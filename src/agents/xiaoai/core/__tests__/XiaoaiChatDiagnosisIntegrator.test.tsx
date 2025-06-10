@@ -6,7 +6,7 @@ describe('XiaoaiChatDiagnosisIntegrator', () => {
     jest.clearAllMocks();
   });
 
-  describe('基础功能', () => {
+
     it('should have chat diagnosis integration concept', () => {
       // 测试聊天诊断集成的基本概念
       expect(true).toBe(true);
@@ -28,7 +28,7 @@ describe('XiaoaiChatDiagnosisIntegrator', () => {
     });
   });
 
-  describe('四诊集成', () => {
+
     it('should handle inquiry diagnosis', () => {
       // TODO: Add test cases when implementation is complete
       expect(true).toBe(true);
@@ -63,7 +63,7 @@ describe('XiaoaiChatDiagnosisIntegrator Performance Tests', () => {
 
     for (let i = 0; i < iterations; i++) {
       // TODO: Execute performance-critical functions when implemented
-    }
+    ;}
 
     const endTime = performance.now();
     const averageTime = (endTime - startTime) / iterations;
@@ -89,7 +89,7 @@ describe('XiaoaiChatDiagnosisIntegrator Performance Tests', () => {
     // Execute function multiple times
     for (let i = 0; i < 100; i++) {
       // TODO: Execute function when implementation is complete
-    }
+    ;}
 
     // Force garbage collection if available
     if (global.gc) {

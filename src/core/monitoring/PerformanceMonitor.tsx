@@ -1,15 +1,14 @@
-import { usePerformanceMonitor } from "../../hooks/usePerformanceMonitor";
-import React from "react";
+
 // 索克生活 - 性能监控系统 - 提供性能指标收集、分析、报告和优化建议
 export interface PerformanceMetric {
-  name: string;,
-  value: number;,
-  unit: string;,
-  timestamp: number;,
+  name: string;
+  value: number;
+  unit: string;
+  timestamp: number;
   category: PerformanceCategory;
-  tags?: Record<string, string>;
+  tags?: Record<string; string>;
   threshold?: {
-    warning: number;,
+    warning: number;
   critical: number;
 };
 }
@@ -24,30 +23,30 @@ export enum PerformanceCategory {
   BUSINESS_LOGIC = "BUSINESS_LOGIC"
 }
 export interface PerformanceReport {
-  id: string;,
-  timestamp: number;,
-  duration: number;,
-  metrics: PerformanceMetric[];,
-  summary: {;,
-  totalMetrics: number;,
-  warningCount: number;,
-  criticalCount: number;,
-  averageResponseTime: number;,
-  memoryUsage: number;,
+  id: string;
+  timestamp: number;
+  duration: number;
+  metrics: PerformanceMetric[];
+  summary: {
+  totalMetrics: number;
+  warningCount: number;
+  criticalCount: number;
+  averageResponseTime: number;
+  memoryUsage: number;
   cpuUsage: number;
 };
-  recommendations: string[],
+  recommendations: string[];
   trends: {,
-  improving: string[],
-  degrading: string[];,
+  improving: string[];
+  degrading: string[];
   stable: string[];
   };
 }
 export interface PerformanceThreshold {
-  category: PerformanceCategory;,
-  metricName: string;,
-  warning: number;,
-  critical: number;,
+  category: PerformanceCategory;
+  metricName: string;
+  warning: number;
+  critical: number;
   unit: string;
 }
 export class PerformanceMonitor {
@@ -89,17 +88,17 @@ export class PerformanceMonitor {
   }
   // 记录性能指标
   public recordMetric()
-    name: string,
-    value: number,
-    category: PerformanceCategory,
-    unit: string = "ms",
-    tags?: Record<string, string>
+    name: string;
+    value: number;
+    category: PerformanceCategory;
+    unit: string = "ms";
+    tags?: Record<string; string>
   ): void {
     const metric: PerformanceMetric = {
       name,
       value,
       unit,
-      timestamp: Date.now(),
+      timestamp: Date.now();
       category,
       tags,
       threshold: this.getThreshold(name);
@@ -122,10 +121,10 @@ export class PerformanceMonitor {
   }
   // 测量函数执行时间
   public async measureAsync<T>()
-    name: string,
-    category: PerformanceCategory,
-    fn: () => Promise<T>,
-    tags?: Record<string, string>
+    name: string;
+    category: PerformanceCategory;
+    fn: () => Promise<T>;
+    tags?: Record<string; string>
   ): Promise<T> {
     const startTime = performance.now();
     try {
@@ -134,23 +133,23 @@ export class PerformanceMonitor {
       this.recordMetric(name, duration, category, "ms", {
         ...tags,
         status: "success"
-      });
+      ;});
       return result;
     } catch (error) {
       const duration = performance.now() - startTime;
       this.recordMetric(name, duration, category, "ms", {
         ...tags,
         status: "error"
-      });
+      ;});
       throw error;
     }
   }
   // 测量同步函数执行时间
   public measure<T>()
-    name: string,
-    category: PerformanceCategory,
-    fn: () => T,
-    tags?: Record<string, string>
+    name: string;
+    category: PerformanceCategory;
+    fn: () => T;
+    tags?: Record<string; string>
   ): T {
     const startTime = performance.now();
     try {
@@ -159,14 +158,14 @@ export class PerformanceMonitor {
       this.recordMetric(name, duration, category, "ms", {
         ...tags,
         status: "success"
-      });
+      ;});
       return result;
     } catch (error) {
       const duration = performance.now() - startTime;
       this.recordMetric(name, duration, category, "ms", {
         ...tags,
         status: "error"
-      });
+      ;});
       throw error;
     }
   }
@@ -211,16 +210,16 @@ export class PerformanceMonitor {
     // 生成优化建议
     const recommendations = this.generateRecommendations(allMetrics);
     const report: PerformanceReport = {,
-  id: `report_${now}`,
-      timestamp: now,
-      duration: timeRangeMs,
-      metrics: allMetrics,
+  id: `report_${now;}`,
+      timestamp: now;
+      duration: timeRangeMs;
+      metrics: allMetrics;
       summary: {,
-  totalMetrics: allMetrics.length,
+  totalMetrics: allMetrics.length;
         warningCount,
         criticalCount,
         averageResponseTime,
-        memoryUsage: this.getCurrentMemoryUsage(),
+        memoryUsage: this.getCurrentMemoryUsage();
         cpuUsage: this.getCurrentCpuUsage();
       },
       recommendations,
@@ -242,10 +241,10 @@ export class PerformanceMonitor {
     this.setThreshold("cpu_usage", PerformanceCategory.CPU, 70, 90, "%");
   }
   private setThreshold()
-    metricName: string,
-    category: PerformanceCategory,
-    warning: number,
-    critical: number,
+    metricName: string;
+    category: PerformanceCategory;
+    warning: number;
+    critical: number;
     unit: string;
   ): void {
     this.thresholds.set(metricName, {
@@ -258,21 +257,21 @@ export class PerformanceMonitor {
   }
   private getThreshold()
     metricName: string;
-  ): { warning: number; critical: number } | undefined {
+  ): { warning: number; critical: number ;} | undefined {
     const threshold = this.thresholds.get(metricName);
     return threshold;
-      ? { warning: threshold.warning, critical: threshold.critical };
+      ? { warning: threshold.warning, critical: threshold.critical ;};
       : undefined;
   }
   private checkThreshold(metric: PerformanceMetric): void {
     if (metric.threshold) {
       if (metric.value >= metric.threshold.critical) {
         console.warn()
-          `Critical performance issue: ${metric.name} = ${metric.value}${metric.unit}`
+          `Critical performance issue: ${metric.name;} = ${metric.value}${metric.unit}`
         );
       } else if (metric.value >= metric.threshold.warning) {
         console.warn()
-          `Performance warning: ${metric.name} = ${metric.value}${metric.unit}`
+          `Performance warning: ${metric.name;} = ${metric.value}${metric.unit}`
         );
       }
     }
@@ -314,8 +313,8 @@ export class PerformanceMonitor {
     return Math.random() * 100; // 实际实现需要使用系统API;
   }
   private analyzeTrends(timeRangeMs: number): {,
-  improving: string[];,
-  degrading: string[],
+  improving: string[];
+  degrading: string[];
   stable: string[];
   } {
     // 趋势分析的实现
@@ -330,7 +329,7 @@ export class PerformanceMonitor {
       (m) => m.category === PerformanceCategory.MEMORY && m.value > 80;
     );
     if (highMemoryMetrics.length > 0) {
-      recommendations.push("考虑优化内存使用，清理不必要的对象引用");
+
     }
     return recommendations;
   }

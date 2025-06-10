@@ -1,5 +1,4 @@
 import { medicalApiService } from "../medicalApiService";
-import { medicalApiService } from "../medicalApiService";
 describe("medicalApiService", () => {
   beforeEach(() => {
     jest.clearAllMocks();

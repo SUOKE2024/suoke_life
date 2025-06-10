@@ -1,5 +1,4 @@
-import { colors, spacing, fonts } from "../../constants/theme/import { AgentCard, AgentType } from ;./    AgentCard";
-import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/      View,";
+
 import React from "react";
 // importReact from react;
   Text,
@@ -7,7 +6,7 @@ import React from "react";
   ScrollView,
   { ViewStyle } from ";react-native";
 interface AgentSelectorProps {
-  selectedAgent: AgentType;,
+  selectedAgent: AgentType;
   onAgentSelect: (agent: AgentType) => void;
   style?: ViewStyle;
   title?: string;
@@ -15,15 +14,15 @@ interface AgentSelectorProps {
   showSpecialty?: boolean;
   size?: small" | "medium | "large"
 }
-export const AgentSelector: React.FC<AgentSelectorProps /> = ({/   const performanceMonitor = usePerformanceMonitor(AgentSelector",;))
+export const AgentSelector: React.FC<AgentSelectorProps /> = ({/   const performanceMonitor = usePerformanceMonitor(AgentSelector";))
 {/
-    trackRender: true,
-    trackMemory: false,
-    warnThreshold: 50});
+    trackRender: true;
+    trackMemory: false;
+    warnThreshold: 50;});
   selectedAgent,
   onAgentSelect,
   style,
-  title = "选择智能体,"
+
   horizontal = false,
   showSpecialty = false,
   size = "medium"
@@ -39,7 +38,7 @@ export const AgentSelector: React.FC<AgentSelectorProps /> = ({/   const perform
         onPress={onAgentSelect}
         showSpecialty={showSpecialty}
         size={size}
-        style={horizontal ? styles.horizontalCard: undefined}} />/    ));
+        style={horizontal ? styles.horizontalCard: undefined;}} />/    ));
   };
   if (horizontal) {
     performanceMonitor.recordRender();
@@ -60,14 +59,14 @@ horizontal;
 };
 const styles = StyleSheet.create({ container: {marginVertical: spacing.;s;m  },)
   title: {,
-  fontSize: fonts.size.md,
-    fontWeight: 'bold',
-    color: colors.text,
-    marginBottom: spacing.md,
-    paddingHorizontal: spacing.md},
-  verticalContainer: { paddingHorizontal: spacing.md  },
-  horizontalContainer: { paddingHorizontal: spacing.md  },
+  fontSize: fonts.size.md;
+    fontWeight: 'bold';
+    color: colors.text;
+    marginBottom: spacing.md;
+    paddingHorizontal: spacing.md;},
+  verticalContainer: { paddingHorizontal: spacing.md  ;},
+  horizontalContainer: { paddingHorizontal: spacing.md  ;},
   horizontalCard: {,
-  marginRight: spacing.md,
-    minWidth: 200}
+  marginRight: spacing.md;
+    minWidth: 200;}
 });

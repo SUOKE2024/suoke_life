@@ -1,5 +1,4 @@
 import { AgentCollaborationSystem, agentCollaborationSystem } from "../agentCollaborationSystem";
-import { AgentCollaborationSystem, agentCollaborationSystem } from "../agentCollaborationSystem";
 describe("agentCollaborationSystem", () => {
   beforeEach(() => {
     jest.clearAllMocks();

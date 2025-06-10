@@ -8,7 +8,7 @@ interface ApiRequest {
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   data?: unknown;
   params?: unknown;
-  headers?: Record<string, string>;
+  headers?: Record<string; string>;
   timeout?: number;
   retries?: number;
 }
@@ -17,7 +17,7 @@ export interface ApiResponse<T = any> {
   success: boolean;
   data?: T;
   error?: {
-    code: string,
+    code: string;
   message: string;
     details?: unknown;
   };
@@ -27,7 +27,7 @@ export interface ApiResponse<T = any> {
 }
 // 错误接口
 interface ApiError {
-  code: string;,
+  code: string;
   message: string;
   details?: unknown;
   timestamp: string;
@@ -39,12 +39,12 @@ class ApiClient {
   constructor() {
     this.eventEmitter = new EventEmitter();
     this.client = axios.create({
-      baseURL: API_CONFIG.BASE_URL,
-      timeout: API_CONFIG.TIMEOUT,
+      baseURL: API_CONFIG.BASE_URL;
+      timeout: API_CONFIG.TIMEOUT;
       headers: {
         'Content-Type': 'application/json',
         Accept: "application/json",X-Client-Version': "1.0.0",X-Platform': 'react-native'
-      }
+      ;}
     });
     this.setupInterceptors();
   }
@@ -66,9 +66,9 @@ class ApiClient {
         // 添加请求ID用于追踪
         const requestId = this.generateRequestId();
         config.headers['X-Request-ID'] = requestId;
-        console.log(`API请求: ${config.method?.toUpperCase()} ${config.url}`, {
+
           requestId,
-          headers: config.headers,
+          headers: config.headers;
           data: config.data;
         });
         return config;
@@ -80,7 +80,7 @@ class ApiClient {
     // 响应拦截器
     this.client.interceptors.response.use(response: AxiosResponse) => {
         const requestId = response.config.headers['X-Request-ID'];
-        console.log(`API响应: ${response.status} ${response.config.url}`, {
+
           requestId,
           data: response.data;
         });
@@ -88,9 +88,9 @@ class ApiClient {
       },
       async error => {
         const requestId = error.config?.headers?.['X-Request-ID'];
-        console.error(`API错误: ${error.config?.url}`, {
+
           requestId,
-          status: error.response?.status,
+          status: error.response?.status;
           message: error.message;
         });
         // 处理认证错误
@@ -99,7 +99,7 @@ class ApiClient {
         }
         // 处理网络错误
         if (!error.response) {
-          return Promise.reject(this.createApiError(ERROR_CODES.NETWORK_ERROR, '网络连接失败'));
+
         }
         // 处理服务器错误
         const apiError = this.createApiError(;)
@@ -122,7 +122,7 @@ class ApiClient {
         }
       }
     } catch (error) {
-      console.error('刷新token失败:', error);
+
     }
     // 清除认证信息并触发登出事件
     await AsyncStorage.multiRemove([)
@@ -134,7 +134,7 @@ class ApiClient {
   }
   // 刷新token;
   private async refreshToken(refreshToken: string): Promise<ApiResponse> {
-    const response = await axios.post(`${API_CONFIG.SERVICES.AUTH}/auth/refresh`, {refreshToken;)
+    const response = await axios.post(`${API_CONFIG.SERVICES.AUTH;}/auth/refresh`, {refreshToken;)
     });
     return response.data;
   }
@@ -144,12 +144,12 @@ class ApiClient {
   }
   // 创建API错误对象
   private createApiError(code: string, message: string, details?: unknown): ApiError {
-    return {code,message,details,timestamp: new Date().toISOString();
+    return {code;message,details,timestamp: new Date().toISOString();
     };
   }
   // 请求去重
   private getRequestKey(config: ApiRequest): string {
-    const { url, method = 'GET', data, params } = config;
+    const { url, method = 'GET', data, params ;} = config;
     return `${method}:${url}:${JSON.stringify(data || {})}:${JSON.stringify(params || {})}`;
   }
   // 执行请求
@@ -173,16 +173,16 @@ class ApiClient {
   }
   // 执行实际请求
   private async executeRequest<T = any>(config: ApiRequest): Promise<ApiResponse<T>> {
-    const { retries = API_CONFIG.RETRY_ATTEMPTS } = config;
+    const { retries = API_CONFIG.RETRY_ATTEMPTS ;} = config;
     let lastError: unknown;
     for (let attempt = 1; attempt <= retries; attempt++) {
       try {
         const axiosConfig: AxiosRequestConfig = {,
-  url: config.url,
-          method: config.method || 'GET',
-          data: config.data,
-          params: config.params,
-          headers: config.headers,
+  url: config.url;
+          method: config.method || 'GET';
+          data: config.data;
+          params: config.params;
+          headers: config.headers;
           timeout: config.timeout || API_CONFIG.TIMEOUT;
         };
         const response = await this.client.request(axiosConfig);
@@ -209,58 +209,58 @@ class ApiClient {
   }
   // GET请求
   async get<T = any>()
-    url: string,
-    params?: unknown,
+    url: string;
+    params?: unknown;
     config?: Partial<ApiRequest>
   ): Promise<ApiResponse<T>> {
-    return this.request<T>({url,method: 'GET',params,...config;)
+    return this.request<T>({url;method: 'GET',params,...config;)
     });
   }
   // POST请求
   async post<T = any>()
-    url: string,
-    data?: unknown,
+    url: string;
+    data?: unknown;
     config?: Partial<ApiRequest>
   ): Promise<ApiResponse<T>> {
-    return this.request<T>({url,method: 'POST',data,...config;)
+    return this.request<T>({url;method: 'POST',data,...config;)
     });
   }
   // PUT请求
   async put<T = any>()
-    url: string,
-    data?: unknown,
+    url: string;
+    data?: unknown;
     config?: Partial<ApiRequest>
   ): Promise<ApiResponse<T>> {
-    return this.request<T>({url,method: 'PUT',data,...config;)
+    return this.request<T>({url;method: 'PUT',data,...config;)
     });
   }
   // DELETE请求
   async delete<T = any>(url: string, config?: Partial<ApiRequest>): Promise<ApiResponse<T>> {
-    return this.request<T>({url,method: 'DELETE',...config;)
+    return this.request<T>({url;method: 'DELETE',...config;)
     });
   }
   // PATCH请求
   async patch<T = any>()
-    url: string,
-    data?: unknown,
+    url: string;
+    data?: unknown;
     config?: Partial<ApiRequest>
   ): Promise<ApiResponse<T>> {
-    return this.request<T>({url,method: 'PATCH',data,...config;)
+    return this.request<T>({url;method: 'PATCH',data,...config;)
     });
   }
   // 上传文件
   async upload<T = any>()
-    url: string,
-    formData: FormData,
+    url: string;
+    formData: FormData;
     config?: Partial<ApiRequest>
   ): Promise<ApiResponse<T>> {
-    return this.request<T>({url,method: 'POST',data: formData,headers: {'Content-Type': 'multipart/form-data';)
+    return this.request<T>({url;method: 'POST',data: formData,headers: {'Content-Type': 'multipart/form-data';)
       },...config;
     });
   }
   // 下载文件
   async download(url: string, config?: Partial<ApiRequest>): Promise<Blob> {
-    const response = await this.client.get(url, {responseType: 'blob',...config;)
+    const response = await this.client.get(url; {responseType: 'blob',...config;)
     });
     return response.data;
   }

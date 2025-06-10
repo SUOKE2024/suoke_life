@@ -12,7 +12,7 @@ export interface AppError extends Error {
 }
 // 错误恢复建议
 export interface ErrorRecovery {
-  action: 'retry' | 'refresh' | 'navigate' | 'contact_support' | 'wait';,
+  action: 'retry' | 'refresh' | 'navigate' | 'contact_support' | 'wait';
   message: string;
   autoRetry?: boolean;
   retryDelay?: number;
@@ -31,7 +31,7 @@ export class ErrorHandler {
   }
   // 处理错误并返回用户友好的信息
   handleError(error: any, context?: string): AppError {
-    const appError = this.normalizeError(error, context);
+    const appError = this.normalizeError(error; context);
     this.logError(appError);
     this.addToHistory(appError);
     return appError;
@@ -50,54 +50,54 @@ export class ErrorHandler {
     // 网络错误
     if (error.name === 'TypeError' && error.message.includes('fetch')) {
       return {
-      name: "NetworkError",
-      message: error.message,
-        code: ERROR_CODES.NETWORK_ERROR,
-        userMessage: '网络连接失败，请检查网络设置',
-        technicalMessage: error.message,
-        recoverable: true,
+      name: "NetworkError";
+      message: error.message;
+        code: ERROR_CODES.NETWORK_ERROR;
+
+        technicalMessage: error.message;
+        recoverable: true;
         timestamp,
         requestId,
-        service: context};
+        service: context;};
     }
     // HTTP错误
     if (error.status) {
       return {
-      name: "HttpError",
-      message: error.message || `HTTP ${error.status}`,
-        code: this.mapHttpStatusToErrorCode(error.status),
-        status: error.status,
-        userMessage: this.getHttpErrorMessage(error.status),
-        technicalMessage: error.message,
-        recoverable: this.isHttpErrorRecoverable(error.status),
+      name: "HttpError";
+      message: error.message || `HTTP ${error.status;}`,
+        code: this.mapHttpStatusToErrorCode(error.status);
+        status: error.status;
+        userMessage: this.getHttpErrorMessage(error.status);
+        technicalMessage: error.message;
+        recoverable: this.isHttpErrorRecoverable(error.status);
         timestamp,
         requestId,
-        service: context};
+        service: context;};
     }
     // 超时错误
     if (error.name === 'AbortError' || error.message.includes('timeout')) {
       return {
-      name: "TimeoutError",
-      message: error.message,
-        code: ERROR_CODES.TIMEOUT,
-        userMessage: '请求超时，请稍后重试',
-        technicalMessage: error.message,
-        recoverable: true,
+      name: "TimeoutError";
+      message: error.message;
+        code: ERROR_CODES.TIMEOUT;
+
+        technicalMessage: error.message;
+        recoverable: true;
         timestamp,
         requestId,
-        service: context};
+        service: context;};
     }
     // 通用错误
     return {
-      name: error.name || 'UnknownError',
-      message: error.message || '未知错误',
-      code: ERROR_CODES.OPERATION_FAILED,
-      userMessage: '操作失败，请稍后重试',
-      technicalMessage: error.message || error.toString(),
-      recoverable: true,
+      name: error.name || 'UnknownError';
+
+      code: ERROR_CODES.OPERATION_FAILED;
+
+      technicalMessage: error.message || error.toString();
+      recoverable: true;
       timestamp,
       requestId,
-      service: context};
+      service: context;};
   }
   // 映射HTTP状态码到错误代码
   private mapHttpStatusToErrorCode(status: number): string {
@@ -110,25 +110,25 @@ export class ErrorHandler {
       case 500: return ERROR_CODES.SERVER_ERROR;
       case 502:
       case 503:
-      case 504: return ERROR_CODES.SERVICE_UNAVAILABLE,
+      case 504: return ERROR_CODES.SERVICE_UNAVAILABLE;
   default: return ERROR_CODES.OPERATION_FAILED;
     }
   }
   // 获取HTTP错误的用户友好信息
   private getHttpErrorMessage(status: number): string {
     switch (status) {
-      case 400: return '请求参数有误，请检查输入信息';
-      case 401: return '身份验证失败，请重新登录';
-      case 403: return '没有权限执行此操作';
-      case 404: return '请求的资源不存在';
-      case 408: return '请求超时，请稍后重试';
-      case 429: return '请求过于频繁，请稍后重试';
-      case 500: return '服务器内部错误，请稍后重试';
-      case 502: return '网关错误，请稍后重试';
-      case 503: return '服务暂时不可用，请稍后重试';
-      case 504: return '网关超时，请稍后重试',
-  default: return '服务异常，请稍后重试';
-    }
+
+
+
+
+
+
+
+
+
+
+
+    ;}
   }
   // 判断HTTP错误是否可恢复
   private isHttpErrorRecoverable(status: number): boolean {
@@ -144,60 +144,60 @@ export class ErrorHandler {
     switch (error.code) {
       case ERROR_CODES.NETWORK_ERROR:
         return {,
-  action: 'retry',
-          message: '请检查网络连接后重试',
-          autoRetry: true,
-          retryDelay: 3000,
-          maxRetries: 3};
+  action: 'retry';
+
+          autoRetry: true;
+          retryDelay: 3000;
+          maxRetries: 3;};
       case ERROR_CODES.UNAUTHORIZED:
         return {,
-  action: 'refresh',
-          message: '请重新登录',
-          autoRetry: false};
+  action: 'refresh';
+
+          autoRetry: false;};
       case ERROR_CODES.TIMEOUT:
         return {,
-  action: 'retry',
-          message: '请求超时，正在重试...',
-          autoRetry: true,
-          retryDelay: 2000,
-          maxRetries: 2};
+  action: 'retry';
+
+          autoRetry: true;
+          retryDelay: 2000;
+          maxRetries: 2;};
       case ERROR_CODES.SERVICE_UNAVAILABLE:
         return {,
-  action: 'wait',
-          message: '服务暂时不可用，请稍后重试',
-          autoRetry: true,
-          retryDelay: 10000,
-          maxRetries: 3};
+  action: 'wait';
+
+          autoRetry: true;
+          retryDelay: 10000;
+          maxRetries: 3;};
       case ERROR_CODES.VALIDATION_ERROR:
         return {,
-  action: 'navigate',
-          message: '请检查输入信息',
-          autoRetry: false};
+  action: 'navigate';
+
+          autoRetry: false;};
       case ERROR_CODES.FORBIDDEN:
         return {,
-  action: 'contact_support',
-          message: '权限不足，请联系管理员',
-          autoRetry: false};
+  action: 'contact_support';
+
+          autoRetry: false;};
       default:
         return {,
-  action: 'retry',
-          message: '操作失败，请重试',
-          autoRetry: false};
+  action: 'retry';
+
+          autoRetry: false;};
     }
   }
   // 记录错误日志
   private logError(error: AppError): void {
     const logLevel = this.getLogLevel(error);
     const logMessage = {
-      level: logLevel,
-      timestamp: error.timestamp,
-      requestId: error.requestId,
-      service: error.service,
-      code: error.code,
-      message: error.technicalMessage,
-      userMessage: error.userMessage,
-      recoverable: error.recoverable,
-      stack: error.stack};
+      level: logLevel;
+      timestamp: error.timestamp;
+      requestId: error.requestId;
+      service: error.service;
+      code: error.code;
+      message: error.technicalMessage;
+      userMessage: error.userMessage;
+      recoverable: error.recoverable;
+      stack: error.stack;};
     if (logLevel === 'error') {
       console.error('App Error:', logMessage);
     } else if (logLevel === 'warn') {
@@ -243,19 +243,19 @@ export class ErrorHandler {
   }
   // 获取错误统计
   getErrorStats(): {
-    total: number,
+    total: number;
   byCode: Record<string, number>;
     byService: Record<string, number>;
-    recoverable: number,
+    recoverable: number;
   recent: number; // 最近1小时的错误数
   } {
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
         const stats = {
-      total: this.errorHistory.length,
-      byCode: {} as Record<string, number>,
-      byService: {} as Record<string, number>,
-      recoverable: 0,
-      recent: 0};
+      total: this.errorHistory.length;
+      byCode: {;} as Record<string, number>,
+      byService: {;} as Record<string, number>,
+      recoverable: 0;
+      recent: 0;};
     this.errorHistory.forEach(error => {
       // 按错误代码统计
       stats.byCode[error.code] = (stats.byCode[error.code] || 0) + 1;
@@ -288,46 +288,46 @@ export class ErrorHandler {
   }
   // 格式化错误信息用于显示
   formatErrorForDisplay(error: AppError): {,
-  title: string;,
-  message: string,
+  title: string;
+  message: string;
   actions: string[];
   } {
     const recovery = this.getRecoveryAdvice(error);
         return {
-      title: this.getErrorTitle(error.code),
-      message: error.userMessage || error.message,
-      actions: this.getActionLabels(recovery.action)};
+      title: this.getErrorTitle(error.code);
+      message: error.userMessage || error.message;
+      actions: this.getActionLabels(recovery.action);};
   }
   // 获取错误标题
   private getErrorTitle(code: string): string {
     switch (code) {
-      case ERROR_CODES.NETWORK_ERROR: return '网络连接失败';
-      case ERROR_CODES.UNAUTHORIZED: return '身份验证失败';
-      case ERROR_CODES.FORBIDDEN: return '权限不足';
-      case ERROR_CODES.NOT_FOUND: return '资源不存在';
-      case ERROR_CODES.TIMEOUT: return '请求超时';
-      case ERROR_CODES.SERVER_ERROR: return '服务器错误';
-      case ERROR_CODES.SERVICE_UNAVAILABLE: return '服务不可用',
-  default: return '操作失败';
-    }
+
+
+
+
+
+
+
+
+    ;}
   }
   // 获取操作按钮标签
   private getActionLabels(action: string): string[] {
     switch (action) {
-      case 'retry': return ["重试", "取消'];
-      case 'refresh': return ["重新登录", "取消'];
-      case 'navigate': return ['确定'];
-      case 'contact_support': return ["联系客服", "确定'];
-      case 'wait': return ["稍后重试",取消'];
-      default: return ['确定'];
-    }
+
+
+
+
+
+
+    ;}
   }
 }
 // 导出单例实例
 export const errorHandler = ErrorHandler.getInstance();
 // 导出便捷函数
 export const handleError = (error: any, context?: string): AppError => {
-  return errorHandler.handleError(error, context);
+  return errorHandler.handleError(error; context);
 };
 export const getRecoveryAdvice = (error: AppError): ErrorRecovery => {
   return errorHandler.getRecoveryAdvice(error);

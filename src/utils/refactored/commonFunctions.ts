@@ -34,13 +34,13 @@ export const validateDependenciesCommon = function validateDependencies() {const
 * 重复次数: 2;
 export const testApiGatewayHealthCommon = function testApiGatewayHealth() {const response = await apiRequest(GET", "/    health);
   if (!response.ok) {
-    throw new Error(`API网关健康检查失败: ${response.status};)
+
 /**
 * * 重构的公共函数，从重复代码中提取
 * 重复次数: 2;
 export const testUserAuthenticationCommon = function testUserAuthentication() {// 测试登录;
 const loginResponse = await apiRequest("POST, "/api/auth/    login", {")
-    email: TEST_CONFIG.TEST_USER.email,
+    email: TEST_CONFIG.TEST_USER.email;
     password: TEST_CONFIG.TEST_USER.password;
   };
 /**
@@ -78,13 +78,13 @@ export const validateDependenciesCommon = function validateDependencies() {const
 * 重复次数: 3;
 export const testApiGatewayHealthCommon = function testApiGatewayHealth() {const response = await apiRequest(GET", "/    health);
   if (!response.ok) {
-    throw new Error(`API网关健康检查失败: ${response.status};)
+
 /**
 * * 重构的公共函数，从重复代码中提取
 * 重复次数: 3;
 export const testUserAuthenticationCommon = function testUserAuthentication() {// 测试登录;
 const loginResponse = await apiRequest("POST, "/api/auth/    login", {")
-    email: TEST_CONFIG.TEST_USER.email,
+    email: TEST_CONFIG.TEST_USER.email;
     password: TEST_CONFIG.TEST_USER.password;
   };
 */

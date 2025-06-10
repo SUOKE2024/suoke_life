@@ -15,7 +15,7 @@ import {;
 
 interface LazyLoaderProps {
   /** 懒加载的组件工厂函数 */
-  factory: () => Promise<{ default: ComponentType<any> }>;
+  factory: () => Promise<{ default: ComponentType<any> ;}>;
   /** 加载中的占位组件 */
   fallback?: ReactNode;
   /** 错误时的占位组件 */
@@ -33,23 +33,23 @@ interface LazyLoaderProps {
 }
 
 interface LazyLoaderState {
-  hasError: boolean;,
-  isLoading: boolean;,
+  hasError: boolean;
+  isLoading: boolean;
   retryAttempts: number;
   error?: Error;
 }
 
 class LazyLoaderErrorBoundary extends React.Component<
-  { children: ReactNode; onError?: (error: Error) => void },
+  { children: ReactNode; onError?: (error: Error) => void ;},
   { hasError: boolean; error?: Error }
 > {
   constructor(props: any) {
     super(props);
-    this.state = { hasError: false };
+    this.state = { hasError: false ;};
   }
 
   static getDerivedStateFromError(error: Error) {
-    return { hasError: true, error };
+    return { hasError: true, error ;};
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
@@ -63,11 +63,11 @@ class LazyLoaderErrorBoundary extends React.Component<
         <View style={styles.errorContainer}>
           <Text style={styles.errorTitle}>组件加载失败</Text>
           <Text style={styles.errorMessage}>
-            {this.state.error?.message || '未知错误'}
+
           </Text>
           <TouchableOpacity;
             style={styles.retryButton}
-            onPress={() => this.setState({ hasError: false, error: undefined })}
+            onPress={() => this.setState({ hasError: false, error: undefined ;})}
           >
             <Text style={styles.retryButtonText}>重试</Text>
           </TouchableOpacity>
@@ -86,12 +86,12 @@ const DefaultFallback: React.FC<{
   <View style={styles.fallbackContainer}>
     {showProgress && <ActivityIndicator size="large" color={colors.primary} />}
     <Text style={styles.fallbackText}>
-      {componentName ? `正在加载 ${componentName}...` : '正在加载...'}
+
     </Text>
   </View>
 );
 
-const DefaultErrorFallback: React.FC<{ onRetry?: () => void }> = ({
+const DefaultErrorFallback: React.FC<{ onRetry?: () => void ;}> = ({
   onRetry
 }) => (
   <View style={styles.errorContainer}>
@@ -109,32 +109,32 @@ export const LazyLoader: React.FC<LazyLoaderProps> = ({
   factory,
   fallback,
   errorFallback,
-  props = {},
+  props = {;},
   showProgress = true,
   timeout = 10000,
   retryCount = 3,
   componentName
 }) => {
   const [state, setState] = React.useState<LazyLoaderState>({
-    hasError: false,
-    isLoading: false,
+    hasError: false;
+    isLoading: false;
     retryAttempts: 0
-  });
+  ;});
 
   const [LazyComponent, setLazyComponent] =
     React.useState<ComponentType<any> | null>(null);
 
   const loadComponent = React.useCallback(async () => {
     if (state.retryAttempts >= retryCount) {
-      setState(prev) => ({ ...prev, hasError: true }));
+      setState(prev) => ({ ...prev, hasError: true ;}));
       return;
     }
 
-    setState(prev) => ({ ...prev, isLoading: true, hasError: false }));
+    setState(prev) => ({ ...prev, isLoading: true, hasError: false ;}));
 
     try {
       const timeoutPromise = new Promise(_, reject) =>
-        setTimeout() => reject(new Error('组件加载超时')), timeout)
+
       );
 
       const componentModule = (await Promise.race([
@@ -142,16 +142,16 @@ export const LazyLoader: React.FC<LazyLoaderProps> = ({
         timeoutPromise
       ])) as any;
       setLazyComponent() => componentModule.default);
-      setState(prev) => ({ ...prev, isLoading: false }));
+      setState(prev) => ({ ...prev, isLoading: false ;}));
     } catch (error) {
-      console.error('LazyLoader: 组件加载失败', error);
+
       setState(prev) => ({
         ...prev,
-        isLoading: false,
-        hasError: true,
-        error: error as Error,
+        isLoading: false;
+        hasError: true;
+        error: error as Error;
         retryAttempts: prev.retryAttempts + 1
-      }));
+      ;}));
     }
   }, [factory, timeout, retryCount, state.retryAttempts]);
 
@@ -160,7 +160,7 @@ export const LazyLoader: React.FC<LazyLoaderProps> = ({
   }, [loadComponent]);
 
   const handleRetry = React.useCallback() => {
-    setState(prev) => ({ ...prev, retryAttempts: 0 }));
+    setState(prev) => ({ ...prev, retryAttempts: 0 ;}));
     loadComponent();
   }, [loadComponent]);
 
@@ -182,7 +182,7 @@ export const LazyLoader: React.FC<LazyLoaderProps> = ({
   return (
     <LazyLoaderErrorBoundary;
       onError={(error) =>
-        setState(prev) => ({ ...prev, hasError: true, error }))
+        setState(prev) => ({ ...prev, hasError: true, error ;}))
       }
     >
       <LazyComponent {...props} />
@@ -192,17 +192,17 @@ export const LazyLoader: React.FC<LazyLoaderProps> = ({
 
 // 高阶组件版本
 export const withLazyLoader = <P extends object>(;
-  factory: () => Promise<{ default: ComponentType<P> }>,
-  options?: Omit<LazyLoaderProps, 'factory' | 'props'>
+  factory: () => Promise<{ default: ComponentType<P> ;}>,
+  options?: Omit<LazyLoaderProps; 'factory' | 'props'>
 ) => {
   return (props: P) => (
-    <LazyLoader factory={factory} props={props} {...options} />
+    <LazyLoader factory={factory;} props={props} {...options} />
   );
 };
 
 // Hook 版本
 export const useLazyComponent = <T extends ComponentType<any>>(;
-  factory: () => Promise<{ default: T }>,
+  factory: () => Promise<{ default: T ;}>,
   deps: React.DependencyList = []
 ) => {
   const [component, setComponent] = React.useState<T | null>(null);
@@ -244,16 +244,16 @@ export const useLazyComponent = <T extends ComponentType<any>>(;
 
 // 预加载函数
 export const preloadComponent = (;
-  factory: () => Promise<{ default: ComponentType<any> }>
+  factory: () => Promise<{ default: ComponentType<any> ;}>
 ) => {
   return factory().catch(error) => {
-    console.warn('组件预加载失败:', error);
+
   });
 };
 
 // 批量预加载
 export const preloadComponents = (;
-  factories: Array<() => Promise<{ default: ComponentType<any> }>>
+  factories: Array<() => Promise<{ default: ComponentType<any> ;}>>
 ) => {
   return Promise.allSettled(
     factories.map(factory) => preloadComponent(factory))
@@ -262,50 +262,50 @@ export const preloadComponents = (;
 
 const styles = StyleSheet.create({
   fallbackContainer: {,
-  flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: spacing.xl,
+  flex: 1;
+    justifyContent: 'center';
+    alignItems: 'center';
+    padding: spacing.xl;
     backgroundColor: colors.background
-  },
+  ;},
   fallbackText: {,
-  fontSize: typography.fontSize.base,
-    color: colors.textSecondary,
-    marginTop: spacing.md,
+  fontSize: typography.fontSize.base;
+    color: colors.textSecondary;
+    marginTop: spacing.md;
     textAlign: 'center'
-  },
+  ;},
   errorContainer: {,
-  flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: spacing.xl,
+  flex: 1;
+    justifyContent: 'center';
+    alignItems: 'center';
+    padding: spacing.xl;
     backgroundColor: colors.background
-  },
+  ;},
   errorTitle: {,
-  fontSize: typography.fontSize.lg,
-    fontWeight: '600' as const,
-    color: colors.error,
-    marginBottom: spacing.sm,
+  fontSize: typography.fontSize.lg;
+    fontWeight: '600' as const;
+    color: colors.error;
+    marginBottom: spacing.sm;
     textAlign: 'center'
-  },
+  ;},
   errorMessage: {,
-  fontSize: typography.fontSize.base,
-    color: colors.textSecondary,
-    marginBottom: spacing.lg,
-    textAlign: 'center',
+  fontSize: typography.fontSize.base;
+    color: colors.textSecondary;
+    marginBottom: spacing.lg;
+    textAlign: 'center';
     lineHeight: 22
-  },
+  ;},
   retryButton: {,
-  backgroundColor: colors.primary,
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
+  backgroundColor: colors.primary;
+    paddingHorizontal: spacing.lg;
+    paddingVertical: spacing.md;
     borderRadius: borderRadius.md
-  },
+  ;},
   retryButtonText: {,
-  fontSize: typography.fontSize.base,
-    fontWeight: '600' as const,
+  fontSize: typography.fontSize.base;
+    fontWeight: '600' as const;
     color: colors.white
-  }
+  ;}
 });
 
 export default LazyLoader;

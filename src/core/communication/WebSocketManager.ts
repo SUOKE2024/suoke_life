@@ -11,22 +11,22 @@ export enum MessageType {
     HEARTBEAT = 'HEARTBEAT'
   }
   export interface WebSocketMessage {
-  type: MessageType;,
-  payload: any;,
-  timestamp: number;,
+  type: MessageType;
+  payload: any;
+  timestamp: number;
   messageId: string;
     userId?: string;
     sessionId?: string;
 }
   export interface ConnectionConfig {
-  url: string;,
-  reconnectInterval: number;,
-  maxReconnectAttempts: number;,
-  heartbeatInterval: number;,
+  url: string;
+  reconnectInterval: number;
+  maxReconnectAttempts: number;
+  heartbeatInterval: number;
   timeout: number;
 }
   export interface MessageHandler {
-  type: MessageType;,
+  type: MessageType;
   handler: (message: WebSocketMessage) => void | Promise<void>;
 }
   export class WebSocketManager {
@@ -46,12 +46,12 @@ export enum MessageType {
     }
     public static getInstance(config?: ConnectionConfig): WebSocketManager {
       if (!WebSocketManager.instance) {
-        const defaultConfig: ConnectionConfig = {,
-  url: 'ws://localhost:8000/ws',
-          reconnectInterval: 3000,
-          maxReconnectAttempts: 5,
-          heartbeatInterval: 30000,
-          timeout: 10000};
+        const defaultConfig: ConnectionConfig = {;
+  url: 'ws://localhost:8000/ws';
+          reconnectInterval: 3000;
+          maxReconnectAttempts: 5;
+          heartbeatInterval: 30000;
+          timeout: 10000;};
         WebSocketManager.instance = new WebSocketManager(config || defaultConfig);
       }
       return WebSocketManager.instance;
@@ -82,7 +82,7 @@ export enum MessageType {
             this.reconnectAttempts = 0;
             this.startHeartbeat();
             this.processMessageQueue();
-            console.log('🔗 WebSocket连接已建立');
+
             resolve();
           };
           this.ws.onmessage = (event) => {
@@ -92,7 +92,7 @@ export enum MessageType {
             clearTimeout(timeout);
             this.isConnecting = false;
             this.stopHeartbeat();
-            console.log('🔌 WebSocket连接已关闭', event.code, event.reason);
+
             if (!event.wasClean && this.reconnectAttempts < this.config.maxReconnectAttempts) {
               this.scheduleReconnect();
             }
@@ -100,7 +100,7 @@ export enum MessageType {
           this.ws.onerror = (error) => {
             clearTimeout(timeout);
             this.isConnecting = false;
-            console.error('❌ WebSocket连接错误:', error);
+
             reject(error);
           };
         } catch (error) {
@@ -121,7 +121,7 @@ export enum MessageType {
         this.ws = null;
       }
       this.connectionPromise = null;
-      console.log('🔌 WebSocket连接已主动断开');
+
     }
     /**
     * 发送消息
@@ -134,10 +134,10 @@ export enum MessageType {
       const message: WebSocketMessage = {
         type,
         payload,
-        timestamp: Date.now(),
-        messageId: this.generateMessageId(),
-        userId: options?.userId,
-        sessionId: options?.sessionId};
+        timestamp: Date.now();
+        messageId: this.generateMessageId();
+        userId: options?.userId;
+        sessionId: options?.sessionId;};
       if (this.ws?.readyState === WebSocket.OPEN) {
         this.ws.send(JSON.stringify(message));
       } else {
@@ -173,7 +173,7 @@ export enum MessageType {
       await this.sendMessage(MessageType.CHAT, {
         message,
         agentType,
-        timestamp: Date.now()}, { sessionId });
+        timestamp: Date.now();}, { sessionId });
     }
     /**
     * 发送健康数据
@@ -181,22 +181,22 @@ export enum MessageType {
     public async sendHealthData(data: any, userId: string): Promise<void> {
       await this.sendMessage(MessageType.HEALTH_DATA, {
         data,
-        timestamp: Date.now()}, { userId });
+        timestamp: Date.now();}, { userId });
     }
     /**
     * 获取连接状态
     */
     public getConnectionStatus(): {
-      connected: boolean,
-  connecting: boolean;,
-  reconnectAttempts: number,
+      connected: boolean;
+  connecting: boolean;
+  reconnectAttempts: number;
   queuedMessages: number;
     } {
       return {
-        connected: this.ws?.readyState === WebSocket.OPEN,
-        connecting: this.isConnecting,
-        reconnectAttempts: this.reconnectAttempts,
-        queuedMessages: this.messageQueue.length};
+        connected: this.ws?.readyState === WebSocket.OPEN;
+        connecting: this.isConnecting;
+        reconnectAttempts: this.reconnectAttempts;
+        queuedMessages: this.messageQueue.length;};
     }
     /**
     * 处理接收到的消息
@@ -215,12 +215,12 @@ export enum MessageType {
             try {
               handler(message);
             } catch (error) {
-              console.error('消息处理器错误:', error);
+
             }
           });
         }
       } catch (error) {
-        console.error('解析WebSocket消息失败:', error);
+
       }
     }
     /**
@@ -229,11 +229,11 @@ export enum MessageType {
     private setupMessageHandlers(): void {
       // 系统通知处理器
       this.onMessage(MessageType.SYSTEM_NOTIFICATION, (message) => {
-        console.log('📢 系统通知:', message.payload);
+
       });
       // 智能体状态更新处理器
       this.onMessage(MessageType.AGENT_STATUS, (message) => {
-        console.log('🤖 智能体状态更新:', message.payload);
+
       });
     }
     /**
@@ -242,7 +242,7 @@ export enum MessageType {
     private startHeartbeat(): void {
       this.heartbeatTimer = setInterval() => {
         if (this.ws?.readyState === WebSocket.OPEN) {
-          this.sendMessage(MessageType.HEARTBEAT, { timestamp: Date.now() });
+          this.sendMessage(MessageType.HEARTBEAT, { timestamp: Date.now() ;});
         }
       }, this.config.heartbeatInterval);
     }
@@ -263,7 +263,7 @@ export enum MessageType {
       console.log(`🔄 尝试重连 (${this.reconnectAttempts}/${this.config.maxReconnectAttempts})`);
       this.reconnectTimer = setTimeout() => {
         this.connect().catch(error => {
-          console.error('重连失败:', error);
+
         });
       }, this.config.reconnectInterval);
     }

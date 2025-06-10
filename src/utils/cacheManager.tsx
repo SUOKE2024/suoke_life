@@ -1,18 +1,17 @@
-import { usePerformanceMonitor } from "../../placeholder";../hooks/    usePerformanceMonitor;
-import AsyncStorage from "@react-native-async-storage/    async-storage";
+@react-native-async-storage/    async-storage";
 import React from "react";
-数据缓存管理工具   提供统一的缓存管理接口，支持过期时间、缓存大小限制等功能
+
 export interface CacheItem<T = any /    > { data: T;
 /     , timestamp: number;
   expiresAt?: number;
   size?: number;
-  accessCount: number,
-  lastAccessed: number}
+  accessCount: number;
+  lastAccessed: number;}
 export interface CacheOptions {
   ttl?: number;  maxSize?: number  / 最大缓存大小（字节）*  compress?: boolean  * / 是否压缩数据* *
 } * /
 export interface CacheStats {
-  totalItems: number;,
+  totalItems: number;
   totalSize: number,hitRate: number,missRate: number;
   oldestItem?: string;
   newestItem?: string;
@@ -22,13 +21,13 @@ export interface CacheStats {
 // 缓存管理器类export class CacheManager  {private static instance: CacheManager;
   private cache: Map<string, CacheItem> = new Map();
   private stats = {
-    hits: 0,
-    misses: 0,
-    sets: 0,
+    hits: 0;
+    misses: 0;
+    sets: 0;
     deletes: 0;
   };
   private options: Required<CacheOptions /> = {/   , ttl: 24 * 60 * 60 * 1000,  maxSize: 50 * 1024 * 1024,  / 默认50MB*  默认1000项* ///
-  }
+  ;}
   private constructor() {
     this.loadFromStorage();
     this.startCleanupTimer();
@@ -42,7 +41,7 @@ export interface CacheStats {
   ///        this.options = { ...this.options, ...options };
   }
   // 设置缓存项  async set<T>(key: string,)
-    data: T,
+    data: T;
     options?: Partial<CacheOptions />/      ): Promise<void>  {
     try {
       const now = Date.now;
@@ -53,10 +52,10 @@ export interface CacheStats {
         return;
       }
       const cacheItem: CacheItem<T> = {data,
-        timestamp: now,
-        expiresAt: itemOptions.ttl ? now + itemOptions.ttl : undefined,
+        timestamp: now;
+        expiresAt: itemOptions.ttl ? now + itemOptions.ttl : undefined;
         size,
-        accessCount: 0,
+        accessCount: 0;
         lastAccessed: now;
       };
       await this.ensureSpace(size, itemOptions;);
@@ -116,7 +115,7 @@ export interface CacheStats {
       this.cache.clear();
       const storageKeys = keys.map(key;) => `cache_${key}`);
       await AsyncStorage.multiRemove(storageKey;s;);
-      this.stats = { hits: 0, misses: 0, sets: 0, deletes: 0}
+      this.stats = { hits: 0, misses: 0, sets: 0, deletes: 0;}
     } catch (error) {
       }
   }
@@ -152,26 +151,26 @@ export interface CacheStats {
     return {totalItems: this.cache.size,totalSize,hitRate: totalRequests > 0 ? (this.stats.hits / totalRequests) * 100 : 0,/          missRate:;
         totalRequests > 0 ? (this.stats.misses / totalRequests) * 100 : 0,/          oldestItem,newestItem,mostAccessed,leastAccesse;d;};
   }
-  // 获取详细统计信息  getDetailedStats(): { stats: CacheStats,
-    operations: typeof this.stats,
+  // 获取详细统计信息  getDetailedStats(): { stats: CacheStats;
+    operations: typeof this.stats;
     items: Array<{,
-  key: string,
-      size: number,
-      age: number,
-      accessCount: number,
+  key: string;
+      size: number;
+      age: number;
+      accessCount: number;
       lastAccessed: number;
       expiresIn?: number}>;
   } {
     const stats = this.getStats;
     const now = Date.now;
     const items = Array.from(this.cache.entries).map([key, item]); => ({key,)
-      size: item.size || 0,
-      age: now - item.timestamp,
-      accessCount: item.accessCount,
-      lastAccessed: item.lastAccessed,
+      size: item.size || 0;
+      age: now - item.timestamp;
+      accessCount: item.accessCount;
+      lastAccessed: item.lastAccessed;
       expiresIn: item.expiresAt ? item.expiresAt - now : undefined;
     }));
-    return {stats,operations: { ...this.stats },item;s;};
+    return {stats,operations: { ...this.stats ;},item;s;};
   }
   // 确保有足够的空间  private async ensureSpace(requiredSize: number,)
     options: Required<CacheOptions />/      ): Promise<void>  {
@@ -228,8 +227,8 @@ export interface CacheStats {
     setInterval() => {
   // 性能监控
 const performanceMonitor = usePerformanceMonitor(cacheManager", {")
-    trackRender: true,
-    trackMemory: false,warnThreshold: 100, // ms };);
+    trackRender: true;
+    trackMemory: false,warnThreshold: 100, // ms ;};);
       this.cleanupExpired();
     }, 5 * 60 * 1000);
   }
@@ -246,7 +245,7 @@ const performanceMonitor = usePerformanceMonitor(cacheManager", {")
           continue;
         }
         try {
-          const key = storageKey.replace("cache_",;);"
+          const key = storageKey.replace("cache_";);"
           const item: CacheItem = JSON.parse(value);
           if (item.expiresAt && Date.now() > item.expiresAt) {
             await AsyncStorage.removeItem(storageKe;y;);
@@ -262,18 +261,18 @@ const performanceMonitor = usePerformanceMonitor(cacheManager", {")
   }
   // 保存缓存项到持久存储  private async saveToStorage(key: string, item: CacheItem): Promise<void>  {
     try {
-      await AsyncStorage.setItem(`cache_${key}`, JSON.stringify(item;);)
+      await AsyncStorage.setItem(`cache_${key;}`, JSON.stringify(item;);)
     } catch (error) {
       }
   }
   ///    >> {
-    const exported: Record<string, any> = {};
+    const exported: Record<string, any> = {;};
     for (const [key, item] of this.cache.entries();) {
       exported[key] = {
-        data: item.data,
-        timestamp: item.timestamp,
-        expiresAt: item.expiresAt,
-        accessCount: item.accessCount,
+        data: item.data;
+        timestamp: item.timestamp;
+        expiresAt: item.expiresAt;
+        accessCount: item.accessCount;
         lastAccessed: item.lastAccessed;
       };
     }
@@ -282,7 +281,7 @@ const performanceMonitor = usePerformanceMonitor(cacheManager", {")
   // 导入缓存数据  async importCache(data: Record<string, any>): Promise<void>  {
     for (const [key, itemData] of Object.entries(data)) {
       if (itemData && typeof itemData === "object") {
-        await this.set(key, itemData.data, { ttl: itemData.expiresAt ? itemData.expiresAt - Date.now: undefined  });
+        await this.set(key, itemData.data, { ttl: itemData.expiresAt ? itemData.expiresAt - Date.now: undefined  ;});
       }
     }
   }
@@ -290,8 +289,8 @@ const performanceMonitor = usePerformanceMonitor(cacheManager", {")
 //   ;
 /   ; ///  >;
 >;(;)
-  key: string,
-  data: T,
+  key: string;
+  data: T;
   options?: Partial<CacheOptions />/    ) => {}
   return cacheManager.set(key, data, option;s;);
 };

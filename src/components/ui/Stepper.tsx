@@ -10,7 +10,7 @@ import {;
 import { useTheme } from '../../contexts/ThemeContext';
 
 export interface StepItem {
-  key: string;,
+  key: string;
   title: string;
   description?: string;
   icon?: React.ReactNode;
@@ -47,7 +47,7 @@ export const Stepper: React.FC<StepperProps> = ({
   descriptionStyle,
   accessible = true,
   testID
-}) => {
+;}) => {
   const { currentTheme } = useTheme();
 
   const getStepStatus = (index: number) => {
@@ -73,25 +73,25 @@ export const Stepper: React.FC<StepperProps> = ({
     switch (size) {
       case 'small':
         return {
-          iconSize: 24,
-          fontSize: 12,
-          descriptionFontSize: 10,
+          iconSize: 24;
+          fontSize: 12;
+          descriptionFontSize: 10;
           spacing: 8
-        };
+        ;};
       case 'large':
         return {
-          iconSize: 40,
-          fontSize: 18,
-          descriptionFontSize: 14,
+          iconSize: 40;
+          fontSize: 18;
+          descriptionFontSize: 14;
           spacing: 16
-        };
+        ;};
       default:
         return {,
-  iconSize: 32,
-          fontSize: 14,
-          descriptionFontSize: 12,
+  iconSize: 32;
+          fontSize: 14;
+          descriptionFontSize: 12;
           spacing: 12
-        };
+        ;};
     }
   };
 
@@ -104,8 +104,8 @@ export const Stepper: React.FC<StepperProps> = ({
   };
 
   const renderStepIcon = (
-    step: StepItem,
-    index: number,
+    step: StepItem;
+    index: number;
     stepStatus: string;
   ) => {
     const color = getStepColor(stepStatus);
@@ -116,11 +116,11 @@ export const Stepper: React.FC<StepperProps> = ({
           style={[
             styles.iconContainer,
             {
-              width: sizeConfig.iconSize,
-              height: sizeConfig.iconSize,
-              borderColor: color,
+              width: sizeConfig.iconSize;
+              height: sizeConfig.iconSize;
+              borderColor: color;
               backgroundColor: stepStatus === 'finish' ? color : 'transparent'
-            }
+            ;}
           ]}
         >
           {step.icon}
@@ -132,7 +132,7 @@ export const Stepper: React.FC<StepperProps> = ({
     let iconContent: React.ReactNode;
     if (stepStatus === 'finish') {
       iconContent = (
-        <Text style={[styles.iconText, { color: '#ffffff' }]}>✓</Text>
+        <Text style={[styles.iconText, { color: '#ffffff' ;}]}>✓</Text>
       );
     } else if (stepStatus === 'error') {
       iconContent = <Text style={[styles.iconText, { color }]}>✕</Text>;
@@ -147,11 +147,11 @@ export const Stepper: React.FC<StepperProps> = ({
         style={[
           styles.iconContainer,
           {
-            width: sizeConfig.iconSize,
-            height: sizeConfig.iconSize,
-            borderColor: color,
+            width: sizeConfig.iconSize;
+            height: sizeConfig.iconSize;
+            borderColor: color;
             backgroundColor: stepStatus === 'finish' ? color : 'transparent'
-          }
+          ;}
         ]}
       >
         {iconContent}
@@ -173,10 +173,10 @@ export const Stepper: React.FC<StepperProps> = ({
           style={[
             styles.verticalConnector,
             {
-              backgroundColor: color,
-              marginLeft: sizeConfig.iconSize / 2 - 1,
+              backgroundColor: color;
+              marginLeft: sizeConfig.iconSize / 2 - 1;
               height: 40
-            }
+            ;}
           ]}
         />
       );
@@ -187,9 +187,9 @@ export const Stepper: React.FC<StepperProps> = ({
         style={[
           styles.horizontalConnector,
           {
-            backgroundColor: color,
+            backgroundColor: color;
             top: sizeConfig.iconSize / 2 - 1
-          }
+          ;}
         ]}
       />
     );
@@ -203,14 +203,14 @@ export const Stepper: React.FC<StepperProps> = ({
     const StepContainer = isClickable ? TouchableOpacity : View;
     const containerProps = isClickable;
       ? {
-          onPress: () => handleStepPress(index),
-          accessible: accessible,
-          accessibilityRole: 'button' as const,
-          accessibilityLabel: `步骤 ${index + 1}: ${step.title}`,
+          onPress: () => handleStepPress(index);
+          accessible: accessible;
+          accessibilityRole: 'button' as const;
+
           accessibilityState: {,
-  selected: index === current,
+  selected: index === current;
             disabled: isDisabled
-          }
+          ;}
         }
       : {};
 
@@ -233,16 +233,16 @@ export const Stepper: React.FC<StepperProps> = ({
             style={[
               styles.textContainer,
               direction === 'horizontal' && styles.horizontalTextContainer,
-              { marginLeft: direction === 'vertical' ? sizeConfig.spacing : 0 }
+              { marginLeft: direction === 'vertical' ? sizeConfig.spacing : 0 ;}
             ]}
           >
             <Text;
               style={[
                 styles.title,
                 {
-                  fontSize: sizeConfig.fontSize,
+                  fontSize: sizeConfig.fontSize;
                   color: getStepColor(stepStatus)
-                },
+                ;},
                 titleStyle
               ]}
             >
@@ -254,9 +254,9 @@ export const Stepper: React.FC<StepperProps> = ({
                 style={[
                   styles.description,
                   {
-                    fontSize: sizeConfig.descriptionFontSize,
+                    fontSize: sizeConfig.descriptionFontSize;
                     color: currentTheme.colors.onSurfaceVariant
-                  },
+                  ;},
                   descriptionStyle
                 ]}
               >
@@ -274,69 +274,69 @@ export const Stepper: React.FC<StepperProps> = ({
   const styles = StyleSheet.create({
     container: {,
   backgroundColor: currentTheme.colors.surface
-    },
+    ;},
     horizontalContainer: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
       alignItems: 'flex-start'
-    },
+    ;},
     verticalContainer: {,
   flexDirection: 'column'
-    },
+    ;},
     horizontalStep: {,
-  flex: 1,
+  flex: 1;
       position: 'relative'
-    },
+    ;},
     verticalStep: {,
-  flexDirection: 'row',
-      alignItems: 'flex-start',
-      paddingVertical: 8,
+  flexDirection: 'row';
+      alignItems: 'flex-start';
+      paddingVertical: 8;
       position: 'relative'
-    },
+    ;},
     stepContent: {,
-  flexDirection: direction === 'vertical' ? 'row' : 'column',
+  flexDirection: direction === 'vertical' ? 'row' : 'column';
       alignItems: direction === 'vertical' ? 'flex-start' : 'center'
-    },
+    ;},
     disabledStep: {,
   opacity: 0.5
-    },
+    ;},
     iconContainer: {,
-  borderWidth: 2,
-      borderRadius: 50,
-      justifyContent: 'center',
+  borderWidth: 2;
+      borderRadius: 50;
+      justifyContent: 'center';
       alignItems: 'center'
-    },
+    ;},
     iconText: {,
-  fontWeight: 'bold',
+  fontWeight: 'bold';
       fontSize: 14
-    },
+    ;},
     textContainer: {,
   alignItems: direction === 'horizontal' ? 'center' : 'flex-start'
-    },
+    ;},
     horizontalTextContainer: {,
-  marginTop: 8,
+  marginTop: 8;
       alignItems: 'center'
-    },
+    ;},
     title: {,
-  fontWeight: '600',
+  fontWeight: '600';
       textAlign: direction === 'horizontal' ? 'center' : 'left'
-    },
+    ;},
     description: {,
-  marginTop: 4,
+  marginTop: 4;
       textAlign: direction === 'horizontal' ? 'center' : 'left'
-    },
+    ;},
     horizontalConnector: {,
-  position: 'absolute',
-      left: '50%',
-      right: '-50%',
-      height: 2,
+  position: 'absolute';
+      left: '50%';
+      right: '-50%';
+      height: 2;
       zIndex: -1
-    },
+    ;},
     verticalConnector: {,
-  position: 'absolute',
-      width: 2,
-      top: sizeConfig.iconSize + 8,
+  position: 'absolute';
+      width: 2;
+      top: sizeConfig.iconSize + 8;
       zIndex: -1
-    }
+    ;}
   });
 
   return (
@@ -364,7 +364,7 @@ export interface StepProps {
   children?: React.ReactNode;
 }
 
-export const Step: React.FC<StepProps> = ({ children }) => {
+export const Step: React.FC<StepProps> = ({ children ;}) => {
   return <>{children}</>;
 };
 
@@ -380,12 +380,12 @@ export const AdvancedStepper: React.FC<AdvancedStepperProps> = ({
   const steps: StepItem[] = React.Children.map(children, (child, index) => {
     if (React.isValidElement(child) && child.type === Step) {
       return {
-        key: child.key?.toString() || index.toString(),
-        title: child.props.title,
-        description: child.props.description,
-        icon: child.props.icon,
+        key: child.key?.toString() || index.toString();
+        title: child.props.title;
+        description: child.props.description;
+        icon: child.props.icon;
         disabled: child.props.disabled
-      };
+      ;};
     }
     return null;
   }).filter(Boolean) as StepItem[];

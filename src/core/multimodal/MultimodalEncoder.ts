@@ -15,25 +15,25 @@ export interface EncoderConfig {
 * 舌象特征提取器
 */
 export interface TongueFeatures {
-  color: {;,
-  red: number;,
-  pink: number;,
-  pale: number;,
+  color: {
+  red: number;
+  pink: number;
+  pale: number;
   purple: number;
 };
   coating: {,
-  thickness: number;,
-  color: string,
+  thickness: number;
+  color: string;
   distribution: number;
   };
   texture: {,
-  cracks: number;,
-  spots: number,
+  cracks: number;
+  spots: number;
   smoothness: number;
   };
   shape: {,
-  size: number;,
-  edges: string,
+  size: number;
+  edges: string;
   tip: string;
   };
 }
@@ -41,26 +41,26 @@ export interface TongueFeatures {
 * 脉象特征提取器
 */
 export interface PulseFeatures {
-  rate: number;,
-  rhythm: {;,
-  regularity: number;,
+  rate: number;
+  rhythm: {
+  regularity: number;
   pattern: string;
 };
   strength: {,
-  amplitude: number;,
+  amplitude: number;
   force: number;
   };
   quality: {,
-  floating: number;,
-  deep: number,
-  slow: number;,
-  rapid: number,
-  weak: number;,
+  floating: number;
+  deep: number;
+  slow: number;
+  rapid: number;
+  weak: number;
   strong: number;
   };
   waveform: {,
-  peaks: number[];,
-  valleys: number[],
+  peaks: number[];
+  valleys: number[];
   duration: number;
   };
 }
@@ -104,7 +104,7 @@ export class TextEncoder extends BaseEncoder {
       await new Promise(resolve => setTimeout(resolve, 1000));
       this.isInitialized = true;
     } catch (error) {
-      throw new Error(`Failed to initialize text encoder: ${error}`);
+      throw new Error(`Failed to initialize text encoder: ${error;}`);
     }
   }
   async encode(text: string): Promise<number[]> {
@@ -121,7 +121,7 @@ export class TextEncoder extends BaseEncoder {
       const embedding = this.generateTextEmbedding(tokens);
       return this.normalizeVector(embedding);
     } catch (error) {
-      throw new Error(`Text encoding failed: ${error}`);
+      throw new Error(`Text encoding failed: ${error;}`);
     }
   }
   private tokenize(text: string): string[] {
@@ -174,7 +174,7 @@ export class TongueEncoder extends BaseEncoder {
       await new Promise(resolve => setTimeout(resolve, 1500));
       this.isInitialized = true;
     } catch (error) {
-      throw new Error(`Failed to initialize tongue encoder: ${error}`);
+      throw new Error(`Failed to initialize tongue encoder: ${error;}`);
     }
   }
   async encode(imageData: ImageData | string): Promise<number[]> {
@@ -191,7 +191,7 @@ export class TongueEncoder extends BaseEncoder {
       const embedding = this.featuresToEmbedding(features);
       return this.normalizeVector(embedding);
     } catch (error) {
-      throw new Error(`Tongue encoding failed: ${error}`);
+      throw new Error(`Tongue encoding failed: ${error;}`);
     }
   }
   private async extractTongueFeatures(imageData: ImageData | string): Promise<TongueFeatures> {
@@ -199,9 +199,9 @@ export class TongueEncoder extends BaseEncoder {
     // 实际实现中应该使用计算机视觉算法分析舌象图像
     return {
       color: {,
-  red: Math.random() * 0.3 + 0.2,
-        pink: Math.random() * 0.4 + 0.3,
-        pale: Math.random() * 0.2 + 0.1,
+  red: Math.random() * 0.3 + 0.2;
+        pink: Math.random() * 0.4 + 0.3;
+        pale: Math.random() * 0.2 + 0.1;
         purple: Math.random() * 0.1;
       },coating: {thickness: Math.random() * 0.5 + 0.1,color: ["white",yellow', 'gray'][Math.floor(Math.random() * 3)],distribution: Math.random() * 0.8 + 0.2;
       },texture: {cracks: Math.random() * 0.3,spots: Math.random() * 0.2,smoothness: Math.random() * 0.8 + 0.2;
@@ -257,7 +257,7 @@ export class PulseEncoder extends BaseEncoder {
       await new Promise(resolve => setTimeout(resolve, 1200));
       this.isInitialized = true;
     } catch (error) {
-      throw new Error(`Failed to initialize pulse encoder: ${error}`);
+      throw new Error(`Failed to initialize pulse encoder: ${error;}`);
     }
   }
   async encode(pulseSignal: number[] | Float32Array): Promise<number[]> {
@@ -274,7 +274,7 @@ export class PulseEncoder extends BaseEncoder {
       const embedding = this.featuresToEmbedding(features);
       return this.normalizeVector(embedding);
     } catch (error) {
-      throw new Error(`Pulse encoding failed: ${error}`);
+      throw new Error(`Pulse encoding failed: ${error;}`);
     }
   }
   private extractPulseFeatures(signal: number[]): PulseFeatures {
@@ -285,15 +285,15 @@ export class PulseEncoder extends BaseEncoder {
     return {rate: heartRate,rhythm: {regularity: this.calculateRhythmRegularity(peaks),pattern: this.classifyRhythmPattern(peaks);
       },
       strength: {,
-  amplitude: this.calculateAmplitude(signal),
+  amplitude: this.calculateAmplitude(signal);
         force: this.calculateForce(signal);
       },
       quality: {,
-  floating: Math.random() * 0.5,
-        deep: Math.random() * 0.5,
-        slow: heartRate < 60 ? 1 : 0,
-        rapid: heartRate > 100 ? 1 : 0,
-        weak: Math.random() * 0.3,
+  floating: Math.random() * 0.5;
+        deep: Math.random() * 0.5;
+        slow: heartRate < 60 ? 1 : 0;
+        rapid: heartRate > 100 ? 1 : 0;
+        weak: Math.random() * 0.3;
         strong: Math.random() * 0.7 + 0.3;
       },
       waveform: {
@@ -405,30 +405,30 @@ export class MultimodalEncoder extends EventEmitter {
       [
         ModalityType.TEXT,
         {
-          dimension: 768,
-          batchSize: 32,
-          maxLength: 512,
-          device: 'cpu',
+          dimension: 768;
+          batchSize: 32;
+          maxLength: 512;
+          device: 'cpu';
           precision: 'float32'
-        }
+        ;}
       ],
       [
         ModalityType.TONGUE_IMAGE,
         {
-          dimension: 512,
-          batchSize: 16,
-          device: 'cpu',
+          dimension: 512;
+          batchSize: 16;
+          device: 'cpu';
           precision: 'float32'
-        }
+        ;}
       ],
       [
         ModalityType.PULSE_SIGNAL,
         {
-          dimension: 256,
-          batchSize: 64,
-          device: 'cpu',
+          dimension: 256;
+          batchSize: 64;
+          device: 'cpu';
           precision: 'float32'
-        }
+        ;}
       ]
     ]);
   }
@@ -450,16 +450,16 @@ export class MultimodalEncoder extends EventEmitter {
       this.emit('initialized');
     } catch (error) {
       this.emit('error', error);
-      throw new Error(`Failed to initialize multimodal encoder: ${error}`);
+      throw new Error(`Failed to initialize multimodal encoder: ${error;}`);
     }
   }
   /**
   * 编码单个模态数据
   */
   async encodeModality()
-    data: any,
-    modality: ModalityType,
-    metadata: Record<string, any> = {}
+    data: any;
+    modality: ModalityType;
+    metadata: Record<string, any> = {;}
   ): Promise<Embedding> {
     try {
       let vector: number[];
@@ -474,15 +474,15 @@ export class MultimodalEncoder extends EventEmitter {
           vector = await this.pulseEncoder.encode(data);
           break;
         default:
-          throw new Error(`Unsupported modality: ${modality}`);
+          throw new Error(`Unsupported modality: ${modality;}`);
       }
       const embedding: Embedding = {,
-  id: `${modality}_${Date.now()}`,
+  id: `${modality;}_${Date.now()}`,
         vector,
         modality,
         metadata: {
           ...metadata,
-          timestamp: Date.now(),
+          timestamp: Date.now();
           dimension: vector.length;
         }
       };
@@ -498,9 +498,9 @@ export class MultimodalEncoder extends EventEmitter {
   */
   async encodeMultimodal()
     inputs: Array<{,
-  data: any;,
+  data: any;
   modality: ModalityType;
-      metadata?: Record<string, any>;
+      metadata?: Record<string; any>;
     }>
   ): Promise<Embedding[]> {
     try {
@@ -512,7 +512,7 @@ export class MultimodalEncoder extends EventEmitter {
       return embeddings;
     } catch (error) {
       this.emit('error', error);
-      throw new Error(`Failed to encode multimodal batch: ${error}`);
+      throw new Error(`Failed to encode multimodal batch: ${error;}`);
     }
   }
   /**
@@ -545,7 +545,7 @@ export class MultimodalEncoder extends EventEmitter {
       this.emit('cleaned_up');
     } catch (error) {
       this.emit('error', error);
-      throw new Error(`Failed to cleanup multimodal encoder: ${error}`);
+      throw new Error(`Failed to cleanup multimodal encoder: ${error;}`);
     }
   }
 }

@@ -1,5 +1,4 @@
 import { nativeModulesManager } from "../nativeModules";
-import { nativeModulesManager } from "../nativeModules";
 describe("nativeModules", () => {
   beforeEach(() => {
     jest.clearAllMocks();

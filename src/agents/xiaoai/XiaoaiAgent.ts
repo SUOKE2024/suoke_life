@@ -124,11 +124,11 @@ interface XiaoaiAgent {
   setPersonality(traits: any): void;
   startInquirySession(userId: string): Promise<any>;
   analyzeImage(
-    imageData: ImageData,
+    imageData: ImageData;
     type: 'face' | 'tongue' | 'body'
   ): Promise<LookResult>;
   analyzeAudio(
-    audioData: AudioData,
+    audioData: AudioData;
     type: 'voice' | 'sound'
   ): Promise<ListenResult>;
   processPalpationData(data: PalpationData): Promise<PalpationResult>;
@@ -147,11 +147,11 @@ interface XiaoaiAgent {
 export class XiaoaiAgentImpl implements XiaoaiAgent {
   private diagnosisIntegrator: XiaoaiChatDiagnosisIntegrator;
   private personality: any = {
-    style: 'caring',
+    style: 'caring';
     tone: 'warm', // 温暖的语调
     expertise: 'health', // 健康专业
     patience: 'high', // 高耐心
-  };
+  ;};
 
   constructor() {
     this.diagnosisIntegrator = new XiaoaiChatDiagnosisIntegrator();
@@ -159,7 +159,7 @@ export class XiaoaiAgentImpl implements XiaoaiAgent {
 
   // 处理聊天消息
   async processMessage(
-    message: string,
+    message: string;
     context: ChatContext
   ): Promise<ChatResponse> {
     try {
@@ -178,23 +178,23 @@ export class XiaoaiAgentImpl implements XiaoaiAgent {
   async analyzeHealthData(data: any): Promise<any> {
     try {
       const analysis = {
-        summary: '健康数据分析完成',
-        insights: [] as string[],
-        recommendations: [] as string[],
-        riskFactors: [] as string[],
-        trends: [] as string[],
+
+        insights: [] as string[];
+        recommendations: [] as string[];
+        riskFactors: [] as string[];
+        trends: [] as string[];
       };
 
       if (data.vitalSigns) {
-        analysis.insights.push('生命体征数据已分析');
+
       }
 
       if (data.symptoms) {
-        analysis.insights.push(`检测到${data.symptoms.length}个症状`);
+
       }
 
       if (data.lifestyle) {
-        analysis.insights.push('生活方式数据已评估');
+
       }
 
       return analysis;
@@ -214,47 +214,47 @@ export class XiaoaiAgentImpl implements XiaoaiAgent {
 
       if (age >= 40) {
         recommendations.push({
-          category: 'lifestyle',
-          title: '定期体检',
-          description: '建议每年进行一次全面体检，重点关注心血管和代谢指标',
-          priority: 'high',
-          timeframe: '每年一次',
+          category: 'lifestyle';
+
+
+          priority: 'high';
+
         });
       }
 
       if (age >= 60) {
         recommendations.push({
-          category: 'exercise',
-          title: '适度运动',
-          description: '建议进行低强度有氧运动，如散步、太极等',
-          priority: 'medium',
-          timeframe: '每周3-5次',
+          category: 'exercise';
+
+
+          priority: 'medium';
+
         });
       }
 
       if (gender === 'female') {
         recommendations.push({
-          category: 'diet',
-          title: '补充铁质',
-          description: '注意补充铁质丰富的食物，预防贫血',
-          priority: 'medium',
-          timeframe: '日常饮食',
+          category: 'diet';
+
+
+          priority: 'medium';
+
         });
       }
 
       if (profile.medicalHistory.length > 0) {
         recommendations.push({
-          category: 'lifestyle',
-          title: '疾病管理',
-          description: '根据既往病史，建议定期随访和监测',
-          priority: 'high',
-          timeframe: '按医嘱执行',
+          category: 'lifestyle';
+
+
+          priority: 'high';
+
         });
       }
 
       if (profile.preferences.diagnosisPreferences.privacyLevel === 'high') {
         recommendations.forEach((rec) => {
-          rec.description = '建议咨询专业医生获取个性化指导';
+
         });
       }
 
@@ -266,7 +266,7 @@ export class XiaoaiAgentImpl implements XiaoaiAgent {
 
   // 设置个性化特征
   setPersonality(traits: any): void {
-    this.personality = { ...this.personality, ...traits };
+    this.personality = { ...this.personality, ...traits ;};
   }
 
   // 四诊功能集成
@@ -279,11 +279,11 @@ export class XiaoaiAgentImpl implements XiaoaiAgent {
   }
 
   async analyzeImage(
-    imageData: ImageData,
+    imageData: ImageData;
     type: 'face' | 'tongue' | 'body'
   ): Promise<LookResult> {
     try {
-      const processedImageData = { ...imageData, type };
+      const processedImageData = { ...imageData, type ;};
 
       if (type === 'face') {
         return await diagnosisServiceClient.look.analyzeFace(
@@ -305,13 +305,13 @@ export class XiaoaiAgentImpl implements XiaoaiAgent {
   }
 
   async analyzeAudio(
-    audioData: AudioData,
+    audioData: AudioData;
     type: 'voice' | 'sound'
   ): Promise<ListenResult> {
     try {
       const audioType: 'voice' | 'breathing' =
         type === 'sound' ? 'breathing' : 'voice';
-      const processedAudioData = { ...audioData, type: audioType };
+      const processedAudioData = { ...audioData, type: audioType ;};
 
       if (audioType === 'voice') {
         return await diagnosisServiceClient.listen.analyzeVoice(
@@ -348,8 +348,8 @@ export class XiaoaiAgentImpl implements XiaoaiAgent {
         summary,
         confidence,
         recommendations,
-        syndrome: this.identifySyndrome(data),
-        treatment: this.suggestTreatment(data),
+        syndrome: this.identifySyndrome(data);
+        treatment: this.suggestTreatment(data);
       };
     } catch (error) {
       throw error;
@@ -362,17 +362,17 @@ export class XiaoaiAgentImpl implements XiaoaiAgent {
       if (feature.type === 'voice_assistance') {
         await accessibilityServiceClient.updateAccessibilitySettings(
           feature.userId,
-          { voice_assistance: true, ...feature.preferences }
+          { voice_assistance: true, ...feature.preferences ;}
         );
       } else if (feature.type === 'screen_reader') {
         await accessibilityServiceClient.updateAccessibilitySettings(
           feature.userId,
-          { screen_reader: true, ...feature.preferences }
+          { screen_reader: true, ...feature.preferences ;}
         );
       } else if (feature.type === 'sign_language') {
         await accessibilityServiceClient.updateAccessibilitySettings(
           feature.userId,
-          { sign_language: true, ...feature.preferences }
+          { sign_language: true, ...feature.preferences ;}
         );
       }
     } catch (error) {
@@ -384,26 +384,26 @@ export class XiaoaiAgentImpl implements XiaoaiAgent {
     try {
       // 检查无障碍服务状态
       const defaultStatus = {
-        serviceAvailable: true,
+        serviceAvailable: true;
         visual: {
-          screenReader: false,
-          highContrast: false,
-          magnification: false,
+          screenReader: false;
+          highContrast: false;
+          magnification: false;
         },
         hearing: {
-          captions: false,
-          signLanguage: false,
-          audioDescription: false,
+          captions: false;
+          signLanguage: false;
+          audioDescription: false;
         },
         motor: {
-          voiceControl: false,
-          eyeTracking: false,
-          switchControl: false,
+          voiceControl: false;
+          eyeTracking: false;
+          switchControl: false;
         },
         cognitive: {
-          simplifiedInterface: false,
-          reminders: false,
-          navigationAssist: false,
+          simplifiedInterface: false;
+          reminders: false;
+          navigationAssist: false;
         },
       };
 
@@ -415,31 +415,31 @@ export class XiaoaiAgentImpl implements XiaoaiAgent {
 
   async adaptInterfaceForDisability(disability: any): Promise<any> {
     try {
-      const adaptations: any = {};
+      const adaptations: any = {;};
 
       if (disability.type === 'visual') {
         adaptations.visual = {
-          fontSize: 'large',
-          highContrast: true,
-          screenReader: true,
+          fontSize: 'large';
+          highContrast: true;
+          screenReader: true;
         };
       } else if (disability.type === 'hearing') {
         adaptations.hearing = {
-          captions: true,
-          visualIndicators: true,
-          signLanguage: true,
+          captions: true;
+          visualIndicators: true;
+          signLanguage: true;
         };
       } else if (disability.type === 'motor') {
         adaptations.motor = {
-          largeButtons: true,
-          voiceControl: true,
-          gestureAlternatives: true,
+          largeButtons: true;
+          voiceControl: true;
+          gestureAlternatives: true;
         };
       } else if (disability.type === 'cognitive') {
         adaptations.cognitive = {
-          simplifiedInterface: true,
-          stepByStep: true,
-          reminders: true,
+          simplifiedInterface: true;
+          stepByStep: true;
+          reminders: true;
         };
       }
 
@@ -451,25 +451,25 @@ export class XiaoaiAgentImpl implements XiaoaiAgent {
 
   // 私有辅助方法
   private applyPersonalityToResponse(
-    text: string,
+    text: string;
     context: ChatContext
   ): string {
     // 根据个性化设置调整回复语调
     if (this.personality.tone === 'warm') {
-      return `${text} 😊`;
+      return `${text;} 😊`;
     }
     return text;
   }
 
   private generateFallbackResponse(
-    message: string,
+    message: string;
     context: ChatContext
   ): ChatResponse {
     return {
-      text: '抱歉，我暂时无法理解您的问题。请您重新描述一下，我会尽力帮助您。',
-      suggestions: ['请描述您的症状', '我想了解健康建议', '帮我分析健康数据'],
-      requiresFollowUp: true,
-      confidence: 0.1,
+
+
+      requiresFollowUp: true;
+      confidence: 0.1;
     };
   }
 
@@ -477,19 +477,19 @@ export class XiaoaiAgentImpl implements XiaoaiAgent {
     const parts: string[] = [];
 
     if (data.inquiry) {
-      parts.push('问诊分析完成');
+
     }
     if (data.look) {
-      parts.push('望诊分析完成');
+
     }
     if (data.listen) {
-      parts.push('闻诊分析完成');
+
     }
     if (data.palpation) {
-      parts.push('切诊分析完成');
+
     }
 
-    return parts.length > 0 ? parts.join('，') : '诊断分析完成';
+
   }
 
   private calculateDiagnosisConfidence(data: FourDiagnosisResults): number {
@@ -524,13 +524,13 @@ export class XiaoaiAgentImpl implements XiaoaiAgent {
 
   private identifySyndrome(data: FourDiagnosisResults): string {
     // 基于四诊结果识别证候
-    return '需要进一步分析确定证候';
-  }
+
+  ;}
 
   private suggestTreatment(data: FourDiagnosisResults): string {
     // 基于诊断结果建议治疗方案
-    return '建议咨询专业中医师制定个性化治疗方案';
-  }
+
+  ;}
 }
 
 // 创建小艾智能体实例

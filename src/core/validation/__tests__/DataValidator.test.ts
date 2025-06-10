@@ -1,5 +1,4 @@
 import { DataValidator, dataValidator, validateData, isValidData, sanitizeData, validateHealthData, validateUserInput, validateApiData } from "../DataValidator";
-import { DataValidator, dataValidator, validateData, isValidData, sanitizeData, validateHealthData, validateUserInput, validateApiData } from "../DataValidator";
 describe("DataValidator", () => {
   beforeEach(() => {
     jest.clearAllMocks();

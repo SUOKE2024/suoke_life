@@ -18,10 +18,28 @@ const ExploreScreen = React.lazy(
   () => import('./screens/explore/ExploreScreen')
 );
 
+// 商业化导航器
+const BusinessNavigator = React.lazy(
+  () => import('./navigation/BusinessNavigator')
+);
+
+// 智能体导航器
+const AgentNavigator = React.lazy(
+  () => import('./navigation/AgentNavigator')
+);
+
+// 商业化快速访问组件
+const BusinessQuickAccess = React.lazy(
+  () => import('./components/business/BusinessQuickAccess')
+);
+
 // 临时创建简单的ProfileScreen组件
 const ProfileScreen = () => (
   <View style={styles.profileContainer}>
-    <Text>个人资料页面</Text>
+    <Text style={styles.profileTitle}>个人中心</Text>
+    <React.Suspense fallback={<LoadingFallback />}>
+      <BusinessQuickAccess />
+    </React.Suspense>
   </View>
 );
 
@@ -70,25 +88,25 @@ const GatewayManagementScreen = () => {
           style={[styles.tab, activeTab === 'monitor' && styles.activeTab]}
           onPress={() => setActiveTab('monitor')}
         >
-          监控
+
         </Text>
         <Text
           style={[styles.tab, activeTab === 'config' && styles.activeTab]}
           onPress={() => setActiveTab('config')}
         >
-          配置
+
         </Text>
         <Text
           style={[styles.tab, activeTab === 'analytics' && styles.activeTab]}
           onPress={() => setActiveTab('analytics')}
         >
-          分析
+
         </Text>
         <Text
           style={[styles.tab, activeTab === 'settings' && styles.activeTab]}
           onPress={() => setActiveTab('settings')}
         >
-          设置
+
         </Text>
       </View>
       {renderContent()}
@@ -101,7 +119,7 @@ const MainTabs = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
+        tabBarIcon: ({ focused, color, size ;}) => {
           let iconName: string;
           switch (route.name) {
             case 'Main':
@@ -116,6 +134,12 @@ const MainTabs = () => {
             case 'Explore':
               iconName = focused ? 'explore' : 'explore-off';
               break;
+            case 'Business':
+              iconName = focused ? 'business' : 'business-outline';
+              break;
+            case 'Agents':
+              iconName = focused ? 'smart-toy' : 'android';
+              break;
             case 'Profile':
               iconName = focused ? 'person' : 'person-outline';
               break;
@@ -127,41 +151,51 @@ const MainTabs = () => {
           }
           return <Icon name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: '#2196F3',
-        tabBarInactiveTintColor: 'gray',
-        headerShown: false,
+        tabBarActiveTintColor: '#2196F3';
+        tabBarInactiveTintColor: 'gray';
+        headerShown: false;
       })}
     >
       <Tab.Screen
         name="Main"
         component={HomeScreen}
-        options={{ title: '首页' }}
+
       />
       <Tab.Screen
         name="Health"
         component={LifeOverviewScreen}
-        options={{ title: '健康' }}
+
       />
       <Tab.Screen
         name="Diagnosis"
         component={FiveDiagnosisAgentIntegrationScreen}
-        options={{ title: '四诊' }}
+
       />
       <Tab.Screen
         name="Explore"
         component={ExploreScreen}
-        options={{ title: '探索' }}
+
+      />
+      <Tab.Screen
+        name="Business"
+        component={BusinessNavigator}
+
+      />
+      <Tab.Screen
+        name="Agents"
+        component={AgentNavigator}
+
       />
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}
-        options={{ title: '我的' }}
+
       />
       {APP_CONFIG.ENVIRONMENT === 'development' && (
         <Tab.Screen
           name="Gateway"
           component={GatewayManagementScreen}
-          options={{ title: '网关' }}
+
         />
       )}
     </Tab.Navigator>
@@ -169,7 +203,7 @@ const MainTabs = () => {
 };
 
 // 应用状态检查组件
-const AppStatusChecker: React.FC<{ children: React.ReactNode }> = ({
+const AppStatusChecker: React.FC<{ children: React.ReactNode ;}> = ({
   children,
 }) => {
   const [isReady, setIsReady] = useState(false);
@@ -180,12 +214,12 @@ const AppStatusChecker: React.FC<{ children: React.ReactNode }> = ({
       // 检查环境配置
       const config = getCurrentEnvConfig();
       console.log('App starting with config:', {
-        environment: APP_CONFIG.ENVIRONMENT,
-        gatewayUrl: config.GATEWAY_URL,
+        environment: APP_CONFIG.ENVIRONMENT;
+        gatewayUrl: config.GATEWAY_URL;
         features: Object.entries(config)
           .filter(([key, value]) => key.startsWith('ENABLE_') && value)
           .map(([key]) => key),
-      });
+      ;});
 
       // 在开发环境中进行额外检查
       if (APP_CONFIG.ENVIRONMENT === 'development') {
@@ -195,12 +229,12 @@ const AppStatusChecker: React.FC<{ children: React.ReactNode }> = ({
       setIsReady(true);
     } catch (err) {
       const errorMessage =
-        err instanceof Error ? err.message : '应用初始化失败';
+
       setError(errorMessage);
       console.error('App initialization error:', err);
-      Alert.alert('初始化错误', errorMessage, [
-        { text: '重试', onPress: checkAppStatus },
-        { text: '继续', onPress: () => setIsReady(true) },
+
+
+
       ]);
     }
   }, []);
@@ -246,7 +280,7 @@ const App: React.FC = () => {
       <AppStatusChecker>
         <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
         <NavigationContainer>
-          <Suspense fallback={<LoadingFallback />}>
+          <Suspense fallback={<LoadingFallback />;}>
             <MainTabs />
           </Suspense>
         </NavigationContainer>
@@ -258,69 +292,76 @@ const App: React.FC = () => {
 // 样式定义
 const styles = StyleSheet.create({
   profileContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    flex: 1;
+    backgroundColor: '#f5f5f5';
+  },
+  profileTitle: {
+    fontSize: 24;
+    fontWeight: 'bold';
+    color: '#333';
+    textAlign: 'center';
+    paddingVertical: 20;
+    backgroundColor: '#fff';
   },
   gatewayContainer: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
+    flex: 1;
+    backgroundColor: '#f5f5f5';
   },
   tabContainer: {
-    flexDirection: 'row',
-    backgroundColor: '#ffffff',
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    flexDirection: 'row';
+    backgroundColor: '#ffffff';
+    paddingVertical: 10;
+    paddingHorizontal: 16;
+    borderBottomWidth: 1;
+    borderBottomColor: '#e0e0e0';
   },
   tab: {
-    flex: 1,
-    textAlign: 'center',
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    marginHorizontal: 4,
-    borderRadius: 6,
-    backgroundColor: '#f0f0f0',
-    color: '#666666',
-    fontSize: 14,
-    fontWeight: '500',
+    flex: 1;
+    textAlign: 'center';
+    paddingVertical: 8;
+    paddingHorizontal: 12;
+    marginHorizontal: 4;
+    borderRadius: 6;
+    backgroundColor: '#f0f0f0';
+    color: '#666666';
+    fontSize: 14;
+    fontWeight: '500';
   },
   activeTab: {
-    backgroundColor: '#2196F3',
-    color: '#ffffff',
+    backgroundColor: '#2196F3';
+    color: '#ffffff';
   },
   errorContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#ffffff',
+    flex: 1;
+    justifyContent: 'center';
+    alignItems: 'center';
+    padding: 20;
+    backgroundColor: '#ffffff';
   },
   errorTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#f44336',
-    marginTop: 16,
-    marginBottom: 8,
+    fontSize: 18;
+    fontWeight: 'bold';
+    color: '#f44336';
+    marginTop: 16;
+    marginBottom: 8;
   },
   errorMessage: {
-    fontSize: 14,
-    color: '#666666',
-    textAlign: 'center',
-    lineHeight: 20,
+    fontSize: 14;
+    color: '#666666';
+    textAlign: 'center';
+    lineHeight: 20;
   },
   loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#ffffff',
+    flex: 1;
+    justifyContent: 'center';
+    alignItems: 'center';
+    backgroundColor: '#ffffff';
   },
   loadingText: {
-    fontSize: 16,
-    color: '#2196F3',
-    marginTop: 16,
-    fontWeight: '500',
+    fontSize: 16;
+    color: '#2196F3';
+    marginTop: 16;
+    fontWeight: '500';
   },
 });
 

@@ -1,5 +1,4 @@
 import { ANIMATION_DURATION, EASING, createAnimatedValue, createAnimatedValueXY, animateValue, animateSpring, animateSequence, animateParallel, animateStagger, animateLoop, animations, layoutAnimations, gestureAnimations, loadingAnimations, transitionAnimations, animationUtils, performanceUtils } from "../animations";
-import { ANIMATION_DURATION, EASING, createAnimatedValue, createAnimatedValueXY, animateValue, animateSpring, animateSequence, animateParallel, animateStagger, animateLoop, animations, layoutAnimations, gestureAnimations, loadingAnimations, transitionAnimations, animationUtils, performanceUtils } from "../animations";
 describe("animations", () => {
   beforeEach(() => {
     jest.clearAllMocks();

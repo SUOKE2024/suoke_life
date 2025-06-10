@@ -19,8 +19,8 @@ export enum ErrorSeverity {
   CRITICAL = 'CRITICAL'
 }
 export interface ErrorInfo {
-  type: ErrorType;,
-  severity: ErrorSeverity;,
+  type: ErrorType;
+  severity: ErrorSeverity;
   message: string;
   code?: string;
   details?: any;
@@ -30,11 +30,11 @@ export interface ErrorInfo {
   stackTrace?: string;
 }
 export interface ErrorHandlerConfig {
-  enableLogging: boolean;,
-  enableReporting: boolean;,
+  enableLogging: boolean;
+  enableReporting: boolean;
   enableUserNotification: boolean;
   reportingEndpoint?: string;
-  maxRetries: number;,
+  maxRetries: number;
   retryDelay: number;
 }
 export class GlobalErrorHandler {
@@ -47,12 +47,12 @@ export class GlobalErrorHandler {
   }
   public static getInstance(config?: ErrorHandlerConfig): GlobalErrorHandler {
     if (!GlobalErrorHandler.instance) {
-      const defaultConfig: ErrorHandlerConfig = {,
-  enableLogging: true,
-        enableReporting: true,
-        enableUserNotification: true,
-        maxRetries: 3,
-        retryDelay: 1000};
+      const defaultConfig: ErrorHandlerConfig = {;
+  enableLogging: true;
+        enableReporting: true;
+        enableUserNotification: true;
+        maxRetries: 3;
+        retryDelay: 1000;};
       GlobalErrorHandler.instance = new GlobalErrorHandler(config || defaultConfig);
     }
     return GlobalErrorHandler.instance;
@@ -61,7 +61,7 @@ export class GlobalErrorHandler {
   * 处理错误
   */
   public handleError(error: Error | ErrorInfo, context?: any): void {
-    const errorInfo = this.normalizeError(error, context);
+    const errorInfo = this.normalizeError(error; context);
     // 记录错误
     if (this.config.enableLogging) {
       this.logError(errorInfo);
@@ -86,12 +86,12 @@ export class GlobalErrorHandler {
   */
   public handleNetworkError(error: Error, url?: string): void {
     this.handleError({
-      type: ErrorType.NETWORK_ERROR,
-      severity: ErrorSeverity.MEDIUM,
-      message: `网络请求失败: ${error.message}`,
-      details: { url, originalError: error.message },
-      timestamp: Date.now(),
-      stackTrace: error.stack});
+      type: ErrorType.NETWORK_ERROR;
+      severity: ErrorSeverity.MEDIUM;
+
+      details: { url, originalError: error.message ;},
+      timestamp: Date.now();
+      stackTrace: error.stack;});
   }
   /**
   * 处理API错误
@@ -99,50 +99,50 @@ export class GlobalErrorHandler {
   public handleApiError(status: number, message: string, endpoint?: string): void {
     const severity = status >= 500 ? ErrorSeverity.HIGH : ErrorSeverity.MEDIUM;
     this.handleError({
-      type: ErrorType.API_ERROR,
+      type: ErrorType.API_ERROR;
       severity,
-      message: `API错误 (${status}): ${message}`,
-      code: status.toString(),
-      details: { endpoint, status },
-      timestamp: Date.now()});
+
+      code: status.toString();
+      details: { endpoint, status ;},
+      timestamp: Date.now();});
   }
   /**
   * 处理验证错误
   */
   public handleValidationError(field: string, message: string): void {
     this.handleError({
-      type: ErrorType.VALIDATION_ERROR,
-      severity: ErrorSeverity.LOW,
-      message: `验证失败: ${field} - ${message}`,
-      details: { field },
-      timestamp: Date.now()});
+      type: ErrorType.VALIDATION_ERROR;
+      severity: ErrorSeverity.LOW;
+
+      details: { field ;},
+      timestamp: Date.now();});
   }
   /**
   * 处理认证错误
   */
   public handleAuthError(message: string): void {
     this.handleError({
-      type: ErrorType.AUTHENTICATION_ERROR,
-      severity: ErrorSeverity.HIGH,
-      message: `认证失败: ${message}`,
-      timestamp: Date.now()});
+      type: ErrorType.AUTHENTICATION_ERROR;
+      severity: ErrorSeverity.HIGH;
+
+      timestamp: Date.now();});
   }
   /**
   * 处理业务逻辑错误
   */
   public handleBusinessError(message: string, details?: any): void {
     this.handleError({
-      type: ErrorType.BUSINESS_LOGIC_ERROR,
-      severity: ErrorSeverity.MEDIUM,
+      type: ErrorType.BUSINESS_LOGIC_ERROR;
+      severity: ErrorSeverity.MEDIUM;
       message,
       details,
-      timestamp: Date.now()});
+      timestamp: Date.now();});
   }
   /**
   * 获取错误统计
   */
   public getErrorStats(): {
-    total: number,
+    total: number;
   byType: Record<ErrorType, number>;
     bySeverity: Record<ErrorSeverity, number>;
     recent: ErrorInfo[];
@@ -154,10 +154,10 @@ export class GlobalErrorHandler {
       bySeverity[error.severity] = (bySeverity[error.severity] || 0) + 1;
     });
     return {
-      total: this.errorQueue.length,
+      total: this.errorQueue.length;
       byType,
       bySeverity,
-      recent: this.errorQueue.slice(-10)};
+      recent: this.errorQueue.slice(-10);};
   }
   /**
   * 清除错误队列
@@ -173,24 +173,24 @@ export class GlobalErrorHandler {
     if (typeof window !== 'undefined') {
       window.addEventListener('unhandledrejection', (event) => {
         this.handleError({
-          type: ErrorType.SYSTEM_ERROR,
-          severity: ErrorSeverity.HIGH,
-          message: `未处理的Promise拒绝: ${event.reason}`,
-          details: { reason: event.reason },
-          timestamp: Date.now()});
+          type: ErrorType.SYSTEM_ERROR;
+          severity: ErrorSeverity.HIGH;
+
+          details: { reason: event.reason ;},
+          timestamp: Date.now();});
       });
       // 处理全局错误
       window.addEventListener('error', (event) => {
         this.handleError({
-          type: ErrorType.SYSTEM_ERROR,
-          severity: ErrorSeverity.HIGH,
-          message: `全局错误: ${event.message}`,
+          type: ErrorType.SYSTEM_ERROR;
+          severity: ErrorSeverity.HIGH;
+
           details: {,
-  filename: event.filename,
-            lineno: event.lineno,
-            colno: event.colno},
-          timestamp: Date.now(),
-          stackTrace: event.error?.stack});
+  filename: event.filename;
+            lineno: event.lineno;
+            colno: event.colno;},
+          timestamp: Date.now();
+          stackTrace: event.error?.stack;});
       });
     }
   }
@@ -202,12 +202,12 @@ export class GlobalErrorHandler {
       return error;
     }
     return {
-      type: ErrorType.UNKNOWN_ERROR,
-      severity: ErrorSeverity.MEDIUM,
-      message: error.message || '未知错误',
-      timestamp: Date.now(),
-      stackTrace: error.stack,
-      details: context};
+      type: ErrorType.UNKNOWN_ERROR;
+      severity: ErrorSeverity.MEDIUM;
+
+      timestamp: Date.now();
+      stackTrace: error.stack;
+      details: context;};
   }
   /**
   * 记录错误
@@ -216,10 +216,10 @@ export class GlobalErrorHandler {
     const logLevel = this.getLogLevel(error.severity);
     const logMessage = `[${error.type}] ${error.message}`;
     console[logLevel](logMessage, {
-      severity: error.severity,
-      timestamp: new Date(error.timestamp).toISOString(),
-      details: error.details,
-      stackTrace: error.stackTrace});
+      severity: error.severity;
+      timestamp: new Date(error.timestamp).toISOString();
+      details: error.details;
+      stackTrace: error.stackTrace;});
   }
   /**
   * 上报错误
@@ -228,12 +228,12 @@ export class GlobalErrorHandler {
     if (!this.config.reportingEndpoint) return;
     try {
       await fetch(this.config.reportingEndpoint, {
-      method: "POST",
+      method: "POST";
       headers: {
-          'Content-Type': 'application/json'},
-        body: JSON.stringify(error)});
+          'Content-Type': 'application/json';},
+        body: JSON.stringify(error);});
     } catch (reportingError) {
-      console.error('错误上报失败:', reportingError);
+
     }
   }
   /**
@@ -243,7 +243,7 @@ export class GlobalErrorHandler {
     if (error.severity === ErrorSeverity.LOW) return;
     const userMessage = this.getUserFriendlyMessage(error);
     // 这里可以集成具体的通知机制（Toast、Modal等）
-    console.warn('用户通知:', userMessage);
+
   }
   /**
   * 获取日志级别
@@ -266,20 +266,20 @@ export class GlobalErrorHandler {
   private getUserFriendlyMessage(error: ErrorInfo): string {
     switch (error.type) {
       case ErrorType.NETWORK_ERROR:
-        return '网络连接异常，请检查网络设置';
+
       case ErrorType.API_ERROR:
-        return '服务暂时不可用，请稍后重试';
+
       case ErrorType.AUTHENTICATION_ERROR:
-        return '登录已过期，请重新登录';
+
       case ErrorType.AUTHORIZATION_ERROR:
-        return '您没有权限执行此操作';
+
       case ErrorType.VALIDATION_ERROR:
-        return '输入信息有误，请检查后重试';
+
       case ErrorType.BUSINESS_LOGIC_ERROR:
-        return error.message,
+        return error.message;
   default:
-        return '系统异常，请稍后重试';
-    }
+
+    ;}
   }
 }
 // 导出单例实例

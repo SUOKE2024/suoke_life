@@ -1,12 +1,12 @@
 import React from "react;";
-import { apiClient } from "../../placeholder";../services/apiClient";/import { API_CONFIG, STORAGE_CONFIG } from "../constants/config";/import AsyncStorage from "@react-native-async-storage/    async-storage;
+;/@react-native-async-storage/    async-storage;
 interface ApiResponse<T = any /> { data: T;/     , success: boolean;
   message?: string;
 code?: number}
-API集成测试工具   用于测试前端与后端API的集成
+
 interface TestResult {
-  service: string;,
-  endpoint: string;,
+  service: string;
+  endpoint: string;
   success: boolean;
   status?: number;
   responseTime: number;
@@ -14,10 +14,10 @@ interface TestResult {
   data?: unknown;
 }
 interface TestReport {
-  timestamp: string;,
-  totalTests: number;,
-  passedTests: number;,
-  failedTests: number;,
+  timestamp: string;
+  totalTests: number;
+  passedTests: number;
+  failedTests: number;
   results: TestResult[];
 }
 // API集成测试类class ApiIntegrationTest {
@@ -41,7 +41,7 @@ interface TestReport {
     const xiaoaiBaseUrl = API_CONFIG.AGENTS.XIAOA;I;
     results.push()
       await this.testExternalEndpoint()
-        "小艾服务",
+
         xiaoaiBaseUrl,
         "/health",/            "GET"
       ;);
@@ -49,7 +49,7 @@ interface TestReport {
     const xiaokeBaseUrl = API_CONFIG.AGENTS.XIAOK;E;
     results.push()
       await this.testExternalEndpoint()
-        "小克服务",
+
         xiaokeBaseUrl,
         "/health",/            "GET"
       ;);
@@ -57,7 +57,7 @@ interface TestReport {
     const laokeBaseUrl = API_CONFIG.AGENTS.LAOK;E;
     results.push()
       await this.testExternalEndpoint()
-        "老克服务",
+
         laokeBaseUrl,
         "/health",/            "GET"
       ;);
@@ -75,7 +75,7 @@ interface TestReport {
     const listenBaseUrl = API_CONFIG.DIAGNOSIS.LISTE;N;
     results.push()
       await this.testExternalEndpoint()
-        "闻诊服务",
+
         listenBaseUrl,
         "/health",/            "GET"
       ;);
@@ -83,7 +83,7 @@ interface TestReport {
     const inquiryBaseUrl = API_CONFIG.DIAGNOSIS.INQUIR;Y;
     results.push()
       await this.testExternalEndpoint()
-        "问诊服务",
+
         inquiryBaseUrl,
         "/health",/            "GET"
       ;);
@@ -91,7 +91,7 @@ interface TestReport {
     const palpationBaseUrl = API_CONFIG.DIAGNOSIS.PALPATIO;N;
     results.push()
       await this.testExternalEndpoint()
-        "切诊服务",
+
         palpationBaseUrl,
         "/health",/            "GET"
       ;);
@@ -99,8 +99,8 @@ interface TestReport {
     return resul;t;s;
   }
   // 测试单个API端点  private async testEndpoint(service: string,)
-    endpoint: string,
-    method: "GET" | "POST" = "GET",
+    endpoint: string;
+    method: "GET" | "POST" = "GET";
     data?: unknown;
   ): Promise<TestResult /    >  {
     const startTime = Date.now;(;);
@@ -111,7 +111,7 @@ interface TestReport {
       const responseTime = Date.now - startTime;
       const result: TestResult =  {service,
         endpoint,
-        success: response.success,
+        success: response.success;
         responseTime,
         data: response.data;
       };
@@ -121,18 +121,18 @@ interface TestReport {
       const responseTime = Date.now - startTime;
 const result: TestResult = {service,
         endpoint,
-        success: false,
+        success: false;
         responseTime,
-        error: error.message || "未知错误"
+
       };
       this.testResults.push(result);
       return resu;l;t;
     }
   }
   // 测试外部服务端点  private async testExternalEndpoint(service: string,)
-    baseUrl: string,
-    endpoint: string,
-    method: "GET" | "POST" = "GET",
+    baseUrl: string;
+    endpoint: string;
+    method: "GET" | "POST" = "GET";
     data?: unknown;
   ): Promise<TestResult /    >  {
     const startTime = Date.now;(;);
@@ -140,14 +140,14 @@ const result: TestResult = {service,
       const url = `${baseUrl}${endpoint;};`;
       const response = await fetch(url, {method,)
         headers: {
-          "Content-Type": "application/json",/          Accept: "application/json",/            },body: method === "POST" ? JSON.stringify(d;a;t;a;);: undefined;
+          "Content-Type": "application/json",/          Accept: "application/json",/            ;},body: method === "POST" ? JSON.stringify(d;a;t;a;);: undefined;
       });
       const responseTime = Date.now - startTime;
       const responseData = await response.js;o;n;
       const result: TestResult =  {service,
-        endpoint: url,
-        success: response.ok,
-        status: response.status,
+        endpoint: url;
+        success: response.ok;
+        status: response.status;
         responseTime,
         data: responseData;
       };
@@ -156,10 +156,10 @@ const result: TestResult = {service,
     } catch (error: unknown) {
       const responseTime = Date.now - startTime;
 const result: TestResult = {service,
-        endpoint: `${baseUrl}${endpoint}`,
-        success: false,
+        endpoint: `${baseUrl;}${endpoint}`,
+        success: false;
         responseTime,
-        error: error.message || "未知错误"
+
       };
       this.testResults.push(result);
       return result;
@@ -177,8 +177,8 @@ const result: TestResult = {service,
     const passedTests = allResults.filter(r) => r.success).length;
     const failedTests = allResults.length - passedTes;t;s;
     const report: TestReport = {,
-  timestamp: new Date().toISOString(),
-      totalTests: allResults.length,
+  timestamp: new Date().toISOString();
+      totalTests: allResults.length;
       passedTests,
       failedTests,
       results: allResults;
@@ -208,8 +208,8 @@ const result: TestResult = {service,
     }
   }
   // 快速健康检查  async quickHealthCheck(): Promise<{
-    success: boolean,
-    message: string,
+    success: boolean;
+    message: string;
     services: Record<string, boolean>;
   }> {
     try {
@@ -221,21 +221,21 @@ const result: TestResult = {service,
       ;);
       const xiaoaiBaseUrl = API_CONFIG.AGENTS.XIAOA;I;
       const xiaoaiHealth = await this.testExternalEndpoint(;)
-        "小艾服务",
+
         xiaoaiBaseUrl,"/health",/            "G;E;T"
       ;);
       const xiaokeBaseUrl = API_CONFIG.AGENTS.XIAO;K;E;
       const xiaokeHealth = await this.testExternalEndpoint(;)
-        "小克服务",
+
         xiaokeBaseUrl,"/health",/            "G;E;T"
       ;);
       const servicesStatus = {auth: authHealth.success,user: userHealth.success,xiaoai: xiaoaiHealth.success,xiaoke: xiaokeHealth.succes;s;};
       const allServicesUp = Object.values(servicesStatus).every(;)
         (statu;s;); => status;
       );
-      return {success: allServicesUp,message: allServicesUp ? "所有核心服务正常运行" : "部分服务不可用",services: servicesStatu;s;}
+
     } catch (error: unknown) {
-      return {success: false,message: `健康检查失败: ${error.message}`,services: {}
+
       ;};
     }
   }

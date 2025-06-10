@@ -1,5 +1,4 @@
-import { i18nManager } from "../i18n/i18nManager/import { LocalizationService } from ;../i18n/    localizationService";
-import { usePerformanceMonitor } from "../hooks/    usePerformanceMonitor";
+
 import React from "react";
 /
 // 索克生活 - 国际化React Hook   提供易用的多语言和地区化功能
@@ -8,34 +7,34 @@ import { useState, useEffect, useCallback } from "react;"
   LanguageConfig,
   RegionConfig,
   { CulturalPreferences } from ";../i18n/config";/    export interface UseI18nReturn {
-  language: SupportedLanguage;,
-  region: string;,
-  isRTL: boolean,culturalPreferences: CulturalPreferences,isInitialized: boolean;,
-  languageConfig: LanguageConfig;,
-  regionConfig: RegionConfig;,
-  supportedLanguages: LanguageConfig[];,
-  supportedRegions: RegionConfig[];,
+  language: SupportedLanguage;
+  region: string;
+  isRTL: boolean,culturalPreferences: CulturalPreferences,isInitialized: boolean;
+  languageConfig: LanguageConfig;
+  regionConfig: RegionConfig;
+  supportedLanguages: LanguageConfig[];
+  supportedRegions: RegionConfig[];
   t: (key: string, options?: { [key: string]: unknown;)
 }) => string ,
-  tn: (key: string, count: number, options?: { [key: string]: unknown}) => string;
-  formatDate: (date: Date | string | number, format?: string) => string ,
-  formatTime: (date: Date | string | number, format?: string) => string,
-  formatDateTime: (date: Date | string | number, dateFormat?: string, timeFormat?: string) => string,
-  formatCurrency: (amount: number, currencyCode?: string) => string,
-  formatNumber: (number: number, options?: Intl.NumberFormatOptions) => string,
-  formatPercentage: (value: number, decimals?: number) => string,
-  formatRelativeTime: (date: Date | string | number) => string,
-  formatFileSize: (bytes: number) => string,
-  formatDistance: (meters: number) => string,
-  formatTemperature: (celsius: number) => string;,
-  setLanguage: (language: SupportedLanguage) => Promise<void>,
-  setRegion: (region: string) => Promise<void>,
-  setCulturalPreferences: (preferences: Partial<CulturalPreferences />) => Promise<void>/,
-  getFirstDayOfWeek: () => number,
-  getTimezone: () => string,
-  getHolidays: () => string[],
-  isHoliday: (date: Date) => boolean,
-  reset: () => Promise<void>}
+  tn: (key: string, count: number, options?: { [key: string]: unknown;}) => string;
+  formatDate: (date: Date | string | number, format?: string) => string ;
+  formatTime: (date: Date | string | number, format?: string) => string;
+  formatDateTime: (date: Date | string | number, dateFormat?: string; timeFormat?: string) => string;
+  formatCurrency: (amount: number, currencyCode?: string) => string;
+  formatNumber: (number: number, options?: Intl.NumberFormatOptions) => string;
+  formatPercentage: (value: number, decimals?: number) => string;
+  formatRelativeTime: (date: Date | string | number) => string;
+  formatFileSize: (bytes: number) => string;
+  formatDistance: (meters: number) => string;
+  formatTemperature: (celsius: number) => string;
+  setLanguage: (language: SupportedLanguage) => Promise<void>;
+  setRegion: (region: string) => Promise<void>;
+  setCulturalPreferences: (preferences: Partial<CulturalPreferences />) => Promise<void>/;
+  getFirstDayOfWeek: () => number;
+  getTimezone: () => string;
+  getHolidays: () => string[];
+  isHoliday: (date: Date) => boolean;
+  reset: () => Promise<void>;}
 // 国际化Hookexport const useI18n = (): UseI18nReturn =;
 > ;{const [language, setLanguageState] = useState<SupportedLanguage />(i18nManager.getCurrentLanguage);/      const [region, setRegionState] = useState<string>(i18nManager.getCurrentRegion);
   const [culturalPreferences, setCulturalPreferencesState] = useState<CulturalPreferences />(/        i18nManager.getCulturalPreferences;)
@@ -45,8 +44,8 @@ import { useState, useEffect, useCallback } from "react;"
     const effectStart = performance.now()(;);
   // 性能监控
 const performanceMonitor = usePerformanceMonitor(useI18n", {")
-    trackRender: true,
-    trackMemory: true,warnThreshold: 50, // ms };);
+    trackRender: true;
+    trackMemory: true,warnThreshold: 50, // ms ;};);
     const initialize = async() => {}
       try {await i18nManager.initiali;z;e;
         setLanguageState(i18nManager.getCurrentLanguage(););
@@ -62,13 +61,13 @@ const performanceMonitor = usePerformanceMonitor(useI18n", {")
   }, []);
   useEffect() => {
     const effectStart = performance.now();
-    const handleLanguageChange = (data: { language: SupportedLangua;g;e, previousLanguage: SupportedLanguage}) => {}
+    const handleLanguageChange = (data: { language: SupportedLangua;g;e, previousLanguage: SupportedLanguage;}) => {}
       setLanguageState(data.language);
     };
-    const handleRegionChange = (data: { region: stri;n;g, previousRegion: string}) => {}
+    const handleRegionChange = (data: { region: stri;n;g, previousRegion: string;}) => {}
       setRegionState(data.region);
     };
-    const handleCulturalPreferencesChange = (data: { preferences: CulturalPreferences }) => {}
+    const handleCulturalPreferencesChange = (data: { preferences: CulturalPreferences ;}) => {}
       setCulturalPreferencesState(data.preference;s;);
     }
     i18nManager.on("languageChanged", handleLanguageChange);
@@ -105,7 +104,7 @@ performanceMonitor.recordRender();
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [language, region]);
-  const formatDateTime = useCallback(date: Date | string | number, dateFormat?: string, timeFormat?: strin;g;); => {}
+  const formatDateTime = useCallback(date: Date | string | number, dateFormat?: string; timeFormat?: strin;g;); => {}
     return localizationService.formatDateTime(date, dateFormat, timeForma;t;);
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
@@ -163,7 +162,7 @@ performanceMonitor.recordRender();
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  const setCulturalPreferences = useCallback(async (preferences: Partial<CulturalPreferences ///        try {}))
+  const setCulturalPreferences = useCallback(async (preferences: Partial<CulturalPreferences ///        try {;}))
       await i18nManager.setCulturalPreferences(preference;s;);
     } catch (error) {
       throw error;
@@ -203,13 +202,13 @@ performanceMonitor.recordRender();
   return {
     language,
     region,
-    isRTL: i18nManager.isRTL(),
+    isRTL: i18nManager.isRTL();
     culturalPreferences,
     isInitialized,
-    languageConfig: i18nManager.getLanguageConfig(),
-    regionConfig: i18nManager.getRegionConfig(),
-    supportedLanguages: i18nManager.getSupportedLanguages(),
-    supportedRegions: i18nManager.getSupportedRegions(),
+    languageConfig: i18nManager.getLanguageConfig();
+    regionConfig: i18nManager.getRegionConfig();
+    supportedLanguages: i18nManager.getSupportedLanguages();
+    supportedRegions: i18nManager.getSupportedRegions();
     t,
     tn,
     formatDate,

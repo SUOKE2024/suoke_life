@@ -86,7 +86,7 @@ interface DiagnosisServiceClient {
   look: LookServiceClient;
   listen: ListenServiceClient;
   palpation: PalpationServiceClient;
-  healthCheck(): Promise<{ [key: string]: boolean }>;
+  healthCheck(): Promise<{ [key: string]: boolean ;}>;
   comprehensiveDiagnosis(data: any): Promise<any>;
   clearCache(): void;
 }
@@ -94,38 +94,38 @@ interface DiagnosisServiceClient {
 // API配置
 const API_CONFIG = {
   inquiry: {
-    baseUrl: 'http://localhost:8001',
-    timeout: 30000,
-    retries: 3,
+    baseUrl: 'http://localhost:8001';
+    timeout: 30000;
+    retries: 3;
   },
   look: {
-    baseUrl: 'http://localhost:8080',
-    timeout: 30000,
-    retries: 3,
+    baseUrl: 'http://localhost:8080';
+    timeout: 30000;
+    retries: 3;
   },
   listen: {
-    baseUrl: 'http://localhost:8000',
-    timeout: 30000,
-    retries: 3,
+    baseUrl: 'http://localhost:8000';
+    timeout: 30000;
+    retries: 3;
   },
   palpation: {
-    baseUrl: 'http://localhost:8002',
-    timeout: 30000,
-    retries: 3,
+    baseUrl: 'http://localhost:8002';
+    timeout: 30000;
+    retries: 3;
   },
   calculation: {
-    baseUrl: 'http://localhost:8003',
-    timeout: 30000,
-    retries: 3,
+    baseUrl: 'http://localhost:8003';
+    timeout: 30000;
+    retries: 3;
   },
 };
 
 // 错误类型定义
 export class DiagnosisApiError extends Error {
   constructor(
-    message: string,
-    public statusCode?: number,
-    public service?: string,
+    message: string;
+    public statusCode?: number;
+    public service?: string;
     public retryable: boolean = false
   ) {
     super(message);
@@ -137,14 +137,14 @@ export class DiagnosisApiError extends Error {
 class CacheManager {
   private cache = new Map<
     string,
-    { data: any; timestamp: number; ttl: number }
+    { data: any; timestamp: number; ttl: number ;}
   >();
 
   set(key: string, data: any, ttl: number = 300000): void {
     // 默认5分钟TTL
     this.cache.set(key, {
       data,
-      timestamp: Date.now(),
+      timestamp: Date.now();
       ttl,
     });
   }
@@ -170,10 +170,10 @@ const cacheManager = new CacheManager();
 
 // 增强的API请求函数
 async function apiRequest<T>(
-  url: string,
-  options: RequestInit = {},
-  timeout: number = 30000,
-  retries: number = 3,
+  url: string;
+  options: RequestInit = {;},
+  timeout: number = 30000;
+  retries: number = 3;
   service: string = 'unknown'
 ): Promise<T> {
   const controller = new AbortController();
@@ -184,10 +184,10 @@ async function apiRequest<T>(
     try {
       const response = await fetch(url, {
         ...options,
-        signal: controller.signal,
+        signal: controller.signal;
         headers: {
           'Content-Type': 'application/json',
-          'X-Request-ID': `${service}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          'X-Request-ID': `${service;}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
           ...options.headers,
         },
       });
@@ -232,40 +232,40 @@ async function apiRequest<T>(
 class DataValidator {
   static validateImageData(data: ImageData): void {
     if (!data.data || data.data.byteLength === 0) {
-      throw new Error('图像数据不能为空');
-    }
+
+    ;}
     if (
       !data.format ||
       !['jpeg', 'jpg', 'png', 'webp'].includes(data.format.toLowerCase())
     ) {
-      throw new Error('不支持的图像格式');
+
     }
     if (data.width <= 0 || data.height <= 0) {
-      throw new Error('图像尺寸无效');
+
     }
   }
 
   static validateAudioData(data: AudioData): void {
     if (!data.data || data.data.byteLength === 0) {
-      throw new Error('音频数据不能为空');
-    }
+
+    ;}
     if (
       !data.format ||
       !['wav', 'mp3', 'aac', 'flac'].includes(data.format.toLowerCase())
     ) {
-      throw new Error('不支持的音频格式');
+
     }
     if (data.duration <= 0) {
-      throw new Error('音频时长无效');
+
     }
   }
 
   static validatePalpationData(data: PalpationData): void {
     if (!data.type || !['pulse', 'touch', 'pressure'].includes(data.type)) {
-      throw new Error('无效的切诊类型');
-    }
+
+    ;}
     if (!data.sensorData || Object.keys(data.sensorData).length === 0) {
-      throw new Error('传感器数据不能为空');
+
     }
   }
 }
@@ -283,7 +283,7 @@ export class InquiryServiceClientImpl implements InquiryServiceClient {
   }
 
   async startSession(userId: string): Promise<string> {
-    const cacheKey = `inquiry_session_${userId}`;
+    const cacheKey = `inquiry_session_${userId;}`;
     const cached = cacheManager.get(cacheKey);
     if (cached) return cached;
 
@@ -291,11 +291,11 @@ export class InquiryServiceClientImpl implements InquiryServiceClient {
     const response = await apiRequest<any>(
       url,
       {
-        method: 'POST',
+        method: 'POST';
         body: JSON.stringify({
-          user_id: userId,
-          session_type: 'comprehensive',
-          language: 'zh-CN',
+          user_id: userId;
+          session_type: 'comprehensive';
+          language: 'zh-CN';
         }),
       },
       this.timeout,
@@ -309,18 +309,18 @@ export class InquiryServiceClientImpl implements InquiryServiceClient {
   }
 
   async askQuestion(
-    sessionId: string,
+    sessionId: string;
     question: string
   ): Promise<InquiryResult> {
-    const url = `${this.baseUrl}/api/v1/inquiry/interact`;
+    const url = `${this.baseUrl;}/api/v1/inquiry/interact`;
     const response = await apiRequest<any>(
       url,
       {
-        method: 'POST',
+        method: 'POST';
         body: JSON.stringify({
-          session_id: sessionId,
-          user_input: question,
-          interaction_type: 'question',
+          session_id: sessionId;
+          user_input: question;
+          interaction_type: 'question';
         }),
       },
       this.timeout,
@@ -329,24 +329,24 @@ export class InquiryServiceClientImpl implements InquiryServiceClient {
     );
 
     return {
-      sessionId: response.session_id,
-      response: response.ai_response || '感谢您的回答，让我继续了解您的情况。',
-      extractedSymptoms: response.extracted_symptoms || [],
-      confidence: response.confidence || 0.8,
-      nextQuestions: response.suggested_questions || [],
-      isComplete: response.is_complete || false,
+      sessionId: response.session_id;
+
+      extractedSymptoms: response.extracted_symptoms || [];
+      confidence: response.confidence || 0.8;
+      nextQuestions: response.suggested_questions || [];
+      isComplete: response.is_complete || false;
     };
   }
 
   async getSymptomAnalysis(sessionId: string): Promise<any> {
-    const url = `${this.baseUrl}/api/v1/inquiry/analysis`;
+    const url = `${this.baseUrl;}/api/v1/inquiry/analysis`;
     const response = await apiRequest<any>(
       url,
       {
-        method: 'POST',
+        method: 'POST';
         body: JSON.stringify({
-          session_id: sessionId,
-          analysis_type: 'comprehensive',
+          session_id: sessionId;
+          analysis_type: 'comprehensive';
         }),
       },
       this.timeout,
@@ -385,9 +385,9 @@ export class LookServiceClientImpl implements LookServiceClient {
     const response = await apiRequest<any>(
       url,
       {
-        method: 'POST',
-        body: formData,
-        headers: {}, // 让浏览器自动设置Content-Type
+        method: 'POST';
+        body: formData;
+        headers: {;}, // 让浏览器自动设置Content-Type
       },
       this.timeout,
       this.retries,
@@ -395,10 +395,10 @@ export class LookServiceClientImpl implements LookServiceClient {
     );
 
     return {
-      analysis: response.analysis || '面部分析完成',
-      features: response.features || [],
-      confidence: response.confidence || 0.8,
-      recommendations: response.recommendations || [],
+
+      features: response.features || [];
+      confidence: response.confidence || 0.8;
+      recommendations: response.recommendations || [];
     };
   }
 
@@ -417,9 +417,9 @@ export class LookServiceClientImpl implements LookServiceClient {
     const response = await apiRequest<any>(
       url,
       {
-        method: 'POST',
-        body: formData,
-        headers: {}, // 让浏览器自动设置Content-Type
+        method: 'POST';
+        body: formData;
+        headers: {;}, // 让浏览器自动设置Content-Type
       },
       this.timeout,
       this.retries,
@@ -427,10 +427,10 @@ export class LookServiceClientImpl implements LookServiceClient {
     );
 
     return {
-      analysis: response.analysis || '舌诊分析完成',
-      features: response.features || [],
-      confidence: response.confidence || 0.8,
-      recommendations: response.recommendations || [],
+
+      features: response.features || [];
+      confidence: response.confidence || 0.8;
+      recommendations: response.recommendations || [];
     };
   }
 }
@@ -462,9 +462,9 @@ export class ListenServiceClientImpl implements ListenServiceClient {
     const response = await apiRequest<any>(
       url,
       {
-        method: 'POST',
-        body: formData,
-        headers: {}, // 让浏览器自动设置Content-Type
+        method: 'POST';
+        body: formData;
+        headers: {;}, // 让浏览器自动设置Content-Type
       },
       this.timeout,
       this.retries,
@@ -472,10 +472,10 @@ export class ListenServiceClientImpl implements ListenServiceClient {
     );
 
     return {
-      analysis: response.analysis || '语音分析完成',
-      features: response.features || [],
-      confidence: response.confidence || 0.8,
-      recommendations: response.recommendations || [],
+
+      features: response.features || [];
+      confidence: response.confidence || 0.8;
+      recommendations: response.recommendations || [];
     };
   }
 
@@ -494,9 +494,9 @@ export class ListenServiceClientImpl implements ListenServiceClient {
     const response = await apiRequest<any>(
       url,
       {
-        method: 'POST',
-        body: formData,
-        headers: {}, // 让浏览器自动设置Content-Type
+        method: 'POST';
+        body: formData;
+        headers: {;}, // 让浏览器自动设置Content-Type
       },
       this.timeout,
       this.retries,
@@ -504,10 +504,10 @@ export class ListenServiceClientImpl implements ListenServiceClient {
     );
 
     return {
-      analysis: response.analysis || '呼吸音分析完成',
-      features: response.features || [],
-      confidence: response.confidence || 0.8,
-      recommendations: response.recommendations || [],
+
+      features: response.features || [];
+      confidence: response.confidence || 0.8;
+      recommendations: response.recommendations || [];
     };
   }
 }
@@ -531,8 +531,8 @@ export class PalpationServiceClientImpl implements PalpationServiceClient {
     const response = await apiRequest<any>(
       url,
       {
-        method: 'POST',
-        body: JSON.stringify(data),
+        method: 'POST';
+        body: JSON.stringify(data);
       },
       this.timeout,
       this.retries,
@@ -540,20 +540,20 @@ export class PalpationServiceClientImpl implements PalpationServiceClient {
     );
 
     return {
-      analysis: response.analysis || '切诊分析完成',
-      measurements: response.measurements || {},
-      confidence: response.confidence || 0.8,
-      recommendations: response.recommendations || [],
+
+      measurements: response.measurements || {;},
+      confidence: response.confidence || 0.8;
+      recommendations: response.recommendations || [];
     };
   }
 
   async startRealTimeMonitoring(userId: string): Promise<string> {
-    const url = `${this.baseUrl}/api/v1/palpation/monitor/start`;
+    const url = `${this.baseUrl;}/api/v1/palpation/monitor/start`;
     const response = await apiRequest<any>(
       url,
       {
-        method: 'POST',
-        body: JSON.stringify({ user_id: userId }),
+        method: 'POST';
+        body: JSON.stringify({ user_id: userId ;}),
       },
       this.timeout,
       this.retries,
@@ -578,17 +578,17 @@ export class DiagnosisServiceClientImpl implements DiagnosisServiceClient {
     this.palpation = new PalpationServiceClientImpl();
   }
 
-  async healthCheck(): Promise<{ [key: string]: boolean }> {
+  async healthCheck(): Promise<{ [key: string]: boolean ;}> {
     const services = ['inquiry', 'look', 'listen', 'palpation'];
-    const results: { [key: string]: boolean } = {};
+    const results: { [key: string]: boolean ;} = {};
 
     await Promise.allSettled(
       services.map(async (service) => {
         try {
           const config = API_CONFIG[service as keyof typeof API_CONFIG];
           const response = await fetch(`${config.baseUrl}/health`, {
-            method: 'GET',
-            signal: AbortSignal.timeout(5000),
+            method: 'GET';
+            signal: AbortSignal.timeout(5000);
           });
           results[service] = response.ok;
         } catch {
@@ -607,7 +607,7 @@ export class DiagnosisServiceClientImpl implements DiagnosisServiceClient {
     palpationData?: PalpationData;
     symptoms?: string[];
   }): Promise<any> {
-    const results: any = {};
+    const results: any = {;};
 
     try {
       // 并行执行各种诊断
@@ -617,7 +617,7 @@ export class DiagnosisServiceClientImpl implements DiagnosisServiceClient {
       if (data.symptoms && data.symptoms.length > 0) {
         promises.push(
           this.inquiry.startSession(data.userId).then((sessionId) => {
-            return { type: 'inquiry', sessionId };
+            return { type: 'inquiry', sessionId ;};
           })
         );
       }
@@ -626,7 +626,7 @@ export class DiagnosisServiceClientImpl implements DiagnosisServiceClient {
       if (data.imageData) {
         promises.push(
           this.look.analyzeFace(data.imageData).then((result) => {
-            return { type: 'look', result };
+            return { type: 'look', result ;};
           })
         );
       }
@@ -635,7 +635,7 @@ export class DiagnosisServiceClientImpl implements DiagnosisServiceClient {
       if (data.audioData) {
         promises.push(
           this.listen.analyzeVoice(data.audioData).then((result) => {
-            return { type: 'listen', result };
+            return { type: 'listen', result ;};
           })
         );
       }
@@ -644,7 +644,7 @@ export class DiagnosisServiceClientImpl implements DiagnosisServiceClient {
       if (data.palpationData) {
         promises.push(
           this.palpation.analyzePalpation(data.palpationData).then((result) => {
-            return { type: 'palpation', result };
+            return { type: 'palpation', result ;};
           })
         );
       }
@@ -656,7 +656,7 @@ export class DiagnosisServiceClientImpl implements DiagnosisServiceClient {
         if (result.status === 'fulfilled') {
           results[result.value.type] = result.value.result || result.value;
         } else {
-          console.error(`诊断失败:`, result.reason);
+
         }
       });
 
@@ -664,15 +664,15 @@ export class DiagnosisServiceClientImpl implements DiagnosisServiceClient {
       const overallConfidence = this.calculateOverallConfidence(results);
 
       return {
-        userId: data.userId,
-        timestamp: new Date().toISOString(),
+        userId: data.userId;
+        timestamp: new Date().toISOString();
         results,
         overallConfidence,
-        recommendations: this.generateRecommendations(results),
+        recommendations: this.generateRecommendations(results);
       };
     } catch (error) {
       throw new DiagnosisApiError(
-        `综合诊断失败: ${(error as Error).message}`,
+
         500,
         'comprehensive',
         false

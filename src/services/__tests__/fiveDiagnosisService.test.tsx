@@ -1,6 +1,4 @@
-import { FiveDiagnosisService, fiveDiagnosisService } from "../fiveDiagnosisService";
-import { FiveDiagnosisService, fiveDiagnosisService } from "../fiveDiagnosisService";
-import React from "react";
+
 describe("fiveDiagnosisService", () => {
   beforeEach(() => {
     jest.clearAllMocks();

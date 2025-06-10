@@ -12,25 +12,25 @@ import { RootStackParamList } from './types';
 
 // 临时占位符组件
 const ChatDetailScreen: React.FC = () => (
-  <View style={ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+  <View style={ flex: 1, justifyContent: 'center', alignItems: 'center' ;}}>
     <Text>聊天详情页面</Text>
   </View>
 );
 
 const AgentChatScreen: React.FC = () => (
-  <View style={ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+  <View style={ flex: 1, justifyContent: 'center', alignItems: 'center' ;}}>
     <Text>智能体聊天页面</Text>
   </View>
 );
 
 const DiagnosisServiceScreen: React.FC = () => (
-  <View style={ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+  <View style={ flex: 1, justifyContent: 'center', alignItems: 'center' ;}}>
     <Text>诊断服务页面</Text>
   </View>
 );
 
 const AgentDemoScreen: React.FC = () => (
-  <View style={ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+  <View style={ flex: 1, justifyContent: 'center', alignItems: 'center' ;}}>
     <Text>智能体演示页面</Text>
   </View>
 );
@@ -43,16 +43,16 @@ const NAVIGATION_STATE_KEY = '@navigation_state';
 
 // 内部导航器组件
 const RootNavigator: React.FC<{,
-  isAuthenticated: boolean;,
+  isAuthenticated: boolean;
   isDemoMode: boolean;
 }> = ({ isAuthenticated, isDemoMode }) => {
   return (
     <Stack.Navigator;
       screenOptions={
-        headerShown: false,
-        gestureEnabled: true,
+        headerShown: false;
+        gestureEnabled: true;
         animation: 'slide_from_right'
-      }}
+      ;}}
     >
       {isAuthenticated || isDemoMode ? (
         // 已认证用户或演示模式显示主应用
@@ -62,39 +62,39 @@ const RootNavigator: React.FC<{,
             component={MainNavigator}
             options={
               animationTypeForReplace: 'push'
-            }}
+            ;}}
           />
           <Stack.Screen;
             name="ChatDetail"
             component={ChatDetailScreen}
             options={
-              presentation: 'card',
+              presentation: 'card';
               animation: 'slide_from_right'
-            }}
+            ;}}
           />
           <Stack.Screen;
             name="AgentChat"
             component={AgentChatScreen}
             options={
-              presentation: 'card',
+              presentation: 'card';
               animation: 'slide_from_right'
-            }}
+            ;}}
           />
           <Stack.Screen;
             name="DiagnosisService"
             component={DiagnosisServiceScreen}
             options={
-              presentation: 'card',
+              presentation: 'card';
               animation: 'slide_from_right'
-            }}
+            ;}}
           />
           <Stack.Screen;
             name="AgentDemo"
             component={AgentDemoScreen}
             options={
-              presentation: 'card',
+              presentation: 'card';
               animation: 'slide_from_right'
-            }}
+            ;}}
           />
         </>
       ) : (
@@ -105,15 +105,15 @@ const RootNavigator: React.FC<{,
             component={AuthNavigator}
             options={
               animationTypeForReplace: 'pop'
-            }}
+            ;}}
           />
           <Stack.Screen;
             name="AgentDemo"
             component={AgentDemoScreen}
             options={
-              presentation: 'card',
+              presentation: 'card';
               animation: 'slide_from_right'
-            }}
+            ;}}
           />
         </>
       )}
@@ -155,7 +155,7 @@ const AppNavigator: React.FC = () => {
         // 暂时设置为未认证状态，显示欢迎页面
         // setIsAuthenticated(false);
       } catch (error) {
-        console.error('认证状态检查失败:', error);
+
       } finally {
         setIsLoading(false);
         setIsReady(true);

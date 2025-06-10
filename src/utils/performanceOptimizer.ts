@@ -3,35 +3,35 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
 // 性能监控接口
 interface PerformanceMetrics {
-  renderTime: number;,
-  memoryUsage: number;,
-  networkLatency: number;,
-  cacheHitRate: number;,
+  renderTime: number;
+  memoryUsage: number;
+  networkLatency: number;
+  cacheHitRate: number;
   errorRate: number;
 }
 // 图像优化配置
 interface ImageOptimizationConfig {
-  quality: number;,
-  maxWidth: number;,
-  maxHeight: number;,
-  format: 'jpeg' | 'png' | 'webp';,
+  quality: number;
+  maxWidth: number;
+  maxHeight: number;
+  format: 'jpeg' | 'png' | 'webp';
   enableLazyLoading: boolean;
 }
 // 网络优化配置
 interface NetworkOptimizationConfig {
-  enableCompression: boolean;,
-  enableCaching: boolean;,
-  retryAttempts: number;,
-  timeout: number;,
+  enableCompression: boolean;
+  enableCaching: boolean;
+  retryAttempts: number;
+  timeout: number;
   enableHttp2: boolean;
 }
 // 性能优化器类
 class PerformanceOptimizer {
   private metrics: PerformanceMetrics = {,
-  renderTime: 0,
-    memoryUsage: 0,
-    networkLatency: 0,
-    cacheHitRate: 0,
+  renderTime: 0;
+    memoryUsage: 0;
+    networkLatency: 0;
+    cacheHitRate: 0;
     errorRate: 0;
   };
   private imageCache: Map<string, string> = new Map();
@@ -49,9 +49,9 @@ class PerformanceOptimizer {
       // 优化内存管理
       this.optimizeMemoryManagement();
       this.isInitialized = true;
-      console.log('性能优化器初始化成功');
+
     } catch (error) {
-      console.error('性能优化器初始化失败:', error);
+
       throw error;
     }
   }
@@ -74,7 +74,7 @@ class PerformanceOptimizer {
         });
       }
     } catch (error) {
-      console.warn('缓存初始化失败:', error);
+
     }
   }
   // 设置性能监控
@@ -139,7 +139,7 @@ class PerformanceOptimizer {
   // 设置内存警告监听
   private setupMemoryWarningListener(): void {
     // 模拟内存警告处理
-    const checkMemoryUsage = () => {if (this.metrics.memoryUsage > 0.8) {console.warn('内存使用率过高，开始清理缓存');
+
         this.cleanupCaches();
       }
     };
@@ -177,14 +177,14 @@ class PerformanceOptimizer {
   }
   // 图像优化
   async optimizeImage()
-    imageUri: string,
-    config: Partial<ImageOptimizationConfig> = {}
+    imageUri: string;
+    config: Partial<ImageOptimizationConfig> = {;}
   ): Promise<string> {
     const defaultConfig: ImageOptimizationConfig = {,
-  quality: 0.8,
-      maxWidth: 1024,
-      maxHeight: 1024,
-      format: 'jpeg',
+  quality: 0.8;
+      maxWidth: 1024;
+      maxHeight: 1024;
+      format: 'jpeg';
       enableLazyLoading: true;
     };
     const finalConfig = { ...defaultConfig, ...config };
@@ -210,16 +210,16 @@ class PerformanceOptimizer {
       await this.persistImageCache();
       return optimizedUri;
     } catch (error) {
-      console.error('图像优化失败:', error);
+
       return imageUri; // 返回原始图像
     }
   }
   // 压缩图像
   private async compressImage()
-    uri: string,
-    width: number,
-    height: number,
-    quality: number,
+    uri: string;
+    width: number;
+    height: number;
+    quality: number;
     format: string;
   ): Promise<string> {
     // 模拟图像压缩逻辑
@@ -237,20 +237,20 @@ class PerformanceOptimizer {
       const cacheData = Object.fromEntries(this.imageCache);
       await AsyncStorage.setItem('optimized_images', JSON.stringify(cacheData));
     } catch (error) {
-      console.warn('图像缓存持久化失败:', error);
+
     }
   }
   // 网络请求优化
   async optimizeNetworkRequest()
-    url: string,
-    options: RequestInit = {},
-    config: Partial<NetworkOptimizationConfig> = {}
+    url: string;
+    options: RequestInit = {;},
+    config: Partial<NetworkOptimizationConfig> = {;}
   ): Promise<Response> {
     const defaultConfig: NetworkOptimizationConfig = {,
-  enableCompression: true,
-      enableCaching: true,
-      retryAttempts: 3,
-      timeout: 10000,
+  enableCompression: true;
+      enableCaching: true;
+      retryAttempts: 3;
+      timeout: 10000;
       enableHttp2: true;
     };
     const finalConfig = { ...defaultConfig, ...config };
@@ -291,9 +291,9 @@ class PerformanceOptimizer {
           if (finalConfig.enableCaching) {
             const responseData = await response.clone().json();
             this.networkCache.set(cacheKey, {
-              data: responseData,
-              headers: Object.fromEntries(response.headers.entries()),
-              timestamp: Date.now(),
+              data: responseData;
+              headers: Object.fromEntries(response.headers.entries());
+              timestamp: Date.now();
               ttl: 300000, // 5分钟TTL;
             });
             // 持久化网络缓存
@@ -314,7 +314,7 @@ class PerformanceOptimizer {
     }
     clearTimeout(timeoutId);
     this.metrics.errorRate += 0.01;
-    throw lastError || new Error('网络请求失败');
+
   }
   // 检查缓存是否有效
   private isCacheValid(cachedItem: any): boolean {
@@ -329,7 +329,7 @@ class PerformanceOptimizer {
       const cacheData = Object.fromEntries(this.networkCache);
       await AsyncStorage.setItem('network_cache', JSON.stringify(cacheData));
     } catch (error) {
-      console.warn('网络缓存持久化失败:', error);
+
     }
   }
   // 延迟函数
@@ -338,7 +338,7 @@ class PerformanceOptimizer {
   }
   // 代码分割和懒加载
   createLazyComponent<T extends React.ComponentType<any>>()
-    importFunction: () => Promise<{ default: T }>,
+    importFunction: () => Promise<{ default: T ;}>,
     fallback?: React.ComponentType;
   ): React.ComponentType {
     const cacheKey = importFunction.toString();
@@ -368,14 +368,14 @@ class PerformanceOptimizer {
           await this.preloadScript(resource);
         } else {
           // 预加载其他资源
-          await this.optimizeNetworkRequest(resource, { method: 'HEAD' });
+          await this.optimizeNetworkRequest(resource, { method: 'HEAD' ;});
         }
       } catch (error) {
-        console.warn(`预加载资源失败: ${resource}`, error);
+
       }
     });
     await Promise.allSettled(preloadPromises);
-    console.log(`预加载完成: ${resources.length} 个资源`);
+
   }
   // 预加载图像
   private async preloadImage(src: string): Promise<void> {
@@ -409,29 +409,29 @@ class PerformanceOptimizer {
   private generateOptimizationRecommendations(): string[] {
     const recommendations: string[] = [];
     if (this.metrics.renderTime > 16) {
-      recommendations.push('渲染时间过长，建议优化组件渲染逻辑');
+
     }
     if (this.metrics.memoryUsage > 0.8) {
-      recommendations.push('内存使用率过高，建议清理缓存或优化数据结构');
+
     }
     if (this.metrics.networkLatency > 2000) {
-      recommendations.push('网络延迟过高，建议启用缓存或优化API调用');
+
     }
     if (this.metrics.cacheHitRate < 0.5) {
-      recommendations.push('缓存命中率较低，建议优化缓存策略');
+
     }
     if (this.metrics.errorRate > 0.1) {
-      recommendations.push('错误率较高，建议检查网络连接和错误处理');
+
     }
     return recommendations;
   }
   // 重置性能指标
   resetMetrics(): void {
     this.metrics = {
-      renderTime: 0,
-      memoryUsage: 0,
-      networkLatency: 0,
-      cacheHitRate: 0,
+      renderTime: 0;
+      memoryUsage: 0;
+      networkLatency: 0;
+      cacheHitRate: 0;
       errorRate: 0;
     };
   }
@@ -441,7 +441,7 @@ class PerformanceOptimizer {
     this.componentCache.clear();
     this.networkCache.clear();
     await AsyncStorage.multiRemove(["optimized_images",network_cache']);
-    console.log('所有缓存已清理');
+
   }
 }
 // 导出单例实例

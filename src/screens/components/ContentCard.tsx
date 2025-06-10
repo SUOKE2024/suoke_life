@@ -1,6 +1,4 @@
-import { ContentItem } from "../../types/explore/import { CONTENT_TYPE_CONFIG, DIFFICULTY_CONFIG  } from ;../../data/exploreData";/importIcon from ../../components/common/Icon"/import { colors, spacing, fonts, borderRadius, shadows } from "../../constants/    theme;
-import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor";
-import React from "react";
+/
 /
 import React,{ memo } from ";react";
   Text,
@@ -8,7 +6,7 @@ import React,{ memo } from ";react";
   TouchableOpacity,
   { Animated } from "react-native;";
 interface ContentCardProps {
-  item: ContentItem;,
+  item: ContentItem;
   onPress: (item: ContentItem) => void;
   onBookmark?: (item: ContentItem) => void;
   onLike?: (item: ContentItem) => void;
@@ -28,7 +26,7 @@ m,
   const typeConfig = CONTENT_TYPE_CONFIG[item.typ;e;];
   const difficultyConfig = DIFFICULTY_CONFIG[item.difficult;y;];
   const handlePress = useCallback() => {
-  const performanceMonitor = usePerformanceMonitor("ContentCard", {trackRender: true,trackMemory: false,warnThreshold: 100};);
+  const performanceMonitor = usePerformanceMonitor("ContentCard", {trackRender: true,trackMemory: false,warnThreshold: 100;};);
     //
     onPress(item);
   };
@@ -60,13 +58,13 @@ style={styles.actionButton}
             onPress={handleBookmark} />/                <Icon;
 name={isBookmarked ? "bookmark" : "bookmark-outline"}
               size={20}
-              color={isBookmarked ? colors.primary: colors.textSecondary} />/          </TouchableOpacity>/
+              color={isBookmarked ? colors.primary: colors.textSecondary;} />/          </TouchableOpacity>/
           <TouchableOpacity;
 style={styles.actionButton}
             onPress={handleLike} />/                <Icon;
 name={isLiked ? "heart" : "heart-outline"}
               size={20}
-              color={isLiked ? colors.error: colors.textSecondary} />/          </TouchableOpacity>/        </View>/      </View>/
+              color={isLiked ? colors.error: colors.textSecondary;} />/          </TouchableOpacity>/        </View>/      </View>/
       {///              {item.title}
         </Text>/        <Text style={styles.subtitle} numberOfLines={2} />/              {item.subtitle}
         </Text>/
@@ -77,156 +75,156 @@ name={isLiked ? "heart" : "heart-outline"}
             <View key={index} style={styles.tag}>/              <Text style={styles.tagText}>{tag}</Text>/            </View>/              ))}
           {item.tags.length > 3  && <Text style={styles.moreTagsText}>+{item.tags.length - 3}</Text>/              )}
         </View>/
-        <View style={styles.stats}>/          <View style={[styles.difficultyBadge, { backgroundColor: difficultyConfig.color + 20"}}]} />/            <Text style={[styles.difficultyText, { color: difficultyConfig.color}}]} />/                  {difficultyConfig.name}"
+        <View style={styles.stats}>/          <View style={[styles.difficultyBadge, { backgroundColor: difficultyConfig.color + 20";}}]} />/            <Text style={[styles.difficultyText, { color: difficultyConfig.color;}}]} />/                  {difficultyConfig.name}"
             </Text>/          </View>/
           <View style={styles.likesContainer}>/            <Icon name="heart-outline" size={14} color={colors.textSecondary} />/            <Text style={styles.likesText}>{item.likes}</Text>/          </View>/        </View>/      </View>/    </TouchableOpacity>/      )
 });
 ContentCard.displayName = "ContentCard"
 const styles = StyleSheet.create({container: {),
-  backgroundColor: colors.background,
-    borderRadius: borderRadius.lg,
-    padding: spacing.md,
-    marginHorizontal: spacing.md,
-    marginVertical: spacing.sm,
-    borderWidth: 1,
-    borderColor: colors.border,
+  backgroundColor: colors.background;
+    borderRadius: borderRadius.lg;
+    padding: spacing.md;
+    marginHorizontal: spacing.md;
+    marginVertical: spacing.sm;
+    borderWidth: 1;
+    borderColor: colors.border;
     ...shadows.sm;
   },
   featuredBadge: {,
-  position: "absolute",
-    top: spacing.sm,
-    right: spacing.sm,
-    flexDirection: row",
+  position: "absolute";
+    top: spacing.sm;
+    right: spacing.sm;
+    flexDirection: row";
     alignItems: "center,",
-    backgroundColor: colors.primary,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
-    borderRadius: borderRadius.sm,
+    backgroundColor: colors.primary;
+    paddingHorizontal: spacing.sm;
+    paddingVertical: spacing.xs;
+    borderRadius: borderRadius.sm;
     zIndex: 1;
   },
   featuredText: {,
-  color: colors.white,
-    fontSize: fonts.size.xs,
-    fontWeight: "600",
+  color: colors.white;
+    fontSize: fonts.size.xs;
+    fontWeight: "600";
     marginLeft: spacing.xs;
   },
   header: {,
-  flexDirection: row",
+  flexDirection: row";
     alignItems: "flex-start,",
     marginBottom: spacing.md;
   },
   imageContainer: {,
-  width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: colors.surface,
-    justifyContent: "center",
-    alignItems: center",
+  width: 50;
+    height: 50;
+    borderRadius: 25;
+    backgroundColor: colors.surface;
+    justifyContent: "center";
+    alignItems: center";
     marginRight: spacing.md;
   },
-  image: { fontSize: 24  },
-  headerInfo: { flex: 1  },
+  image: { fontSize: 24  ;},
+  headerInfo: { flex: 1  ;},
   typeContainer: {,
   flexDirection: "row,",
-    alignItems: "center",
+    alignItems: "center";
     marginBottom: spacing.xs;
   },
   typeText: {,
-  fontSize: fonts.size.sm,
-    fontWeight: 600",
+  fontSize: fonts.size.sm;
+    fontWeight: 600";
     marginLeft: spacing.xs;
   },
   metaInfo: {,
   flexDirection: "row,",
     alignItems: "center"
-  },
+  ;},
   author: {,
-  fontSize: fonts.size.sm,
-    color: colors.text,
+  fontSize: fonts.size.sm;
+    color: colors.text;
     fontWeight: 500""
-  },
+  ;},
   separator: {,
-  fontSize: fonts.size.sm,
-    color: colors.textSecondary,
+  fontSize: fonts.size.sm;
+    color: colors.textSecondary;
     marginHorizontal: spacing.xs;
   },
   readTime: {,
-  fontSize: fonts.size.sm,
+  fontSize: fonts.size.sm;
     color: colors.textSecondary;
   },
   actions: {,
   flexDirection: "row,",
     alignItems: "center"
-  },
+  ;},
   actionButton: {,
-  padding: spacing.xs,
+  padding: spacing.xs;
     marginLeft: spacing.xs;
   },
-  content: { marginBottom: spacing.md  },
+  content: { marginBottom: spacing.md  ;},
   title: {,
-  fontSize: fonts.size.lg,
-    fontWeight: bold",
-    color: colors.text,
-    lineHeight: fonts.lineHeight.lg,
+  fontSize: fonts.size.lg;
+    fontWeight: bold";
+    color: colors.text;
+    lineHeight: fonts.lineHeight.lg;
     marginBottom: spacing.xs;
   },
   subtitle: {,
-  fontSize: fonts.size.md,
-    color: colors.textSecondary,
-    lineHeight: fonts.lineHeight.md,
+  fontSize: fonts.size.md;
+    color: colors.textSecondary;
+    lineHeight: fonts.lineHeight.md;
     marginBottom: spacing.sm;
   },
   description: {,
-  fontSize: fonts.size.sm,
-    color: colors.textSecondary,
+  fontSize: fonts.size.sm;
+    color: colors.textSecondary;
     lineHeight: fonts.lineHeight.sm;
   },
   footer: {,
   flexDirection: "row,",
-    justifyContent: "space-between",
+    justifyContent: "space-between";
     alignItems: flex-end""
-  },
+  ;},
   tags: {,
   flexDirection: "row,",
-    alignItems: "center",
-    flex: 1,
+    alignItems: "center";
+    flex: 1;
     flexWrap: wrap""
-  },
+  ;},
   tag: {,
-  backgroundColor: colors.surface,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
-    borderRadius: borderRadius.sm,
-    marginRight: spacing.xs,
+  backgroundColor: colors.surface;
+    paddingHorizontal: spacing.sm;
+    paddingVertical: spacing.xs;
+    borderRadius: borderRadius.sm;
+    marginRight: spacing.xs;
     marginBottom: spacing.xs;
   },
   tagText: {,
-  fontSize: fonts.size.xs,
+  fontSize: fonts.size.xs;
     color: colors.text;
   },
   moreTagsText: {,
-  fontSize: fonts.size.xs,
-    color: colors.textSecondary,
+  fontSize: fonts.size.xs;
+    color: colors.textSecondary;
     fontStyle: "italic"
-  },
+  ;},
   stats: {,
-  flexDirection: "row",
+  flexDirection: "row";
     alignItems: center""
-  },
+  ;},
   difficultyBadge: {,
-  paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
-    borderRadius: borderRadius.sm,
+  paddingHorizontal: spacing.sm;
+    paddingVertical: spacing.xs;
+    borderRadius: borderRadius.sm;
     marginRight: spacing.md;
   },
   difficultyText: {,
-  fontSize: fonts.size.xs,
+  fontSize: fonts.size.xs;
     fontWeight: "600"
-  },
+  ;},
   likesContainer: {,
-  flexDirection: "row",
+  flexDirection: "row";
     alignItems: center""
-  },
+  ;},
   likesText: {,
-  fontSize: fonts.size.sm,
-    color: colors.textSecondary,marginLeft: spacing.xs};};);
+  fontSize: fonts.size.sm;
+    color: colors.textSecondary,marginLeft: spacing.xs;};};);

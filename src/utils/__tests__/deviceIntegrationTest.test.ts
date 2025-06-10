@@ -1,5 +1,4 @@
 import { deviceIntegrationTester } from "../deviceIntegrationTest";
-import { deviceIntegrationTester } from "../deviceIntegrationTest";
 describe("deviceIntegrationTest", () => {
   beforeEach(() => {
     jest.clearAllMocks();

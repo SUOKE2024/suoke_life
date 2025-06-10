@@ -1,28 +1,28 @@
 import React from "react";
 // 配置管理器   索克生活APP - 架构优化
 interface AppConfig {
-  api: {baseUrl: string;,
-  timeout: number;,
+  api: {baseUrl: string;
+  timeout: number;
   retryAttempts: number;
 };
   agents: { xiaoai: {,
-  enabled: boolean,
-      model: string};
-    xiaoke: { enabled: boolean,
-      model: string};
-    laoke: { enabled: boolean,
-      model: string};
-    soer: { enabled: boolean,
-      model: string};
+  enabled: boolean;
+      model: string;};
+    xiaoke: { enabled: boolean;
+      model: string;};
+    laoke: { enabled: boolean;
+      model: string;};
+    soer: { enabled: boolean;
+      model: string;};
   };
-  features: { fiveDiagnosis: boolean,
-    blockchain: boolean,
-    offlineMode: boolean};
-  performance: { enableMemoryMonitoring: boolean,
-    enablePerformanceTracking: boolean,
-    maxCacheSize: number};
-  security: { enableEncryption: boolean,
-    tokenExpiration: number};
+  features: { fiveDiagnosis: boolean;
+    blockchain: boolean;
+    offlineMode: boolean;};
+  performance: { enableMemoryMonitoring: boolean;
+    enablePerformanceTracking: boolean;
+    maxCacheSize: number;};
+  security: { enableEncryption: boolean;
+    tokenExpiration: number;};
 }
 class ConfigurationManager {
   private static instance: ConfigurationManager;
@@ -56,19 +56,19 @@ class ConfigurationManager {
   private loadDefaultConfig(): AppConfig {
     return {
       api: {,
-  baseUrl: "https: timeout: 10000,
-        retryAttempts: 3},
+  baseUrl: "https: timeout: 10000;
+        retryAttempts: 3;},
       agents: {,
   xiaoai: {,
-  enabled: true,
-          model: "gpt-4"},
+  enabled: true;
+          model: "gpt-4";},
         xiaoke: {,
-  enabled: true,
-          model: "gpt-4"},
+  enabled: true;
+          model: "gpt-4";},
         laoke: {,
-  enabled: true,
-          model: "gpt-4"},soer: {enabled: true,model: "gpt-4"};
-      },features: {fiveDiagnosis: true,blockchain: true,offlineMode: false},performance: {enableMemoryMonitoring: true,enablePerformanceTracking: true,maxCacheSize: 100 * 1024 * 1024},security: {enableEncryption: true,tokenExpiration: 24 * 60 * 60 * 1000};};
+  enabled: true;
+          model: "gpt-4";},soer: {enabled: true,model: "gpt-4";};
+      },features: {fiveDiagnosis: true,blockchain: true,offlineMode: false;},performance: {enableMemoryMonitoring: true,enablePerformanceTracking: true,maxCacheSize: 100 * 1024 * 1024;},security: {enableEncryption: true,tokenExpiration: 24 * 60 * 60 * 1000;};};
   }
   private loadEnvironmentConfig(): void {
     if (process.env.API_BASE_URL) {

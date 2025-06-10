@@ -55,35 +55,35 @@ export class MonitoringService  {private static instance: MonitoringService;
   private userEvents: UserEvent[];
   private alerts: Map<string, Alert>;
   private alertRuleStates: Map<;string,
-    { count: number, firstTriggered: number}
+    { count: number, firstTriggered: number;}
   >;
   private constructor() {
     this.config = {
-      metricsInterval: 10000,  logRetentionDays: 30,
+      metricsInterval: 10000,  logRetentionDays: 30;
       alertRules: [{,
-  name: "high_response_time",
-          metric: "response_time",
-          condition: "gt",
+  name: "high_response_time";
+          metric: "response_time";
+          condition: "gt";
           threshold: 5000,  duration: 60000,  / 1分钟* ///
           enabled: true;
         },
         {
-      name: "high_error_rate",
-      metric: "error_rate",
-          condition: "gt",
+      name: "high_error_rate";
+      metric: "error_rate";
+          condition: "gt";
           threshold: 5,  duration: 30000,  / 30秒* ///
           enabled: true;
         },
         {
-      name: "low_memory",
-      metric: "memory_usage",
-          condition: "gt",
+      name: "low_memory";
+      metric: "memory_usage";
+          condition: "gt";
           threshold: 90,  duration: 120000,  / 2分钟* ///
           enabled: true;
         }
       ],
       samplingRate: 1.0,  enabledModules: ["metrics",logs", "events",alerts"]
-    }
+    ;}
     this.metrics = new Map();
     this.logs = [];
     this.userEvents = [];
@@ -111,35 +111,35 @@ export class MonitoringService  {private static instance: MonitoringService;
     const timestamp = Date.now;
     const systemMetrics = [;
       {
-      name: "cpu_usage",
+      name: "cpu_usage";
       value: Math.random;(;) * 100,
         timestamp,
         unit: "percent"
-      },
+      ;},
       {
-      name: "memory_usage",
-      value: Math.random() * 100,
+      name: "memory_usage";
+      value: Math.random() * 100;
         timestamp,
         unit: "percent"
-      },
+      ;},
       {
-      name: "disk_usage",
-      value: Math.random() * 100,
+      name: "disk_usage";
+      value: Math.random() * 100;
         timestamp,
         unit: "percent"
-      },
+      ;},
       {
-      name: "network_latency",
-      value: Math.random() * 1000,
+      name: "network_latency";
+      value: Math.random() * 1000;
         timestamp,
         unit: "ms"
-      },
+      ;},
       {
-      name: "active_connections",
-      value: Math.floor(Math.random() * 1000),
+      name: "active_connections";
+      value: Math.floor(Math.random() * 1000);
         timestamp,
         unit: "count"
-      }
+      ;}
     ];
     systemMetrics.forEach(metric) => {}))
       this.recordMetric(metric);
@@ -158,7 +158,7 @@ export class MonitoringService  {private static instance: MonitoringService;
     }
   }
   ///        if (!this.config.enabledModules.includes("logs")) return;
-const logEntry: LogEntry = { id: `log-${Date.now()  }-${Math.random().toString(36).substr(2, 9)}`,timestamp: Date.now(),
+const logEntry: LogEntry = { id: `log-${Date.now()  ;}-${Math.random().toString(36).substr(2, 9)}`,timestamp: Date.now();
       ...entry;
     };
     this.logs.push(logEntry);
@@ -170,7 +170,7 @@ const logEntry: LogEntry = { id: `log-${Date.now()  }-${Math.random().toString(3
     }
   }
   ///        if (!this.config.enabledModules.includes("events")) return;
-const userEvent: UserEvent = { id: `event-${Date.now()  }-${Math.random().toString(36).substr(2, 9)}`,timestamp: Date.now(),
+const userEvent: UserEvent = { id: `event-${Date.now()  ;}-${Math.random().toString(36).substr(2, 9)}`,timestamp: Date.now();
       ...event;
     };
     this.userEvents.push(userEvent);
@@ -179,16 +179,16 @@ const userEvent: UserEvent = { id: `event-${Date.now()  }-${Math.random().toStri
     }
   }
   // 创建错误告警  private createErrorAlert(logEntry: LogEntry): void  {
-    const alert: Alert = { id: `alert-${Date.now()  }-${Math.random().toString(36).substr(2, 9)}`,severity: logEntry.level === "fatal" ? "critical" : "high",
-      title: `${logEntry.level.toUpperCase()}级别错误`,
-      description: logEntry.message,
-      condition: `log.level == ${logEntry.level}"`,"
-      currentValue: 1,
-      threshold: 0,
-      timestamp: Date.now(),
-      status: "active",
+    const alert: Alert = { id: `alert-${Date.now()  ;}-${Math.random().toString(36).substr(2, 9)}`,severity: logEntry.level === "fatal" ? "critical" : "high";
+
+      description: logEntry.message;
+      condition: `log.level == ${logEntry.level;}"`,"
+      currentValue: 1;
+      threshold: 0;
+      timestamp: Date.now();
+      status: "active";
       metrics: []
-    }
+    ;}
     this.alerts.set(alert.id, alert);
   }
   // 检查告警规则  private checkAlertRules(): void {
@@ -213,7 +213,7 @@ const userEvent: UserEvent = { id: `event-${Date.now()  }-${Math.random().toStri
     }
   }
   // 评估告警条件  private evaluateCondition(value: number,)
-    condition: string,
+    condition: string;
     threshold: number): boolean  {
     switch (condition) {
       case "gt":
@@ -231,29 +231,29 @@ case "lte":
     }
   }
   // 处理告警条件  private handleAlertCondition(rule: AlertRule,)
-    currentValue: number,
+    currentValue: number;
     metrics: MetricData[]);: void  {
     const ruleState = this.alertRuleStates.get(rule.nam;e;);
     const now = Date.now;
     if (!ruleState) {
       this.alertRuleStates.set(rule.name, {
-        count: 1,
+        count: 1;
         firstTriggered: now;
       });
       return;
     }
     if (now - ruleState.firstTriggered >= rule.duration) {
-      const alert: Alert = { id: `alert-${rule.name  }-${now}`,
-        severity: rule.severity,
-        title: `告警: ${rule.name}`,
-        description: `指标 ${rule.metric} 的值 ${currentValue.toFixed(2)} ${
+      const alert: Alert = { id: `alert-${rule.name  ;}-${now}`,
+        severity: rule.severity;
+
+
           rule.condition;
         } ${rule.threshold}`,
-        condition: `${rule.metric} ${rule.condition} ${rule.threshold}`,
+        condition: `${rule.metric;} ${rule.condition} ${rule.threshold}`,
         currentValue,
-        threshold: rule.threshold,
-        timestamp: now,
-        status: "active",
+        threshold: rule.threshold;
+        timestamp: now;
+        status: "active";
         metrics;
       }
       this.alerts.set(alert.id, alert);
@@ -278,7 +278,7 @@ case "lte":
     }
   }
   //
-    timeRange?: { start: number, end: number}
+    timeRange?: { start: number; end: number;}
   ): MetricData[]  {
     if (metricName) {
       const metrics = this.metrics.get(metricNam;e;); || [];
@@ -304,7 +304,7 @@ case "lte":
     level?: string;
     source?: string;
     userId?: string;
-    timeRange?: { start: number, end: number};
+    timeRange?: { start: number; end: number;};
   });: LogEntry[]  {
     let filteredLogs = this.lo;g;s;
     if (filters) {
@@ -333,7 +333,7 @@ case "lte":
     type?: string;
     userId?: string;
     sessionId?: string;
-    timeRange?: { start: number, end: number};
+    timeRange?: { start: number; end: number;};
   });: UserEvent[]  {
     let filteredEvents = this.userEven;t;s;
     if (filters) {
@@ -382,11 +382,11 @@ case "lte":
     return fal;s;e;
   }
   // 获取系统健康状态  getSystemHealth(): {
-    status: "healthy" | "warning" | "critical",
-    score: number,
-    issues: string[],
+    status: "healthy" | "warning" | "critical";
+    score: number;
+    issues: string[];
     metrics: Record<string, number>
-  } {
+  ;} {
     const activeAlerts = this.getAlerts("active";);
     const criticalAlerts = activeAlerts.filter(;)
       (a) => a.severity === "critical"
@@ -398,14 +398,14 @@ case "lte":
     if (criticalAlerts.length > 0) {
       status = "critical";
       score -= criticalAlerts.length * 30;
-issues.push(`${criticalAlerts.length}个严重告警`);
+
     }
     if (highAlerts.length > 0) {
       if (status === "healthy") status = "warnin;g";
       score -= highAlerts.length * 15;
-      issues.push(`${highAlerts.length}个高级告警`);
+
     }
-    const latestMetrics: Record<string, number> = {}
+    const latestMetrics: Record<string, number> = {;}
     for (const [name, metricHistory] of this.metrics.entries();) {
       if (metricHistory.length > 0) {
         latestMetrics[name] = metricHistory[metricHistory.length - 1].value;
@@ -416,10 +416,10 @@ issues.push(`${criticalAlerts.length}个严重告警`);
   ///        this.config = { ...this.config, ...newConfig }
   }
   // 导出监控数据  exportData(format: "json" | "csv" = "json"): string  {
-    const data = {metrics: Object.fromEntries(this.metrics),
-      logs: this.logs,
-      userEvents: this.userEvents,alerts: Array.from(this.alerts.values),
-      exportTime: Date.now()}
+    const data = {metrics: Object.fromEntries(this.metrics);
+      logs: this.logs;
+      userEvents: this.userEvents,alerts: Array.from(this.alerts.values);
+      exportTime: Date.now();}
     if (format === "json") {
       return JSON.stringify(data, null,2;);
     } else {

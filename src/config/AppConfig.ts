@@ -133,253 +133,253 @@ const getCurrentEnvironment = (): Environment => {
 };
 // 开发环境配置
 const developmentConfig: AppConfiguration = {
-  environment: 'development',
-  version: '1.0.0',
-  buildNumber: '1',
+  environment: 'development';
+  version: '1.0.0';
+  buildNumber: '1';
   api: {
-    baseUrl: 'http://localhost:8000',
-    timeout: 30000,
-    retryAttempts: 3,
-    retryDelay: 1000,
-    enableMocking: true,
+    baseUrl: 'http://localhost:8000';
+    timeout: 30000;
+    retryAttempts: 3;
+    retryDelay: 1000;
+    enableMocking: true;
   },
   agents: {
     xiaoai: {
-      enabled: true,
-      endpoint: 'http://localhost:8001',
-      timeout: 30000,
-      maxSessions: 10,
+      enabled: true;
+      endpoint: 'http://localhost:8001';
+      timeout: 30000;
+      maxSessions: 10;
     },
     xiaoke: {
-      enabled: true,
-      endpoint: 'http://localhost:8002',
-      timeout: 30000,
-      maxSessions: 10,
+      enabled: true;
+      endpoint: 'http://localhost:8002';
+      timeout: 30000;
+      maxSessions: 10;
     },
     laoke: {
-      enabled: true,
-      endpoint: 'http://localhost:8003',
-      timeout: 30000,
-      maxSessions: 10,
+      enabled: true;
+      endpoint: 'http://localhost:8003';
+      timeout: 30000;
+      maxSessions: 10;
     },
     soer: {
-      enabled: true,
-      endpoint: 'http://localhost:8004',
-      timeout: 30000,
-      maxSessions: 10,
+      enabled: true;
+      endpoint: 'http://localhost:8004';
+      timeout: 30000;
+      maxSessions: 10;
     },
   },
   diagnosis: {
     looking: {
-      enabled: true,
-      aiModelEndpoint: 'http://localhost:8001/diagnosis/looking',
-      confidenceThreshold: 0.7,
+      enabled: true;
+      aiModelEndpoint: 'http://localhost:8001/diagnosis/looking';
+      confidenceThreshold: 0.7;
     },
     listening: {
-      enabled: true,
-      aiModelEndpoint: 'http://localhost:8001/diagnosis/listening',
-      confidenceThreshold: 0.7,
+      enabled: true;
+      aiModelEndpoint: 'http://localhost:8001/diagnosis/listening';
+      confidenceThreshold: 0.7;
     },
     inquiry: {
-      enabled: true,
-      aiModelEndpoint: 'http://localhost:8001/diagnosis/inquiry',
-      confidenceThreshold: 0.7,
+      enabled: true;
+      aiModelEndpoint: 'http://localhost:8001/diagnosis/inquiry';
+      confidenceThreshold: 0.7;
     },
     palpation: {
-      enabled: true,
-      aiModelEndpoint: 'http://localhost:8001/diagnosis/palpation',
-      confidenceThreshold: 0.7,
+      enabled: true;
+      aiModelEndpoint: 'http://localhost:8001/diagnosis/palpation';
+      confidenceThreshold: 0.7;
     },
     calculation: {
-      enabled: true,
-      aiModelEndpoint: 'http://localhost:8001/diagnosis/calculation',
-      confidenceThreshold: 0.8,
+      enabled: true;
+      aiModelEndpoint: 'http://localhost:8001/diagnosis/calculation';
+      confidenceThreshold: 0.8;
     },
   },
   performance: {
-    enableMonitoring: true,
-    sampleRate: 1.0,
-    renderThreshold: 16,
-    memoryThreshold: 100,
-    networkThreshold: 5000,
-    enableReporting: true,
-    reportingEndpoint: 'http://localhost:8000/performance',
+    enableMonitoring: true;
+    sampleRate: 1.0;
+    renderThreshold: 16;
+    memoryThreshold: 100;
+    networkThreshold: 5000;
+    enableReporting: true;
+    reportingEndpoint: 'http://localhost:8000/performance';
   },
   security: {
-    enableEncryption: false,
-    jwtSecret: 'dev-secret-key',
-    tokenExpiry: 3600,
-    enableBiometric: false,
-    enablePinCode: false,
-    sessionTimeout: 1800,
+    enableEncryption: false;
+    jwtSecret: 'dev-secret-key';
+    tokenExpiry: 3600;
+    enableBiometric: false;
+    enablePinCode: false;
+    sessionTimeout: 1800;
   },
   features: {
-    enableFiveDiagnosis: true,
-    enableAgentCoordination: true,
-    enableBlockchain: false,
-    enableOfflineMode: true,
-    enablePushNotifications: false,
-    enableAnalytics: false,
-    enableCrashReporting: true,
-    enablePerformanceMonitoring: true,
+    enableFiveDiagnosis: true;
+    enableAgentCoordination: true;
+    enableBlockchain: false;
+    enableOfflineMode: true;
+    enablePushNotifications: false;
+    enableAnalytics: false;
+    enableCrashReporting: true;
+    enablePerformanceMonitoring: true;
   },
   logging: {
-    level: 'debug',
-    enableConsole: true,
-    enableRemote: false,
-    remoteEndpoint: 'http://localhost:8000/logs',
+    level: 'debug';
+    enableConsole: true;
+    enableRemote: false;
+    remoteEndpoint: 'http://localhost:8000/logs';
   },
   cache: {
-    enableCache: true,
-    maxSize: 50,
-    ttl: 300,
+    enableCache: true;
+    maxSize: 50;
+    ttl: 300;
   },
 };
 // 生产环境配置
 const productionConfig: AppConfiguration = {
-  environment: 'production',
-  version: '1.0.0',
-  buildNumber: '1',
+  environment: 'production';
+  version: '1.0.0';
+  buildNumber: '1';
   api: {
-    baseUrl: 'https://api.suokelife.com',
-    timeout: 30000,
-    retryAttempts: 3,
-    retryDelay: 1000,
-    enableMocking: false,
+    baseUrl: 'https://api.suokelife.com';
+    timeout: 30000;
+    retryAttempts: 3;
+    retryDelay: 1000;
+    enableMocking: false;
   },
   agents: {
     xiaoai: {
-      enabled: true,
-      endpoint: 'https://xiaoai.suokelife.com',
-      timeout: 30000,
-      maxSessions: 100,
+      enabled: true;
+      endpoint: 'https://xiaoai.suokelife.com';
+      timeout: 30000;
+      maxSessions: 100;
     },
     xiaoke: {
-      enabled: true,
-      endpoint: 'https://xiaoke.suokelife.com',
-      timeout: 30000,
-      maxSessions: 100,
+      enabled: true;
+      endpoint: 'https://xiaoke.suokelife.com';
+      timeout: 30000;
+      maxSessions: 100;
     },
     laoke: {
-      enabled: true,
-      endpoint: 'https://laoke.suokelife.com',
-      timeout: 30000,
-      maxSessions: 100,
+      enabled: true;
+      endpoint: 'https://laoke.suokelife.com';
+      timeout: 30000;
+      maxSessions: 100;
     },
     soer: {
-      enabled: true,
-      endpoint: 'https://soer.suokelife.com',
-      timeout: 30000,
-      maxSessions: 100,
+      enabled: true;
+      endpoint: 'https://soer.suokelife.com';
+      timeout: 30000;
+      maxSessions: 100;
     },
   },
   diagnosis: {
     looking: {
-      enabled: true,
-      aiModelEndpoint: 'https://xiaoai.suokelife.com/diagnosis/looking',
-      confidenceThreshold: 0.8,
+      enabled: true;
+      aiModelEndpoint: 'https://xiaoai.suokelife.com/diagnosis/looking';
+      confidenceThreshold: 0.8;
     },
     listening: {
-      enabled: true,
-      aiModelEndpoint: 'https://xiaoai.suokelife.com/diagnosis/listening',
-      confidenceThreshold: 0.8,
+      enabled: true;
+      aiModelEndpoint: 'https://xiaoai.suokelife.com/diagnosis/listening';
+      confidenceThreshold: 0.8;
     },
     inquiry: {
-      enabled: true,
-      aiModelEndpoint: 'https://xiaoai.suokelife.com/diagnosis/inquiry',
-      confidenceThreshold: 0.8,
+      enabled: true;
+      aiModelEndpoint: 'https://xiaoai.suokelife.com/diagnosis/inquiry';
+      confidenceThreshold: 0.8;
     },
     palpation: {
-      enabled: true,
-      aiModelEndpoint: 'https://xiaoai.suokelife.com/diagnosis/palpation',
-      confidenceThreshold: 0.8,
+      enabled: true;
+      aiModelEndpoint: 'https://xiaoai.suokelife.com/diagnosis/palpation';
+      confidenceThreshold: 0.8;
     },
     calculation: {
-      enabled: true,
-      aiModelEndpoint: 'https://xiaoai.suokelife.com/diagnosis/calculation',
-      confidenceThreshold: 0.9,
+      enabled: true;
+      aiModelEndpoint: 'https://xiaoai.suokelife.com/diagnosis/calculation';
+      confidenceThreshold: 0.9;
     },
   },
   performance: {
-    enableMonitoring: true,
-    sampleRate: 0.1,
-    renderThreshold: 16,
-    memoryThreshold: 200,
-    networkThreshold: 10000,
-    enableReporting: true,
-    reportingEndpoint: 'https://api.suokelife.com/performance',
+    enableMonitoring: true;
+    sampleRate: 0.1;
+    renderThreshold: 16;
+    memoryThreshold: 200;
+    networkThreshold: 10000;
+    enableReporting: true;
+    reportingEndpoint: 'https://api.suokelife.com/performance';
   },
   security: {
-    enableEncryption: true,
-    jwtSecret: process.env.JWT_SECRET || 'production-secret-key',
-    tokenExpiry: 3600,
-    enableBiometric: true,
-    enablePinCode: true,
-    sessionTimeout: 1800,
+    enableEncryption: true;
+    jwtSecret: process.env.JWT_SECRET || 'production-secret-key';
+    tokenExpiry: 3600;
+    enableBiometric: true;
+    enablePinCode: true;
+    sessionTimeout: 1800;
   },
   features: {
-    enableFiveDiagnosis: true,
-    enableAgentCoordination: true,
-    enableBlockchain: true,
-    enableOfflineMode: true,
-    enablePushNotifications: true,
-    enableAnalytics: true,
-    enableCrashReporting: true,
-    enablePerformanceMonitoring: true,
+    enableFiveDiagnosis: true;
+    enableAgentCoordination: true;
+    enableBlockchain: true;
+    enableOfflineMode: true;
+    enablePushNotifications: true;
+    enableAnalytics: true;
+    enableCrashReporting: true;
+    enablePerformanceMonitoring: true;
   },
   logging: {
-    level: 'warn',
-    enableConsole: false,
-    enableRemote: true,
-    remoteEndpoint: 'https://api.suokelife.com/logs',
+    level: 'warn';
+    enableConsole: false;
+    enableRemote: true;
+    remoteEndpoint: 'https://api.suokelife.com/logs';
   },
   cache: {
-    enableCache: true,
-    maxSize: 100,
-    ttl: 600,
+    enableCache: true;
+    maxSize: 100;
+    ttl: 600;
   },
 };
 // 测试环境配置
 const stagingConfig: AppConfiguration = {
   ...productionConfig,
-  environment: 'staging',
+  environment: 'staging';
   api: {
     ...productionConfig.api,
-    baseUrl: 'https://staging-api.suokelife.com',
+    baseUrl: 'https://staging-api.suokelife.com';
   },
   agents: {
     xiaoai: {
       ...productionConfig.agents.xiaoai,
-      endpoint: 'https://staging-xiaoai.suokelife.com',
+      endpoint: 'https://staging-xiaoai.suokelife.com';
     },
     xiaoke: {
       ...productionConfig.agents.xiaoke,
-      endpoint: 'https://staging-xiaoke.suokelife.com',
+      endpoint: 'https://staging-xiaoke.suokelife.com';
     },
     laoke: {
       ...productionConfig.agents.laoke,
-      endpoint: 'https://staging-laoke.suokelife.com',
+      endpoint: 'https://staging-laoke.suokelife.com';
     },
     soer: {
       ...productionConfig.agents.soer,
-      endpoint: 'https://staging-soer.suokelife.com',
+      endpoint: 'https://staging-soer.suokelife.com';
     },
   },
   logging: {
     ...productionConfig.logging,
-    level: 'info',
-    enableConsole: true,
+    level: 'info';
+    enableConsole: true;
   },
   performance: {
     ...productionConfig.performance,
-    sampleRate: 0.5,
+    sampleRate: 0.5;
   },
 };
 // 配置映射
 const configMap: Record<Environment, AppConfiguration> = {
-  development: developmentConfig,
-  staging: stagingConfig,
-  production: productionConfig,
+  development: developmentConfig;
+  staging: stagingConfig;
+  production: productionConfig;
 };
 // 配置管理类
 class ConfigManager {
@@ -414,7 +414,7 @@ class ConfigManager {
     this.currentConfig = {
       ...this.currentConfig,
       ...updates,
-    };
+    ;};
     // 通知监听器
     this.listeners.forEach((listener) => listener(this.currentConfig));
   }
@@ -468,11 +468,11 @@ class ConfigManager {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000);
       const response = await fetch(`${this.currentConfig.api.baseUrl}/config`, {
-        method: 'GET',
+        method: 'GET';
         headers: {
           'Content-Type': 'application/json',
-        },
-        signal: controller.signal,
+        ;},
+        signal: controller.signal;
       });
       clearTimeout(timeoutId);
       if (response.ok) {

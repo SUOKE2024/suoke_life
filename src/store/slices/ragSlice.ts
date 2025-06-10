@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { ragService } from '../../services/ragService';
 import { RAG_CONFIG } from '../../constants/config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import type {RAGQueryRequest,;
+import type {RAGQueryRequest;
   RAGQueryResponse,
   TCMAnalysisRequest,
   TCMAnalysisResponse,
@@ -13,96 +13,96 @@ import type {RAGQueryRequest,;
 // 状态接口定义
 export interface RAGState {
   // 查询状态
-  isQuerying: boolean;,
-  isStreaming: boolean;,
-  currentQuery: string;,
+  isQuerying: boolean;
+  isStreaming: boolean;
+  currentQuery: string;
   queryHistory: RAGQueryResponse[];
   // 当前结果
-  currentResult: RAGQueryResponse | null;,
+  currentResult: RAGQueryResponse | null;
   streamingText: string;
   // 中医分析状态
-  isAnalyzing: boolean;,
+  isAnalyzing: boolean;
   tcmAnalysisResult: TCMAnalysisResponse | null;
   // 中药推荐状态
-  isRecommending: boolean;,
+  isRecommending: boolean;
   herbRecommendationResult: HerbRecommendationResponse | null;
   // 错误处理
-  error: string | null;,
+  error: string | null;
   lastError: Error | null;
   // 缓存管理
-  cacheStats: {;,
-  size: number;,
-  keys: string[];,
-  hitRate: number;,
-  totalQueries: number;,
+  cacheStats: {
+  size: number;
+  keys: string[];
+  hitRate: number;
+  totalQueries: number;
   cacheHits: number;
 };
   // 性能监控
   performance: {,
-  averageResponseTime: number;,
-  totalQueries: number,
-  successRate: number;,
+  averageResponseTime: number;
+  totalQueries: number;
+  successRate: number;
   failureCount: number;
   };
   // 用户偏好
   preferences: {,
-  enableCache: boolean;,
-  enableStreaming: boolean,
-  defaultTaskType: 'consultation' | 'diagnosis' | 'treatment' | 'prevention';,
-  maxHistorySize: number,
+  enableCache: boolean;
+  enableStreaming: boolean;
+  defaultTaskType: 'consultation' | 'diagnosis' | 'treatment' | 'prevention';
+  maxHistorySize: number;
   autoSaveHistory: boolean;
   };
   // 离线支持
   offline: {,
-  isOffline: boolean;,
-  pendingQueries: RAGQueryRequest[],
+  isOffline: boolean;
+  pendingQueries: RAGQueryRequest[];
   offlineCache: RAGQueryResponse[];
   };
 }
 // 初始状态
 const initialState: RAGState = {,
-  isQuerying: false,
-  isStreaming: false,
-  currentQuery: '',
-  queryHistory: [],
-  currentResult: null,
-  streamingText: '',
-  isAnalyzing: false,
-  tcmAnalysisResult: null,
-  isRecommending: false,
-  herbRecommendationResult: null,
-  error: null,
-  lastError: null,
+  isQuerying: false;
+  isStreaming: false;
+  currentQuery: '';
+  queryHistory: [];
+  currentResult: null;
+  streamingText: '';
+  isAnalyzing: false;
+  tcmAnalysisResult: null;
+  isRecommending: false;
+  herbRecommendationResult: null;
+  error: null;
+  lastError: null;
   cacheStats: {,
-  size: 0,
-    keys: [],
-    hitRate: 0,
-    totalQueries: 0,
+  size: 0;
+    keys: [];
+    hitRate: 0;
+    totalQueries: 0;
     cacheHits: 0;
   },
   performance: {,
-  averageResponseTime: 0,
-    totalQueries: 0,
-    successRate: 100,
+  averageResponseTime: 0;
+    totalQueries: 0;
+    successRate: 100;
     failureCount: 0;
   },
   preferences: {,
-  enableCache: true,
-    enableStreaming: true,
-    defaultTaskType: 'consultation',
-    maxHistorySize: 50,
+  enableCache: true;
+    enableStreaming: true;
+    defaultTaskType: 'consultation';
+    maxHistorySize: 50;
     autoSaveHistory: true;
   },
   offline: {,
-  isOffline: false,
-    pendingQueries: [],
+  isOffline: false;
+    pendingQueries: [];
     offlineCache: []
-  }
+  ;}
 };
 // 异步Thunk：基础RAG查询
 export const queryRAG = createAsyncThunk(;);
   'rag/query',
-  async (request: RAGQueryRequest, { dispatch, rejectWithValue }) => {
+  async (request: RAGQueryRequest, { dispatch, rejectWithValue ;}) => {
     try {
       const startTime = Date.now();
       // 更新查询状态
@@ -110,13 +110,13 @@ export const queryRAG = createAsyncThunk(;);
       const result = await ragService.query(request);
       // 计算响应时间
       const responseTime = Date.now() - startTime;
-      dispatch(updatePerformanceMetrics({ responseTime, success: true }));
+      dispatch(updatePerformanceMetrics({ responseTime, success: true ;}));
       // 更新缓存统计
       const cacheStats = ragService.getCacheStats();
       dispatch(updateCacheStats(cacheStats));
       return result;
     } catch (error) {
-      dispatch(updatePerformanceMetrics({ responseTime: 0, success: false }));
+      dispatch(updatePerformanceMetrics({ responseTime: 0, success: false ;}));
       return rejectWithValue(error as Error).message);
     }
   }
@@ -124,7 +124,7 @@ export const queryRAG = createAsyncThunk(;);
 // 异步Thunk：中医分析
 export const analyzeTCMSyndrome = createAsyncThunk(;);
   'rag/analyzeTCMSyndrome',
-  async (request: TCMAnalysisRequest, { rejectWithValue }) => {
+  async (request: TCMAnalysisRequest, { rejectWithValue ;}) => {
     try {
       const result = await ragService.analyzeTCM(request);
       return result;
@@ -136,7 +136,7 @@ export const analyzeTCMSyndrome = createAsyncThunk(;);
 // 异步Thunk：中药推荐
 export const recommendHerbs = createAsyncThunk(;);
   'rag/recommendHerbs',
-  async (request: HerbRecommendationRequest, { rejectWithValue }) => {
+  async (request: HerbRecommendationRequest, { rejectWithValue ;}) => {
     try {
       const result = await ragService.recommendHerbs(request);
       return result;
@@ -149,7 +149,7 @@ export const recommendHerbs = createAsyncThunk(;);
 export const streamQueryRAG = createAsyncThunk(;);
   'rag/streamQuery',
   async ()
-    { request, onChunk }: { request: RAGQueryRequest; onChunk: (chunk: StreamResponse) => void },
+    { request, onChunk }: { request: RAGQueryRequest; onChunk: (chunk: StreamResponse) => void ;},
     { dispatch, rejectWithValue }
   ) => {
     try {
@@ -168,15 +168,15 @@ export const streamQueryRAG = createAsyncThunk(;);
 // 异步Thunk：多模态查询
 export const multimodalQuery = createAsyncThunk(;);
   'rag/multimodalQuery',
-  async (request: RAGQueryRequest, { dispatch, rejectWithValue }) => {
+  async (request: RAGQueryRequest, { dispatch, rejectWithValue ;}) => {
     try {
       const startTime = Date.now();
       const result = await ragService.multimodalQuery(request);
       const responseTime = Date.now() - startTime;
-      dispatch(updatePerformanceMetrics({ responseTime, success: true }));
+      dispatch(updatePerformanceMetrics({ responseTime, success: true ;}));
       return result;
     } catch (error) {
-      dispatch(updatePerformanceMetrics({ responseTime: 0, success: false }));
+      dispatch(updatePerformanceMetrics({ responseTime: 0, success: false ;}));
       return rejectWithValue(error as Error).message);
     }
   }
@@ -224,7 +224,7 @@ const ragSlice = createSlice({name: 'rag',initialState,reducers: {// 基础状�
       );
     },
     // 缓存管理
-    updateCacheStats: (state, action: PayloadAction<{ size: number; keys: string[] }>) => {
+    updateCacheStats: (state, action: PayloadAction<{ size: number; keys: string[] ;}>) => {
       const { size, keys } = action.payload;
       state.cacheStats.size = size;
       state.cacheStats.keys = keys;
@@ -243,17 +243,17 @@ const ragSlice = createSlice({name: 'rag',initialState,reducers: {// 基础状�
     clearCache: (state) => {
       ragService.clearCache();
       state.cacheStats = {
-        size: 0,
-        keys: [],
-        hitRate: 0,
-        totalQueries: 0,
+        size: 0;
+        keys: [];
+        hitRate: 0;
+        totalQueries: 0;
         cacheHits: 0;
       };
     },
     // 性能监控
     updatePerformanceMetrics: ()
-      state,
-      action: PayloadAction<{ responseTime: number; success: boolean }>
+      state;
+      action: PayloadAction<{ responseTime: number; success: boolean ;}>
     ) => {
       const { responseTime, success } = action.payload;
       if (success) {
@@ -274,15 +274,15 @@ const ragSlice = createSlice({name: 'rag',initialState,reducers: {// 基础状�
     },
     resetPerformanceMetrics: (state) => {
       state.performance = {
-        averageResponseTime: 0,
-        totalQueries: 0,
-        successRate: 100,
+        averageResponseTime: 0;
+        totalQueries: 0;
+        successRate: 100;
         failureCount: 0;
       };
     },
     // 用户偏好管理
     updatePreferences: (state, action: PayloadAction<Partial<RAGState['preferences']>>) => {
-      state.preferences = { ...state.preferences, ...action.payload };
+      state.preferences = { ...state.preferences, ...action.payload ;};
       // 持久化偏好设置
       AsyncStorage.setItem('@rag_preferences', JSON.stringify(state.preferences));
     },
@@ -328,10 +328,10 @@ const ragSlice = createSlice({name: 'rag',initialState,reducers: {// 基础状�
     performHealthCheck: (state) => {
       ragService.checkHealth().then(isHealthy => {
         if (!isHealthy) {
-          state.error = 'RAG服务不可用';
-        }
+
+        ;}
       }).catch(error => {
-        state.error = `健康检查失败: ${error.message}`;
+
       });
     }
   },
@@ -346,7 +346,7 @@ const ragSlice = createSlice({name: 'rag',initialState,reducers: {// 基础状�
         state.isQuerying = false;
         state.currentResult = action.payload;
         if (state.preferences.autoSaveHistory) {
-          ragSlice.caseReducers.addToHistory(state, { payload: action.payload, type: 'addToHistory' });
+          ragSlice.caseReducers.addToHistory(state, { payload: action.payload, type: 'addToHistory' ;});
         }
       })
       .addCase(queryRAG.rejected, (state, action) => {
@@ -442,16 +442,16 @@ export const {
 // 导出reducer;
 export default ragSlice.reducer;
 // 选择器
-export const selectRAGState = (state: { rag: RAGState }) => state.rag;
-export const selectIsQuerying = (state: { rag: RAGState }) => state.rag.isQuerying;
-export const selectIsStreaming = (state: { rag: RAGState }) => state.rag.isStreaming;
-export const selectCurrentResult = (state: { rag: RAGState }) => state.rag.currentResult;
-export const selectQueryHistory = (state: { rag: RAGState }) => state.rag.queryHistory;
-export const selectCacheStats = (state: { rag: RAGState }) => state.rag.cacheStats;
-export const selectPerformanceMetrics = (state: { rag: RAGState }) => state.rag.performance;
-export const selectPreferences = (state: { rag: RAGState }) => state.rag.preferences;
-export const selectOfflineStatus = (state: { rag: RAGState }) => state.rag.offline;
-export const selectTCMAnalysisResult = (state: { rag: RAGState }) => state.rag.tcmAnalysisResult;
-export const selectHerbRecommendationResult = (state: { rag: RAGState }) => state.rag.herbRecommendationResult;
-export const selectError = (state: { rag: RAGState }) => state.rag.error;
-export const selectStreamingText = (state: { rag: RAGState }) => state.rag.streamingText;
+export const selectRAGState = (state: { rag: RAGState ;}) => state.rag;
+export const selectIsQuerying = (state: { rag: RAGState ;}) => state.rag.isQuerying;
+export const selectIsStreaming = (state: { rag: RAGState ;}) => state.rag.isStreaming;
+export const selectCurrentResult = (state: { rag: RAGState ;}) => state.rag.currentResult;
+export const selectQueryHistory = (state: { rag: RAGState ;}) => state.rag.queryHistory;
+export const selectCacheStats = (state: { rag: RAGState ;}) => state.rag.cacheStats;
+export const selectPerformanceMetrics = (state: { rag: RAGState ;}) => state.rag.performance;
+export const selectPreferences = (state: { rag: RAGState ;}) => state.rag.preferences;
+export const selectOfflineStatus = (state: { rag: RAGState ;}) => state.rag.offline;
+export const selectTCMAnalysisResult = (state: { rag: RAGState ;}) => state.rag.tcmAnalysisResult;
+export const selectHerbRecommendationResult = (state: { rag: RAGState ;}) => state.rag.herbRecommendationResult;
+export const selectError = (state: { rag: RAGState ;}) => state.rag.error;
+export const selectStreamingText = (state: { rag: RAGState ;}) => state.rag.streamingText;

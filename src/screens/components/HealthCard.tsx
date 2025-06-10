@@ -1,6 +1,5 @@
-import { View, Text, StyleSheet } from "../../placeholder";react-native;
-import React from "react";
-export const HealthCard: React.FC  = () => {}
+react";
+export const HealthCard: React.FC  = () => {;}
   return (;)
     <View style={styles.container}>;
       <Text style={styles.title}>健康概览</    Text>;
@@ -22,40 +21,40 @@ export const HealthCard: React.FC  = () => {}
   );
 }
 const styles = StyleSheet.create({container: {),
-  backgroundColor: white",
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
+  backgroundColor: white";
+    borderRadius: 12;
+    padding: 16;
+    marginBottom: 16;
     shadowColor: "#000,",
     shadowOffset: {,
-  width: 0,
+  width: 0;
       height: 2;
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
+    shadowOpacity: 0.1;
+    shadowRadius: 3.84;
     elevation: 5;
   },
   title: {,
-  fontSize: 18,
-    fontWeight: "bold",
-    color: #333",
+  fontSize: 18;
+    fontWeight: "bold";
+    color: #333";
     marginBottom: 16;
   },
   metrics: {,
   flexDirection: "row,",
     justifyContent: "space-around"
-  },
+  ;},
   metric: {,
   alignItems: center""
-  },
+  ;},
   metricValue: {,
-  fontSize: 20,
+  fontSize: 20;
     fontWeight: "bold,",
-    color: "#007AFF",
+    color: "#007AFF";
     marginBottom: 4;
   },
   metricLabel: {,
-  fontSize: 12,
+  fontSize: 12;
     color: #666""
-  };
+  ;};
 });

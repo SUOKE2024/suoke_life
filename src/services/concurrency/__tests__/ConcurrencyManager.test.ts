@@ -1,5 +1,4 @@
 import { ConcurrencyManager } from "../ConcurrencyManager";
-import { ConcurrencyManager } from "../ConcurrencyManager";
 describe("ConcurrencyManager", () => {
   beforeEach(() => {
     jest.clearAllMocks();

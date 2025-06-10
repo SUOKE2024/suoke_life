@@ -5,7 +5,7 @@ describe('AccessibilityServiceClient', () => {
     jest.clearAllMocks();
   });
 
-  describe('基础功能', () => {
+
     it('should have accessibility service concept', () => {
       // 测试无障碍服务的基本概念
       expect(true).toBe(true);
@@ -27,7 +27,7 @@ describe('AccessibilityServiceClient', () => {
     });
   });
 
-  describe('无障碍功能', () => {
+
     it('should handle visual impairment support', () => {
       // TODO: Add test cases when implementation is complete
       expect(true).toBe(true);
@@ -62,7 +62,7 @@ describe('AccessibilityServiceClient Performance Tests', () => {
 
     for (let i = 0; i < iterations; i++) {
       // TODO: Execute performance-critical functions when implemented
-    }
+    ;}
 
     const endTime = performance.now();
     const averageTime = (endTime - startTime) / iterations;
@@ -88,7 +88,7 @@ describe('AccessibilityServiceClient Performance Tests', () => {
     // Execute function multiple times
     for (let i = 0; i < 100; i++) {
       // TODO: Execute function when implementation is complete
-    }
+    ;}
 
     // Force garbage collection if available
     if (global.gc) {

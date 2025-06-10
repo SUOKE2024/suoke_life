@@ -1,5 +1,4 @@
-import { CalculationConfig } from "../../config/AlgorithmConfig";
-import { TCMKnowledgeBase } from "../../knowledge/TCMKnowledgeBase";
+
 import { CalculationData, CalculationDiagnosisAlgorithm } from "../CalculationDiagnosisAlgorithm";
 
 // Mock dependencies
@@ -21,20 +20,20 @@ describe("CalculationDiagnosisAlgorithm", () => {
     algorithm = new CalculationDiagnosisAlgorithm(mockConfig, mockKnowledgeBase);
   });
 
-  describe("基础功能测试", () => {
-    it("应该能够正确初始化", () => {
+
+
       expect(algorithm).toBeDefined();
       expect(algorithm).toBeInstanceOf(CalculationDiagnosisAlgorithm);
     });
 
-    it("应该能够处理有效输入", async () => {
+
       const validInput: CalculationData = {
-        birthDate: "1990-01-01",
-        birthTime: "08:00",
-        birthPlace: "北京",
-        currentDate: "2024-01-01",
-        currentTime: "10:00",
-        currentLocation: "上海"
+        birthDate: "1990-01-01";
+        birthTime: "08:00";
+
+        currentDate: "2024-01-01";
+        currentTime: "10:00";
+
       };
 
       const result = await algorithm.analyze(validInput);
@@ -43,42 +42,42 @@ describe("CalculationDiagnosisAlgorithm", () => {
       expect(result.analysis).toBeDefined();
     });
 
-    it("应该能够处理边界情况", async () => {
+
       const edgeCaseInput: CalculationData = {
         birthDate: "2000-02-29", // 闰年
-        birthTime: "00:00",
-        birthPlace: "",
-        currentDate: "2024-12-31",
-        currentTime: "23:59",
+        birthTime: "00:00";
+        birthPlace: "";
+        currentDate: "2024-12-31";
+        currentTime: "23:59";
         currentLocation: ""
-      };
+      ;};
 
       const result = await algorithm.analyze(edgeCaseInput);
       expect(result).toBeDefined();
       expect(result.confidence).toBeGreaterThanOrEqual(0);
     });
 
-    it("应该能够优雅地处理无效输入", async () => {
+
       const invalidInput: CalculationData = {
-        birthDate: "invalid-date",
+        birthDate: "invalid-date";
         birthTime: "25:00", // 无效时间
-        birthPlace: "",
-        currentDate: "",
-        currentTime: "",
+        birthPlace: "";
+        currentDate: "";
+        currentTime: "";
         currentLocation: ""
-      };
+      ;};
 
       await expect(algorithm.analyze(invalidInput)).rejects.toThrow();
     });
 
-    it("应该返回正确的输出格式", async () => {
+
       const testInput: CalculationData = {
-        birthDate: "1985-06-15",
-        birthTime: "14:30",
-        birthPlace: "广州",
-        currentDate: "2024-01-15",
-        currentTime: "16:00",
-        currentLocation: "深圳"
+        birthDate: "1985-06-15";
+        birthTime: "14:30";
+
+        currentDate: "2024-01-15";
+        currentTime: "16:00";
+
       };
 
       const result = await algorithm.analyze(testInput);
@@ -92,15 +91,15 @@ describe("CalculationDiagnosisAlgorithm", () => {
     });
   });
 
-  describe("五行分析测试", () => {
-    it("应该能够正确分析五行属性", async () => {
+
+
       const input: CalculationData = {
         birthDate: "1990-03-21", // 春分
-        birthTime: "12:00",
-        birthPlace: "北京",
-        currentDate: "2024-01-01",
-        currentTime: "12:00",
-        currentLocation: "北京"
+        birthTime: "12:00";
+
+        currentDate: "2024-01-01";
+        currentTime: "12:00";
+
       };
 
       const result = await algorithm.analyze(input);
@@ -110,14 +109,14 @@ describe("CalculationDiagnosisAlgorithm", () => {
       expect(result.fiveElements.balance).toBeDefined();
     });
 
-    it("应该能够计算五行平衡度", async () => {
+
       const input: CalculationData = {
-        birthDate: "1988-08-08",
-        birthTime: "08:08",
-        birthPlace: "北京",
-        currentDate: "2024-01-01",
-        currentTime: "12:00",
-        currentLocation: "北京"
+        birthDate: "1988-08-08";
+        birthTime: "08:08";
+
+        currentDate: "2024-01-01";
+        currentTime: "12:00";
+
       };
 
       const result = await algorithm.analyze(input);
@@ -128,15 +127,15 @@ describe("CalculationDiagnosisAlgorithm", () => {
     });
   });
 
-  describe("体质分析测试", () => {
-    it("应该能够确定主要体质类型", async () => {
+
+
       const input: CalculationData = {
         birthDate: "1992-12-21", // 冬至
-        birthTime: "06:00",
-        birthPlace: "哈尔滨",
-        currentDate: "2024-01-01",
-        currentTime: "12:00",
-        currentLocation: "哈尔滨"
+        birthTime: "06:00";
+
+        currentDate: "2024-01-01";
+        currentTime: "12:00";
+
       };
 
       const result = await algorithm.analyze(input);
@@ -147,14 +146,14 @@ describe("CalculationDiagnosisAlgorithm", () => {
       expect(Array.isArray(result.constitution.lifeStageInfluence.characteristics)).toBe(true);
     });
 
-    it("应该能够提供体质倾向分析", async () => {
+
       const input: CalculationData = {
-        birthDate: "1995-07-07",
-        birthTime: "18:00",
-        birthPlace: "广州",
-        currentDate: "2024-01-01",
-        currentTime: "12:00",
-        currentLocation: "广州"
+        birthDate: "1995-07-07";
+        birthTime: "18:00";
+
+        currentDate: "2024-01-01";
+        currentTime: "12:00";
+
       };
 
       const result = await algorithm.analyze(input);
@@ -166,7 +165,7 @@ describe("CalculationDiagnosisAlgorithm", () => {
   });
 });
 
-describe("CalculationDiagnosisAlgorithm 性能测试", () => {
+
   let algorithm: CalculationDiagnosisAlgorithm;
   let mockConfig: jest.Mocked<CalculationConfig>;
   let mockKnowledgeBase: jest.Mocked<TCMKnowledgeBase>;
@@ -177,15 +176,15 @@ describe("CalculationDiagnosisAlgorithm 性能测试", () => {
     algorithm = new CalculationDiagnosisAlgorithm(mockConfig, mockKnowledgeBase);
   });
 
-  it("应该在性能阈值内执行", async () => {
+
     const iterations = 10;
     const testInput: CalculationData = {
-      birthDate: "1990-01-01",
-      birthTime: "12:00",
-      birthPlace: "北京",
-      currentDate: "2024-01-01",
-      currentTime: "12:00",
-      currentLocation: "北京"
+      birthDate: "1990-01-01";
+      birthTime: "12:00";
+
+      currentDate: "2024-01-01";
+      currentTime: "12:00";
+
     };
 
     const startTime = performance.now();
@@ -201,14 +200,14 @@ describe("CalculationDiagnosisAlgorithm 性能测试", () => {
     expect(averageTime).toBeLessThan(100);
   });
 
-  it("应该能够高效处理大量数据", async () => {
-    const testCases: CalculationData[] = Array.from({ length: 100 }, (_, i) => ({
-      birthDate: `199${i % 10}-0${(i % 12) + 1}-${(i % 28) + 1}`,
-      birthTime: `${i % 24}:${i % 60}`,
-      birthPlace: "北京",
-      currentDate: "2024-01-01",
-      currentTime: "12:00",
-      currentLocation: "北京"
+
+    const testCases: CalculationData[] = Array.from({ length: 100 ;}, (_, i) => ({
+      birthDate: `199${i % 10;}-0${(i % 12) + 1}-${(i % 28) + 1}`,
+      birthTime: `${i % 24;}:${i % 60}`,
+
+      currentDate: "2024-01-01";
+      currentTime: "12:00";
+
     }));
 
     const startTime = performance.now();
@@ -228,15 +227,15 @@ describe("CalculationDiagnosisAlgorithm 性能测试", () => {
     });
   });
 
-  it("应该不会造成内存泄漏", async () => {
+
     const initialMemory = process.memoryUsage().heapUsed;
     const testInput: CalculationData = {
-      birthDate: "1990-01-01",
-      birthTime: "12:00",
-      birthPlace: "北京",
-      currentDate: "2024-01-01",
-      currentTime: "12:00",
-      currentLocation: "北京"
+      birthDate: "1990-01-01";
+      birthTime: "12:00";
+
+      currentDate: "2024-01-01";
+      currentTime: "12:00";
+
     };
 
     // 执行多次分析

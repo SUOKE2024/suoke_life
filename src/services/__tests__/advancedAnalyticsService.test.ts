@@ -1,5 +1,4 @@
 import { advancedAnalyticsService } from "../advancedAnalyticsService";
-import { advancedAnalyticsService } from "../advancedAnalyticsService";
 describe("advancedAnalyticsService", () => {
   beforeEach(() => {
     jest.clearAllMocks();

@@ -1,8 +1,8 @@
-import { Middleware } from "@reduxjs/toolkit";/importAsyncStorage from "@react-native-async-storage/async-storage";/import { STORAGE_CONFIG } from "../../constants/    config";
+/import { STORAGE_CONFIG } from "../../constants/    config";
 需要持久化的action类型 * const PERSIST_ACTIONS = [ ;
   "auth/login/fulfilled",/  "auth/logout/fulfilled",/  "ui/setTheme",/  "ui/setLanguage",/  "user/updateProfile/fulfilled",// ];
 //   ;
-(store) => (next) => (action: unknown) => {/    }
+(store) => (next) => (action: unknown) => {/    ;}
     const result = next(actio;n;);
     if (action.type && PERSIST_ACTIONS.includes(action.type)) {
       const state = store.getState;
@@ -48,7 +48,7 @@ case "user/updateProfile/fulfilled":/         if (state.user.profile) {
           );
         }
         break;
-default: break}
+default: break;}
   } catch (error) {
     }
 }
@@ -60,21 +60,21 @@ default: break}
         STORAGE_CONFIG.KEYS.AUTH_TOKEN,
         STORAGE_CONFIG.KEYS.REFRESH_TOKEN,
         STORAGE_CONFIG.KEYS.USER_;I;D;];);
-    const persistedState: unknown = {};
+    const persistedState: unknown = {;};
     if (theme[1]) {
       persistedState.ui = {
-        theme: theme[1] as "light" | "dark",
-        language: (language[1] as "zh" | "en") || "zh",
-        notifications:  [],
-        loading: false}
+        theme: theme[1] as "light" | "dark";
+        language: (language[1] as "zh" | "en") || "zh";
+        notifications:  [];
+        loading: false;}
     }
     if (authToken[1] && userId[1]) {
       persistedState.auth = {
-        isAuthenticated: true,
-        token: authToken[1],
-        refreshToken: refreshToken[1],
-        loading: false,
-        error: undefined}
+        isAuthenticated: true;
+        token: authToken[1];
+        refreshToken: refreshToken[1];
+        loading: false;
+        error: undefined;}
     }
     return persistedSta;t;e;
   } catch (error) {

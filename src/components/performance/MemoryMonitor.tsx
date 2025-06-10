@@ -37,19 +37,19 @@ interface PerformanceMetrics {
 
 export const MemoryMonitor: React.FC = () => {
   const [memoryStats, setMemoryStats] = useState<MemoryStats>({
-    totalMemory: 0,
-    usedMemory: 0,
-    availableMemory: 0,
-    modelMemory: 0,
-    cacheMemory: 0,
-    systemMemory: 0,
+    totalMemory: 0;
+    usedMemory: 0;
+    availableMemory: 0;
+    modelMemory: 0;
+    cacheMemory: 0;
+    systemMemory: 0;
   });
 
   const [performanceMetrics, setPerformanceMetrics] =
     useState<PerformanceMetrics>({
-      memoryPressure: 'low',
-      recommendations: [],
-      optimizationActions: [],
+      memoryPressure: 'low';
+      recommendations: [];
+      optimizationActions: [];
     });
 
   const [isMonitoring, setIsMonitoring] = useState(false);
@@ -90,7 +90,7 @@ export const MemoryMonitor: React.FC = () => {
         modelMemory,
         cacheMemory,
         systemMemory,
-      };
+      ;};
 
       setMemoryStats(newStats);
 
@@ -108,8 +108,8 @@ export const MemoryMonitor: React.FC = () => {
   };
 
   const analyzePerformance = (
-    stats: MemoryStats,
-    modelStats: any,
+    stats: MemoryStats;
+    modelStats: any;
     cacheStats: any
   ): PerformanceMetrics => {
     const memoryUsageRatio = stats.usedMemory / stats.totalMemory;
@@ -122,52 +122,52 @@ export const MemoryMonitor: React.FC = () => {
       memoryPressure = 'low';
     } else if (memoryUsageRatio < 0.75) {
       memoryPressure = 'medium';
-      recommendations.push('考虑清理不必要的缓存');
+
     } else if (memoryUsageRatio < 0.9) {
       memoryPressure = 'high';
-      recommendations.push('建议立即清理内存');
-      recommendations.push('卸载未使用的AI模型');
+
+
     } else {
       memoryPressure = 'critical';
-      recommendations.push('内存严重不足，需要紧急清理');
-      recommendations.push('关闭非必要功能');
+
+
     }
 
     // 生成优化建议
     if (stats.cacheMemory > 50 * 1024 * 1024) {
       // 50MB
       optimizationActions.push({
-        title: '清理缓存',
-        description: `缓存占用 ${formatBytes(stats.cacheMemory)}，建议清理`,
+
+
         action: async () => {
           await optimizedCacheService.cleanup();
           await updateMemoryStats();
         },
-        impact: 'medium',
+        impact: 'medium';
       });
     }
 
     if (modelStats.loadedModels > 2) {
       optimizationActions.push({
-        title: '卸载未使用模型',
-        description: `当前加载 ${modelStats.loadedModels} 个模型，建议卸载不常用的`,
+
+
         action: async () => {
           // 实现模型卸载逻辑
           await updateMemoryStats();
         },
-        impact: 'high',
+        impact: 'high';
       });
     }
 
     if (cacheStats.itemCount > 300) {
       optimizationActions.push({
-        title: '压缩缓存项',
-        description: `缓存项过多 (${cacheStats.itemCount})，建议压缩`,
+
+
         action: async () => {
           await optimizedCacheService.cleanup();
           await updateMemoryStats();
         },
-        impact: 'low',
+        impact: 'low';
       });
     }
 
@@ -201,9 +201,9 @@ export const MemoryMonitor: React.FC = () => {
   ): Promise<void> => {
     try {
       await action.action();
-      Alert.alert('优化完成', `${action.title} 执行成功`);
+
     } catch (error) {
-      Alert.alert('优化失败', `${action.title} 执行失败: ${error.message}`);
+
     }
   };
 
@@ -241,12 +241,12 @@ export const MemoryMonitor: React.FC = () => {
         <TouchableOpacity
           style={[
             styles.toggleButton,
-            { backgroundColor: isMonitoring ? '#4CAF50' : '#9E9E9E' },
+            { backgroundColor: isMonitoring ? '#4CAF50' : '#9E9E9E' ;},
           ]}
           onPress={() => setIsMonitoring(!isMonitoring)}
         >
           <Text style={styles.toggleButtonText}>
-            {isMonitoring ? '监控中' : '已停止'}
+
           </Text>
         </TouchableOpacity>
       </View>
@@ -260,10 +260,10 @@ export const MemoryMonitor: React.FC = () => {
             style={[
               styles.memoryUsed,
               {
-                width: `${getMemoryUsagePercentage()}%`,
+                width: `${getMemoryUsagePercentage();}%`,
                 backgroundColor: getMemoryPressureColor(
                   performanceMetrics.memoryPressure
-                ),
+                );
               },
             ]}
           />
@@ -296,7 +296,7 @@ export const MemoryMonitor: React.FC = () => {
           </View>
           <View style={styles.memoryItem}>
             <Text style={styles.memoryLabel}>可用:</Text>
-            <Text style={[styles.memoryValue, { color: '#4CAF50' }]}>
+            <Text style={[styles.memoryValue, { color: '#4CAF50' ;}]}>
               {formatBytes(memoryStats.availableMemory)}
             </Text>
           </View>
@@ -313,12 +313,12 @@ export const MemoryMonitor: React.FC = () => {
               {
                 backgroundColor: getMemoryPressureColor(
                   performanceMetrics.memoryPressure
-                ),
+                );
               },
             ]}
           />
           <Text style={styles.statusText}>
-            内存压力: {performanceMetrics.memoryPressure.toUpperCase()}
+
           </Text>
         </View>
       </View>
@@ -355,11 +355,11 @@ export const MemoryMonitor: React.FC = () => {
                           ? '#4CAF50'
                           : action.impact === 'medium'
                             ? '#FF9800'
-                            : '#9E9E9E',
+                            : '#9E9E9E';
                     },
                   ]}
                 >
-                  影响: {action.impact}
+
                 </Text>
               </View>
               <TouchableOpacity
@@ -380,12 +380,12 @@ export const MemoryMonitor: React.FC = () => {
           <TouchableOpacity
             style={[
               styles.settingToggle,
-              { backgroundColor: autoOptimize ? '#4CAF50' : '#9E9E9E' },
+              { backgroundColor: autoOptimize ? '#4CAF50' : '#9E9E9E' ;},
             ]}
             onPress={() => setAutoOptimize(!autoOptimize)}
           >
             <Text style={styles.settingToggleText}>
-              {autoOptimize ? '开启' : '关闭'}
+
             </Text>
           </TouchableOpacity>
         </View>
@@ -396,159 +396,159 @@ export const MemoryMonitor: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-    padding: 16,
+    flex: 1;
+    backgroundColor: '#f5f5f5';
+    padding: 16;
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 20,
+    flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
+    marginBottom: 20;
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
+    fontSize: 24;
+    fontWeight: 'bold';
+    color: '#333';
   },
   toggleButton: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
+    paddingHorizontal: 16;
+    paddingVertical: 8;
+    borderRadius: 20;
   },
   toggleButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: 'white';
+    fontWeight: 'bold';
   },
   section: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    backgroundColor: 'white';
+    borderRadius: 12;
+    padding: 16;
+    marginBottom: 16;
+    shadowColor: '#000';
+    shadowOffset: { width: 0, height: 2 ;},
+    shadowOpacity: 0.1;
+    shadowRadius: 4;
+    elevation: 3;
   },
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 12,
+    fontSize: 18;
+    fontWeight: 'bold';
+    color: '#333';
+    marginBottom: 12;
   },
   memoryBar: {
-    height: 8,
-    backgroundColor: '#E0E0E0',
-    borderRadius: 4,
-    marginBottom: 8,
+    height: 8;
+    backgroundColor: '#E0E0E0';
+    borderRadius: 4;
+    marginBottom: 8;
   },
   memoryUsed: {
-    height: '100%',
-    borderRadius: 4,
+    height: '100%';
+    borderRadius: 4;
   },
   memoryText: {
-    textAlign: 'center',
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 16,
+    textAlign: 'center';
+    fontSize: 16;
+    fontWeight: 'bold';
+    color: '#333';
+    marginBottom: 16;
   },
   memoryDetails: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    flexDirection: 'row';
+    flexWrap: 'wrap';
+    justifyContent: 'space-between';
   },
   memoryItem: {
-    width: '48%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 8,
+    width: '48%';
+    flexDirection: 'row';
+    justifyContent: 'space-between';
+    marginBottom: 8;
   },
   memoryLabel: {
-    fontSize: 14,
-    color: '#666',
+    fontSize: 14;
+    color: '#666';
   },
   memoryValue: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#333',
+    fontSize: 14;
+    fontWeight: 'bold';
+    color: '#333';
   },
   statusContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: 'row';
+    alignItems: 'center';
   },
   statusIndicator: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    marginRight: 8,
+    width: 12;
+    height: 12;
+    borderRadius: 6;
+    marginRight: 8;
   },
   statusText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
+    fontSize: 16;
+    fontWeight: 'bold';
+    color: '#333';
   },
   recommendation: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 4,
-    lineHeight: 20,
+    fontSize: 14;
+    color: '#666';
+    marginBottom: 4;
+    lineHeight: 20;
   },
   actionItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
+    flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
+    paddingVertical: 12;
+    borderBottomWidth: 1;
+    borderBottomColor: '#E0E0E0';
   },
   actionInfo: {
-    flex: 1,
-    marginRight: 12,
+    flex: 1;
+    marginRight: 12;
   },
   actionTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 4,
+    fontSize: 16;
+    fontWeight: 'bold';
+    color: '#333';
+    marginBottom: 4;
   },
   actionDescription: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 4,
+    fontSize: 14;
+    color: '#666';
+    marginBottom: 4;
   },
   actionImpact: {
-    fontSize: 12,
-    fontWeight: 'bold',
+    fontSize: 12;
+    fontWeight: 'bold';
   },
   actionButton: {
-    backgroundColor: '#2196F3',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 6,
+    backgroundColor: '#2196F3';
+    paddingHorizontal: 16;
+    paddingVertical: 8;
+    borderRadius: 6;
   },
   actionButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: 'white';
+    fontWeight: 'bold';
   },
   settingItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
   },
   settingLabel: {
-    fontSize: 16,
-    color: '#333',
+    fontSize: 16;
+    color: '#333';
   },
   settingToggle: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
+    paddingHorizontal: 12;
+    paddingVertical: 6;
+    borderRadius: 16;
   },
   settingToggleText: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: 'white';
+    fontWeight: 'bold';
   },
 });
 

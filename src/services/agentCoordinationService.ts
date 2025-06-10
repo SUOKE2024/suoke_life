@@ -7,27 +7,27 @@ import { apiClient } from './apiClient';
   MessageType;
 } from '../types/agents';
 export interface CoordinationRequest {
-  initiatorAgent: AgentType;,
-  targetAgents: AgentType[];,
-  task: string;,
+  initiatorAgent: AgentType;
+  targetAgents: AgentType[];
+  task: string;
   priority: 'low' | 'normal' | 'high' | 'urgent';
   data?: any;
   timeout?: number;
 }
 export interface CoordinationResult {
-  collaborationId: string;,
-  status: 'success' | 'partial' | 'failed';,
+  collaborationId: string;
+  status: 'success' | 'partial' | 'failed';
   responses: AgentResponse[];
   errors?: string[];
   duration: number;
 }
 export interface AgentInfo {
-  id: string;,
-  name: string;,
-  type: AgentType;,
-  status: 'active' | 'inactive' | 'busy' | 'error';,
-  capabilities: string[];,
-  load: number;,
+  id: string;
+  name: string;
+  type: AgentType;
+  status: 'active' | 'inactive' | 'busy' | 'error';
+  capabilities: string[];
+  load: number;
   lastHeartbeat: Date;
 }
 class AgentCoordinationService {
@@ -42,39 +42,39 @@ class AgentCoordinationService {
   private initializeDefaultAgents(): void {
     const defaultAgents: AgentInfo[] = [
       {
-      id: "xiaoai-001",
-      name: '小艾',
-        type: AgentType.XIAOAI,
-        status: 'active',
+      id: "xiaoai-001";
+
+        type: AgentType.XIAOAI;
+        status: 'active';
         capabilities: ["health_consultation",voice_interaction', 'four_diagnosis'],
-        load: 0.2,
+        load: 0.2;
         lastHeartbeat: new Date();
       },
       {
-      id: "xiaoke-001",
-      name: '小克',
-        type: AgentType.XIAOKE,
-        status: 'active',
+      id: "xiaoke-001";
+
+        type: AgentType.XIAOKE;
+        status: 'active';
         capabilities: ["data_analysis",health_monitoring', 'report_generation'],
-        load: 0.1,
+        load: 0.1;
         lastHeartbeat: new Date();
       },
       {
-      id: "laoke-001",
-      name: '老克',
-        type: AgentType.LAOKE,
-        status: 'active',
+      id: "laoke-001";
+
+        type: AgentType.LAOKE;
+        status: 'active';
         capabilities: ["knowledge_management",education', 'tcm_knowledge'],
-        load: 0.15,
+        load: 0.15;
         lastHeartbeat: new Date();
       },
       {
-      id: "soer-001",
-      name: '索儿',
-        type: AgentType.SOER,
-        status: 'active',
+      id: "soer-001";
+
+        type: AgentType.SOER;
+        status: 'active';
         capabilities: ["lifestyle_management",eco_services', 'community'],
-        load: 0.05,
+        load: 0.05;
         lastHeartbeat: new Date();
       }
     ];
@@ -90,11 +90,11 @@ class AgentCoordinationService {
     const collaborationId = this.generateCollaborationId();
     try {
       const collaboration: AgentCollaboration = {,
-  id: collaborationId,
-        initiatorAgent: request.initiatorAgent,
-        participantAgents: request.targetAgents,
-        collaborationType: this.determineCollaborationType(request.task),
-        status: 'pending',
+  id: collaborationId;
+        initiatorAgent: request.initiatorAgent;
+        participantAgents: request.targetAgents;
+        collaborationType: this.determineCollaborationType(request.task);
+        status: 'pending';
         startTime: new Date();
       };
       this.activeCollaborations.set(collaborationId, collaboration);
@@ -118,7 +118,7 @@ class AgentCoordinationService {
   * 发送协作请求到多个智能体
   */
   private async sendCollaborationRequests()
-    request: CoordinationRequest,
+    request: CoordinationRequest;
     collaborationId: string;
   ): Promise<AgentResponse[]> {
     const promises = request.targetAgents.map(async agentType => {try {const message: AgentMessage = {id: this.generateMessageId(),fromAgent: request.initiatorAgent,toAgent: agentType,userId: 'system',sessionId: collaborationId,messageType: MessageType.COMMAND,content: {task: request.task,data: request.data,priority: request.priority;)
@@ -127,7 +127,7 @@ class AgentCoordinationService {
         const response = await this.sendMessageToAgent(agentType, message);
         return response;
       } catch (error: any) {
-        return {id: this.generateMessageId(),agentType,messageId: '',userId: 'system',sessionId: collaborationId,content: { error: error.message },responseType: 'error' as const,timestamp: new Date(),processingTime: 0;
+        return {id: this.generateMessageId(),agentType,messageId: '',userId: 'system',sessionId: collaborationId,content: { error: error.message ;},responseType: 'error' as const,timestamp: new Date(),processingTime: 0;
         };
       }
     });
@@ -137,22 +137,22 @@ class AgentCoordinationService {
   * 向特定智能体发送消息
   */
   private async sendMessageToAgent()
-    agentType: AgentType,
+    agentType: AgentType;
     message: AgentMessage;
   ): Promise<AgentResponse> {
     const endpoint = this.getAgentEndpoint(agentType);
     try {
-      const response: any = await apiClient.post(`${endpoint}/collaborate`, {
+      const response: any = await apiClient.post(`${endpoint;}/collaborate`, {
         message,
         timeout: 30000;
       });
       if (!response.success || !response.data) {
-        throw new Error(response.error?.message || `智能体 ${agentType} 协作失败`);
+
       }
       return response.data;
     } catch (error: any) {
-      throw new Error(`智能体 ${agentType} 通信失败: ${error.message}`);
-    }
+
+    ;}
   }
   /**
   * 获取智能体端点
@@ -166,11 +166,11 @@ class AgentCoordinationService {
   * 确定协作类型
   */
   private determineCollaborationType(task: string): AgentCollaboration['collaborationType'] {
-    if (task.includes('诊断') || task.includes('四诊')) {
+
       return 'consultation';
-    } else if (task.includes('数据') || task.includes('信息')) {
+
       return 'data_sharing';
-    } else if (task.includes('任务') || task.includes('执行')) {
+
       return 'task_delegation';
     } else {
       return 'knowledge_exchange';
@@ -193,34 +193,34 @@ class AgentCoordinationService {
   * 四诊协调专用方法
   */
   async coordinateFourDiagnosis(userId: string, sessionId: string): Promise<CoordinationResult> {
-    return this.initiateCollaboration({initiatorAgent: AgentType.XIAOAI,targetAgents: [AgentType.XIAOAI],task: '四诊协调统筹',priority: 'high',data: {userId,sessionId,diagnosisType: 'comprehensive';)
-      };
+
+      ;};
     });
   }
   /**
   * 健康管理协调
   */
   async coordinateHealthManagement(userId: string, healthData: any): Promise<CoordinationResult> {
-    return this.initiateCollaboration({initiatorAgent: AgentType.SOER,targetAgents: [AgentType.SOER, AgentType.XIAOAI],task: '健康管理协调',priority: 'normal',data: {userId,healthData,managementType: 'lifestyle';)
-      };
+
+      ;};
     });
   }
   /**
   * 知识查询协调
   */
   async coordinateKnowledgeQuery(query: string, userId: string): Promise<CoordinationResult> {
-    return this.initiateCollaboration({initiatorAgent: AgentType.LAOKE,targetAgents: [AgentType.LAOKE, AgentType.XIAOAI],task: '知识查询协调',priority: 'normal',data: {query,userId,queryType: 'knowledge_retrieval';)
-      };
+
+      ;};
     });
   }
   /**
   * 服务管理协调
   */
   async coordinateServiceManagement()
-    serviceRequest: any,
+    serviceRequest: any;
     userId: string;
   ): Promise<CoordinationResult> {
-    return this.initiateCollaboration({initiatorAgent: AgentType.XIAOKE,targetAgents: [AgentType.XIAOKE],task: '服务管理协调',priority: 'normal',data: {serviceRequest,userId,managementType: 'service_subscription';)
+
       };
     });
   }
@@ -240,10 +240,10 @@ class AgentCoordinationService {
   * 获取协作统计信息
   */
   getCollaborationStats(): {
-    total: number,
-  active: number;,
-  completed: number,
-  failed: number;,
+    total: number;
+  active: number;
+  completed: number;
+  failed: number;
   averageDuration: number;
   } {
     const collaborations = Array.from(this.activeCollaborations.values());

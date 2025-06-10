@@ -5,36 +5,36 @@ import axios, { AxiosInstance } from 'axios';
 */
 // 类型定义
 export interface Message {
-  id: string;,
-  topic: string;,
+  id: string;
+  topic: string;
   payload: any;
-  attributes?: Record<string, string>;
+  attributes?: Record<string; string>;
   publishTime: number;
   publisherId?: string;
 }
 export interface Topic {
   name: string;
   description?: string;
-  properties?: Record<string, string>;
-  creationTime: number;,
-  partitionCount: number;,
+  properties?: Record<string; string>;
+  creationTime: number;
+  partitionCount: number;
   retentionHours: number;
 }
 export interface PublishRequest {
-  topic: string;,
+  topic: string;
   payload: any;
-  attributes?: Record<string, string>;
+  attributes?: Record<string; string>;
 }
 export interface PublishResponse {
-  messageId: string;,
-  publishTime: number;,
+  messageId: string;
+  publishTime: number;
   success: boolean;
   errorMessage?: string;
 }
 export interface SubscribeRequest {
   topic: string;
   subscriptionName?: string;
-  filter?: Record<string, string>;
+  filter?: Record<string; string>;
   acknowledge?: boolean;
   maxMessages?: number;
   timeoutSeconds?: number;
@@ -45,7 +45,7 @@ export interface SubscribeResponse {
 export interface CreateTopicRequest {
   name: string;
   description?: string;
-  properties?: Record<string, string>;
+  properties?: Record<string; string>;
   partitionCount?: number;
   retentionHours?: number;
 }
@@ -64,10 +64,10 @@ export interface ListTopicsResponse {
   totalCount: number;
 }
 export interface Subscription {
-  id: string;,
-  topic: string;,
+  id: string;
+  topic: string;
   callback: (message: Message) => void;
-  filter?: Record<string, string>;
+  filter?: Record<string; string>;
   isActive: boolean;
 }
 export interface MessageBusConfig {
@@ -89,20 +89,20 @@ export class MessageBusService {
   private reconnectAttempts = 0;
   private maxReconnectAttempts = 5;
   private reconnectDelay = 1000;
-  constructor(config: MessageBusConfig = {}) {
+  constructor(config: MessageBusConfig = {;}) {
     this.config = {
-      baseUrl: "/api/v1/gateway/message-bus",
-      timeout: 30000,
-      retryAttempts: 3,
-      retryDelay: 1000,
-      enableWebSocket: true,
-      webSocketUrl: 'ws://localhost:8004/ws',
+      baseUrl: "/api/v1/gateway/message-bus";
+      timeout: 30000;
+      retryAttempts: 3;
+      retryDelay: 1000;
+      enableWebSocket: true;
+      webSocketUrl: 'ws://localhost:8004/ws';
       ...config};
     this.apiClient = axios.create({
-      baseURL: this.config.baseUrl,
-      timeout: this.config.timeout,
+      baseURL: this.config.baseUrl;
+      timeout: this.config.timeout;
       headers: {
-        'Content-Type': 'application/json'}});
+        'Content-Type': 'application/json';}});
     // 如果启用WebSocket，则初始化连接
     if (this.config.enableWebSocket) {
       this.initializeWebSocket();
@@ -117,7 +117,7 @@ export class MessageBusService {
       return response.data;
     } catch (error) {
       console.error('Failed to publish message:', error);
-      throw new Error(`Failed to publish message: ${error}`);
+      throw new Error(`Failed to publish message: ${error;}`);
     }
   }
   /**
@@ -129,13 +129,13 @@ export class MessageBusService {
       return response.data;
     } catch (error) {
       console.error('Failed to create topic:', error);
-      throw new Error(`Failed to create topic: ${error}`);
+      throw new Error(`Failed to create topic: ${error;}`);
     }
   }
   /**
   * 获取主题列表
   */
-  async listTopics(request: ListTopicsRequest = {}): Promise<ListTopicsResponse> {
+  async listTopics(request: ListTopicsRequest = {;}): Promise<ListTopicsResponse> {
     try {
       const params = new URLSearchParams();
       if (request.pageSize) params.append('pageSize', request.pageSize.toString());
@@ -144,7 +144,7 @@ export class MessageBusService {
       return response.data;
     } catch (error) {
       console.error('Failed to list topics:', error);
-      throw new Error(`Failed to list topics: ${error}`);
+      throw new Error(`Failed to list topics: ${error;}`);
     }
   }
   /**
@@ -152,11 +152,11 @@ export class MessageBusService {
   */
   async getTopic(topicName: string): Promise<Topic> {
     try {
-      const response = await this.apiClient.get(`/topics/${topicName}`);
+      const response = await this.apiClient.get(`/topics/${topicName;}`);
       return response.data.topic;
     } catch (error) {
       console.error('Failed to get topic:', error);
-      throw new Error(`Failed to get topic: ${error}`);
+      throw new Error(`Failed to get topic: ${error;}`);
     }
   }
   /**
@@ -164,40 +164,40 @@ export class MessageBusService {
   */
   async deleteTopic(topicName: string): Promise<boolean> {
     try {
-      const response = await this.apiClient.delete(`/topics/${topicName}`);
+      const response = await this.apiClient.delete(`/topics/${topicName;}`);
       return response.data.success;
     } catch (error) {
       console.error('Failed to delete topic:', error);
-      throw new Error(`Failed to delete topic: ${error}`);
+      throw new Error(`Failed to delete topic: ${error;}`);
     }
   }
   /**
   * 订阅主题（使用WebSocket）
   */
   async subscribe(
-    topic: string,
-    callback: (message: Message) => void,
+    topic: string;
+    callback: (message: Message) => void;
     options: {
-      filter?: Record<string, string>;
+      filter?: Record<string; string>;
       subscriptionName?: string;
     } = {}
   ): Promise<string> {
     const subscriptionId = `${topic}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const subscription: Subscription = {,
-  id: subscriptionId,
+  id: subscriptionId;
       topic,
       callback,
-      filter: options.filter,
+      filter: options.filter;
       isActive: true;
     };
     this.subscriptions.set(subscriptionId, subscription);
     // 如果WebSocket连接可用，发送订阅请求
     if (this.webSocket && this.webSocket.readyState === WebSocket.OPEN) {
       this.sendWebSocketMessage({
-        type: 'subscribe',
+        type: 'subscribe';
         subscriptionId,
         topic,
-        filter: options.filter,
+        filter: options.filter;
         subscriptionName: options.subscriptionName;
       });
     }
@@ -216,7 +216,7 @@ export class MessageBusService {
     // 如果WebSocket连接可用，发送取消订阅请求
     if (this.webSocket && this.webSocket.readyState === WebSocket.OPEN) {
       this.sendWebSocketMessage({
-        type: 'unsubscribe',
+        type: 'unsubscribe';
         subscriptionId;
       });
     }
@@ -231,13 +231,13 @@ export class MessageBusService {
   /**
   * 检查服务健康状态
   */
-  async healthCheck(): Promise<{ status: string; service: string }> {
+  async healthCheck(): Promise<{ status: string; service: string ;}> {
     try {
       const response = await this.apiClient.get('/health');
       return response.data;
     } catch (error) {
       console.error('Health check failed:', error);
-      throw new Error(`Health check failed: ${error}`);
+      throw new Error(`Health check failed: ${error;}`);
     }
   }
   /**
@@ -320,9 +320,9 @@ export class MessageBusService {
     for (const subscription of this.subscriptions.values()) {
       if (subscription.isActive) {
         this.sendWebSocketMessage({
-          type: 'subscribe',
-          subscriptionId: subscription.id,
-          topic: subscription.topic,
+          type: 'subscribe';
+          subscriptionId: subscription.id;
+          topic: subscription.topic;
           filter: subscription.filter;
         });
       }

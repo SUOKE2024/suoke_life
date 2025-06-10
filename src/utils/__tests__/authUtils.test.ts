@@ -1,5 +1,4 @@
 import { validateEmail, validatePhone, validatePassword, getPasswordStrength, validateUsername, validateVerificationCode, validateLoginForm, validateRegisterForm, validateForgotPasswordForm, storeAuthTokens, getAuthToken, getRefreshToken, clearAuthTokens, isAuthenticated, formatAuthError, generateDeviceId, storeDeviceId, getDeviceId } from "../authUtils";
-import { validateEmail, validatePhone, validatePassword, getPasswordStrength, validateUsername, validateVerificationCode, validateLoginForm, validateRegisterForm, validateForgotPasswordForm, storeAuthTokens, getAuthToken, getRefreshToken, clearAuthTokens, isAuthenticated, formatAuthError, generateDeviceId, storeDeviceId, getDeviceId } from "../authUtils";
 describe("authUtils", () => {
   beforeEach(() => {
     jest.clearAllMocks();

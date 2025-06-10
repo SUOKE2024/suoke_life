@@ -17,8 +17,8 @@ import { unifiedApiService } from '../../services/unifiedApiService';
 import { isLoggedIn } from '../../utils/authUtils';
 
 interface LoginFormData {
-  email: string;,
-  password: string;,
+  email: string;
+  password: string;
   rememberMe: boolean;
 }
 
@@ -31,10 +31,10 @@ interface LoginFormErrors {
 const LoginScreen: React.FC = () => {
   const navigation = useNavigation();
   const [formData, setFormData] = useState<LoginFormData>({
-    email: '',
-    password: '',
+    email: '';
+    password: '';
     rememberMe: false
-  });
+  ;});
   const [errors, setErrors] = useState<LoginFormErrors>({});
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -55,26 +55,26 @@ const LoginScreen: React.FC = () => {
         }
       }
     } catch (error) {
-      console.log('检查认证状态失败:', error);
+
     }
   };
 
   // 表单验证
   const validateForm = (): boolean => {
-    const newErrors: LoginFormErrors = {};
+    const newErrors: LoginFormErrors = {;};
 
     // 邮箱验证
     if (!formData.email.trim()) {
-      newErrors.email = '请输入邮箱';
+
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = '请输入有效的邮箱地址';
+
     }
 
     // 密码验证
     if (!formData.password) {
-      newErrors.password = '请输入密码';
+
     } else if (formData.password.length < 6) {
-      newErrors.password = '密码至少6个字符';
+
     }
 
     setErrors(newErrors);
@@ -93,27 +93,27 @@ const LoginScreen: React.FC = () => {
     try {
       // 调用认证服务登录
       const loginResponse = await unifiedApiService.login({
-        email: formData.email,
-        password: formData.password,
+        email: formData.email;
+        password: formData.password;
         rememberMe: formData.rememberMe
-      });
+      ;});
       // 获取用户信息
       const userInfo = await unifiedApiService.getCurrentUser();
       Alert.alert(
-        '登录成功',
-        `欢迎回来，${userInfo.data?.username || userInfo.data?.email || '用户'}！`,
+
+
         [
           {
-            text: '确定',
+
             onPress: () => navigation.navigate('Main' as never)
-          }
+          ;}
         ]
       );
     } catch (error: any) {
-      console.error('登录失败:', error);
+
       setErrors({
-        general: error.message || '登录失败，请检查邮箱和密码'
-      });
+
+      ;});
     } finally {
       setLoading(false);
     }
@@ -131,8 +131,8 @@ const LoginScreen: React.FC = () => {
 
   // 处理第三方登录
   const handleSocialLogin = async (provider: string) => {
-    Alert.alert('提示', `${provider}登录功能即将上线`);
-  };
+
+  ;};
 
   return (
     <SafeAreaView style={styles.container}>
@@ -152,10 +152,10 @@ const LoginScreen: React.FC = () => {
               <Text style={styles.label}>邮箱</Text>
               <TextInput;
                 style={[styles.input, errors.email && styles.inputError]}
-                placeholder="请输入邮箱"
+
                 value={formData.email}
                 onChangeText={(text) =>
-                  setFormData({ ...formData, email: text })
+                  setFormData({ ...formData, email: text ;})
                 }
                 keyboardType="email-address"
                 autoCapitalize="none"
@@ -176,10 +176,10 @@ const LoginScreen: React.FC = () => {
                     styles.passwordInput,
                     errors.password && styles.inputError
                   ]}
-                  placeholder="请输入密码"
+
                   value={formData.password}
                   onChangeText={(text) =>
-                    setFormData({ ...formData, password: text })
+                    setFormData({ ...formData, password: text ;})
                   }
                   secureTextEntry={!showPassword}
                   autoCapitalize="none"
@@ -191,7 +191,7 @@ const LoginScreen: React.FC = () => {
                   onPress={() => setShowPassword(!showPassword)}
                 >
                   <Text style={styles.eyeText}>
-                    {showPassword ? '隐藏' : '显示'}
+
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -208,7 +208,7 @@ const LoginScreen: React.FC = () => {
                   setFormData({
                     ...formData,
                     rememberMe: !formData.rememberMe
-                  })
+                  ;})
                 }
               >
                 <View;
@@ -265,13 +265,13 @@ const LoginScreen: React.FC = () => {
             <View style={styles.socialContainer}>
               <TouchableOpacity;
                 style={styles.socialButton}
-                onPress={() => handleSocialLogin('微信')}
+
               >
                 <Text style={styles.socialButtonText}>微信登录</Text>
               </TouchableOpacity>
               <TouchableOpacity;
                 style={styles.socialButton}
-                onPress={() => handleSocialLogin('支付宝')}
+
               >
                 <Text style={styles.socialButtonText}>支付宝登录</Text>
               </TouchableOpacity>
@@ -293,200 +293,200 @@ const LoginScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
+  flex: 1;
     backgroundColor: '#F5F7FA'
-  },
+  ;},
   keyboardContainer: {,
   flex: 1
-  },
+  ;},
   scrollContainer: {,
-  flexGrow: 1,
-    justifyContent: 'center',
+  flexGrow: 1;
+    justifyContent: 'center';
     paddingHorizontal: 20
-  },
+  ;},
   header: {,
-  alignItems: 'center',
+  alignItems: 'center';
     marginBottom: 40
-  },
+  ;},
   title: {,
-  fontSize: 32,
-    fontWeight: 'bold',
-    color: '#2C3E50',
+  fontSize: 32;
+    fontWeight: 'bold';
+    color: '#2C3E50';
     marginBottom: 8
-  },
+  ;},
   subtitle: {,
-  fontSize: 16,
+  fontSize: 16;
     color: '#7F8C8D'
-  },
+  ;},
   form: {,
-  backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 24,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
+  backgroundColor: '#FFFFFF';
+    borderRadius: 16;
+    padding: 24;
+    shadowColor: '#000';
+    shadowOffset: { width: 0, height: 2 ;},
+    shadowOpacity: 0.1;
+    shadowRadius: 8;
     elevation: 5
-  },
+  ;},
   inputContainer: {,
   marginBottom: 20
-  },
+  ;},
   label: {,
-  fontSize: 16,
-    fontWeight: '600',
-    color: '#2C3E50',
+  fontSize: 16;
+    fontWeight: '600';
+    color: '#2C3E50';
     marginBottom: 8
-  },
+  ;},
   input: {,
-  borderWidth: 1,
-    borderColor: '#E1E8ED',
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    fontSize: 16,
+  borderWidth: 1;
+    borderColor: '#E1E8ED';
+    borderRadius: 8;
+    paddingHorizontal: 16;
+    paddingVertical: 12;
+    fontSize: 16;
     backgroundColor: '#F8F9FA'
-  },
+  ;},
   inputError: {,
   borderColor: '#E74C3C'
-  },
+  ;},
   passwordContainer: {,
-  flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#E1E8ED',
-    borderRadius: 8,
+  flexDirection: 'row';
+    alignItems: 'center';
+    borderWidth: 1;
+    borderColor: '#E1E8ED';
+    borderRadius: 8;
     backgroundColor: '#F8F9FA'
-  },
+  ;},
   passwordInput: {,
-  flex: 1,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+  flex: 1;
+    paddingHorizontal: 16;
+    paddingVertical: 12;
     fontSize: 16
-  },
+  ;},
   eyeButton: {,
-  paddingHorizontal: 16,
+  paddingHorizontal: 16;
     paddingVertical: 12
-  },
+  ;},
   eyeText: {,
-  color: '#3498DB',
-    fontSize: 14,
+  color: '#3498DB';
+    fontSize: 14;
     fontWeight: '600'
-  },
+  ;},
   errorText: {,
-  color: '#E74C3C',
-    fontSize: 14,
+  color: '#E74C3C';
+    fontSize: 14;
     marginTop: 4
-  },
+  ;},
   rememberContainer: {,
-  flexDirection: 'row',
-    alignItems: 'center',
+  flexDirection: 'row';
+    alignItems: 'center';
     marginBottom: 20
-  },
+  ;},
   checkbox: {,
   marginRight: 8
-  },
+  ;},
   checkboxInner: {,
-  width: 20,
-    height: 20,
-    borderWidth: 2,
-    borderColor: '#BDC3C7',
-    borderRadius: 4,
-    justifyContent: 'center',
+  width: 20;
+    height: 20;
+    borderWidth: 2;
+    borderColor: '#BDC3C7';
+    borderRadius: 4;
+    justifyContent: 'center';
     alignItems: 'center'
-  },
+  ;},
   checkboxChecked: {,
-  backgroundColor: '#3498DB',
+  backgroundColor: '#3498DB';
     borderColor: '#3498DB'
-  },
+  ;},
   checkmark: {,
-  color: '#FFFFFF',
-    fontSize: 12,
+  color: '#FFFFFF';
+    fontSize: 12;
     fontWeight: 'bold'
-  },
+  ;},
   rememberText: {,
-  fontSize: 14,
+  fontSize: 14;
     color: '#7F8C8D'
-  },
+  ;},
   generalError: {,
-  color: '#E74C3C',
-    fontSize: 14,
-    textAlign: 'center',
+  color: '#E74C3C';
+    fontSize: 14;
+    textAlign: 'center';
     marginBottom: 16
-  },
+  ;},
   loginButton: {,
-  backgroundColor: '#3498DB',
-    borderRadius: 8,
-    paddingVertical: 16,
-    alignItems: 'center',
+  backgroundColor: '#3498DB';
+    borderRadius: 8;
+    paddingVertical: 16;
+    alignItems: 'center';
     marginBottom: 16
-  },
+  ;},
   loginButtonDisabled: {,
   backgroundColor: '#BDC3C7'
-  },
+  ;},
   loginButtonText: {,
-  color: '#FFFFFF',
-    fontSize: 16,
+  color: '#FFFFFF';
+    fontSize: 16;
     fontWeight: 'bold'
-  },
+  ;},
   forgotPasswordButton: {,
-  alignItems: 'center',
+  alignItems: 'center';
     marginBottom: 24
-  },
+  ;},
   forgotPasswordText: {,
-  color: '#3498DB',
-    fontSize: 14,
+  color: '#3498DB';
+    fontSize: 14;
     fontWeight: '600'
-  },
+  ;},
   divider: {,
-  flexDirection: 'row',
-    alignItems: 'center',
+  flexDirection: 'row';
+    alignItems: 'center';
     marginBottom: 24
-  },
+  ;},
   dividerLine: {,
-  flex: 1,
-    height: 1,
+  flex: 1;
+    height: 1;
     backgroundColor: '#E1E8ED'
-  },
+  ;},
   dividerText: {,
-  marginHorizontal: 16,
-    color: '#7F8C8D',
+  marginHorizontal: 16;
+    color: '#7F8C8D';
     fontSize: 14
-  },
+  ;},
   socialContainer: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
+  flexDirection: 'row';
+    justifyContent: 'space-between';
     marginBottom: 24
-  },
+  ;},
   socialButton: {,
-  flex: 1,
-    backgroundColor: '#F8F9FA',
-    borderRadius: 8,
-    paddingVertical: 12,
-    alignItems: 'center',
-    marginHorizontal: 4,
-    borderWidth: 1,
+  flex: 1;
+    backgroundColor: '#F8F9FA';
+    borderRadius: 8;
+    paddingVertical: 12;
+    alignItems: 'center';
+    marginHorizontal: 4;
+    borderWidth: 1;
     borderColor: '#E1E8ED'
-  },
+  ;},
   socialButtonText: {,
-  color: '#2C3E50',
-    fontSize: 14,
+  color: '#2C3E50';
+    fontSize: 14;
     fontWeight: '600'
-  },
+  ;},
   registerContainer: {,
-  flexDirection: 'row',
-    justifyContent: 'center',
+  flexDirection: 'row';
+    justifyContent: 'center';
     alignItems: 'center'
-  },
+  ;},
   registerText: {,
-  color: '#7F8C8D',
+  color: '#7F8C8D';
     fontSize: 14
-  },
+  ;},
   registerLink: {,
-  color: '#3498DB',
-    fontSize: 14,
-    fontWeight: '600',
+  color: '#3498DB';
+    fontSize: 14;
+    fontWeight: '600';
     marginLeft: 4
-  }
+  ;}
 });
 
 export default LoginScreen;

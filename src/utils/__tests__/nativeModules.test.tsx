@@ -1,5 +1,4 @@
-import { nativeModulesManager } from "../nativeModules";
-import React from "react";
+
 describe("nativeModules", () => {
   beforeEach(() => {
     jest.clearAllMocks();

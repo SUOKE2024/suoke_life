@@ -3,7 +3,7 @@ import {import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from '../common/Icon';
 import { colors } from '../../constants/theme';
 import { cornMazeService } from '../../services/cornMazeService';
-import {View,;
+import {View;
   Text,
   StyleSheet,
   ScrollView,
@@ -18,10 +18,10 @@ import {View,;
 } from '../../types/maze';
 const { width } = Dimensions.get('window');
 interface MazeStatsScreenProps {
-  navigation: any;,
+  navigation: any;
   userId: string;
 }
-const MazeStatsScreen: React.FC<MazeStatsScreenProps> = ({ navigation, userId }) => {
+const MazeStatsScreen: React.FC<MazeStatsScreenProps> = ({ navigation, userId ;}) => {
   const [stats, setStats] = useState<MazeStats | null>(null);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
@@ -30,17 +30,17 @@ const MazeStatsScreen: React.FC<MazeStatsScreenProps> = ({ navigation, userId })
   // 主题配置
   const themeConfig = {
     [MazeTheme.HEALTH_PATH]: {
-      name: "健康之路",
-      color: '#4CAF50',
+
+      color: '#4CAF50';
       icon: 'heart-pulse'
-    },[MazeTheme.NUTRITION_GARDEN]: {
-      name: "营养花园",
+    ;},[MazeTheme.NUTRITION_GARDEN]: {
+
       color: '#FF9800',icon: 'food-apple';
     },[MazeTheme.TCM_JOURNEY]: {
-      name: "中医之旅",
+
       color: '#9C27B0',icon: 'leaf';
     },[MazeTheme.BALANCED_LIFE]: {
-      name: "平衡生活", "
+
       color: '#2196F3',icon: 'scale-balance';
     };
   };
@@ -52,7 +52,7 @@ const MazeStatsScreen: React.FC<MazeStatsScreenProps> = ({ navigation, userId })
       setStats(userStats);
       setLeaderboard(globalLeaderboard);
     } catch (error) {
-      console.error('加载统计数据失败:', error);
+
     } finally {
       setLoading(false);
     }
@@ -67,7 +67,7 @@ const MazeStatsScreen: React.FC<MazeStatsScreenProps> = ({ navigation, userId })
   }, [loadData]);
   // 渲染统计卡片
   const renderStatsCard = (title: string, value: string | number, icon: string, color: string) => (;)
-    <View style={[styles.statsCard, { borderLeftColor: color }}]}>;
+    <View style={[styles.statsCard, { borderLeftColor: color ;}}]}>;
       <View style={styles.statsIcon}>;
         <Icon name={icon} size={24} color={color} />;
       </View>;
@@ -96,7 +96,7 @@ const MazeStatsScreen: React.FC<MazeStatsScreenProps> = ({ navigation, userId })
         ]}}
       >
         <View style={styles.rankContainer}>
-          <Text style={[styles.rankText, { color: rankColor }}]}>
+          <Text style={[styles.rankText, { color: rankColor ;}}]}>
             #{entry.rank}
           </Text>
           {index < 3  && <Icon;
@@ -109,13 +109,13 @@ const MazeStatsScreen: React.FC<MazeStatsScreenProps> = ({ navigation, userId })
         <View style={styles.userInfo}>
           <Text style={[styles.username, isCurrentUser && styles.currentUserText]}>;
             {entry.username};
-            {isCurrentUser && ' (你)'};
+
           </Text>;
           <Text style={styles.mazeName}>{entry.mazeName}</Text>;
         </View>;
         <View style={styles.scoreContainer}>;
           <Text style={[styles.score, isCurrentUser && styles.currentUserText]}>;
-            {entry.score}分;
+
           </Text>;
           <Text style={styles.completionTime}>;
             {Math.floor(entry.completionTime / 60)}:{(entry.completionTime % 60).toString().padStart(2, '0')};
@@ -125,11 +125,11 @@ const MazeStatsScreen: React.FC<MazeStatsScreenProps> = ({ navigation, userId })
     );
   };
   // 格式化游戏时间
-  const formatPlayTime = (minutes: number): string => {if (minutes < 60) {return `${minutes}分钟`;
+
     }
     const hours = Math.floor(minutes / 60);
     const remainingMinutes = minutes % 60;
-    return `${hours}小时${remainingMinutes}分钟`;
+
   };
   return (
   <SafeAreaView style={styles.container}>
@@ -138,7 +138,7 @@ const MazeStatsScreen: React.FC<MazeStatsScreenProps> = ({ navigation, userId })
           <Icon name="arrow-left" size={24} color={colors.text} />
         </TouchableOpacity>
         <Text style={styles.title}>游戏统计</Text>
-        <View style={ width: 24 }} />
+        <View style={ width: 24 ;}} />
       </View>
       <View style={styles.tabContainer}>
         <TouchableOpacity;
@@ -146,7 +146,7 @@ const MazeStatsScreen: React.FC<MazeStatsScreenProps> = ({ navigation, userId })
           onPress={() => setSelectedTab('stats')}
         >
           <Text style={[styles.tabText, selectedTab === 'stats' && styles.activeTabText]}>
-            个人统计
+
           </Text>
         </TouchableOpacity>
         <TouchableOpacity;
@@ -154,7 +154,7 @@ const MazeStatsScreen: React.FC<MazeStatsScreenProps> = ({ navigation, userId })
           onPress={() => setSelectedTab('leaderboard')}
         >
           <Text style={[styles.tabText, selectedTab === 'leaderboard' && styles.activeTabText]}>
-            排行榜
+
           </Text>
         </TouchableOpacity>
       </View>
@@ -167,10 +167,10 @@ const MazeStatsScreen: React.FC<MazeStatsScreenProps> = ({ navigation, userId })
         {selectedTab === 'stats' && stats  && <View style={styles.statsSection}>
             {// 基础统计}
             <View style={styles.statsGrid}>
-              {renderStatsCard('完成迷宫', stats.completedMazes, 'check-circle', colors.success)}
-              {renderStatsCard('总迷宫数', stats.totalMazes, 'grid', colors.primary)}
-              {renderStatsCard('平均分数', Math.round(stats.averageScore), 'star', colors.warning)}
-              {renderStatsCard('游戏时间', formatPlayTime(stats.totalPlayTime), 'clock', colors.info)}
+
+
+
+
             </View>
             {// 等级和排名}
             {(stats.level || stats.rank)  && <View style={styles.levelSection}>
@@ -209,7 +209,7 @@ const MazeStatsScreen: React.FC<MazeStatsScreenProps> = ({ navigation, userId })
                     {themeConfig[stats.favoriteTheme].name}
                   </Text>
                   <Text style={styles.favoriteDescription}>
-                    你最常玩的迷宫主题
+
                   </Text>
                 </View>
               </View>
@@ -245,74 +245,74 @@ const MazeStatsScreen: React.FC<MazeStatsScreenProps> = ({ navigation, userId })
 };
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
+  flex: 1;
     backgroundColor: colors.background;
   },
   header: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    borderBottomWidth: 1,
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
+    paddingHorizontal: 20;
+    paddingVertical: 16;
+    borderBottomWidth: 1;
     borderBottomColor: colors.border;
   },
   title: {,
-  fontSize: 18,
-    fontWeight: '600',
+  fontSize: 18;
+    fontWeight: '600';
     color: colors.text;
   },
   tabContainer: {,
-  flexDirection: 'row',
-    backgroundColor: colors.surface,
-    marginHorizontal: 20,
-    marginTop: 16,
-    borderRadius: 12,
+  flexDirection: 'row';
+    backgroundColor: colors.surface;
+    marginHorizontal: 20;
+    marginTop: 16;
+    borderRadius: 12;
     padding: 4;
   },
   tab: {,
-  flex: 1,
-    paddingVertical: 12,
-    alignItems: 'center',
+  flex: 1;
+    paddingVertical: 12;
+    alignItems: 'center';
     borderRadius: 8;
   },
   activeTab: {,
   backgroundColor: colors.primary;
   },
   tabText: {,
-  fontSize: 14,
-    fontWeight: '600',
+  fontSize: 14;
+    fontWeight: '600';
     color: colors.textSecondary;
   },
   activeTabText: {,
   color: colors.white;
   },
   content: {,
-  flex: 1,
+  flex: 1;
     paddingHorizontal: 20;
   },
   statsSection: {,
   paddingVertical: 16;
   },
   statsGrid: {,
-  flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
+  flexDirection: 'row';
+    flexWrap: 'wrap';
+    justifyContent: 'space-between';
     marginBottom: 24;
   },
   statsCard: {,
-  width: '48%',
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    borderLeftWidth: 4,
-    flexDirection: 'row',
-    alignItems: 'center',
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+  width: '48%';
+    backgroundColor: colors.surface;
+    borderRadius: 12;
+    padding: 16;
+    marginBottom: 12;
+    borderLeftWidth: 4;
+    flexDirection: 'row';
+    alignItems: 'center';
+    elevation: 2;
+    shadowColor: '#000';
+    shadowOffset: { width: 0, height: 2 ;},
+    shadowOpacity: 0.1;
     shadowRadius: 4;
   },
   statsIcon: {,
@@ -322,189 +322,189 @@ const styles = StyleSheet.create({
   flex: 1;
   },
   statsValue: {,
-  fontSize: 20,
-    fontWeight: 'bold',
+  fontSize: 20;
+    fontWeight: 'bold';
     color: colors.text;
   },
   statsTitle: {,
-  fontSize: 12,
-    color: colors.textSecondary,
+  fontSize: 12;
+    color: colors.textSecondary;
     marginTop: 2;
   },
   sectionTitle: {,
-  fontSize: 16,
-    fontWeight: '600',
-    color: colors.text,
+  fontSize: 16;
+    fontWeight: '600';
+    color: colors.text;
     marginBottom: 12;
   },
   levelSection: {,
   marginBottom: 24;
   },
   levelCard: {,
-  backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: 16,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+  backgroundColor: colors.surface;
+    borderRadius: 12;
+    padding: 16;
+    elevation: 2;
+    shadowColor: '#000';
+    shadowOffset: { width: 0, height: 2 ;},
+    shadowOpacity: 0.1;
     shadowRadius: 4;
   },
   levelInfo: {,
-  flexDirection: 'row',
-    alignItems: 'center',
+  flexDirection: 'row';
+    alignItems: 'center';
     marginBottom: 16;
   },
   levelText: {,
-  marginLeft: 16,
+  marginLeft: 16;
     flex: 1;
   },
   levelNumber: {,
-  fontSize: 18,
-    fontWeight: 'bold',
+  fontSize: 18;
+    fontWeight: 'bold';
     color: colors.text;
   },
   levelDescription: {,
-  fontSize: 14,
-    color: colors.textSecondary,
+  fontSize: 14;
+    color: colors.textSecondary;
     marginTop: 2;
   },
   rankInfo: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
     alignItems: 'center'
-  },
+  ;},
   rankText: {,
-  marginLeft: 16,
+  marginLeft: 16;
     flex: 1;
   },
   rankNumber: {,
-  fontSize: 18,
-    fontWeight: 'bold',
+  fontSize: 18;
+    fontWeight: 'bold';
     color: colors.text;
   },
   rankDescription: {,
-  fontSize: 14,
-    color: colors.textSecondary,
+  fontSize: 14;
+    color: colors.textSecondary;
     marginTop: 2;
   },
   favoriteSection: {,
   marginBottom: 24;
   },
   favoriteCard: {,
-  backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+  backgroundColor: colors.surface;
+    borderRadius: 12;
+    padding: 16;
+    flexDirection: 'row';
+    alignItems: 'center';
+    elevation: 2;
+    shadowColor: '#000';
+    shadowOffset: { width: 0, height: 2 ;},
+    shadowOpacity: 0.1;
     shadowRadius: 4;
   },
   favoriteText: {,
-  marginLeft: 16,
+  marginLeft: 16;
     flex: 1;
   },
   favoriteName: {,
-  fontSize: 16,
-    fontWeight: '600',
+  fontSize: 16;
+    fontWeight: '600';
     color: colors.text;
   },
   favoriteDescription: {,
-  fontSize: 14,
-    color: colors.textSecondary,
+  fontSize: 14;
+    color: colors.textSecondary;
     marginTop: 2;
   },
   achievementsSection: {,
   marginBottom: 24;
   },
   achievementsList: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
     flexWrap: 'wrap'
-  },
+  ;},
   achievementBadge: {,
-  flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.surface,
-    borderRadius: 20,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    marginRight: 8,
-    marginBottom: 8,
-    elevation: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
+  flexDirection: 'row';
+    alignItems: 'center';
+    backgroundColor: colors.surface;
+    borderRadius: 20;
+    paddingHorizontal: 12;
+    paddingVertical: 6;
+    marginRight: 8;
+    marginBottom: 8;
+    elevation: 1;
+    shadowColor: '#000';
+    shadowOffset: { width: 0, height: 1 ;},
+    shadowOpacity: 0.05;
     shadowRadius: 2;
   },
   achievementText: {,
-  fontSize: 12,
-    fontWeight: '500',
-    color: colors.text,
+  fontSize: 12;
+    fontWeight: '500';
+    color: colors.text;
     marginLeft: 4;
   },
   leaderboardSection: {,
   paddingVertical: 16;
   },
   leaderboardList: {,
-  backgroundColor: colors.surface,
-    borderRadius: 12,
-    overflow: 'hidden',
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+  backgroundColor: colors.surface;
+    borderRadius: 12;
+    overflow: 'hidden';
+    elevation: 2;
+    shadowColor: '#000';
+    shadowOffset: { width: 0, height: 2 ;},
+    shadowOpacity: 0.1;
     shadowRadius: 4;
   },
   leaderboardEntry: {,
-  flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
+  flexDirection: 'row';
+    alignItems: 'center';
+    paddingHorizontal: 16;
+    paddingVertical: 12;
+    borderBottomWidth: 1;
     borderBottomColor: colors.border;
   },
   currentUserEntry: {,
   backgroundColor: colors.primary + '10'
-  },
+  ;},
   rankContainer: {,
-  flexDirection: 'row',
-    alignItems: 'center',
+  flexDirection: 'row';
+    alignItems: 'center';
     width: 60;
   },
   userInfo: {,
-  flex: 1,
+  flex: 1;
     marginLeft: 12;
   },
   username: {,
-  fontSize: 16,
-    fontWeight: '600',
+  fontSize: 16;
+    fontWeight: '600';
     color: colors.text;
   },
   currentUserText: {,
   color: colors.primary;
   },
   mazeName: {,
-  fontSize: 12,
-    color: colors.textSecondary,
+  fontSize: 12;
+    color: colors.textSecondary;
     marginTop: 2;
   },
   scoreContainer: {,
   alignItems: 'flex-end'
-  },
+  ;},
   score: {,
-  fontSize: 16,
-    fontWeight: 'bold',
+  fontSize: 16;
+    fontWeight: 'bold';
     color: colors.text;
   },
   completionTime: {,
-  fontSize: 12,
-    color: colors.textSecondary,
+  fontSize: 12;
+    color: colors.textSecondary;
     marginTop: 2;
   },
   emptyState: {,
-  alignItems: "center",
+  alignItems: "center";
       paddingVertical: 60;
   },emptyText: {fontSize: 18,fontWeight: '600',color: colors.textSecondary,marginTop: 16;
   },emptySubtext: {fontSize: 14,color: colors.textSecondary,marginTop: 8,textAlign: 'center';

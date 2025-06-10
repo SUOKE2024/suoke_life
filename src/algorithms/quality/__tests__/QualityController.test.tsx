@@ -9,14 +9,14 @@ describe('QualityController', () => {
       // Add test cases
       const config = {
         thresholds: {
-          minConfidence: 0.7,
-          consistencyCheck: 0.8,
+          minConfidence: 0.7;
+          consistencyCheck: 0.8;
         },
         rules: {
-          data_completeness: true,
-          confidence_threshold: true,
-          result_consistency: true,
-          safety_check: true,
+          data_completeness: true;
+          confidence_threshold: true;
+          result_consistency: true;
+          safety_check: true;
         },
       };
       const controller = new QualityController(config);
@@ -26,10 +26,10 @@ describe('QualityController', () => {
       // Add test cases
       const config = {
         thresholds: {
-          minConfidence: 0.5,
-          consistencyCheck: 0.6,
+          minConfidence: 0.5;
+          consistencyCheck: 0.6;
         },
-        rules: {},
+        rules: {;},
       };
       const controller = new QualityController(config);
       expect(controller).toBeDefined();
@@ -38,11 +38,11 @@ describe('QualityController', () => {
       // Add test cases
       const config = {
         thresholds: {
-          minConfidence: 0.7,
-          consistencyCheck: 0.8,
+          minConfidence: 0.7;
+          consistencyCheck: 0.8;
         },
         rules: {
-          data_completeness: true,
+          data_completeness: true;
         },
       };
       expect(() => {
@@ -53,11 +53,11 @@ describe('QualityController', () => {
       // Add test cases;
       const config = {
         thresholds: {
-          minConfidence: 0.7,
-          consistencyCheck: 0.8,
+          minConfidence: 0.7;
+          consistencyCheck: 0.8;
         },
         rules: {
-          data_completeness: true,
+          data_completeness: true;
         },
       };
       const controller = new QualityController(config);
@@ -68,11 +68,11 @@ describe('QualityController', () => {
     it('should execute within performance thresholds', () => {
       const config = {
         thresholds: {
-          minConfidence: 0.7,
-          consistencyCheck: 0.8,
+          minConfidence: 0.7;
+          consistencyCheck: 0.8;
         },
         rules: {
-          data_completeness: true,
+          data_completeness: true;
         },
       };
       const iterations = 10;
@@ -89,11 +89,11 @@ describe('QualityController', () => {
     it('should handle large datasets efficiently', () => {
       const config = {
         thresholds: {
-          minConfidence: 0.7,
-          consistencyCheck: 0.8,
+          minConfidence: 0.7;
+          consistencyCheck: 0.8;
         },
         rules: {
-          data_completeness: true,
+          data_completeness: true;
         },
       };
       const startTime = performance.now();
@@ -106,11 +106,11 @@ describe('QualityController', () => {
     it('should not cause memory leaks', () => {
       const config = {
         thresholds: {
-          minConfidence: 0.7,
-          consistencyCheck: 0.8,
+          minConfidence: 0.7;
+          consistencyCheck: 0.8;
         },
         rules: {
-          data_completeness: true,
+          data_completeness: true;
         },
       };
       const initialMemory = process.memoryUsage().heapUsed;

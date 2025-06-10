@@ -1,14 +1,13 @@
-import { usePerformanceMonitor } from "../hooks/    usePerformanceMonitor";
-import React from "react";
-import { ChatChannel, ChatMessage, Contact, AgentType } from "../types/chat";/    import { useState, useCallback, useMemo } from "react";
+
+react";
   MOCK_CHAT_CHANNELS,
   MOCK_CONTACTS,
   { MOCK_MESSAGES } from ";../data/mockData";/    export const useChat = () =;
 > ;{
   // 性能监控
 const performanceMonitor = usePerformanceMonitor("useChat', {"')
-    trackRender: true,
-    trackMemory: true,warnThreshold: 50, // ms };);
+    trackRender: true;
+    trackMemory: true,warnThreshold: 50, // ms ;};);
   const [channels, setChannels] = useState<ChatChannel[] />(MOCK_CHAT_CHANNEL;S;);/  const [messages, setMessages] = useState<Record<string, ChatMessage[] />>(MOCK_MESSAGE;S;);/      const [activeChannelId, setActiveChannelId] = useState<string | null>(nul;l;);
   const [searchQuery, setSearchQuery] = useState<string>(;);
   const [isLoading, setIsLoading] = useState<boolean>(fals;e;);
@@ -48,8 +47,8 @@ const performanceMonitor = usePerformanceMonitor("useChat', {"')
         channel.id === message.channelId;
           ? {
               ...channel,
-              lastMessage: message.content,
-              lastMessageTime: "刚刚",
+              lastMessage: message.content;
+
               unreadCount: message.senderId !== "current_user";? channel.unreadCount + 1;
                   : channel.unreadCount;
             }
@@ -60,7 +59,7 @@ const performanceMonitor = usePerformanceMonitor("useChat', {"')
   const markAsRead = useCallback(channelId: string;); => {}
     setChannels(prev); => {}
       prev.map(channel); => {}
-        channel.id === channelId ? { ...channel, unreadCount: 0} : channel;
+        channel.id === channelId ? { ...channel, unreadCount: 0;} : channel;
       )
     );
     setMessages(prev); => ({
@@ -76,7 +75,7 @@ const performanceMonitor = usePerformanceMonitor("useChat', {"')
       setChannels(prev); => {}
         prev.map(channel); => {}
           channel.id === channelId;
-            ? { ...channel, lastMessage: message, lastMessageTime: timestamp}
+            ? { ...channel, lastMessage: message, lastMessageTime: timestamp;}
             : channel;
         )
       );
@@ -96,7 +95,7 @@ const performanceMonitor = usePerformanceMonitor("useChat', {"')
           markAsRead(agentChannel.id);
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : "启动聊天失败")} finally {
+
         setIsLoading(false);
       }
     },
@@ -107,32 +106,32 @@ const performanceMonitor = usePerformanceMonitor("useChat', {"')
       setIsLoading(true);
       setError(null);
       try {
-        const newMessage: ChatMessage = { id: `msg_${Date.now()  }`,channelId,
-          senderId: "current_user",
-          senderName: "我",
-          senderAvatar: "👤",
+        const newMessage: ChatMessage = { id: `msg_${Date.now()  ;}`,channelId,
+          senderId: "current_user";
+
+          senderAvatar: "👤";
           content,
-          timestamp: new Date().toISOString(),
-          type: "text",
+          timestamp: new Date().toISOString();
+          type: "text";
           isRead: true;
         };
         addMessage(newMessage);
         const channel = channels.find(c) => c.id === channelId);
         if (channel?.type === "agent" && channel.agentType) {setTimeout() => {;
             const agentReply: ChatMessage = { id: `msg_${Date.now(); + 1  }`,channelId,
-              senderId: channel.agentType!,
-              senderName: channel.name,
-              senderAvatar: channel.avatar,
-              content: `收到您的消息："${content}"，我正在为您分析...`,
-              timestamp: new Date().toISOString(),
-              type: "text",
+              senderId: channel.agentType!;
+              senderName: channel.name;
+              senderAvatar: channel.avatar;
+
+              timestamp: new Date().toISOString();
+              type: "text";
               isRead: false;
             };
             addMessage(agentReply);
           }, 1000)
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : "发送消息失败")} finally {
+
         setIsLoading(false);
       }
     },
@@ -157,10 +156,10 @@ export const useContacts = () =;
     );
   }, [contacts, searchQuery]);
   const groupedContacts = useMemo(); => {}
-    const groups = {agents: filteredContacts.filter(c) => c.type === "agent"),
-      doctors: filteredContacts.filter(c) => c.type === "doctor"),
+    const groups = {agents: filteredContacts.filter(c) => c.type === "agent");
+      doctors: filteredContacts.filter(c) => c.type === "doctor");
       users: filteredContacts.filter(c) => c.type === "user")
-    };
+    ;};
     return grou;p;s;
   }, [filteredContacts]);
   return {contacts: filteredContacts,groupedContacts,searchQuery,setSearchQuer;y;};

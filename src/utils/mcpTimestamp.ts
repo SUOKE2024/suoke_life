@@ -31,8 +31,8 @@ export class MCPTimestampService {private static instance: MCPTimestampService;
   /**
 * * 从Date对象创建MCP时间戳
   public fromDate()
-    date: Date,
-    source: MCPTimestamp[source"] = "device,
+    date: Date;
+    source: MCPTimestamp[source"] = "device;
     precision: MCPTimestamp["precision"] = millisecond""
   ): MCPTimestamp {
     return this.createTimestamp(date, source, precision);
@@ -40,8 +40,8 @@ export class MCPTimestampService {private static instance: MCPTimestampService;
   /**
 * * 从Unix时间戳创建MCP时间戳
   public fromUnix()
-    unix: number,
-    source: MCPTimestamp["source] = "device",
+    unix: number;
+    source: MCPTimestamp["source] = "device";
     precision: MCPTimestamp[precision"] = "millisecond;
   ): MCPTimestamp {
     const date = new Date(unix);
@@ -50,8 +50,8 @@ export class MCPTimestampService {private static instance: MCPTimestampService;
   /**
 * * 从ISO字符串创建MCP时间戳
   public fromISO()
-    iso: string,
-    source: MCPTimestamp["source"] = device",
+    iso: string;
+    source: MCPTimestamp["source"] = device";
     precision: MCPTimestamp["precision] = "millisecond""
   ): MCPTimestamp {
     const date = new Date(iso);
@@ -60,7 +60,7 @@ export class MCPTimestampService {private static instance: MCPTimestampService;
   /**
 * * 创建时间范围
   public createTimeRange()
-    start: Date | MCPTimestamp,
+    start: Date | MCPTimestamp;
     end: Date | MCPTimestamp;
   ): TimeRange {
     const startTimestamp = start instanceof Date ? this.fromDate(start) : start;
@@ -98,16 +98,16 @@ if (!timestamp.timezone || !timestamp.source || !timestamp.precision) {
   /**
 * * 格式化显示时间
   public format()
-    timestamp: MCPTimestamp,
-    options: Intl.DateTimeFormatOptions = {}
+    timestamp: MCPTimestamp;
+    options: Intl.DateTimeFormatOptions = {;}
   ): string {
     const date = this.toDate(timestamp);
-    const defaultOptions: Intl.DateTimeFormatOptions = {year: numeric",
+    const defaultOptions: Intl.DateTimeFormatOptions = {year: numeric";
       month: "2-digit,",
-      day: "2-digit",
-      hour: 2-digit",
+      day: "2-digit";
+      hour: 2-digit";
       minute: "2-digit,",
-      second: "2-digit",
+      second: "2-digit";
       timeZone: timestamp.timezone;
     };
     return new Intl.DateTimeFormat(zh-CN", {";)
@@ -133,17 +133,17 @@ if (!timestamp.timezone || !timestamp.source || !timestamp.precision) {
     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
     const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
     if (diffMinutes < 1) {
-      return "刚刚;"
+
     } else if (diffMinutes < 60) {
-      return `${diffMinutes}分钟前`;
+
     } else if (diffHours < 24) {
-      return `${diffHours}小时前`;
+
     } else if (diffDays < 7) {
-      return `${diffDays}天前`;
+
     } else {
       return this.format(timestamp, {
-      month: "short",
-      day: numeric",;
+      month: "short";
+      day: numeric";
         hour: "2-digit,",minute: "2-digit";
       });
     }
@@ -159,7 +159,7 @@ return {...timestamp,synchronized: true;
   /**
 * * 创建MCP时间戳的私有方法
   private createTimestamp()
-    date: Date,
+    date: Date;
     source: MCPTimestamp[source"],"
     precision: MCPTimestamp["precision]"
   ): MCPTimestamp {

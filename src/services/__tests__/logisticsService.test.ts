@@ -1,5 +1,4 @@
 import { logisticsService } from "../logisticsService";
-import { logisticsService } from "../logisticsService";
 describe("logisticsService", () => {
   beforeEach(() => {
     jest.clearAllMocks();

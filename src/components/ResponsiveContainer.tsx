@@ -16,14 +16,14 @@ testID="responsive-container";
     </View>/      ;);
 }
 const styles = StyleSheet.create({container: {),
-  flex: 1,
-    paddingHorizontal: 16,
+  flex: 1;
+    paddingHorizontal: 16;
     backgroundColor: "#fff"
-  },
+  ;},
   phone: {,
-  maxWidth: 480,
+  maxWidth: 480;
     alignSelf: "center"
-  },
+  ;},
   tablet: {,
-  maxWidth: 900,
-    alignSelf: "center",paddingHorizontal: 32};};);
+  maxWidth: 900;
+    alignSelf: "center",paddingHorizontal: 32;};};);

@@ -26,15 +26,15 @@ interface KnowledgeGraphVisualizationProps {
   height?: number;
 }
 interface LayoutNode extends GraphNode {
-  x: number,
-  y: number;,
-  vx: number,
-  vy: number;,
-  radius: number,
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  radius: number;
   color: string;
 }
 interface LayoutEdge extends GraphEdge {
-  sourceNode: LayoutNode,
+  sourceNode: LayoutNode;
   targetNode: LayoutNode;
 }
 export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationProps> = ({
@@ -42,10 +42,10 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
   loading = false,
   onNodePress,
   onEdgePress,
-  width: propWidth,
+  width: propWidth;
   height: propHeight;
 }) => {
-  const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+  const { width: screenWidth, height: screenHeight ;} = Dimensions.get('window');
   const width = propWidth || screenWidth - 32;
   const height = propHeight || screenHeight * 0.6;
   const [layoutNodes, setLayoutNodes] = useState<LayoutNode[]>([]);
@@ -55,14 +55,14 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
   const animationRef = useRef<number | null>(null);
   // 节点类型颜色映射
   const nodeColors: Record<string, string> = {
-      constitution: "#4CAF50",
-      symptom: '#FF9800',
-    acupoint: '#2196F3',
-    herb: '#9C27B0',
-    syndrome: '#F44336',
-    treatment: '#00BCD4',
+      constitution: "#4CAF50";
+      symptom: '#FF9800';
+    acupoint: '#2196F3';
+    herb: '#9C27B0';
+    syndrome: '#F44336';
+    treatment: '#00BCD4';
     default: '#757575'
-  };
+  ;};
   // 初始化布局
   useEffect() => {
     if (graphData && graphData.nodes.length > 0) {
@@ -106,11 +106,11 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
   };
   const getNodeRadius = (node: GraphNode): number => {const baseRadius = 20;
     const typeMultipliers: Record<string, number> = {
-      constitution: 1.2,
-      syndrome: 1.1,
-      symptom: 1.0,
-      acupoint: 0.9,
-      herb: 0.8,
+      constitution: 1.2;
+      syndrome: 1.1;
+      symptom: 1.0;
+      acupoint: 0.9;
+      herb: 0.8;
       treatment: 0.9;
     };
     return baseRadius * (typeMultipliers[node.type] || 1.0);
@@ -197,16 +197,16 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
             <View key={type} style={styles.legendItem}>
               <View;
                 style={[
-                  styles.legendColor,{ backgroundColor: nodeColors[type] }};
+                  styles.legendColor,{ backgroundColor: nodeColors[type] ;}};
                 ]};
               />;
               <Text style={styles.legendText}>;
-                {type === 'constitution' ? '体质' :;
-                type === 'symptom' ? '症状' :;
-                type === 'acupoint' ? '穴位' :;
-                type === 'herb' ? '中药' :;
-                type === 'syndrome' ? '证型' :;
-                type === 'treatment' ? '治疗' : type};
+
+
+
+
+
+
               </Text>;
             </View>;
           ))};
@@ -219,10 +219,10 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
       <View style={styles.statistics}>;
         <Text style={styles.statisticsTitle}>图谱统计</Text>;
         <Text style={styles.statisticsText}>;
-          节点总数: {graphData.statistics.total_nodes};
+
         </Text>;
         <Text style={styles.statisticsText}>;
-          边总数: {graphData.statistics.total_edges};
+
         </Text>;
         <Text style={styles.statisticsText}>节点类型分布:</Text>;
         {Object.entries(graphData.statistics.node_types).map([type, count]) => (;))
@@ -280,7 +280,7 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
           onPress={() => setShowStatistics(!showStatistics)};
         >;
           <Text style={styles.controlButtonText}>;
-            {showStatistics ? '隐藏统计' : '显示统计'};
+
           </Text>;
         </TouchableOpacity>;
         <TouchableOpacity;
@@ -292,7 +292,7 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
           }}
         >
           <Text style={styles.controlButtonText}>
-            {animationRef.current ? '暂停' : '开始'}
+
           </Text>
         </TouchableOpacity>
       </View>
@@ -368,159 +368,159 @@ export const KnowledgeGraphVisualization: React.FC<KnowledgeGraphVisualizationPr
 };
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
+  flex: 1;
     backgroundColor: '#FFFFFF'
-  },
+  ;},
   loadingContainer: {,
-  justifyContent: 'center',
+  justifyContent: 'center';
     alignItems: 'center'
-  },
+  ;},
   loadingText: {,
-  marginTop: 16,
-    fontSize: 16,
+  marginTop: 16;
+    fontSize: 16;
     color: '#666666'
-  },
+  ;},
   emptyContainer: {,
-  justifyContent: 'center',
+  justifyContent: 'center';
     alignItems: 'center'
-  },
+  ;},
   emptyText: {,
-  fontSize: 16,
+  fontSize: 16;
     color: '#999999'
-  },
+  ;},
   controls: {,
-  flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    backgroundColor: '#F8F9FA',
-    borderBottomWidth: 1,
+  flexDirection: 'row';
+    justifyContent: 'space-around';
+    paddingVertical: 12;
+    paddingHorizontal: 16;
+    backgroundColor: '#F8F9FA';
+    borderBottomWidth: 1;
     borderBottomColor: '#E0E0E0'
-  },
+  ;},
   controlButton: {,
-  backgroundColor: '#007AFF',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
+  backgroundColor: '#007AFF';
+    paddingHorizontal: 16;
+    paddingVertical: 8;
     borderRadius: 8;
   },
   controlButtonText: {,
-  color: '#FFFFFF',
-    fontSize: 14,
+  color: '#FFFFFF';
+    fontSize: 14;
     fontWeight: '600'
-  },
+  ;},
   graphContainer: {,
   flex: 1;
   },
   svg: {,
   backgroundColor: '#FAFAFA'
-  },
+  ;},
   legend: {,
-  position: 'absolute',
-    top: 60,
-    left: 16,
+  position: 'absolute';
+    top: 60;
+    left: 16;
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    padding: 12,
-    borderRadius: 8,
-    borderWidth: 1,
+    padding: 12;
+    borderRadius: 8;
+    borderWidth: 1;
     borderColor: '#E0E0E0'
-  },
+  ;},
   legendTitle: {,
-  fontSize: 14,
-    fontWeight: 'bold',
-    color: '#333333',
+  fontSize: 14;
+    fontWeight: 'bold';
+    color: '#333333';
     marginBottom: 8;
   },
   legendItems: {,
   gap: 4;
   },
   legendItem: {,
-  flexDirection: 'row',
-    alignItems: 'center',
+  flexDirection: 'row';
+    alignItems: 'center';
     gap: 8;
   },
   legendColor: {,
-  width: 12,
-    height: 12,
+  width: 12;
+    height: 12;
     borderRadius: 6;
   },
   legendText: {,
-  fontSize: 12,
+  fontSize: 12;
     color: '#666666'
-  },
+  ;},
   statistics: {,
-  position: 'absolute',
-    top: 60,
-    right: 16,
+  position: 'absolute';
+    top: 60;
+    right: 16;
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    padding: 12,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
+    padding: 12;
+    borderRadius: 8;
+    borderWidth: 1;
+    borderColor: '#E0E0E0';
     maxWidth: 200;
   },
   statisticsTitle: {,
-  fontSize: 14,
-    fontWeight: 'bold',
-    color: '#333333',
+  fontSize: 14;
+    fontWeight: 'bold';
+    color: '#333333';
     marginBottom: 8;
   },
   statisticsText: {,
-  fontSize: 12,
-    color: '#666666',
+  fontSize: 12;
+    color: '#666666';
     marginBottom: 4;
   },
   statisticsSubText: {,
-  fontSize: 11,
-    color: '#999999',
-    marginLeft: 8,
+  fontSize: 11;
+    color: '#999999';
+    marginLeft: 8;
     marginBottom: 2;
   },
   nodeDetails: {,
-  position: 'absolute',
-    bottom: 16,
-    left: 16,
-    right: 16,
+  position: 'absolute';
+    bottom: 16;
+    left: 16;
+    right: 16;
     backgroundColor: 'rgba(255, 255, 255, 0.95)',
-    padding: 16,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
-    shadowColor: '#000',
+    padding: 16;
+    borderRadius: 12;
+    borderWidth: 1;
+    borderColor: '#E0E0E0';
+    shadowColor: '#000';
     shadowOffset: {,
-  width: 0,
+  width: 0;
       height: 2;
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
+    shadowOpacity: 0.1;
+    shadowRadius: 3.84;
     elevation: 5;
   },
   nodeDetailsTitle: {,
-  fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333333',
+  fontSize: 16;
+    fontWeight: 'bold';
+    color: '#333333';
     marginBottom: 8;
   },
   nodeDetailsType: {,
-  fontSize: 14,
-    color: '#666666',
+  fontSize: 14;
+    color: '#666666';
     marginBottom: 8;
   },
   nodeProperties: {,
   marginBottom: 12;
   },
   nodePropertiesTitle: {,
-  fontSize: 14,
-    fontWeight: '600',
-    color: '#333333',
+  fontSize: 14;
+    fontWeight: '600';
+    color: '#333333';
     marginBottom: 4;
   },
   nodePropertyText: {,
   fontSize: 12,color: '#666666',marginBottom: 2;
   },closeButton: {,
-  alignSelf: "flex-end",
+  alignSelf: "flex-end";
       backgroundColor: '#007AFF',paddingHorizontal: 16,paddingVertical: 8,borderRadius: 8;
   },closeButtonText: {,
-  color: "#FFFFFF",
+  color: "#FFFFFF";
       fontSize: 14,fontWeight: '600';
   };
 });

@@ -15,20 +15,20 @@ interface HealthDataDashboardProps {
   userId: string;
 }
 type TabType = 'overview' | 'vitals' | 'tcm' | 'reports' | 'data';
-export const HealthDataDashboard: React.FC<HealthDataDashboardProps> = ({ userId }) => {
+export const HealthDataDashboard: React.FC<HealthDataDashboardProps> = ({ userId ;}) => {
   const [activeTab, setActiveTab] = useState<TabType>('overview');
   const tabs = [;
     {
-      key: "overview",
-      label: '数据管理', icon: '📊' },{
-      key: "vitals",
-      label: '生命体征', icon: '💓' },{
-      key: "tcm",
-      label: '中医五诊', icon: '🏥' },{
-      key: "reports",
-      label: '健康报告', icon: '📋' },{
-      key: "data",
-      label: '数据管理', icon: '💾' };
+      key: "overview";
+
+      key: "vitals";
+
+      key: "tcm";
+
+      key: "reports";
+
+      key: "data";
+
   ];
   const renderTabContent = () => {switch (activeTab) {case 'overview':return <HealthDataManager userId={userId} />;
       case 'vitals':
@@ -40,7 +40,7 @@ export const HealthDataDashboard: React.FC<HealthDataDashboardProps> = ({ userId
       case 'data':
         return <HealthDataImportExport userId={userId} />;
       default:
-        return <HealthDataManager userId={userId} />;
+        return <HealthDataManager userId={userId;} />;
     }
   };
   const renderTabBar = () => (
@@ -84,46 +84,46 @@ export const HealthDataDashboard: React.FC<HealthDataDashboardProps> = ({ userId
 };
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
+  flex: 1;
     backgroundColor: '#f5f5f5'
-  },
+  ;},
   header: {,
-  backgroundColor: '#fff',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    borderBottomWidth: 1,
+  backgroundColor: '#fff';
+    paddingHorizontal: 20;
+    paddingVertical: 16;
+    borderBottomWidth: 1;
     borderBottomColor: '#e0e0e0'
-  },
+  ;},
   title: {,
-  fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
+  fontSize: 24;
+    fontWeight: 'bold';
+    color: '#333';
     marginBottom: 4;
   },
   subtitle: {,
-  fontSize: 16,
+  fontSize: 16;
     color: '#666'
-  },
+  ;},
   tabBar: {,
-  backgroundColor: '#fff',
-    borderBottomWidth: 1,
+  backgroundColor: '#fff';
+    borderBottomWidth: 1;
     borderBottomColor: '#e0e0e0'
-  },
+  ;},
   tabScrollContent: {,
   paddingHorizontal: 16;
   },
   tab: {,
-  paddingHorizontal: 20,
-    paddingVertical: 12,
-    marginRight: 8,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
+  paddingHorizontal: 20;
+    paddingVertical: 12;
+    marginRight: 8;
+    borderRadius: 20;
+    alignItems: 'center';
+    justifyContent: 'center';
     minWidth: 80;
   },
   activeTab: {,
   backgroundColor: '#007AFF'
-  },tabIcon: {fontSize: 20,marginBottom: 4;
+  ;},tabIcon: {fontSize: 20,marginBottom: 4;
   },tabLabel: {fontSize: 12,color: '#666',fontWeight: '500';
   },activeTabLabel: {color: '#fff';
   },content: {flex: 1;

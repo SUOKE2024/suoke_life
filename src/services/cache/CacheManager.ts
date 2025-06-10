@@ -1,7 +1,7 @@
 import React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 export interface CacheItem<T = any> {
-  data: T,
+  data: T;
   timestamp: number;
   ttl?: number; // Time to live in milliseconds;
   version?: string;
@@ -17,13 +17,13 @@ export class CacheManager {
   private memoryCache = new Map<string, CacheItem>();
   private config: Required<CacheConfig>;
   private cleanupInterval?: NodeJS.Timeout;
-  constructor(config: CacheConfig = {}) {
+  constructor(config: CacheConfig = {;}) {
     this.config = {
       defaultTTL: 5 * 60 * 1000, // 5 minutes;
-      maxMemoryItems: 100,
-      enablePersistence: true,
-      keyPrefix: 'suoke_cache_',
-      version: '1.0.0',
+      maxMemoryItems: 100;
+      enablePersistence: true;
+      keyPrefix: 'suoke_cache_';
+      version: '1.0.0';
       ...config;
     };
     // 启动定期清理
@@ -34,9 +34,9 @@ export class CacheManager {
   */
   async set<T>(key: string, data: T, ttl?: number): Promise<void> {
     const cacheItem: CacheItem<T> = {
-      data,
-      timestamp: Date.now(),
-      ttl: ttl || this.config.defaultTTL,
+      data;
+      timestamp: Date.now();
+      ttl: ttl || this.config.defaultTTL;
       version: this.config.version;
     };
     // 内存缓存
@@ -109,9 +109,9 @@ export class CacheManager {
       memorySize,
       validItems,
       expiredItems,
-      hitRate: this.calculateHitRate(),
+      hitRate: this.calculateHitRate();
       memoryUsage: this.estimateMemoryUsage()
-    };
+    ;};
   }
   /**
   * 批量设置缓存
@@ -123,22 +123,22 @@ export class CacheManager {
   /**
   * 批量获取缓存
   */
-  async getMultiple<T>(keys: string[]): Promise<Array<{ key: string; data: T | null }>> {
+  async getMultiple<T>(keys: string[]): Promise<Array<{ key: string; data: T | null ;}>> {
     const promises = keys.map(async key => ({
       key,
       data: await this.get<T>(key)
-    }));
+    ;}));
     return Promise.all(promises);
   }
     /**
     * 缓存装饰器
     */
   cached(key: string, ttl?: number) {
-    return (target: any, propertyName: string, descriptor: PropertyDescriptor) => {
+    return (target: any; propertyName: string, descriptor: PropertyDescriptor) => {
       const method = descriptor.value;
       const cacheManager = this;
             descriptor.value = async function (...args: any[]) {
-        const cacheKey = `${key}_${JSON.stringify(args)}`;
+        const cacheKey = `${key;}_${JSON.stringify(args)}`;
                 // 尝试从缓存获取
         const cached = await cacheManager.get(cacheKey);
         if (cached !== null) {
@@ -187,7 +187,7 @@ export class CacheManager {
     }
   }
   private getPersistentKey(key: string): string {
-    return `${this.config.keyPrefix}${key}`;
+    return `${this.config.keyPrefix;}${key}`;
   }
   /**
   * 缓存有效性检查
@@ -274,20 +274,20 @@ export class CacheManager {
 // 默认缓存管理器实例
 export const defaultCacheManager = new CacheManager({
   defaultTTL: 5 * 60 * 1000, // 5分钟
-  maxMemoryItems: 100,
-  enablePersistence: true,
-  keyPrefix: 'suoke_',
+  maxMemoryItems: 100;
+  enablePersistence: true;
+  keyPrefix: 'suoke_';
   version: '1.0.0'
-});
+;});
 // 缓存装饰器
 export function Cached(key: string, ttl?: number) {
-  return (target: any, propertyName: string, descriptor: PropertyDescriptor) => {
+  return (target: any; propertyName: string, descriptor: PropertyDescriptor) => {
     return defaultCacheManager.cached(key, ttl)(target, propertyName, descriptor);
   };
 }
 // 缓存Hook;
 export function useCache<T>(key: string, fetcher: () => Promise<T>, ttl?: number) {
-  const [data, setData] = React.useState<T | null>(null);
+  const [data; setData] = React.useState<T | null>(null);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<Error | null>(null);
   React.useEffect() => {

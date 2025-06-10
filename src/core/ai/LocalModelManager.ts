@@ -54,7 +54,7 @@ export class LocalModelManager {
   private maxCacheSize = 50; // 减少缓存大小
   private maxModelMemory = 256 * 1024 * 1024; // 减少到256MB
   private memoryMonitor: MemoryMonitor;
-  private modelUsageStats: Map<string, { count: number; lastUsed: number }> =
+  private modelUsageStats: Map<string, { count: number; lastUsed: number ;}> =
     new Map();
 
   constructor() {
@@ -65,11 +65,11 @@ export class LocalModelManager {
 
   private initializeMemoryMonitor(): void {
     this.memoryMonitor = {
-      totalMemory: 0,
-      usedMemory: 0,
-      availableMemory: 0,
+      totalMemory: 0;
+      usedMemory: 0;
+      availableMemory: 0;
       threshold: 0.8, // 80%内存使用阈值
-    };
+    ;};
   }
 
   private async getDeviceMemoryInfo(): Promise<void> {
@@ -81,8 +81,8 @@ export class LocalModelManager {
       this.memoryMonitor = {
         totalMemory,
         usedMemory,
-        availableMemory: totalMemory - usedMemory,
-        threshold: 0.8,
+        availableMemory: totalMemory - usedMemory;
+        threshold: 0.8;
       };
     } catch (error) {
       console.warn('Failed to get device memory info:', error);
@@ -122,7 +122,7 @@ export class LocalModelManager {
   private clearInferenceCache(): void {
     const cacheSize = this.inferenceCache.size;
     this.inferenceCache.clear();
-    console.log(`Cleared inference cache: ${cacheSize} items`);
+    console.log(`Cleared inference cache: ${cacheSize;} items`);
   }
 
   private async unloadUnusedModels(): Promise<void> {
@@ -136,7 +136,7 @@ export class LocalModelManager {
         now - model.lastUsed > unusedThreshold
       ) {
         await this.unloadModel(modelId);
-        console.log(`Unloaded unused model: ${modelId}`);
+        console.log(`Unloaded unused model: ${modelId;}`);
       }
     }
   }
@@ -149,49 +149,49 @@ export class LocalModelManager {
   private initializeDefaultModels(): void {
     const defaultModels: LocalModel[] = [
       {
-        id: 'health_basic_assessment',
-        name: '基础健康评估',
-        type: 'onnx',
-        version: '1.0.0',
-        filePath: 'models/health_basic.onnx',
+        id: 'health_basic_assessment';
+
+        type: 'onnx';
+        version: '1.0.0';
+        filePath: 'models/health_basic.onnx';
         fileSize: 3 * 1024 * 1024, // 减少到3MB
         capabilities: ['health_screening', 'basic_diagnosis'],
-        isLoaded: false,
-        lastUsed: 0,
-        accuracy: 0.89,
-        inferenceTimeMs: 50,
-        priority: 'high',
-        memoryFootprint: 0,
+        isLoaded: false;
+        lastUsed: 0;
+        accuracy: 0.89;
+        inferenceTimeMs: 50;
+        priority: 'high';
+        memoryFootprint: 0;
       },
       {
-        id: 'symptom_screening',
-        name: '症状初筛',
-        type: 'tflite',
-        version: '1.2.0',
-        filePath: 'models/symptom_screening.tflite',
+        id: 'symptom_screening';
+
+        type: 'tflite';
+        version: '1.2.0';
+        filePath: 'models/symptom_screening.tflite';
         fileSize: 2 * 1024 * 1024, // 减少到2MB
         capabilities: ['symptom_analysis', 'risk_assessment'],
-        isLoaded: false,
-        lastUsed: 0,
-        accuracy: 0.92,
-        inferenceTimeMs: 30,
-        priority: 'medium',
-        memoryFootprint: 0,
+        isLoaded: false;
+        lastUsed: 0;
+        accuracy: 0.92;
+        inferenceTimeMs: 30;
+        priority: 'medium';
+        memoryFootprint: 0;
       },
       {
-        id: 'lifestyle_recommendation',
-        name: '生活方式推荐',
-        type: 'onnx',
-        version: '1.1.0',
-        filePath: 'models/lifestyle_rec.onnx',
+        id: 'lifestyle_recommendation';
+
+        type: 'onnx';
+        version: '1.1.0';
+        filePath: 'models/lifestyle_rec.onnx';
         fileSize: 1.5 * 1024 * 1024, // 1.5MB
         capabilities: ['lifestyle_analysis', 'recommendation'],
-        isLoaded: false,
-        lastUsed: 0,
-        accuracy: 0.85,
-        inferenceTimeMs: 40,
-        priority: 'low',
-        memoryFootprint: 0,
+        isLoaded: false;
+        lastUsed: 0;
+        accuracy: 0.85;
+        inferenceTimeMs: 40;
+        priority: 'low';
+        memoryFootprint: 0;
       },
     ];
 
@@ -235,7 +235,7 @@ export class LocalModelManager {
   async loadModel(modelId: string): Promise<void> {
     const model = this.models.get(modelId);
     if (!model) {
-      throw new Error(`Model not found: ${modelId}`);
+      throw new Error(`Model not found: ${modelId;}`);
     }
 
     if (model.isLoaded) {
@@ -249,12 +249,12 @@ export class LocalModelManager {
       await this.performMemoryCleanup();
 
       if (!this.canLoadModel(model)) {
-        throw new Error(`Insufficient memory to load model: ${modelId}`);
+        throw new Error(`Insufficient memory to load model: ${modelId;}`);
       }
     }
 
     try {
-      console.log(`Loading model: ${modelId}`);
+      console.log(`Loading model: ${modelId;}`);
       const loadedModel = await this.loadModelFile(model);
 
       this.loadedModels.set(modelId, loadedModel);
@@ -266,7 +266,7 @@ export class LocalModelManager {
       this.memoryMonitor.usedMemory += model.memoryFootprint;
       this.memoryMonitor.availableMemory -= model.memoryFootprint;
 
-      console.log(`Model loaded successfully: ${modelId}`);
+      console.log(`Model loaded successfully: ${modelId;}`);
     } catch (error) {
       console.error(`Failed to load model ${modelId}:`, error);
       throw error;
@@ -288,14 +288,14 @@ export class LocalModelManager {
       this.memoryMonitor.availableMemory += model.memoryFootprint;
       model.memoryFootprint = 0;
 
-      console.log(`Model unloaded: ${modelId}`);
+      console.log(`Model unloaded: ${modelId;}`);
     } catch (error) {
       console.error(`Failed to unload model ${modelId}:`, error);
     }
   }
 
   async runInference(
-    modelId: string,
+    modelId: string;
     inputData: any
   ): Promise<ModelInferenceResult> {
     // 检查缓存
@@ -315,7 +315,7 @@ export class LocalModelManager {
     const loadedModel = this.loadedModels.get(modelId);
 
     if (!model || !loadedModel) {
-      throw new Error(`Model not available: ${modelId}`);
+      throw new Error(`Model not available: ${modelId;}`);
     }
 
     try {
@@ -328,10 +328,10 @@ export class LocalModelManager {
 
       const result: ModelInferenceResult = {
         modelId,
-        output: output.output,
-        confidence: output.confidence,
+        output: output.output;
+        confidence: output.confidence;
         inferenceTime,
-        timestamp: Date.now(),
+        timestamp: Date.now();
       };
 
       // 更新使用统计
@@ -362,8 +362,8 @@ export class LocalModelManager {
 
   private updateUsageStats(modelId: string): void {
     const stats = this.modelUsageStats.get(modelId) || {
-      count: 0,
-      lastUsed: 0,
+      count: 0;
+      lastUsed: 0;
     };
     stats.count++;
     stats.lastUsed = Date.now();
@@ -378,11 +378,11 @@ export class LocalModelManager {
     cacheSize: number;
   } {
     return {
-      totalMemory: this.memoryMonitor.totalMemory,
-      usedMemory: this.memoryMonitor.usedMemory,
-      availableMemory: this.memoryMonitor.availableMemory,
-      loadedModels: this.loadedModels.size,
-      cacheSize: this.inferenceCache.size,
+      totalMemory: this.memoryMonitor.totalMemory;
+      usedMemory: this.memoryMonitor.usedMemory;
+      availableMemory: this.memoryMonitor.availableMemory;
+      loadedModels: this.loadedModels.size;
+      cacheSize: this.inferenceCache.size;
     };
   }
 
@@ -398,15 +398,15 @@ export class LocalModelManager {
     // 模拟模型加载延迟
     await new Promise((resolve) => setTimeout(resolve, 100));
     return {
-      type: model.type,
-      version: model.version,
-      capabilities: model.capabilities,
+      type: model.type;
+      version: model.version;
+      capabilities: model.capabilities;
     };
   }
 
   private async executeInference(
-    loadedModel: any,
-    inputData: any,
+    loadedModel: any;
+    inputData: any;
     modelConfig: LocalModel
   ): Promise<{
     output: any;
@@ -419,10 +419,10 @@ export class LocalModelManager {
 
     return {
       output: {
-        prediction: 'mock_result',
-        features: inputData,
+        prediction: 'mock_result';
+        features: inputData;
       },
-      confidence: 0.85 + Math.random() * 0.1,
+      confidence: 0.85 + Math.random() * 0.1;
     };
   }
 

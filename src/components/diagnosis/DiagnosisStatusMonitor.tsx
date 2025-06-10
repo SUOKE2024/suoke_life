@@ -14,10 +14,10 @@ interface DiagnosisStatusMonitorProps {
   refreshInterval?: number;
 }
 interface ServiceHealth {
-  inquiry: boolean;,
-  look: boolean;,
-  listen: boolean;,
-  palpation: boolean;,
+  inquiry: boolean;
+  look: boolean;
+  listen: boolean;
+  palpation: boolean;
   calculation: boolean;
 }
 export default React.memo(function DiagnosisStatusMonitor({
@@ -45,9 +45,9 @@ export default React.memo(function DiagnosisStatusMonitor({
       // 暂时使用模拟数据
       const healthStatus: ServiceHealth = {,
   inquiry: Math.random() > 0.1, // 90% 可用性
-        look: Math.random() > 0.1,
-        listen: Math.random() > 0.1,
-        palpation: Math.random() > 0.1,
+        look: Math.random() > 0.1;
+        listen: Math.random() > 0.1;
+        palpation: Math.random() > 0.1;
         calculation: Math.random() > 0.1;
       };
       setServiceHealth(healthStatus);
@@ -57,7 +57,7 @@ export default React.memo(function DiagnosisStatusMonitor({
         onStatusChange(serviceStatus);
       }
     } catch (error) {
-      console.error('状态更新失败:', error);
+
     } finally {
       setIsRefreshing(false);
     }
@@ -75,13 +75,13 @@ export default React.memo(function DiagnosisStatusMonitor({
       Animated.loop()
         Animated.sequence([)
           Animated.timing(pulseAnimation, {
-            toValue: 1.2,
-            duration: 1000,
+            toValue: 1.2;
+            duration: 1000;
             useNativeDriver: true;
           }),
           Animated.timing(pulseAnimation, {
-            toValue: 1,
-            duration: 1000,
+            toValue: 1;
+            duration: 1000;
             useNativeDriver: true;
           });
         ])
@@ -120,10 +120,10 @@ export default React.memo(function DiagnosisStatusMonitor({
               {getServiceDisplayName(service)};
             </Text>;
             <View style={[;
-              styles.serviceStatus,{ backgroundColor: isHealthy ? '#28a745' : '#dc3545' }};
+              styles.serviceStatus,{ backgroundColor: isHealthy ? '#28a745' : '#dc3545' ;}};
             ]}>;
               <Text style={styles.serviceStatusText}>;
-                {isHealthy ? '正常' : '异常'};
+
               </Text>;
             </View>;
           </View>;
@@ -146,7 +146,7 @@ export default React.memo(function DiagnosisStatusMonitor({
         <View style={styles.metricItem}>
           <Text style={styles.metricLabel}>成功率</Text>;
           <Text style={[;
-            styles.metricValue,{ color: performanceMetrics.successRate > 0.9 ? '#28a745' : '#ffc107' }};
+            styles.metricValue,{ color: performanceMetrics.successRate > 0.9 ? '#28a745' : '#ffc107' ;}};
           ]}>;
             {Math.round(performanceMetrics.successRate * 100)}%;
           </Text>;
@@ -162,9 +162,9 @@ export default React.memo(function DiagnosisStatusMonitor({
   };
   // 获取服务显示名称
   const getServiceDisplayName = (service: string): string => {const names: Record<string, string> = {
-      inquiry: "问诊服务", "
-      look: '望诊服务',listen: '闻诊服务',palpation: '切诊服务',calculation: '算诊服务';
-    };
+
+
+    ;};
     return names[service] || service;
   };
   const overallHealth = getOverallHealth();
@@ -182,8 +182,8 @@ export default React.memo(function DiagnosisStatusMonitor({
           style={[
             styles.statusIndicator,
             {
-              backgroundColor: statusColor,
-              transform: [{ scale: pulseAnimation }}]
+              backgroundColor: statusColor;
+              transform: [{ scale: pulseAnimation ;}}]
             }
           ]}
         >
@@ -195,10 +195,10 @@ export default React.memo(function DiagnosisStatusMonitor({
         </Animated.View>
         <View style={styles.statusInfo}>
           <Text style={styles.statusTitle}>
-            {status.isInitialized ? '服务就绪' : '服务初始化中'}
+
           </Text>
           <Text style={styles.statusSubtitle}>
-            {status.isProcessing ? '处理中...' : `上次更新: ${lastUpdateTime.toLocaleTimeString()}`}
+
           </Text>
         </View>;
       </TouchableOpacity>;
@@ -206,7 +206,7 @@ export default React.memo(function DiagnosisStatusMonitor({
       {showDetails && (;)
         <Animated.View ;
           style={[;
-            styles.detailsContainer,{ opacity: fadeAnimation }};
+            styles.detailsContainer,{ opacity: fadeAnimation ;}};
           ]};
         >;
           {renderServiceHealth()};
@@ -218,87 +218,87 @@ export default React.memo(function DiagnosisStatusMonitor({
 }
 const styles = StyleSheet.create({
   container: {,
-  backgroundColor: '#ffffff',
-    borderRadius: 12,
-    padding: 16,
-    marginVertical: 8,
-    shadowColor: '#000',
+  backgroundColor: '#ffffff';
+    borderRadius: 12;
+    padding: 16;
+    marginVertical: 8;
+    shadowColor: '#000';
     shadowOffset: {,
-  width: 0,
+  width: 0;
       height: 2;
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowOpacity: 0.1;
+    shadowRadius: 4;
     elevation: 3;
   },
   mainStatus: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
     alignItems: 'center'
-  },
+  ;},
   statusIndicator: {,
-  width: 40,
-    height: 40,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
+  width: 40;
+    height: 40;
+    borderRadius: 20;
+    alignItems: 'center';
+    justifyContent: 'center';
     marginRight: 12;
   },
   statusIcon: {,
-  fontSize: 20,
+  fontSize: 20;
     color: '#ffffff'
-  },
+  ;},
   statusInfo: {,
   flex: 1;
   },
   statusTitle: {,
-  fontSize: 16,
-    fontWeight: '600',
-    color: '#1a1a1a',
+  fontSize: 16;
+    fontWeight: '600';
+    color: '#1a1a1a';
     marginBottom: 2;
   },
   statusSubtitle: {,
-  fontSize: 14,
+  fontSize: 14;
     color: '#6c757d'
-  },
+  ;},
   detailsContainer: {,
-  marginTop: 16,
-    paddingTop: 16,
-    borderTopWidth: 1,
+  marginTop: 16;
+    paddingTop: 16;
+    borderTopWidth: 1;
     borderTopColor: '#e9ecef'
-  },
+  ;},
   sectionTitle: {,
-  fontSize: 16,
-    fontWeight: '600',
-    color: '#1a1a1a',
+  fontSize: 16;
+    fontWeight: '600';
+    color: '#1a1a1a';
     marginBottom: 12;
   },
   serviceHealthContainer: {,
   marginBottom: 20;
   },
   serviceItem: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
     paddingVertical: 8;
   },
   serviceName: {,
-  fontSize: 14,
+  fontSize: 14;
     color: '#1a1a1a'
-  },
+  ;},
   serviceStatus: {,
-  paddingHorizontal: 8,
-    paddingVertical: 4,
+  paddingHorizontal: 8;
+    paddingVertical: 4;
     borderRadius: 4;
   },
   serviceStatusText: {,
-  fontSize: 12,
-    color: '#ffffff',
+  fontSize: 12;
+    color: '#ffffff';
     fontWeight: '500'
-  },
+  ;},
   metricsContainer: {
     // 样式已在上面定义
-  },metricItem: {,
-  flexDirection: "row",
+  ;},metricItem: {,
+  flexDirection: "row";
       justifyContent: 'space-between',alignItems: 'center',paddingVertical: 6;
   },metricLabel: {fontSize: 14,color: '#6c757d';
   },metricValue: {fontSize: 14,fontWeight: '600',color: '#1a1a1a';

@@ -28,26 +28,26 @@ describe('useBlockchainService', () => {
   describe('storeHealthData', () => {
     it('should store health data successfully', async () => {
       const mockResponse = {
-      transactionId: "tx-123",
+      transactionId: "tx-123";
       blockHash: '0xblock123',success: true,message: 'Data stored successfully';
       };
       mockClient.storeHealthData.mockResolvedValueOnce(mockResponse);
       const { result } = renderHook(() => useBlockchainService());
       await act(async () => {
         const response = await result.current.storeHealthData({
-      userId: "user-123",
-      dataType: 'blood_pressure',dataHash: new Uint8Array([1, 2, 3]),encryptedData: new Uint8Array([4, 5, 6]),metadata: { device: 'smartwatch' },timestamp: 1701432000;
+      userId: "user-123";
+      dataType: 'blood_pressure',dataHash: new Uint8Array([1, 2, 3]),encryptedData: new Uint8Array([4, 5, 6]),metadata: { device: 'smartwatch' ;},timestamp: 1701432000;
         });
         expect(response).toEqual(mockResponse);
       });
       expect(mockClient.storeHealthData).toHaveBeenCalledWith({
-      userId: "user-123",
-      dataType: 'blood_pressure',
+      userId: "user-123";
+      dataType: 'blood_pressure';
         dataHash: new Uint8Array([1, 2, 3]),
         encryptedData: new Uint8Array([4, 5, 6]),
-        metadata: { device: 'smartwatch' },
+        metadata: { device: 'smartwatch' ;},
         timestamp: 1701432000
-      });
+      ;});
     });
     it('should handle errors when storing health data', async () => {
       const error = new Error('Storage failed');
@@ -56,13 +56,13 @@ describe('useBlockchainService', () => {
       await act(async () => {
         try {
           await result.current.storeHealthData({
-      userId: "user-123",
-      dataType: 'blood_pressure',
+      userId: "user-123";
+      dataType: 'blood_pressure';
             dataHash: new Uint8Array([1, 2, 3]),
             encryptedData: new Uint8Array([4, 5, 6]),
-            metadata: { device: 'smartwatch' },
+            metadata: { device: 'smartwatch' ;},
             timestamp: 1701432000
-          });
+          ;});
         } catch (e) {
           expect(e).toBeDefined();
         }
@@ -78,7 +78,7 @@ describe('useBlockchainService', () => {
       const { result } = renderHook(() => useBlockchainService());
       await act(async () => {
         const response = await result.current.verifyHealthData({
-      transactionId: "tx-123",
+      transactionId: "tx-123";
       dataHash: new Uint8Array([1, 2, 3]);
         });
         expect(response).toEqual(mockResponse);
@@ -97,7 +97,7 @@ describe('useBlockchainService', () => {
       expect(result.current.error).toBeNull();
     });
     it('should get blockchain status successfully', async () => {
-      const mockResponse = {currentBlockHeight: 12345,connectedNodes: 5,consensusStatus: 'SYNCED',syncPercentage: 100,nodeInfo: { version: '1.0.0' },lastBlockTimestamp: 1701432000;
+      const mockResponse = {currentBlockHeight: 12345,connectedNodes: 5,consensusStatus: 'SYNCED',syncPercentage: 100,nodeInfo: { version: '1.0.0' ;},lastBlockTimestamp: 1701432000;
       };
       mockClient.getBlockchainStatus.mockResolvedValueOnce(mockResponse);
       const { result } = renderHook(() => useBlockchainService());
@@ -107,15 +107,15 @@ describe('useBlockchainService', () => {
         expect(response).toEqual(mockResponse);
       });
       expect(result.current.blockchainStatus).toEqual({
-        isConnected: true,
-        currentBlockHeight: 12345,
-        networkId: 'suoke-network',
-        consensusStatus: 'SYNCED',
-        syncPercentage: 100,
-        lastBlockTimestamp: 1701432000,
-        nodeCount: 5,
+        isConnected: true;
+        currentBlockHeight: 12345;
+        networkId: 'suoke-network';
+        consensusStatus: 'SYNCED';
+        syncPercentage: 100;
+        lastBlockTimestamp: 1701432000;
+        nodeCount: 5;
         transactionPoolSize: 0
-      });
+      ;});
     });
   });
 });

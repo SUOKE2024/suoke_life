@@ -102,31 +102,31 @@ export abstract class MazeAgentBase {
    * 生成迷宫交互响应
    */
   async generateMazeInteraction(
-    input: string,
+    input: string;
     context: MazeContext
   ): Promise<MazeInteraction> {
     return {
-      id: `maze_${this.agentType}_${Date.now()}`,
-      playerId: 'current_user',
+      id: `maze_${this.agentType;}_${Date.now()}`,
+      playerId: 'current_user';
       npcResponse: this.generateContextualResponse(input, context),
-      action: this.determineAction(input),
-      location: context.currentPosition,
-      rewards: this.generateRewards(context),
+      action: this.determineAction(input);
+      location: context.currentPosition;
+      rewards: this.generateRewards(context);
       hints: this.generateHints(input, context),
-      challenges: this.generateChallenges(context),
-      storyProgression: this.calculateStoryProgression(context),
-      nextActions: this.suggestNextActions(context),
-      timestamp: new Date(),
-      agentType: this.agentType,
+      challenges: this.generateChallenges(context);
+      storyProgression: this.calculateStoryProgression(context);
+      nextActions: this.suggestNextActions(context);
+      timestamp: new Date();
+      agentType: this.agentType;
       contextualAdvice: this.generateContextualAdvice(input, context),
-    };
+    ;};
   }
 
   /**
    * 生成上下文响应
    */
   protected abstract generateContextualResponse(
-    input: string,
+    input: string;
     context: MazeContext
   ): string;
 
@@ -135,13 +135,13 @@ export abstract class MazeAgentBase {
    */
   protected determineAction(input: string): string {
     const lowerInput = input.toLowerCase();
-    if (lowerInput.includes('帮助') || lowerInput.includes('指导')) {
+
       return 'provide_guidance';
-    } else if (lowerInput.includes('知识') || lowerInput.includes('学习')) {
+
       return 'share_knowledge';
-    } else if (lowerInput.includes('挑战') || lowerInput.includes('测试')) {
+
       return 'create_challenge';
-    } else if (lowerInput.includes('奖励') || lowerInput.includes('礼物')) {
+
       return 'give_reward';
     } else {
       return 'general_interaction';
@@ -156,13 +156,13 @@ export abstract class MazeAgentBase {
 
     if (context.score > 80) {
       rewards.push({
-        rewardId: `reward_${Date.now()}`,
-        type: 'points',
-        name: '探索达人',
-        description: '在迷宫中表现出色',
-        value: 50,
-        icon: 'star',
-        rarity: 'rare',
+        rewardId: `reward_${Date.now();}`,
+        type: 'points';
+
+
+        value: 50;
+        icon: 'star';
+        rarity: 'rare';
       });
     }
 
@@ -177,16 +177,16 @@ export abstract class MazeAgentBase {
 
     switch (context.mazeTheme) {
       case MazeTheme.HEALTH_PATH:
-        hints.push('健康的生活方式从小事做起');
+
         break;
       case MazeTheme.NUTRITION_GARDEN:
-        hints.push('均衡饮食包含多种营养素');
+
         break;
       case MazeTheme.TCM_JOURNEY:
-        hints.push('中医讲究阴阳平衡');
+
         break;
       case MazeTheme.BALANCED_LIFE:
-        hints.push('工作与休息要平衡');
+
         break;
     }
 
@@ -201,15 +201,15 @@ export abstract class MazeAgentBase {
 
     if (context.acquiredKnowledge.length >= 3) {
       challenges.push({
-        challengeId: `challenge_${this.agentType}_${Date.now()}`,
-        title: '健康知识测试',
-        description: '测试你对健康知识的掌握程度',
-        type: 'multiple_choice',
-        difficultyLevel: context.difficulty,
-        questions: this.generateQuestions(context),
-        rewardDescription: '完成后获得健康知识徽章',
-        timeLimit: 300,
-        maxAttempts: 3,
+        challengeId: `challenge_${this.agentType;}_${Date.now()}`,
+
+
+        type: 'multiple_choice';
+        difficultyLevel: context.difficulty;
+        questions: this.generateQuestions(context);
+
+        timeLimit: 300;
+        maxAttempts: 3;
       });
     }
 
@@ -241,14 +241,14 @@ export abstract class MazeAgentBase {
     const actions: string[] = [];
 
     if (context.acquiredKnowledge.length < 3) {
-      actions.push('寻找知识节点');
+
     }
     if (context.completedChallenges.length < 2) {
-      actions.push('接受健康挑战');
+
     }
 
-    actions.push('继续探索');
-    actions.push('查看地图');
+
+
 
     return actions.slice(0, 4);
   }
@@ -257,7 +257,7 @@ export abstract class MazeAgentBase {
    * 生成上下文建议
    */
   protected abstract generateContextualAdvice(
-    input: string,
+    input: string;
     context: MazeContext
   ): string;
 }
@@ -272,35 +272,35 @@ export class LaokeMazeAgent extends MazeAgentBase {
 
   protected getDefaultPersonality(): Record<string, any> {
     return {
-      style: 'scholarly',
-      tone: 'wise',
-      expertise: 'knowledge_sharing',
+      style: 'scholarly';
+      tone: 'wise';
+      expertise: 'knowledge_sharing';
     };
   }
 
   protected generateContextualResponse(
-    input: string,
+    input: string;
     context: MazeContext
   ): string {
-    return `老克在此！学而时习之，不亦说乎？您在迷宫中的学习之旅已经走过了${context.stepsCount}步，收获颇丰。`;
-  }
+
+  ;}
 
   protected generateQuestions(context: MazeContext): any[] {
     return [
       {
-        question: '中医养生的基本原则是什么？',
-        options: ['阴阳平衡', '快速见效', '西医结合', '技术至上'],
-        correct: 0,
+
+
+        correct: 0;
       },
     ];
   }
 
   protected generateContextualAdvice(
-    input: string,
+    input: string;
     context: MazeContext
   ): string {
-    return "古人云：'知之者不如好之者，好之者不如乐之者。'建议您在探索中保持学习的乐趣。";
-  }
+
+  ;}
 }
 
 /**
@@ -312,7 +312,7 @@ export class MazeAgentFactory {
       case 'laoke':
         return new LaokeMazeAgent();
       default:
-        throw new Error(`Agent type ${agentType} not implemented yet`);
+        throw new Error(`Agent type ${agentType;} not implemented yet`);
     }
   }
 }

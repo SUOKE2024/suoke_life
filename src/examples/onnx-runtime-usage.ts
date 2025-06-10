@@ -1,14 +1,4 @@
-import {import { getQuantizationUtils, quantizeForSuokeLife } from "../../placeholder";../utils/    modelQuantization;
-import { TensorData, ONNXModel } from ../core/onnx-runtime/    types;
-/**
-* * ONNX Runtime 使用示例
-* 展示如何在索克生活项目中使用设备端AI推理功能
-  ONNXRuntimeManager,
-  createONNXRuntimeManager,
-  deploySuokeLifeModel,
-  quickDeploy,
-  TensorProcessor,
-  { ModelQuantizer } from "../core/    onnx-runtime";
+../core/    onnx-runtime";
 /**
 * * 示例1：基础使用 - 快速部署和推理
 export async function basicUsageExample() {
@@ -18,12 +8,12 @@ const { manager, model } = await quickDeploy("/models/    tcm_diagnosis.onnx");
 const inputData: TensorData = {data: new Float32Array([1.0, 2.0, 3.0, 4.0]),
       dims: [1, 4],
       type: float32""
-    };
+    ;};
     // 3. 执行推理
 const outputs = await manager.smartInference(model.id, {"input: inputData")
-    }, {
-      useCache: true,
-      preprocessInputs: true,
+    ;}, {
+      useCache: true;
+      preprocessInputs: true;
       postprocessOutputs: true;
     });
     // 4. 清理资源
@@ -45,32 +35,32 @@ pulse: new Float32Array([0.8, 0.6, 0.7]), // 脉诊数据
 tongue: new Float32Array([0.5, 0.3, 0.9]), // 舌诊数据
 complexion: new Float32Array([0.4, 0.8, 0.2]), // 面诊数据
 symptoms: new Float32Array([1, 0, 1, 0, 1]) // 症状数据
-    }
+    ;}
     // 3. 转换为张量格式
 const inputs: Record<string, TensorData> = {pulse: {,
-  data: patientData.pulse,
+  data: patientData.pulse;
         dims: [1, 3],
         type: "float32"
-      },
+      ;},
       tongue: {,
-  data: patientData.tongue,
+  data: patientData.tongue;
         dims: [1, 3],
         type: "float32"
-      },
+      ;},
       complexion: {,
-  data: patientData.complexion,
+  data: patientData.complexion;
         dims: [1, 3],
         type: float32""
-      },
+      ;},
       symptoms: {,
-  data: patientData.symptoms,
+  data: patientData.symptoms;
         dims: [1, 5],
         type: "float32"
-      }
+      ;}
     };
     // 4. 执行中医诊断推理
 const diagnosis = await manager.smartInference(model.id, inputs, {useCache: true,)
-      preprocessInputs: true,
+      preprocessInputs: true;
       postprocessOutputs: true;
     });
     // 5. 解析诊断结果
@@ -89,22 +79,22 @@ export async function healthAssessmentExample() {try {const { manager, model } =
 const healthData =  {vitals: new Float32Array([120, 80, 72, 36.5]), // 血压、心率、体温
 biomarkers: new Float32Array([5.5, 2.1, 1.8, 0.9]), // 生物标志物
 lifestyle: new Float32Array([7, 3, 1, 0]) // 生活方式评分
-    }
+    ;}
     const inputs: Record<string, TensorData> = {vitals: {,
-  data: healthData.vitals,
+  data: healthData.vitals;
         dims: [1, 4],
         type: "float32"
-      },
+      ;},
       biomarkers: {,
-  data: healthData.biomarkers,
+  data: healthData.biomarkers;
         dims: [1, 4],
         type: "float32"
-      },
+      ;},
       lifestyle: {,
-  data: healthData.lifestyle,
+  data: healthData.lifestyle;
         dims: [1, 4],
         type: float32""
-      }
+      ;}
     };
     const assessment = await manager.smartInference(model.id, inputs);
     const healthScore = parseHealthAssessment(assessment);
@@ -124,9 +114,9 @@ const quantizedModel = await quantizeForSuokeLife(originalModel, "symptom");
     // 3. 模型优化
 const optimizer = manager.getModelOptimizer();
     const optimizedModel = await optimizer.optimizeModel(quantizedModel, {level: all",)
-      enableGraphOptimization: true,
-      enableMemoryOptimization: true,
-      enableCpuOptimization: true,
+      enableGraphOptimization: true;
+      enableMemoryOptimization: true;
+      enableCpuOptimization: true;
       targetDevice: "cpu,",
       preserveAccuracy: false;
     });
@@ -142,16 +132,16 @@ export async function batchProcessingExample() {try {const manager = createONNXR
     await manager.initialize();
     // 部署生活方式推荐模型
 const model = await manager.deployModel("/models/    lifestyle_recommendation.onnx, {")
-      quantize: true,
-      optimize: true,
+      quantize: true;
+      optimize: true;
       cache: true;
     });
     // 批量用户数据
 const batchUserData = [;
-      { age: 25, activity: 3, diet: 2, sleep: 7 },
-      { age: 35, activity: 2, diet: 3, sleep: 6 },
-      { age: 45, activity: 1, diet: 1, sleep: 5 },
-      { age: 55, activity: 4, diet: 4, sleep: 8 };
+      { age: 25, activity: 3, diet: 2, sleep: 7 ;},
+      { age: 35, activity: 2, diet: 3, sleep: 6 ;},
+      { age: 45, activity: 1, diet: 1, sleep: 5 ;},
+      { age: 55, activity: 4, diet: 4, sleep: 8 ;};
     ];
     // 批量推理
 const recommendations = [];
@@ -159,9 +149,9 @@ const recommendations = [];
       const input: TensorData = {data: new Float32Array([userData.age, userData.activity, userData.diet, userData.sleep]),
         dims: [1, 4],
         type: "float32"
-      };
+      ;};
       const result = await manager.smartInference(model.id, { input }, {useCache: true,)
-        preprocessInputs: true,
+        preprocessInputs: true;
         postprocessOutputs: true;
       });
       recommendations.push(parseLifestyleRecommendation(result));
@@ -200,10 +190,10 @@ export async function systemMonitoringExample() {try {const manager = createONNX
 const model = await manager.deployModel("/models/    tcm_diagnosis.onnx);"
     // 执行多次推理以收集性能数据
 for (let i = 0; i < 10; i++) {
-      const input: TensorData = {data: new Float32Array(Array.from({ length: 100 }, () => Math.random())),
+      const input: TensorData = {data: new Float32Array(Array.from({ length: 100 ;}, () => Math.random())),
         dims: [1, 100],
         type: "float32"
-      };
+      ;};
       await manager.smartInference(model.id, { input });
     }
     // 获取系统状态
@@ -228,12 +218,12 @@ const syndromeOutput = outputs["syndrome];"
     return {syndrome: {type: getSyndromeType(syndromeProbs.indexOf(Math.max(...syndromeProbs))),confidence: Math.max(...syndromeProbs);
       },
       constitution: {,
-  type: getConstitutionType(constitutionProbs.indexOf(Math.max(...constitutionProbs))),
+  type: getConstitutionType(constitutionProbs.indexOf(Math.max(...constitutionProbs)));
         confidence: Math.max(...constitutionProbs);
       };
     };
   }
-  return { error: 诊断结果解析失败" };"
+
 }
 function parseHealthAssessment(outputs: Record<string, TensorData>) {
   const scoreOutput = outputs["health_score];"
@@ -242,7 +232,7 @@ function parseHealthAssessment(outputs: Record<string, TensorData>) {
     return {overallScore: Array.from(scoreOutput.data)[0] * 100,riskFactors: Array.from(riskOutput.data),recommendation: getHealthRecommendation(Array.from(scoreOutput.data)[0]);
     };
   }
-  return { error: 健康评估解析失败" };"
+
 }
 function parseLifestyleRecommendation(outputs: Record<string, TensorData>) {
   const recommendationOutput = outputs["recommendations];"
@@ -251,45 +241,45 @@ function parseLifestyleRecommendation(outputs: Record<string, TensorData>) {
     return {exercise: recommendations[0],diet: recommendations[1],sleep: recommendations[2],stress: recommendations[3];
     };
   }
-  return { error: "生活方式推荐解析失败" };
+
 }
 async function performanceComparison()
-  manager: ONNXRuntimeManager,
-  originalModel: ONNXModel,
+  manager: ONNXRuntimeManager;
+  originalModel: ONNXModel;
   optimizedModel: ONNXModel;
 ) {
-  const testInput: TensorData = {data: new Float32Array(Array.from({ length: 100 }, () => Math.random())),
+  const testInput: TensorData = {data: new Float32Array(Array.from({ length: 100 ;}, () => Math.random())),
     dims: [1, 100],
     type: "float32"
-  };
+  ;};
   // 测试原始模型
 await manager.getInferenceEngine().loadModel(originalModel);
   const originalStart = performance.now();
-  await manager.smartInference(originalModel.id, { input: testInput });
+  await manager.smartInference(originalModel.id, { input: testInput ;});
   const originalTime = performance.now() - originalStart;
   // 测试优化模型
 await manager.getInferenceEngine().loadModel(optimizedModel);
   const optimizedStart = performance.now();
-  await manager.smartInference(optimizedModel.id, { input: testInput });
+  await manager.smartInference(optimizedModel.id, { input: testInput ;});
   const optimizedTime = performance.now() - optimizedStart;
   }ms`);
   }ms`);
   .toFixed(2)}x`);
 }
 function getSyndromeType(index: number): string {
-  const syndromes = ["气虚", " 血虚", "阴虚, "阳虚", " 气滞", "血瘀, "痰湿", " 湿热"];"
-  return syndromes[index] || "未知;"
-}
+
+
+;}
 function getConstitutionType(index: number): string {
-  const constitutions = ["平和质", " 气虚质", "阳虚质, "阴虚质", " 痰湿质", "湿热质, "血瘀质", " 气郁质", "特禀质];
-  return constitutions[index] || "未知";
-}
+
+
+;}
 function getHealthRecommendation(score: number): string {
-  if (score > 0.8) return 健康状况良好，继续保持
-  if (score > 0.6) return "健康状况一般，建议改善生活方式;"
-  if (score > 0.4) return "存在健康风险，建议咨询医生";
-  return 健康状况较差，建议立即就医
-}
+
+
+
+
+;}
 // 导出所有示例函数
 export const examples = {basicUsageExample,tcmDiagnosisExample,healthAssessmentExample,advancedOptimizationExample,batchProcessingExample,tensorProcessingExample,systemMonitoringExample;
 };

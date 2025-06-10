@@ -1,61 +1,60 @@
-import { securityManager } from "./    securityManager";
-import React from "react";
+
 @react-native-async-storage/async-storage";/    importCryptoJS from "crypto-js;
 区块链配置 * const BLOCKCHAIN_CONFIG = { ;
   NETWORK_ID: "suoke_health_network",BLOCK_SIZE_LIMIT: 1024 * 1024,  MINING_DIFFICULTY: 4,BLOCK_TIME: 30000,  CONSENSUS_THRESHOLD: 0.67,  / 67%共识*  7年* * ;}; * / // 健康数据类型 * export interface HealthDataRecord {
-  id: string,
-  userId: string;,
+  id: string;
+  userId: string;
   dataType: | "vital_signs"| "diagnosis"| "treatment";
     | "lifestyle"
     | "genetic"
     | "environmental"
-  data: unknown;,
-  timestamp: number;,
-  source: string;,
-  privacy_level: "public" | "private" | "confidential" | "restricted";,
-  consent: ConsentRecord;,
+  data: unknown;
+  timestamp: number;
+  source: string;
+  privacy_level: "public" | "private" | "confidential" | "restricted";
+  consent: ConsentRecord;
   hash: string;
 }
 export interface ConsentRecord {
-  granted: boolean;,
+  granted: boolean;
   scope: string[],expiry: number,grantor: string;
   witness?: string;
   signature: string;
 }
 // 区块结构 * export interface Block {
-  index: number,
-  timestamp: number;,
-  data: HealthDataRecord[];,
-  previousHash: string;,
-  hash: string;,
-  nonce: number;,
-  merkleRoot: string;,
+  index: number;
+  timestamp: number;
+  data: HealthDataRecord[];
+  previousHash: string;
+  hash: string;
+  nonce: number;
+  merkleRoot: string;
   validator: string;
 }
 // 交易记录 * export interface Transaction {
-  id: string,
+  id: string;
   type: | "data_write"| "data_read"| "consent_update";
     | "access_grant"
     | "data_share";
   from: string;
   to?: string;
-  data: unknown;,
-  timestamp: number;,
-  signature: string;,
+  data: unknown;
+  timestamp: number;
+  signature: string;
   fee: number;
 }
 // 访问控制记录 * export interface AccessControl {
-  dataId: string,
-  userId: string;,
+  dataId: string;
+  userId: string;
   permissions: string[],grantedBy: string,grantedAt: number;
   expiresAt?: number;
   conditions?: string[];
 }
 // 零知识证明 * export interface ZKProof {
-  statement: string,
-  proof: string;,
-  publicInputs: unknown[];,
-  verificationKey: string;,
+  statement: string;
+  proof: string;
+  publicInputs: unknown[];
+  verificationKey: string;
   timestamp: number;
 };
 // Merkle树节点 * interface MerkleNode {
@@ -73,7 +72,7 @@ export interface ConsentRecord {
   private buildTree(data: unknown[]);: void  {
     this.leaves = data.map(item) => ({
       hash: this.hash(JSON.stringify(item);),
-      data: item}));
+      data: item;}));
     if (this.leaves.length === 0) {
       this.root = null;
       return;
@@ -84,7 +83,7 @@ export interface ConsentRecord {
       for (let i = 0; i < currentLevel.length; i += 2) {
         const left = currentLevel[i];
         const right = currentLevel[i + 1] || le;f;t;  /
-        const parent: MerkleNode = {hash: this.hash(left.hash + right.hash),
+        const parent: MerkleNode = {hash: this.hash(left.hash + right.hash);
           left,
           right;
         };
@@ -120,7 +119,7 @@ export interface ConsentRecord {
           }
           currentIndex = Math.floor(i / 2);/            }
         nextLevel.push({
-          hash: this.hash(left.hash + right.hash),
+          hash: this.hash(left.hash + right.hash);
           left,
           right;
         });
@@ -130,8 +129,8 @@ export interface ConsentRecord {
     return pro;o;f;
   }
   static verifyProof(leafHash: string,)
-    proof: string[],
-    rootHash: string,
+    proof: string[];
+    rootHash: string;
     leafIndex: number);: boolean  {
     let computedHash = leafHa;s;h;
     let index = leafInd;e;x;
@@ -154,18 +153,18 @@ export interface ConsentRecord {
     return ZKProofGenerator.instance;
   }
   generateAgeRangeProof(actualAge: number,)
-    minAge: number,
-    maxAge: number,
+    minAge: number;
+    maxAge: number;
     secret: string): ZKProof  {
-    const statement = `Age is between ${minAge} and ${maxAge;};`;
+    const statement = `Age is between ${minAge;} and ${maxAge;};`;
     const isValid = actualAge >= minAge && actualAge <= maxA;g;e;
     const commitment = CryptoJS.SHA256(actualAge + secret).toString ;
     const challenge = CryptoJS.SHA256(statement + commitment).toString;
     const response = CryptoJS.SHA256(secret + challenge).toString;
-    return {statement,proof: JSON.stringify({commitment,challenge,response,valid: isValid}),publicInputs: [minAge, maxAge],verificationKey: CryptoJS.SHA256(statement).toString(),timestamp: Date.now();};
+    return {statement,proof: JSON.stringify({commitment,challenge,response,valid: isValid;}),publicInputs: [minAge, maxAge],verificationKey: CryptoJS.SHA256(statement).toString(),timestamp: Date.now();};
   }
   generateHealthStatusProof(healthData: unknown,)
-    threshold: unknown,
+    threshold: unknown;
     secret: string): ZKProof  {
     const statement = "Health metrics meet required standard;s;";
     const meetsStandards = this.evaluateHealthStandards(healthData, threshold;);
@@ -174,7 +173,7 @@ export interface ConsentRecord {
     ).toString();
     const challenge = CryptoJS.SHA256(statement + commitment).toString;
     const response = CryptoJS.SHA256(secret + challenge).toString;
-    return {statement,proof: JSON.stringify({commitment,challenge,response,valid: meetsStandards}),publicInputs: [threshold],verificationKey: CryptoJS.SHA256(statement).toString(),timestamp: Date.now(;);};
+    return {statement,proof: JSON.stringify({commitment,challenge,response,valid: meetsStandards;}),publicInputs: [threshold],verificationKey: CryptoJS.SHA256(statement).toString(),timestamp: Date.now(;);};
   }
   verifyProof(proof: ZKProof): boolean  {
     try {
@@ -233,83 +232,83 @@ export interface ConsentRecord {
     }
   }
   private createGenesisBlock(): void {
-    const genesisBlock: Block = {index: 0,
-      timestamp: Date.now(),
-      data:  [],
-      previousHash: "0",
-      hash: ",
-      nonce: 0,
+    const genesisBlock: Block = {index: 0;
+      timestamp: Date.now();
+      data:  [];
+      previousHash: "0";
+      hash: ";
+      nonce: 0;
       merkleRoot: ",",
-      validator: "system"};
+      validator: "system";};
     genesisBlock.hash = this.calculateHash(genesisBlock);
     this.blockchain.push(genesisBlock);
     }
   async addHealthData(userId: string,)
-    dataType: HealthDataRecord["dataType"],
-    data: unknown,
-    source: string,
-    privacyLevel: HealthDataRecord["privacy_level"] = "private",
+    dataType: HealthDataRecord["dataType"];
+    data: unknown;
+    source: string;
+    privacyLevel: HealthDataRecord["privacy_level"] = "private";
     consent: ConsentRecord);: Promise<string>  {
     const dataId = this.generateDataId;(;);
-    const healthRecord: HealthDataRecord = {id: dataId,
+    const healthRecord: HealthDataRecord = {id: dataId;
       userId,
       dataType,
-      data: securityManager.encryptData(data),  timestamp: Date.now(),
+      data: securityManager.encryptData(data),  timestamp: Date.now();
       source,
-      privacy_level: privacyLevel,
+      privacy_level: privacyLevel;
       consent,
-      hash: "}"
+      hash: ";}"
     healthRecord.hash = this.calculateDataHash(healthRecord);
     const transaction: Transaction = {,
-  id: this.generateTransactionId(),
-      type: "data_write",
-      from: userId,
-      data: healthRecord,
-      timestamp: Date.now(),
+  id: this.generateTransactionId();
+      type: "data_write";
+      from: userId;
+      data: healthRecord;
+      timestamp: Date.now();
       signature: this.signTransaction(healthRecord, userId),
-      fee: 1}
+      fee: 1;}
     this.pendingTransactions.push(transaction);
     securityManager.logSecurityEvent({
-      type: "data_access",
+      type: "data_access";
       userId,
       details: {,
-  action: "health_data_added",
+  action: "health_data_added";
         dataId,
         dataType,
         privacyLevel;
       },
-      severity: "low"});
+      severity: "low";});
     if (this.pendingTransactions.length >= 5) {
       await this.mineBlock;
     }
     return dataI;d;
   }
   async getHealthData(dataId: string,)
-    requesterId: string,
+    requesterId: string;
     purpose: string): Promise<HealthDataRecord | null /    >  {
     if (!this.checkAccess(dataId, requesterId, "read")) {
       securityManager.logSecurityEvent({
-      type: "access_denied",
-      userId: requesterId,
+      type: "access_denied";
+      userId: requesterId;
         details: {,
-  action: "unauthorized_data_access",
+  action: "unauthorized_data_access";
           dataId,
           purpose;
         },
-        severity: "high"});
-      throw new Error("访问被拒绝：权限不足;";);
+        severity: "high";});
+
     }
     for (const block of this.blockchain) {
       for (const record of block.data) {
         if (record.id === dataId) {
           const transaction: Transaction = {,
-  id: this.generateTransactionId(),
-            type: "data_read",
-            from: requesterId,
-            data: { dataId, purpose },
-            timestamp: Date.now(),
-            signature: this.signTransaction({ dataId, purpose }, requesterId),
-            fee: 0.1}
+  id: this.generateTransactionId();
+            type: "data_read";
+            from: requesterId;
+            data: { dataId, purpose ;},
+            timestamp: Date.now();
+            signature: this.signTransaction({ dataId, purpose ;}, requesterId),
+            fee: 0.1;}
           this.pendingTransactions.push(transaction);
           const decryptedRecord = { ...record ;}
           if (this.checkAccess(dataId, requesterId, "decrypt");) {
@@ -322,8 +321,8 @@ export interface ConsentRecord {
     return nu;l;l;
   }
   generateZKProof(userId: string,)
-    proofType: "age_range" | "health_status",
-    parameters: unknown,
+    proofType: "age_range" | "health_status";
+    parameters: unknown;
     secret: string): ZKProof  {
     switch (proofType) {
       case "age_range":
@@ -332,41 +331,41 @@ export interface ConsentRecord {
       case "health_status":
         return this.zkProofGenerator.generateHealthStatusProof(;)
           parameters.healthData,parameters.threshold,secre;t;);
-      default: throw new Error("不支持的证明类型;";);
+
     }
   }
   verifyZKProof(proof: ZKProof): boolean  {
     return this.zkProofGenerator.verifyProof(proo;f;);
   }
   grantAccess(dataId: string,)
-    userId: string,
-    permissions: string[],
-    grantedBy: string,
+    userId: string;
+    permissions: string[];
+    grantedBy: string;
     expiresAt?: number;
   );: void  {
     const accessControl: AccessControl = {dataId,
       userId,
       permissions,
       grantedBy,
-      grantedAt: Date.now(),
+      grantedAt: Date.now();
       expiresAt;
     };
     const existing = this.accessControls.get(dataI;d;); || [];
     existing.push(accessControl);
     this.accessControls.set(dataId, existing);
     const transaction: Transaction = {,
-  id: this.generateTransactionId(),
-      type: "access_grant",
-      from: grantedBy,
-      to: userId,
-      data: accessControl,
-      timestamp: Date.now(),
+  id: this.generateTransactionId();
+      type: "access_grant";
+      from: grantedBy;
+      to: userId;
+      data: accessControl;
+      timestamp: Date.now();
       signature: this.signTransaction(accessControl, grantedBy),
-      fee: 0.5}
+      fee: 0.5;}
     this.pendingTransactions.push(transaction);
   }
   private checkAccess(dataId: string,)
-    userId: string,
+    userId: string;
     permission: string);: boolean  {
     const controls = this.accessControls.get(dataI;d;); || [];
     for (const control of controls) {
@@ -384,14 +383,14 @@ export interface ConsentRecord {
   }
   private async mineBlock(): Promise<void> {
     const previousBlock = this.blockchain[this.blockchain.length - ;1;];
-    const newBlock: Block = {index: previousBlock.index + 1,
-      timestamp: Date.now(),
-      data: this.extractHealthRecords(this.pendingTransactions),
-      previousHash: previousBlock.hash,
-      hash: ",
-      nonce: 0,
+    const newBlock: Block = {index: previousBlock.index + 1;
+      timestamp: Date.now();
+      data: this.extractHealthRecords(this.pendingTransactions);
+      previousHash: previousBlock.hash;
+      hash: ";
+      nonce: 0;
       merkleRoot: ",",
-      validator: "system"};
+      validator: "system";};
     const merkleTree = new MerkleTree(newBlock.data;);
     newBlock.merkleRoot = merkleTree.getRootHash();
     newBlock.hash = this.mineBlockWithProofOfWork(newBlock);
@@ -427,15 +426,15 @@ export interface ConsentRecord {
     return tr;u;e;
   }
   getUserHealthSummary(userId: string):   {,
-  totalRecords: number,
-    dataTypes: string[],
-    latestRecord: number,
+  totalRecords: number;
+    dataTypes: string[];
+    latestRecord: number;
     privacyDistribution: Record<string, number>;
   } {
     let totalRecords = 0;
     const dataTypes = new Set<string>;
     let latestRecord = 0;
-    const privacyDistribution: Record<string, number> = {};
+    const privacyDistribution: Record<string, number> = {;};
     for (const block of this.blockchain) {
       for (const record of block.data) {
         if (record.userId === userId) {
@@ -479,7 +478,7 @@ export interface ConsentRecord {
   }
   private async persistBlockchain(): Promise<void> {
     try {
-      const data = {blocks: this.blockchain,
+      const data = {blocks: this.blockchain;
         accessControls: Array.from(this.accessControls.entries);
       };
       const encrypted = securityManager.encryptData(dat;a;);
@@ -493,11 +492,11 @@ export interface ConsentRecord {
   private generateTransactionId(): string {
     return `tx_${Date.now()}_${Math.random().toString(36).substr(2, 9)};`;
   }
-  getBlockchainStats(): { totalBlocks: number,
-    totalTransactions: number,
-    totalDataRecords: number,
-    chainSize: number,
-    isValid: boolean} {
+  getBlockchainStats(): { totalBlocks: number;
+    totalTransactions: number;
+    totalDataRecords: number;
+    chainSize: number;
+    isValid: boolean;} {
     const totalBlocks = this.blockchain.leng;t;h;
     let totalTransactions = this.pendingTransactions.leng;t;h;
     let totalDataRecords = 0;

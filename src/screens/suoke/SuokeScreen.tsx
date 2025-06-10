@@ -18,36 +18,36 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const { width } = Dimensions.get('window');
 // 产品类型定义
 interface Product {
-  id: string;,
-  name: string;,
+  id: string;
+  name: string;
   price: number;
   originalPrice?: number;
-  image: string;,
-  category: string;,
-  rating: number;,
-  reviews: number;,
-  description: string;,
+  image: string;
+  category: string;
+  rating: number;
+  reviews: number;
+  description: string;
   tags: string[];
   isRecommended?: boolean;
   discount?: number;
 }
 // 服务类型定义
 interface Service {
-  id: string;,
-  title: string;,
-  subtitle: string;,
-  icon: string;,
-  color: string;,
+  id: string;
+  title: string;
+  subtitle: string;
+  icon: string;
+  color: string;
   description: string;
   price?: number;
   isPopular?: boolean;
 }
 // 分类类型定义
 interface Category {
-  id: string;,
-  name: string;,
-  icon: string;,
-  color: string;,
+  id: string;
+  name: string;
+  icon: string;
+  color: string;
   count: number;
 }
 const SuokeScreen: React.FC = () => {
@@ -62,148 +62,148 @@ const SuokeScreen: React.FC = () => {
   const generateProducts = (): Product[] => {
     return [
       {
-      id: "1",
-      name: '有机枸杞子',
-        price: 89,
-        originalPrice: 128,
-        image: '🍇',
-        category: 'herbs',
-        rating: 4.8,
-        reviews: 256,
-        description: '宁夏有机枸杞，富含花青素和维生素',
-        tags: ["有机", "养肝明目', '抗氧化'],
-        isRecommended: true,
-        discount: 30},
+      id: "1";
+
+        price: 89;
+        originalPrice: 128;
+        image: '🍇';
+        category: 'herbs';
+        rating: 4.8;
+        reviews: 256;
+
+
+        isRecommended: true;
+        discount: 30;},
       {
-      id: "2",
-      name: '野生灵芝片',
-        price: 299,
-        originalPrice: 399,
-        image: '🍄',
-        category: 'herbs',
-        rating: 4.9,
-        reviews: 189,
-        description: '长白山野生灵芝，增强免疫力',
-        tags: ["野生", "免疫调节', '安神'],
-        isRecommended: true,
-        discount: 25},
+      id: "2";
+
+        price: 299;
+        originalPrice: 399;
+        image: '🍄';
+        category: 'herbs';
+        rating: 4.9;
+        reviews: 189;
+
+
+        isRecommended: true;
+        discount: 25;},
       {
-      id: "3",
-      name: '蜂蜜柠檬茶',
-        price: 45,
-        image: '🍯',
-        category: 'tea',
-        rating: 4.6,
-        reviews: 432,
-        description: '天然蜂蜜配柠檬，清热润燥',
-        tags: ["天然", "润燥', '维C']},
+      id: "3";
+
+        price: 45;
+        image: '🍯';
+        category: 'tea';
+        rating: 4.6;
+        reviews: 432;
+
+
       {
-      id: "4",
-      name: '养生药膳包',
-        price: 168,
-        originalPrice: 218,
-        image: '🥘',
-        category: 'food',
-        rating: 4.7,
-        reviews: 98,
-        description: '精选药食同源食材，滋补养生',
-        tags: ["药膳", "滋补', '调理'],
-        discount: 23},
+      id: "4";
+
+        price: 168;
+        originalPrice: 218;
+        image: '🥘';
+        category: 'food';
+        rating: 4.7;
+        reviews: 98;
+
+
+        discount: 23;},
       {
-      id: "5",
-      name: '艾灸贴',
-        price: 78,
-        image: '🔥',
-        category: 'therapy',
-        rating: 4.5,
-        reviews: 167,
-        description: '便携式艾灸贴，温经散寒',
-        tags: ["艾灸", "温经', '便携']},
+      id: "5";
+
+        price: 78;
+        image: '🔥';
+        category: 'therapy';
+        rating: 4.5;
+        reviews: 167;
+
+
       {
-      id: "6",
-      name: '刮痧板套装',
-        price: 128,
-        originalPrice: 168,
-        image: '💎',
-        category: 'therapy',
-        rating: 4.8,
-        reviews: 234,
-        description: '天然牛角刮痧板，疏通经络',
-        tags: ["刮痧", "经络', '天然'],
-        discount: 24}];
+      id: "6";
+
+        price: 128;
+        originalPrice: 168;
+        image: '💎';
+        category: 'therapy';
+        rating: 4.8;
+        reviews: 234;
+
+
+        discount: 24;}];
   };
   // 生成模拟服务数据
   const generateServices = (): Service[] => {
     return [
       {
-      id: "1",
-      title: '名医问诊',
-        subtitle: '三甲医院专家在线',
-        icon: 'doctor',
-        color: '#FF6B6B',
-        description: '预约知名中医专家，一对一健康咨询',
-        price: 299,
-        isPopular: true},
+      id: "1";
+
+
+        icon: 'doctor';
+        color: '#FF6B6B';
+
+        price: 299;
+        isPopular: true;},
       {
-      id: "2",
-      title: '体质检测',
-        subtitle: 'AI智能分析体质',
-        icon: 'heart-pulse',
-        color: '#4ECDC4',
-        description: '通过AI分析，精准识别个人体质类型',
-        price: 99,
-        isPopular: true},
+      id: "2";
+
+
+        icon: 'heart-pulse';
+        color: '#4ECDC4';
+
+        price: 99;
+        isPopular: true;},
       {
-      id: "3",
-      title: '健康档案',
-        subtitle: '个人健康数据管理',
-        icon: 'file-document',
-        color: '#45B7D1',
-        description: '建立完整健康档案，追踪健康变化',
-        price: 0},
+      id: "3";
+
+
+        icon: 'file-document';
+        color: '#45B7D1';
+
+        price: 0;},
       {
-      id: "4",
-      title: '养生计划',
-        subtitle: '个性化养生方案',
-        icon: 'calendar-check',
-        color: '#96CEB4',
-        description: '根据体质制定专属养生计划',
-        price: 199},
+      id: "4";
+
+
+        icon: 'calendar-check';
+        color: '#96CEB4';
+
+        price: 199;},
       {
-      id: "5",
-      title: '膳食指导',
-        subtitle: '营养师专业指导',
-        icon: 'food-apple',
-        color: '#FECA57',
-        description: '专业营养师提供饮食调理建议',
-        price: 149},
+      id: "5";
+
+
+        icon: 'food-apple';
+        color: '#FECA57';
+
+        price: 149;},
       {
-      id: "6",
-      title: '运动康复',
-        subtitle: '康复师指导训练',
-        icon: 'run',
-        color: '#FF9FF3',
-        description: '专业康复师制定运动康复方案',
-        price: 249}];
+      id: "6";
+
+
+        icon: 'run';
+        color: '#FF9FF3';
+
+        price: 249;}];
   };
   // 生成分类数据
   const generateCategories = (): Category[] => {
     return [
       {
-      id: "all",
-      name: '全部', icon: 'view-grid', color: '#666', count: 0 },
+      id: "all";
+
       {
-      id: "herbs",
-      name: '中药材', icon: 'leaf', color: '#4CAF50', count: 2 },
+      id: "herbs";
+
       {
-      id: "tea",
-      name: '养生茶', icon: 'coffee', color: '#FF9800', count: 1 },
+      id: "tea";
+
       {
-      id: "food",
-      name: '药膳', icon: 'food', color: '#E91E63', count: 1 },
+      id: "food";
+
       {
-      id: "therapy",
-      name: '理疗', icon: 'medical-bag', color: '#9C27B0', count: 2 }];
+      id: "therapy";
+
   };
   // 加载数据
   const loadData = useCallback(async () => {
@@ -218,8 +218,8 @@ const SuokeScreen: React.FC = () => {
       setServices(servicesData);
       setCategories(categoriesData);
     } catch (error) {
-      console.error('加载数据失败:', error);
-      Alert.alert("错误", "加载数据失败，请稍后重试');
+
+
     } finally {
       setLoading(false);
     }
@@ -242,31 +242,31 @@ const SuokeScreen: React.FC = () => {
   const handleProductPress = (product: Product) => {
     Alert.alert()
       product.name,
-      `${product.description}\n\n价格: ¥${product.price}`,
+
       [
         {
-      text: "取消",
-      style: 'cancel' },
+
+      style: 'cancel' ;},
         {
-      text: "立即购买", "
-      onPress: () => console.log('购买:', product.name) },
+
+
         {
-      text: "加入购物车", "
-      onPress: () => console.log('加入购物车:', product.name) }],
+
+
     );
   };
   // 处理服务点击
   const handleServicePress = (service: Service) => {
     Alert.alert()
       service.title,
-      `${service.description}\n\n${service.price ? `价格: ¥${service.price}` : '免费服务'}`,
+
       [
         {
-      text: "取消",
-      style: 'cancel' },
+
+      style: 'cancel' ;},
         {
-      text: "立即预约", "
-      onPress: () => console.log('预约:', service.title) }],
+
+
     );
   };
   // 渲染轮播图
@@ -278,17 +278,17 @@ const SuokeScreen: React.FC = () => {
         showsHorizontalScrollIndicator={false}
         style={styles.bannerScroll}
       >
-        <View style={[styles.bannerItem, { backgroundColor: '#FF6B6B' }}]}>
+        <View style={[styles.bannerItem, { backgroundColor: '#FF6B6B' ;}}]}>
           <Text style={styles.bannerTitle}>春季养生特惠</Text>
           <Text style={styles.bannerSubtitle}>精选中药材 限时8折</Text>
           <Icon name="leaf" size={40} color="#FFFFFF" style={styles.bannerIcon}>
         </View>
-        <View style={[styles.bannerItem, { backgroundColor: '#4ECDC4' }}]}>
+        <View style={[styles.bannerItem, { backgroundColor: '#4ECDC4' ;}}]}>
           <Text style={styles.bannerTitle}>名医在线问诊</Text>
           <Text style={styles.bannerSubtitle}>三甲医院专家 24小时服务</Text>
           <Icon name="doctor" size={40} color="#FFFFFF" style={styles.bannerIcon}>
         </View>
-        <View style={[styles.bannerItem, { backgroundColor: '#45B7D1' }}]}>
+        <View style={[styles.bannerItem, { backgroundColor: '#45B7D1' ;}}]}>
           <Text style={styles.bannerTitle}>AI体质检测</Text>
           <Text style={styles.bannerSubtitle}>智能分析 精准调理</Text>
           <Icon name="brain" size={40} color="#FFFFFF" style={styles.bannerIcon}>
@@ -306,7 +306,7 @@ const SuokeScreen: React.FC = () => {
             style={[
               styles.categoryItem,
               selectedCategory === category.id && styles.categoryItemActive,
-              { borderColor: category.color }}]}
+              { borderColor: category.color ;}}]}
             onPress={() => setSelectedCategory(category.id)}
           >
             <Icon;
@@ -329,13 +329,13 @@ const SuokeScreen: React.FC = () => {
     </View>
   );
   // 渲染服务卡片
-  const renderServiceCard = ({ item }: { item: Service }) => ()
+  const renderServiceCard = ({ item }: { item: Service ;}) => ()
     <TouchableOpacity;
-      style={[styles.serviceCard, { borderLeftColor: item.color }}]}
+      style={[styles.serviceCard, { borderLeftColor: item.color ;}}]}
       onPress={() => handleServicePress(item)}
     >
       <View style={styles.serviceHeader}>
-        <View style={[styles.serviceIcon, { backgroundColor: item.color + '20' }}]}>
+        <View style={[styles.serviceIcon, { backgroundColor: item.color + '20' ;}}]}>
           <Icon name={item.icon} size={24} color={item.color} />
         </View>
         {item.isPopular  && <View style={styles.popularBadge}>
@@ -359,7 +359,7 @@ const SuokeScreen: React.FC = () => {
     </TouchableOpacity>
   );
   // 渲染产品卡片
-  const renderProductCard = ({ item }: { item: Product }) => ()
+  const renderProductCard = ({ item }: { item: Product ;}) => ()
     <TouchableOpacity;
       style={styles.productCard}
       onPress={() => handleProductPress(item)}
@@ -477,261 +477,261 @@ const SuokeScreen: React.FC = () => {
 };
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
-    backgroundColor: '#F8F9FA'},
+  flex: 1;
+    backgroundColor: '#F8F9FA';},
   scrollView: {,
-  flex: 1},
+  flex: 1;},
   loadingContainer: {,
-  flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'},
+  flex: 1;
+    justifyContent: 'center';
+    alignItems: 'center';},
   loadingText: {,
-  marginTop: 10,
-    fontSize: 16,
-    color: '#666'},
+  marginTop: 10;
+    fontSize: 16;
+    color: '#666';},
   header: {,
-  paddingHorizontal: 20,
-    paddingVertical: 20,
-    backgroundColor: '#FFFFFF'},
+  paddingHorizontal: 20;
+    paddingVertical: 20;
+    backgroundColor: '#FFFFFF';},
   headerTitle: {,
-  fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 4},
+  fontSize: 24;
+    fontWeight: 'bold';
+    color: '#333';
+    marginBottom: 4;},
   headerSubtitle: {,
-  fontSize: 14,
-    color: '#666'},
+  fontSize: 14;
+    color: '#666';},
   bannerContainer: {,
-  height: 120,
-    marginVertical: 10},
+  height: 120;
+    marginVertical: 10;},
   bannerScroll: {,
-  flex: 1},
+  flex: 1;},
   bannerItem: {,
-  width: width - 40,
-    marginHorizontal: 20,
-    borderRadius: 12,
-    padding: 20,
-    justifyContent: 'center',
-    position: 'relative'},
+  width: width - 40;
+    marginHorizontal: 20;
+    borderRadius: 12;
+    padding: 20;
+    justifyContent: 'center';
+    position: 'relative';},
   bannerTitle: {,
-  fontSize: 18,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    marginBottom: 4},
+  fontSize: 18;
+    fontWeight: 'bold';
+    color: '#FFFFFF';
+    marginBottom: 4;},
   bannerSubtitle: {,
-  fontSize: 14,
-    color: '#FFFFFF',
-    opacity: 0.9},
+  fontSize: 14;
+    color: '#FFFFFF';
+    opacity: 0.9;},
   bannerIcon: {,
-  position: 'absolute',
-    right: 20,
-    top: 20,
-    opacity: 0.3},
+  position: 'absolute';
+    right: 20;
+    top: 20;
+    opacity: 0.3;},
   section: {,
-  marginVertical: 10},
+  marginVertical: 10;},
   sectionHeader: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    marginBottom: 15},
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
+    paddingHorizontal: 20;
+    marginBottom: 15;},
   sectionTitle: {,
-  fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333'},
+  fontSize: 18;
+    fontWeight: 'bold';
+    color: '#333';},
   sectionMore: {,
-  fontSize: 14,
-    color: '#4A90E2'},
+  fontSize: 14;
+    color: '#4A90E2';},
   servicesList: {,
-  paddingHorizontal: 15},
+  paddingHorizontal: 15;},
   serviceCard: {,
-  width: 200,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    padding: 16,
-    marginHorizontal: 5,
-    borderLeftWidth: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3},
+  width: 200;
+    backgroundColor: '#FFFFFF';
+    borderRadius: 12;
+    padding: 16;
+    marginHorizontal: 5;
+    borderLeftWidth: 4;
+    shadowColor: '#000';
+    shadowOffset: { width: 0, height: 2 ;},
+    shadowOpacity: 0.1;
+    shadowRadius: 4;
+    elevation: 3;},
   serviceHeader: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 12},
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'flex-start';
+    marginBottom: 12;},
   serviceIcon: {,
-  width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center'},
+  width: 40;
+    height: 40;
+    borderRadius: 20;
+    justifyContent: 'center';
+    alignItems: 'center';},
   popularBadge: {,
-  backgroundColor: '#FF6B6B',
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 8},
+  backgroundColor: '#FF6B6B';
+    paddingHorizontal: 6;
+    paddingVertical: 2;
+    borderRadius: 8;},
   popularText: {,
-  fontSize: 10,
-    color: '#FFFFFF',
-    fontWeight: 'bold'},
+  fontSize: 10;
+    color: '#FFFFFF';
+    fontWeight: 'bold';},
   serviceTitle: {,
-  fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 4},
+  fontSize: 16;
+    fontWeight: 'bold';
+    color: '#333';
+    marginBottom: 4;},
   serviceSubtitle: {,
-  fontSize: 12,
-    color: '#666',
-    marginBottom: 8},
+  fontSize: 12;
+    color: '#666';
+    marginBottom: 8;},
   serviceDescription: {,
-  fontSize: 14,
-    color: '#666',
-    lineHeight: 20,
-    marginBottom: 12},
+  fontSize: 14;
+    color: '#666';
+    lineHeight: 20;
+    marginBottom: 12;},
   serviceFooter: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'},
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';},
   servicePrice: {,
-  fontSize: 16,
-    fontWeight: 'bold',
-    color: '#FF6B6B'},
+  fontSize: 16;
+    fontWeight: 'bold';
+    color: '#FF6B6B';},
   serviceFree: {,
-  fontSize: 16,
-    fontWeight: 'bold',
-    color: '#4CAF50'},
+  fontSize: 16;
+    fontWeight: 'bold';
+    color: '#4CAF50';},
   categoryContainer: {,
-  paddingHorizontal: 20,
-    marginBottom: 15},
+  paddingHorizontal: 20;
+    marginBottom: 15;},
   categoryItem: {,
-  flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 20,
-    borderWidth: 1,
-    marginRight: 10,
-    backgroundColor: '#FFFFFF',
-    position: 'relative'},
+  flexDirection: 'row';
+    alignItems: 'center';
+    paddingHorizontal: 12;
+    paddingVertical: 8;
+    borderRadius: 20;
+    borderWidth: 1;
+    marginRight: 10;
+    backgroundColor: '#FFFFFF';
+    position: 'relative';},
   categoryItemActive: {,
-  backgroundColor: '#4A90E2',
-    borderColor: '#4A90E2'},
+  backgroundColor: '#4A90E2';
+    borderColor: '#4A90E2';},
   categoryText: {,
-  fontSize: 14,
-    color: '#666',
-    marginLeft: 6},
+  fontSize: 14;
+    color: '#666';
+    marginLeft: 6;},
   categoryTextActive: {,
-  color: '#FFFFFF'},
+  color: '#FFFFFF';},
   categoryBadge: {,
-  position: 'absolute',
-    top: -5,
-    right: -5,
-    backgroundColor: '#FF6B6B',
-    borderRadius: 8,
-    minWidth: 16,
-    height: 16,
-    justifyContent: 'center',
-    alignItems: 'center'},
+  position: 'absolute';
+    top: -5;
+    right: -5;
+    backgroundColor: '#FF6B6B';
+    borderRadius: 8;
+    minWidth: 16;
+    height: 16;
+    justifyContent: 'center';
+    alignItems: 'center';},
   categoryBadgeText: {,
-  fontSize: 10,
-    color: '#FFFFFF',
-    fontWeight: 'bold'},
+  fontSize: 10;
+    color: '#FFFFFF';
+    fontWeight: 'bold';},
   productRow: {,
-  justifyContent: 'space-between',
-    paddingHorizontal: 20},
+  justifyContent: 'space-between';
+    paddingHorizontal: 20;},
   productCard: {,
-  width: (width - 50) / 2,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    padding: 12,
-    marginBottom: 15,
-    position: 'relative',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3},
+  width: (width - 50) / 2;
+    backgroundColor: '#FFFFFF';
+    borderRadius: 12;
+    padding: 12;
+    marginBottom: 15;
+    position: 'relative';
+    shadowColor: '#000';
+    shadowOffset: { width: 0, height: 2 ;},
+    shadowOpacity: 0.1;
+    shadowRadius: 4;
+    elevation: 3;},
   recommendedBadge: {,
-  position: 'absolute',
-    top: 8,
-    left: 8,
-    backgroundColor: '#4CAF50',
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 8,
-    zIndex: 1},
+  position: 'absolute';
+    top: 8;
+    left: 8;
+    backgroundColor: '#4CAF50';
+    paddingHorizontal: 6;
+    paddingVertical: 2;
+    borderRadius: 8;
+    zIndex: 1;},
   recommendedText: {,
-  fontSize: 10,
-    color: '#FFFFFF',
-    fontWeight: 'bold'},
+  fontSize: 10;
+    color: '#FFFFFF';
+    fontWeight: 'bold';},
   discountBadge: {,
-  position: 'absolute',
-    top: 8,
-    right: 8,
-    backgroundColor: '#FF6B6B',
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 8,
-    zIndex: 1},
+  position: 'absolute';
+    top: 8;
+    right: 8;
+    backgroundColor: '#FF6B6B';
+    paddingHorizontal: 6;
+    paddingVertical: 2;
+    borderRadius: 8;
+    zIndex: 1;},
   discountText: {,
-  fontSize: 10,
-    color: '#FFFFFF',
-    fontWeight: 'bold'},
+  fontSize: 10;
+    color: '#FFFFFF';
+    fontWeight: 'bold';},
   productImage: {,
-  height: 80,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 8},
+  height: 80;
+    justifyContent: 'center';
+    alignItems: 'center';
+    marginBottom: 8;},
   productEmoji: {,
-  fontSize: 40},
+  fontSize: 40;},
   productInfo: {,
-  flex: 1},
+  flex: 1;},
   productName: {,
-  fontSize: 14,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 4},
+  fontSize: 14;
+    fontWeight: 'bold';
+    color: '#333';
+    marginBottom: 4;},
   productDescription: {,
-  fontSize: 12,
-    color: '#666',
-    lineHeight: 16,
-    marginBottom: 8},
+  fontSize: 12;
+    color: '#666';
+    lineHeight: 16;
+    marginBottom: 8;},
   productTags: {,
-  flexDirection: 'row',
-    marginBottom: 8},
+  flexDirection: 'row';
+    marginBottom: 8;},
   productTag: {,
-  backgroundColor: '#F0F0F0',
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 8,
-    marginRight: 4},
+  backgroundColor: '#F0F0F0';
+    paddingHorizontal: 6;
+    paddingVertical: 2;
+    borderRadius: 8;
+    marginRight: 4;},
   productTagText: {,
-  fontSize: 10,
-    color: '#666'},
+  fontSize: 10;
+    color: '#666';},
   productRating: {,
-  flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8},
+  flexDirection: 'row';
+    alignItems: 'center';
+    marginBottom: 8;},
   ratingText: {,
-  fontSize: 12,
-    color: '#333',
-    marginLeft: 2},
+  fontSize: 12;
+    color: '#333';
+    marginLeft: 2;},
   reviewsText: {,
-  fontSize: 12,
-    color: '#999',
-    marginLeft: 4},
+  fontSize: 12;
+    color: '#999';
+    marginLeft: 4;},
   productPricing: {,
-  flexDirection: 'row',
-    alignItems: 'center'},
+  flexDirection: 'row';
+    alignItems: 'center';},
   productPrice: {,
-  fontSize: 16,
-    fontWeight: 'bold',
-    color: '#FF6B6B'},
+  fontSize: 16;
+    fontWeight: 'bold';
+    color: '#FF6B6B';},
   originalPrice: {,
-  fontSize: 12,
-    color: '#999',
-    textDecorationLine: 'line-through',
-    marginLeft: 6}});
+  fontSize: 12;
+    color: '#999';
+    textDecorationLine: 'line-through';
+    marginLeft: 6;}});
 export default SuokeScreen;

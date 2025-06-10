@@ -1,14 +1,14 @@
 import { getCurrentEnvConfig } from '../constants/config';
 // 流式事件类型
 export interface StreamEvent {
-  type: 'benchmark_progress' | 'benchmark_complete' | 'benchmark_error' | 'system_status';,
-  data: any;,
+  type: 'benchmark_progress' | 'benchmark_complete' | 'benchmark_error' | 'system_status';
+  data: any;
   timestamp: string;
 }
 // 流式配置
 export interface StreamConfig {
-  benchmark_id: string;,
-  model_id: string;,
+  benchmark_id: string;
+  model_id: string;
   total_samples: number;
 }
 // 事件监听器类型
@@ -39,26 +39,26 @@ export class BenchmarkStreamingService {
     this.isConnecting = true;
     return new Promise(resolve, reject) => {try {this.ws = new WebSocket(`${this.baseUrl}/ws/streaming`);
         this.ws.onopen = () => {
-          console.log('WebSocket连接已建立');
+
           this.isConnecting = false;
           this.reconnectAttempts = 0;
           resolve();
         };
         this.ws.onerror = error => {
-          console.error('WebSocket连接错误:', error);
+
           this.isConnecting = false;
-          reject(new Error('WebSocket连接失败'));
+
         };
         this.ws.onmessage = event => {
           try {
             const streamEvent: StreamEvent = JSON.parse(event.data);
             this.handleMessage(streamEvent);
           } catch (error) {
-            console.error('解析WebSocket消息失败:', error);
+
           }
         };
         this.ws.onclose = event => {
-          console.log('WebSocket连接已关闭:', event.code, event.reason);
+
           this.isConnecting = false;
           this.ws = null;
           // 自动重连
@@ -93,12 +93,12 @@ export class BenchmarkStreamingService {
   subscribeToEvents(eventTypes: string[]): void {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
       const message = {
-      command: "subscribe",
+      command: "subscribe";
       event_types: eventTypes;
       };
       this.ws.send(JSON.stringify(message));
     } else {
-      console.warn('WebSocket未连接，无法订阅事件');
+
     }
   }
   /**
@@ -107,7 +107,7 @@ export class BenchmarkStreamingService {
   unsubscribeFromEvents(eventTypes: string[]): void {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
       const message = {
-      command: "unsubscribe",
+      command: "unsubscribe";
       event_types: eventTypes;
       };
       this.ws.send(JSON.stringify(message));
@@ -122,7 +122,7 @@ export class BenchmarkStreamingService {
       };
       this.ws.send(JSON.stringify(message));
     } else {
-      throw new Error('WebSocket未连接，无法启动流式测试');
+
     }
   }
   /**
@@ -131,7 +131,7 @@ export class BenchmarkStreamingService {
   stopStreamingBenchmark(benchmarkId: string): void {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
       const message = {
-      command: "stop_benchmark",
+      command: "stop_benchmark";
       benchmark_id: benchmarkId;
       };
       this.ws.send(JSON.stringify(message));
@@ -168,7 +168,7 @@ export class BenchmarkStreamingService {
         try {
           listener(event);
         } catch (error) {
-          console.error('事件监听器执行错误:', error);
+
         }
       });
     }
@@ -179,7 +179,7 @@ export class BenchmarkStreamingService {
         try {
           listener(event);
         } catch (error) {
-          console.error('通用事件监听器执行错误:', error);
+
         }
       });
     }
@@ -197,7 +197,7 @@ export class BenchmarkStreamingService {
       case WebSocket.CLOSING:
         return 'CLOSING';
       case WebSocket.CLOSED:
-        return 'CLOSED',
+        return 'CLOSED';
   default:
         return 'UNKNOWN';
     }
@@ -214,7 +214,7 @@ export class BenchmarkStreamingService {
   sendHeartbeat(): void {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
       const message = {
-      command: "ping",
+      command: "ping";
       timestamp: new Date().toISOString();
       };
       this.ws.send(JSON.stringify(message));

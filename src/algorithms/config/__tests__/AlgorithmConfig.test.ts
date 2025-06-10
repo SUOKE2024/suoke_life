@@ -47,11 +47,11 @@ describe('AlgorithmConfig Performance Tests', () => {
   });
   it('should handle large datasets efficiently', () => {
     const largeConfig = {
-      looking: { enabled: true },
-      listening: { enabled: true },
-      inquiry: { enabled: true },
-      palpation: { enabled: true },
-      calculation: { enabled: true },
+      looking: { enabled: true ;},
+      listening: { enabled: true ;},
+      inquiry: { enabled: true ;},
+      palpation: { enabled: true ;},
+      calculation: { enabled: true ;},
     };
     const startTime = performance.now();
     // Test with large dataset

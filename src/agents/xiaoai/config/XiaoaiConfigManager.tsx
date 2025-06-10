@@ -20,229 +20,229 @@ const CONFIG_KEY_PREFIX = 'xiaoai_config_';
 const CONFIG_VERSION = '1.0.0';
 
 const DEFAULT_CONFIG: XiaoaiConfig = {
-  version: CONFIG_VERSION,
-  enabled: true,
-  debugMode: false,
+  version: CONFIG_VERSION;
+  enabled: true;
+  debugMode: false;
   personality: {
-    style: 'caring',
-    tone: 'warm',
-    expertise: 'health',
-    patience: 'high',
-    empathy: 'high',
-    culturalSensitivity: 'high',
+    style: 'caring';
+    tone: 'warm';
+    expertise: 'health';
+    patience: 'high';
+    empathy: 'high';
+    culturalSensitivity: 'high';
   },
   voice: {
-    gender: 'female',
-    age: 'adult',
-    tone: 'warm',
-    speed: 'normal',
-    language: 'zh',
-    dialect: undefined,
+    gender: 'female';
+    age: 'adult';
+    tone: 'warm';
+    speed: 'normal';
+    language: 'zh';
+    dialect: undefined;
   },
   diagnosis: {
     look: {
-      enabled: true,
-      faceAnalysis: true,
-      tongueAnalysis: true,
-      bodyAnalysis: true,
-      imageQuality: 'high',
-      confidenceThreshold: 0.7,
+      enabled: true;
+      faceAnalysis: true;
+      tongueAnalysis: true;
+      bodyAnalysis: true;
+      imageQuality: 'high';
+      confidenceThreshold: 0.7;
     },
     listen: {
-      enabled: true,
-      voiceAnalysis: true,
-      breathingAnalysis: true,
-      coughAnalysis: true,
-      audioQuality: 'high',
-      noiseReduction: true,
-      confidenceThreshold: 0.7,
+      enabled: true;
+      voiceAnalysis: true;
+      breathingAnalysis: true;
+      coughAnalysis: true;
+      audioQuality: 'high';
+      noiseReduction: true;
+      confidenceThreshold: 0.7;
     },
     inquiry: {
-      enabled: true,
-      maxQuestions: 20,
-      adaptiveQuestioning: true,
-      followUpEnabled: true,
-      contextAware: true,
-      multiLanguageSupport: true,
+      enabled: true;
+      maxQuestions: 20;
+      adaptiveQuestioning: true;
+      followUpEnabled: true;
+      contextAware: true;
+      multiLanguageSupport: true;
     },
     palpation: {
-      enabled: true,
-      pulseAnalysis: true,
-      pressurePointAnalysis: true,
-      sensorCalibration: 'auto',
-      dataQuality: 'high',
-      confidenceThreshold: 0.7,
+      enabled: true;
+      pulseAnalysis: true;
+      pressurePointAnalysis: true;
+      sensorCalibration: 'auto';
+      dataQuality: 'high';
+      confidenceThreshold: 0.7;
     },
     calculation: {
-      enabled: true,
-      algorithmType: 'hybrid',
-      mlModelVersion: 'latest',
-      ruleEngineVersion: 'v2',
-      confidenceThreshold: 0.8,
-      explainabilityLevel: 'detailed',
+      enabled: true;
+      algorithmType: 'hybrid';
+      mlModelVersion: 'latest';
+      ruleEngineVersion: 'v2';
+      confidenceThreshold: 0.8;
+      explainabilityLevel: 'detailed';
     },
     integration: {
-      enabled: true,
+      enabled: true;
       weightDistribution: {
-        look: 0.25,
-        listen: 0.25,
-        inquiry: 0.25,
-        palpation: 0.25,
+        look: 0.25;
+        listen: 0.25;
+        inquiry: 0.25;
+        palpation: 0.25;
       },
-      minimumDiagnosisTypes: 2,
-      confidenceAggregation: 'weighted_average',
+      minimumDiagnosisTypes: 2;
+      confidenceAggregation: 'weighted_average';
     },
   },
   healthAnalysis: {
     dataCollection: {
-      enabled: true,
-      frequency: 'daily',
-      autoSync: true,
+      enabled: true;
+      frequency: 'daily';
+      autoSync: true;
       dataTypes: ['vitals', 'symptoms', 'lifestyle', 'environment'],
-      privacyMode: 'standard',
+      privacyMode: 'standard';
     },
     trendAnalysis: {
-      enabled: true,
+      enabled: true;
       lookbackPeriod: 30, // 天
       predictionHorizon: 7, // 天
-      patternRecognition: true,
+      patternRecognition: true;
     },
     riskAssessment: {
-      enabled: true,
+      enabled: true;
       factors: ['genetic', 'lifestyle', 'environmental', 'medical_history'],
-      updateFrequency: 'weekly',
+      updateFrequency: 'weekly';
       alertThresholds: {
-        low: 0.3,
-        medium: 0.6,
-        high: 0.8,
-        critical: 0.95,
+        low: 0.3;
+        medium: 0.6;
+        high: 0.8;
+        critical: 0.95;
       },
     },
     recommendations: {
-      enabled: true,
-      personalized: true,
-      evidenceBased: true,
-      culturallyAdapted: true,
-      maxRecommendations: 10,
-      updateFrequency: 'daily',
+      enabled: true;
+      personalized: true;
+      evidenceBased: true;
+      culturallyAdapted: true;
+      maxRecommendations: 10;
+      updateFrequency: 'daily';
     },
   },
   accessibility: {
-    enabled: false,
+    enabled: false;
     features: {
       visualImpairment: {
-        enabled: false,
-        screenReader: true,
-        highContrast: false,
-        largeText: false,
-        colorBlindMode: 'none',
+        enabled: false;
+        screenReader: true;
+        highContrast: false;
+        largeText: false;
+        colorBlindMode: 'none';
       },
       hearingImpairment: {
-        enabled: false,
-        visualAlerts: true,
-        captioning: true,
-        signLanguageSupport: false,
+        enabled: false;
+        visualAlerts: true;
+        captioning: true;
+        signLanguageSupport: false;
       },
       motorImpairment: {
-        enabled: false,
-        voiceControl: true,
-        gestureSimplification: true,
-        dwellClicking: false,
+        enabled: false;
+        voiceControl: true;
+        gestureSimplification: true;
+        dwellClicking: false;
       },
       cognitiveSupport: {
-        enabled: false,
-        simplifiedInterface: true,
-        stepByStepGuidance: true,
-        memoryAids: true,
+        enabled: false;
+        simplifiedInterface: true;
+        stepByStepGuidance: true;
+        memoryAids: true;
       },
     },
     elderlyMode: {
-      enabled: false,
-      largerButtons: true,
-      simplifiedNavigation: true,
-      voiceGuidance: true,
-      reminderSupport: true,
+      enabled: false;
+      largerButtons: true;
+      simplifiedNavigation: true;
+      voiceGuidance: true;
+      reminderSupport: true;
     },
   },
   language: {
-    primary: 'zh',
-    secondary: [],
-    autoDetect: true,
-    dialectSupport: true,
+    primary: 'zh';
+    secondary: [];
+    autoDetect: true;
+    dialectSupport: true;
     supportedDialects: ['mandarin', 'cantonese', 'shanghainese'],
-    translationQuality: 'high',
-    culturalAdaptation: true,
+    translationQuality: 'high';
+    culturalAdaptation: true;
   },
   notification: {
-    enabled: true,
+    enabled: true;
     channels: {
-      health_alerts: true,
-      medication_reminders: true,
-      appointment_reminders: true,
-      health_tips: true,
-      diagnosis_results: true,
-      emergency_alerts: true,
+      health_alerts: true;
+      medication_reminders: true;
+      appointment_reminders: true;
+      health_tips: true;
+      diagnosis_results: true;
+      emergency_alerts: true;
     },
     quietHours: {
-      enabled: true,
-      start: '22:00',
-      end: '08:00',
+      enabled: true;
+      start: '22:00';
+      end: '08:00';
     },
     frequency: {
-      health_tips: 'daily',
-      check_in_reminders: 'weekly',
+      health_tips: 'daily';
+      check_in_reminders: 'weekly';
     },
   },
   privacy: {
     dataCollection: {
-      analytics: true,
-      diagnosticData: true,
-      usageStatistics: true,
-      personalizedAds: false,
+      analytics: true;
+      diagnosticData: true;
+      usageStatistics: true;
+      personalizedAds: false;
     },
     dataSharing: {
-      withHealthProviders: true,
-      withFamilyMembers: false,
-      withResearchers: false,
-      anonymizedOnly: true,
+      withHealthProviders: true;
+      withFamilyMembers: false;
+      withResearchers: false;
+      anonymizedOnly: true;
     },
     dataRetention: {
-      healthRecords: 'permanent',
+      healthRecords: 'permanent';
       conversationHistory: 90, // 天
       diagnosticImages: 365, // 天
-    },
+    ;},
     encryption: {
-      atRest: true,
-      inTransit: true,
-      endToEnd: true,
+      atRest: true;
+      inTransit: true;
+      endToEnd: true;
     },
   },
   performance: {
     caching: {
-      enabled: true,
-      ttl: CACHE_CONFIG.TTL.MEDIUM,
+      enabled: true;
+      ttl: CACHE_CONFIG.TTL.MEDIUM;
       maxSize: 100 * 1024 * 1024, // 100MB
-      strategy: 'lru',
+      strategy: 'lru';
     },
     network: {
-      timeout: APP_CONFIG.AGENTS.RESPONSE_TIMEOUT,
-      retryAttempts: 3,
-      retryDelay: 1000,
-      offlineMode: true,
+      timeout: APP_CONFIG.AGENTS.RESPONSE_TIMEOUT;
+      retryAttempts: 3;
+      retryDelay: 1000;
+      offlineMode: true;
     },
     processing: {
-      maxConcurrentTasks: 5,
-      priorityQueue: true,
-      backgroundProcessing: true,
-      lowPowerMode: 'adaptive',
+      maxConcurrentTasks: 5;
+      priorityQueue: true;
+      backgroundProcessing: true;
+      lowPowerMode: 'adaptive';
     },
   },
   experimental: {
-    advancedDiagnostics: false,
-    aiPoweredPredictions: false,
-    augmentedRealitySupport: false,
-    blockchainIntegration: false,
-    quantumAlgorithms: false,
+    advancedDiagnostics: false;
+    aiPoweredPredictions: false;
+    augmentedRealitySupport: false;
+    blockchainIntegration: false;
+    quantumAlgorithms: false;
   },
 };
 
@@ -302,7 +302,7 @@ export class XiaoaiConfigManager {
         this.config = this.migrateConfig(parsedConfig);
       }
     } catch (error) {
-      console.error('加载小艾配置失败:', error);
+
       this.config = { ...DEFAULT_CONFIG };
     }
   }
@@ -318,7 +318,7 @@ export class XiaoaiConfigManager {
       );
       this.notifyListeners();
     } catch (error) {
-      console.error('保存小艾配置失败:', error);
+
       throw error;
     }
   }
@@ -334,7 +334,7 @@ export class XiaoaiConfigManager {
    * 更新配置
    */
   async updateConfig(updates: Partial<XiaoaiConfig>): Promise<void> {
-    this.config = { ...this.config, ...updates };
+    this.config = { ...this.config, ...updates ;};
     await this.saveConfig();
   }
 
@@ -415,9 +415,9 @@ export class XiaoaiConfigManager {
     const totalKeys = Object.keys(this.config).length;
 
     return {
-      cacheHitRate: totalKeys > 0 ? cacheSize / totalKeys : 0,
-      configSize: JSON.stringify(this.config).length,
-      lastSaved: new Date(),
+      cacheHitRate: totalKeys > 0 ? cacheSize / totalKeys : 0;
+      configSize: JSON.stringify(this.config).length;
+      lastSaved: new Date();
     };
   }
 
@@ -437,7 +437,7 @@ export class XiaoaiConfigManager {
    * 迁移到最新版本
    */
   private migrateToLatest(config: any): XiaoaiConfig {
-    const migratedConfig = { ...DEFAULT_CONFIG };
+    const migratedConfig = { ...DEFAULT_CONFIG ;};
 
     // 保留用户自定义的配置
     if (config.personality) {
@@ -479,7 +479,7 @@ export class XiaoaiConfigManager {
       try {
         listener(this.config);
       } catch (error) {
-        console.error('配置监听器执行失败:', error);
+
       }
     });
   }
@@ -518,10 +518,10 @@ export class XiaoaiConfigManager {
         this.config = this.migrateConfig(importedConfig);
         await this.saveConfig();
       } else {
-        throw new Error('配置格式无效');
+
       }
     } catch (error) {
-      console.error('导入配置失败:', error);
+
       throw error;
     }
   }
@@ -564,10 +564,10 @@ export const useXiaoaiConfig = () => {
     updateConfig,
     resetConfig,
     isFeatureEnabled:
-      xiaoaiConfigManager.isFeatureEnabled.bind(xiaoaiConfigManager),
+      xiaoaiConfigManager.isFeatureEnabled.bind(xiaoaiConfigManager);
     getConfigValue:
-      xiaoaiConfigManager.getConfigValue.bind(xiaoaiConfigManager),
+      xiaoaiConfigManager.getConfigValue.bind(xiaoaiConfigManager);
     setConfigValue:
-      xiaoaiConfigManager.setConfigValue.bind(xiaoaiConfigManager),
+      xiaoaiConfigManager.setConfigValue.bind(xiaoaiConfigManager);
   };
 };

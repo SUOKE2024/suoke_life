@@ -1,6 +1,4 @@
-import { TCMDiagnosisEngine, tcmDiagnosisEngine } from "../tcmDiagnosisEngine";
-import { TCMDiagnosisEngine, tcmDiagnosisEngine } from "../tcmDiagnosisEngine";
-import React from "react";
+
 describe("tcmDiagnosisEngine", () => {
   beforeEach(() => {
     jest.clearAllMocks();

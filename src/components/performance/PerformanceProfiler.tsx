@@ -9,7 +9,7 @@ import React, {;
 import PerformanceMonitor from '../../utils/performanceMonitor';
 
 interface PerformanceProfilerProps {
-  id: string;,
+  id: string;
   children: React.ReactNode;
   onRender?: ProfilerOnRenderCallback;
   enableLogging?: boolean;
@@ -21,9 +21,9 @@ export const PerformanceProfiler: React.FC<PerformanceProfilerProps> = ({
   children,
   onRender,
   enableLogging = false
-}) => {
+;}) => {
   const handleRender: ProfilerOnRenderCallback = (
-    profileId,
+    profileId;
     phase,
     actualDuration,
     baseDuration,
@@ -35,10 +35,10 @@ export const PerformanceProfiler: React.FC<PerformanceProfilerProps> = ({
 
     if (enableLogging) {
       console.log(`📊 Component ${profileId} ${phase}:`, {
-        actualDuration: `${actualDuration.toFixed(2)}ms`,
-        baseDuration: `${baseDuration.toFixed(2)}ms`,
-        startTime: `${startTime.toFixed(2)}ms`,
-        commitTime: `${commitTime.toFixed(2)}ms`
+        actualDuration: `${actualDuration.toFixed(2);}ms`,
+        baseDuration: `${baseDuration.toFixed(2);}ms`,
+        startTime: `${startTime.toFixed(2);}ms`,
+        commitTime: `${commitTime.toFixed(2);}ms`
       });
     }
 
@@ -71,7 +71,7 @@ export const PerformanceProfiler: React.FC<PerformanceProfilerProps> = ({
 
 // 高阶组件：为组件添加性能监控
 export function withPerformanceMonitoring<P extends object>(
-  WrappedComponent: ComponentType<P>,
+  WrappedComponent: ComponentType<P>;
   componentName?: string;
 ) {
   const displayName =
@@ -136,24 +136,24 @@ export function usePerformanceMonitoring(componentName: string) {
   });
 
   return {
-    renderCount: renderCountRef.current,
+    renderCount: renderCountRef.current;
     renderTime,
     mountTime: mountTimeRef.current
-  };
+  ;};
 }
 
 // 性能监控装饰器
 export function performanceMonitored(componentName?: string) {
   return function <P extends object>(target: ComponentType<P>) {
-    return withPerformanceMonitoring(target, componentName);
+    return withPerformanceMonitoring(target; componentName);
   };
 }
 
 // 网络请求性能监控装饰器
 export function monitorNetworkRequest(url: string, method: string = 'GET') {
   return function (
-    target: any,
-    propertyName: string,
+    target: any;
+    propertyName: string;
     descriptor: PropertyDescriptor;
   ) {
     const originalMethod = descriptor.value;
@@ -200,17 +200,17 @@ export function monitorNetworkRequest(url: string, method: string = 'GET') {
 interface PerformanceBenchmarkProps {
   name: string;
   iterations?: number;
-  onComplete?: (results: BenchmarkResult) => void;,
+  onComplete?: (results: BenchmarkResult) => void;
   children: React.ReactNode;
 }
 
 interface BenchmarkResult {
-  name: string;,
-  iterations: number;,
-  totalTime: number;,
-  averageTime: number;,
-  minTime: number;,
-  maxTime: number;,
+  name: string;
+  iterations: number;
+  totalTime: number;
+  averageTime: number;
+  minTime: number;
+  maxTime: number;
   fps: number;
 }
 
@@ -219,7 +219,7 @@ export const PerformanceBenchmark: React.FC<PerformanceBenchmarkProps> = ({
   iterations = 100,
   onComplete,
   children
-}) => {
+;}) => {
   const [isRunning, setIsRunning] = useState(false);
   const [results, setResults] = useState<BenchmarkResult | null>(null);
   const timesRef = useRef<number[]>([]);
@@ -246,7 +246,7 @@ export const PerformanceBenchmark: React.FC<PerformanceBenchmarkProps> = ({
           minTime,
           maxTime,
           fps
-        };
+        ;};
 
         setResults(benchmarkResult);
         setIsRunning(false);
@@ -279,25 +279,25 @@ export const PerformanceBenchmark: React.FC<PerformanceBenchmarkProps> = ({
       <button onClick={runBenchmark} disabled={isRunning}>
         {isRunning;
           ? `Running... (${timesRef.current.length}/${iterations})`
-          : `Run Benchmark: ${name}`}
+          : `Run Benchmark: ${name;}`}
       </button>
 
       {results && (
         <div;
           style={
-            marginTop: 10,
-            padding: 10,
-            border: '1px solid #ccc',
+            marginTop: 10;
+            padding: 10;
+            border: '1px solid #ccc';
             borderRadius: 4
-          }}
+          ;}}
         >
-          <h4>Benchmark Results: {results.name}</h4>
-          <p>Iterations: {results.iterations}</p>
-          <p>Total Time: {results.totalTime.toFixed(2)}ms</p>
-          <p>Average Time: {results.averageTime.toFixed(2)}ms</p>
-          <p>Min Time: {results.minTime.toFixed(2)}ms</p>
-          <p>Max Time: {results.maxTime.toFixed(2)}ms</p>
-          <p>FPS: {results.fps.toFixed(2)}</p>
+          <h4>Benchmark Results: {results.name;}</h4>
+          <p>Iterations: {results.iterations;}</p>
+          <p>Total Time: {results.totalTime.toFixed(2);}ms</p>
+          <p>Average Time: {results.averageTime.toFixed(2);}ms</p>
+          <p>Min Time: {results.minTime.toFixed(2);}ms</p>
+          <p>Max Time: {results.maxTime.toFixed(2);}ms</p>
+          <p>FPS: {results.fps.toFixed(2);}</p>
         </div>
       )}
 

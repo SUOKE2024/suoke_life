@@ -43,7 +43,7 @@ describe('FiveDiagnosisEngine', () => {
       const largeDataset = new Array(10000).fill(0).map((_, i) => i);
       const startTime = performance.now();
       // Test with large dataset
-      new FiveDiagnosisEngine({ data: largeDataset });
+      new FiveDiagnosisEngine({ data: largeDataset ;});
       const endTime = performance.now();
       // Should handle large datasets within 100ms
       expect(endTime - startTime).toBeLessThan(100);

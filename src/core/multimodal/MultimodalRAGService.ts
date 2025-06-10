@@ -1,84 +1,5 @@
 import { EventEmitter } from "events";
-import { MultimodalEncoder } from "../../placeholder";./    MultimodalEncoder;
-import {MultimodalEmbeddingFusion,;
-  ModalityType,
-  Embedding,
-  FusionResult,
-  { FusionStrategy  } from ./    MultimodalEmbeddingFusion;
-/**
-* * 检索查询接口
-export interface MultimodalQuery {
-  text?: string;
-  tongueImage?: ImageData | string;
-  pulseSignal?: number[];
-  audioData?: ArrayBuffer;
-  metadata?: Record<string, any>;
-  strategy?: string;
-  topK?: number;
-  threshold?: number;
-}
-/**
-* * 检索结果接口
-export interface RetrievalResult {
-  id: string;,
-  content: string;,
-  modality: ModalityType;,
-  score: number;,
-  metadata: Record<string, any>;
-  embedding?: number[];
-}
-/**
-* * RAG响应接口
-export interface RAGResponse {
-  answer: string;,
-  confidence: number;,
-  sources: RetrievalResult[];,
-  fusionResult: FusionResult;,
-  reasoning: string;,
-  metadata: Record<string, any>;
-}
-/**
-* * 向量数据库接口
-export interface VectorDatabase {
-  search(embedding: number[], topK: number, filter?: Record<string, any>): Promise<RetrievalResult[]>;
-  insert(id: string, embedding: number[], metadata: Record<string, any>): Promise<void>;
-  update(id: string, embedding: number[], metadata: Record<string, any>): Promise<void>;
-  delete(id: string): Promise<void>;
-  createIndex(dimension: number, metric?: string): Promise<void>;
-}
-/**
-* * 语言模型接口
-export interface LanguageModel {
-  generate(prompt: string, context: string[], options?: Record<string, any>): Promise<string>;
-  generateWithReasoning(prompt: string, context: string[]): Promise<{ answer: string; reasoning: string;
-}>;
-}
-/**
-* * 多模态RAG服务
-export class MultimodalRAGService extends EventEmitter {private encoder: MultimodalEncoder;
-  private fusion: MultimodalEmbeddingFusion;
-  private vectorDB: VectorDatabase;
-  private languageModel: LanguageModel;
-  private isInitialized: boolean = false;
-  private queryCache: Map<string, RAGResponse>;
-  private embeddingCache: Map<string, Embedding[]>;
-  constructor()
-    vectorDB: VectorDatabase,
-    languageModel: LanguageModel;
-  ) {
-    super();
-    this.vectorDB = vectorDB;
-    this.languageModel = languageModel;
-    this.encoder = new MultimodalEncoder();
-    this.fusion = new MultimodalEmbeddingFusion();
-    this.queryCache = new Map();
-    this.embeddingCache = new Map();
-    this.setupEventListeners();
-  }
-  /**
-* * 设置事件监听器
-  private setupEventListeners(): void {
-    this.encoder.on("error, (error) => {}")
+error, (error) => {}")
       this.emit("encodingError", error);
     });
     this.fusion.on(fusionCompleted", (result) => {}")
@@ -101,7 +22,7 @@ await this.initializeVectorDatabase();
       this.emit("initialized);"
     } catch (error) {
       this.emit("error", error);
-      throw new Error(`Failed to initialize MultimodalRAGService: ${error}`);
+      throw new Error(`Failed to initialize MultimodalRAGService: ${error;}`);
     }
   }
   /**
@@ -126,7 +47,7 @@ await this.vectorDB.createIndex(768, cosine"); // 融合向量"
     // 检查缓存
 if (this.queryCache.has(cacheKey)) {
       const cachedResult = this.queryCache.get(cacheKey)!;
-      this.emit("cacheHit", { query, result: cachedResult });
+      this.emit("cacheHit", { query, result: cachedResult ;});
       return cachedResult;
     }
     try {
@@ -150,15 +71,15 @@ const generationResult = await this.generateAnswer(;)
         fusionResult;
       );
       // 5. 构建响应
-const response: RAGResponse = {answer: generationResult.answer,
+const response: RAGResponse = {answer: generationResult.answer;
         confidence: this.calculateResponseConfidence(fusionResult, retrievalResults),
-        sources: retrievalResults,
+        sources: retrievalResults;
         fusionResult,
-        reasoning: generationResult.reasoning,
+        reasoning: generationResult.reasoning;
         metadata: {,
-  queryModalities: embeddings.map(e => e.modality),
+  queryModalities: embeddings.map(e => e.modality);
           fusionStrategy: query.strategy || "tcm_diagnosis,"
-          retrievalCount: retrievalResults.length,
+          retrievalCount: retrievalResults.length;
           timestamp: Date.now();
         }
       };
@@ -168,35 +89,35 @@ this.queryCache.set(cacheKey, response);
       return response;
     } catch (error) {
       this.emit(queryError", { query, error });"
-      throw new Error(`Query processing failed: ${error}`);
+      throw new Error(`Query processing failed: ${error;}`);
     }
   }
   /**
 * * 编码查询中的多模态数据
   private async encodeQuery(query: MultimodalQuery): Promise<Embedding[]> {
-    const inputs: Array<{ data: any; modality: ModalityType; metadata?: Record<string, any> }> = [];
+    const inputs: Array<{ data: any; modality: ModalityType; metadata?: Record<string; any> }> = [];
     // 添加文本模态
 if (query.text) {
       inputs.push({
-        data: query.text,
-        modality: ModalityType.TEXT,
-        metadata: { type: "query_text, ...query.metadata }"
+        data: query.text;
+        modality: ModalityType.TEXT;
+        metadata: { type: "query_text, ...query.metadata ;}"
       });
     }
     // 添加舌象模态
 if (query.tongueImage) {
       inputs.push({
-        data: query.tongueImage,
-        modality: ModalityType.TONGUE,
-        metadata: { type: "tongue_image", ...query.metadata }
+        data: query.tongueImage;
+        modality: ModalityType.TONGUE;
+        metadata: { type: "tongue_image", ...query.metadata ;}
       });
     }
     // 添加脉象模态
 if (query.pulseSignal) {
       inputs.push({
-        data: query.pulseSignal,
-        modality: ModalityType.PULSE,
-        metadata: { type: pulse_signal", ...query.metadata }"
+        data: query.pulseSignal;
+        modality: ModalityType.PULSE;
+        metadata: { type: pulse_signal", ...query.metadata ;}"
       });
     }
     if (inputs.length === 0) {
@@ -207,8 +128,8 @@ if (query.pulseSignal) {
   /**
 * * 检索相关文档
   private async retrieveRelevantDocuments()
-    fusionResult: FusionResult,
-    topK: number,
+    fusionResult: FusionResult;
+    topK: number;
     threshold: number;
   ): Promise<RetrievalResult[]> {
     try {
@@ -216,28 +137,28 @@ if (query.pulseSignal) {
 const results = await this.vectorDB.search(;)
         fusionResult.fusedEmbedding,
         topK,
-        { confidence_threshold: threshold };
+        { confidence_threshold: threshold ;};
       );
       // 过滤低置信度结果
 const filteredResults = results.filter(result => result.score >= threshold);
       this.emit("retrievalCompleted", {
         fusionResult,
-        results: filteredResults,
-        originalCount: results.length,
+        results: filteredResults;
+        originalCount: results.length;
         filteredCount: filteredResults.length;
       });
       return filteredResults;
     } catch (error) {
-      throw new Error(`Document retrieval failed: ${error}`);
+      throw new Error(`Document retrieval failed: ${error;}`);
     }
   }
   /**
 * * 生成回答
   private async generateAnswer()
-    query: MultimodalQuery,
-    retrievalResults: RetrievalResult[],
+    query: MultimodalQuery;
+    retrievalResults: RetrievalResult[];
     fusionResult: FusionResult;
-  ): Promise<{ answer: string; reasoning: string }> {
+  ): Promise<{ answer: string; reasoning: string ;}> {
     try {
       // 构建上下文
 const context = this.buildContext(query, retrievalResults, fusionResult);
@@ -248,57 +169,57 @@ const result = await this.languageModel.generateWithReasoning(prompt, context);
       this.emit(answerGenerated", { query, result, context });"
       return result;
     } catch (error) {
-      throw new Error(`Answer generation failed: ${error}`);
+      throw new Error(`Answer generation failed: ${error;}`);
     }
   }
   /**
 * * 构建上下文
   private buildContext()
-    query: MultimodalQuery,
-    retrievalResults: RetrievalResult[],
+    query: MultimodalQuery;
+    retrievalResults: RetrievalResult[];
     fusionResult: FusionResult;
   ): string[] {
     const context: string[] = [];
     // 添加检索到的文档内容
 retrievalResults.forEach(result, index) => {}))
-      context.push(`[文档${index + 1}] ${result.content}`);
+
     });
     // 添加模态信息
 const modalityInfo = Object.entries(fusionResult.modalityWeights);
       .map([modality, weight]) => `${modality}: ${(weight * 100).toFixed(1)}%`);
       .join(" );"
-    context.push(`[模态权重] ${modalityInfo}`);
+
     // 添加融合策略信息
-context.push(`[融合策略] ${fusionResult.strategy}`);
+
     return context;
   }
   /**
 * * 构建提示词
   private buildPrompt(query: MultimodalQuery, fusionResult: FusionResult): string {
-    let prompt = `作为一名专业的中医智能助手，请基于提供的多模态信息回答用户的问题。;
-用户查询信息：`;
+
+
     if (query.text) {
-      prompt += `\n- 文本描述：${query.text}`;
-    }
+
+    ;}
     if (query.tongueImage) {
-      prompt += `\n- 舌象图像：已提供舌象特征分析`;
+
     }
     if (query.pulseSignal) {
-      prompt += `\n- 脉象信号：已提供脉象特征分析`;
+
     }
-    prompt += `\n\n请结合中医理论，综合分析各种模态信息，给出专业的诊断建议或治疗方案。
-要求：
-1. 回答要准确、专业、易懂;
-2. 结合传统中医理论和现代医学知识;
-3. 给出具体的建议和注意事项;
-4. 说明诊断的依据和推理过程;
-请提供详细的回答：`;
+
+
+
+
+
+
+
     return prompt;
   }
   /**
 * * 计算响应置信度
   private calculateResponseConfidence()
-    fusionResult: FusionResult,
+    fusionResult: FusionResult;
     retrievalResults: RetrievalResult[]
   ): number {
     if (retrievalResults.length === 0) return 0;
@@ -311,10 +232,10 @@ return (fusionConfidence * 0.4 + avgRetrievalScore * 0.4 + resultCountFactor * 0
   /**
 * * 添加文档到向量数据库
   async addDocument()
-    id: string,
-    content: string,
-    modality: ModalityType,
-    metadata: Record<string, any> = {}
+    id: string;
+    content: string;
+    modality: ModalityType;
+    metadata: Record<string, any> = {;}
   ): Promise<void> {
     try {
       // 编码文档内容
@@ -329,17 +250,17 @@ await this.vectorDB.insert(id, embedding.vector, {
       this.emit("documentAdded", { id, modality, metadata });
     } catch (error) {
       this.emit(documentAddError", { id, error });"
-      throw new Error(`Failed to add document: ${error}`);
+      throw new Error(`Failed to add document: ${error;}`);
     }
   }
   /**
 * * 批量添加文档
   async addDocuments()
     documents: Array<{,
-  id: string;,
-  content: string,
+  id: string;
+  content: string;
   modality: ModalityType;
-      metadata?: Record<string, any>;
+      metadata?: Record<string; any>;
     }>
   ): Promise<void> {
     const addPromises = documents.map(doc =>;)
@@ -347,7 +268,7 @@ await this.vectorDB.insert(id, embedding.vector, {
     );
     try {
       await Promise.all(addPromises);
-      this.emit("documentsAdded, { count: documents.length });"
+      this.emit("documentsAdded, { count: documents.length ;});"
     } catch (error) {
       this.emit("documentsAddError", error);
       throw error;

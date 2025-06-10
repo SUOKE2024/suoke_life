@@ -70,59 +70,59 @@ export class ZKPHealthReportGenerator {
 
   // 生成健康证明
   async generateHealthProof(request: HealthProofRequest): Promise<ZKProof> {
-    const proofId = `proof_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const proofId = `proof_${Date.now();}_${Math.random().toString(36).substr(2, 9)}`;
 
     switch (request.proofType) {
       case ProofType.AGE_RANGE:
         return this.generateAgeRangeProof(
-          proofId,
+          proofId;
           request.privateData,
           request.publicAttributes,
           request.secret
         );
       case ProofType.HEALTH_STATUS:
         return this.generateHealthStatusProof(
-          proofId,
+          proofId;
           request.privateData,
           request.publicAttributes,
           request.secret
         );
       case ProofType.VITAL_SIGNS_RANGE:
         return this.generateVitalSignsRangeProof(
-          proofId,
+          proofId;
           request.privateData,
           request.publicAttributes,
           request.secret
         );
       case ProofType.CONSTITUTION_TYPE:
         return this.generateConstitutionTypeProof(
-          proofId,
+          proofId;
           request.privateData,
           request.publicAttributes,
           request.secret
         );
       case ProofType.ACTIVITY_LEVEL:
         return this.generateActivityLevelProof(
-          proofId,
+          proofId;
           request.privateData,
           request.publicAttributes,
           request.secret
         );
       case ProofType.RISK_ASSESSMENT:
         return this.generateRiskAssessmentProof(
-          proofId,
+          proofId;
           request.privateData,
           request.publicAttributes,
           request.secret
         );
       default:
-        throw new Error(`不支持的证明类型: ${request.proofType}`);
-    }
+
+    ;}
   }
 
   // 验证健康证明
   async verifyHealthProof(
-    proof: ZKProof,
+    proof: ZKProof;
     publicInputs?: any[]
   ): Promise<VerificationResult> {
     try {
@@ -133,18 +133,18 @@ export class ZKPHealthReportGenerator {
 
       if (proofAge > maxAge) {
         return {
-          valid: false,
-          message: '证明已过期',
-          timestamp: now,
+          valid: false;
+
+          timestamp: now;
         };
       }
 
       // 验证证明结构
       if (!proof.proof || !proof.verificationKey || !proof.statement) {
         return {
-          valid: false,
-          message: '证明结构无效',
-          timestamp: now,
+          valid: false;
+
+          timestamp: now;
         };
       }
 
@@ -154,9 +154,9 @@ export class ZKPHealthReportGenerator {
         JSON.stringify(publicInputs) !== JSON.stringify(proof.publicInputs)
       ) {
         return {
-          valid: false,
-          message: '公共输入不匹配',
-          timestamp: now,
+          valid: false;
+
+          timestamp: now;
         };
       }
 
@@ -164,30 +164,30 @@ export class ZKPHealthReportGenerator {
       const isValid = await this.verifyProofCryptography(proof);
 
       return {
-        valid: isValid,
-        message: isValid ? '证明验证成功' : '证明验证失败',
-        timestamp: now,
+        valid: isValid;
+
+        timestamp: now;
       };
     } catch (error: any) {
       return {
-        valid: false,
-        message: `验证过程出错: ${error.message}`,
-        timestamp: Date.now(),
+        valid: false;
+
+        timestamp: Date.now();
       };
     }
   }
 
   // 生成年龄范围证明
   private async generateAgeRangeProof(
-    proofId: string,
-    privateData: { actualAge: number },
-    publicAttributes: { minAge: number; maxAge: number },
+    proofId: string;
+    privateData: { actualAge: number ;},
+    publicAttributes: { minAge: number; maxAge: number ;},
     secret: string
   ): Promise<ZKProof> {
-    const { actualAge } = privateData;
+    const { actualAge ;} = privateData;
     const { minAge, maxAge } = publicAttributes;
 
-    const statement = `年龄在 ${minAge} 到 ${maxAge} 岁之间`;
+
     const isValid = actualAge >= minAge && actualAge <= maxAge;
 
     const commitment = CryptoJS.SHA256(`${actualAge}:${secret}`).toString();
@@ -195,36 +195,36 @@ export class ZKPHealthReportGenerator {
     const response = CryptoJS.SHA256(`${secret}:${challenge}`).toString();
 
     return {
-      id: proofId,
-      type: ProofType.AGE_RANGE,
+      id: proofId;
+      type: ProofType.AGE_RANGE;
       statement,
       proof: JSON.stringify({
         commitment,
         challenge,
         response,
-        valid: isValid,
+        valid: isValid;
       }),
       publicInputs: [minAge, maxAge],
-      verificationKey: CryptoJS.SHA256(statement).toString(),
-      timestamp: Date.now(),
+      verificationKey: CryptoJS.SHA256(statement).toString();
+      timestamp: Date.now();
       metadata: {
-        version: this.version,
-        algorithm: this.algorithm,
+        version: this.version;
+        algorithm: this.algorithm;
       },
     };
   }
 
   // 生成健康状态证明
   private async generateHealthStatusProof(
-    proofId: string,
-    privateData: { healthMetrics: any },
-    publicAttributes: { meetsStandards: boolean; category: string },
+    proofId: string;
+    privateData: { healthMetrics: any ;},
+    publicAttributes: { meetsStandards: boolean; category: string ;},
     secret: string
   ): Promise<ZKProof> {
-    const { healthMetrics } = privateData;
+    const { healthMetrics ;} = privateData;
     const { meetsStandards, category } = publicAttributes;
 
-    const statement = `健康指标符合${category}类别标准`;
+
     const metricsHash = CryptoJS.SHA256(
       JSON.stringify(healthMetrics)
     ).toString();
@@ -233,37 +233,37 @@ export class ZKPHealthReportGenerator {
     const response = CryptoJS.SHA256(`${secret}:${challenge}`).toString();
 
     return {
-      id: proofId,
-      type: ProofType.HEALTH_STATUS,
+      id: proofId;
+      type: ProofType.HEALTH_STATUS;
       statement,
       proof: JSON.stringify({
         commitment,
         challenge,
         response,
-        valid: meetsStandards,
+        valid: meetsStandards;
         category,
       }),
       publicInputs: [category, meetsStandards],
-      verificationKey: CryptoJS.SHA256(statement).toString(),
-      timestamp: Date.now(),
+      verificationKey: CryptoJS.SHA256(statement).toString();
+      timestamp: Date.now();
       metadata: {
-        version: this.version,
-        algorithm: this.algorithm,
+        version: this.version;
+        algorithm: this.algorithm;
       },
     };
   }
 
   // 生成生命体征范围证明
   private async generateVitalSignsRangeProof(
-    proofId: string,
-    privateData: { vitalSigns: Record<string, number> },
-    publicAttributes: { ranges: HealthDataRange[]; allInRange: boolean },
+    proofId: string;
+    privateData: { vitalSigns: Record<string, number> ;},
+    publicAttributes: { ranges: HealthDataRange[]; allInRange: boolean ;},
     secret: string
   ): Promise<ZKProof> {
-    const { vitalSigns } = privateData;
+    const { vitalSigns ;} = privateData;
     const { ranges, allInRange } = publicAttributes;
 
-    const statement = '生命体征在正常范围内';
+
     const vitalSignsHash = CryptoJS.SHA256(
       JSON.stringify(vitalSigns)
     ).toString();
@@ -274,30 +274,30 @@ export class ZKPHealthReportGenerator {
     const response = CryptoJS.SHA256(`${secret}:${challenge}`).toString();
 
     return {
-      id: proofId,
-      type: ProofType.VITAL_SIGNS_RANGE,
+      id: proofId;
+      type: ProofType.VITAL_SIGNS_RANGE;
       statement,
       proof: JSON.stringify({
         commitment,
         challenge,
         response,
-        valid: allInRange,
+        valid: allInRange;
         ranges,
       }),
       publicInputs: [ranges, allInRange],
-      verificationKey: CryptoJS.SHA256(statement).toString(),
-      timestamp: Date.now(),
+      verificationKey: CryptoJS.SHA256(statement).toString();
+      timestamp: Date.now();
       metadata: {
-        version: this.version,
-        algorithm: this.algorithm,
+        version: this.version;
+        algorithm: this.algorithm;
       },
     };
   }
 
   // 生成体质类型证明
   private async generateConstitutionTypeProof(
-    proofId: string,
-    privateData: { constitutionData: string[] },
+    proofId: string;
+    privateData: { constitutionData: string[] ;},
     publicAttributes: {
       hasType: string[];
       doesNotHaveType: string[];
@@ -305,10 +305,10 @@ export class ZKPHealthReportGenerator {
     },
     secret: string
   ): Promise<ZKProof> {
-    const { constitutionData } = privateData;
+    const { constitutionData ;} = privateData;
     const { hasType, doesNotHaveType, dominantType } = publicAttributes;
 
-    const statement = `体质类型验证`;
+
     const constitutionHash = CryptoJS.SHA256(
       JSON.stringify(constitutionData)
     ).toString();
@@ -329,37 +329,37 @@ export class ZKPHealthReportGenerator {
     const isValid = hasRequiredTypes && hasNoForbiddenTypes && hasDominantType;
 
     return {
-      id: proofId,
-      type: ProofType.CONSTITUTION_TYPE,
+      id: proofId;
+      type: ProofType.CONSTITUTION_TYPE;
       statement,
       proof: JSON.stringify({
         commitment,
         challenge,
         response,
-        valid: isValid,
+        valid: isValid;
         dominantType,
       }),
       publicInputs: [hasType, doesNotHaveType, dominantType],
-      verificationKey: CryptoJS.SHA256(statement).toString(),
-      timestamp: Date.now(),
+      verificationKey: CryptoJS.SHA256(statement).toString();
+      timestamp: Date.now();
       metadata: {
-        version: this.version,
-        algorithm: this.algorithm,
+        version: this.version;
+        algorithm: this.algorithm;
       },
     };
   }
 
   // 生成活动水平证明
   private async generateActivityLevelProof(
-    proofId: string,
-    privateData: { activityData: { level: string } },
-    publicAttributes: { level: string; meetsTarget: boolean },
+    proofId: string;
+    privateData: { activityData: { level: string ;} },
+    publicAttributes: { level: string; meetsTarget: boolean ;},
     secret: string
   ): Promise<ZKProof> {
-    const { activityData } = privateData;
+    const { activityData ;} = privateData;
     const { level, meetsTarget } = publicAttributes;
 
-    const statement = `活动水平达到${level}标准`;
+
     const activityHash = CryptoJS.SHA256(
       JSON.stringify(activityData)
     ).toString();
@@ -368,59 +368,59 @@ export class ZKPHealthReportGenerator {
     const response = CryptoJS.SHA256(`${secret}:${challenge}`).toString();
 
     return {
-      id: proofId,
-      type: ProofType.ACTIVITY_LEVEL,
+      id: proofId;
+      type: ProofType.ACTIVITY_LEVEL;
       statement,
       proof: JSON.stringify({
         commitment,
         challenge,
         response,
-        valid: meetsTarget,
+        valid: meetsTarget;
         level,
       }),
       publicInputs: [level, meetsTarget],
-      verificationKey: CryptoJS.SHA256(statement).toString(),
-      timestamp: Date.now(),
+      verificationKey: CryptoJS.SHA256(statement).toString();
+      timestamp: Date.now();
       metadata: {
-        version: this.version,
-        algorithm: this.algorithm,
+        version: this.version;
+        algorithm: this.algorithm;
       },
     };
   }
 
   // 生成风险评估证明
   private async generateRiskAssessmentProof(
-    proofId: string,
-    privateData: { riskFactors: any[] },
-    publicAttributes: { riskLevel: string; belowThreshold: boolean },
+    proofId: string;
+    privateData: { riskFactors: any[] ;},
+    publicAttributes: { riskLevel: string; belowThreshold: boolean ;},
     secret: string
   ): Promise<ZKProof> {
-    const { riskFactors } = privateData;
+    const { riskFactors ;} = privateData;
     const { riskLevel, belowThreshold } = publicAttributes;
 
-    const statement = `风险水平低于${riskLevel}阈值`;
+
     const riskHash = CryptoJS.SHA256(JSON.stringify(riskFactors)).toString();
     const commitment = CryptoJS.SHA256(`${riskHash}:${secret}`).toString();
     const challenge = CryptoJS.SHA256(`${statement}:${commitment}`).toString();
     const response = CryptoJS.SHA256(`${secret}:${challenge}`).toString();
 
     return {
-      id: proofId,
-      type: ProofType.RISK_ASSESSMENT,
+      id: proofId;
+      type: ProofType.RISK_ASSESSMENT;
       statement,
       proof: JSON.stringify({
         commitment,
         challenge,
         response,
-        valid: belowThreshold,
+        valid: belowThreshold;
         riskLevel,
       }),
       publicInputs: [riskLevel, belowThreshold],
-      verificationKey: CryptoJS.SHA256(statement).toString(),
-      timestamp: Date.now(),
+      verificationKey: CryptoJS.SHA256(statement).toString();
+      timestamp: Date.now();
       metadata: {
-        version: this.version,
-        algorithm: this.algorithm,
+        version: this.version;
+        algorithm: this.algorithm;
       },
     };
   }
@@ -459,7 +459,7 @@ export class BatchProofGenerator {
 
   // 生成综合健康报告证明
   async generateComprehensiveHealthProof(
-    userId: string,
+    userId: string;
     healthData: {
       age: number;
       vitalSigns: Record<string, number>;
@@ -468,7 +468,7 @@ export class BatchProofGenerator {
       riskFactors: any[];
     },
     requirements: {
-      ageRange?: { min: number; max: number };
+      ageRange?: { min: number; max: number ;};
       vitalSignsRanges?: HealthDataRange[];
       requiredConstitutionTypes?: string[];
       minActivityLevel?: string;
@@ -481,11 +481,11 @@ export class BatchProofGenerator {
     if (requirements.ageRange) {
       const ageProof = await this.generator.generateHealthProof({
         userId,
-        proofType: ProofType.AGE_RANGE,
-        privateData: { actualAge: healthData.age },
+        proofType: ProofType.AGE_RANGE;
+        privateData: { actualAge: healthData.age ;},
         publicAttributes: {
-          minAge: requirements.ageRange.min,
-          maxAge: requirements.ageRange.max,
+          minAge: requirements.ageRange.min;
+          maxAge: requirements.ageRange.max;
         },
         secret,
       });
@@ -503,10 +503,10 @@ export class BatchProofGenerator {
 
       const vitalSignsProof = await this.generator.generateHealthProof({
         userId,
-        proofType: ProofType.VITAL_SIGNS_RANGE,
-        privateData: { vitalSigns: healthData.vitalSigns },
+        proofType: ProofType.VITAL_SIGNS_RANGE;
+        privateData: { vitalSigns: healthData.vitalSigns ;},
         publicAttributes: {
-          ranges: requirements.vitalSignsRanges,
+          ranges: requirements.vitalSignsRanges;
           allInRange,
         },
         secret,
@@ -517,12 +517,12 @@ export class BatchProofGenerator {
     if (requirements.requiredConstitutionTypes) {
       const constitutionProof = await this.generator.generateHealthProof({
         userId,
-        proofType: ProofType.CONSTITUTION_TYPE,
-        privateData: { constitutionData: healthData.constitutionType },
+        proofType: ProofType.CONSTITUTION_TYPE;
+        privateData: { constitutionData: healthData.constitutionType ;},
         publicAttributes: {
-          hasType: requirements.requiredConstitutionTypes,
-          doesNotHaveType: [],
-          dominantType: healthData.constitutionType[0],
+          hasType: requirements.requiredConstitutionTypes;
+          doesNotHaveType: [];
+          dominantType: healthData.constitutionType[0];
         },
         secret,
       });
@@ -532,11 +532,11 @@ export class BatchProofGenerator {
     if (requirements.minActivityLevel) {
       const activityProof = await this.generator.generateHealthProof({
         userId,
-        proofType: ProofType.ACTIVITY_LEVEL,
-        privateData: { activityData: { level: healthData.activityLevel } },
+        proofType: ProofType.ACTIVITY_LEVEL;
+        privateData: { activityData: { level: healthData.activityLevel ;} },
         publicAttributes: {
-          level: requirements.minActivityLevel,
-          meetsTarget: true,
+          level: requirements.minActivityLevel;
+          meetsTarget: true;
         },
         secret,
       });
@@ -546,11 +546,11 @@ export class BatchProofGenerator {
     if (requirements.maxRiskLevel) {
       const riskProof = await this.generator.generateHealthProof({
         userId,
-        proofType: ProofType.RISK_ASSESSMENT,
-        privateData: { riskFactors: healthData.riskFactors },
+        proofType: ProofType.RISK_ASSESSMENT;
+        privateData: { riskFactors: healthData.riskFactors ;},
         publicAttributes: {
-          riskLevel: requirements.maxRiskLevel,
-          belowThreshold: true,
+          riskLevel: requirements.maxRiskLevel;
+          belowThreshold: true;
         },
         secret,
       });
@@ -593,15 +593,15 @@ export async function generateHealthProof(
 }
 
 export async function verifyHealthProof(
-  proof: ZKProof,
+  proof: ZKProof;
   publicInputs?: any[]
 ): Promise<VerificationResult> {
-  return zkpHealthReportGenerator.verifyHealthProof(proof, publicInputs);
+  return zkpHealthReportGenerator.verifyHealthProof(proof; publicInputs);
 }
 
 export async function generateComprehensiveHealthProof(
-  userId: string,
-  healthData: any,
+  userId: string;
+  healthData: any;
   requirements: any
 ): Promise<ZKProof[]> {
   return batchProofGenerator.generateComprehensiveHealthProof(

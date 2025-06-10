@@ -35,7 +35,7 @@ export interface CalendarProps {
 }
 
 interface CalendarState {
-  currentMonth: Date;,
+  currentMonth: Date;
   selectedDates: Date[];
 }
 
@@ -62,19 +62,19 @@ export const Calendar: React.FC<CalendarProps> = ({
   todayTextStyle,
   accessible = true,
   testID
-}) => {
+;}) => {
   const { currentTheme } = useTheme();
 
   const [state, setState] = useState<CalendarState>() => {
     const initialDate = value || defaultValue || new Date();
     return {
       currentMonth: new Date(
-        initialDate.getFullYear(),
+        initialDate.getFullYear();
         initialDate.getMonth(),
         1;
       ),
       selectedDates: value ? [value] : defaultValue ? [defaultValue] : []
-    };
+    ;};
   });
 
   const today = new Date();
@@ -82,7 +82,7 @@ export const Calendar: React.FC<CalendarProps> = ({
 
   // 获取月份名称
   const getMonthName = (date: Date) => {
-    return date.toLocaleDateString(locale, { year: 'numeric', month: 'long' });
+    return date.toLocaleDateString(locale, { year: 'numeric', month: 'long' ;});
   };
 
   // 获取星期名称
@@ -97,7 +97,7 @@ export const Calendar: React.FC<CalendarProps> = ({
     for (let i = 0; i < 7; i++) {
       const day = new Date(firstDay);
       day.setDate(firstDay.getDate() + i);
-      names.push(day.toLocaleDateString(locale, { weekday: 'short' }));
+      names.push(day.toLocaleDateString(locale, { weekday: 'short' ;}));
     }
     return names;
   };
@@ -196,7 +196,7 @@ export const Calendar: React.FC<CalendarProps> = ({
         newSelectedDates = [date];
     }
 
-    setState(prev) => ({ ...prev, selectedDates: newSelectedDates }));
+    setState(prev) => ({ ...prev, selectedDates: newSelectedDates ;}));
     onChange?.(newSelectedDates[0]);
   };
 
@@ -209,7 +209,7 @@ export const Calendar: React.FC<CalendarProps> = ({
       } else {
         newMonth.setMonth(newMonth.getMonth() + 1);
       }
-      return { ...prev, currentMonth: newMonth };
+      return { ...prev, currentMonth: newMonth ;};
     });
   };
 
@@ -222,84 +222,84 @@ export const Calendar: React.FC<CalendarProps> = ({
 
   const styles = StyleSheet.create({
     container: {,
-  backgroundColor: currentTheme.colors.surface,
-      borderRadius: 8,
+  backgroundColor: currentTheme.colors.surface;
+      borderRadius: 8;
       padding: 16
-    },
+    ;},
     header: {,
-  flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
+  flexDirection: 'row';
+      justifyContent: 'space-between';
+      alignItems: 'center';
       marginBottom: 16
-    },
+    ;},
     headerButton: {,
-  padding: 8,
+  padding: 8;
       borderRadius: 4
-    },
+    ;},
     headerButtonText: {,
-  fontSize: 18,
-      fontWeight: 'bold',
+  fontSize: 18;
+      fontWeight: 'bold';
       color: currentTheme.colors.primary
-    },
+    ;},
     headerTitle: {,
-  fontSize: 18,
-      fontWeight: '600',
+  fontSize: 18;
+      fontWeight: '600';
       color: currentTheme.colors.onSurface
-    },
+    ;},
     weekHeader: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
       marginBottom: 8
-    },
+    ;},
     weekDay: {,
-  flex: 1,
-      alignItems: 'center',
+  flex: 1;
+      alignItems: 'center';
       paddingVertical: 8
-    },
+    ;},
     weekDayText: {,
-  fontSize: 12,
-      fontWeight: '600',
+  fontSize: 12;
+      fontWeight: '600';
       color: currentTheme.colors.onSurfaceVariant
-    },
+    ;},
     daysContainer: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
       flexWrap: 'wrap'
-    },
+    ;},
     dayButton: {,
   width: '14.28%', // 100% / 7 days;
-      aspectRatio: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderRadius: 4,
+      aspectRatio: 1;
+      justifyContent: 'center';
+      alignItems: 'center';
+      borderRadius: 4;
       margin: 1
-    },
+    ;},
     dayText: {,
-  fontSize: 14,
+  fontSize: 14;
       color: currentTheme.colors.onSurface
-    },
+    ;},
     otherMonthDay: {,
   opacity: 0.3
-    },
+    ;},
     selectedDay: {,
   backgroundColor: currentTheme.colors.primary
-    },
+    ;},
     selectedDayText: {,
-  color: currentTheme.colors.onPrimary,
+  color: currentTheme.colors.onPrimary;
       fontWeight: '600'
-    },
+    ;},
     todayDay: {,
-  borderWidth: 2,
+  borderWidth: 2;
       borderColor: currentTheme.colors.primary
-    },
+    ;},
     todayText: {,
-  color: currentTheme.colors.primary,
+  color: currentTheme.colors.primary;
       fontWeight: '600'
-    },
+    ;},
     disabledDay: {,
   opacity: 0.3
-    },
+    ;},
     disabledDayText: {,
   color: currentTheme.colors.onSurfaceVariant
-    }
+    ;}
   });
 
   return (
@@ -311,7 +311,7 @@ export const Calendar: React.FC<CalendarProps> = ({
           onPress={() => changeMonth('prev')}
           accessible={accessible}
           accessibilityRole="button"
-          accessibilityLabel="上个月"
+
         >
           <Text style={styles.headerButtonText}>‹</Text>
         </TouchableOpacity>
@@ -325,7 +325,7 @@ export const Calendar: React.FC<CalendarProps> = ({
           onPress={() => changeMonth('next')}
           accessible={accessible}
           accessibilityRole="button"
-          accessibilityLabel="下个月"
+
         >
           <Text style={styles.headerButtonText}>›</Text>
         </TouchableOpacity>
@@ -365,7 +365,7 @@ export const Calendar: React.FC<CalendarProps> = ({
               disabled={disabled}
               accessible={accessible}
               accessibilityRole="button"
-              accessibilityLabel={`${date.getDate()}日`}
+
               accessibilityState={ selected, disabled }}
             >
               <Text;

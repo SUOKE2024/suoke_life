@@ -1,5 +1,4 @@
 import { AgentCoordinationService, agentCoordinationService } from "../agentCoordinationService";
-import { AgentCoordinationService, agentCoordinationService } from "../agentCoordinationService";
 describe("agentCoordinationService", () => {
   beforeEach(() => {
     jest.clearAllMocks();

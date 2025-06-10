@@ -1,6 +1,4 @@
-import { GraphQLClient, graphqlClient } from "../client";
-import { GraphQLClient, graphqlClient } from "../client";
-import React from "react";
+
 describe("client", () => {
   beforeEach(() => {
     jest.clearAllMocks();

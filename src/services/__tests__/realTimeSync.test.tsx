@@ -1,5 +1,4 @@
-import { performance } from "perf_hooks";
-import React from "react";
+
 describe("realTimeSync", () => {
   beforeEach(() => {
     jest.clearAllMocks();

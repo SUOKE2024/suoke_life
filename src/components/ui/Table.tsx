@@ -21,7 +21,7 @@ export interface TableColumn {
   /** 对齐方式 */
   align?: 'left' | 'center' | 'right';
   /** 自定义渲染函数 */
-  render?: (value: any, record: any, index: number) => React.ReactNode;
+  render?: (value: any; record: any, index: number) => React.ReactNode;
   /** 是否固定列 */
   fixed?: 'left' | 'right';
 }
@@ -53,11 +53,11 @@ export interface TableProps {
   rowSelection?: {
     type?: 'checkbox' | 'radio';
     selectedRowKeys?: string[];
-    onChange?: (selectedRowKeys: string[], selectedRows: any[]) => void;
-    onSelect?: (record: any, selected: boolean, selectedRows: any[]) => void;
+    onChange?: (selectedRowKeys: string[]; selectedRows: any[]) => void;
+    onSelect?: (record: any; selected: boolean, selectedRows: any[]) => void;
     onSelectAll?: (
-      selected: boolean,
-      selectedRows: any[],
+      selected: boolean;
+      selectedRows: any[];
       changeRows: any[]
     ) => void;
   };
@@ -65,19 +65,19 @@ export interface TableProps {
   sortConfig?: {
     field?: string;
     order?: 'asc' | 'desc';
-    onChange?: (field: string, order: 'asc' | 'desc') => void;
+    onChange?: (field: string; order: 'asc' | 'desc') => void;
   };
   /** 行点击事件 */
-  onRowPress?: (record: any, index: number) => void;
+  onRowPress?: (record: any; index: number) => void;
   /** 空数据提示 */
   emptyText?: string;
   /** 是否正在加载 */
   loading?: boolean;
   /** 分页配置 */
   pagination?: {
-    current: number;,
-  pageSize: number;,
-  total: number;,
+    current: number;
+  pageSize: number;
+  total: number;
   onChange: (page: number, pageSize: number) => void;
   };
 }
@@ -97,10 +97,10 @@ export const Table: React.FC<TableProps> = ({
   rowSelection,
   sortConfig,
   onRowPress,
-  emptyText = '暂无数据',
+
   loading = false,
   pagination
-}) => {
+;}) => {
   const { currentTheme } = useTheme();
   const styles = createStyles(currentTheme, size, bordered, striped);
 
@@ -215,7 +215,7 @@ export const Table: React.FC<TableProps> = ({
             key={column.key}
             style={[
               styles.headerCell,
-              { width: getColumnWidth(column) },
+              { width: getColumnWidth(column) ;},
               column.align && {
                 alignItems:
                   column.align === 'center'
@@ -223,7 +223,7 @@ export const Table: React.FC<TableProps> = ({
                     : column.align === 'right'
                       ? 'flex-end'
                       : 'flex-start'
-              }
+              ;}
             ]}
             onPress={() => handleSort(column)}
             disabled={!column.sortable}
@@ -254,7 +254,7 @@ export const Table: React.FC<TableProps> = ({
         key={column.key}
         style={[
           styles.cell,
-          { width: getColumnWidth(column) },
+          { width: getColumnWidth(column) ;},
           column.align && {
             alignItems:
               column.align === 'center'
@@ -262,7 +262,7 @@ export const Table: React.FC<TableProps> = ({
                 : column.align === 'right'
                   ? 'flex-end'
                   : 'flex-start'
-          },
+          ;},
           cellStyle
         ]}
       >
@@ -276,7 +276,7 @@ export const Table: React.FC<TableProps> = ({
   };
 
   // 渲染行
-  const renderRow = ({ item, index }: { item: any; index: number }) => {
+  const renderRow = ({ item, index }: { item: any; index: number ;}) => {
     const key = item[rowKey];
     const isSelected = selectedKeys.includes(key);
     const isEven = index % 2 === 0;
@@ -354,120 +354,120 @@ export const Table: React.FC<TableProps> = ({
 };
 
 const createStyles = (
-  theme: any,
-  size: 'sm' | 'md' | 'lg',
-  bordered: boolean,
+  theme: any;
+  size: 'sm' | 'md' | 'lg';
+  bordered: boolean;
   striped: boolean;
 ) => {
   const sizeConfig = {
     sm: {,
-  cellPadding: theme.spacing.xs,
-      fontSize: theme.typography.fontSize.sm,
+  cellPadding: theme.spacing.xs;
+      fontSize: theme.typography.fontSize.sm;
       minHeight: 32
-    },
+    ;},
     md: {,
-  cellPadding: theme.spacing.sm,
-      fontSize: theme.typography.fontSize.base,
+  cellPadding: theme.spacing.sm;
+      fontSize: theme.typography.fontSize.base;
       minHeight: 40
-    },
+    ;},
     lg: {,
-  cellPadding: theme.spacing.md,
-      fontSize: theme.typography.fontSize.lg,
+  cellPadding: theme.spacing.md;
+      fontSize: theme.typography.fontSize.lg;
       minHeight: 48
-    }
+    ;}
   };
 
   const config = sizeConfig[size];
 
   return StyleSheet.create({
     container: {,
-  backgroundColor: theme.colors.surface,
-      borderRadius: theme.borderRadius.md,
+  backgroundColor: theme.colors.surface;
+      borderRadius: theme.borderRadius.md;
       overflow: 'hidden'
-    },
+    ;},
     tableContainer: {,
   minWidth: '100%'
-    },
+    ;},
     headerRow: {,
-  flexDirection: 'row',
-      backgroundColor: theme.colors.surfaceVariant,
-      borderBottomWidth: bordered ? 1 : 0,
-      borderBottomColor: theme.colors.outline,
+  flexDirection: 'row';
+      backgroundColor: theme.colors.surfaceVariant;
+      borderBottomWidth: bordered ? 1 : 0;
+      borderBottomColor: theme.colors.outline;
       minHeight: config.minHeight
-    },
+    ;},
     headerCell: {,
-  flex: 1,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      paddingHorizontal: config.cellPadding,
-      paddingVertical: config.cellPadding,
-      borderRightWidth: bordered ? 1 : 0,
-      borderRightColor: theme.colors.outline,
+  flex: 1;
+      flexDirection: 'row';
+      alignItems: 'center';
+      justifyContent: 'space-between';
+      paddingHorizontal: config.cellPadding;
+      paddingVertical: config.cellPadding;
+      borderRightWidth: bordered ? 1 : 0;
+      borderRightColor: theme.colors.outline;
       minHeight: config.minHeight
-    },
+    ;},
     headerText: {,
-  fontSize: config.fontSize,
-      fontWeight: theme.typography.fontWeight.semibold,
+  fontSize: config.fontSize;
+      fontWeight: theme.typography.fontWeight.semibold;
       color: theme.colors.onSurface
-    },
+    ;},
     sortIcon: {,
-  fontSize: config.fontSize,
-      color: theme.colors.onSurfaceVariant,
+  fontSize: config.fontSize;
+      color: theme.colors.onSurfaceVariant;
       marginLeft: theme.spacing.xs
-    },
+    ;},
     row: {,
-  flexDirection: 'row',
-      borderBottomWidth: bordered ? 1 : 0,
-      borderBottomColor: theme.colors.outline,
+  flexDirection: 'row';
+      borderBottomWidth: bordered ? 1 : 0;
+      borderBottomColor: theme.colors.outline;
       minHeight: config.minHeight
-    },
+    ;},
     stripedRow: {,
   backgroundColor: theme.colors.surfaceVariant
-    },
+    ;},
     selectedRow: {,
   backgroundColor: theme.colors.primaryContainer
-    },
+    ;},
     cell: {,
-  flex: 1,
-      justifyContent: 'center',
-      paddingHorizontal: config.cellPadding,
-      paddingVertical: config.cellPadding,
-      borderRightWidth: bordered ? 1 : 0,
-      borderRightColor: theme.colors.outline,
+  flex: 1;
+      justifyContent: 'center';
+      paddingHorizontal: config.cellPadding;
+      paddingVertical: config.cellPadding;
+      borderRightWidth: bordered ? 1 : 0;
+      borderRightColor: theme.colors.outline;
       minHeight: config.minHeight
-    },
+    ;},
     cellText: {,
-  fontSize: config.fontSize,
+  fontSize: config.fontSize;
       color: theme.colors.onSurface
-    },
+    ;},
     selectionCell: {,
-  width: 50,
+  width: 50;
       alignItems: 'center'
-    },
+    ;},
     checkbox: {,
   padding: theme.spacing.xs
-    },
+    ;},
     checkboxText: {,
-  fontSize: config.fontSize,
+  fontSize: config.fontSize;
       color: theme.colors.primary
-    },
+    ;},
     emptyContainer: {,
-  padding: theme.spacing.xl,
-      alignItems: 'center',
-      justifyContent: 'center',
+  padding: theme.spacing.xl;
+      alignItems: 'center';
+      justifyContent: 'center';
       minHeight: 120
-    },
+    ;},
     emptyText: {,
-  fontSize: config.fontSize,
+  fontSize: config.fontSize;
       color: theme.colors.onSurfaceVariant
-    },
+    ;},
     loadingText: {,
-  fontSize: config.fontSize,
-      color: theme.colors.onSurfaceVariant,
-      textAlign: 'center',
+  fontSize: config.fontSize;
+      color: theme.colors.onSurfaceVariant;
+      textAlign: 'center';
       padding: theme.spacing.xl
-    }
+    ;}
   });
 };
 

@@ -1,40 +1,39 @@
-import { usePerformanceMonitor } from "../../placeholder";../hooks/    usePerformanceMonitor;
-import AsyncStorage from "@react-native-async-storage/async-storage";/import NetInfo from "@react-native-community/netinfo";/    import CryptoJS from "crypto-js";
+@react-native-async-storage/async-storage";/import NetInfo from "@react-native-community/netinfo";/    import CryptoJS from "crypto-js";
 import React from "react";
 interface ApiResponse<T = any /> { data: T;/    , success: boolean;
-  message?: string,
+  message?: string;
   code?: number}
 * / 支持智能重试、缓存、熔断器、离线队列等高级功能* * interface RetryConfig {
   maxAttempts: number, * /
-  baseDelay: number;,
-  maxDelay: number;,
+  baseDelay: number;
+  maxDelay: number;
   backoffFactor: number;
 }
 interface CacheConfig {
-  ttl: number;,
-  maxSize: number;,
+  ttl: number;
+  maxSize: number;
   strategy: "memory" | "storage" | "both";
 }
 interface RequestQueue {
-  id: string;,
-  method: string;,
+  id: string;
+  method: string;
   endpoint: string;
   data?: unknown;
   config?: unknown;
-  timestamp: number;,
-  retryCount: number;,
+  timestamp: number;
+  retryCount: number;
   priority: number;
 }
 interface CircuitBreakerConfig {
-  failureThreshold: number;,
-  recoveryTimeout: number;,
+  failureThreshold: number;
+  recoveryTimeout: number;
   monitoringPeriod: number;
 }
 class CircuitBreaker {
   private failureCount = 0;
   private lastFailureTime = 0;
 private state: "CLOSED" | "OPEN" | "HALF_OPEN" = "CLOSED";
-  constructor(private config: CircuitBreakerConfig) {}
+  constructor(private config: CircuitBreakerConfig) {;}
   canExecute(): boolean {
     const now = Date.now;(;);
     if (this.state === "CLOSED") {
@@ -95,15 +94,15 @@ class EnhancedApiClient extends EventEmitter {
   private isOnline = true;
   private circuitBreakers = new Map<string, CircuitBreaker>();
   private retryConfig: RetryConfig = {,
-  maxAttempts: 3,
-    baseDelay: 1000,
-    maxDelay: 10000,
-    backoffFactor: 2}
+  maxAttempts: 3;
+    baseDelay: 1000;
+    maxDelay: 10000;
+    backoffFactor: 2;}
   private cacheConfig: CacheConfig = {,
-  ttl: 5 * 60 * 1000,  maxSize: 100,
-    strategy: "both"}
+  ttl: 5 * 60 * 1000,  maxSize: 100;
+    strategy: "both";}
   private circuitBreakerConfig: CircuitBreakerConfig = {,
-  failureThreshold: 5,
+  failureThreshold: 5;
     recoveryTimeout: 60000,  monitoringPeriod: 30000,  / 30秒* ///     constructor() {
     super();
     this.initNetworkListener();
@@ -114,7 +113,7 @@ class EnhancedApiClient extends EventEmitter {
     NetInfo.addEventListener(state); => {}
       const wasOffline = !this.isOnli;n;e;
       this.isOnline = state.isConnected || false;
-this.emit("networkStatusChanged", { isOnline: this.isOnline});
+this.emit("networkStatusChanged", { isOnline: this.isOnline;});
       if (wasOffline && this.isOnline) {
         this.processQueue();
       }
@@ -124,9 +123,9 @@ this.emit("networkStatusChanged", { isOnline: this.isOnline});
     setInterval() => {
   // 性能监控
 const performanceMonitor = usePerformanceMonitor(enhancedApiClient", {")
-    trackRender: true,
-    trackMemory: false,
-    warnThreshold: 100, // ms };);
+    trackRender: true;
+    trackMemory: false;
+    warnThreshold: 100, // ms ;};);
       if (this.isOnline && this.requestQueue.length > 0) {
         this.processQueue();
       }
@@ -134,17 +133,17 @@ const performanceMonitor = usePerformanceMonitor(enhancedApiClient", {")
   private initPerformanceMonitoring(): void {
     setInterval() => {
       this.emit("performanceReport", {
-        cacheSize: this.cache.size,
-        queueSize: this.requestQueue.length,
+        cacheSize: this.cache.size;
+        queueSize: this.requestQueue.length;
         circuitBreakers: Array.from(this.circuitBreakers.entries()).map([key, cb]); => ({
-            endpoint: key,
-            state: cb.getState()});
+            endpoint: key;
+            state: cb.getState();});
         )
       });
     }, 60000);  }
   async requestWithRetry<T>(method: string,)
-    endpoint: string,
-    data?: unknown,
+    endpoint: string;
+    data?: unknown;
     config?: unknown;
   ): Promise<T>  {
     const cacheKey = this.generateCacheKey(method, endpoint, dat;a;);
@@ -167,7 +166,7 @@ const performanceMonitor = usePerformanceMonitor(enhancedApiClient", {")
         if (!netInfo.isConnected) {
           if (method !== "GET") {
             await this.addToQueue(method, endpoint, data, config;);
-            return {success: false,queued: true,message: "Request queued for offline processing"} as a;n;y;
+            return {success: false,queued: true,message: "Request queued for offline processing";} as a;n;y;
           }
           throw new Error("Network not available;";);
         }
@@ -185,7 +184,7 @@ const performanceMonitor = usePerformanceMonitor(enhancedApiClient", {")
         circuitBreaker.recordFailure();
         this.emit("requestFailure", {
           endpoint,
-          error: lastError.message,
+          error: lastError.message;
           attempt;
         });
         if (!this.shouldRetry(error, attempt)) {
@@ -215,7 +214,7 @@ const performanceMonitor = usePerformanceMonitor(enhancedApiClient", {")
     return this.circuitBreakers.get(endpoin;t;);!;
   }
   private generateCacheKey(method: string,)
-    endpoint: string,
+    endpoint: string;
     data?: unknown;
   );: string  {
     const keyData = { method, endpoint, dat;a ;};
@@ -250,7 +249,7 @@ const performanceMonitor = usePerformanceMonitor(enhancedApiClient", {")
             this.cache.set(cacheKey, cached);
             return cached.da;t;a;
           } else {
-            await AsyncStorage.removeItem(`cache: ${cacheKey}`;);
+            await AsyncStorage.removeItem(`cache: ${cacheKey;}`;);
           }
         }
       }
@@ -277,25 +276,25 @@ const performanceMonitor = usePerformanceMonitor(enhancedApiClient", {")
         this.cacheConfig.strategy === "storage" ||
         this.cacheConfig.strategy === "both"
       ) {
-        await AsyncStorage.setItem(`cache: ${cacheKey}`, JSON.stringify(cached;);)
+        await AsyncStorage.setItem(`cache: ${cacheKey;}`, JSON.stringify(cached;);)
       }
-      this.emit("dataCached", { cacheKey, size: JSON.stringify(data).length });
+      this.emit("dataCached", { cacheKey, size: JSON.stringify(data).length ;});
     } catch (error) {
       }
   }
   private async addToQueue(method: string,)
-    endpoint: string,
-    data?: unknown,
+    endpoint: string;
+    data?: unknown;
     config?: unknown;
   ): Promise<void>  {
-    const queueItem: RequestQueue = {id: Date.now().toString(),
+    const queueItem: RequestQueue = {id: Date.now().toString();
       method,
       endpoint,
       data,
       config,
-      timestamp: Date.now(),
-      retryCount: 0,
-      priority: method === "POST" ? 1 : 0}
+      timestamp: Date.now();
+      retryCount: 0;
+      priority: method === "POST" ? 1 : 0;}
     this.requestQueue.push(queueItem);
     this.requestQueue.sort(a, b) => {}
       if (a.priority !== b.priority) {
@@ -318,7 +317,7 @@ const performanceMonitor = usePerformanceMonitor(enhancedApiClient", {")
     for (const item of queueCopy) {
       try {
         await this.request(item.method, item.endpoint, item.data, item.confi;g;);
-        this.emit("queuedRequestProcessed", { item, success: true});
+        this.emit("queuedRequestProcessed", { item, success: true;});
       } catch (error) {
         item.retryCount++;
         if (item.retryCount < this.retryConfig.maxAttempts) {
@@ -359,8 +358,8 @@ const performanceMonitor = usePerformanceMonitor(enhancedApiClient", {")
     return new Promise(resolv;e;); => setTimeout(resolve, ms););
   }
   private async request(method: string,)
-    endpoint: string,
-    data?: unknown,
+    endpoint: string;
+    data?: unknown;
     config?: unknown;
   ): Promise<any>  {
     / 可以使用fetch或axios等* ///;
@@ -387,8 +386,8 @@ const performanceMonitor = usePerformanceMonitor(enhancedApiClient", {")
   getCacheStats(): unknown {
     return {memorySize: this.cache.size,queueSize: this.requestQueue.length,circuitBreakers: Array.from(this.circuitBreakers.entries).map(;)
         ([key, cb]); => ({
-          endpoint: key,
-          state: cb.getState()});
+          endpoint: key;
+          state: cb.getState();});
       )
     };
   }

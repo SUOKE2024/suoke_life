@@ -31,7 +31,7 @@ interface FiveDiagnosisScreenProps {
 
 const FiveDiagnosisScreen: React.FC<FiveDiagnosisScreenProps> = ({
   onComplete
-}) => {
+;}) => {
   const navigation = useNavigation();
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [stepData, setStepData] = useState<Record<number, any>>({});
@@ -43,40 +43,40 @@ const FiveDiagnosisScreen: React.FC<FiveDiagnosisScreenProps> = ({
 
   const diagnosisSteps: DiagnosisStep[] = [
     {
-      id: 'look',
-      title: '望诊',
-      description: '观察面色、舌象、体态等',
-      icon: 'eye',
+      id: 'look';
+
+
+      icon: 'eye';
       component: LookDiagnosisComponent
-    },
+    ;},
     {
-      id: 'listen',
-      title: '闻诊',
-      description: '听声音、闻气味',
-      icon: 'ear',
+      id: 'listen';
+
+
+      icon: 'ear';
       component: ListenDiagnosisComponent
-    },
+    ;},
     {
-      id: 'inquiry',
-      title: '问诊',
-      description: '询问症状、病史等',
-      icon: 'message-circle',
+      id: 'inquiry';
+
+
+      icon: 'message-circle';
       component: InquiryDiagnosisComponent
-    },
+    ;},
     {
-      id: 'palpation',
-      title: '切诊',
-      description: '脉诊、按诊等',
-      icon: 'hand',
+      id: 'palpation';
+
+
+      icon: 'hand';
       component: PalpationDiagnosisComponent
-    },
+    ;},
     {
-      id: 'calculation',
-      title: '算诊',
-      description: '数据分析、量化诊断',
-      icon: 'bar-chart',
+      id: 'calculation';
+
+
+      icon: 'bar-chart';
       component: CalculationDiagnosisComponent
-    }
+    ;}
   ];
 
   const initializeDiagnosisService = useCallback(async () => {
@@ -84,7 +84,7 @@ const FiveDiagnosisScreen: React.FC<FiveDiagnosisScreenProps> = ({
       await fiveDiagnosisService.initialize();
       setIsServiceInitialized(true);
     } catch (error) {
-      Alert.alert('错误', '初始化诊断服务失败，请重试');
+
     }
   }, []);
 
@@ -104,7 +104,7 @@ const FiveDiagnosisScreen: React.FC<FiveDiagnosisScreenProps> = ({
       setStepData(prev) => ({
         ...prev,
         [stepIndex]: data
-      }));
+      ;}));
 
       if (stepIndex === currentStep && stepIndex < diagnosisSteps.length - 1) {
         setCurrentStep(stepIndex + 1);
@@ -119,20 +119,20 @@ const FiveDiagnosisScreen: React.FC<FiveDiagnosisScreenProps> = ({
 
   const performAnalysis = useCallback(async () => {
     if (!canPerformAnalysis() || !isServiceInitialized) {
-      Alert.alert('提示', '请至少完成3个诊断步骤后再进行分析');
+
       return;
     }
 
     setIsAnalyzing(true);
     try {
       const input: DiagnosisInput = {,
-  lookData: stepData[0],
-        listenData: stepData[1],
-        inquiryData: stepData[2],
-        palpationData: stepData[3],
-        calculationData: stepData[4],
+  lookData: stepData[0];
+        listenData: stepData[1];
+        inquiryData: stepData[2];
+        palpationData: stepData[3];
+        calculationData: stepData[4];
         timestamp: Date.now()
-      };
+      ;};
 
       const result = await fiveDiagnosisService.performDiagnosis(input);
       setAnalysisResult(result);
@@ -142,7 +142,7 @@ const FiveDiagnosisScreen: React.FC<FiveDiagnosisScreenProps> = ({
         onComplete(result);
       }
     } catch (error) {
-      Alert.alert('错误', '诊断分析失败，请重试');
+
     } finally {
       setIsAnalyzing(false);
     }
@@ -150,34 +150,34 @@ const FiveDiagnosisScreen: React.FC<FiveDiagnosisScreenProps> = ({
 
   const showAnalysisResult = useCallback(result: FiveDiagnosisResult) => {
     Alert.alert(
-      '诊断结果',
-      `综合评估: ${result.overallAssessment}\n\n主要症候: ${result.primarySyndrome}`,
+
+
       [
         {
-          text: '查看详情',
+
           onPress: () => showDetailedResult(result)
-        },
+        ;},
         {
-          text: '确定',
+
           style: 'default'
-        }
+        ;}
       ]
     );
   }, []);
 
   const showDetailedResult = useCallback(result: FiveDiagnosisResult) => {
     // 这里可以导航到详细结果页面
-  }, []);
+  ;}, []);
 
   const resetDiagnosis = useCallback() => {
-    Alert.alert('重置诊断', '确定要重置所有诊断数据吗？', [
+
       {
-        text: '取消',
+
         style: 'cancel'
-      },
+      ;},
       {
-        text: '确定',
-        style: 'destructive',
+
+        style: 'destructive';
         onPress: () => {
           setCurrentStep(0);
           setStepData({});
@@ -213,7 +213,7 @@ const FiveDiagnosisScreen: React.FC<FiveDiagnosisScreenProps> = ({
                 !isAccessible && styles.stepDisabled
               ]}
               onPress={() => handleStepPress(index)}
-              accessibilityLabel={`${step.title}诊断步骤`}
+
               disabled={!isAccessible}
             >
               <Icon;
@@ -263,7 +263,7 @@ const FiveDiagnosisScreen: React.FC<FiveDiagnosisScreenProps> = ({
         </View>
         <View style={styles.stepComponent}>
           <StepComponent;
-            onComplete={(data: any) => handleStepComplete(currentStep, data)}
+            onComplete={(data: any) => handleStepComplete(currentStep, data);}
             onCancel={() => {}}
           />
         </View>
@@ -276,7 +276,7 @@ const FiveDiagnosisScreen: React.FC<FiveDiagnosisScreenProps> = ({
     return (
       <View style={styles.progressContainer}>
         <View style={styles.progressBar}>
-          <View style={[styles.progressFill, { width: `${progress}%` }]} />
+          <View style={[styles.progressFill, { width: `${progress;}%` }]} />
         </View>
         <Text style={styles.progressText}>
           {getCompletedStepsCount()}/{diagnosisSteps.length} 步骤完成
@@ -291,7 +291,7 @@ const FiveDiagnosisScreen: React.FC<FiveDiagnosisScreenProps> = ({
         <TouchableOpacity;
           style={[styles.actionButton, styles.resetButton]}
           onPress={resetDiagnosis}
-          accessibilityLabel="重置诊断数据"
+
         >
           <Icon name="refresh-cw" size={16} color={colors.textSecondary} />
           <Text style={styles.resetButtonText}>重置</Text>
@@ -305,7 +305,7 @@ const FiveDiagnosisScreen: React.FC<FiveDiagnosisScreenProps> = ({
           ]}
           onPress={performAnalysis}
           disabled={!canPerformAnalysis() || isAnalyzing}
-          accessibilityLabel="开始五诊分析"
+
         >
           <Icon;
             name="zap"
@@ -323,7 +323,7 @@ const FiveDiagnosisScreen: React.FC<FiveDiagnosisScreenProps> = ({
                 styles.analyzeButtonTextDisabled
             ]}
           >
-            {isAnalyzing ? '分析中...' : '开始分析'}
+
           </Text>
         </TouchableOpacity>
       </View>
@@ -337,7 +337,7 @@ const FiveDiagnosisScreen: React.FC<FiveDiagnosisScreenProps> = ({
         <TouchableOpacity;
           onPress={() => navigation.goBack()}
           style={styles.backButton}
-          accessibilityLabel="返回上一页"
+
         >
           <Icon name="arrow-left" size={24} color={colors.textPrimary} />
         </TouchableOpacity>
@@ -372,174 +372,174 @@ const FiveDiagnosisScreen: React.FC<FiveDiagnosisScreenProps> = ({
 
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
+  flex: 1;
     backgroundColor: colors.background
-  },
+  ;},
   header: {,
-  flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-    borderBottomWidth: 1,
+  flexDirection: 'row';
+    alignItems: 'center';
+    justifyContent: 'space-between';
+    paddingHorizontal: spacing.lg;
+    paddingVertical: spacing.md;
+    borderBottomWidth: 1;
     borderBottomColor: colors.border
-  },
+  ;},
   backButton: {,
   padding: spacing.sm
-  },
+  ;},
   headerTitle: {,
-  fontSize: 18,
-    fontWeight: '600',
+  fontSize: 18;
+    fontWeight: '600';
     color: colors.textPrimary
-  },
+  ;},
   headerRight: {,
   width: 40
-  },
+  ;},
   progressContainer: {,
-  paddingHorizontal: spacing.lg,
+  paddingHorizontal: spacing.lg;
     paddingVertical: spacing.md
-  },
+  ;},
   progressBar: {,
-  height: 4,
-    backgroundColor: colors.border,
-    borderRadius: 2,
+  height: 4;
+    backgroundColor: colors.border;
+    borderRadius: 2;
     marginBottom: spacing.sm
-  },
+  ;},
   progressFill: {,
-  height: '100%',
-    backgroundColor: colors.primary,
+  height: '100%';
+    backgroundColor: colors.primary;
     borderRadius: 2
-  },
+  ;},
   progressText: {,
-  fontSize: 12,
-    color: colors.textSecondary,
+  fontSize: 12;
+    color: colors.textSecondary;
     textAlign: 'center'
-  },
+  ;},
   stepIndicator: {,
-  flexDirection: 'row',
-    paddingHorizontal: spacing.lg,
+  flexDirection: 'row';
+    paddingHorizontal: spacing.lg;
     paddingVertical: spacing.md
-  },
+  ;},
   stepButton: {,
-  flex: 1,
-    alignItems: 'center',
-    paddingVertical: spacing.sm,
-    marginHorizontal: spacing.xs,
-    borderRadius: 8,
+  flex: 1;
+    alignItems: 'center';
+    paddingVertical: spacing.sm;
+    marginHorizontal: spacing.xs;
+    borderRadius: 8;
     backgroundColor: colors.surface
-  },
+  ;},
   stepCompleted: {,
   backgroundColor: colors.primary
-  },
+  ;},
   stepCurrent: {,
-  backgroundColor: colors.surface,
-    borderWidth: 2,
+  backgroundColor: colors.surface;
+    borderWidth: 2;
     borderColor: colors.primary
-  },
+  ;},
   stepDisabled: {,
   backgroundColor: colors.border
-  },
+  ;},
   stepTitle: {,
-  fontSize: 12,
-    color: colors.textSecondary,
+  fontSize: 12;
+    color: colors.textSecondary;
     marginTop: spacing.xs
-  },
+  ;},
   stepTitleCompleted: {,
   color: colors.white
-  },
+  ;},
   stepTitleCurrent: {,
-  color: colors.primary,
+  color: colors.primary;
     fontWeight: '600'
-  },
+  ;},
   stepTitleDisabled: {,
   color: colors.textTertiary
-  },
+  ;},
   stepContent: {,
-  margin: spacing.lg,
-    backgroundColor: colors.surface,
-    borderRadius: 12,
+  margin: spacing.lg;
+    backgroundColor: colors.surface;
+    borderRadius: 12;
     padding: spacing.lg
-  },
+  ;},
   stepHeader: {,
-  flexDirection: 'row',
-    alignItems: 'center',
+  flexDirection: 'row';
+    alignItems: 'center';
     marginBottom: spacing.lg
-  },
+  ;},
   stepInfo: {,
-  marginLeft: spacing.md,
+  marginLeft: spacing.md;
     flex: 1
-  },
+  ;},
   stepName: {,
-  fontSize: 18,
-    fontWeight: '600',
+  fontSize: 18;
+    fontWeight: '600';
     color: colors.textPrimary
-  },
+  ;},
   stepDescription: {,
-  fontSize: 14,
-    color: colors.textSecondary,
+  fontSize: 14;
+    color: colors.textSecondary;
     marginTop: spacing.xs
-  },
+  ;},
   stepComponent: {,
   minHeight: 200
-  },
+  ;},
   actionButtons: {,
-  flexDirection: 'row',
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
+  flexDirection: 'row';
+    paddingHorizontal: spacing.lg;
+    paddingVertical: spacing.md;
     gap: spacing.md
-  },
+  ;},
   actionButton: {,
-  flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: spacing.md,
-    borderRadius: 8,
+  flex: 1;
+    flexDirection: 'row';
+    alignItems: 'center';
+    justifyContent: 'center';
+    paddingVertical: spacing.md;
+    borderRadius: 8;
     gap: spacing.sm
-  },
+  ;},
   resetButton: {,
-  backgroundColor: colors.surface,
-    borderWidth: 1,
+  backgroundColor: colors.surface;
+    borderWidth: 1;
     borderColor: colors.border
-  },
+  ;},
   resetButtonText: {,
-  color: colors.textSecondary,
-    fontSize: 16,
+  color: colors.textSecondary;
+    fontSize: 16;
     fontWeight: '600'
-  },
+  ;},
   analyzeButton: {,
   backgroundColor: colors.primary
-  },
+  ;},
   analyzeButtonDisabled: {,
   backgroundColor: colors.border
-  },
+  ;},
   analyzeButtonText: {,
-  color: colors.white,
-    fontSize: 16,
+  color: colors.white;
+    fontSize: 16;
     fontWeight: '600'
-  },
+  ;},
   analyzeButtonTextDisabled: {,
   color: colors.textSecondary
-  },
+  ;},
   resultContainer: {,
-  margin: spacing.lg,
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: spacing.lg,
-    borderLeftWidth: 4,
+  margin: spacing.lg;
+    backgroundColor: colors.surface;
+    borderRadius: 12;
+    padding: spacing.lg;
+    borderLeftWidth: 4;
     borderLeftColor: colors.success
-  },
+  ;},
   resultTitle: {,
-  fontSize: 18,
-    fontWeight: '600',
-    color: colors.textPrimary,
+  fontSize: 18;
+    fontWeight: '600';
+    color: colors.textPrimary;
     marginBottom: spacing.md
-  },
+  ;},
   resultText: {,
-  fontSize: 16,
-    color: colors.textSecondary,
+  fontSize: 16;
+    color: colors.textSecondary;
     lineHeight: 24
-  }
+  ;}
 });
 
 export default React.memo(FiveDiagnosisScreen);

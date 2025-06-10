@@ -16,20 +16,20 @@ import {;
   getCurrentEnvConfig} from '../../constants/config';
 import { useApiService } from '../../services/IntegratedApiService';
 interface ConfigItem {
-  key: string;,
-  label: string;,
-  type: 'boolean' | 'number' | 'string';,
+  key: string;
+  label: string;
+  type: 'boolean' | 'number' | 'string';
   value: any;
   description?: string;
   min?: number;
   max?: number;
 }
 interface ConfigSection {
-  title: string;,
+  title: string;
   items: ConfigItem[];
 }
 const GatewayConfig: React.FC = () => {
-  const { apiService } = useApiService();
+  const { apiService ;} = useApiService();
   const [configs, setConfigs] = useState<ConfigSection[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
@@ -41,100 +41,100 @@ const GatewayConfig: React.FC = () => {
   const initializeConfigs = () => {
     const configSections: ConfigSection[] = [
       {
-      title: "功能特性",
+
       items: Object.entries(GATEWAY_FEATURES).map([key, value]) => ({
-          key: `features.${key}`,
-          label: formatLabel(key),
-          type: 'boolean',
+          key: `features.${key;}`,
+          label: formatLabel(key);
+          type: 'boolean';
           value,
-          description: getFeatureDescription(key)}))},
+          description: getFeatureDescription(key);}))},
       {
-      title: "性能配置",
+
       items: [
           {
-      key: "performance.TIMEOUT",
-      label: '请求超时时间',
-            type: 'number',
-            value: GATEWAY_PERFORMANCE_CONFIG.TIMEOUT,
-            description: '单个请求的超时时间（毫秒）',
-            min: 1000,
-            max: 120000},
+      key: "performance.TIMEOUT";
+
+            type: 'number';
+            value: GATEWAY_PERFORMANCE_CONFIG.TIMEOUT;
+
+            min: 1000;
+            max: 120000;},
           {
-      key: "performance.RETRY_ATTEMPTS",
-      label: '重试次数',
-            type: 'number',
-            value: GATEWAY_PERFORMANCE_CONFIG.RETRY_ATTEMPTS,
-            description: '请求失败时的重试次数',
-            min: 0,
-            max: 10},
+      key: "performance.RETRY_ATTEMPTS";
+
+            type: 'number';
+            value: GATEWAY_PERFORMANCE_CONFIG.RETRY_ATTEMPTS;
+
+            min: 0;
+            max: 10;},
           {
-      key: "performance.RETRY_DELAY",
-      label: '重试延迟',
-            type: 'number',
-            value: GATEWAY_PERFORMANCE_CONFIG.RETRY_DELAY,
-            description: '重试之间的延迟时间（毫秒）',
-            min: 100,
-            max: 10000},
+      key: "performance.RETRY_DELAY";
+
+            type: 'number';
+            value: GATEWAY_PERFORMANCE_CONFIG.RETRY_DELAY;
+
+            min: 100;
+            max: 10000;},
           {
-      key: "performance.STREAM_TIMEOUT",
-      label: '流式超时时间',
-            type: 'number',
-            value: GATEWAY_PERFORMANCE_CONFIG.STREAM_TIMEOUT,
-            description: '流式请求的超时时间（毫秒）',
-            min: 10000,
-            max: 300000}]},
+      key: "performance.STREAM_TIMEOUT";
+
+            type: 'number';
+            value: GATEWAY_PERFORMANCE_CONFIG.STREAM_TIMEOUT;
+
+            min: 10000;
+            max: 300000;}]},
       {
-      title: "熔断器配置",
+
       items: [
           {
-      key: "circuitBreaker.FAILURE_THRESHOLD",
-      label: '失败阈值',
-            type: 'number',
-            value: GATEWAY_PERFORMANCE_CONFIG.CIRCUIT_BREAKER.FAILURE_THRESHOLD,
-            description: '触发熔断的连续失败次数',
-            min: 1,
-            max: 20},
+      key: "circuitBreaker.FAILURE_THRESHOLD";
+
+            type: 'number';
+            value: GATEWAY_PERFORMANCE_CONFIG.CIRCUIT_BREAKER.FAILURE_THRESHOLD;
+
+            min: 1;
+            max: 20;},
           {
-      key: "circuitBreaker.RECOVERY_TIMEOUT",
-      label: '恢复超时',
-            type: 'number',
-            value: GATEWAY_PERFORMANCE_CONFIG.CIRCUIT_BREAKER.RECOVERY_TIMEOUT,
-            description: '熔断器恢复尝试的超时时间（毫秒）',
-            min: 10000,
-            max: 300000},
+      key: "circuitBreaker.RECOVERY_TIMEOUT";
+
+            type: 'number';
+            value: GATEWAY_PERFORMANCE_CONFIG.CIRCUIT_BREAKER.RECOVERY_TIMEOUT;
+
+            min: 10000;
+            max: 300000;},
           {
-      key: "circuitBreaker.MONITORING_PERIOD",
-      label: '监控周期',
-            type: 'number',
-            value: GATEWAY_PERFORMANCE_CONFIG.CIRCUIT_BREAKER.MONITORING_PERIOD,
-            description: '监控失败率的时间窗口（毫秒）',
-            min: 5000,
-            max: 120000}]},
+      key: "circuitBreaker.MONITORING_PERIOD";
+
+            type: 'number';
+            value: GATEWAY_PERFORMANCE_CONFIG.CIRCUIT_BREAKER.MONITORING_PERIOD;
+
+            min: 5000;
+            max: 120000;}]},
       {
-      title: "缓存配置",
+
       items: [
           {
-      key: "cache.TTL",
-      label: '默认TTL',
-            type: 'number',
-            value: GATEWAY_CACHE_CONFIG.TTL,
-            description: '缓存项的默认生存时间（毫秒）',
-            min: 1000,
-            max: 3600000},
+      key: "cache.TTL";
+
+            type: 'number';
+            value: GATEWAY_CACHE_CONFIG.TTL;
+
+            min: 1000;
+            max: 3600000;},
           {
-      key: "cache.MAX_SIZE",
-      label: '最大缓存数',
-            type: 'number',
-            value: GATEWAY_CACHE_CONFIG.MAX_SIZE,
-            description: '缓存中最大项目数',
-            min: 10,
-            max: 1000},
+      key: "cache.MAX_SIZE";
+
+            type: 'number';
+            value: GATEWAY_CACHE_CONFIG.MAX_SIZE;
+
+            min: 10;
+            max: 1000;},
           {
-      key: "cache.ENABLE_PERSISTENCE",
-      label: '启用持久化',
-            type: 'boolean',
-            value: GATEWAY_CACHE_CONFIG.ENABLE_PERSISTENCE,
-            description: '是否将缓存持久化到本地存储'}]}];
+      key: "cache.ENABLE_PERSISTENCE";
+
+            type: 'boolean';
+            value: GATEWAY_CACHE_CONFIG.ENABLE_PERSISTENCE;
+
     setConfigs(configSections);
   };
   // 格式化标签
@@ -148,25 +148,25 @@ const GatewayConfig: React.FC = () => {
   // 获取功能描述
   const getFeatureDescription = (key: string): string => {
     const descriptions: Record<string, string> = {
-      ENABLE_STREAMING: "启用流式响应处理", "
-      ENABLE_MULTIMODAL: '启用多模态数据处理',
-      ENABLE_TCM: '启用中医相关功能',
-      ENABLE_OFFLINE: '启用离线模式支持',
-      ENABLE_ANALYTICS: '启用分析和统计',
-      ENABLE_CACHING: '启用响应缓存',
-      ENABLE_CIRCUIT_BREAKER: '启用熔断器保护',
-      ENABLE_RATE_LIMITING: '启用请求限流',
-      ENABLE_AUTHENTICATION: '启用身份认证',
-      ENABLE_MONITORING: '启用监控和日志'};
-    return descriptions[key] || '功能开关';
-  };
+
+
+
+
+
+
+
+
+
+
+
+  ;};
   // 更新配置值
   const updateConfigValue = (key: string, value: any) => {
     setConfigs(prevConfigs =>)
       prevConfigs.map(section => ({
         ...section,
         items: section.items.map(item =>)
-          item.key === key ? { ...item, value } : item,
+          item.key === key ? { ...item, value ;} : item,
         )})),
     );
     setHasChanges(true);
@@ -186,23 +186,23 @@ const GatewayConfig: React.FC = () => {
       if (typeof localStorage !== 'undefined') {
         localStorage.setItem('gateway_config', JSON.stringify(configData));
       }
-      Alert.alert("成功", "配置已保存');
+
       setHasChanges(false);
       setIsEditing(false);
     } catch (error) {
-      Alert.alert("错误", "保存配置失败');
+
     }
   };
   // 重置配置
   const resetConfigs = () => {
-    Alert.alert("确认重置", "这将重置所有配置到默认值，确定继续吗？',
+
       [
         {
-      text: "取消",
-      style: 'cancel' },
+
+      style: 'cancel' ;},
         {
-      text: "确定", "
-      style: 'destructive',
+
+      style: 'destructive';
           onPress: () => {
             initializeConfigs();
             setHasChanges(false);
@@ -212,22 +212,22 @@ const GatewayConfig: React.FC = () => {
   };
   // 清除缓存
   const clearCache = () => {
-    Alert.alert("清除缓存", "确定要清除所有缓存数据吗？',
+
       [
         {
-      text: "取消",
-      style: 'cancel' },
+
+      style: 'cancel' ;},
         {
-      text: "确定",
+
       onPress: () => {
             apiService.clearCache();
-            Alert.alert("成功", "缓存已清除');
+
           }}],
     );
   };
   // 渲染配置项
   const renderConfigItem = (item: ConfigItem) => {
-    const { key, label, type, value, description, min, max } = item;
+    const { key, label, type, value, description, min, max ;} = item;
     return (
   <View key={key} style={styles.configItem}>
         <View style={styles.configHeader}>
@@ -254,7 +254,7 @@ const GatewayConfig: React.FC = () => {
               editable={isEditing}
             />
             {min !== undefined && max !== undefined  && <Text style={styles.rangeText}>
-                范围: {min} - {max}
+
               </Text>
             )}
           </View>
@@ -272,7 +272,7 @@ const GatewayConfig: React.FC = () => {
   // 渲染配置节
   const renderConfigSection = (section: ConfigSection) => {
     return (
-  <View key={section.title} style={styles.section}>
+  <View key={section.title;} style={styles.section}>
         <Text style={styles.sectionTitle}>{section.title}</Text>
         {section.items.map(renderConfigItem)}
       </View>
@@ -295,7 +295,7 @@ const GatewayConfig: React.FC = () => {
             onPress={() => setShowAdvanced(!showAdvanced)}
           >
             <Text style={styles.actionButtonText}>
-              {showAdvanced ? '隐藏高级' : '显示高级'}
+
             </Text>
           </TouchableOpacity>
         </View>
@@ -323,14 +323,14 @@ const GatewayConfig: React.FC = () => {
               style={[styles.footerButton, styles.cancelButton]}
               onPress={() => {
                 if (hasChanges) {
-                  Alert.alert("放弃更改", "有未保存的更改，确定要放弃吗？',
+
                     [
                       {
-      text: "取消",
-      style: 'cancel' },
+
+      style: 'cancel' ;},
                       {
-      text: "放弃",
-      style: 'destructive',
+
+      style: 'destructive';
                         onPress: () => {
                           initializeConfigs();
                           setIsEditing(false);
@@ -368,123 +368,123 @@ const GatewayConfig: React.FC = () => {
 };
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
-    backgroundColor: '#f5f5f5'},
+  flex: 1;
+    backgroundColor: '#f5f5f5';},
   header: {,
-  backgroundColor: '#fff',
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0'},
+  backgroundColor: '#fff';
+    padding: 16;
+    borderBottomWidth: 1;
+    borderBottomColor: '#e0e0e0';},
   title: {,
-  fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 12},
+  fontSize: 24;
+    fontWeight: 'bold';
+    color: '#333';
+    marginBottom: 12;},
   headerActions: {,
-  flexDirection: 'row',
-    gap: 8},
+  flexDirection: 'row';
+    gap: 8;},
   actionButton: {,
-  paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 6,
-    borderWidth: 1},
+  paddingHorizontal: 12;
+    paddingVertical: 6;
+    borderRadius: 6;
+    borderWidth: 1;},
   clearButton: {,
-  borderColor: '#f44336',
-    backgroundColor: '#fff'},
+  borderColor: '#f44336';
+    backgroundColor: '#fff';},
   advancedButton: {,
-  borderColor: '#2196f3',
-    backgroundColor: '#fff'},
+  borderColor: '#2196f3';
+    backgroundColor: '#fff';},
   actionButtonText: {,
-  fontSize: 14,
-    fontWeight: '500'},
+  fontSize: 14;
+    fontWeight: '500';},
   content: {,
-  flex: 1},
+  flex: 1;},
   section: {,
-  margin: 16,
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    padding: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3},
+  margin: 16;
+    backgroundColor: '#fff';
+    borderRadius: 8;
+    padding: 16;
+    shadowColor: '#000';
+    shadowOffset: { width: 0, height: 2 ;},
+    shadowOpacity: 0.1;
+    shadowRadius: 4;
+    elevation: 3;},
   sectionTitle: {,
-  fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 16},
+  fontSize: 18;
+    fontWeight: 'bold';
+    color: '#333';
+    marginBottom: 16;},
   configItem: {,
-  marginBottom: 16,
-    paddingBottom: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0'},
+  marginBottom: 16;
+    paddingBottom: 16;
+    borderBottomWidth: 1;
+    borderBottomColor: '#f0f0f0';},
   configHeader: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 4},
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
+    marginBottom: 4;},
   configLabel: {,
-  fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
-    flex: 1},
+  fontSize: 16;
+    fontWeight: '600';
+    color: '#333';
+    flex: 1;},
   configDescription: {,
-  fontSize: 14,
-    color: '#666',
-    marginBottom: 8},
+  fontSize: 14;
+    color: '#666';
+    marginBottom: 8;},
   numberInputContainer: {,
-  marginTop: 8},
+  marginTop: 8;},
   numberInput: {,
-  borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 6,
-    padding: 12,
-    fontSize: 16,
-    backgroundColor: '#fff'},
+  borderWidth: 1;
+    borderColor: '#ddd';
+    borderRadius: 6;
+    padding: 12;
+    fontSize: 16;
+    backgroundColor: '#fff';},
   textInput: {,
-  borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 6,
-    padding: 12,
-    fontSize: 16,
-    backgroundColor: '#fff',
-    marginTop: 8},
+  borderWidth: 1;
+    borderColor: '#ddd';
+    borderRadius: 6;
+    padding: 12;
+    fontSize: 16;
+    backgroundColor: '#fff';
+    marginTop: 8;},
   disabledInput: {,
-  backgroundColor: '#f5f5f5',
-    color: '#999'},
+  backgroundColor: '#f5f5f5';
+    color: '#999';},
   rangeText: {,
-  fontSize: 12,
-    color: '#666',
-    marginTop: 4},
+  fontSize: 12;
+    color: '#666';
+    marginTop: 4;},
   footer: {,
-  backgroundColor: '#fff',
-    padding: 16,
-    borderTopWidth: 1,
-    borderTopColor: '#e0e0e0'},
+  backgroundColor: '#fff';
+    padding: 16;
+    borderTopWidth: 1;
+    borderTopColor: '#e0e0e0';},
   footerButton: {,
-  paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 6,
-    alignItems: 'center'},
+  paddingVertical: 12;
+    paddingHorizontal: 24;
+    borderRadius: 6;
+    alignItems: 'center';},
   footerButtonText: {,
-  fontSize: 16,
-    fontWeight: 'bold',
-    color: '#fff'},
+  fontSize: 16;
+    fontWeight: 'bold';
+    color: '#fff';},
   editButton: {,
-  backgroundColor: '#2196f3'},
+  backgroundColor: '#2196f3';},
   editActions: {,
-  flexDirection: 'row',
-    gap: 12},
+  flexDirection: 'row';
+    gap: 12;},
   cancelButton: {,
-  backgroundColor: '#9e9e9e',
-    flex: 1},
+  backgroundColor: '#9e9e9e';
+    flex: 1;},
   resetButton: {,
-  backgroundColor: '#ff9800',
-    flex: 1},
+  backgroundColor: '#ff9800';
+    flex: 1;},
   saveButton: {,
-  backgroundColor: '#4caf50',
-    flex: 1},
+  backgroundColor: '#4caf50';
+    flex: 1;},
   disabledButton: {,
-  backgroundColor: '#ccc'}});
+  backgroundColor: '#ccc';}});
 export default GatewayConfig;

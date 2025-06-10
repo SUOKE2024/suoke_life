@@ -12,8 +12,8 @@ import {;
 import { useTheme } from '../../contexts/ThemeContext';
 
 export interface TabItem {
-  key: string;,
-  title: string;,
+  key: string;
+  title: string;
   content: React.ReactNode;
   disabled?: boolean;
   badge?: string | number;
@@ -41,7 +41,7 @@ export interface TabsProps {
 
 export const Tabs: React.FC<TabsProps> = ({
   items,
-  activeKey: controlledActiveKey,
+  activeKey: controlledActiveKey;
   defaultActiveKey,
   onChange,
   type = 'line',
@@ -80,14 +80,14 @@ export const Tabs: React.FC<TabsProps> = ({
     if (animated) {
       Animated.parallel([
         Animated.spring(indicatorAnim, {
-          toValue: index,
+          toValue: index;
           useNativeDriver: true
-        }),
+        ;}),
         Animated.timing(contentAnim, {
-          toValue: index,
-          duration: 200,
+          toValue: index;
+          duration: 200;
           useNativeDriver: true
-        })
+        ;})
       ]).start();
     }
   };
@@ -97,47 +97,47 @@ export const Tabs: React.FC<TabsProps> = ({
 
   const getTabBarStyles = () => {
     const baseStyle = {
-      flexDirection: 'row' as const,
+      flexDirection: 'row' as const;
       backgroundColor: currentTheme.colors.surface
-    };
+    ;};
 
     switch (type) {
       case 'card':
         return {
           ...baseStyle,
-          backgroundColor: currentTheme.colors.surfaceVariant,
-          borderRadius: 8,
+          backgroundColor: currentTheme.colors.surfaceVariant;
+          borderRadius: 8;
           padding: 4
-        };
+        ;};
       case 'button':
         return {
           ...baseStyle,
           backgroundColor: 'transparent'
-        };
+        ;};
       default:
         return {
           ...baseStyle,
-          borderBottomWidth: 1,
+          borderBottomWidth: 1;
           borderBottomColor: currentTheme.colors.outline
-        };
+        ;};
     }
   };
 
   const getTabStyles = (isActive: boolean, isDisabled: boolean) => {
     const baseStyle = {
-      paddingHorizontal: 16,
-      paddingVertical: 12,
-      alignItems: 'center' as const,
-      justifyContent: 'center' as const,
-      flex: scrollable ? 0 : 1,
+      paddingHorizontal: 16;
+      paddingVertical: 12;
+      alignItems: 'center' as const;
+      justifyContent: 'center' as const;
+      flex: scrollable ? 0 : 1;
       minWidth: scrollable ? 80 : undefined
-    };
+    ;};
 
     if (isDisabled) {
       return {
         ...baseStyle,
         opacity: 0.5
-      };
+      ;};
     }
 
     switch (type) {
@@ -147,22 +147,22 @@ export const Tabs: React.FC<TabsProps> = ({
           backgroundColor: isActive;
             ? currentTheme.colors.primary;
             : 'transparent',
-          borderRadius: 6,
+          borderRadius: 6;
           marginHorizontal: 2
-        };
+        ;};
       case 'button':
         return {
           ...baseStyle,
           backgroundColor: isActive;
             ? currentTheme.colors.primary;
             : currentTheme.colors.surfaceVariant,
-          borderRadius: 8,
+          borderRadius: 8;
           marginHorizontal: 4
-        };
+        ;};
       default:
         return {
           ...baseStyle,
-          borderBottomWidth: isActive ? 2 : 0,
+          borderBottomWidth: isActive ? 2 : 0;
           borderBottomColor: isActive;
             ? currentTheme.colors.primary;
             : 'transparent'
@@ -172,15 +172,15 @@ export const Tabs: React.FC<TabsProps> = ({
 
   const getTabTextStyles = (isActive: boolean, isDisabled: boolean) => {
     const baseStyle = {
-      fontSize: 16,
+      fontSize: 16;
       fontWeight: isActive ? ('600' as const) : ('400' as const)
-    };
+    ;};
 
     if (isDisabled) {
       return {
         ...baseStyle,
         color: currentTheme.colors.onSurfaceVariant
-      };
+      ;};
     }
 
     switch (type) {
@@ -205,7 +205,7 @@ export const Tabs: React.FC<TabsProps> = ({
   const renderTabBar = () => {
     const TabBarContainer = scrollable ? ScrollView : View;
     const containerProps = scrollable;
-      ? { horizontal: true, showsHorizontalScrollIndicator: false }
+      ? { horizontal: true, showsHorizontalScrollIndicator: false ;}
       : {};
 
     return (
@@ -230,9 +230,9 @@ export const Tabs: React.FC<TabsProps> = ({
               accessible={accessible}
               accessibilityRole="tab"
               accessibilityLabel={item.title}
-              accessibilityState={ selected: isActive, disabled: isDisabled }}
+              accessibilityState={ selected: isActive, disabled: isDisabled ;}}
             >
-              <View style={ flexDirection: 'row', alignItems: 'center' }}>
+              <View style={ flexDirection: 'row', alignItems: 'center' ;}}>
                 <Text;
                   style={[
                     getTabTextStyles(isActive, isDisabled),
@@ -266,25 +266,25 @@ export const Tabs: React.FC<TabsProps> = ({
   const styles = StyleSheet.create({
     container: {,
   flex: 1
-    },
+    ;},
     content: {,
-  flex: 1,
+  flex: 1;
       padding: 16
-    },
+    ;},
     badge: {,
-  backgroundColor: currentTheme.colors.error,
-      borderRadius: 10,
-      paddingHorizontal: 6,
-      paddingVertical: 2,
-      marginLeft: 8,
-      minWidth: 20,
+  backgroundColor: currentTheme.colors.error;
+      borderRadius: 10;
+      paddingHorizontal: 6;
+      paddingVertical: 2;
+      marginLeft: 8;
+      minWidth: 20;
       alignItems: 'center'
-    },
+    ;},
     badgeText: {,
-  color: '#ffffff',
-      fontSize: 12,
+  color: '#ffffff';
+      fontSize: 12;
       fontWeight: '600'
-    }
+    ;}
   });
 
   return (
@@ -298,14 +298,14 @@ export const Tabs: React.FC<TabsProps> = ({
 
 // TabPane 组件（用于更简洁的API）
 export interface TabPaneProps {
-  tab: string;,
+  tab: string;
   key: string;
   disabled?: boolean;
   badge?: string | number;
   children: React.ReactNode;
 }
 
-export const TabPane: React.FC<TabPaneProps> = ({ children }) => {
+export const TabPane: React.FC<TabPaneProps> = ({ children ;}) => {
   return <>{children}</>;
 };
 
@@ -321,12 +321,12 @@ export const AdvancedTabs: React.FC<AdvancedTabsProps> = ({
   const items: TabItem[] = React.Children.map(children, (child) => {
     if (React.isValidElement(child) && child.type === TabPane) {
       return {
-        key: child.props.key || '',
-        title: child.props.tab,
-        content: child.props.children,
-        disabled: child.props.disabled,
+        key: child.props.key || '';
+        title: child.props.tab;
+        content: child.props.children;
+        disabled: child.props.disabled;
         badge: child.props.badge
-      };
+      ;};
     }
     return null;
   }).filter(Boolean) as TabItem[];

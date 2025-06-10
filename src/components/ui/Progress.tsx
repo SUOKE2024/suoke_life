@@ -45,7 +45,7 @@ export const Progress: React.FC<ProgressProps> = ({
   accessible = true,
   accessibilityLabel,
   testID
-}) => {
+;}) => {
   const { currentTheme } = useTheme();
   const progressAnim = useRef(new Animated.Value(0)).current;
   const indeterminateAnim = useRef(new Animated.Value(0)).current;
@@ -59,25 +59,25 @@ export const Progress: React.FC<ProgressProps> = ({
       Animated.loop(
         Animated.sequence([
           Animated.timing(indeterminateAnim, {
-            toValue: 1,
-            duration: 1000,
+            toValue: 1;
+            duration: 1000;
             useNativeDriver: false
-          }),
+          ;}),
           Animated.timing(indeterminateAnim, {
-            toValue: 0,
-            duration: 1000,
+            toValue: 0;
+            duration: 1000;
             useNativeDriver: false
-          })
+          ;})
         ])
       ).start();
     } else {
       indeterminateAnim.setValue(0);
       if (animated) {
         Animated.timing(progressAnim, {
-          toValue: percentage,
-          duration: 500,
+          toValue: percentage;
+          duration: 500;
           useNativeDriver: false
-        }).start();
+        ;}).start();
       } else {
         progressAnim.setValue(percentage);
       }
@@ -95,11 +95,11 @@ export const Progress: React.FC<ProgressProps> = ({
   const getSizeStyles = () => {
     switch (size) {
       case 'sm':
-        return { height: 4, borderRadius: 2 };
+        return { height: 4, borderRadius: 2 ;};
       case 'lg':
-        return { height: 12, borderRadius: 6 };
+        return { height: 12, borderRadius: 6 ;};
       default:
-        return { height: 8, borderRadius: 4 };
+        return { height: 8, borderRadius: 4 ;};
     }
   };
 
@@ -124,28 +124,28 @@ export const Progress: React.FC<ProgressProps> = ({
   const styles = StyleSheet.create({
     container: {,
   width: '100%'
-    },
+    ;},
     progressBar: {,
-  width: '100%',
-      backgroundColor: backgroundColor || currentTheme.colors.outline,
-      borderRadius: sizeStyles.borderRadius,
-      height: sizeStyles.height,
+  width: '100%';
+      backgroundColor: backgroundColor || currentTheme.colors.outline;
+      borderRadius: sizeStyles.borderRadius;
+      height: sizeStyles.height;
       overflow: 'hidden'
-    },
+    ;},
     progressFill: {,
-  height: '100%',
-      backgroundColor: progressColor,
+  height: '100%';
+      backgroundColor: progressColor;
       borderRadius: sizeStyles.borderRadius
-    },
+    ;},
     stripedFill: {
       // React Native不支持backgroundImage，这里可以用其他方式实现条纹效果
       opacity: 0.8
-    },
+    ;},
     label: {,
-  fontSize: 14,
-      color: currentTheme.colors.onSurface,
-      textAlign: 'center',
-      marginTop: 4,
+  fontSize: 14;
+      color: currentTheme.colors.onSurface;
+      textAlign: 'center';
+      marginTop: 4;
       ...labelStyle
     }
   });
@@ -155,7 +155,7 @@ export const Progress: React.FC<ProgressProps> = ({
       const translateX = indeterminateAnim.interpolate({
         inputRange: [0, 1],
         outputRange: ['-100%', '100%']
-      });
+      ;});
 
       return (
         <View style={styles.progressBar}>
@@ -163,8 +163,8 @@ export const Progress: React.FC<ProgressProps> = ({
             style={[
               styles.progressFill,
               {
-                width: '30%',
-                transform: [{ translateX }]
+                width: '30%';
+                transform: [{ translateX ;}]
               }
             ]}
           />
@@ -176,7 +176,7 @@ export const Progress: React.FC<ProgressProps> = ({
       inputRange: [0, 100],
       outputRange: ['0%', '100%'],
       extrapolate: 'clamp'
-    });
+    ;});
 
     return (
       <View style={styles.progressBar}>
@@ -193,13 +193,13 @@ export const Progress: React.FC<ProgressProps> = ({
 
   const getAccessibilityProps = () => ({
     accessible,
-    accessibilityRole: 'progressbar' as const,
-    accessibilityLabel: accessibilityLabel || `进度 ${percentage.toFixed(0)}%`,
+    accessibilityRole: 'progressbar' as const;
+
     accessibilityValue: {,
-  min: 0,
+  min: 0;
       max,
       now: normalizedValue
-    }
+    ;}
   });
 
   return (

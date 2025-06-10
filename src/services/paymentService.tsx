@@ -1,17 +1,16 @@
-import { apiClient } from "../../placeholder";./    apiClient;
-import React from "react";
-支付系统集成服务   索克生活APP - 多支付方式集成管理
+react";
+
 | "wechat"  *  | "unionpay"  *  | "stripe"  *  | "paypal"  *  | "apple_pay"  *  | "google_pay"  *  | "huawei_pay"  *  | "samsung_pay"  *  | "bank_car;";
 d";  * / 银行卡直连* ///     "
 | "credit_card"  *  | "debit_card"  *  | "digital_wallet"  *  | "bank_transfer"  *  | "installment"  *  | "crypt;";
 o";  * / 加密货币* ///     "
 | "processing"  *  | "completed"  *  | "failed"  *  | "cancelled"  *  | "refunded"  *  | "partial_refund"  *  | "expire;";
 d";  * / 已过期* ///     " // 支付订单信息 * export interface PaymentOrder {
-  id: string,
-  userId: string;,
-  amount: number;,
-  currency: string;,
-  description: string;,
+  id: string;
+  userId: string;
+  amount: number;
+  currency: string;
+  description: string;
   orderType: | "medical_service"| "health_product"| "subscription";
     | "consultation";
     | "medication";
@@ -19,7 +18,7 @@ d";  * / 已过期* ///     " // 支付订单信息 * export interface PaymentOr
   relatedId: string; ///    , status: PaymentStatus;
   paymentMethod?: PaymentMethod;
   provider?: PaymentProvider;
-  createdAt: string;,
+  createdAt: string;
   updatedAt: string;
   expiresAt?: string;
   metadata?:  {
@@ -34,24 +33,24 @@ d";  * / 已过期* ///     " // 支付订单信息 * export interface PaymentOr
   success: boolean,   ;
   orderId: string;
   transactionId?: string;
-  amount: number;,
-  currency: string;,
-  status: PaymentStatus;,
-  provider: PaymentProvider;,
-  paymentMethod: PaymentMethod;,
+  amount: number;
+  currency: string;
+  status: PaymentStatus;
+  provider: PaymentProvider;
+  paymentMethod: PaymentMethod;
   timestamp: string;
   receipt?:  {
     receiptId: string;
     downloadUrl?: string;
     emailSent?: boolean;
 };
-  error?:  { code: string,
+  error?:  { code: string;
     message: string;
     details?: unknown};
 }
 // 退款信息 * export interface RefundRequest {
-  orderId: string,
-  amount: number;,
+  orderId: string;
+  amount: number;
   reason: string,refundType: "full" | "partial",requestedBy: string;
   metadata?:  {
     returnedItems?: string[];
@@ -60,16 +59,16 @@ d";  * / 已过期* ///     " // 支付订单信息 * export interface PaymentOr
 }
 }
 // 支付配置 * interface PaymentConfig {
-  provider: PaymentProvider,
-  apiKey: string;,
-  secretKey: string;,
-  merchantId: string;,
-  environment: "sandbox" | "production";,
-  webhookUrl: string;,
-  supportedCurrencies: string[];,
-  supportedMethods: PaymentMethod[];,
-  fees: {percentage: number;,
-  fixed: number;,
+  provider: PaymentProvider;
+  apiKey: string;
+  secretKey: string;
+  merchantId: string;
+  environment: "sandbox" | "production";
+  webhookUrl: string;
+  supportedCurrencies: string[];
+  supportedMethods: PaymentMethod[];
+  fees: {percentage: number;
+  fixed: number;
   currency: string;
 }
 }
@@ -80,80 +79,80 @@ d";  * / 已过期* ///     " // 支付订单信息 * export interface PaymentOr
   }
   // 初始化支付配置  private initializeConfigs(): void {
     this.configs.set("alipay", {
-      provider: "alipay",
-      apiKey: process.env.ALIPAY_APP_ID || ",
+      provider: "alipay";
+      apiKey: process.env.ALIPAY_APP_ID || ";
       secretKey: process.env.ALIPAY_PRIVATE_KEY || ","
-      merchantId: process.env.ALIPAY_MERCHANT_ID || ",
+      merchantId: process.env.ALIPAY_MERCHANT_ID || ";
       environment: (process.env.NODE_ENV === "production",)
         ? "production"
         : "sandbox") as "sandbox" | "production",
-      webhookUrl: process.env.ALIPAY_WEBHOOK_URL || ",
-      supportedCurrencies: ["CNY"],
+      webhookUrl: process.env.ALIPAY_WEBHOOK_URL || ";
+      supportedCurrencies: ["CNY"];
       supportedMethods: ["digital_wallet",balance"],
-      fees: { percentage: 0.6, fixed: 0, currency: "CNY"}
+      fees: { percentage: 0.6, fixed: 0, currency: "CNY";}
     });
     this.configs.set("wechat", {
-      provider: "wechat",
-      apiKey: process.env.WECHAT_APP_ID || ",
+      provider: "wechat";
+      apiKey: process.env.WECHAT_APP_ID || ";
       secretKey: process.env.WECHAT_API_KEY || ","
-      merchantId: process.env.WECHAT_MERCHANT_ID || ",
+      merchantId: process.env.WECHAT_MERCHANT_ID || ";
       environment: (process.env.NODE_ENV === "production",)
         ? "production"
         : "sandbox") as "sandbox" | "production",
-      webhookUrl: process.env.WECHAT_WEBHOOK_URL || ",
-      supportedCurrencies: ["CNY"],
+      webhookUrl: process.env.WECHAT_WEBHOOK_URL || ";
+      supportedCurrencies: ["CNY"];
       supportedMethods: ["digital_wallet",balance"],
-      fees: { percentage: 0.6, fixed: 0, currency: "CNY"}
+      fees: { percentage: 0.6, fixed: 0, currency: "CNY";}
     });
     this.configs.set("stripe", {
-      provider: "stripe",
-      apiKey: process.env.STRIPE_PUBLISHABLE_KEY || ",
+      provider: "stripe";
+      apiKey: process.env.STRIPE_PUBLISHABLE_KEY || ";
       secretKey: process.env.STRIPE_SECRET_KEY || ","
-      merchantId: process.env.STRIPE_MERCHANT_ID || ",
+      merchantId: process.env.STRIPE_MERCHANT_ID || ";
       environment: (process.env.NODE_ENV === "production",)
         ? "production"
         : "sandbox") as "sandbox" | "production",
-      webhookUrl: process.env.STRIPE_WEBHOOK_URL || ",
+      webhookUrl: process.env.STRIPE_WEBHOOK_URL || ";
       supportedCurrencies: ["USD",EUR", "GBP",CNY", "JPY"],
       supportedMethods: ["credit_card",debit_card", "digital_wallet"],
-      fees: { percentage: 2.9, fixed: 0.3, currency: "USD"}
+      fees: { percentage: 2.9, fixed: 0.3, currency: "USD";}
     });
     this.configs.set("paypal", {
-      provider: "paypal",
-      apiKey: process.env.PAYPAL_CLIENT_ID || ",
+      provider: "paypal";
+      apiKey: process.env.PAYPAL_CLIENT_ID || ";
       secretKey: process.env.PAYPAL_CLIENT_SECRET || ","
-      merchantId: process.env.PAYPAL_MERCHANT_ID || ",
+      merchantId: process.env.PAYPAL_MERCHANT_ID || ";
       environment: (process.env.NODE_ENV === "production",)
         ? "production"
         : "sandbox") as "sandbox" | "production",
-      webhookUrl: process.env.PAYPAL_WEBHOOK_URL || ",
+      webhookUrl: process.env.PAYPAL_WEBHOOK_URL || ";
       supportedCurrencies: ["USD",EUR", "GBP",CNY", "JPY"],
       supportedMethods: ["digital_wallet",credit_card", "bank_transfer"],
-      fees: { percentage: 3.4, fixed: 0.3, currency: "USD"}
+      fees: { percentage: 3.4, fixed: 0.3, currency: "USD";}
     });
     this.configs.set("apple_pay", {
-      provider: "apple_pay",
-      apiKey: process.env.APPLE_PAY_MERCHANT_ID || ",
+      provider: "apple_pay";
+      apiKey: process.env.APPLE_PAY_MERCHANT_ID || ";
       secretKey: process.env.APPLE_PAY_CERTIFICATE || ","
-      merchantId: process.env.APPLE_PAY_MERCHANT_ID || ",
+      merchantId: process.env.APPLE_PAY_MERCHANT_ID || ";
       environment: (process.env.NODE_ENV === "production",)
         ? "production"
         : "sandbox") as "sandbox" | "production",
-      webhookUrl: process.env.APPLE_PAY_WEBHOOK_URL || ",
+      webhookUrl: process.env.APPLE_PAY_WEBHOOK_URL || ";
       supportedCurrencies: ["USD",EUR", "GBP",CNY", "JPY"],
-      supportedMethods: ["digital_wallet"],
-      fees: { percentage: 2.9, fixed: 0.3, currency: "USD"}
+      supportedMethods: ["digital_wallet"];
+      fees: { percentage: 2.9, fixed: 0.3, currency: "USD";}
     });
   }
   ///    >  {
     try {
       const orderId = this.generateOrderId;
       const now = new Date().toISOString;(;);
-      const order: PaymentOrder = {id: orderId,
+      const order: PaymentOrder = {id: orderId;
         ...orderData,
-        status: "pending",
-        createdAt: now,
-        updatedAt: now,
+        status: "pending";
+        createdAt: now;
+        updatedAt: now;
         expiresAt: orderData.expiresAt ||;new Date(Date.now(); + 30 * 60 * 1000).toISOString()}
       this.activeOrders.set(orderId, order);
       await apiClient.post(" / api * v1 /payments/orders", order;);/
@@ -163,8 +162,8 @@ d";  * / 已过期* ///     " // 支付订单信息 * export interface PaymentOr
     }
   }
   // 发起支付  async initiatePayment(orderId: string,)
-    provider: PaymentProvider,
-    paymentMethod: PaymentMethod,
+    provider: PaymentProvider;
+    paymentMethod: PaymentMethod;
     additionalData?: unknown;
   );: Promise< {
     paymentUrl?: string;
@@ -196,7 +195,7 @@ order.status = "processing";
           return await this.initiatePaypalPayment(order, additionalD;a;t;a;);
         case "apple_pay":
           return await this.initiateApplePayPayment(order, additionalD;a;t;a;);
-        default: throw new Error(`Payment provider ${provider} not implemented;`;);
+        default: throw new Error(`Payment provider ${provider;} not implemented;`;);
       }
     } catch (error) {
       throw error;
@@ -227,17 +226,17 @@ const response = await apiClient.get(;)
           return await this.handleStripeCallback(callbackD;a;t;a;);
         case "paypal":
           return await this.handlePaypalCallback(callbackD;a;t;a;);
-        default: throw new Error(`Callback handler for ${provider} not implemented;`;);
+        default: throw new Error(`Callback handler for ${provider;} not implemented;`;);
       }
     } catch (error) {
       throw error;
     }
   }
-  // 申请退款  async requestRefund(refundRequest: RefundRequest): Promise< { success: boolean,
-    refundId: string,
-    amount: number,
+  // 申请退款  async requestRefund(refundRequest: RefundRequest): Promise< { success: boolean;
+    refundId: string;
+    amount: number;
     status: "pending" | "approved" | "rejected" | "processed"
-    estimatedProcessingTime?: string}> {
+    estimatedProcessingTime?: string;}> {
     try {
       const order = this.activeOrders.get(refundRequest.orderI;d;);
       if (!order) {
@@ -254,12 +253,12 @@ const response = await apiClient.post(;)
     }
   }
   // 获取支付方式列表  async getAvailablePaymentMethods(amount: number,)
-    currency: string,
+    currency: string;
     orderType: PaymentOrder["orderType"]);: Promise<
-    { provider: PaymentProvider,
-      methods: PaymentMethod[],
-      fees: { percentage: number, fixed: number, currency: string},
-      estimatedTotal: number}[]
+    { provider: PaymentProvider;
+      methods: PaymentMethod[];
+      fees: { percentage: number, fixed: number, currency: string;},
+      estimatedTotal: number;}[]
   > {
     const availableMethods: unknown[] = [];
     this.configs.forEach(config, provider); => {}
@@ -268,8 +267,8 @@ const response = await apiClient.post(;)
           (amount * config.fees.percentage) / 100 + config.fees.fix;e;d;/        const estimatedTotal = amount + estimatedFe;e;s;
         availableMethods.push({
           provider,
-          methods: config.supportedMethods,
-          fees: config.fees,
+          methods: config.supportedMethods;
+          fees: config.fees;
           estimatedTotal;
         });
       }
@@ -277,10 +276,10 @@ const response = await apiClient.post(;)
     return availableMetho;d;s;
   }
   // 获取支付历史  async getPaymentHistory(userId: string,)
-    filters?:  {
-      status?: PaymentStatus,
+    filters?: {
+      status?: PaymentStatus;
       orderType?: PaymentOrder["orderType"]
-      dateRange?:  { start: string, end: string};
+      dateRange?:  { start: string; end: string;};
       provider?: PaymentProvider});: Promise<PaymentOrder[] /    >  {
     try {
       const params = new URLSearchParams;(;);
@@ -305,12 +304,12 @@ const response = await apiClient.get(;)
     }
   }
   // 验证支付安全性  async validatePaymentSecurity(orderId: string,)
-    securityData: { deviceId: string,
-      ipAddress: string,
+    securityData: { deviceId: string;
+      ipAddress: string;
       userAgent: string;
       biometricVerified?: boolean;
-      twoFactorVerified?: boolean}): Promise< { isValid: boolean,
-    riskLevel: "low" | "medium" | "high",
+      twoFactorVerified?: boolean}): Promise< { isValid: boolean;
+    riskLevel: "low" | "medium" | "high";
     requiresAdditionalVerification: boolean;
     verificationMethods?: string[]
     }> {
@@ -325,57 +324,57 @@ const response = await apiClient.get(;)
     }
   }
   // 支付提供商特定实现  private async initiateAlipayPayment()
-    order: PaymentOrder,
+    order: PaymentOrder;
     additionalData?: unknown;
   ) {
     const config = this.configs.get("alipay";);!
-    const paymentData = {app_id: config.apiKey,
-      method: "alipay.trade.app.pay",
-      charset: "utf-8",
-      sign_type: "RSA2",
-      timestamp: new Date().toISOString(),
-      version: "1.0",
+    const paymentData = {app_id: config.apiKey;
+      method: "alipay.trade.app.pay";
+      charset: "utf-8";
+      sign_type: "RSA2";
+      timestamp: new Date().toISOString();
+      version: "1.0";
       biz_content: JSON.stringify({),
-  out_trade_no: order.id,
-        total_amount: order.amount.toString(),
-        subject: order.description,
-        product_code: "QUICK_MSECURITY_PAY"};)
+  out_trade_no: order.id;
+        total_amount: order.amount.toString();
+        subject: order.description;
+        product_code: "QUICK_MSECURITY_PAY";};)
     ;};
     return {
-      paymentToken: "alipay_payment_token",
+      paymentToken: "alipay_payment_token";
       deepLink: `alipays:///        ;}
   }
   private async initiateWechatPayment()
-    order: PaymentOrder,
+    order: PaymentOrder;
     additionalData?: unknown;
   ) {
     const config = this.configs.get("wechat";);!;
     return {
-      paymentToken: "wechat_payment_token",
+      paymentToken: "wechat_payment_token";
       qrCode: "data:image/pn;gbase64,wechat_qr_code_data",/        };
   }
   private async initiateStripePayment()
-    order: PaymentOrder,
+    order: PaymentOrder;
     additionalData?: unknown;
   ) {
     const config = this.configs.get("stripe");!;
     return {
-      paymentToken: "stripe_payment_intent_client_secret",
+      paymentToken: "stripe_payment_intent_client_secret";
       paymentUrl: `https://;
   };
   private async initiatePaypalPayment(;)
     order: PaymentOrder,additionalData?: unknown;
   ) {
     const config = this.configs.get("paypal";);!;
-    return {paymentUrl: `https:///     paymentToken: "paypal_payment_token"};
+    return {paymentUrl: `https:///     paymentToken: "paypal_payment_token";};
   };
   private async initiateApplePayPayment(;)
     order: PaymentOrder,additionalData?: unknown;
   ) {
     const config = this.configs.get("apple_pay");!;
     return {nativePaymentData: {merchantIdentifier: config.merchantId,paymentRequest: {,
-  countryCode: "US",
-      currencyCode: order.currency,total: {label: order.description,amount: order.amount.toString()};
+  countryCode: "US";
+      currencyCode: order.currency,total: {label: order.description,amount: order.amount.toString();};
         }};};
   }
   ///    >  {

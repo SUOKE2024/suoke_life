@@ -1,6 +1,4 @@
-import { permissionManager } from "../permissions";
-import { permissionManager } from "../permissions";
-import React from "react";
+
 describe("permissions", () => {
   beforeEach(() => {
     jest.clearAllMocks();

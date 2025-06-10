@@ -1,33 +1,32 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions } from "../../placeholder";react-native;
-import React, { useState, useEffect } from "react";
+react";
 const { width } = Dimensions.get(window");"
 export interface SystemMetric {
-  id: string;,
-  name: string;,
-  value: number;,
-  unit: string;,
-  status: "healthy | "warning" | critical";,
-  threshold: {;,
-  warning: number;,
+  id: string;
+  name: string;
+  value: number;
+  unit: string;
+  status: "healthy | "warning" | critical";
+  threshold: {
+  warning: number;
   critical: number;
 };
   lastUpdated: Date;
 }
 export interface ServiceStatus {
-  id: string;,
-  name: string;,
-  status: "online | "offline" | degraded";,
-  uptime: number;,
-  responseTime: number;,
-  errorRate: number;,
+  id: string;
+  name: string;
+  status: "online | "offline" | degraded";
+  uptime: number;
+  responseTime: number;
+  errorRate: number;
   lastCheck: Date;
 }
 export interface SystemAlert {
-  id: string;,
-  type: "error | "warning" | info";,
-  title: string;,
-  message: string;,
-  timestamp: Date;,
+  id: string;
+  type: "error | "warning" | info";
+  title: string;
+  message: string;
+  timestamp: Date;
   resolved: boolean;
 }
 export interface SystemMonitorDashboardProps {
@@ -55,102 +54,102 @@ return() => clearInterval(interval);
 const mockMetrics: SystemMetric[] = [;
         {
       id: "cpu-usage,",
-      name: "CPU使用率",
-          value: 45,
-          unit: %",
+
+          value: 45;
+          unit: %";
           status: "healthy,",
-          threshold: { warning: 70, critical: 90 },
+          threshold: { warning: 70, critical: 90 ;},
           lastUpdated: new Date();
         },
         {
-      id: "memory-usage",
-      name: 内存使用率",
-          value: 68,
+      id: "memory-usage";
+
+          value: 68;
           unit: "%,",
-          status: "healthy",
-          threshold: { warning: 80, critical: 95 },
+          status: "healthy";
+          threshold: { warning: 80, critical: 95 ;},
           lastUpdated: new Date();
         },
         {
-          id: disk-usage",
-          name: "磁盘使用率,",
-          value: 82,
-          unit: "%",
-          status: warning",
-          threshold: { warning: 80, critical: 95 },
+          id: disk-usage";
+
+          value: 82;
+          unit: "%";
+          status: warning";
+          threshold: { warning: 80, critical: 95 ;},
           lastUpdated: new Date();
         },
         {
       id: "network-latency,",
-      name: "网络延迟",
-          value: 25,
-          unit: ms",
+
+          value: 25;
+          unit: ms";
           status: "healthy,",
-          threshold: { warning: 100, critical: 200 },
+          threshold: { warning: 100, critical: 200 ;},
           lastUpdated: new Date();
         }
       ];
       const mockServices: ServiceStatus[] = [;
         {
-      id: "api-gateway",
-      name: API网关",
+      id: "api-gateway";
+
           status: "online,",
-          uptime: 99.8,
-          responseTime: 120,
-          errorRate: 0.1,
+          uptime: 99.8;
+          responseTime: 120;
+          errorRate: 0.1;
           lastCheck: new Date();
         },
         {
-      id: "user-service",
-      name: 用户服务",
+      id: "user-service";
+
           status: "online,",
-          uptime: 99.9,
-          responseTime: 85,
-          errorRate: 0.05,
+          uptime: 99.9;
+          responseTime: 85;
+          errorRate: 0.05;
           lastCheck: new Date();
         },
         {
-      id: "health-service",
-      name: 健康服务",
+      id: "health-service";
+
           status: "degraded,",
-          uptime: 98.5,
-          responseTime: 250,
-          errorRate: 1.2,
+          uptime: 98.5;
+          responseTime: 250;
+          errorRate: 1.2;
           lastCheck: new Date();
         },
         {
-      id: "ai-service",
-      name: AI服务",
+      id: "ai-service";
+
           status: "online,",
-          uptime: 99.7,
-          responseTime: 180,
-          errorRate: 0.3,
+          uptime: 99.7;
+          responseTime: 180;
+          errorRate: 0.3;
           lastCheck: new Date();
         }
       ];
       const mockAlerts: SystemAlert[] = [;
         {
-      id: "alert-001",
-      type: warning",
-          title: "磁盘空间不足,",
-          message: "系统磁盘使用率已达到82%，建议清理日志文件",
-          timestamp: new Date(Date.now() - 10 * 60 * 1000),
+      id: "alert-001";
+      type: warning";
+
+
+          timestamp: new Date(Date.now() - 10 * 60 * 1000);
           resolved: false;
         },
         {
-          id: alert-002",
+          id: alert-002";
           type: "warning,",
-          title: "健康服务响应缓慢", "
-          message: 健康服务平均响应时间超过200ms",
-          timestamp: new Date(Date.now() - 5 * 60 * 1000),
+
+
+          timestamp: new Date(Date.now() - 5 * 60 * 1000);
           resolved: false;
         },
         {
       id: "alert-003,",
-      type: "info",
-          title: 系统更新完成",
-          message: "API网关已成功更新到v2.1.0,",
-          timestamp: new Date(Date.now() - 60 * 60 * 1000),
+      type: "info";
+
+
+          timestamp: new Date(Date.now() - 60 * 60 * 1000);
           resolved: true;
         }
       ];
@@ -162,7 +161,7 @@ const mockMetrics: SystemMetric[] = [;
       setLoading(false);
     }
   };
-  const getMetricStatusColor = (status: SystemMetric[status"]): string => {}"
+  const getMetricStatusColor = (status: SystemMetric[status"]): string => {;}"
     switch (status) {
       case "healthy:"
         return "#4CAF50";
@@ -174,7 +173,7 @@ const mockMetrics: SystemMetric[] = [;
         return "#757575;"
     }
   };
-  const getServiceStatusColor = (status: ServiceStatus["status"]): string => {}
+  const getServiceStatusColor = (status: ServiceStatus["status"]): string => {;}
     switch (status) {
       case online":"
         return "#4CAF50;"
@@ -186,7 +185,7 @@ const mockMetrics: SystemMetric[] = [;
         return #757575;
     }
   };
-  const getAlertTypeColor = (type: SystemAlert["type]): string => {}"
+  const getAlertTypeColor = (type: SystemAlert["type]): string => {;}"
     switch (type) {
       case "error":return #F44336;
       case "warning:"
@@ -197,7 +196,7 @@ const mockMetrics: SystemMetric[] = [;
         return "#757575";
     }
   };
-  const getAlertIcon = (type: SystemAlert[type"]): string => {}"
+  const getAlertIcon = (type: SystemAlert[type"]): string => {;}"
     switch (type) {
       case "error:"
         return "❌";
@@ -217,17 +216,17 @@ key={metric.id}
     >
       <View style={styles.metricHeader}>
         <Text style={styles.metricName}>{metric.name}</    Text>
-        <View style={[styles.statusDot, { backgroundColor: getMetricStatusColor(metric.status) }}]} /    >
+        <View style={[styles.statusDot, { backgroundColor: getMetricStatusColor(metric.status) ;}}]} /    >
       </    View>
       <View style={styles.metricValue}>
-        <Text style={[styles.valueText, { color: getMetricStatusColor(metric.status) }}]}>
+        <Text style={[styles.valueText, { color: getMetricStatusColor(metric.status) ;}}]}>
           {metric.value}
         </    Text>
         <Text style={styles.unitText}>{metric.unit}</    Text>
       </    View>
       <View style={styles.thresholdInfo}>
         <Text style={styles.thresholdText}>
-          警告: {metric.threshold.warning}{metric.unit} | 严重: {metric.threshold.critical}{metric.unit}
+
         </    Text>
       </    View>
     </    TouchableOpacity>
@@ -240,7 +239,7 @@ key={service.id}
     >
       <View style={styles.serviceHeader}>
         <Text style={styles.serviceName}>{service.name}</    Text>
-        <View style={[styles.statusBadge, { backgroundColor: getServiceStatusColor(service.status) }}]}>
+        <View style={[styles.statusBadge, { backgroundColor: getServiceStatusColor(service.status) ;}}]}>
           <Text style={styles.statusText}>{service.status.toUpperCase()}</    Text>
         </    View>
       </    View>
@@ -269,7 +268,7 @@ key={alert.id}
       <View style={styles.alertHeader}>
         <Text style={styles.alertIcon}>{getAlertIcon(alert.type)}</    Text>
         <View style={styles.alertInfo}>
-          <Text style={[styles.alertTitle, { color: getAlertTypeColor(alert.type) }}]}>
+          <Text style={[styles.alertTitle, { color: getAlertTypeColor(alert.type) ;}}]}>
             {alert.title}
           </    Text>
           <Text style={styles.alertTimestamp}>
@@ -334,185 +333,185 @@ key={alert.id}
   );
 };
 const styles = StyleSheet.create({container: {),
-  flex: 1,
+  flex: 1;
     backgroundColor: "#f5f5f5,",
-    padding: 16},
+    padding: 16;},
   loadingContainer: {,
-  flex: 1,
-    justifyContent: "center",
-    alignItems: center"},"
+  flex: 1;
+    justifyContent: "center";
+    alignItems: center";},"
   loadingText: {,
-  fontSize: 16,
-    color: "#666},",
+  fontSize: 16;
+    color: "#666;},",
   sectionTitle: {,
-  fontSize: 20,
-    fontWeight: "bold",
-    color: #333",
-    marginBottom: 16,
-    marginTop: 16},
+  fontSize: 20;
+    fontWeight: "bold";
+    color: #333";
+    marginBottom: 16;
+    marginTop: 16;},
   overviewContainer: {,
-  marginBottom: 16},
+  marginBottom: 16;},
   overviewGrid: {,
   flexDirection: "row,",
-    justifyContent: "space-between"},
+    justifyContent: "space-between";},
   overviewCard: {,
-  backgroundColor: #fff",
-    borderRadius: 12,
-    padding: 16,
+  backgroundColor: #fff";
+    borderRadius: 12;
+    padding: 16;
     alignItems: "center,",
-    flex: 1,
-    marginHorizontal: 4,
-    shadowColor: "#000",
+    flex: 1;
+    marginHorizontal: 4;
+    shadowColor: "#000";
     shadowOffset: {,
-  width: 0,
-      height: 2},
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5},
+  width: 0;
+      height: 2;},
+    shadowOpacity: 0.1;
+    shadowRadius: 3.84;
+    elevation: 5;},
   overviewValue: {,
-  fontSize: 24,
-    fontWeight: bold",
+  fontSize: 24;
+    fontWeight: bold";
     color: "#4CAF50,",
-    marginBottom: 4},
+    marginBottom: 4;},
   overviewLabel: {,
-  fontSize: 12,
-    color: "#666",
-    textAlign: center"},"
+  fontSize: 12;
+    color: "#666";
+    textAlign: center";},"
   metricsGrid: {,
   flexDirection: "row,",
-    flexWrap: "wrap",
-    justifyContent: space-between"},"
+    flexWrap: "wrap";
+    justifyContent: space-between";},"
   metricCard: {,
-  width: (width - 48) /     2,
+  width: (width - 48) /     2;
     backgroundColor: "#fff,",
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
-    shadowColor: "#000",
+    borderRadius: 12;
+    padding: 16;
+    marginBottom: 16;
+    shadowColor: "#000";
     shadowOffset: {,
-  width: 0,
-      height: 2},
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5},
+  width: 0;
+      height: 2;},
+    shadowOpacity: 0.1;
+    shadowRadius: 3.84;
+    elevation: 5;},
   metricHeader: {,
-  flexDirection: row",
+  flexDirection: row";
     justifyContent: "space-between,",
-    alignItems: "center",
-    marginBottom: 8},
+    alignItems: "center";
+    marginBottom: 8;},
   metricName: {,
-  fontSize: 14,
-    color: #666",
+  fontSize: 14;
+    color: #666";
     fontWeight: "500,",
-    flex: 1},
+    flex: 1;},
   statusDot: {,
-  width: 8,
-    height: 8,
-    borderRadius: 4},
+  width: 8;
+    height: 8;
+    borderRadius: 4;},
   metricValue: {,
-  flexDirection: "row",
-    alignItems: baseline",
-    marginBottom: 8},
+  flexDirection: "row";
+    alignItems: baseline";
+    marginBottom: 8;},
   valueText: {,
-  fontSize: 24,
-    fontWeight: "bold},",
+  fontSize: 24;
+    fontWeight: "bold;},",
   unitText: {,
-  fontSize: 12,
-    color: "#999",
-    marginLeft: 4},
+  fontSize: 12;
+    color: "#999";
+    marginLeft: 4;},
   thresholdInfo: {,
-  marginTop: 4},
+  marginTop: 4;},
   thresholdText: {,
-  fontSize: 10,
-    color: #999"},"
+  fontSize: 10;
+    color: #999";},"
   servicesContainer: {,
-  marginBottom: 16},
+  marginBottom: 16;},
   serviceCard: {,
   backgroundColor: "#fff,",
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    shadowColor: "#000",
+    borderRadius: 12;
+    padding: 16;
+    marginBottom: 12;
+    shadowColor: "#000";
     shadowOffset: {,
-  width: 0,
-      height: 2},
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5},
+  width: 0;
+      height: 2;},
+    shadowOpacity: 0.1;
+    shadowRadius: 3.84;
+    elevation: 5;},
   serviceHeader: {,
-  flexDirection: row",
+  flexDirection: row";
     justifyContent: "space-between,",
-    alignItems: "center",
-    marginBottom: 12},
+    alignItems: "center";
+    marginBottom: 12;},
   serviceName: {,
-  fontSize: 16,
-    fontWeight: 600",
+  fontSize: 16;
+    fontWeight: 600";
     color: "#333,",
-    flex: 1},
+    flex: 1;},
   statusBadge: {,
-  paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12},
+  paddingHorizontal: 8;
+    paddingVertical: 4;
+    borderRadius: 12;},
   statusText: {,
-  fontSize: 10,
-    color: "#fff",
-    fontWeight: 600"},"
+  fontSize: 10;
+    color: "#fff";
+    fontWeight: 600";},"
   serviceMetrics: {,
   flexDirection: "row,",
-    justifyContent: "space-between"},
+    justifyContent: "space-between";},
   serviceMetric: {,
-  alignItems: center"},"
+  alignItems: center";},"
   metricLabel: {,
-  fontSize: 12,
+  fontSize: 12;
     color: "#666,",
-    marginBottom: 4},
+    marginBottom: 4;},
   serviceMetricValue: {,
-  fontSize: 14,
-    fontWeight: "600",
-    color: #333"},"
+  fontSize: 14;
+    fontWeight: "600";
+    color: #333";},"
   alertsContainer: {,
-  marginBottom: 16},
+  marginBottom: 16;},
   alertCard: {,
   backgroundColor: "#fff,",
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    shadowColor: "#000",
+    borderRadius: 12;
+    padding: 16;
+    marginBottom: 12;
+    shadowColor: "#000";
     shadowOffset: {,
-  width: 0,
-      height: 2},
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5},
+  width: 0;
+      height: 2;},
+    shadowOpacity: 0.1;
+    shadowRadius: 3.84;
+    elevation: 5;},
   resolvedAlert: {,
-  opacity: 0.7},
+  opacity: 0.7;},
   alertHeader: {,
-  flexDirection: row",
+  flexDirection: row";
     alignItems: "center,",
-    marginBottom: 8},
+    marginBottom: 8;},
   alertIcon: {,
-  fontSize: 20,
-    marginRight: 12},
+  fontSize: 20;
+    marginRight: 12;},
   alertInfo: {,
-  flex: 1},
+  flex: 1;},
   alertTitle: {,
-  fontSize: 16,
-    fontWeight: "600",
-    marginBottom: 2},
+  fontSize: 16;
+    fontWeight: "600";
+    marginBottom: 2;},
   alertTimestamp: {,
-  fontSize: 12,
-    color: #999"},"
+  fontSize: 12;
+    color: #999";},"
   resolvedBadge: {,
   backgroundColor: "#4CAF50,",
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12},
+    paddingHorizontal: 8;
+    paddingVertical: 4;
+    borderRadius: 12;},
   resolvedText: {,
-  fontSize: 10,
-    color: "#fff",
-    fontWeight: 500"},"
+  fontSize: 10;
+    color: "#fff";
+    fontWeight: 500";},"
   alertMessage: {,
-  fontSize: 14,
-    color: '#666',lineHeight: 20}});
+  fontSize: 14;
+    color: '#666',lineHeight: 20;}});
 export default SystemMonitorDashboard;
   */

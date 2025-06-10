@@ -1,20 +1,19 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions } from "../../placeholder";react-native;
-import React, { useState, useEffect } from "react";
+react";
 const { width } = Dimensions.get(window");"
 export interface HealthMetric {
-  id: string;,
-  name: string;,
-  value: number;,
-  unit: string;,
-  status: "normal | "warning" | danger";,
-  trend: "up | "down" | stable";,
+  id: string;
+  name: string;
+  value: number;
+  unit: string;
+  status: "normal | "warning" | danger";
+  trend: "up | "down" | stable";
   lastUpdated: Date;
 }
 export interface HealthInsight {
-  id: string;,
-  title: string;,
-  description: string;,
-  type: "recommendation | "warning" | achievement";,
+  id: string;
+  title: string;
+  description: string;
+  type: "recommendation | "warning" | achievement";
   priority: "low | "medium" | high";
 }
 export interface AdvancedHealthDashboardProps {
@@ -39,63 +38,63 @@ export const AdvancedHealthDashboard: React.FC<AdvancedHealthDashboardProps>  = 
 const mockMetrics: HealthMetric[] = [;
         {
       id: "heart-rate,",
-      name: "心率",
-          value: 72,
-          unit: bpm",
+
+          value: 72;
+          unit: bpm";
           status: "normal,",
-          trend: "stable",
+          trend: "stable";
           lastUpdated: new Date();
         },
         {
-          id: blood-pressure",
-          name: "血压,",
-          value: 120,
-          unit: "mmHg",
-          status: normal",
+          id: blood-pressure";
+
+          value: 120;
+          unit: "mmHg";
+          status: normal";
           trend: "down,",
           lastUpdated: new Date();
         },
         {
-      id: "sleep-quality",
-      name: 睡眠质量",
-          value: 85,
+      id: "sleep-quality";
+
+          value: 85;
           unit: "%,",
-          status: "normal",
-          trend: up",
+          status: "normal";
+          trend: up";
           lastUpdated: new Date();
         },
         {
       id: "stress-level,",
-      name: "压力水平",
-          value: 35,
-          unit: %",
+
+          value: 35;
+          unit: %";
           status: "warning,",
-          trend: "up",
+          trend: "up";
           lastUpdated: new Date();
         }
       ];
       const mockInsights: HealthInsight[] = [;
         {
-          id: sleep-improvement",
-          title: "睡眠质量提升,",
-          description: "您的睡眠质量比上周提升了15%，继续保持良好的作息习惯。",
-          type: achievement",
+          id: sleep-improvement";
+
+
+          type: achievement";
           priority: "medium"
-        },
+        ;},
         {
-      id: "stress-warning",
-      title: 压力水平偏高",
-          description: "建议进行深呼吸练习或冥想来缓解压力。,",
-          type: "warning",
+      id: "stress-warning";
+
+
+          type: "warning";
           priority: high""
-        },
+        ;},
         {
       id: "exercise-recommendation,",
-      title: "运动建议", "
-          description: 根据您的健康状况，建议每天进行30分钟的有氧运动。",
+
+
           type: "recommendation,",
           priority: "medium"
-        }
+        ;}
       ];
       setMetrics(mockMetrics);
       setInsights(mockInsights);
@@ -104,7 +103,7 @@ const mockMetrics: HealthMetric[] = [;
       setLoading(false);
     }
   };
-  const getStatusColor = (status: HealthMetric["status]): string => {}"
+  const getStatusColor = (status: HealthMetric["status]): string => {;}"
     switch (status) {
       case "normal":return #4CAF50;
       case "warning:"
@@ -115,7 +114,7 @@ const mockMetrics: HealthMetric[] = [;
         return "#757575";
     }
   };
-  const getTrendIcon = (trend: HealthMetric[trend"]): string => {}"
+  const getTrendIcon = (trend: HealthMetric[trend"]): string => {;}"
     switch (trend) {
       case "up:"
         return "↗️";
@@ -127,7 +126,7 @@ const mockMetrics: HealthMetric[] = [;
         return "➡️;"
     }
   };
-  const getInsightIcon = (type: HealthInsight["type"]): string => {}
+  const getInsightIcon = (type: HealthInsight["type"]): string => {;}
     switch (type) {
       case achievement":"
         return "🎉;"
@@ -137,7 +136,7 @@ const mockMetrics: HealthMetric[] = [;
         return "💡";
       default:
         return ℹ️
-    }
+    ;}
   };
   const renderMetricCard = (metric: HealthMetric) => (;)
     <TouchableOpacity;
@@ -150,12 +149,12 @@ key={metric.id}
         <Text style={styles.trendIcon}>{getTrendIcon(metric.trend)}</    Text>
       </    View>
       <View style={styles.metricValue}>
-        <Text style={[styles.valueText, { color: getStatusColor(metric.status) }}]}>
+        <Text style={[styles.valueText, { color: getStatusColor(metric.status) ;}}]}>
           {metric.value}
         </    Text>
         <Text style={styles.unitText}>{metric.unit}</    Text>
       </    View>
-      <View style={[styles.statusIndicator, { backgroundColor: getStatusColor(metric.status) }}]} /    >
+      <View style={[styles.statusIndicator, { backgroundColor: getStatusColor(metric.status) ;}}]} /    >
     </    TouchableOpacity>
   );
   const renderInsightCard = (insight: HealthInsight) => (;)
@@ -194,137 +193,137 @@ key={insight.id}
       <View style={styles.summaryContainer}>;
         <Text style={styles.summaryTitle}>今日健康总结</    Text>;
         <Text style={styles.summaryText}>;
-          您的整体健康状况良好，建议关注压力管理，继续保持良好的睡眠习惯。;
+
         </    Text>;
       </    View>;
     </    ScrollView>;
   );
 };
 const styles = StyleSheet.create({container: {),
-  flex: 1,
+  flex: 1;
     backgroundColor: "#f5f5f5,",
-    padding: 16},
+    padding: 16;},
   loadingContainer: {,
-  flex: 1,
-    justifyContent: "center",
-    alignItems: center"},"
+  flex: 1;
+    justifyContent: "center";
+    alignItems: center";},"
   loadingText: {,
-  fontSize: 16,
-    color: "#666},",
+  fontSize: 16;
+    color: "#666;},",
   sectionTitle: {,
-  fontSize: 20,
-    fontWeight: "bold",
-    color: #333",
-    marginBottom: 16,
-    marginTop: 16},
+  fontSize: 20;
+    fontWeight: "bold";
+    color: #333";
+    marginBottom: 16;
+    marginTop: 16;},
   metricsGrid: {,
   flexDirection: "row,",
-    flexWrap: "wrap",
-    justifyContent: space-between"},"
+    flexWrap: "wrap";
+    justifyContent: space-between";},"
   metricCard: {,
-  width: (width - 48) /     2,
+  width: (width - 48) /     2;
     backgroundColor: "#fff,",
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
-    shadowColor: "#000",
+    borderRadius: 12;
+    padding: 16;
+    marginBottom: 16;
+    shadowColor: "#000";
     shadowOffset: {,
-  width: 0,
-      height: 2},
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
-    position: relative"},"
+  width: 0;
+      height: 2;},
+    shadowOpacity: 0.1;
+    shadowRadius: 3.84;
+    elevation: 5;
+    position: relative";},"
   metricHeader: {,
   flexDirection: "row,",
-    justifyContent: "space-between",
-    alignItems: center",
-    marginBottom: 8},
+    justifyContent: "space-between";
+    alignItems: center";
+    marginBottom: 8;},
   metricName: {,
-  fontSize: 14,
+  fontSize: 14;
     color: "#666,",
-    fontWeight: "500"},
+    fontWeight: "500";},
   trendIcon: {,
-  fontSize: 16},
+  fontSize: 16;},
   metricValue: {,
-  flexDirection: row",
-    alignItems: "baseline},",
+  flexDirection: row";
+    alignItems: "baseline;},",
   valueText: {,
-  fontSize: 24,
-    fontWeight: "bold"},
+  fontSize: 24;
+    fontWeight: "bold";},
   unitText: {,
-  fontSize: 12,
-    color: #999",
-    marginLeft: 4},
+  fontSize: 12;
+    color: #999";
+    marginLeft: 4;},
   statusIndicator: {,
   position: "absolute,",
-    top: 0,
-    right: 0,
-    width: 4,
-    height: "100%",
-    borderTopRightRadius: 12,
-    borderBottomRightRadius: 12},
+    top: 0;
+    right: 0;
+    width: 4;
+    height: "100%";
+    borderTopRightRadius: 12;
+    borderBottomRightRadius: 12;},
   insightsContainer: {,
-  marginBottom: 16},
+  marginBottom: 16;},
   insightCard: {,
-  backgroundColor: #fff",
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
+  backgroundColor: #fff";
+    borderRadius: 12;
+    padding: 16;
+    marginBottom: 12;
     shadowColor: "#000,",
     shadowOffset: {,
-  width: 0,
-      height: 2},
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5},
+  width: 0;
+      height: 2;},
+    shadowOpacity: 0.1;
+    shadowRadius: 3.84;
+    elevation: 5;},
   insightHeader: {,
-  flexDirection: "row",
-    alignItems: center",
-    marginBottom: 8},
+  flexDirection: "row";
+    alignItems: center";
+    marginBottom: 8;},
   insightIcon: {,
-  fontSize: 20,
-    marginRight: 8},
+  fontSize: 20;
+    marginRight: 8;},
   insightTitle: {,
-  fontSize: 16,
+  fontSize: 16;
     fontWeight: "600,",
-    color: "#333",
-    flex: 1},
+    color: "#333";
+    flex: 1;},
   insightDescription: {,
-  fontSize: 14,
-    color: #666",
-    lineHeight: 20,
-    marginBottom: 8},
+  fontSize: 14;
+    color: #666";
+    lineHeight: 20;
+    marginBottom: 8;},
   priorityBadge: {,
   alignSelf: "flex-start,",
-    backgroundColor: "#e3f2fd",
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12},
+    backgroundColor: "#e3f2fd";
+    paddingHorizontal: 8;
+    paddingVertical: 4;
+    borderRadius: 12;},
   priorityText: {,
-  fontSize: 12,
-    color: #1976d2",
-    fontWeight: "500},",
+  fontSize: 12;
+    color: #1976d2";
+    fontWeight: "500;},",
   summaryContainer: {,
-  backgroundColor: "#fff",
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
-    shadowColor: #000",
+  backgroundColor: "#fff";
+    borderRadius: 12;
+    padding: 16;
+    marginBottom: 16;
+    shadowColor: #000";
     shadowOffset: {,
-  width: 0,
-      height: 2},
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5},
+  width: 0;
+      height: 2;},
+    shadowOpacity: 0.1;
+    shadowRadius: 3.84;
+    elevation: 5;},
   summaryTitle: {,
-  fontSize: 18,
+  fontSize: 18;
     fontWeight: "600,",
-    color: "#333",
-    marginBottom: 8},
+    color: "#333";
+    marginBottom: 8;},
   summaryText: {,
-  fontSize: 14,
-    color: #666",
-    lineHeight: 20}});
+  fontSize: 14;
+    color: #666";
+    lineHeight: 20;}});
 export default AdvancedHealthDashboard;
   */

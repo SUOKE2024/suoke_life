@@ -39,13 +39,13 @@ export const Pagination: React.FC<PaginationProps> = ({
   showTotal = false,
   totalItems,
   showPrevNext = true,
-  prevText = '上一页',
-  nextText = '下一页',
+
+
   variant = 'default',
   style,
   disabled = false,
   size = 'md'
-}) => {
+;}) => {
   const { currentTheme } = useTheme();
   const styles = createStyles(currentTheme, size);
 
@@ -125,70 +125,70 @@ export const Pagination: React.FC<PaginationProps> = ({
 const createStyles = (theme: any, size: 'sm' | 'md' | 'lg') => {
   const sizeConfig = {
     sm: {,
-  buttonSize: 32,
-      fontSize: 14,
+  buttonSize: 32;
+      fontSize: 14;
       spacing: 4
-    },
+    ;},
     md: {,
-  buttonSize: 40,
-      fontSize: 16,
+  buttonSize: 40;
+      fontSize: 16;
       spacing: 8
-    },
+    ;},
     lg: {,
-  buttonSize: 48,
-      fontSize: 18,
+  buttonSize: 48;
+      fontSize: 18;
       spacing: 12
-    }
+    ;}
   };
 
   const config = sizeConfig[size];
 
   return StyleSheet.create({
     container: {,
-  flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
+  flexDirection: 'row';
+      alignItems: 'center';
+      justifyContent: 'center';
       paddingVertical: 16
-    },
+    ;},
     paginationContainer: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
       alignItems: 'center'
-    },
+    ;},
     navButton: {,
-  width: config.buttonSize,
-      height: config.buttonSize,
-      borderRadius: 4,
-      backgroundColor: theme.colors.surface,
-      borderWidth: 1,
-      borderColor: theme.colors.outline,
-      justifyContent: 'center',
-      alignItems: 'center',
+  width: config.buttonSize;
+      height: config.buttonSize;
+      borderRadius: 4;
+      backgroundColor: theme.colors.surface;
+      borderWidth: 1;
+      borderColor: theme.colors.outline;
+      justifyContent: 'center';
+      alignItems: 'center';
       marginHorizontal: config.spacing
-    },
+    ;},
     disabledNavButton: {,
   opacity: 0.5
-    },
+    ;},
     navButtonText: {,
-  fontSize: config.fontSize,
-      color: theme.colors.onSurface,
+  fontSize: config.fontSize;
+      color: theme.colors.onSurface;
       fontWeight: '500'
-    },
+    ;},
     disabledNavButtonText: {,
   color: '#999'
-    },
+    ;},
     totalText: {,
-  fontSize: 14,
-      color: '#666',
+  fontSize: 14;
+      color: '#666';
       marginRight: 16
-    },
+    ;},
     pageInfo: {,
   paddingHorizontal: 16
-    },
+    ;},
     pageInfoText: {,
-  fontSize: config.fontSize,
-      color: theme.colors.onSurface,
+  fontSize: config.fontSize;
+      color: theme.colors.onSurface;
       fontWeight: '500'
-    }
+    ;}
   });
 };
 

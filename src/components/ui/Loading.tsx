@@ -1,6 +1,5 @@
 import {   View, ActivityIndicator, StyleSheet, ViewStyle   } from "react-native";
-import { colors, spacing } from "../../placeholder";../../constants/    theme;
-import { usePerformanceMonitor } from "../hooks/    usePerformanceMonitor";
+../hooks/    usePerformanceMonitor";
 import React from "react";
 importText from "./    Text";
 importReact from "react";
@@ -23,8 +22,8 @@ testID?: string;
 }
 const Loading: React.FC<LoadingProps /    > = ({// 性能监控)
 const performanceMonitor = usePerformanceMonitor(Loading", {")
-    trackRender: true,
-    trackMemory: false,warnThreshold: 100, // ms };);
+    trackRender: true;
+    trackMemory: false,warnThreshold: 100, // ms ;};);
   loading = true,
   size = "large",
   color = colors.primary,
@@ -83,25 +82,25 @@ const styles = useMemo(); =>;
                     useMemo() => {
                         StyleSheet.create({
                           overlay: {,
-  position: "absolute",
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
+  position: "absolute";
+                            top: 0;
+                            left: 0;
+                            right: 0;
+                            bottom: 0;
                             backgroundColor: "rgba(255, 255, 255, 0.8)",
                             zIndex: 1000;
                           },
                           center: {,
-  flex: 1,
-                            alignItems: "center",
+  flex: 1;
+                            alignItems: "center";
                             justifyContent: "center"
-                          },
+                          ;},
                           content: {,
-  alignItems: "center",
+  alignItems: "center";
                             justifyContent: "center"
-                          },
-                          indicator: { marginBottom: spacing.xs  },
-                          text: { textAlign: "center"  }
+                          ;},
+                          indicator: { marginBottom: spacing.xs  ;},
+                          text: { textAlign: "center"  ;}
                         }),
                       []
                     ),

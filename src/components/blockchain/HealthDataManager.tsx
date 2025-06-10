@@ -15,7 +15,7 @@ import { HealthDataRecord } from '../../types/blockchain';
 interface HealthDataManagerProps {
   userId: string;
 }
-export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) => {
+export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId ;}) => {
   const {
     records,
     storeData,
@@ -35,21 +35,21 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
   const dataTypeStats = records.reduce(acc, record) => {acc[record.dataType] = (acc[record.dataType] || 0) + 1;
     return acc;
   }, {} as Record<string, number>);
-  const handleStoreData = async (dataType: string, data: any, metadata?: Record<string, string>) => {try {await storeData(dataType, data, metadata);
-      Alert.alert("成功", "健康数据已成功存储到区块链');
+  const handleStoreData = async (dataType: string, data: any, metadata?: Record<string; string>) => {try {await storeData(dataType, data, metadata);
+
       setShowAddModal(false);
     } catch (error) {
-      Alert.alert('错误', `存储失败: ${error instanceof Error ? error.message : '未知错误'}`);
+
     }
   };
   const handleVerifyData = async (record: HealthDataRecord) => {try {// 这里需要原始数据来验证，实际应用中可能需要从其他地方获取;
       const result = await verifyData(record.transactionId, {});
-      Alert.alert('验证结果',
-        result.valid ? '数据完整性验证通过' : '数据完整性验证失败',
-        [{ text: '确定' }]
+
+
+
       );
     } catch (error) {
-      Alert.alert('错误', `验证失败: ${error instanceof Error ? error.message : '未知错误'}`);
+
     }
   };
   const formatTimestamp = (timestamp: number) => {return new Date(timestamp).toLocaleString('zh-CN');
@@ -58,7 +58,7 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
       .map(b => b.toString(16).padStart(2, '0'));
       .join('') + '...';
   };
-  const renderRecord = ({ item }: { item: HealthDataRecord }) => ()
+  const renderRecord = ({ item }: { item: HealthDataRecord ;}) => ()
     <TouchableOpacity;
       style={styles.recordCard}
       onPress={() => setSelectedRecord(item)}
@@ -69,7 +69,7 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
       </View>
       <View style={styles.recordContent}>
         <Text style={styles.recordLabel}>交易ID:</Text>
-        <Text style={styles.recordValue}>{item.transactionId.slice(0, 16)}...</Text>
+        <Text style={styles.recordValue;}>{item.transactionId.slice(0, 16)}...</Text>
       </View>;
       <View style={styles.recordContent}>;
         <Text style={styles.recordLabel}>数据哈希:</Text>;
@@ -92,7 +92,7 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
         onPress={() => setFilterType('')}
       >
         <Text style={[styles.filterChipText, !filterType && styles.filterChipTextActive]}>
-          全部 ({records.length});
+
         </Text>;
       </TouchableOpacity>;
       {Object.entries(dataTypeStats).map([type, count]) => (;))
@@ -164,7 +164,7 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyText}>
-              {isLoading ? '加载中...' : '暂无健康数据记录'}
+
             </Text>
           </View>
         }
@@ -186,14 +186,14 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
 };
 // 添加数据模态框
 const AddDataModal: React.FC<{,
-  visible: boolean;,
-  onClose: () => void,
-  onSubmit: (dataType: string, data: any, metadata?: Record<string, string>) => void;
+  visible: boolean;
+  onClose: () => void;
+  onSubmit: (dataType: string, data: any, metadata?: Record<string; string>) => void;
 }> = ({ visible, onClose, onSubmit }) => {
   const [dataType, setDataType] = useState('');
   const [dataContent, setDataContent] = useState('');
   const [metadata, setMetadata] = useState('');
-  const handleSubmit = () => {if (!dataType.trim() || !dataContent.trim()) {Alert.alert("错误", "请填写数据类型和内容');
+
       return;
     }
     try {
@@ -205,7 +205,7 @@ const AddDataModal: React.FC<{,
       setDataContent('');
       setMetadata('');
     } catch (error) {
-      Alert.alert("错误", "数据格式不正确，请输入有效的JSON');
+
     }
   };
   return (
@@ -224,7 +224,7 @@ const AddDataModal: React.FC<{,
               style={styles.textInput}
               value={dataType}
               onChangeText={setDataType}
-              placeholder="例如: blood_pressure, heart_rate"
+
             />
           </View>
           <View style={styles.inputGroup}>
@@ -233,7 +233,7 @@ const AddDataModal: React.FC<{,
               style={[styles.textInput, styles.textArea]}
               value={dataContent}
               onChangeText={setDataContent}
-              placeholder='例如: {"systolic": 120, "diastolic": 80}'
+
               multiline;
               numberOfLines={6}
             />
@@ -244,7 +244,7 @@ const AddDataModal: React.FC<{,
               style={[styles.textInput, styles.textArea]};
               value={metadata};
               onChangeText={setMetadata};
-              placeholder='例如: {"device": "smart_watch",location": "home"}';
+
               multiline;
               numberOfLines={4};
             />;
@@ -259,8 +259,8 @@ const AddDataModal: React.FC<{,
 };
 // 记录详情模态框
 const RecordDetailModal: React.FC<{,
-  record: HealthDataRecord | null;,
-  onClose: () => void,
+  record: HealthDataRecord | null;
+  onClose: () => void;
   onVerify: (record: HealthDataRecord) => void;
 }> = ({ record, onClose, onVerify }) => {
   if (!record) return null;
@@ -317,226 +317,226 @@ const RecordDetailModal: React.FC<{,
 };
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
+  flex: 1;
     backgroundColor: '#F8F9FA'
-  },
+  ;},
   statsContainer: {,
-  flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
-    padding: 16,
+  flexDirection: 'row';
+    backgroundColor: '#FFFFFF';
+    padding: 16;
     marginBottom: 8;
   },
   statItem: {,
-  flex: 1,
+  flex: 1;
     alignItems: 'center'
-  },
+  ;},
   statValue: {,
-  fontSize: 18,
-    fontWeight: '700',
-    color: '#2C3E50',
+  fontSize: 18;
+    fontWeight: '700';
+    color: '#2C3E50';
     marginBottom: 4;
   },
   statLabel: {,
-  fontSize: 12,
-    color: '#6C757D',
+  fontSize: 12;
+    color: '#6C757D';
     textAlign: 'center'
-  },
+  ;},
   actionContainer: {,
-  flexDirection: 'row',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
+  flexDirection: 'row';
+    paddingHorizontal: 16;
+    paddingVertical: 8;
     gap: 12;
   },
   addButton: {,
-  flex: 1,
-    backgroundColor: '#007AFF',
-    paddingVertical: 12,
-    borderRadius: 8,
+  flex: 1;
+    backgroundColor: '#007AFF';
+    paddingVertical: 12;
+    borderRadius: 8;
     alignItems: 'center'
-  },
+  ;},
   addButtonText: {,
-  color: '#FFFFFF',
-    fontSize: 16,
+  color: '#FFFFFF';
+    fontSize: 16;
     fontWeight: '600'
-  },
+  ;},
   refreshButton: {,
-  paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: '#F8F9FA',
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#DEE2E6',
-    alignItems: 'center',
+  paddingHorizontal: 16;
+    paddingVertical: 12;
+    backgroundColor: '#F8F9FA';
+    borderRadius: 8;
+    borderWidth: 1;
+    borderColor: '#DEE2E6';
+    alignItems: 'center';
     justifyContent: 'center'
-  },
+  ;},
   refreshButtonText: {,
-  color: '#6C757D',
+  color: '#6C757D';
     fontSize: 14;
   },
   filterContainer: {,
-  paddingHorizontal: 16,
+  paddingHorizontal: 16;
     paddingVertical: 8;
   },
   filterChip: {,
-  paddingHorizontal: 12,
-    paddingVertical: 6,
-    backgroundColor: '#F8F9FA',
-    borderRadius: 16,
-    marginRight: 8,
-    borderWidth: 1,
+  paddingHorizontal: 12;
+    paddingVertical: 6;
+    backgroundColor: '#F8F9FA';
+    borderRadius: 16;
+    marginRight: 8;
+    borderWidth: 1;
     borderColor: '#DEE2E6'
-  },
+  ;},
   filterChipActive: {,
-  backgroundColor: '#007AFF',
+  backgroundColor: '#007AFF';
     borderColor: '#007AFF'
-  },
+  ;},
   filterChipText: {,
-  fontSize: 12,
+  fontSize: 12;
     color: '#6C757D'
-  },
+  ;},
   filterChipTextActive: {,
   color: '#FFFFFF'
-  },
+  ;},
   errorContainer: {,
-  backgroundColor: '#FFE6E6',
-    padding: 12,
-    marginHorizontal: 16,
-    marginVertical: 8,
+  backgroundColor: '#FFE6E6';
+    padding: 12;
+    marginHorizontal: 16;
+    marginVertical: 8;
     borderRadius: 8;
   },
   errorText: {,
-  color: '#D32F2F',
+  color: '#D32F2F';
     fontSize: 14;
   },
   recordsList: {,
-  flex: 1,
+  flex: 1;
     paddingHorizontal: 16;
   },
   recordCard: {,
-  backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    padding: 16,
-    marginVertical: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
+  backgroundColor: '#FFFFFF';
+    borderRadius: 12;
+    padding: 16;
+    marginVertical: 4;
+    shadowColor: '#000';
+    shadowOffset: { width: 0, height: 1 ;},
+    shadowOpacity: 0.1;
+    shadowRadius: 2;
     elevation: 2;
   },
   recordHeader: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
     marginBottom: 12;
   },
   recordType: {,
-  fontSize: 16,
-    fontWeight: '600',
+  fontSize: 16;
+    fontWeight: '600';
     color: '#2C3E50'
-  },
+  ;},
   recordTime: {,
-  fontSize: 12,
+  fontSize: 12;
     color: '#6C757D'
-  },
+  ;},
   recordContent: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
+  flexDirection: 'row';
+    justifyContent: 'space-between';
     marginBottom: 8;
   },
   recordLabel: {,
-  fontSize: 14,
-    color: '#6C757D',
+  fontSize: 14;
+    color: '#6C757D';
     flex: 1;
   },
   recordValue: {,
-  fontSize: 14,
-    color: '#2C3E50',
-    flex: 2,
-    textAlign: 'right',
+  fontSize: 14;
+    color: '#2C3E50';
+    flex: 2;
+    textAlign: 'right';
     fontFamily: 'monospace'
-  },
+  ;},
   recordActions: {,
-  flexDirection: 'row',
-    justifyContent: 'flex-end',
+  flexDirection: 'row';
+    justifyContent: 'flex-end';
     marginTop: 12;
   },
   verifyButton: {,
-  paddingHorizontal: 16,
-    paddingVertical: 8,
-    backgroundColor: '#28A745',
+  paddingHorizontal: 16;
+    paddingVertical: 8;
+    backgroundColor: '#28A745';
     borderRadius: 6;
   },
   verifyButtonText: {,
-  color: '#FFFFFF',
-    fontSize: 14,
+  color: '#FFFFFF';
+    fontSize: 14;
     fontWeight: '500'
-  },
+  ;},
   emptyContainer: {,
-  padding: 32,
+  padding: 32;
     alignItems: 'center'
-  },
+  ;},
   emptyText: {,
-  fontSize: 16,
+  fontSize: 16;
     color: '#6C757D'
-  },
+  ;},
   modalContainer: {,
-  flex: 1,
+  flex: 1;
     backgroundColor: '#FFFFFF'
-  },
+  ;},
   modalHeader: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 16,
-    borderBottomWidth: 1,
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
+    padding: 16;
+    borderBottomWidth: 1;
     borderBottomColor: '#DEE2E6'
-  },
+  ;},
   modalTitle: {,
-  fontSize: 18,
-    fontWeight: '600',
+  fontSize: 18;
+    fontWeight: '600';
     color: '#2C3E50'
-  },
+  ;},
   modalCloseText: {,
-  fontSize: 16,
+  fontSize: 16;
     color: '#007AFF'
-  },
+  ;},
   modalContent: {,
-  flex: 1,
+  flex: 1;
     padding: 16;
   },
   inputGroup: {,
   marginBottom: 20;
   },
   inputLabel: {,
-  fontSize: 14,
-    fontWeight: '500',
-    color: '#2C3E50',
+  fontSize: 14;
+    fontWeight: '500';
+    color: '#2C3E50';
     marginBottom: 8;
   },
   textInput: {,
-  borderWidth: 1,
-    borderColor: '#DEE2E6',
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
+  borderWidth: 1;
+    borderColor: '#DEE2E6';
+    borderRadius: 8;
+    padding: 12;
+    fontSize: 16;
     backgroundColor: '#FFFFFF'
-  },
+  ;},
   textArea: {,
-  height: 120,
+  height: 120;
     textAlignVertical: 'top'
-  },
+  ;},
   submitButton: {,
-  backgroundColor: '#007AFF',
-    paddingVertical: 16,
-    borderRadius: 8,
-    alignItems: 'center',
+  backgroundColor: '#007AFF';
+    paddingVertical: 16;
+    borderRadius: 8;
+    alignItems: 'center';
     marginTop: 20;
   },
   submitButtonText: {,
-  color: '#FFFFFF',
-    fontSize: 16,
+  color: '#FFFFFF';
+    fontSize: 16;
     fontWeight: '600'
-  },
+  ;},
   detailGroup: {,
   marginBottom: 20;
   },detailLabel: {fontSize: 14,fontWeight: '500',color: '#6C757D',marginBottom: 8;

@@ -1,6 +1,5 @@
-import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/      View,";
-import React from "react";
-import { colors, spacing } from "../../constants/theme";/importText from "./Text";/    import React,{ useState, useRef } from "react";
+
+./Text";/    import React,{ useState, useRef } from "react";
   StyleSheet,
   ViewStyle,
   PanResponder,
@@ -23,7 +22,7 @@ export interface SliderProps {
   testID?: string;
 }
 const Slider: React.FC<SliderProps /> = ({/   const performanceMonitor = usePerformanceMonitor("Slider', { /    "';))
-    trackRender: true,trackMemory: true,warnThreshold: 50};);
+    trackRender: true,trackMemory: true,warnThreshold: 50;};);
   value,
   onValueChange,
   minimumValue = 0,
@@ -74,11 +73,11 @@ const Slider: React.FC<SliderProps /> = ({/   const performanceMonitor = usePerf
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [value, sliderWidth]);
   const panResponder = PanResponder.create({onStartShouldSetPanResponder:  => !disabled,)
-    onMoveShouldSetPanResponder: () => !disabled,
-    onPanResponderGrant: () => {}
+    onMoveShouldSetPanResponder: () => !disabled;
+    onPanResponderGrant: () => {;}
       setIsDragging(true);
     },
-    onPanResponderMove: (_, gestureState) => {}
+    onPanResponderMove: (_, gestureState) => {;}
       const newPosition = Math.max(;)
         0,
         Math.min(;)
@@ -90,7 +89,7 @@ const Slider: React.FC<SliderProps /> = ({/   const performanceMonitor = usePerf
       const newValue = getValueFromPosition(newPositio;n;);
       onValueChange(newValue);
     },
-    onPanResponderRelease: () => {}
+    onPanResponderRelease: () => {;}
       setIsDragging(false);
     }
   });
@@ -102,7 +101,7 @@ const Slider: React.FC<SliderProps /> = ({/   const performanceMonitor = usePerf
     setSliderWidth(width);
   }
   const minimumTrackWidth = thumbPosition.interpolate({inputRange: [0, sliderWidth - thumbSize],)
-    outputRange: [thumbSize / 2, sliderWidth - thumbSize / 2],/        extrapolate: "clamp"};);
+    outputRange: [thumbSize / 2, sliderWidth - thumbSize / 2],/        extrapolate: "clamp";};);
   performanceMonitor.recordRender();
   return (;)
     <View style={[styles.container, style]} testID={testID} />/          {label && (;)
@@ -112,25 +111,25 @@ const Slider: React.FC<SliderProps /> = ({/   const performanceMonitor = usePerf
             </Text>/              )};
         </View>/          )};
       <View style={styles.sliderContainer}>/            <View,style={[;
-            styles.track,{height: trackHeight,backgroundColor: maximumTrackTintColor}};
+            styles.track,{height: trackHeight,backgroundColor: maximumTrackTintColor;}};
           ]};
           onLayout={handleLayout} />/              <Animated.View;
 style={[
               styles.minimumTrack,
               {
-                height: trackHeight,
-                backgroundColor: minimumTrackTintColor,
-                width: minimumTrackWidth}}
+                height: trackHeight;
+                backgroundColor: minimumTrackTintColor;
+                width: minimumTrackWidth;}}
             ]}
           />/        </View>/
         <Animated.View;
 style={[
             styles.thumb,
             {
-              width: thumbSize,
-              height: thumbSize,
-              backgroundColor: thumbTintColor,
-              borderRadius: thumbSize / 2,/                  transform: [{ translateX: thumbPosition   }}]
+              width: thumbSize;
+              height: thumbSize;
+              backgroundColor: thumbTintColor;
+              borderRadius: thumbSize / 2,/                  transform: [{ translateX: thumbPosition   ;}}]
             },
             isDragging && styles.thumbActive;
           ]};
@@ -139,34 +138,34 @@ style={[
 };
 const styles = StyleSheet.create({ container: {marginVertical: spacing.;s;m  },)
   labelContainer: {,
-  flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: spacing.sm},
-  label: { color: colors.textSecondary  },
+  flexDirection: "row";
+    justifyContent: "space-between";
+    alignItems: "center";
+    marginBottom: spacing.sm;},
+  label: { color: colors.textSecondary  ;},
   value: {,
-  color: colors.primary,
-    fontWeight: "600"},
+  color: colors.primary;
+    fontWeight: "600";},
   sliderContainer: {,
-  position: "relative",
-    justifyContent: "center"},
-  track: { borderRadius: 2  },
+  position: "relative";
+    justifyContent: "center";},
+  track: { borderRadius: 2  ;},
   minimumTrack: {,
-  position: "absolute",
-    left: 0,
-    top: 0,
-    borderRadius: 2},
+  position: "absolute";
+    left: 0;
+    top: 0;
+    borderRadius: 2;},
   thumb: {,
-  position: "absolute",
-    top: -8,
-    shadowColor: colors.black,
+  position: "absolute";
+    top: -8;
+    shadowColor: colors.black;
     shadowOffset: {,
-  width: 0,
-      height: 2},
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5},
-  thumbActive: { transform: [{ scale: 1.2   }]
+  width: 0;
+      height: 2;},
+    shadowOpacity: 0.25;
+    shadowRadius: 3.84;
+    elevation: 5;},
+  thumbActive: { transform: [{ scale: 1.2   ;}]
   }
 });
 export default React.memo(Slider);

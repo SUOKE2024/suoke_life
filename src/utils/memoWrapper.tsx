@@ -1,5 +1,5 @@
 import React from "react";
-///      Component: T,areEqual?: (prevProps: unknown, nextProps: unknown) => boolean;
+///      Component: T,areEqual?: (prevProps: unknown; nextProps: unknown) => boolean;
 ): T {
   return React.memo(Component, areEqua;l;); as T;
 }

@@ -27,7 +27,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   style,
   animated = true,
   children
-}) => {
+;}) => {
   const { currentTheme } = useTheme();
   const styles = createStyles(currentTheme);
 
@@ -38,15 +38,15 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
     if (animated) {
       Animated.parallel([
         Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 800,
+          toValue: 1;
+          duration: 800;
           useNativeDriver: true
-        }),
+        ;}),
         Animated.timing(translateYAnim, {
-          toValue: 0,
-          duration: 600,
+          toValue: 0;
+          duration: 600;
           useNativeDriver: true
-        })
+        ;})
       ]).start();
     }
   }, [animated, fadeAnim, translateYAnim]);
@@ -55,34 +55,34 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
     switch (type) {
       case 'noData':
         return {
-          icon: icon || '📊',
-          title: title || '暂无数据',
-          description: description || '当前没有可显示的数据'
+          icon: icon || '📊';
+
+
         };
       case 'noResults':
         return {
-          icon: icon || '🔍',
-          title: title || '无搜索结果',
+          icon: icon || '🔍';
+
           description:
-            description || '没有找到符合条件的结果，请尝试其他关键词'
-        };
+
+        ;};
       case 'noConnection':
         return {
-          icon: icon || '📡',
-          title: title || '网络连接失败',
-          description: description || '请检查网络连接后重试'
+          icon: icon || '📡';
+
+
         };
       case 'noContent':
         return {
-          icon: icon || '📝',
-          title: title || '暂无内容',
-          description: description || '这里还没有任何内容'
+          icon: icon || '📝';
+
+
         };
       default:
         return {,
-  icon: icon || '🤔',
-          title: title || '空空如也',
-          description: description || '这里什么都没有'
+  icon: icon || '🤔';
+
+
         };
     }
   };
@@ -94,8 +94,8 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
         styles.container,
         style,
         {
-          opacity: fadeAnim,
-          transform: [{ translateY: translateYAnim }]
+          opacity: fadeAnim;
+          transform: [{ translateY: translateYAnim ;}]
         }
       ]
     : [styles.container, style];
@@ -120,45 +120,45 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
 const createStyles = (theme: any) => {
   return StyleSheet.create({
     container: {,
-  flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
+  flex: 1;
+      justifyContent: 'center';
+      alignItems: 'center';
       padding: theme.spacing.xl
-    },
+    ;},
     content: {,
-  alignItems: 'center',
+  alignItems: 'center';
       maxWidth: 280
-    },
+    ;},
     iconContainer: {,
-  width: 100,
-      height: 100,
-      borderRadius: 50,
-      backgroundColor: theme.colors.surfaceVariant,
-      justifyContent: 'center',
-      alignItems: 'center',
+  width: 100;
+      height: 100;
+      borderRadius: 50;
+      backgroundColor: theme.colors.surfaceVariant;
+      justifyContent: 'center';
+      alignItems: 'center';
       marginBottom: theme.spacing.lg
-    },
+    ;},
     icon: {,
   fontSize: 48
-    },
+    ;},
     title: {,
-  fontSize: theme.typography.fontSize.lg,
-      fontWeight: theme.typography.fontWeight.semibold,
-      color: theme.colors.onSurface,
-      textAlign: 'center',
+  fontSize: theme.typography.fontSize.lg;
+      fontWeight: theme.typography.fontWeight.semibold;
+      color: theme.colors.onSurface;
+      textAlign: 'center';
       marginBottom: theme.spacing.md
-    },
+    ;},
     description: {,
-  fontSize: theme.typography.fontSize.base,
-      color: theme.colors.onSurfaceVariant,
-      textAlign: 'center',
-      lineHeight: 22,
+  fontSize: theme.typography.fontSize.base;
+      color: theme.colors.onSurfaceVariant;
+      textAlign: 'center';
+      lineHeight: 22;
       marginBottom: theme.spacing.lg
-    },
+    ;},
     actionsContainer: {,
-  width: '100%',
+  width: '100%';
       alignItems: 'center'
-    }
+    ;}
   });
 };
 

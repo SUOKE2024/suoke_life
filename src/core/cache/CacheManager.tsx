@@ -1,5 +1,4 @@
-import { performanceMonitor, PerformanceCategory } from "../monitoring/PerformanceMonitor";
-import React from "react";
+
 /**
 * 索克生活 - 缓存管理系统
 * 提供多层缓存、过期策略、缓存优化和性能监控
@@ -17,18 +16,18 @@ export enum CacheStrategy {
   TTL = "TTL" // 基于过期时间
 }
 export interface CacheItem<T = any> {
-  key: string,
-  value: T;,
+  key: string;
+  value: T;
   timestamp: number;
   ttl?: number; // 生存时间（毫秒）
-  accessCount: number,
+  accessCount: number;
   lastAccessed: number;
   size?: number; // 数据大小（字节）
-  metadata?: Record<string, any>;
+  metadata?: Record<string; any>;
 }
 export interface CacheConfig {
-  type: CacheType;,
-  strategy: CacheStrategy;,
+  type: CacheType;
+  strategy: CacheStrategy;
   maxSize: number;
   maxMemory?: number; // 最大内存使用（字节）
   defaultTTL?: number; // 默认TTL（毫秒）
@@ -39,21 +38,21 @@ export interface CacheConfig {
   encryptionEnabled: boolean; // 是否启用加密
 }
 export interface CacheStats {
-  hits: number;,
-  misses: number;,
-  hitRate: number;,
-  totalItems: number;,
-  totalSize: number;,
+  hits: number;
+  misses: number;
+  hitRate: number;
+  totalItems: number;
+  totalSize: number;
   memoryUsage: number;
   oldestItem?: number;
   newestItem?: number;
-  totalHits: number;,
-  totalMisses: number;,
+  totalHits: number;
+  totalMisses: number;
   evictionCount: number;
 }
 export interface CacheLayer {
-  name: string;,
-  config: CacheConfig;,
+  name: string;
+  config: CacheConfig;
   cache: Map<string, CacheItem>;
   stats: CacheStats;
 }
@@ -76,16 +75,16 @@ export class CacheManager {
     const layer: CacheLayer = {
       name,
       config,
-      cache: new Map(),
+      cache: new Map();
       stats: {,
-  hits: 0,
-        misses: 0,
-        hitRate: 0,
-        totalItems: 0,
-        totalSize: 0,
-        memoryUsage: 0,
-        totalHits: 0,
-        totalMisses: 0,
+  hits: 0;
+        misses: 0;
+        hitRate: 0;
+        totalItems: 0;
+        totalSize: 0;
+        memoryUsage: 0;
+        totalHits: 0;
+        totalMisses: 0;
         evictionCount: 0;
       }
     };
@@ -97,12 +96,12 @@ export class CacheManager {
     }
   }
   public async set<T>()
-    layerName: string,
-    key: string,
-    value: T,
+    layerName: string;
+    key: string;
+    value: T;
     options: {
       ttl?: number;
-      metadata?: Record<string, any>;
+      metadata?: Record<string; any>;
     } = {}
   ): Promise<boolean> {
     return performanceMonitor.measureAsync(;)
@@ -117,14 +116,14 @@ export class CacheManager {
         const size = this.calculateSize(serializedValue);
         const item: CacheItem<T> = {
           key,
-          value: serializedValue,
-          timestamp: now,
-          ttl: options.ttl || layer.config.defaultTTL,
-          accessCount: 0,
-          lastAccessed: now,
+          value: serializedValue;
+          timestamp: now;
+          ttl: options.ttl || layer.config.defaultTTL;
+          accessCount: 0;
+          lastAccessed: now;
           size,
-          metadata: options.metadata,
-          compressed: layer.config.compression && this.compressionEnabled,
+          metadata: options.metadata;
+          compressed: layer.config.compression && this.compressionEnabled;
           encrypted: layer.config.encryptionEnabled;
         };
         if (this.needsEviction(layer, size)) {
@@ -200,7 +199,7 @@ export class CacheManager {
     await this.clearLayer(layer);
     this.resetStats(layer);
   }
-  public getStats(layerName?: string): CacheStats | Map<string, CacheStats> {
+  public getStats(layerName?: string): CacheStats | Map<string; CacheStats> {
     if (layerName) {
       const layer = this.layers.get(layerName);
       return layer ? layer.stats : {hits: 0,misses: 0,hitRate: 0,totalItems: 0,totalSize: 0,memoryUsage: 0,totalHits: 0,totalMisses: 0,evictionCount: 0;
@@ -220,7 +219,7 @@ export class CacheManager {
     return await this.getLayerKeys(layer);
   }
   public async setMultiple<T>(layerName: string,)
-    items: Array<{ key: string, value: T, options?: unknown }>
+    items: Array<{ key: string, value: T, options?: unknown ;}>
   ): Promise<boolean[]> {
     const results: boolean[] = [];
     for (const item of items) {
@@ -239,9 +238,9 @@ export class CacheManager {
     return results;
   }
   public async warmup<T>()
-    layerName: string,
+    layerName: string;
     dataLoader: () => Promise<Map<string, T>>,
-    options: { ttl?: number } = {}
+    options: { ttl?: number ;} = {}
   ): Promise<void> {
     try {
       const data = await dataLoader();
@@ -253,10 +252,10 @@ export class CacheManager {
     }
   }
   public async getOrSet<T>()
-    layerName: string,
-    key: string,
-    loader: () => Promise<T>,
-    options: { ttl?: number, metadata?: Record<string, any> } = {}
+    layerName: string;
+    key: string;
+    loader: () => Promise<T>;
+    options: { ttl?: number; metadata?: Record<string; any> } = {}
   ): Promise<T> {
     const value = await this.get<T>(layerName, key);
     if (value !== null) {
@@ -283,7 +282,7 @@ export class CacheManager {
     return true;
   }
   private async storeItem(layer: CacheLayer,)
-    key: string,
+    key: string;
     item: CacheItem<any>): Promise<boolean> {
     try {
       switch (layer.config.type) {
@@ -293,7 +292,7 @@ export class CacheManager {
         case CacheType.LOCAL_STORAGE:
           if (typeof localStorage !== "undefined") {
             localStorage.setItem()
-              `cache_${layer.name}_${key}`,
+              `cache_${layer.name;}_${key}`,
               JSON.stringify(item);
             );
             return true;
@@ -302,7 +301,7 @@ export class CacheManager {
         case CacheType.SESSION_STORAGE:
           if (typeof sessionStorage !== "undefined") {
             sessionStorage.setItem()
-              `cache_${layer.name}_${key}`,
+              `cache_${layer.name;}_${key}`,
               JSON.stringify(item);
             );
             return true;
@@ -325,13 +324,13 @@ export class CacheManager {
           return layer.cache.get(key) || null;
         case CacheType.LOCAL_STORAGE:
           if (typeof localStorage !== "undefined") {
-            const data = localStorage.getItem(`cache_${layer.name}_${key}`);
+            const data = localStorage.getItem(`cache_${layer.name;}_${key}`);
             return data ? JSON.parse(data) : null;
           }
           break;
         case CacheType.SESSION_STORAGE:
           if (typeof sessionStorage !== "undefined") {
-            const data = sessionStorage.getItem(`cache_${layer.name}_${key}`);
+            const data = sessionStorage.getItem(`cache_${layer.name;}_${key}`);
             return data ? JSON.parse(data) : null;
           }
           break;
@@ -351,13 +350,13 @@ export class CacheManager {
           return layer.cache.delete(key);
         case CacheType.LOCAL_STORAGE:
           if (typeof localStorage !== "undefined") {
-            localStorage.removeItem(`cache_${layer.name}_${key}`);
+            localStorage.removeItem(`cache_${layer.name;}_${key}`);
             return true;
           }
           break;
         case CacheType.SESSION_STORAGE:
           if (typeof sessionStorage !== "undefined") {
-            sessionStorage.removeItem(`cache_${layer.name}_${key}`);
+            sessionStorage.removeItem(`cache_${layer.name;}_${key}`);
             return true;
           }
           break;
@@ -438,14 +437,14 @@ export class CacheManager {
     const requiredMB = requiredSpace / (1024 * 1024);
     let freedMB = 0;
     const keys = await this.getLayerKeys(layer);
-    const items: Array<{ key: string, item: CacheItem<any> }> = [];
+    const items: Array<{ key: string, item: CacheItem<any> ;}> = [];
     for (const key of keys) {
       const item = await this.retrieveItem(layer, key);
       if (item) {
         items.push({ key, item });
       }
     }
-    let itemsToEvict: Array<{ key: string, item: CacheItem<any> }> = [];
+    let itemsToEvict: Array<{ key: string, item: CacheItem<any> ;}> = [];
     switch (layer.config.strategy) {
       case CacheStrategy.LRU:
         items.sort(a, b) => a.item.lastAccessed - b.item.lastAccessed);
@@ -496,7 +495,7 @@ export class CacheManager {
     }
   }
   private updateStats(layer: CacheLayer,)
-    operation: "hit" | "miss" | "set" | "delete",
+    operation: "hit" | "miss" | "set" | "delete";
     size?: number): void {
     const stats = layer.stats;
     switch (operation) {
@@ -522,14 +521,14 @@ export class CacheManager {
   }
   private resetStats(layer: CacheLayer): void {
     layer.stats = {
-      hits: 0,
-      misses: 0,
-      hitRate: 0,
-      totalItems: 0,
-      totalSize: 0,
-      memoryUsage: 0,
-      totalHits: 0,
-      totalMisses: 0,
+      hits: 0;
+      misses: 0;
+      hitRate: 0;
+      totalItems: 0;
+      totalSize: 0;
+      memoryUsage: 0;
+      totalHits: 0;
+      totalMisses: 0;
       evictionCount: 0;
     };
   }
@@ -559,29 +558,29 @@ export class CacheManager {
   private setupDefaultLayers(): void {
     // 内存缓存层 - 用于频繁访问的数据
     this.createLayer("memory", {
-      type: CacheType.MEMORY,
-      strategy: CacheStrategy.LRU,
-      maxSize: 1000,
+      type: CacheType.MEMORY;
+      strategy: CacheStrategy.LRU;
+      maxSize: 1000;
       maxMemory: 50 * 1024 * 1024, // 50MB;
       defaultTTL: 5 * 60 * 1000,  // 5分钟
       cleanupInterval: 60 * 1000,  // 1分钟清理一次
-    });
+    ;});
     // 本地存储缓存层 - 用于持久化数据
     this.createLayer("localStorage", {
-      type: CacheType.LOCAL_STORAGE,
-      strategy: CacheStrategy.TTL,
-      maxSize: 500,
+      type: CacheType.LOCAL_STORAGE;
+      strategy: CacheStrategy.TTL;
+      maxSize: 500;
       defaultTTL: 24 * 60 * 60 * 1000, // 24小时
       cleanupInterval: 10 * 60 * 1000,  // 10分钟清理一次
-    });
+    ;});
     // 会话存储缓存层 - 用于会话期间的数据
     this.createLayer("sessionStorage", {
-      type: CacheType.SESSION_STORAGE,
-      strategy: CacheStrategy.FIFO,
-      maxSize: 200,
+      type: CacheType.SESSION_STORAGE;
+      strategy: CacheStrategy.FIFO;
+      maxSize: 200;
       defaultTTL: 30 * 60 * 1000, // 30分钟
       cleanupInterval: 5 * 60 * 1000,  // 5分钟清理一次
-    });
+    ;});
   }
   private startGlobalCleanup(): void {
     setInterval() => {
@@ -608,14 +607,14 @@ export class CacheManager {
   }
   private async persistItem(item: CacheItem<any>): Promise<void> {
     // 这里应该实现持久化存储逻辑
-  }
+  ;}
   private async loadFromPersistent(key: string): Promise<CacheItem<any> | null> {
     // 这里应该实现从持久化存储加载的逻辑
     return null;
   }
   private async deleteFromPersistent(key: string): Promise<void> {
     // 这里应该实现从持久化存储删除的逻辑
-  }
+  ;}
   private async clearPersistent(): Promise<void> {
     // 这里应该实现清空持久化存储的逻辑
   }

@@ -52,7 +52,7 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
     try {
       await dispatch(fetchHealthStatus()).unwrap();
     } catch (error) {
-      console.error('刷新失败:', error);
+
     } finally {
       setRefreshing(false);
     }
@@ -105,11 +105,11 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
           <View style={styles.statusRow}>
             <View style={styles.statusItem}>
               <Badge;
-                style={[styles.statusBadge, { backgroundColor: getConnectionStatusColor() }}]}
+                style={[styles.statusBadge, { backgroundColor: getConnectionStatusColor() ;}}]}
               />
               <Text style={styles.statusText}>
-                {connectionState === 'OPEN' ? '已连接' :
-                connectionState === 'CONNECTING' ? '连接中' : '已断开'}
+
+
               </Text>
             </View>
             <Button;
@@ -117,7 +117,7 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
               onPress={handleConnectionToggle}
               compact;
             >
-              {isConnected ? '断开' : '连接'}
+
             </Button>
           </View>
           {error  && <Text style={styles.errorText}>连接错误: {error}</Text>
@@ -125,7 +125,7 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
           <View style={styles.metricsRow}>
             <Text style={styles.metricText}>事件数量: {eventCount}</Text>
             <Button mode="text" onPress={clearEvents} compact>
-              清除历史
+
             </Button>
           </View>
         </Card.Content>
@@ -140,19 +140,19 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
               <Text style={styles.statLabel}>总计</Text>
             </View>
             <View style={styles.statItem}>
-              <Text style={[styles.statNumber, { color: '#FF9800' }}]}>
+              <Text style={[styles.statNumber, { color: '#FF9800' ;}}]}>
                 {taskStats.running}
               </Text>
               <Text style={styles.statLabel}>运行中</Text>
             </View>
             <View style={styles.statItem}>
-              <Text style={[styles.statNumber, { color: '#4CAF50' }}]}>
+              <Text style={[styles.statNumber, { color: '#4CAF50' ;}}]}>
                 {taskStats.completed}
               </Text>
               <Text style={styles.statLabel}>已完成</Text>
             </View>
             <View style={styles.statItem}>
-              <Text style={[styles.statNumber, { color: '#F44336' }}]}>
+              <Text style={[styles.statNumber, { color: '#F44336' ;}}]}>
                 {taskStats.failed}
               </Text>
               <Text style={styles.statLabel}>失败</Text>
@@ -163,14 +163,14 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
       {// 系统健康状态}
       {healthStatus  && <Card style={styles.card}>
           <Card.Title;
-            title="系统健康状态"
+
             right={() => ()
               <Chip;
-                style={[styles.statusChip, { backgroundColor: getStatusColor(getSystemStatus()) }}]}
-                textStyle={ color: 'white' }}
+                style={[styles.statusChip, { backgroundColor: getStatusColor(getSystemStatus()) ;}}]}
+                textStyle={ color: 'white' ;}}
               >
-                {getSystemStatus() === 'healthy' ? '健康' :
-                getSystemStatus() === 'warning' ? '警告' : '严重'}
+
+
               </Chip>
             )}
           />
@@ -212,10 +212,10 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
               <Chip;
                 style={[styles.serviceChip, {
                   backgroundColor: healthStatus.status === 'healthy' ? '#4CAF50' : '#F44336'
-                }}]}
-                textStyle={ color: 'white' }}
+                ;}}]}
+                textStyle={ color: 'white' ;}}
               >
-                {healthStatus.status === 'healthy' ? '正常' : '异常'}
+
               </Chip>
             </View>
           </Card.Content>
@@ -238,10 +238,10 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
                           event.type === 'benchmark_error' ? '#F44336' :
                           event.type === 'benchmark_complete' ? '#4CAF50' :
                           event.type === 'benchmark_progress' ? '#FF9800' : '#2196F3'
-                      }}]}
+                      ;}}]}
                       textStyle={
-      color: "white",
-      fontSize: 10 }}
+      color: "white";
+      fontSize: 10 ;}}
                     >
                       {event.type}
                     </Chip>
@@ -264,19 +264,19 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
         <Card.Content>
           <View style={styles.eventStatsGrid}>
             <View style={styles.eventStatItem}>
-              <Text style={[styles.eventStatNumber, { color: '#F44336' }}]}>
+              <Text style={[styles.eventStatNumber, { color: '#F44336' ;}}]}>
                 {errorEvents.length}
               </Text>
               <Text style={styles.eventStatLabel}>错误</Text>
             </View>
             <View style={styles.eventStatItem}>;
-              <Text style={[styles.eventStatNumber, { color: '#FF9800' }}]}>;
+              <Text style={[styles.eventStatNumber, { color: '#FF9800' ;}}]}>;
                 {progressEvents.length};
               </Text>;
               <Text style={styles.eventStatLabel}>进度</Text>;
             </View>;
             <View style={styles.eventStatItem}>;
-              <Text style={[styles.eventStatNumber, { color: '#4CAF50' }}]}>;
+              <Text style={[styles.eventStatNumber, { color: '#4CAF50' ;}}]}>;
                 {completeEvents.length};
               </Text>;
               <Text style={styles.eventStatLabel}>完成</Text>;
@@ -289,63 +289,63 @@ export const BenchmarkMonitor: React.FC<BenchmarkMonitorProps> = ({
 };
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
+  flex: 1;
     backgroundColor: '#f5f5f5'
-  },
+  ;},
   card: {,
-  margin: 16,
+  margin: 16;
     marginBottom: 8;
   },
   statusRow: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
     marginBottom: 8;
   },
   statusItem: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
     alignItems: 'center'
-  },
+  ;},
   statusBadge: {,
-  width: 12,
-    height: 12,
-    borderRadius: 6,
+  width: 12;
+    height: 12;
+    borderRadius: 6;
     marginRight: 8;
   },
   statusText: {,
-  fontSize: 16,
+  fontSize: 16;
     fontWeight: '500'
-  },
+  ;},
   errorText: {,
-  color: '#F44336',
-    fontSize: 12,
+  color: '#F44336';
+    fontSize: 12;
     marginTop: 4;
   },
   metricsRow: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
     marginTop: 8;
   },
   metricText: {,
-  fontSize: 14,
+  fontSize: 14;
     color: '#666'
-  },
+  ;},
   statsGrid: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
     justifyContent: 'space-around'
-  },
+  ;},
   statItem: {,
   alignItems: 'center'
-  },
+  ;},
   statNumber: {,
-  fontSize: 24,
-    fontWeight: 'bold',
+  fontSize: 24;
+    fontWeight: 'bold';
     color: '#333'
-  },
+  ;},
   statLabel: {,
-  fontSize: 12,
-    color: '#666',
+  fontSize: 12;
+    color: '#666';
     marginTop: 4;
   },
   statusChip: {,
@@ -358,68 +358,68 @@ const styles = StyleSheet.create({
   marginBottom: 16;
   },
   metricLabel: {,
-  fontSize: 14,
-    color: '#666',
+  fontSize: 14;
+    color: '#666';
     marginBottom: 4;
   },
   progressBar: {,
-  height: 8,
-    borderRadius: 4,
+  height: 8;
+    borderRadius: 4;
     marginBottom: 4;
   },
   metricValue: {,
-  fontSize: 12,
-    color: '#333',
+  fontSize: 12;
+    color: '#333';
     textAlign: 'right'
-  },
+  ;},
   serviceStatus: {,
-  flexDirection: 'row',
-    alignItems: 'center',
+  flexDirection: 'row';
+    alignItems: 'center';
     marginTop: 8;
   },
   serviceLabel: {,
-  fontSize: 14,
-    color: '#666',
+  fontSize: 14;
+    color: '#666';
     marginRight: 8;
   },
   serviceChip: {,
   height: 24;
   },
   noEventsText: {,
-  textAlign: 'center',
-    color: '#666',
-    fontStyle: 'italic',
+  textAlign: 'center';
+    color: '#666';
+    fontStyle: 'italic';
     padding: 16;
   },
   eventsContainer: {,
   marginTop: 8;
   },
   eventItem: {,
-  backgroundColor: '#f9f9f9',
-    padding: 12,
-    borderRadius: 8,
+  backgroundColor: '#f9f9f9';
+    padding: 12;
+    borderRadius: 8;
     marginBottom: 8;
   },
   eventHeader: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
     marginBottom: 4;
   },
   eventTypeChip: {,
   height: 20;
   },
   eventTime: {,
-  fontSize: 10,
+  fontSize: 10;
     color: '#666'
-  },
+  ;},
   eventData: {,
-  fontSize: 10,
-    color: '#333',
+  fontSize: 10;
+    color: '#333';
     fontFamily: 'monospace'
-  },
+  ;},
   eventStatsGrid: {,
-  flexDirection: "row",
+  flexDirection: "row";
       justifyContent: 'space-around';
   },eventStatItem: {alignItems: 'center';
   },eventStatNumber: {fontSize: 20,fontWeight: 'bold';

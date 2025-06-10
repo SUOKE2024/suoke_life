@@ -17,9 +17,9 @@ import { MedicalResource, TimeSlot, Review } from '../../store/slices/medicalRes
 } from 'react-native';
 const { width, height } = Dimensions.get('window');
 interface MedicalResourceDetailScreenProps {
-  navigation: any;,
-  route: {;,
-  params: {;,
+  navigation: any;
+  route: {
+  params: {
   resourceId: string;
 };
   };
@@ -48,28 +48,28 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
     }
   }, [resourceId, getResourceDetails]);
   // 拨打电话
-  const handleCall = useCallback(phoneNumber: string) => {const url = `tel:${phoneNumber}`;
+  const handleCall = useCallback(phoneNumber: string) => {const url = `tel:${phoneNumber;}`;
     Linking.canOpenURL(url);
       .then(supported) => {
         if (supported) {
           return Linking.openURL(url);
         } else {
-          Alert.alert("错误", "无法拨打电话');
+
         }
       })
-      .catch(err) => console.error('拨打电话失败:', err));
+
   }, []);
   // 打开网站
-  const handleOpenWebsite = useCallback(website: string) => {const url = website.startsWith('http') ? website : `https://${website}`;
+  const handleOpenWebsite = useCallback(website: string) => {const url = website.startsWith('http') ? website : `https://${website;}`;
     Linking.canOpenURL(url);
       .then(supported) => {
         if (supported) {
           return Linking.openURL(url);
         } else {
-          Alert.alert("错误", "无法打开网站');
+
         }
       })
-      .catch(err) => console.error('打开网站失败:', err));
+
   }, []);
   // 预约时间段
   const handleBookTimeSlot = useCallback(timeSlot: TimeSlot) => {setSelectedTimeSlot(timeSlot);
@@ -83,16 +83,16 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
         selectedResource.id,
         selectedResource.name,
         userId,
-        '常规咨询',
+
         selectedTimeSlot.startTime,
         30,
-        '通过应用预约'
+
       );
       setShowBookingModal(false);
       setSelectedTimeSlot(null);
-      Alert.alert("预约成功", "您的预约已确认，请按时就诊');
+
     } catch (error) {
-      Alert.alert("预约失败", "请稍后重试');
+
     }
   }, [selectedResource, selectedTimeSlot, quickBookAppointment]);
   // 查看图片
@@ -165,7 +165,7 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
           data={selectedResource.images};
           renderItem={({ item, index }) => (;)
             <TouchableOpacity onPress={() => handleImagePress(index)}>;
-              <Image source={ uri: item }} style={styles.image} / loading="lazy" decoding="async" />;
+              <Image source={ uri: item ;}} style={styles.image} / loading="lazy" decoding="async" />;
             </TouchableOpacity>;
           )};
           keyExtractor={(item, index) => index.toString()};
@@ -190,7 +190,7 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
           color={selectedResource.availability.isOpen ? '#4CAF50' : '#FF9800'}
         />
         <Text style={styles.infoText}>
-          {selectedResource.availability.isOpen ? '营业中' : '已关闭'} · {selectedResource.availability.hours}
+
         </Text>
       </View>
       {selectedResource.specialty  && <View style={styles.infoRow}>
@@ -393,7 +393,7 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
             horizontal;
             data={selectedResource.images};
             renderItem={({ item }) => (;)
-              <Image source={ uri: item }} style={styles.fullImage} / loading="lazy" decoding="async" />;
+              <Image source={ uri: item ;}} style={styles.fullImage} / loading="lazy" decoding="async" />;
             )};
             keyExtractor={(item, index) => index.toString()};
             initialScrollIndex={selectedImageIndex};
@@ -405,9 +405,9 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
     </Modal>;
   );
   // 获取类型标签
-  const getTypeLabel = (type: string) => {const typeMap: { [key: string]: string } = {
-      hospital: "医院", "
-      clinic: '诊所',pharmacy: '药店',specialist: '专科',doctor: '医生';
+  const getTypeLabel = (type: string) => {const typeMap: { [key: string]: string ;} = {
+
+
     };
     return typeMap[type] || type;
   };
@@ -430,296 +430,296 @@ const MedicalResourceDetailScreen: React.FC<MedicalResourceDetailScreenProps> = 
 };
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
+  flex: 1;
     backgroundColor: '#f5f5f5'
-  },
+  ;},
   // 加载和错误状态
   loadingContainer: {,
-  flex: 1,
-    justifyContent: 'center',
+  flex: 1;
+    justifyContent: 'center';
     alignItems: 'center'
-  },
+  ;},
   errorContainer: {,
-  flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  flex: 1;
+    justifyContent: 'center';
+    alignItems: 'center';
     paddingHorizontal: 20;
   },
   errorText: {,
-  fontSize: 16,
-    color: '#666',
-    textAlign: 'center',
+  fontSize: 16;
+    color: '#666';
+    textAlign: 'center';
     marginBottom: 20;
   },
   retryButton: {,
-  backgroundColor: '#007AFF',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+  backgroundColor: '#007AFF';
+    paddingHorizontal: 20;
+    paddingVertical: 10;
     borderRadius: 8;
   },
   retryButtonText: {,
-  color: '#fff',
-    fontSize: 16,
+  color: '#fff';
+    fontSize: 16;
     fontWeight: '500'
-  },
+  ;},
   // 头部
   header: {,
-  flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
+  flexDirection: 'row';
+    alignItems: 'center';
+    paddingHorizontal: 16;
+    paddingVertical: 12;
+    backgroundColor: '#fff';
+    borderBottomWidth: 1;
     borderBottomColor: '#e0e0e0'
-  },
+  ;},
   backButton: {,
-  padding: 8,
+  padding: 8;
     marginRight: 12;
   },
   headerInfo: {,
   flex: 1;
   },
   resourceName: {,
-  fontSize: 18,
-    fontWeight: '600',
-    color: '#333',
+  fontSize: 18;
+    fontWeight: '600';
+    color: '#333';
     marginBottom: 4;
   },
   resourceType: {,
-  fontSize: 14,
-    color: '#007AFF',
+  fontSize: 14;
+    color: '#007AFF';
     fontWeight: '500'
-  },
+  ;},
   ratingContainer: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
     alignItems: 'center'
-  },
+  ;},
   rating: {,
-  marginLeft: 4,
-    fontSize: 16,
-    fontWeight: '500',
+  marginLeft: 4;
+    fontSize: 16;
+    fontWeight: '500';
     color: '#333'
-  },
+  ;},
   // 内容区域
   content: {,
   flex: 1;
   },
   // 图片区域
   imageSection: {,
-  backgroundColor: '#fff',
+  backgroundColor: '#fff';
     marginBottom: 8;
   },
   imageList: {,
-  paddingHorizontal: 16,
+  paddingHorizontal: 16;
     paddingVertical: 12;
   },
   image: {,
-  width: 120,
-    height: 80,
-    borderRadius: 8,
+  width: 120;
+    height: 80;
+    borderRadius: 8;
     marginRight: 12;
   },
   // 分区样式
   section: {,
-  backgroundColor: '#fff',
-    marginBottom: 8,
-    paddingHorizontal: 16,
+  backgroundColor: '#fff';
+    marginBottom: 8;
+    paddingHorizontal: 16;
     paddingVertical: 16;
   },
   sectionTitle: {,
-  fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
+  fontSize: 16;
+    fontWeight: '600';
+    color: '#333';
     marginBottom: 12;
   },
   // 信息行
   infoRow: {,
-  flexDirection: 'row',
-    alignItems: 'center',
+  flexDirection: 'row';
+    alignItems: 'center';
     marginBottom: 12;
   },
   infoText: {,
-  marginLeft: 12,
-    fontSize: 14,
-    color: '#333',
+  marginLeft: 12;
+    fontSize: 14;
+    color: '#333';
     flex: 1;
   },
   // 联系方式
   contactItem: {,
-  flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 12,
-    borderBottomWidth: 1,
+  flexDirection: 'row';
+    alignItems: 'center';
+    paddingVertical: 12;
+    borderBottomWidth: 1;
     borderBottomColor: '#f0f0f0'
-  },
+  ;},
   contactText: {,
-  marginLeft: 12,
-    fontSize: 14,
-    color: '#333',
+  marginLeft: 12;
+    fontSize: 14;
+    color: '#333';
     flex: 1;
   },
   // 服务项目
   servicesContainer: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
     flexWrap: 'wrap'
-  },
+  ;},
   serviceTag: {,
-  backgroundColor: '#f0f0f0',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
-    marginRight: 8,
+  backgroundColor: '#f0f0f0';
+    paddingHorizontal: 12;
+    paddingVertical: 6;
+    borderRadius: 16;
+    marginRight: 8;
     marginBottom: 8;
   },
   serviceText: {,
-  fontSize: 12,
+  fontSize: 12;
     color: '#666'
-  },
+  ;},
   // 时间段
   timeSlotsContainer: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
     flexWrap: 'wrap'
-  },
+  ;},
   timeSlot: {,
-  backgroundColor: '#f8f8f8',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 8,
-    marginRight: 8,
-    marginBottom: 8,
-    borderWidth: 1,
+  backgroundColor: '#f8f8f8';
+    paddingHorizontal: 12;
+    paddingVertical: 8;
+    borderRadius: 8;
+    marginRight: 8;
+    marginBottom: 8;
+    borderWidth: 1;
     borderColor: '#007AFF'
-  },
+  ;},
   timeSlotDisabled: {,
-  backgroundColor: '#f0f0f0',
+  backgroundColor: '#f0f0f0';
     borderColor: '#ccc'
-  },
+  ;},
   timeSlotText: {,
-  fontSize: 12,
-    color: '#007AFF',
+  fontSize: 12;
+    color: '#007AFF';
     fontWeight: '500'
-  },
+  ;},
   timeSlotTextDisabled: {,
   color: '#999'
-  },
+  ;},
   timeSlotPrice: {,
-  fontSize: 10,
-    color: '#FF6B35',
+  fontSize: 10;
+    color: '#FF6B35';
     marginTop: 2;
   },
   // 描述
   description: {,
-  fontSize: 14,
-    color: '#333',
+  fontSize: 14;
+    color: '#333';
     lineHeight: 20;
   },
   // 评价
   reviewItem: {,
-  paddingVertical: 12,
-    borderBottomWidth: 1,
+  paddingVertical: 12;
+    borderBottomWidth: 1;
     borderBottomColor: '#f0f0f0'
-  },
+  ;},
   reviewHeader: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
     marginBottom: 8;
   },
   reviewUser: {,
-  fontSize: 14,
-    fontWeight: '500',
+  fontSize: 14;
+    fontWeight: '500';
     color: '#333'
-  },
+  ;},
   reviewRating: {,
   flexDirection: 'row'
-  },
+  ;},
   reviewComment: {,
-  fontSize: 14,
-    color: '#333',
-    lineHeight: 18,
+  fontSize: 14;
+    color: '#333';
+    lineHeight: 18;
     marginBottom: 6;
   },
   reviewDate: {,
-  fontSize: 12,
+  fontSize: 12;
     color: '#999'
-  },
+  ;},
   moreReviews: {,
-  alignItems: 'center',
+  alignItems: 'center';
     paddingVertical: 12;
   },
   moreReviewsText: {,
-  fontSize: 14,
+  fontSize: 14;
     color: '#007AFF'
-  },
+  ;},
   // 预约模态框
   modalOverlay: {,
-  flex: 1,
+  flex: 1;
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
+    justifyContent: 'center';
     alignItems: 'center'
-  },
+  ;},
   modalContent: {,
-  backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 20,
-    width: width * 0.85,
+  backgroundColor: '#fff';
+    borderRadius: 12;
+    padding: 20;
+    width: width * 0.85;
     maxWidth: 400;
   },
   modalTitle: {,
-  fontSize: 18,
-    fontWeight: '600',
-    color: '#333',
-    textAlign: 'center',
+  fontSize: 18;
+    fontWeight: '600';
+    color: '#333';
+    textAlign: 'center';
     marginBottom: 20;
   },
   bookingInfo: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
     marginBottom: 12;
   },
   bookingLabel: {,
-  fontSize: 14,
-    color: '#666',
+  fontSize: 14;
+    color: '#666';
     width: 80;
   },
   bookingValue: {,
-  fontSize: 14,
-    color: '#333',
+  fontSize: 14;
+    color: '#333';
     flex: 1;
   },
   modalButtons: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
     marginTop: 20;
   },
   modalButton: {,
-  flex: 1,
-    paddingVertical: 12,
-    borderRadius: 8,
+  flex: 1;
+    paddingVertical: 12;
+    borderRadius: 8;
     alignItems: 'center'
-  },
+  ;},
   cancelButton: {,
-  backgroundColor: '#f0f0f0',
+  backgroundColor: '#f0f0f0';
     marginRight: 8;
   },
   confirmButton: {,
-  backgroundColor: '#007AFF',
+  backgroundColor: '#007AFF';
     marginLeft: 8;
   },
   cancelButtonText: {,
-  fontSize: 16,
-    color: '#666',
+  fontSize: 16;
+    color: '#666';
     fontWeight: '500'
-  },
+  ;},
   confirmButtonText: {,
-  fontSize: 16,
-    color: '#fff',
+  fontSize: 16;
+    color: '#fff';
     fontWeight: '500'
-  },
+  ;},
   // 图片查看模态框
   imageModalOverlay: {,
-  flex: 1,
+  flex: 1;
     backgroundColor: 'rgba(0, 0, 0, 0.9)',justifyContent: 'center',alignItems: 'center';
   },imageModalClose: {,
-  position: "absolute",
+  position: "absolute";
       top: 50,right: 20,zIndex: 1,padding: 10;
   },fullImage: {width: width,height: height * 0.7,resizeMode: 'contain';
   };

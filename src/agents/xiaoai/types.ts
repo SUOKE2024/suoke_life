@@ -6,7 +6,7 @@ export interface ImageData {
   format: string;
   width: number;
   height: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string; any>;
 }
 
 export interface AudioData {
@@ -15,13 +15,13 @@ export interface AudioData {
   duration: number;
   sampleRate: number;
   channels?: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string; any>;
 }
 
 export interface PalpationData {
   type: 'pulse' | 'touch' | 'pressure';
   sensorData: Record<string, any>;
-  metadata?: Record<string, any>;
+  metadata?: Record<string; any>;
 }
 
 // 个性化特征类型
@@ -291,9 +291,9 @@ export interface InquiryResult {
 
 export interface LookResult {
   analysisId: string;
-  faceFeatures?: Record<string, any>;
-  complexionAnalysis?: Record<string, any>;
-  tongueAnalysis?: Record<string, any>;
+  faceFeatures?: Record<string; any>;
+  complexionAnalysis?: Record<string; any>;
+  tongueAnalysis?: Record<string; any>;
   overallAssessment: string;
   confidence: number;
   recommendations?: string[];
@@ -301,17 +301,17 @@ export interface LookResult {
 
 export interface ListenResult {
   analysisId: string;
-  voiceFeatures?: Record<string, any>;
-  breathingPattern?: Record<string, any>;
+  voiceFeatures?: Record<string; any>;
+  breathingPattern?: Record<string; any>;
   overallAssessment: string;
   confidence: number;
 }
 
 export interface PalpationResult {
   analysisId: string;
-  pulseAnalysis?: Record<string, any>;
-  abdominalAnalysis?: Record<string, any>;
-  skinAnalysis?: Record<string, any>;
+  pulseAnalysis?: Record<string; any>;
+  abdominalAnalysis?: Record<string; any>;
+  skinAnalysis?: Record<string; any>;
   overallAssessment: string;
   confidence: number;
 }
@@ -343,7 +343,7 @@ export interface DiagnosisServiceClient {
   look: LookServiceClient;
   listen: ListenServiceClient;
   palpation: PalpationServiceClient;
-  healthCheck(): Promise<{ [key: string]: boolean }>;
+  healthCheck(): Promise<{ [key: string]: boolean ;}>;
   comprehensiveDiagnosis(data: {
     userId: string;
     imageData?: ImageData;

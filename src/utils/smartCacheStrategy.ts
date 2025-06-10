@@ -7,9 +7,9 @@ export enum CachePriority {
 }
 // 缓存元数据接口;
 export interface CacheMetadata {
-  priority: CachePriority;,
-  createdAt: number;,
-  lastAccessed: number;,
+  priority: CachePriority;
+  createdAt: number;
+  lastAccessed: number;
   accessCount: number;
   ttl?: number;
   size: number;
@@ -18,11 +18,11 @@ export interface CacheMetadata {
 }
 // 缓存统计信息接口
 export interface CacheStats {
-  totalItems: number;,
-  totalSize: number;,
-  hitRate: number;,
-  missRate: number;,
-  memoryUsage: number;,
+  totalItems: number;
+  totalSize: number;
+  hitRate: number;
+  missRate: number;
+  memoryUsage: number;
   averageAccessTime: number;
 }
 // 预测模型接口
@@ -44,25 +44,25 @@ export class SmartCacheStrategy {private cache = new Map<string, unknown>();
   constructor(maxSizeInBytes: number = 50 * 1024 * 1024) {
     this.maxCacheSize = maxSizeInBytes;
     this.stats = {
-      totalItems: 0,
-      totalSize: 0,
-      hitRate: 0,
-      missRate: 0,
-      memoryUsage: 0,
-      averageAccessTime: 0};
+      totalItems: 0;
+      totalSize: 0;
+      hitRate: 0;
+      missRate: 0;
+      memoryUsage: 0;
+      averageAccessTime: 0;};
     this.predictionModel = {
-      userBehaviorPattern: new Map(),
-      timeBasedAccess: new Map(),
-      contextualAccess: new Map(),
-      seasonalPatterns: new Map()};
+      userBehaviorPattern: new Map();
+      timeBasedAccess: new Map();
+      contextualAccess: new Map();
+      seasonalPatterns: new Map();};
     this.startPeriodicOptimization();
   }
   // 设置缓存项
 async set()
-    key: string,
-    data: unknown,
-    priority: CachePriority = CachePriority.MEDIUM,
-    ttl?: number,
+    key: string;
+    data: unknown;
+    priority: CachePriority = CachePriority.MEDIUM;
+    ttl?: number;
     dependencies?: string[]
   ): Promise<void> {
     const size = this.calculateSize(data);
@@ -71,9 +71,9 @@ if (this.getCurrentCacheSize() + size > this.maxCacheSize) {
       await this.makeSpace(size);
     }
     const metadata: CacheMetadata = {priority,
-      createdAt: Date.now(),
-      lastAccessed: Date.now(),
-      accessCount: 1,
+      createdAt: Date.now();
+      lastAccessed: Date.now();
+      accessCount: 1;
       ttl,
       size,
       dependencies};
@@ -182,8 +182,8 @@ this.stats.averageAccessTime =
   }
   // 更新预测模型
 private updatePredictionModel()
-    key: string,
-    context?: string,
+    key: string;
+    context?: string;
     hit: boolean = true;
   ): void {
     // 更新用户行为模式

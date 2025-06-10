@@ -1,12 +1,4 @@
-import { Platform } from "react-native";
-import {import { PROVIDER_PRIORITY, DEFAULT_CONFIGS, DEVICE_THRESHOLDS } from ./    constants;
-  DeviceCapabilities,
-  CPUCapabilities,
-  MemoryCapabilities,
-  GPUCapabilities,
-  NPUCapabilities,
-  ExecutionProvider,
-  { EdgeComputeConfig } from "../../placeholder";./    types;
+./    types;
 /**
 * * 设备能力检测器 - 检测设备硬件能力和支持的执行提供者
 * 为边缘计算提供设备特性信息
@@ -64,28 +56,28 @@ this.capabilities = this.getDefaultCapabilities();
 * * 检查设备是否适合运行特定模型
   isModelCompatible(modelRequirements: ModelRequirements): CompatibilityResult {
     if (!this.capabilities) {
-      return {compatible: false,reason: "设备能力未检测,", "recommendations: [];
-      };
+
+      ;};
     }
     const issues: string[] = [];
     const recommendations: string[] = [];
     // 检查内存要求
 if (modelRequirements.minMemory > this.capabilities.memory.available) {
-      issues.push("内存不足");
-      recommendations.push(考虑使用量化模型或释放内存");"
+
+
     }
     // 检查CPU要求
 if (modelRequirements.minCpuCores > this.capabilities.cpu.cores) {
-      issues.push("CPU核心数不足);"
-      recommendations.push("降低并发会话数");
+
+
     }
     // 检查执行提供者支持
 const hasRequiredProvider = modelRequirements.requiredProviders?.some(;)
       provider => this.capabilities!.supportedProviders.includes(provider);
     );
     if (modelRequirements.requiredProviders && !hasRequiredProvider) {
-      issues.push(缺少必需的执行提供者");"
-      recommendations.push("使用CPU执行提供者作为后备);"
+
+
     }
     return {compatible: issues.length === 0,reason: issues.join(",),recommendations,estimatedPerformance: this.estimateModelPerformance(modelRequirements);
     };
@@ -98,10 +90,10 @@ private async detectCPUCapabilities(): Promise<CPUCapabilities> {
     }
     try {
       // 在实际应用中，这里应该调用原生模块获取真实的CPU信息
-const capabilities: CPUCapabilities = {cores: await this.getCPUCores(),
-        architecture: await this.getCPUArchitecture(),
-        frequency: await this.getCPUFrequency(),
-        supportedInstructions: await this.getSupportedInstructions(),
+const capabilities: CPUCapabilities = {cores: await this.getCPUCores();
+        architecture: await this.getCPUArchitecture();
+        frequency: await this.getCPUFrequency();
+        supportedInstructions: await this.getSupportedInstructions();
         thermalThrottling: await this.checkThermalThrottling();
       };
       this.detectionCache.set(cacheKey, capabilities);
@@ -116,9 +108,9 @@ const capabilities: CPUCapabilities = {cores: await this.getCPUCores(),
       return this.detectionCache.get(cacheKey);
     }
     try {
-      const capabilities: MemoryCapabilities = {total: await this.getTotalMemory(),
-        available: await this.getAvailableMemory(),
-        type: await this.getMemoryType(),
+      const capabilities: MemoryCapabilities = {total: await this.getTotalMemory();
+        available: await this.getAvailableMemory();
+        type: await this.getMemoryType();
         bandwidth: await this.getMemoryBandwidth();
       };
       this.detectionCache.set(cacheKey, capabilities);
@@ -135,10 +127,10 @@ const capabilities: CPUCapabilities = {cores: await this.getCPUCores(),
     try {
       const hasGPU = await this.checkGPUAvailability();
       if (!hasGPU) return undefined;
-      const capabilities: GPUCapabilities = {vendor: await this.getGPUVendor(),
-        model: await this.getGPUModel(),
-        memory: await this.getGPUMemory(),
-        computeUnits: await this.getGPUComputeUnits(),
+      const capabilities: GPUCapabilities = {vendor: await this.getGPUVendor();
+        model: await this.getGPUModel();
+        memory: await this.getGPUMemory();
+        computeUnits: await this.getGPUComputeUnits();
         supportedAPIs: await this.getGPUSupportedAPIs();
       };
       this.detectionCache.set(cacheKey, capabilities);
@@ -155,10 +147,10 @@ const capabilities: CPUCapabilities = {cores: await this.getCPUCores(),
     try {
       const hasNPU = await this.checkNPUAvailability();
       if (!hasNPU) return undefined;
-      const capabilities: NPUCapabilities = {vendor: await this.getNPUVendor(),
-        model: await this.getNPUModel(),
-        tops: await this.getNPUTOPS(),
-        supportedPrecisions: await this.getNPUSupportedPrecisions(),
+      const capabilities: NPUCapabilities = {vendor: await this.getNPUVendor();
+        model: await this.getNPUModel();
+        tops: await this.getNPUTOPS();
+        supportedPrecisions: await this.getNPUSupportedPrecisions();
         driverVersion: await this.getNPUDriverVersion();
       };
       this.detectionCache.set(cacheKey, capabilities);
@@ -203,9 +195,9 @@ if (await this.checkQNNSupport()) {
     }
   }
   private generateRecommendedConfig()
-    cpu: CPUCapabilities,
-    memory: MemoryCapabilities,
-    gpu?: GPUCapabilities,
+    cpu: CPUCapabilities;
+    memory: MemoryCapabilities;
+    gpu?: GPUCapabilities;
     npu?: NPUCapabilities;
   ): EdgeComputeConfig {
     const baseConfig = { ...DEFAULT_CONFIGS.EDGE_COMPUTE };
@@ -233,27 +225,27 @@ baseConfig.enableNPU = !!npu;
   }
   private estimateModelPerformance(requirements: ModelRequirements): PerformanceEstimate {
     if (!this.capabilities) {
-      return { score: 0, bottlenecks: ["设备能力未知"] };
-    }
+
+    ;}
     let score = 100;
     const bottlenecks: string[] = [];
     // 内存评估
 const memoryRatio = requirements.minMemory /     this.capabilities.memory.available;
     if (memoryRatio > 0.8) {
       score -= 30;
-      bottlenecks.push(内存不足");"
+
     } else if (memoryRatio > 0.6) {
       score -= 15;
-      bottlenecks.push("内存紧张);"
+
     }
     // CPU评估
 const cpuRatio = requirements.minCpuCores /     this.capabilities.cpu.cores;
     if (cpuRatio > 1) {
       score -= 25;
-      bottlenecks.push("CPU核心不足");
+
     } else if (cpuRatio > 0.8) {
       score -= 10;
-      bottlenecks.push(CPU负载较高");"
+
     }
     // 执行提供者评估
 const hasOptimalProvider = requirements.preferredProviders?.some(;)
@@ -261,7 +253,7 @@ const hasOptimalProvider = requirements.preferredProviders?.some(;)
     );
     if (!hasOptimalProvider) {
       score -= 20;
-      bottlenecks.push("缺少优化的执行提供者);"
+
     }
     return {score: Math.max(0, score),bottlenecks;
     };
@@ -378,7 +370,7 @@ private getDefaultCapabilities(): DeviceCapabilities {
     };
   }
   private getDefaultCPUCapabilities(): CPUCapabilities {
-    return {cores: 4,architecture: arm64",;
+    return {cores: 4,architecture: arm64";
       frequency: 2000,supportedInstructions: ["NEON],";
       thermalThrottling: true;
     };
@@ -393,7 +385,7 @@ type: "LPDDR4",'
 }
 // 辅助接口
 interface ModelRequirements {
-  minMemory: number;,
+  minMemory: number;
   minCpuCores: number;
   requiredProviders?: ExecutionProvider[];
   preferredProviders?: ExecutionProvider[];

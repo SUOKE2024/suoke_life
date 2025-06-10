@@ -44,8 +44,8 @@ export const multiSet = async (keyValuePairs: [string, any][]): Promise<void> =>
   }
 };
 // 批量获取
-export const multiGet = async (keys: string[]): Promise<{ [key: string]: unknown }> => {try {const keyValuePairs = await AsyncStorage.multiGet(keys);
-    const result: { [key: string]: unknown } = {};
+export const multiGet = async (keys: string[]): Promise<{ [key: string]: unknown ;}> => {try {const keyValuePairs = await AsyncStorage.multiGet(keys);
+    const result: { [key: string]: unknown ;} = {};
     keyValuePairs.forEach([key, value]) => {
       try {
         result[key] = value ? JSON.parse(value) : null;
@@ -78,7 +78,7 @@ export class StorageManager {
     this.prefix = prefix;
   }
   private getKey(key: string): string {
-    return this.prefix ? `${this.prefix}_${key}` : key;
+    return this.prefix ? `${this.prefix;}_${key}` : key;
   }
   async set<T>(key: string, value: T): Promise<void> {
     return setStorageItem(this.getKey(key), value);

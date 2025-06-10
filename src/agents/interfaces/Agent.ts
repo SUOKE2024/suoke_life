@@ -80,7 +80,7 @@ export interface AgentMessage {
   content: any;
   timestamp: Date;
   priority: MessagePriority;
-  metadata?: Record<string, any>;
+  metadata?: Record<string; any>;
 }
 
 /**

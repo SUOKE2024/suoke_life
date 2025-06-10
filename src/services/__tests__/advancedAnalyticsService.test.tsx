@@ -1,6 +1,4 @@
-import { advancedAnalyticsService } from "../advancedAnalyticsService";
-import { advancedAnalyticsService } from "../advancedAnalyticsService";
-import React from "react";
+
 describe("advancedAnalyticsService", () => {
   beforeEach(() => {
     jest.clearAllMocks();

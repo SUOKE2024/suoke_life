@@ -4,56 +4,56 @@ import { Alert } from 'react-native';
 import CryptoJS from 'crypto-js';
 // 安全配置常量
 const SECURITY_CONFIG = {
-      ENCRYPTION_KEY: "suoke_life_security_key_2024",
+      ENCRYPTION_KEY: "suoke_life_security_key_2024";
       SESSION_TIMEOUT: 30 * 60 * 1000, // 30分钟
-  MAX_LOGIN_ATTEMPTS: 5,
-  AUDIT_LOG_MAX_SIZE: 1000,
-  PASSWORD_MIN_LENGTH: 8};
+  MAX_LOGIN_ATTEMPTS: 5;
+  AUDIT_LOG_MAX_SIZE: 1000;
+  PASSWORD_MIN_LENGTH: 8;};
 // 接口定义
 export interface DeviceInfo {
-  platform: string;,
+  platform: string;
   version: string;
-  model: string;,
+  model: string;
   uniqueId: string;
   isJailbroken?: boolean;
   isEmulator?: boolean;
 }
 export interface UserSession {
-  userId: string;,
+  userId: string;
   sessionId: string;
-  startTime: number;,
+  startTime: number;
   lastActivity: number;
-  deviceInfo: DeviceInfo;,
+  deviceInfo: DeviceInfo;
   permissions: string[];
   biometricEnabled: boolean;
 }
 export interface SecurityPolicy {
-  requireBiometric: boolean;,
+  requireBiometric: boolean;
   sessionTimeout: number;
-  maxLoginAttempts: number;,
+  maxLoginAttempts: number;
   passwordComplexity: {;
-    minLength: number;,
+    minLength: number;
   requireUppercase: boolean;
-    requireLowercase: boolean;,
+    requireLowercase: boolean;
   requireNumbers: boolean;
     requireSpecialChars: boolean;
 };
   dataEncryption: {,
   enabled: boolean;
-    algorithm: string,
+    algorithm: string;
   keyRotationInterval: number;
   };
   auditLogging: {,
   enabled: boolean;
-    logLevel: "basic" | "detailed" | "verbose",
+    logLevel: "basic" | "detailed" | "verbose";
   retentionDays: number;
   };
 }
 export interface SecurityEvent {
-  id: string;,
+  id: string;
   type: string;
   userId?: string;
-  timestamp: number;,
+  timestamp: number;
   details: Record<string, any>;
   severity: "low" | "medium" | "high" | "critical";
   deviceInfo?: DeviceInfo;
@@ -77,7 +77,7 @@ class EncryptionManager {
       const encrypted = CryptoJS.AES.encrypt(jsonString, this.encryptionKey).toString();
       return encrypted;
     } catch (error) {
-      throw new Error('加密失败');
+
     }
   }
   decrypt(encryptedData: string): any {
@@ -86,7 +86,7 @@ class EncryptionManager {
       const jsonString = decrypted.toString(CryptoJS.enc.Utf8);
       return JSON.parse(jsonString);
     } catch (error) {
-      throw new Error('解密失败');
+
     }
   }
   generateHash(data: string): string {
@@ -137,11 +137,11 @@ class AccessControlManager {
       userPermissions.push(permission);
       this.permissions.set(userId, userPermissions);
       SecurityManager.getInstance().logSecurityEvent({
-        type: "access_granted",
+        type: "access_granted";
         userId,
-        details: { action: "grant_permission", permission },
+        details: { action: "grant_permission", permission ;},
         severity: "medium"
-      });
+      ;});
     }
   }
   // 撤销权限
@@ -152,11 +152,11 @@ class AccessControlManager {
       userPermissions.splice(index, 1);
       this.permissions.set(userId, userPermissions);
       SecurityManager.getInstance().logSecurityEvent({
-        type: "access_denied",
+        type: "access_denied";
         userId,
-        details: { action: "revoke_permission", permission },
+        details: { action: "revoke_permission", permission ;},
         severity: "medium"
-      });
+      ;});
     }
   }
   // 设置用户角色
@@ -164,11 +164,11 @@ class AccessControlManager {
     const rolePerms = this.rolePermissions.get(role) || [];
     this.permissions.set(userId, [...rolePerms]);
     SecurityManager.getInstance().logSecurityEvent({
-      type: "access_granted",
+      type: "access_granted";
       userId,
-      details: { action: "set_role", role },
+      details: { action: "set_role", role ;},
       severity: "medium"
-    });
+    ;});
   }
 }
 // 安全审计管理器
@@ -188,8 +188,8 @@ class SecurityAuditManager {
   // 记录安全事件
   logEvent(event: Omit<SecurityEvent, "id" | "timestamp">): void {
     const securityEvent: SecurityEvent = {,
-  id: this.generateEventId(),
-      timestamp: Date.now(),
+  id: this.generateEventId();
+      timestamp: Date.now();
       ...event;
     };
     this.auditLogs.push(securityEvent);
@@ -207,7 +207,7 @@ class SecurityAuditManager {
     type?: string;
     userId?: string;
     severity?: string;
-    timeRange?: { start: number; end: number };
+    timeRange?: { start: number; end: number ;};
   }): SecurityEvent[] {
     let filteredLogs = [...this.auditLogs];
     if (filters?.type) {
@@ -230,36 +230,36 @@ class SecurityAuditManager {
     return filteredLogs.sort(a, b) => b.timestamp - a.timestamp);
   }
   // 生成安全报告
-  generateSecurityReport(timeRange: { start: number; end: number }): {
-    summary: string,
-  events: SecurityEvent[];,
+  generateSecurityReport(timeRange: { start: number; end: number ;}): {
+    summary: string;
+  events: SecurityEvent[];
   statistics: Record<string, number>;
     recommendations: string[];
   } {
     const events = this.getAuditLogs({ timeRange });
     const statistics = {
-      total: events.length,
-      critical: events.filter(e) => e.severity === "critical").length,
-      high: events.filter(e) => e.severity === "high").length,
-      medium: events.filter(e) => e.severity === "medium").length,
+      total: events.length;
+      critical: events.filter(e) => e.severity === "critical").length;
+      high: events.filter(e) => e.severity === "high").length;
+      medium: events.filter(e) => e.severity === "medium").length;
       low: events.filter(e) => e.severity === "low").length;
     };
     const recommendations: string[] = [];
     if (statistics.critical > 0) {
-      recommendations.push("发现严重安全事件，建议立即检查系统安全");
+
     }
     if (statistics.high > 10) {
-      recommendations.push("高风险事件较多，建议加强安全监控");
+
     }
     const summary = `
-安全报告 (${new Date(timeRange.start).toLocaleDateString()} - ${new Date())
+
       timeRange.end;
     ).toLocaleDateString()})
-总事件数: ${statistics.total}
-严重事件: ${statistics.critical}
-高风险事件: ${statistics.high}
-中风险事件: ${statistics.medium}
-低风险事件: ${statistics.low}
+
+
+
+
+
     `.trim();
     return {
       summary,
@@ -278,7 +278,7 @@ class SecurityAuditManager {
       );
       await AsyncStorage.setItem("security_audit_logs", encryptedLogs);
     } catch (error) {
-      console.error('持久化审计日志失败:', error);
+
     }
   }
   private async loadAuditLogs(): Promise<void> {
@@ -294,8 +294,8 @@ class SecurityAuditManager {
   private checkForAlerts(event: SecurityEvent): void {
     // 检查是否需要发送安全告警
     if (event.severity === "critical") {
-      Alert.alert("安全告警", "检测到严重安全事件，请立即检查系统安全");
-    }
+
+    ;}
     // 检查登录失败次数
     if ()
       event.type === "access_denied" &&
@@ -309,14 +309,14 @@ class SecurityAuditManager {
       );
       if (recentFailures.length >= SECURITY_CONFIG.MAX_LOGIN_ATTEMPTS) {
         this.logEvent({
-      type: "suspicious",
-      userId: event.userId,
+      type: "suspicious";
+      userId: event.userId;
           details: {,
-  action: "account_locked",
+  action: "account_locked";
             attempts: recentFailures.length;
           },
           severity: "high"
-        });
+        ;});
       }
     }
   }
@@ -347,10 +347,10 @@ export class SecurityManager {
       await this.loadSecurityPolicy();
       await this.validateDeviceSecurity();
       this.logSecurityEvent({
-      type: "system",
-      details: { action: "security_system_initialized" },
+      type: "system";
+      details: { action: "security_system_initialized" ;},
         severity: "low"
-      });
+      ;});
     } catch (error) {
       throw error;
     }
@@ -359,21 +359,21 @@ export class SecurityManager {
   createSession(userId: string, deviceInfo: DeviceInfo): UserSession {
     const session: UserSession = {
       userId,
-      sessionId: this.generateSessionId(),
-      startTime: Date.now(),
-      lastActivity: Date.now(),
+      sessionId: this.generateSessionId();
+      startTime: Date.now();
+      lastActivity: Date.now();
       deviceInfo,
-      permissions: [],
+      permissions: [];
       biometricEnabled: false;
     };
     this.currentSession = session;
     this.logSecurityEvent({
-      type: "login",
+      type: "login";
       userId,
       details: {,
-  action: "session_created",
-      sessionId: session.sessionId },
-      severity: "low",
+  action: "session_created";
+      sessionId: session.sessionId ;},
+      severity: "low";
       deviceInfo;
     });
     return session;
@@ -399,13 +399,13 @@ export class SecurityManager {
   destroySession(): void {
     if (this.currentSession) {
       this.logSecurityEvent({
-      type: "logout",
-      userId: this.currentSession.userId,
+      type: "logout";
+      userId: this.currentSession.userId;
         details: {,
-  action: "session_destroyed",
-      sessionId: this.currentSession.sessionId },
+  action: "session_destroyed";
+      sessionId: this.currentSession.sessionId ;},
         severity: "low"
-      });
+      ;});
       this.currentSession = null;
     }
   }
@@ -426,24 +426,24 @@ export class SecurityManager {
   }
   private getDefaultSecurityPolicy(): SecurityPolicy {
     return {
-      requireBiometric: false,
-      sessionTimeout: SECURITY_CONFIG.SESSION_TIMEOUT,
-      maxLoginAttempts: SECURITY_CONFIG.MAX_LOGIN_ATTEMPTS,
+      requireBiometric: false;
+      sessionTimeout: SECURITY_CONFIG.SESSION_TIMEOUT;
+      maxLoginAttempts: SECURITY_CONFIG.MAX_LOGIN_ATTEMPTS;
       passwordComplexity: {,
-  minLength: SECURITY_CONFIG.PASSWORD_MIN_LENGTH,
-        requireUppercase: true,
-        requireLowercase: true,
-        requireNumbers: true,
+  minLength: SECURITY_CONFIG.PASSWORD_MIN_LENGTH;
+        requireUppercase: true;
+        requireLowercase: true;
+        requireNumbers: true;
         requireSpecialChars: false;
       },
       dataEncryption: {,
-  enabled: true,
-        algorithm: "AES-256",
+  enabled: true;
+        algorithm: "AES-256";
         keyRotationInterval: 30 * 24 * 60 * 60 * 1000 // 30天
-      },
+      ;},
       auditLogging: {,
-  enabled: true,
-        logLevel: "detailed",
+  enabled: true;
+        logLevel: "detailed";
         retentionDays: 90;
       }
     };
@@ -455,7 +455,7 @@ export class SecurityManager {
         this.securityPolicy = JSON.parse(storedPolicy);
       }
     } catch (error) {
-      console.error('加载安全策略失败:', error);
+
     }
   }
   private async validateDeviceSecurity(): Promise<void> {

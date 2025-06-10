@@ -1,5 +1,4 @@
-import { colors, spacing, borderRadius, shadows } from "../../constants/    theme";
-import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/      Modal as RNModal,";
+
 import React from "react";
 /
 // 索克生活 - Modal组件   模态框组件
@@ -10,7 +9,7 @@ importReact from ";react";
   TouchableOpacity,
   TouchableWithoutFeedback,
   { Dimensions } from "react-native";
-const { width: screenWidth, height: screenHeight} = Dimensions.get(";window;";);
+const { width: screenWidth, height: screenHeight;} = Dimensions.get(";window;";);
 export interface ModalProps {
   visible: boolean;
   onClose?: () => void;
@@ -25,7 +24,7 @@ export interface ModalProps {
   testID?: string;
 }
 const Modal: React.FC<ModalProps /> = ({/   const performanceMonitor = usePerformanceMonitor("Modal, { /    ";))
-    trackRender: true,trackMemory: false,warnThreshold: 50};);
+    trackRender: true,trackMemory: false,warnThreshold: 50;};);
   visible,
   onClose,
   children,
@@ -74,28 +73,28 @@ const Modal: React.FC<ModalProps /> = ({/   const performanceMonitor = usePerfor
 const styles = StyleSheet.create({backdrop: {),
   flex: 1,backgroundColor: rgba(0, 0, 0, 0.;5;);",
     justifyContent: "center,",
-    alignItems: "center"},
+    alignItems: "center";},
   modal: {,
-  backgroundColor: colors.surface,
-    borderRadius: borderRadius.xl,
-    padding: spacing.lg,
+  backgroundColor: colors.surface;
+    borderRadius: borderRadius.xl;
+    padding: spacing.lg;
     ...shadows.xl;
   },
   center: {
-    },
+    ;},
   bottom: {,
-  position: absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0},
+  position: absolute";
+    bottom: 0;
+    left: 0;
+    right: 0;
+    borderBottomLeftRadius: 0;
+    borderBottomRightRadius: 0;},
   top: {,
-  position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: 0}
+  position: 'absolute';
+    top: 0;
+    left: 0;
+    right: 0;
+    borderTopLeftRadius: 0;
+    borderTopRightRadius: 0;}
 });
 export default React.memo(Modal);

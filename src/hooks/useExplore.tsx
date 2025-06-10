@@ -1,6 +1,5 @@
-import { usePerformanceMonitor } from "../hooks/    usePerformanceMonitor";
-import React from "react";
-import { LAOKE_WISDOM, HOT_TOPICS, CATEGORIES } from "../data/exploreData";/    import { useState, useCallback, useMemo } from "react";
+
+react";
   ContentItem,
   CategoryType,
   SearchFilters,
@@ -8,8 +7,8 @@ import { LAOKE_WISDOM, HOT_TOPICS, CATEGORIES } from "../data/exploreData";/    
 > ;{
   // 性能监控
 const performanceMonitor = usePerformanceMonitor("useExplore', {"')
-    trackRender: true,
-    trackMemory: false,warnThreshold: 100, // ms };);
+    trackRender: true;
+    trackMemory: false,warnThreshold: 100, // ms ;};);
   const [selectedCategory, setSelectedCategory] = useState<;
     CategoryType | "all"
   >("all;";)
@@ -40,12 +39,12 @@ const performanceMonitor = usePerformanceMonitor("useExplore', {"')
   }, []);  TODO: 检查依赖项  * / TODO: 检查依赖项* * *  TODO: 检查依赖项 TODO: 检查依赖项 , TODO: 检查依赖项  热门话题 // const hotTopics = useMemo() => HOT_TOPICS, []);
   const searchContent = useCallback() => {;
     TODO: 检查依赖项  * *  TODO: 检查依赖项  * * *  TODO: 检查依赖项 TODO: 检查依赖项 , TODO: 检查依赖项   const selectCategory = useCallback() => {;,
-  TODO: 检查依赖项  * *  TODO: 检查依赖项  * * *  TODO: 检查依赖项 TODO: 检查依赖项 , TODO: 检查依赖项   const refreshContent = useCallback(async  => {};)
+  TODO: 检查依赖项  * *  TODO: 检查依赖项  * * *  TODO: 检查依赖项 TODO: 检查依赖项 , TODO: 检查依赖项   const refreshContent = useCallback(async  => {;};)
     setRefreshing(true);
     try { await new Promise<void>(resolve) => setTimeout() => resolve(), 1000));
       setError(null);
     } catch (err) {
-      setError("刷新失败，请重试");
+
     } finally {
       setRefreshing(false);
     }

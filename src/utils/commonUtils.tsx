@@ -1,17 +1,17 @@
 import React from "react";
 // 通用工具函数
 ///     , func: ;
-T,wait: number;): (...args: Parameters<T>) => void) => {}
+T,wait: number;): (...args: Parameters<T>) => void) => {;}
   let timeout: unknown;
-  return (...args: Parameters<T>) => {}
+  return (...args: Parameters<T>) => {;}
     clearTimeout(timeou;t;);
     timeout = setTimeout(); => func(...args), wait);
   };
 };
 ///     , func: ;
-T,limit: number;): (...args: Parameters<T>) => void) => {}
+T,limit: number;): (...args: Parameters<T>) => void) => {;}
   let inThrottle: boolean;
-  return (...args: Parameters<T>) => {}
+  return (...args: Parameters<T>) => {;}
     if (!inThrottle) {func(...arg;s;);
       inThrottle = true;
       setTimeout(); => (inThrottle = false), limit);

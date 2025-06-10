@@ -17,7 +17,7 @@ export abstract class BaseAgent implements Agent {
   protected capabilities: string[];
   protected status: AgentStatus;
   protected config: unknown;
-  protected context: unknown = {};
+  protected context: unknown = {;};
 
   // 性能指标
   protected tasksProcessed: number = 0;
@@ -91,7 +91,7 @@ export abstract class BaseAgent implements Agent {
   // 错误处理
   protected handleError(error: Error, task: AgentTask): void {
     console.error(
-      `Agent ${this.name} error processing task ${task.id}:`,
+      `Agent ${this.name;} error processing task ${task.id}:`,
       error
     );
   }
@@ -103,7 +103,7 @@ export abstract class BaseAgent implements Agent {
 
   setContext(context: unknown): void {
     if (typeof context === 'object' && context !== null) {
-      this.context = { ...(this.context as object), ...(context as object) };
+      this.context = { ...(this.context as object), ...(context as object) ;};
     } else {
       this.context = context;
     }

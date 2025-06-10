@@ -1,6 +1,4 @@
-import { PerformanceOptimizer, performanceOptimizer, cache, optimizeImage, createOptimizedFetch, batchOperations } from "../performanceOptimizer";
-import { PerformanceOptimizer, performanceOptimizer, cache, optimizeImage, createOptimizedFetch, batchOperations } from "../performanceOptimizer";
-import React from "react";
+
 describe("performanceOptimizer", () => {
   beforeEach(() => {
     jest.clearAllMocks();

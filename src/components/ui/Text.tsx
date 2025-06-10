@@ -1,6 +1,5 @@
-import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/      Text as RNText,";
-import React from "react";
-import { useTheme } from "../../contexts/ThemeContext";/import { useAccessibility } from "../../contexts/AccessibilityContext";/import { responsive, typography } from "../../utils/responsive";/    importReact from "react";
+
+../../contexts/AccessibilityContext";/react";
   StyleSheet,
   TextStyle,
   { AccessibilityRole } from ";react-native";
@@ -55,7 +54,7 @@ weight?: "300" | "400" | "500" | "600" | "700";
   onLongPress?: () => void;
 }
 const Text: React.FC<TextProps /> = ({/   const performanceMonitor = usePerformanceMonitor("Text', { /    "';))
-    trackRender: true,trackMemory: false,warnThreshold: 100};);
+    trackRender: true,trackMemory: false,warnThreshold: 100;};);
   children,
   variant = "body1",
   color,
@@ -78,92 +77,92 @@ const Text: React.FC<TextProps /> = ({/   const performanceMonitor = usePerforma
   const { config   } = useAccessibility;(;);
   const getVariantStyle = (): TextStyle => {};
     const variantStyles: Record<string, TextStyle> = {h1: {,
-  fontSize: responsive.fontSize(theme.typography.fontSize["5xl"]),
-        fontWeight: "700" as const,
+  fontSize: responsive.fontSize(theme.typography.fontSize["5xl"]);
+        fontWeight: "700" as const;
         lineHeight: responsive.fontSize(,)
           theme.typography.fontSize["5xl"] * theme.typography.lineHeight.tight;
         ),
-        color: theme.colors.onSurface},
+        color: theme.colors.onSurface;},
       h2: {,
-  fontSize: responsive.fontSize(theme.typography.fontSize["4xl"]),
-        fontWeight: "700" as const,
+  fontSize: responsive.fontSize(theme.typography.fontSize["4xl"]);
+        fontWeight: "700" as const;
         lineHeight: responsive.fontSize(,)
           theme.typography.fontSize["4xl"] * theme.typography.lineHeight.tight;
         ),
-        color: theme.colors.onSurface},
+        color: theme.colors.onSurface;},
       h3: {,
-  fontSize: responsive.fontSize(theme.typography.fontSize["3xl"]),
-        fontWeight: "600" as const,
+  fontSize: responsive.fontSize(theme.typography.fontSize["3xl"]);
+        fontWeight: "600" as const;
         lineHeight: responsive.fontSize(,)
           theme.typography.fontSize["3xl"] * theme.typography.lineHeight.tight;
         ),
-        color: theme.colors.onSurface},
+        color: theme.colors.onSurface;},
       h4: {,
-  fontSize: responsive.fontSize(theme.typography.fontSize["2xl"]),
-        fontWeight: "600" as const,
+  fontSize: responsive.fontSize(theme.typography.fontSize["2xl"]);
+        fontWeight: "600" as const;
         lineHeight: responsive.fontSize(,)
           theme.typography.fontSize["2xl"] * theme.typography.lineHeight.normal;
         ),
-        color: theme.colors.onSurface},
+        color: theme.colors.onSurface;},
       h5: {,
-  fontSize: responsive.fontSize(theme.typography.fontSize.xl),
-        fontWeight: "600" as const,
+  fontSize: responsive.fontSize(theme.typography.fontSize.xl);
+        fontWeight: "600" as const;
         lineHeight: responsive.fontSize(,)
           theme.typography.fontSize.xl * theme.typography.lineHeight.normal;
         ),
-        color: theme.colors.onSurface},
+        color: theme.colors.onSurface;},
       h6: {,
-  fontSize: responsive.fontSize(theme.typography.fontSize.lg),
-        fontWeight: "600" as const,
+  fontSize: responsive.fontSize(theme.typography.fontSize.lg);
+        fontWeight: "600" as const;
         lineHeight: responsive.fontSize(,)
           theme.typography.fontSize.lg * theme.typography.lineHeight.normal;
         ),
-        color: theme.colors.onSurface},
+        color: theme.colors.onSurface;},
       body1: {,
-  fontSize: responsive.fontSize(theme.typography.fontSize.base),
-        fontWeight: "400" as const,
+  fontSize: responsive.fontSize(theme.typography.fontSize.base);
+        fontWeight: "400" as const;
         lineHeight: responsive.fontSize(,)
           theme.typography.fontSize.base * theme.typography.lineHeight.normal;
         ),
-        color: theme.colors.onSurface},
+        color: theme.colors.onSurface;},
       body2: {,
-  fontSize: responsive.fontSize(theme.typography.fontSize.sm),
-        fontWeight: "400" as const,
+  fontSize: responsive.fontSize(theme.typography.fontSize.sm);
+        fontWeight: "400" as const;
         lineHeight: responsive.fontSize(,)
           theme.typography.fontSize.sm * theme.typography.lineHeight.normal;
         ),
-        color: theme.colors.onSurfaceVariant},
+        color: theme.colors.onSurfaceVariant;},
       caption: {,
-  fontSize: responsive.fontSize(theme.typography.fontSize.xs),
-        fontWeight: "400" as const,
+  fontSize: responsive.fontSize(theme.typography.fontSize.xs);
+        fontWeight: "400" as const;
         lineHeight: responsive.fontSize(,)
           theme.typography.fontSize.xs * theme.typography.lineHeight.normal;
         ),
-        color: theme.colors.onSurfaceVariant},
+        color: theme.colors.onSurfaceVariant;},
       overline: {,
-  fontSize: responsive.fontSize(theme.typography.fontSize.xs),
-        fontWeight: "500" as const,
+  fontSize: responsive.fontSize(theme.typography.fontSize.xs);
+        fontWeight: "500" as const;
         lineHeight: responsive.fontSize(,)
           theme.typography.fontSize.xs * theme.typography.lineHeight.normal;
         ),
-        color: theme.colors.onSurfaceVariant,
-        textTransform: "uppercase",
-        letterSpacing: 0.5},
+        color: theme.colors.onSurfaceVariant;
+        textTransform: "uppercase";
+        letterSpacing: 0.5;},
       button: {,
-  fontSize: responsive.fontSize(theme.typography.fontSize.base),
-        fontWeight: "500" as const,
+  fontSize: responsive.fontSize(theme.typography.fontSize.base);
+        fontWeight: "500" as const;
         lineHeight: responsive.fontSize(,)
           theme.typography.fontSize.base * theme.typography.lineHeight.normal;
         ),
-        color: theme.colors.primary},
+        color: theme.colors.primary;},
       link: {,
-  fontSize: responsive.fontSize(theme.typography.fontSize.base),
-        fontWeight: "400" as const,
+  fontSize: responsive.fontSize(theme.typography.fontSize.base);
+        fontWeight: "400" as const;
         lineHeight: responsive.fontSize(,)
           theme.typography.fontSize.base * theme.typography.lineHeight.normal;
         ),
-        color: theme.colors.primary,
-        textDecorationLine: "underline"}
+        color: theme.colors.primary;
+        textDecorationLine: "underline";}
     ;};
     return variantStyles[variant] || variantStyles.bod;y;1;
   };
@@ -171,16 +170,16 @@ const Text: React.FC<TextProps /> = ({/   const performanceMonitor = usePerforma
     if (!color) {return getVariantStyle().color as st;r;i;n;g;
     }
     const themeColors: Record<string, string> = {
-      primary: theme.colors.primary,
-      secondary: theme.colors.secondary,
-      onSurface: theme.colors.onSurface,
-      onSurfaceVariant: theme.colors.onSurfaceVariant,
-      onPrimary: theme.colors.onPrimary,
-      onSecondary: theme.colors.onSecondary,
-      error: theme.colors.error,
-      success: theme.colors.success,
-      warning: theme.colors.warning,
-      info: theme.colors.info}
+      primary: theme.colors.primary;
+      secondary: theme.colors.secondary;
+      onSurface: theme.colors.onSurface;
+      onSurfaceVariant: theme.colors.onSurfaceVariant;
+      onPrimary: theme.colors.onPrimary;
+      onSecondary: theme.colors.onSecondary;
+      error: theme.colors.error;
+      success: theme.colors.success;
+      warning: theme.colors.warning;
+      info: theme.colors.info;}
     return themeColors[color] || col;o;r;
   };
   const getFontSize = (): number => {};
@@ -191,7 +190,7 @@ const Text: React.FC<TextProps /> = ({/   const performanceMonitor = usePerforma
     }
     return responsive.fontSize(theme.typography.fontSize[size;];);
   };
-  const getAccessibilityFontSize = (baseFontSize: number): number => {};
+  const getAccessibilityFontSize = (baseFontSize: number): number => {;};
     if (config.largeFontEnabled) {return typography.getScaledFontSize(baseFontSize * config.fontSc;a;l;e;);
     }
     return baseFontSi;z;e;
@@ -199,10 +198,10 @@ const Text: React.FC<TextProps /> = ({/   const performanceMonitor = usePerforma
   const textStyle: TextStyle = {
     ...styles.base,
     ...getVariantStyle(),
-    color: getColor(),
-    fontSize: getAccessibilityFontSize(getFontSize()),
-    fontWeight: weight || getVariantStyle().fontWeight,
-    textAlign: align,
+    color: getColor();
+    fontSize: getAccessibilityFontSize(getFontSize());
+    fontWeight: weight || getVariantStyle().fontWeight;
+    textAlign: align;
     ...(disabled && styles.disabled)
   };
   const generateAccessibilityLabel = (): string => {};
@@ -210,7 +209,7 @@ const Text: React.FC<TextProps /> = ({/   const performanceMonitor = usePerforma
     }
     if (variant.startsWith("h")) {
       const level = variant.charAt(1);
-      return `${children} 标题级别${level;};`
+
     }
     return typeof children === "string" ? children : ;
   };
@@ -247,6 +246,6 @@ style={[textStyle, style]}}
       onLongPress={onLongPress} />/          {children};
     </RNText>/      ;);
 };
-const styles = StyleSheet.create({base: {fontFamily: "System"},)
-  disabled: { opacity: 0.5  };};);
+const styles = StyleSheet.create({base: {fontFamily: "System";},)
+  disabled: { opacity: 0.5  ;};};);
 export default React.memo(Text);

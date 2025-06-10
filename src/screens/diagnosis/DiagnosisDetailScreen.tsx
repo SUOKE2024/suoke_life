@@ -14,18 +14,18 @@ import { FiveDiagnosisResult } from '../../services/fiveDiagnosisService';
   Platform;
 } from 'react-native';
 // import { usePerformanceMonitor } from '../../hooks/usePerformanceMonitor';
-const { width: screenWidth } = Dimensions.get('window');
+const { width: screenWidth ;} = Dimensions.get('window');
 interface RouteParams {
   result: FiveDiagnosisResult;
 }
 // 证型颜色映射
 const SYNDROME_COLORS: Record<string, string> = {
-  '气虚证': "#4CAF50",血虚证': "#F44336",阴虚证': "#2196F3",阳虚证': "#FF9800",气滞证': "#9C27B0",血瘀证': "#795548",痰湿证': "#607D8B",湿热证': '#FF5722'
-};
+
+;};
 // 体质类型图标
 const CONSTITUTION_ICONS: Record<string, string> = {
-  '平和质': "😊",气虚质': "😴",阳虚质': "🥶",阴虚质': "🔥",痰湿质': "💧",湿热质': "🌡️",血瘀质': "🩸",气郁质': "😔",特禀质': '🤧'
-};
+
+;};
 export default React.memo(function DiagnosisDetailScreen() {
   const navigation = useNavigation();
   const route = useRoute();
@@ -41,13 +41,13 @@ export default React.memo(function DiagnosisDetailScreen() {
     // 页面加载动画
     Animated.parallel([)
       Animated.timing(fadeAnimation, {
-        toValue: 1,
-        duration: 500,
+        toValue: 1;
+        duration: 500;
         useNativeDriver: true;
       }),
             Animated.timing(slideAnimation, {
-        toValue: 0,
-        duration: 500,
+        toValue: 0;
+        duration: 500;
         useNativeDriver: false;
       });
     ]).start();
@@ -63,41 +63,41 @@ export default React.memo(function DiagnosisDetailScreen() {
   };
   // 分享诊断结果
   const shareResult = async () => {try {const shareContent = `;
-索克生活 - 五诊检测报告;
-🏥 主要证型: ${result.primarySyndrome.name};
+
+
 🎯 置信度: ${Math.round(result.overallConfidence * 100)}%;
-🧬 体质类型: ${result.constitutionType.type};
+
 📊 数据质量: ${Math.round(result.qualityMetrics.dataQuality * 100)}%;
 🔬 结果可靠性: ${Math.round(result.qualityMetrics.resultReliability * 100)}%;
 📈 完整性: ${Math.round(result.qualityMetrics.completeness * 100)}%;
-🕐 检测时间: ${new Date(result.timestamp).toLocaleString()};
-通过索克生活App获取您的专属健康报告;
+
+
       `.trim();
       await Share.share({
-        message: shareContent,
-        title: '五诊检测报告'
+        message: shareContent;
+
       });
     } catch (error) {
-      console.error('分享失败:', error);
-      Alert.alert("分享失败", "无法分享诊断结果，请稍后重试');
+
+
     }
   };
   // 保存报告
   const saveReport = () => {Alert.alert(;)
-      "保存报告", "报告已保存到您的健康档案中',[{
-      text: "确定", "
-      style: 'default' }];
+
+
+      style: 'default' ;}];
     );
   };
   // 预约咨询
   const bookConsultation = () => {Alert.alert(;)
-      "预约咨询", "是否要预约专业中医师进行详细咨询？',[;
+
         {
-      text: "取消",
-      style: 'cancel' },{
-      text: "预约", "
+
+      style: 'cancel' ;},{
+
       style: 'default',onPress: () => {// 这里应该导航到预约页面;
-            Alert.alert("功能开发中", "预约功能正在开发中，敬请期待');
+
           }
         }
       ]
@@ -108,14 +108,14 @@ export default React.memo(function DiagnosisDetailScreen() {
   <View style={styles.tabBar}>
       {[
         {
-      key: "overview",
-      title: '概览' },
+      key: "overview";
+
         {
-      key: "details",
-      title: '详情' },
+      key: "details";
+
         {
-      key: "recommendations",
-      title: '建议' }
+      key: "recommendations";
+
       ].map(tab => ()))
         <TouchableOpacity;
           key={tab.key};
@@ -142,7 +142,7 @@ export default React.memo(function DiagnosisDetailScreen() {
           <Text style={styles.cardTitle}>诊断结果</Text>
           <View style={[
             styles.confidenceBadge,
-            { backgroundColor: getConfidenceColor(result.overallConfidence) }}
+            { backgroundColor: getConfidenceColor(result.overallConfidence) ;}}
           ]}>
             <Text style={styles.confidenceText}>
               {Math.round(result.overallConfidence * 100)}%
@@ -152,7 +152,7 @@ export default React.memo(function DiagnosisDetailScreen() {
         <View style={styles.syndromeContainer}>
           <View style={[
             styles.syndromeIndicator,
-            { backgroundColor: SYNDROME_COLORS[result.primarySyndrome.name] || '#6c757d' }}
+            { backgroundColor: SYNDROME_COLORS[result.primarySyndrome.name] || '#6c757d' ;}}
           ]} />
           <View style={styles.syndromeInfo}>
             <Text style={styles.syndromeName}>
@@ -191,19 +191,19 @@ export default React.memo(function DiagnosisDetailScreen() {
         <View style={styles.qualityMetrics}>;
           {[;
             {
-      label: "数据质量",
-      value: result.qualityMetrics.dataQuality },{
-      label: "结果可靠性",
-      value: result.qualityMetrics.resultReliability },{
-      label: "完整性", "
-      value: result.qualityMetrics.completeness };
+
+      value: result.qualityMetrics.dataQuality ;},{
+
+      value: result.qualityMetrics.resultReliability ;},{
+
+      value: result.qualityMetrics.completeness ;};
           ].map(metric, index) => (;))
             <View key={index} style={styles.metricItem}>;
               <Text style={styles.metricLabel}>{metric.label}</Text>;
               <View style={styles.metricBar}>;
                 <View ;
                   style={[;
-                    styles.metricFill,{width: `${metric.value * 100}}%`,backgroundColor: getQualityColor(metric.value);
+                    styles.metricFill,{width: `${metric.value * 100;}}%`,backgroundColor: getQualityColor(metric.value);
                     }
                   ]}
                 />
@@ -266,7 +266,7 @@ export default React.memo(function DiagnosisDetailScreen() {
                   <View;
                     style={[
                       styles.evidenceFill,
-                      { width: `${strength * 100}}%` }
+                      { width: `${strength * 100;}}%` }
                     ]}
                   />
                 </View>
@@ -351,19 +351,19 @@ export default React.memo(function DiagnosisDetailScreen() {
     return '#dc3545';
   };
   const getMethodDisplayName = (method: string): string => {const names: Record<string, string> = {
-      looking: "望诊", "
-      listening: '闻诊',inquiry: '问诊',palpation: '切诊',calculation: '算诊';
-    };
+
+
+    ;};
     return names[method] || method;
   };
   const getRecommendationCategoryName = (category: string): string => {const names: Record<string, string> = {
-      lifestyle: "生活方式建议", "
-      diet: '饮食建议',exercise: '运动建议',treatment: '治疗建议',prevention: '预防建议';
-    };
+
+
+    ;};
     return names[category] || category;
   };
   const getRecommendationIcon = (category: string): string => {const icons: Record<string, string> = {
-      lifestyle: "🏠",
+      lifestyle: "🏠";
       diet: '🍎',exercise: '🏃',treatment: '💊',prevention: '🛡️';
     };
     return icons[category] || '📝';
@@ -393,8 +393,8 @@ export default React.memo(function DiagnosisDetailScreen() {
         style={[
           styles.content,
           {
-            opacity: fadeAnimation,
-            transform: [{ translateY: slideAnimation }}]
+            opacity: fadeAnimation;
+            transform: [{ translateY: slideAnimation ;}}]
           }
         ]}
       >
@@ -421,7 +421,7 @@ export default React.memo(function DiagnosisDetailScreen() {
           onPress={bookConsultation};
         >;
           <Text style={[styles.actionButtonText, styles.primaryActionButtonText]}>;
-            预约咨询;
+
           </Text>;
         </TouchableOpacity>;
       </View>;
@@ -430,61 +430,61 @@ export default React.memo(function DiagnosisDetailScreen() {
 }
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
+  flex: 1;
     backgroundColor: '#f8f9fa'
-  },
+  ;},
   header: {,
-  flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    backgroundColor: '#ffffff',
-    borderBottomWidth: 1,
+  flexDirection: 'row';
+    alignItems: 'center';
+    justifyContent: 'space-between';
+    paddingHorizontal: 20;
+    paddingVertical: 15;
+    backgroundColor: '#ffffff';
+    borderBottomWidth: 1;
     borderBottomColor: '#e9ecef'
-  },
+  ;},
   backButton: {,
   padding: 8;
   },
   backButtonText: {,
-  fontSize: 24,
+  fontSize: 24;
     color: '#007AFF'
-  },
+  ;},
   headerTitle: {,
-  fontSize: 18,
-    fontWeight: '600',
+  fontSize: 18;
+    fontWeight: '600';
     color: '#1a1a1a'
-  },
+  ;},
   shareButton: {,
   padding: 8;
   },
   shareButtonText: {,
-  fontSize: 16,
+  fontSize: 16;
     color: '#007AFF'
-  },
+  ;},
   tabBar: {,
-  flexDirection: 'row',
-    backgroundColor: '#ffffff',
-    borderBottomWidth: 1,
+  flexDirection: 'row';
+    backgroundColor: '#ffffff';
+    borderBottomWidth: 1;
     borderBottomColor: '#e9ecef'
-  },
+  ;},
   tabItem: {,
-  flex: 1,
-    paddingVertical: 15,
+  flex: 1;
+    paddingVertical: 15;
     alignItems: 'center'
-  },
+  ;},
   tabItemActive: {,
-  borderBottomWidth: 2,
+  borderBottomWidth: 2;
     borderBottomColor: '#007AFF'
-  },
+  ;},
   tabText: {,
-  fontSize: 16,
+  fontSize: 16;
     color: '#6c757d'
-  },
+  ;},
   tabTextActive: {,
-  color: '#007AFF',
+  color: '#007AFF';
     fontWeight: '600'
-  },
+  ;},
   content: {,
   flex: 1;
   },
@@ -496,237 +496,237 @@ const styles = StyleSheet.create({
   },
   tabContent: {
     // 内容样式
-  },
+  ;},
   resultCard: {,
-  backgroundColor: '#ffffff',
-    borderRadius: 12,
-    padding: 20,
-    marginBottom: 15,
-    shadowColor: '#000',
+  backgroundColor: '#ffffff';
+    borderRadius: 12;
+    padding: 20;
+    marginBottom: 15;
+    shadowColor: '#000';
     shadowOffset: {,
-  width: 0,
+  width: 0;
       height: 2;
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowOpacity: 0.1;
+    shadowRadius: 4;
     elevation: 3;
   },
   cardHeader: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
     marginBottom: 15;
   },
   cardTitle: {,
-  fontSize: 18,
-    fontWeight: '600',
+  fontSize: 18;
+    fontWeight: '600';
     color: '#1a1a1a'
-  },
+  ;},
   confidenceBadge: {,
-  paddingHorizontal: 12,
-    paddingVertical: 6,
+  paddingHorizontal: 12;
+    paddingVertical: 6;
     borderRadius: 20;
   },
   confidenceText: {,
-  fontSize: 14,
-    fontWeight: '600',
+  fontSize: 14;
+    fontWeight: '600';
     color: '#ffffff'
-  },
+  ;},
   syndromeContainer: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
     alignItems: 'center'
-  },
+  ;},
   syndromeIndicator: {,
-  width: 8,
-    height: 60,
-    borderRadius: 4,
+  width: 8;
+    height: 60;
+    borderRadius: 4;
     marginRight: 15;
   },
   syndromeInfo: {,
   flex: 1;
   },
   syndromeName: {,
-  fontSize: 20,
-    fontWeight: '700',
-    color: '#1a1a1a',
+  fontSize: 20;
+    fontWeight: '700';
+    color: '#1a1a1a';
     marginBottom: 5;
   },
   syndromeDescription: {,
-  fontSize: 16,
-    color: '#6c757d',
+  fontSize: 16;
+    color: '#6c757d';
     lineHeight: 24;
   },
   constitutionContainer: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
     alignItems: 'center'
-  },
+  ;},
   constitutionIcon: {,
-  fontSize: 40,
+  fontSize: 40;
     marginRight: 15;
   },
   constitutionInfo: {,
   flex: 1;
   },
   constitutionType: {,
-  fontSize: 18,
-    fontWeight: '600',
-    color: '#1a1a1a',
+  fontSize: 18;
+    fontWeight: '600';
+    color: '#1a1a1a';
     marginBottom: 10;
   },
   characteristicsContainer: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
     flexWrap: 'wrap'
-  },
+  ;},
   characteristicTag: {,
-  backgroundColor: '#e9ecef',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-    marginRight: 8,
+  backgroundColor: '#e9ecef';
+    paddingHorizontal: 8;
+    paddingVertical: 4;
+    borderRadius: 12;
+    marginRight: 8;
     marginBottom: 4;
   },
   characteristicText: {,
-  fontSize: 12,
+  fontSize: 12;
     color: '#6c757d'
-  },
+  ;},
   qualityMetrics: {
     // 质量指标样式
-  },
+  ;},
   metricItem: {,
-  flexDirection: 'row',
-    alignItems: 'center',
+  flexDirection: 'row';
+    alignItems: 'center';
     marginBottom: 12;
   },
   metricLabel: {,
-  fontSize: 14,
-    color: '#6c757d',
+  fontSize: 14;
+    color: '#6c757d';
     width: 80;
   },
   metricBar: {,
-  flex: 1,
-    height: 8,
-    backgroundColor: '#e9ecef',
-    borderRadius: 4,
-    marginHorizontal: 12,
+  flex: 1;
+    height: 8;
+    backgroundColor: '#e9ecef';
+    borderRadius: 4;
+    marginHorizontal: 12;
     overflow: 'hidden'
-  },
+  ;},
   metricFill: {,
-  height: '100%',
+  height: '100%';
     borderRadius: 4;
   },
   metricValue: {,
-  fontSize: 14,
-    fontWeight: '600',
-    color: '#1a1a1a',
-    width: 40,
+  fontSize: 14;
+    fontWeight: '600';
+    color: '#1a1a1a';
+    width: 40;
     textAlign: 'right'
-  },
+  ;},
   expandableHeader: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
+  flexDirection: 'row';
+    justifyContent: 'space-between';
     alignItems: 'center'
-  },
+  ;},
   expandIcon: {,
-  fontSize: 16,
+  fontSize: 16;
     color: '#6c757d'
-  },
+  ;},
   expandableContent: {,
-  marginTop: 15,
-    paddingTop: 15,
-    borderTopWidth: 1,
+  marginTop: 15;
+    paddingTop: 15;
+    borderTopWidth: 1;
     borderTopColor: '#e9ecef'
-  },
+  ;},
   sectionSubtitle: {,
-  fontSize: 16,
-    fontWeight: '600',
-    color: '#1a1a1a',
-    marginBottom: 10,
+  fontSize: 16;
+    fontWeight: '600';
+    color: '#1a1a1a';
+    marginBottom: 10;
     marginTop: 15;
   },
   detailItem: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
     paddingVertical: 8;
   },
   detailLabel: {,
-  fontSize: 14,
+  fontSize: 14;
     color: '#6c757d'
-  },
+  ;},
   detailValue: {,
-  fontSize: 14,
-    color: '#1a1a1a',
+  fontSize: 14;
+    color: '#1a1a1a';
     fontWeight: '500'
-  },
+  ;},
   evidenceItem: {,
-  flexDirection: 'row',
-    alignItems: 'center',
+  flexDirection: 'row';
+    alignItems: 'center';
     marginBottom: 8;
   },
   evidenceMethod: {,
-  fontSize: 14,
-    color: '#6c757d',
+  fontSize: 14;
+    color: '#6c757d';
     width: 60;
   },
   evidenceBar: {,
-  flex: 1,
-    height: 6,
-    backgroundColor: '#e9ecef',
-    borderRadius: 3,
-    marginHorizontal: 12,
+  flex: 1;
+    height: 6;
+    backgroundColor: '#e9ecef';
+    borderRadius: 3;
+    marginHorizontal: 12;
     overflow: 'hidden'
-  },
+  ;},
   evidenceFill: {,
-  height: '100%',
-    backgroundColor: '#007AFF',
+  height: '100%';
+    backgroundColor: '#007AFF';
     borderRadius: 3;
   },
   evidenceValue: {,
-  fontSize: 12,
-    color: '#1a1a1a',
-    width: 35,
+  fontSize: 12;
+    color: '#1a1a1a';
+    width: 35;
     textAlign: 'right'
-  },
+  ;},
   riskFactorItem: {,
   marginBottom: 8;
   },
   riskFactorText: {,
-  fontSize: 14,
+  fontSize: 14;
     color: '#dc3545'
-  },
+  ;},
   recommendationItem: {,
-  flexDirection: 'row',
-    alignItems: 'flex-start',
+  flexDirection: 'row';
+    alignItems: 'flex-start';
     marginBottom: 12;
   },
   recommendationIcon: {,
-  fontSize: 16,
-    marginRight: 10,
+  fontSize: 16;
+    marginRight: 10;
     marginTop: 2;
   },
   recommendationText: {,
-  flex: 1,
-    fontSize: 14,
-    color: '#1a1a1a',
+  flex: 1;
+    fontSize: 14;
+    color: '#1a1a1a';
     lineHeight: 20;
   },
   bottomActions: {,
-  flexDirection: 'row',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    backgroundColor: '#ffffff',
-    borderTopWidth: 1,
+  flexDirection: 'row';
+    paddingHorizontal: 20;
+    paddingVertical: 15;
+    backgroundColor: '#ffffff';
+    borderTopWidth: 1;
     borderTopColor: '#e9ecef'
-  },
+  ;},
   actionButton: {,
-  flex: 1,
-    paddingVertical: 12,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#6c757d',
+  flex: 1;
+    paddingVertical: 12;
+    borderRadius: 8;
+    borderWidth: 1;
+    borderColor: '#6c757d';
     alignItems: 'center',marginRight: 10;
   },primaryActionButton: {,
-  backgroundColor: "#007AFF",
+  backgroundColor: "#007AFF";
       borderColor: '#007AFF',marginRight: 0;
   },actionButtonText: {fontSize: 16,color: '#6c757d',fontWeight: '500';
   },primaryActionButtonText: {color: '#ffffff';

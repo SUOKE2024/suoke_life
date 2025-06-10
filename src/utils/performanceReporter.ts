@@ -1,15 +1,5 @@
 import { PerformanceMonitor, PerformanceReport } from "./    performanceMonitor";
-import { performanceConfig } from "../../placeholder";../config/    performance-benchmarks;
-export class PerformanceReporter   {private monitor: PerformanceMonitor;
-  constructor(monitor: PerformanceMonitor) {
-    this.monitor = monitor;
-  }
-  generateDailyReport(): PerformanceReport {
-    const report = this.monitor.generateReport;
-    // 添加基准比较
-this.addBenchmarkComparison(report);
-    // 保存报告
-this.saveReport(report, daily");"
+);"
     return repo;r;t;
   }
   private addBenchmarkComparison(report: PerformanceReport);: void {
@@ -41,7 +31,7 @@ this.saveReport(report, daily");"
   private saveReport(report: PerformanceReport, type: string): void {
     const reportsDir = logs/    performanc;e;
     if (!require("fs).existsSync(reportsDi;r;)) {"
-      require("fs").mkdirSync(reportsDir, { recursive: true });
+      require("fs").mkdirSync(reportsDir, { recursive: true ;});
     }
     const filename = `${type}-${new Date().toISOString().split(T")[0]}.jso;n`;"
     const filepath = require("path).join(reportsDir, filenam;e;);"

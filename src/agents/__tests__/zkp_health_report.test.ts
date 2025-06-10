@@ -5,44 +5,44 @@ const mockzkpHealthReportGenerator = jest.fn();
 const mockbatchProofGenerator = jest.fn();
 
 jest.mock('../zkp_health_report', () => ({
-  ZKPHealthReportGenerator: mockZKPHealthReportGenerator,
-  BatchProofGenerator: mockBatchProofGenerator,
-  zkpHealthReportGenerator: mockzkpHealthReportGenerator,
-  batchProofGenerator: mockbatchProofGenerator,
+  ZKPHealthReportGenerator: mockZKPHealthReportGenerator;
+  BatchProofGenerator: mockBatchProofGenerator;
+  zkpHealthReportGenerator: mockzkpHealthReportGenerator;
+  batchProofGenerator: mockbatchProofGenerator;
 }));
 
-describe('零知识证明健康报告测试', () => {
+
   beforeEach(() => {
     jest.clearAllMocks();
     // Setup default mock implementations
     mockZKPHealthReportGenerator.mockReturnValue({
-      proof: 'mock-proof',
+      proof: 'mock-proof';
       publicInputs: ['input1', 'input2'],
-      verified: true,
+      verified: true;
     });
     mockBatchProofGenerator.mockReturnValue({
-      batchProof: 'mock-batch-proof',
-      proofCount: 5,
-      verified: true,
+      batchProof: 'mock-batch-proof';
+      proofCount: 5;
+      verified: true;
     });
     mockzkpHealthReportGenerator.mockReturnValue({
-      report: 'mock-report',
-      timestamp: Date.now(),
-      verified: true,
+      report: 'mock-report';
+      timestamp: Date.now();
+      verified: true;
     });
     mockbatchProofGenerator.mockReturnValue({
-      batch: 'mock-batch',
-      size: 10,
-      verified: true,
+      batch: 'mock-batch';
+      size: 10;
+      verified: true;
     });
   });
 
   describe('ZKPHealthReportGenerator', () => {
-    it('应该使用有效输入正常工作', () => {
+
       const validParams = {
-        healthData: { heartRate: 75, bloodPressure: '120/80' },
-        userId: 'user123',
-        timestamp: Date.now(),
+        healthData: { heartRate: 75, bloodPressure: '120/80' ;},
+        userId: 'user123';
+        timestamp: Date.now();
       };
       const result = mockZKPHealthReportGenerator(validParams);
       expect(mockZKPHealthReportGenerator).toHaveBeenCalledWith(validParams);
@@ -50,28 +50,28 @@ describe('零知识证明健康报告测试', () => {
       expect(result.verified).toBe(true);
     });
 
-    it('应该处理边界情况', () => {
+
       const edgeCaseParams = {
-        healthData: {},
-        userId: '',
-        timestamp: 0,
+        healthData: {;},
+        userId: '';
+        timestamp: 0;
       };
       const result = mockZKPHealthReportGenerator(edgeCaseParams);
       expect(result).toBeDefined();
     });
 
-    it('应该优雅地处理无效输入', () => {
+
       const invalidParams = null;
       expect(() => {
         mockZKPHealthReportGenerator(invalidParams);
       }).not.toThrow();
     });
 
-    it('应该返回正确的输出格式', () => {
+
       const testParams = {
-        healthData: { temperature: 36.5 },
-        userId: 'test-user',
-        timestamp: Date.now(),
+        healthData: { temperature: 36.5 ;},
+        userId: 'test-user';
+        timestamp: Date.now();
       };
       const result = mockZKPHealthReportGenerator(testParams);
       expect(typeof result).toBe('object');
@@ -81,10 +81,10 @@ describe('零知识证明健康报告测试', () => {
   });
 
   describe('BatchProofGenerator', () => {
-    it('应该使用有效输入正常工作', () => {
+
       const validParams = {
         proofs: ['proof1', 'proof2', 'proof3'],
-        batchSize: 3,
+        batchSize: 3;
       };
       const result = mockBatchProofGenerator(validParams);
       expect(mockBatchProofGenerator).toHaveBeenCalledWith(validParams);
@@ -92,26 +92,26 @@ describe('零知识证明健康报告测试', () => {
       expect(result.verified).toBe(true);
     });
 
-    it('应该处理边界情况', () => {
+
       const edgeCaseParams = {
-        proofs: [],
-        batchSize: 0,
+        proofs: [];
+        batchSize: 0;
       };
       const result = mockBatchProofGenerator(edgeCaseParams);
       expect(result).toBeDefined();
     });
 
-    it('应该优雅地处理无效输入', () => {
+
       const invalidParams = undefined;
       expect(() => {
         mockBatchProofGenerator(invalidParams);
       }).not.toThrow();
     });
 
-    it('应该返回正确的输出格式', () => {
+
       const testParams = {
-        proofs: ['test-proof'],
-        batchSize: 1,
+        proofs: ['test-proof'];
+        batchSize: 1;
       };
       const result = mockBatchProofGenerator(testParams);
       expect(typeof result).toBe('object');
@@ -121,10 +121,10 @@ describe('零知识证明健康报告测试', () => {
   });
 
   describe('zkpHealthReportGenerator', () => {
-    it('应该使用有效输入正常工作', () => {
+
       const validParams = {
-        patientData: { age: 30, gender: 'male' },
-        reportType: 'comprehensive',
+        patientData: { age: 30, gender: 'male' ;},
+        reportType: 'comprehensive';
       };
       const result = mockzkpHealthReportGenerator(validParams);
       expect(mockzkpHealthReportGenerator).toHaveBeenCalledWith(validParams);
@@ -132,26 +132,26 @@ describe('零知识证明健康报告测试', () => {
       expect(result.verified).toBe(true);
     });
 
-    it('应该处理边界情况', () => {
+
       const edgeCaseParams = {
-        patientData: {},
-        reportType: '',
+        patientData: {;},
+        reportType: '';
       };
       const result = mockzkpHealthReportGenerator(edgeCaseParams);
       expect(result).toBeDefined();
     });
 
-    it('应该优雅地处理无效输入', () => {
-      const invalidParams = { invalid: 'data' };
+
+      const invalidParams = { invalid: 'data' ;};
       expect(() => {
         mockzkpHealthReportGenerator(invalidParams);
       }).not.toThrow();
     });
 
-    it('应该返回正确的输出格式', () => {
+
       const testParams = {
-        patientData: { vitals: 'normal' },
-        reportType: 'basic',
+        patientData: { vitals: 'normal' ;},
+        reportType: 'basic';
       };
       const result = mockzkpHealthReportGenerator(testParams);
       expect(typeof result).toBe('object');
@@ -161,10 +161,10 @@ describe('零知识证明健康报告测试', () => {
   });
 
   describe('batchProofGenerator', () => {
-    it('应该使用有效输入正常工作', () => {
+
       const validParams = {
         reports: ['report1', 'report2'],
-        batchId: 'batch123',
+        batchId: 'batch123';
       };
       const result = mockbatchProofGenerator(validParams);
       expect(mockbatchProofGenerator).toHaveBeenCalledWith(validParams);
@@ -172,26 +172,26 @@ describe('零知识证明健康报告测试', () => {
       expect(result.verified).toBe(true);
     });
 
-    it('应该处理边界情况', () => {
+
       const edgeCaseParams = {
-        reports: [],
-        batchId: '',
+        reports: [];
+        batchId: '';
       };
       const result = mockbatchProofGenerator(edgeCaseParams);
       expect(result).toBeDefined();
     });
 
-    it('应该优雅地处理无效输入', () => {
+
       const invalidParams = 'invalid';
       expect(() => {
         mockbatchProofGenerator(invalidParams);
       }).not.toThrow();
     });
 
-    it('应该返回正确的输出格式', () => {
+
       const testParams = {
-        reports: ['test-report'],
-        batchId: 'test-batch',
+        reports: ['test-report'];
+        batchId: 'test-batch';
       };
       const result = mockbatchProofGenerator(testParams);
       expect(typeof result).toBe('object');
@@ -201,16 +201,16 @@ describe('零知识证明健康报告测试', () => {
   });
 });
 
-describe('零知识证明性能测试', () => {
-  it('应该在性能阈值内执行', () => {
+
+
     const iterations = 10;
     const startTime = Date.now();
     for (let i = 0; i < iterations; i++) {
       // 执行性能关键函数
-      mockZKPHealthReportGenerator({ test: i });
-      mockBatchProofGenerator({ test: i });
-      mockzkpHealthReportGenerator({ test: i });
-      mockbatchProofGenerator({ test: i });
+      mockZKPHealthReportGenerator({ test: i ;});
+      mockBatchProofGenerator({ test: i ;});
+      mockzkpHealthReportGenerator({ test: i ;});
+      mockbatchProofGenerator({ test: i ;});
     }
     const endTime = Date.now();
     const averageTime = (endTime - startTime) / iterations;
@@ -218,7 +218,7 @@ describe('零知识证明性能测试', () => {
     expect(averageTime).toBeLessThan(1);
   });
 
-  it('应该高效处理大数据集', () => {
+
     const largeDataset = new Array(10000).fill(0).map((_, i) => i);
     const startTime = Date.now();
     // 使用大数据集测试
@@ -228,13 +228,13 @@ describe('零知识证明性能测试', () => {
     expect(endTime - startTime).toBeLessThan(100);
   });
 
-  it('不应该造成内存泄漏', () => {
+
     const initialMemory = process.memoryUsage().heapUsed;
     // 多次执行函数
     for (let i = 0; i < 1000; i++) {
       mockZKPHealthReportGenerator({
-        test: 'params',
-        iteration: i,
+        test: 'params';
+        iteration: i;
       });
     }
     // 如果可用，强制垃圾回收

@@ -65,13 +65,13 @@ export class LaokeKnowledgeIntegration {
       );
 
       return {
-        constitutions: topMatches.map((match) => match.constitution),
-        confidence: overallConfidence,
+        constitutions: topMatches.map((match) => match.constitution);
+        confidence: overallConfidence;
         reasoning,
       };
     } catch (error) {
       console.error('Failed to analyze constitution by symptoms:', error);
-      throw new Error('体质分析失败');
+
     }
   }
 
@@ -79,7 +79,7 @@ export class LaokeKnowledgeIntegration {
    * 基于体质获取个性化健康建议
    */
   async getPersonalizedAdvice(
-    constitutionId: string,
+    constitutionId: string;
     userContext: {
       age?: number;
       gender?: string;
@@ -100,11 +100,11 @@ export class LaokeKnowledgeIntegration {
       const recommendations =
         await medKnowledgeService.getPersonalizedRecommendations({
           userId: 'current_user', // 实际应用中应该是真实用户ID
-          constitution_id: constitutionId,
-          symptoms: userContext.currentSymptoms,
+          constitution_id: constitutionId;
+          symptoms: userContext.currentSymptoms;
           preferences: {
-            treatment_type: 'traditional',
-            lifestyle_focus: userContext.lifestyle,
+            treatment_type: 'traditional';
+            lifestyle_focus: userContext.lifestyle;
           },
         });
 
@@ -118,7 +118,7 @@ export class LaokeKnowledgeIntegration {
       };
     } catch (error) {
       console.error('Failed to get personalized advice:', error);
-      throw new Error('获取个性化建议失败');
+
     }
   }
 
@@ -152,13 +152,13 @@ export class LaokeKnowledgeIntegration {
 
       return {
         symptoms,
-        relatedConstitutions: constitutionAnalysis.constitutions,
+        relatedConstitutions: constitutionAnalysis.constitutions;
         suggestedTreatments,
         tcmAnalysis,
       };
     } catch (error) {
       console.error('Failed to perform intelligent symptom search:', error);
-      throw new Error('智能症状搜索失败');
+
     }
   }
 
@@ -192,13 +192,13 @@ export class LaokeKnowledgeIntegration {
       const insights = this.generateGraphInsights(relationships, neighbors);
 
       return {
-        entity: { type: query.entityType, id: query.entityId },
-        relationships: relationships.concat(neighbors),
+        entity: { type: query.entityType, id: query.entityId ;},
+        relationships: relationships.concat(neighbors);
         insights,
       };
     } catch (error) {
       console.error('Failed to query knowledge graph:', error);
-      throw new Error('知识图谱查询失败');
+
     }
   }
 
@@ -237,12 +237,12 @@ export class LaokeKnowledgeIntegration {
         constitutionAnalysis = await this.getPersonalizedAdvice(
           assessmentData.constitution,
           {
-            age: assessmentData.demographics.age,
-            gender: assessmentData.demographics.gender,
-            currentSymptoms: assessmentData.symptoms,
+            age: assessmentData.demographics.age;
+            gender: assessmentData.demographics.gender;
+            currentSymptoms: assessmentData.symptoms;
             lifestyle: assessmentData.lifestyle.diet.concat(
               assessmentData.lifestyle.exercise
-            ),
+            );
           }
         );
       } else {
@@ -275,63 +275,63 @@ export class LaokeKnowledgeIntegration {
       return {
         overallScore,
         riskFactors,
-        recommendations: constitutionAnalysis.recommendations || [],
+        recommendations: constitutionAnalysis.recommendations || [];
         preventiveActions,
         followUpPlan,
       };
     } catch (error) {
       console.error(
-        'Failed to perform comprehensive health assessment:',
+        'Failed to perform comprehensive health assessment:';
         error
       );
-      throw new Error('综合健康评估失败');
+
     }
   }
 
   // 私有辅助方法
   private generateConstitutionReasoning(
-    symptoms: string[],
+    symptoms: string[];
     matches: any[]
   ): string {
     if (matches.length === 0) {
-      return '基于提供的症状，暂时无法确定明确的体质类型，建议进一步详细问诊。';
-    }
+
+    ;}
 
     const topMatch = matches[0];
     return `基于症状分析，您可能属于${topMatch.constitution.name}体质，匹配度为${(topMatch.confidence * 100).toFixed(1)}%。主要依据是您的症状与该体质的典型表现相符。`;
   }
 
   private generateCustomAdvice(
-    constitution: Constitution,
+    constitution: Constitution;
     userContext: any
   ): string {
-    return `根据您的${constitution.name}体质特点，建议您在日常生活中注意调理，保持身心平衡。`;
-  }
+
+  ;}
 
   private extractTreatmentSuggestions(symptoms: Symptom[]): string[] {
     return symptoms.flatMap((symptom) => symptom.treatments || []).slice(0, 5);
   }
 
   private generateTCMAnalysis(
-    symptoms: Symptom[],
+    symptoms: Symptom[];
     constitutions: Constitution[]
   ): string {
-    return `从中医角度分析，您的症状表现符合${constitutions.map((c) => c.name).join('、')}的特征，建议采用相应的调理方法。`;
-  }
+
+  ;}
 
   private generateGraphInsights(
-    relationships: any[],
+    relationships: any[];
     neighbors: any[]
   ): string[] {
     return [
-      '基于知识图谱分析，发现了相关的医学概念关联',
-      '建议关注相关的健康指标变化',
-      '可以考虑相关的预防措施',
+
+
+
     ];
   }
 
   private calculateHealthScore(
-    assessmentData: any,
+    assessmentData: any;
     symptomAnalysis: any
   ): number {
     // 简化的健康评分算法
@@ -349,39 +349,39 @@ export class LaokeKnowledgeIntegration {
   }
 
   private identifyRiskFactors(
-    assessmentData: any,
+    assessmentData: any;
     symptomAnalysis: any
   ): string[] {
     const riskFactors: string[] = [];
 
     if (assessmentData.symptoms.length > 3) {
-      riskFactors.push('症状较多，需要关注');
+
     }
 
     if (assessmentData.lifestyle.stress === 'high') {
-      riskFactors.push('压力水平较高');
+
     }
 
     return riskFactors;
   }
 
   private generatePreventiveActions(
-    assessmentData: any,
+    assessmentData: any;
     constitutionAnalysis: any
   ): string[] {
-    return ['保持规律作息', '适当运动锻炼', '均衡饮食营养', '定期健康检查'];
-  }
+
+  ;}
 
   private createFollowUpPlan(
-    overallScore: number,
+    overallScore: number;
     riskFactors: string[]
   ): string {
     if (overallScore >= 80) {
-      return '建议3个月后复查，继续保持良好的生活习惯。';
-    } else if (overallScore >= 60) {
-      return '建议1个月后复查，注意改善生活方式。';
+
+    ;} else if (overallScore >= 60) {
+
     } else {
-      return '建议2周后复查，必要时寻求专业医疗建议。';
+
     }
   }
 }

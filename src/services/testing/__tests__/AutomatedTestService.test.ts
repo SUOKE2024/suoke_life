@@ -1,5 +1,4 @@
 import { AutomatedTestService } from "../AutomatedTestService";
-import { AutomatedTestService } from "../AutomatedTestService";
 describe("AutomatedTestService", () => {
   beforeEach(() => {
     jest.clearAllMocks();

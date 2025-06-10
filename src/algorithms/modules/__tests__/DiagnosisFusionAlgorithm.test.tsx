@@ -1,6 +1,4 @@
-import { DiagnosisFusionAlgorithm } from "../DiagnosisFusionAlgorithm";
-import { DiagnosisFusionAlgorithm } from "../DiagnosisFusionAlgorithm";
-import React from "react";
+
 describe("DiagnosisFusionAlgorithm", () => {
   beforeEach(() => {
     jest.clearAllMocks();

@@ -21,7 +21,7 @@ const { width } = Dimensions.get('window');
 interface MedicalResourceScreenProps {
   navigation: any;
 }
-const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigation }) => {
+const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigation ;}) => {
   const {
     searchResults,
     nearbyResources,
@@ -57,18 +57,18 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
   // 资源类型选项
   const resourceTypes = [;
     {
-      key: "all",
-      label: '全部', icon: 'local-hospital' },{
-      key: "hospital",
-      label: '医院', icon: 'local-hospital' },{
-      key: "clinic",
-      label: '诊所', icon: 'medical-services' },{
-      key: "pharmacy",
-      label: '药店', icon: 'local-pharmacy' },{
-      key: "specialist",
-      label: '专科', icon: 'psychology' },{
-      key: "doctor",
-      label: '医生', icon: 'person' };
+      key: "all";
+
+      key: "hospital";
+
+      key: "clinic";
+
+      key: "pharmacy";
+
+      key: "specialist";
+
+      key: "doctor";
+
   ];
   // 初始化
   useEffect() => {
@@ -80,11 +80,11 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
   // 获取当前位置
   const getCurrentLocation = useCallback() => {// 这里应该使用地理位置API;
     // 暂时使用模拟数据;
-    const mockLocation = { lat: 39.9042, lng: 116.4074, radius: 5000 };
+    const mockLocation = { lat: 39.9042, lng: 116.4074, radius: 5000 ;};
     findNearbyResources(mockLocation);
   }, [findNearbyResources]);
   // 搜索处理
-  const handleSearch = useCallback() => {if (searchText.trim()) {const filters = selectedCategory !== 'all' ? { type: [selectedCategory] } : {};
+  const handleSearch = useCallback() => {if (searchText.trim()) {const filters = selectedCategory !== 'all' ? { type: [selectedCategory] ;} : {};
       searchByKeyword(searchText.trim(), filters);
       setShowSearchHistory(false);
     }
@@ -101,7 +101,7 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
   }, [searchText, searchByKeyword, searchByType]);
   // 资源项点击
   const handleResourcePress = useCallback(resource: MedicalResource) => {selectResource(resource);
-    navigation.navigate('MedicalResourceDetail', { resourceId: resource.id });
+    navigation.navigate('MedicalResourceDetail', { resourceId: resource.id ;});
   }, [selectResource, navigation]);
   // 刷新
   const handleRefresh = useCallback() => {refreshResults();
@@ -118,7 +118,7 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
         <Icon name="search" size={24} color="#666" style={styles.searchIcon}>
         <TextInput;
           style={styles.searchInput}
-          placeholder="搜索医院、诊所、医生..."
+
           value={searchText}
           onChangeText={setSearchText}
           onSubmitEditing={handleSearch}
@@ -196,7 +196,7 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
     );
   };
   // 渲染资源卡片
-  const renderResourceCard = ({ item }: { item: MedicalResource }) => ()
+  const renderResourceCard = ({ item }: { item: MedicalResource ;}) => ()
     <TouchableOpacity;
       style={styles.resourceCard}
       onPress={() => handleResourcePress(item)}
@@ -230,10 +230,10 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
           />;
           <Text;
             style={[;
-              styles.availabilityText,{ color: item.availability.isOpen ? '#4CAF50' : '#FF9800' }};
+              styles.availabilityText,{ color: item.availability.isOpen ? '#4CAF50' : '#FF9800' ;}};
             ]};
           >;
-            {item.availability.isOpen ? '营业中' : '已关闭'};
+
           </Text>;
         </View>;
         {item.consultationFee && (;)
@@ -264,7 +264,7 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
     );
   };
   // 渲染附近资源卡片
-  const renderNearbyCard = ({ item }: { item: MedicalResource }) => (;)
+  const renderNearbyCard = ({ item }: { item: MedicalResource ;}) => (;)
     <TouchableOpacity;
       style={styles.nearbyCard};
       onPress={() => handleResourcePress(item)};
@@ -315,9 +315,9 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
     );
   };
   // 获取类型标签
-  const getTypeLabel = (type: string) => {const typeMap: { [key: string]: string } = {
-      hospital: "医院", "
-      clinic: '诊所',pharmacy: '药店',specialist: '专科',doctor: '医生';
+  const getTypeLabel = (type: string) => {const typeMap: { [key: string]: string ;} = {
+
+
     };
     return typeMap[type] || type;
   };
@@ -327,7 +327,7 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
       <View style={styles.healthWarning}>;
         <Icon name="warning" size={16} color="#FF9800" />;
         <Text style={styles.healthWarningText}>;
-          服务连接异常，部分功能可能受限;
+
         </Text>;
         <TouchableOpacity onPress={healthCheck}>;
           <Text style={styles.retryText}>重试</Text>;
@@ -354,268 +354,268 @@ const MedicalResourceScreen: React.FC<MedicalResourceScreenProps> = ({ navigatio
 };
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
+  flex: 1;
     backgroundColor: '#f5f5f5'
-  },
+  ;},
   // 健康状态
   healthWarning: {,
-  flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#FFF3CD',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderBottomWidth: 1,
+  flexDirection: 'row';
+    alignItems: 'center';
+    backgroundColor: '#FFF3CD';
+    paddingHorizontal: 16;
+    paddingVertical: 8;
+    borderBottomWidth: 1;
     borderBottomColor: '#FFE69C'
-  },
+  ;},
   healthWarningText: {,
-  flex: 1,
-    marginLeft: 8,
-    fontSize: 14,
+  flex: 1;
+    marginLeft: 8;
+    fontSize: 14;
     color: '#856404'
-  },
+  ;},
   retryText: {,
-  fontSize: 14,
-    color: '#007AFF',
+  fontSize: 14;
+    color: '#007AFF';
     fontWeight: '500'
-  },
+  ;},
   // 搜索栏
   searchContainer: {,
-  flexDirection: 'row',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
+  flexDirection: 'row';
+    paddingHorizontal: 16;
+    paddingVertical: 12;
+    backgroundColor: '#fff';
+    borderBottomWidth: 1;
     borderBottomColor: '#e0e0e0'
-  },
+  ;},
   searchInputContainer: {,
-  flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#f8f8f8',
-    borderRadius: 8,
+  flex: 1;
+    flexDirection: 'row';
+    alignItems: 'center';
+    backgroundColor: '#f8f8f8';
+    borderRadius: 8;
     paddingHorizontal: 12;
   },
   searchIcon: {,
   marginRight: 8;
   },
   searchInput: {,
-  flex: 1,
-    fontSize: 16,
-    paddingVertical: 12,
+  flex: 1;
+    fontSize: 16;
+    paddingVertical: 12;
     color: '#333'
-  },
+  ;},
   clearButton: {,
   padding: 4;
   },
   filterButton: {,
-  marginLeft: 12,
-    padding: 8,
-    justifyContent: 'center',
+  marginLeft: 12;
+    padding: 8;
+    justifyContent: 'center';
     alignItems: 'center'
-  },
+  ;},
   // 类型选择器
   categoryContainer: {,
-  backgroundColor: '#fff',
-    borderBottomWidth: 1,
+  backgroundColor: '#fff';
+    borderBottomWidth: 1;
     borderBottomColor: '#e0e0e0'
-  },
+  ;},
   categoryContent: {,
-  paddingHorizontal: 16,
+  paddingHorizontal: 16;
     paddingVertical: 12;
   },
   categoryItem: {,
-  flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    marginRight: 12,
-    borderRadius: 20,
-    borderWidth: 1,
+  flexDirection: 'row';
+    alignItems: 'center';
+    paddingHorizontal: 16;
+    paddingVertical: 8;
+    marginRight: 12;
+    borderRadius: 20;
+    borderWidth: 1;
     borderColor: '#007AFF'
-  },
+  ;},
   categoryItemActive: {,
   backgroundColor: '#007AFF'
-  },
+  ;},
   categoryText: {,
-  marginLeft: 6,
-    fontSize: 14,
-    color: '#007AFF',
+  marginLeft: 6;
+    fontSize: 14;
+    color: '#007AFF';
     fontWeight: '500'
-  },
+  ;},
   categoryTextActive: {,
   color: '#fff'
-  },
+  ;},
   // 搜索历史
   historyContainer: {,
-  backgroundColor: '#fff',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
+  backgroundColor: '#fff';
+    paddingHorizontal: 16;
+    paddingVertical: 12;
+    borderBottomWidth: 1;
     borderBottomColor: '#e0e0e0'
-  },
+  ;},
   historyTitle: {,
-  fontSize: 14,
-    fontWeight: '500',
-    color: '#666',
+  fontSize: 14;
+    fontWeight: '500';
+    color: '#666';
     marginBottom: 8;
   },
   historyItem: {,
-  flexDirection: 'row',
-    alignItems: 'center',
+  flexDirection: 'row';
+    alignItems: 'center';
     paddingVertical: 8;
   },
   historyText: {,
-  marginLeft: 8,
-    fontSize: 14,
+  marginLeft: 8;
+    fontSize: 14;
     color: '#333'
-  },
+  ;},
   // 内容区域
   content: {,
   flex: 1;
   },
   // 分区
   sectionContainer: {,
-  backgroundColor: '#fff',
-    marginBottom: 8,
+  backgroundColor: '#fff';
+    marginBottom: 8;
     paddingVertical: 16;
   },
   sectionHeader: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 16,
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
+    paddingHorizontal: 16;
     marginBottom: 12;
   },
   sectionTitle: {,
-  fontSize: 18,
-    fontWeight: '600',
+  fontSize: 18;
+    fontWeight: '600';
     color: '#333'
-  },
+  ;},
   // 附近资源
   nearbyList: {,
   paddingHorizontal: 16;
   },
   nearbyCard: {,
-  width: 120,
-    padding: 12,
-    marginRight: 12,
-    backgroundColor: '#f8f8f8',
+  width: 120;
+    padding: 12;
+    marginRight: 12;
+    backgroundColor: '#f8f8f8';
     borderRadius: 8;
   },
   nearbyName: {,
-  fontSize: 14,
-    fontWeight: '500',
-    color: '#333',
+  fontSize: 14;
+    fontWeight: '500';
+    color: '#333';
     marginBottom: 4;
   },
   nearbyType: {,
-  fontSize: 12,
-    color: '#666',
+  fontSize: 12;
+    color: '#666';
     marginBottom: 6;
   },
   nearbyRating: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
     alignItems: 'center'
-  },
+  ;},
   nearbyRatingText: {,
-  marginLeft: 4,
-    fontSize: 12,
+  marginLeft: 4;
+    fontSize: 12;
     color: '#666'
-  },
+  ;},
   // 资源卡片
   resultsList: {,
   paddingHorizontal: 16;
   },
   resourceCard: {,
-  backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+  backgroundColor: '#fff';
+    borderRadius: 12;
+    padding: 16;
+    marginBottom: 12;
+    shadowColor: '#000';
+    shadowOffset: { width: 0, height: 2 ;},
+    shadowOpacity: 0.1;
+    shadowRadius: 4;
     elevation: 3;
   },
   resourceHeader: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'flex-start';
     marginBottom: 8;
   },
   resourceInfo: {,
   flex: 1;
   },
   resourceName: {,
-  fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
+  fontSize: 16;
+    fontWeight: '600';
+    color: '#333';
     marginBottom: 4;
   },
   resourceType: {,
-  fontSize: 14,
-    color: '#007AFF',
+  fontSize: 14;
+    color: '#007AFF';
     fontWeight: '500'
-  },
+  ;},
   ratingContainer: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
     alignItems: 'center'
-  },
+  ;},
   rating: {,
-  marginLeft: 4,
-    fontSize: 14,
-    fontWeight: '500',
+  marginLeft: 4;
+    fontSize: 14;
+    fontWeight: '500';
     color: '#333'
-  },
+  ;},
   resourceAddress: {,
-  fontSize: 14,
-    color: '#666',
+  fontSize: 14;
+    color: '#666';
     marginBottom: 12;
   },
   resourceServices: {,
-  flexDirection: 'row',
-    flexWrap: 'wrap',
+  flexDirection: 'row';
+    flexWrap: 'wrap';
     marginBottom: 12;
   },
   serviceTag: {,
-  backgroundColor: '#f0f0f0',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 4,
-    marginRight: 8,
+  backgroundColor: '#f0f0f0';
+    paddingHorizontal: 8;
+    paddingVertical: 4;
+    borderRadius: 4;
+    marginRight: 8;
     marginBottom: 4;
   },
   serviceText: {,
-  fontSize: 12,
+  fontSize: 12;
     color: '#666'
-  },
+  ;},
   moreServices: {,
-  fontSize: 12,
-    color: '#007AFF',
+  fontSize: 12;
+    color: '#007AFF';
     alignSelf: 'center'
-  },
+  ;},
   resourceFooter: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
+  flexDirection: 'row';
+    justifyContent: 'space-between';
     alignItems: 'center'
-  },
+  ;},
   availabilityContainer: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
     alignItems: 'center'
-  },
+  ;},
   availabilityText: {,
-  marginLeft: 4,
-    fontSize: 12,
+  marginLeft: 4;
+    fontSize: 12;
     fontWeight: '500'
-  },
+  ;},
   priceText: {,
-  fontSize: 14,
-    fontWeight: '600',
+  fontSize: 14;
+    fontWeight: '600';
     color: '#FF6B35'
-  },
+  ;},
   // 空状态
   emptyContainer: {,
-  flex: 1,
+  flex: 1;
     justifyContent: 'center',alignItems: 'center',paddingVertical: 60;
   },emptyText: {fontSize: 18,fontWeight: '500',color: '#666',marginTop: 16,marginBottom: 8;
   },emptySubtext: {fontSize: 14,color: '#999',textAlign: 'center';

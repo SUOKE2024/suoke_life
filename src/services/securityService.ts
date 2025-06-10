@@ -3,16 +3,16 @@
 * 处理API网关的安全功能，包括认证、授权、加密等
 */
 export interface TokenInfo {
-  accessToken: string;,
-  refreshToken: string;,
-  expiresAt: Date;,
+  accessToken: string;
+  refreshToken: string;
+  expiresAt: Date;
   tokenType: string;
 }
 export interface SecurityEvent {
-  id: string;,
+  id: string;
   type: 'login' | 'logout' | 'failed_login' | 'token_refresh';
   userId?: string;
-  timestamp: Date;,
+  timestamp: Date;
   details: Record<string, any>;
 }
 class SecurityService {
@@ -25,7 +25,7 @@ class SecurityService {
       // 简单的Token验证逻辑
       return token && token.length > 0;
     } catch (error) {
-      console.error('Token验证失败:', error);
+
       return false;
     }
   }
@@ -41,8 +41,8 @@ class SecurityService {
   */
   recordSecurityEvent(eventData: Omit<SecurityEvent, 'id' | 'timestamp'>): void {
     const event: SecurityEvent = {,
-  id: `event_${Date.now()}`,
-      timestamp: new Date(),
+  id: `event_${Date.now();}`,
+      timestamp: new Date();
       ...eventData;
     };
         this.events.push(event);

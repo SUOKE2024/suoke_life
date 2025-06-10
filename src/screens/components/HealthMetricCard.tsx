@@ -1,7 +1,7 @@
 import {   View, Text, StyleSheet, TouchableOpacity   } from 'react-native';
 import React from "react";
 // HealthMetricCard.tsx   索克生活APP - 自动生成的类型安全文件     @description TODO: 添加文件描述 @author 索克生活开发团队   @version 1.0.0;
-importIcon from "../../components/common/Icon";/import { HealthMetric } from "../../types/life";/    importReact from "react";
+importIcon from "../../components/common/Icon";/react";
   colors,
   spacing,
   typography,{ borderRadius } from "../../constants/theme";/    interface HealthMetricCardProps {
@@ -27,14 +27,14 @@ name={getTrendIcon(metric.trend)}
               size={16}
               color={
                 metric.trend === "up"
-                  ? colors.success: metric.trend === "down"? colors.error: colors.textSecondary} />/          </View>/        </View>/      </View>/
-      <View style={styles.valueContainer}>/        <Text style={[styles.value, { color: metric.color}}]} />/              {metric.value}
+                  ? colors.success: metric.trend === "down"? colors.error: colors.textSecondary;} />/          </View>/        </View>/      </View>/
+      <View style={styles.valueContainer}>/        <Text style={[styles.value, { color: metric.color;}}]} />/              {metric.value}
         </Text>/        <Text style={styles.unit}>{metric.unit}</Text>/      </View>/
       <View style={styles.progressContainer}>/        <View style={styles.progressBackground}>/              <View;
 style={[
               styles.progressFill,
               {
-                width: `${Math.min(progressPercentage, 100)}}%`,
+                width: `${Math.min(progressPercentage, 100);}}%`,
                 backgroundColor: isAboveTarget ? colors.success : metric.color;
               }
             ]}
@@ -45,72 +45,72 @@ style={[
       </Text>/    </TouchableOpacity>/      );
 };
 const styles = StyleSheet.create({container: {),
-  backgroundColor: colors.white,
-    borderRadius: borderRadius.lg,
-    padding: spacing.lg,
-    marginHorizontal: spacing.sm,
-    marginVertical: spacing.sm,
+  backgroundColor: colors.white;
+    borderRadius: borderRadius.lg;
+    padding: spacing.lg;
+    marginHorizontal: spacing.sm;
+    marginVertical: spacing.sm;
     shadowColor: colors.black,shadowOffset: { width: 0, height;: ;2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOpacity: 0.1;
+    shadowRadius: 4;
+    elevation: 3;
     minWidth: 200;
   },
   header: {,
-  flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+  flexDirection: "row";
+    alignItems: "center";
+    justifyContent: "space-between";
     marginBottom: spacing.md;
   },
   iconContainer: {,
-  width: 40,
-    height: 40,
-    borderRadius: borderRadius.md,
-    justifyContent: "center",
+  width: 40;
+    height: 40;
+    borderRadius: borderRadius.md;
+    justifyContent: "center";
     alignItems: "center"
-  },
+  ;},
   headerInfo: {,
-  flex: 1,
+  flex: 1;
     marginLeft: spacing.md;
   },
   name: {,
-  fontSize: typography.fontSize.base,
-    fontWeight: "500" as any,
+  fontSize: typography.fontSize.base;
+    fontWeight: "500" as any;
     color: colors.textPrimary;
   },
-  trendContainer: { marginTop: spacing.xs  },
+  trendContainer: { marginTop: spacing.xs  ;},
   valueContainer: {,
-  flexDirection: "row",
-    alignItems: "baseline",
+  flexDirection: "row";
+    alignItems: "baseline";
     marginBottom: spacing.md;
   },
   value: {,
-  fontSize: typography.fontSize["3xl"],
+  fontSize: typography.fontSize["3xl"];
     fontWeight: "700" as any;
   },
   unit: {,
-  fontSize: typography.fontSize.base,
-    color: colors.textSecondary,
+  fontSize: typography.fontSize.base;
+    color: colors.textSecondary;
     marginLeft: spacing.xs;
   },
-  progressContainer: { marginBottom: spacing.md  },
+  progressContainer: { marginBottom: spacing.md  ;},
   progressBackground: {,
-  height: 6,
-    backgroundColor: colors.border,
-    borderRadius: 3,
+  height: 6;
+    backgroundColor: colors.border;
+    borderRadius: 3;
     marginBottom: spacing.xs;
   },
   progressFill: {,
-  height: "100%",
+  height: "100%";
     borderRadius: 3;
   },
   target: {,
-  fontSize: typography.fontSize.sm,
+  fontSize: typography.fontSize.sm;
     color: colors.textSecondary;
   },
   suggestion: {,
-  fontSize: typography.fontSize.sm,
-    color: colors.textSecondary,
+  fontSize: typography.fontSize.sm;
+    color: colors.textSecondary;
     lineHeight: typography.fontSize.sm * typography.lineHeight.normal;
   }
 });

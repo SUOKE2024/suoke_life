@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import {medKnowledgeService,;
+import {medKnowledgeService;
   Constitution,
   Symptom,
   Acupoint,
@@ -14,105 +14,105 @@ import {medKnowledgeService,;
 // 状态接口定义
 export interface MedKnowledgeState {
   // 数据状态
-  constitutions: Constitution[];,
-  symptoms: Symptom[];,
-  acupoints: Acupoint[];,
-  herbs: Herb[];,
-  syndromes: Syndrome[];,
-  searchResults: KnowledgeResult[];,
-  knowledgeGraph: GraphData | null;,
+  constitutions: Constitution[];
+  symptoms: Symptom[];
+  acupoints: Acupoint[];
+  herbs: Herb[];
+  syndromes: Syndrome[];
+  searchResults: KnowledgeResult[];
+  knowledgeGraph: GraphData | null;
   recommendations: HealthRecommendation[];
   // 当前选中项
-  selectedConstitution: Constitution | null;,
-  selectedSymptom: Symptom | null;,
-  selectedAcupoint: Acupoint | null;,
-  selectedHerb: Herb | null;,
+  selectedConstitution: Constitution | null;
+  selectedSymptom: Symptom | null;
+  selectedAcupoint: Acupoint | null;
+  selectedHerb: Herb | null;
   selectedSyndrome: Syndrome | null;
   // 加载状态
-  loading: {;,
-  constitutions: boolean;,
-  symptoms: boolean;,
-  acupoints: boolean;,
-  herbs: boolean;,
-  syndromes: boolean;,
-  search: boolean;,
-  graph: boolean;,
+  loading: {
+  constitutions: boolean;
+  symptoms: boolean;
+  acupoints: boolean;
+  herbs: boolean;
+  syndromes: boolean;
+  search: boolean;
+  graph: boolean;
   recommendations: boolean;
 };
   // 错误状态
   error: {,
-  constitutions: string | null;,
-  symptoms: string | null,
-  acupoints: string | null;,
-  herbs: string | null,
-  syndromes: string | null;,
-  search: string | null,
-  graph: string | null;,
+  constitutions: string | null;
+  symptoms: string | null;
+  acupoints: string | null;
+  herbs: string | null;
+  syndromes: string | null;
+  search: string | null;
+  graph: string | null;
   recommendations: string | null;
   };
   // 搜索状态
-  searchQuery: KnowledgeQuery | null,
+  searchQuery: KnowledgeQuery | null;
   searchHistory: string[];
   // 缓存状态
   lastUpdated: {,
-  constitutions: number | null;,
-  symptoms: number | null,
-  acupoints: number | null;,
-  herbs: number | null,
+  constitutions: number | null;
+  symptoms: number | null;
+  acupoints: number | null;
+  herbs: number | null;
   syndromes: number | null;
   };
   // 服务状态
   serviceHealth: {,
-  status: 'unknown' | 'healthy' | 'unhealthy';,
+  status: 'unknown' | 'healthy' | 'unhealthy';
   lastCheck: number | null;
   };
 }
 // 初始状态
 const initialState: MedKnowledgeState = {,
-  constitutions: [],
-  symptoms: [],
-  acupoints: [],
-  herbs: [],
-  syndromes: [],
-  searchResults: [],
-  knowledgeGraph: null,
-  recommendations: [],
-  selectedConstitution: null,
-  selectedSymptom: null,
-  selectedAcupoint: null,
-  selectedHerb: null,
-  selectedSyndrome: null,
+  constitutions: [];
+  symptoms: [];
+  acupoints: [];
+  herbs: [];
+  syndromes: [];
+  searchResults: [];
+  knowledgeGraph: null;
+  recommendations: [];
+  selectedConstitution: null;
+  selectedSymptom: null;
+  selectedAcupoint: null;
+  selectedHerb: null;
+  selectedSyndrome: null;
   loading: {,
-  constitutions: false,
-    symptoms: false,
-    acupoints: false,
-    herbs: false,
-    syndromes: false,
-    search: false,
-    graph: false,
+  constitutions: false;
+    symptoms: false;
+    acupoints: false;
+    herbs: false;
+    syndromes: false;
+    search: false;
+    graph: false;
     recommendations: false;
   },
   error: {,
-  constitutions: null,
-    symptoms: null,
-    acupoints: null,
-    herbs: null,
-    syndromes: null,
-    search: null,
-    graph: null,
+  constitutions: null;
+    symptoms: null;
+    acupoints: null;
+    herbs: null;
+    syndromes: null;
+    search: null;
+    graph: null;
     recommendations: null;
   },
-  searchQuery: null,
-  searchHistory: [],
+  searchQuery: null;
+  searchHistory: [];
   lastUpdated: {,
-  constitutions: null,
-    symptoms: null,
-    acupoints: null,
-    herbs: null,
+  constitutions: null;
+    symptoms: null;
+    acupoints: null;
+    herbs: null;
     syndromes: null;
   },
   serviceHealth: {,
-  status: 'unknown',
+  status: 'unknown';
     lastCheck: null;
   }
 };
@@ -123,17 +123,17 @@ export const fetchConstitutions = createAsyncThunk(;);
     try {
       return await medKnowledgeService.getConstitutions();
     } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : '获取体质信息失败');
+
     }
   }
 );
 export const fetchConstitutionById = createAsyncThunk(;);
   'medKnowledge/fetchConstitutionById',
-  async (id: string, { rejectWithValue }) => {
+  async (id: string, { rejectWithValue ;}) => {
     try {
       return await medKnowledgeService.getConstitutionById(id);
     } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : '获取体质详情失败');
+
     }
   }
 );
@@ -143,17 +143,17 @@ export const fetchSymptoms = createAsyncThunk(;);
     try {
       return await medKnowledgeService.getSymptoms();
     } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : '获取症状信息失败');
+
     }
   }
 );
 export const searchSymptoms = createAsyncThunk(;);
   'medKnowledge/searchSymptoms',
-  async (query: string, { rejectWithValue }) => {
+  async (query: string, { rejectWithValue ;}) => {
     try {
       return await medKnowledgeService.searchSymptoms(query);
     } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : '搜索症状失败');
+
     }
   }
 );
@@ -163,17 +163,17 @@ export const fetchAcupoints = createAsyncThunk(;);
     try {
       return await medKnowledgeService.getAcupoints();
     } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : '获取穴位信息失败');
+
     }
   }
 );
 export const fetchAcupointsByConstitution = createAsyncThunk(;);
   'medKnowledge/fetchAcupointsByConstitution',
-  async (constitutionId: string, { rejectWithValue }) => {
+  async (constitutionId: string, { rejectWithValue ;}) => {
     try {
       return await medKnowledgeService.getAcupointsByConstitution(constitutionId);
     } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : '获取体质相关穴位失败');
+
     }
   }
 );
@@ -183,17 +183,17 @@ export const fetchHerbs = createAsyncThunk(;);
     try {
       return await medKnowledgeService.getHerbs();
     } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : '获取中药信息失败');
+
     }
   }
 );
 export const fetchHerbsBySymptom = createAsyncThunk(;);
   'medKnowledge/fetchHerbsBySymptom',
-  async (symptomId: string, { rejectWithValue }) => {
+  async (symptomId: string, { rejectWithValue ;}) => {
     try {
       return await medKnowledgeService.getHerbsBySymptom(symptomId);
     } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : '获取症状相关中药失败');
+
     }
   }
 );
@@ -203,17 +203,17 @@ export const fetchSyndromes = createAsyncThunk(;);
     try {
       return await medKnowledgeService.getSyndromes();
     } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : '获取证型信息失败');
+
     }
   }
 );
 export const searchKnowledge = createAsyncThunk(;);
   'medKnowledge/searchKnowledge',
-  async (query: KnowledgeQuery, { rejectWithValue }) => {
+  async (query: KnowledgeQuery, { rejectWithValue ;}) => {
     try {
       return await medKnowledgeService.searchKnowledge(query);
     } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : '知识搜索失败');
+
     }
   }
 );
@@ -223,17 +223,17 @@ export const fetchKnowledgeGraph = createAsyncThunk(;);
     try {
       return await medKnowledgeService.getKnowledgeGraph();
     } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : '获取知识图谱失败');
+
     }
   }
 );
 export const fetchPersonalizedRecommendations = createAsyncThunk(;);
   'medKnowledge/fetchPersonalizedRecommendations',
-  async (request: RecommendationRequest, { rejectWithValue }) => {
+  async (request: RecommendationRequest, { rejectWithValue ;}) => {
     try {
       return await medKnowledgeService.getPersonalizedRecommendations(request);
     } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : '获取个性化推荐失败');
+
     }
   }
 );
@@ -244,7 +244,7 @@ export const checkServiceHealth = createAsyncThunk(;);
       const result = await medKnowledgeService.healthCheck();
       return result;
     } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : '服务健康检查失败');
+
     }
   }
 );
@@ -450,18 +450,18 @@ export const {
   resetState;
 } = medKnowledgeSlice.actions;
 // 选择器
-export const selectMedKnowledgeState = (state: { medKnowledge: MedKnowledgeState }) => state.medKnowledge;
-export const selectConstitutions = (state: { medKnowledge: MedKnowledgeState }) => state.medKnowledge.constitutions;
-export const selectSymptoms = (state: { medKnowledge: MedKnowledgeState }) => state.medKnowledge.symptoms;
-export const selectAcupoints = (state: { medKnowledge: MedKnowledgeState }) => state.medKnowledge.acupoints;
-export const selectHerbs = (state: { medKnowledge: MedKnowledgeState }) => state.medKnowledge.herbs;
-export const selectSyndromes = (state: { medKnowledge: MedKnowledgeState }) => state.medKnowledge.syndromes;
-export const selectSearchResults = (state: { medKnowledge: MedKnowledgeState }) => state.medKnowledge.searchResults;
-export const selectKnowledgeGraph = (state: { medKnowledge: MedKnowledgeState }) => state.medKnowledge.knowledgeGraph;
-export const selectRecommendations = (state: { medKnowledge: MedKnowledgeState }) => state.medKnowledge.recommendations;
-export const selectSelectedConstitution = (state: { medKnowledge: MedKnowledgeState }) => state.medKnowledge.selectedConstitution;
-export const selectLoading = (state: { medKnowledge: MedKnowledgeState }) => state.medKnowledge.loading;
-export const selectErrors = (state: { medKnowledge: MedKnowledgeState }) => state.medKnowledge.error;
-export const selectSearchHistory = (state: { medKnowledge: MedKnowledgeState }) => state.medKnowledge.searchHistory;
-export const selectServiceHealth = (state: { medKnowledge: MedKnowledgeState }) => state.medKnowledge.serviceHealth;
+export const selectMedKnowledgeState = (state: { medKnowledge: MedKnowledgeState ;}) => state.medKnowledge;
+export const selectConstitutions = (state: { medKnowledge: MedKnowledgeState ;}) => state.medKnowledge.constitutions;
+export const selectSymptoms = (state: { medKnowledge: MedKnowledgeState ;}) => state.medKnowledge.symptoms;
+export const selectAcupoints = (state: { medKnowledge: MedKnowledgeState ;}) => state.medKnowledge.acupoints;
+export const selectHerbs = (state: { medKnowledge: MedKnowledgeState ;}) => state.medKnowledge.herbs;
+export const selectSyndromes = (state: { medKnowledge: MedKnowledgeState ;}) => state.medKnowledge.syndromes;
+export const selectSearchResults = (state: { medKnowledge: MedKnowledgeState ;}) => state.medKnowledge.searchResults;
+export const selectKnowledgeGraph = (state: { medKnowledge: MedKnowledgeState ;}) => state.medKnowledge.knowledgeGraph;
+export const selectRecommendations = (state: { medKnowledge: MedKnowledgeState ;}) => state.medKnowledge.recommendations;
+export const selectSelectedConstitution = (state: { medKnowledge: MedKnowledgeState ;}) => state.medKnowledge.selectedConstitution;
+export const selectLoading = (state: { medKnowledge: MedKnowledgeState ;}) => state.medKnowledge.loading;
+export const selectErrors = (state: { medKnowledge: MedKnowledgeState ;}) => state.medKnowledge.error;
+export const selectSearchHistory = (state: { medKnowledge: MedKnowledgeState ;}) => state.medKnowledge.searchHistory;
+export const selectServiceHealth = (state: { medKnowledge: MedKnowledgeState ;}) => state.medKnowledge.serviceHealth;
 export default medKnowledgeSlice.reducer;

@@ -8,21 +8,21 @@ import { configureStore } from '@reduxjs/toolkit';
 describe('performance-stress', () => {
   const mockStore = configureStore({
     reducer: {
-      test: (state = {}, action) => state,
+      test: (state = {;}, action) => state,
     },
   });
 
   const mockNavigation = {
-    navigate: jest.fn(),
-    goBack: jest.fn(),
-    dispatch: jest.fn(),
+    navigate: jest.fn();
+    goBack: jest.fn();
+    dispatch: jest.fn();
   };
 
   const mockRoute = {
-    params: {},
+    params: {;},
   };
 
-  const TestWrapper: React.FC<{ children: React.ReactNode }> = ({
+  const TestWrapper: React.FC<{ children: React.ReactNode ;}> = ({
     children,
   }) => (
     <Provider store={mockStore}>
@@ -34,11 +34,11 @@ describe('performance-stress', () => {
     jest.clearAllMocks();
   });
 
-  it('应该能够渲染组件', () => {
+
     expect(true).toBeTruthy();
   });
 
-  it('应该通过基本测试', () => {
+
     expect(mockNavigation).toBeDefined();
     expect(mockRoute).toBeDefined();
   });

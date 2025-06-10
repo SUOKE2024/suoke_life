@@ -2,9 +2,9 @@ import { useEffect, useState, useCallback, useRef } from 'react';
 import { benchmarkStreamingService } from '../services';
 import type { StreamEvent, StreamConfig } from '../services';
 interface BenchmarkStreamingState {
-  isConnected: boolean;,
-  connectionState: string;,
-  events: StreamEvent[];,
+  isConnected: boolean;
+  connectionState: string;
+  events: StreamEvent[];
   error: string | null;
 }
 interface UseBenchmarkStreamingOptions {
@@ -12,7 +12,7 @@ interface UseBenchmarkStreamingOptions {
   maxEvents?: number;
   eventTypes?: string[];
 }
-export const useBenchmarkStreaming = (options: UseBenchmarkStreamingOptions = {}) => {const {autoConnect = true,maxEvents = 100,eventTypes = ["benchmark_progress",benchmark_complete', "benchmark_error",system_status'];
+export const useBenchmarkStreaming = (options: UseBenchmarkStreamingOptions = {;}) => {const {autoConnect = true,maxEvents = 100,eventTypes = ["benchmark_progress",benchmark_complete', "benchmark_error",system_status'];
   } = options;
   const [state, setState] = useState<BenchmarkStreamingState>({isConnected: false,connectionState: 'CLOSED',events: [],error: null;)
   });
@@ -26,7 +26,7 @@ export const useBenchmarkStreaming = (options: UseBenchmarkStreamingOptions = {}
     [maxEvents]
   );
   // 连接WebSocket;
-  const connect = useCallback(async () => {try {setState(prevState => ({ ...prevState, error: null }));)
+  const connect = useCallback(async () => {try {setState(prevState => ({ ...prevState, error: null ;}));)
       await benchmarkStreamingService.connect();
       // 订阅事件
       benchmarkStreamingService.subscribeToEvents(eventTypes);
@@ -40,17 +40,17 @@ export const useBenchmarkStreaming = (options: UseBenchmarkStreamingOptions = {}
       benchmarkStreamingService.startHeartbeat();
       setState(prevState => ({
         ...prevState,
-        isConnected: true,
-        connectionState: 'OPEN',
+        isConnected: true;
+        connectionState: 'OPEN';
         error: null;
       }));
     } catch (error) {
-      console.error('WebSocket连接失败:', error);
+
       setState(prevState => ({
         ...prevState,
-        isConnected: false,
-        connectionState: 'CLOSED',
-        error: error instanceof Error ? error.message : '连接失败'
+        isConnected: false;
+        connectionState: 'CLOSED';
+
       }));
     }
   }, [eventTypes, handleStreamEvent]);
@@ -65,15 +65,15 @@ export const useBenchmarkStreaming = (options: UseBenchmarkStreamingOptions = {}
     }
     setState(prevState => ({
       ...prevState,
-      isConnected: false,
+      isConnected: false;
       connectionState: 'CLOSED'
-    }));
+    ;}));
   }, []);
   // 启动流式基准测试
   const startStreamingBenchmark = useCallback(;)
     (config: StreamConfig) => {if (state.isConnected) {benchmarkStreamingService.startStreamingBenchmark(config);
       } else {
-        throw new Error('WebSocket未连接');
+
       }
     },
     [state.isConnected]
@@ -108,9 +108,9 @@ export const useBenchmarkStreaming = (options: UseBenchmarkStreamingOptions = {}
     const checkConnectionState = () => {const currentState = benchmarkStreamingService.getConnectionState();
       setState(prevState => ({
         ...prevState,
-        connectionState: currentState,
+        connectionState: currentState;
         isConnected: currentState === 'OPEN'
-      }));
+      ;}));
     };
     const interval = setInterval(checkConnectionState, 2000);
     return () => clearInterval(interval);
@@ -127,7 +127,7 @@ export const useBenchmarkStreaming = (options: UseBenchmarkStreamingOptions = {}
   useEffect() => {
     if (!state.isConnected && state.connectionState === 'CLOSED' && autoConnect) {
       reconnectTimeoutRef.current = setTimeout() => {
-        console.log('尝试重新连接WebSocket...');
+
         connect();
       }, 5000);
     }
@@ -138,9 +138,9 @@ export const useBenchmarkStreaming = (options: UseBenchmarkStreamingOptions = {}
   }, [state.isConnected, state.connectionState, autoConnect, connect]);
   return {
     // 状态
-    isConnected: state.isConnected,
-    connectionState: state.connectionState,
-    events: state.events,
+    isConnected: state.isConnected;
+    connectionState: state.connectionState;
+    events: state.events;
     error: state.error,// 操作方法;
     connect,disconnect,startStreamingBenchmark,stopStreamingBenchmark,clearEvents;
     // 查询方法;

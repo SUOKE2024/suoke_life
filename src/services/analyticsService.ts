@@ -2,9 +2,9 @@ import { performanceMonitor } from './performanceMonitor';
 import { configService } from './configService';
 // 事件类型定义
 export interface AnalyticsEvent {
-  id: string;,
-  type: 'api_call' | 'error' | 'performance' | 'user_action' | 'system';,
-  timestamp: number;,
+  id: string;
+  type: 'api_call' | 'error' | 'performance' | 'user_action' | 'system';
+  timestamp: number;
   data: Record<string, any>;
   userId?: string;
   sessionId: string;
@@ -13,38 +13,38 @@ export interface AnalyticsEvent {
 }
 // 性能指标
 export interface PerformanceMetrics {
-  responseTime: number;,
-  throughput: number;,
-  errorRate: number;,
-  cacheHitRate: number;,
-  memoryUsage: number;,
+  responseTime: number;
+  throughput: number;
+  errorRate: number;
+  cacheHitRate: number;
+  memoryUsage: number;
   cpuUsage: number;
 }
 // 用户行为数据
 export interface UserBehavior {
-  userId: string;,
-  sessionId: string;,
-  actions: string[];,
-  duration: number;,
-  screens: string[];,
+  userId: string;
+  sessionId: string;
+  actions: string[];
+  duration: number;
+  screens: string[];
   errors: number;
 }
 // 服务使用统计
 export interface ServiceUsage {
-  service: string;,
-  calls: number;,
-  errors: number;,
-  avgResponseTime: number;,
+  service: string;
+  calls: number;
+  errors: number;
+  avgResponseTime: number;
   lastUsed: number;
 }
 // 分析配置
 interface AnalyticsConfig {
-  enabled: boolean;,
-  batchSize: number;,
-  flushInterval: number;,
-  maxEvents: number;,
-  enableUserTracking: boolean;,
-  enablePerformanceTracking: boolean;,
+  enabled: boolean;
+  batchSize: number;
+  flushInterval: number;
+  maxEvents: number;
+  enableUserTracking: boolean;
+  enablePerformanceTracking: boolean;
   enableErrorTracking: boolean;
 }
 class AnalyticsService {
@@ -57,12 +57,12 @@ class AnalyticsService {
   constructor() {
     this.sessionId = this.generateSessionId();
     this.config = {
-      enabled: true,
-      batchSize: 50,
+      enabled: true;
+      batchSize: 50;
       flushInterval: 30000, // 30秒
-      maxEvents: 1000,
-      enableUserTracking: true,
-      enablePerformanceTracking: true,
+      maxEvents: 1000;
+      enableUserTracking: true;
+      enablePerformanceTracking: true;
       enableErrorTracking: true;
     };
     this.initializePerformanceTracking();
@@ -86,14 +86,14 @@ class AnalyticsService {
         const entries = list.getEntries();
         entries.forEach(entry) => {
           this.trackEvent('performance', {
-            name: entry.name,
-            duration: entry.duration,
-            startTime: entry.startTime,
+            name: entry.name;
+            duration: entry.duration;
+            startTime: entry.startTime;
             entryType: entry.entryType;
           });
         });
       });
-      this.performanceObserver.observe({ entryTypes: ["measure",navigation', 'resource'] });
+      this.performanceObserver.observe({ entryTypes: ["measure",navigation', 'resource'] ;});
     } catch (error) {
       console.warn('Performance tracking not supported:', error);
     }
@@ -108,7 +108,7 @@ class AnalyticsService {
   setUserId(userId: string) {
     this.userId = userId;
     this.trackEvent('user_action', {
-      action: 'login',
+      action: 'login';
       userId;
     });
   }
@@ -116,22 +116,22 @@ class AnalyticsService {
   clearUserId() {
     if (this.userId) {
       this.trackEvent('user_action', {
-      action: "logout",
+      action: "logout";
       userId: this.userId;
       });
     }
     this.userId = undefined;
   }
   // 跟踪事件
-  trackEvent(type: AnalyticsEvent['type'], data: Record<string, any>, service?: string, endpoint?: string) {
+  trackEvent(type: AnalyticsEvent['type'], data: Record<string, any>, service?: string; endpoint?: string) {
     if (!this.config.enabled) return;
     const event: AnalyticsEvent = {,
-  id: this.generateEventId(),
+  id: this.generateEventId();
       type,
-      timestamp: Date.now(),
+      timestamp: Date.now();
       data,
-      userId: this.userId,
-      sessionId: this.sessionId,
+      userId: this.userId;
+      sessionId: this.sessionId;
       service,
       endpoint;
     };
@@ -155,17 +155,17 @@ class AnalyticsService {
     }, service, endpoint);
   }
   // 跟踪错误
-  trackError(error: Error, context?: Record<string, any>) {
+  trackError(error: Error, context?: Record<string; any>) {
     if (!this.config.enableErrorTracking) return;
     this.trackEvent('error', {
-      message: error.message,
-      stack: error.stack,
-      name: error.name,
+      message: error.message;
+      stack: error.stack;
+      name: error.name;
       context;
     });
   }
   // 跟踪用户行为
-  trackUserAction(action: string, data?: Record<string, any>) {
+  trackUserAction(action: string, data?: Record<string; any>) {
     if (!this.config.enableUserTracking) return;
     this.trackEvent('user_action', {
       action,
@@ -173,9 +173,9 @@ class AnalyticsService {
     });
   }
   // 跟踪页面访问
-  trackPageView(screen: string, data?: Record<string, any>) {
+  trackPageView(screen: string, data?: Record<string; any>) {
     this.trackEvent('user_action', {
-      action: 'page_view',
+      action: 'page_view';
       screen,
       ...data;
     });
@@ -192,13 +192,13 @@ class AnalyticsService {
       ? (errorEvents.length / apiEvents.length) * 100;
       : 0;
     return {
-      responseTime: avgResponseTime,
-      throughput: apiEvents.length,
+      responseTime: avgResponseTime;
+      throughput: apiEvents.length;
       errorRate,
-      cacheHitRate: this.calculateCacheHitRate(),
-      memoryUsage: this.getMemoryUsage(),
+      cacheHitRate: this.calculateCacheHitRate();
+      memoryUsage: this.getMemoryUsage();
       cpuUsage: 0 // 浏览器环境无法获取CPU使用率
-    };
+    ;};
   }
   // 计算缓存命中率
   private calculateCacheHitRate(): number {
@@ -226,11 +226,11 @@ class AnalyticsService {
         const key = `${event.userId}_${event.sessionId}`;
                 if (!userSessions.has(key)) {
           userSessions.set(key, {
-            userId: event.userId!,
-            sessionId: event.sessionId,
-            actions: [],
-            duration: 0,
-            screens: [],
+            userId: event.userId!;
+            sessionId: event.sessionId;
+            actions: [];
+            duration: 0;
+            screens: [];
             errors: 0;
           });
         }
@@ -266,9 +266,9 @@ class AnalyticsService {
                 if (!serviceStats.has(service)) {
           serviceStats.set(service, {
             service,
-            calls: 0,
-            errors: 0,
-            avgResponseTime: 0,
+            calls: 0;
+            errors: 0;
+            avgResponseTime: 0;
             lastUsed: 0;
           });
         }
@@ -286,7 +286,7 @@ class AnalyticsService {
   }
   // 获取事件统计
   getEventStats(): Record<string, number> {
-    const stats: Record<string, number> = {};
+    const stats: Record<string, number> = {;};
         this.events.forEach(event => {
       stats[event.type] = (stats[event.type] || 0) + 1;
     });
@@ -315,19 +315,19 @@ class AnalyticsService {
   private async sendToAnalyticsServer(events: AnalyticsEvent[]): Promise<void> {
     // 实际实现中应该调用真实的分析API;
     const response = await fetch('/api/analytics/events', {
-      method: "POST",
+      method: "POST";
       headers: {
         'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ events })
+      ;},
+      body: JSON.stringify({ events ;})
     });
     if (!response.ok) {
-      throw new Error(`Analytics API error: ${response.status}`);
+      throw new Error(`Analytics API error: ${response.status;}`);
     }
   }
   // 更新配置
   updateConfig(newConfig: Partial<AnalyticsConfig>) {
-    this.config = { ...this.config, ...newConfig };
+    this.config = { ...this.config, ...newConfig ;};
   }
   // 获取配置
   getConfig(): AnalyticsConfig {

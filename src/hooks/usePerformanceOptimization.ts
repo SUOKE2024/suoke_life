@@ -30,8 +30,8 @@ export const usePerformanceOptimization = () => {
 
   // 网络请求优化
   const optimizeNetworkRequest = useCallback(async (
-    key: string,
-    requestFn: () => Promise<any>,
+    key: string;
+    requestFn: () => Promise<any>;
     ttl: number = 300000
   ) => {
     const cached = networkCache.current.get(key);
@@ -43,7 +43,7 @@ export const usePerformanceOptimization = () => {
     networkCache.current.set(key, {
       data,
       timestamp: Date.now()
-    });
+    ;});
 
     return data;
   }, []);

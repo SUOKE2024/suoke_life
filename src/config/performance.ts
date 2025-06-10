@@ -3,23 +3,23 @@ export interface PerformanceConfig {
   // 全局性能监控开关;
 enabled: boolean;
   // 开发环境配置
-development: {;,
-  trackRender: boolean;,
-  trackMemory: boolean;,
-  trackNetwork: boolean;,
-  logToConsole: boolean;,
+development: {
+  trackRender: boolean;
+  trackMemory: boolean;
+  trackNetwork: boolean;
+  logToConsole: boolean;
   warnThreshold: number; // ms;,
   errorThreshold: number // ms;
 }
   // 生产环境配置
 production: {,
-  trackRender: boolean,
-    trackMemory: boolean,
-    trackNetwork: boolean,
-    logToConsole: boolean,
+  trackRender: boolean;
+    trackMemory: boolean;
+    trackNetwork: boolean;
+    logToConsole: boolean;
     warnThreshold: number; // ms,
-    errorThreshold: number // ms,
-    reportToAnalytics: boolean}
+    errorThreshold: number // ms;
+    reportToAnalytics: boolean;}
   // 组件特定配置
 components: {
     [componentName: string]: {,
@@ -31,47 +31,47 @@ components: {
   };
 }
 export const performanceConfig: PerformanceConfig = {,
-  enabled: true,
+  enabled: true;
   development: {,
-  trackRender: true,
-    trackMemory: true,
-    trackNetwork: true,
+  trackRender: true;
+    trackMemory: true;
+    trackNetwork: true;
     logToConsole: true,warnThreshold: 30,errorThreshold: 50;
   },
   production: {,
-  trackRender: true,
-    trackMemory: false,
-    trackNetwork: true,
-    logToConsole: false,
-    warnThreshold: 60,
-    errorThreshold: 50,
+  trackRender: true;
+    trackMemory: false;
+    trackNetwork: true;
+    logToConsole: false;
+    warnThreshold: 60;
+    errorThreshold: 50;
     reportToAnalytics: true;
   },
   components: {
     // 关键组件的特殊配置
     "HomeScreen: {",
-  enabled: true,
-      warnThreshold: 30,
-      trackMemory: true,
+  enabled: true;
+      warnThreshold: 30;
+      trackMemory: true;
       customMetrics: ["userInteraction", dataLoad"]"
-    },
+    ;},
     "ProfileScreen: {",
-  enabled: true,
-      warnThreshold: 30,
+  enabled: true;
+      warnThreshold: 30;
       trackMemory: true;
     },
     "HealthDashboard": {
-      enabled: true,
-      warnThreshold: 40,
-      trackMemory: true,
+      enabled: true;
+      warnThreshold: 40;
+      trackMemory: true;
       customMetrics: [chartRender",dataUpdate]
-    },
+    ;},
     "AgentChat": {
-      enabled: true,
-      warnThreshold: 30,
-      trackMemory: true,
+      enabled: true;
+      warnThreshold: 30;
+      trackMemory: true;
       customMetrics: [messageRender",scrollPerformance']"
-    }
+    ;}
   }
 }
 // 性能阈值配置

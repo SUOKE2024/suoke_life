@@ -1,6 +1,4 @@
-import { CategoryType } from "../../types/explore/import { CATEGORIES  } from ;../../data/exploreData";/importIcon from ../../components/common/Icon"/import { colors, spacing, fonts, borderRadius } from "../../constants/    theme;
-import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor";
-import React from "react";
+/
 /
 import React,{ memo } from ";react";
   Text,
@@ -14,19 +12,19 @@ interface CategoryTabsProps {
 }
 export const CategoryTabs = memo<CategoryTabsProps />({/      selectedCategory,onCategorySelect,style;)
 }) => {}
-  const categories: Array<{ key: CategoryType | "all name: string, icon: string, color: string}> = [;"
+  const categories: Array<{ key: CategoryType | "all name: string, icon: string, color: string;}> = [;"
     {
-      key: "all",
-      name: 全部", icon: "view-grid, color: colors.primary},...Object.entries(CATEGORIES).map([key, config]);
+      key: "all";
+
 => ({
-      key: key as CategoryType,
-      name: config.name,
-      icon: config.icon,
+      key: key as CategoryType;
+      name: config.name;
+      icon: config.icon;
       color: config.color;
     }))
   ];
   const handleCategoryPress = useCallback() => {
-  const performanceMonitor = usePerformanceMonitor("CategoryTabs", {trackRender: true,trackMemory: false,warnThreshold: 50};);
+  const performanceMonitor = usePerformanceMonitor("CategoryTabs", {trackRender: true,trackMemory: false,warnThreshold: 50;};);
     //
     onCategorySelect(category);
   };
@@ -44,11 +42,11 @@ export const CategoryTabs = memo<CategoryTabsProps />({/      selectedCategory,o
         <Icon;
 name={category.icon}
           size={20}
-          color={isSelected ? category.color: colors.textSecondary} />/            <Text;
+          color={isSelected ? category.color: colors.textSecondary;} />/            <Text;
 style={[
             styles.tabText,
             isSelected && styles.selectedTabText,
-            isSelected && { color: category.color}}
+            isSelected && { color: category.color;}}
           ]} />/              {category.name}
         </Text>/      </TouchableOpacity>/        );
   };
@@ -61,29 +59,29 @@ horizontal;
 });
 CategoryTabs.displayName = "CategoryTabs"
 const styles = StyleSheet.create({container: {),
-  backgroundColor: colors.background,
-    borderBottomWidth: 1,
+  backgroundColor: colors.background;
+    borderBottomWidth: 1;
     borderBottomColor: colors.border;
   },
   scrollContent: {,
-  paddingHorizontal: spacing.md,
+  paddingHorizontal: spacing.md;
     paddingVertical: spacing.sm;
   },
   tab: {,
-  flexDirection: "row",
-    alignItems: center",
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    marginRight: spacing.sm,
-    borderRadius: borderRadius.lg,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
+  flexDirection: "row";
+    alignItems: center";
+    paddingHorizontal: spacing.md;
+    paddingVertical: spacing.sm;
+    marginRight: spacing.sm;
+    borderRadius: borderRadius.lg;
+    backgroundColor: colors.surface;
+    borderWidth: 1;
     borderColor: colors.border;
   },
-  selectedTab: { borderColor: "transparent  },"
+  selectedTab: { borderColor: "transparent  ;},"
   tabText: {,
-  fontSize: fonts.size.sm,
-    color: colors.textSecondary,
-    marginLeft: spacing.sm,
+  fontSize: fonts.size.sm;
+    color: colors.textSecondary;
+    marginLeft: spacing.sm;
     fontWeight: "500"
-  },selectedTabText: { fontWeight: 600"  };};);"
+  ;},selectedTabText: { fontWeight: 600"  ;};};);"

@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Alert, Vibration } from 'react-native';
 import { cornMazeService } from '../services/cornMazeService';
-import {Maze,;
+import {Maze;
   MazeProgress,
   Position,
   Direction,
@@ -14,19 +14,19 @@ import {Maze,;
   GameReward;
 } from '../types/maze';
 interface UseMazeGameProps {
-  mazeId: string;,
+  mazeId: string;
   userId: string;
-  onGameComplete?: (score: number, rewards: GameReward[]) => void;
+  onGameComplete?: (score: number; rewards: GameReward[]) => void;
   onError?: (error: string) => void;
 }
 interface MazeGameState {
-  maze: Maze | null;,
-  progress: MazeProgress | null;,
-  settings: GameSettings | null;,
-  loading: boolean;,
-  error: string | null;,
-  isPaused: boolean;,
-  currentEvent: {;,
+  maze: Maze | null;
+  progress: MazeProgress | null;
+  settings: GameSettings | null;
+  loading: boolean;
+  error: string | null;
+  isPaused: boolean;
+  currentEvent: {
   type: GameEventType;
     data?: any;
 } | null;
@@ -37,15 +37,15 @@ export const useMazeGame = ({mazeId,userId,onGameComplete,onError;)
   const gameTimerRef = useRef<NodeJS.Timeout | null>(null);
   const autoSaveTimerRef = useRef<NodeJS.Timeout | null>(null);
   // 初始化游戏
-  const initializeGame = useCallback(async () => {try {setState(prev => ({ ...prev, loading: true, error: null }));)
+  const initializeGame = useCallback(async () => {try {setState(prev => ({ ...prev, loading: true, error: null ;}));)
       const [mazeResponse, settingsResponse] = await Promise.all([;)
         cornMazeService.getMaze(mazeId, userId),cornMazeService.getGameSettings(userId);
       ]);
       setState(prev => ({
         ...prev,
-        maze: mazeResponse.maze,
-        progress: mazeResponse.userProgress || null,
-        settings: settingsResponse,
+        maze: mazeResponse.maze;
+        progress: mazeResponse.userProgress || null;
+        settings: settingsResponse;
         loading: false;
       }));
       // 如果没有进度，开始新游戏
@@ -57,17 +57,17 @@ export const useMazeGame = ({mazeId,userId,onGameComplete,onError;)
         startAutoSave();
       }
     } catch (error) {
-      const errorMessage = '初始化游戏失败';
-      setState(prev => ({ ...prev, error: errorMessage, loading: false }));
+
+      setState(prev => ({ ...prev, error: errorMessage, loading: false ;}));
       onError?.(errorMessage);
     }
   }, [mazeId, userId, onError]);
   // 开始新游戏
   const startNewGame = useCallback(async () => {try {const newProgress = await cornMazeService.startMaze({ userId, mazeId });)
-      setState(prev => ({ ...prev, progress: newProgress }));
+      setState(prev => ({ ...prev, progress: newProgress ;}));
     } catch (error) {
-      const errorMessage = '开始游戏失败';
-      setState(prev => ({ ...prev, error: errorMessage }));
+
+      setState(prev => ({ ...prev, error: errorMessage ;}));
       onError?.(errorMessage);
     }
   }, [userId, mazeId, onError]);
@@ -84,13 +84,13 @@ export const useMazeGame = ({mazeId,userId,onGameComplete,onError;)
       const updatedProgress = await cornMazeService.getUserProgress(mazeId, userId);
       setState(prev => ({
         ...prev,
-        progress: updatedProgress.progress,
+        progress: updatedProgress.progress;
         currentEvent: {,
-  type: moveResponse.eventType,
+  type: moveResponse.eventType;
           data: {,
-  knowledgeNode: moveResponse.knowledgeNode,
-            challenge: moveResponse.challenge,
-            reward: moveResponse.reward,
+  knowledgeNode: moveResponse.knowledgeNode;
+            challenge: moveResponse.challenge;
+            reward: moveResponse.reward;
             message: moveResponse.message;
           }
         }
@@ -109,8 +109,8 @@ export const useMazeGame = ({mazeId,userId,onGameComplete,onError;)
       }
       return moveResponse;
     } catch (error) {
-      const errorMessage = '移动失败';
-      setState(prev => ({ ...prev, error: errorMessage }));
+
+      setState(prev => ({ ...prev, error: errorMessage ;}));
       onError?.(errorMessage);
     }
   }, [state.progress, state.isPaused, state.loading, state.settings, userId, mazeId, onError]);
@@ -121,21 +121,21 @@ export const useMazeGame = ({mazeId,userId,onGameComplete,onError;)
       }
       onGameComplete?.(score, rewards);
     } catch (error) {
-      console.error('记录游戏完成失败:', error);
+
     }
   }, [state.progress, userId, mazeId, onGameComplete]);
   // 暂停/继续游戏
-  const togglePause = useCallback() => {setState(prev => ({ ...prev, isPaused: !prev.isPaused }));
+  const togglePause = useCallback() => {setState(prev => ({ ...prev, isPaused: !prev.isPaused ;}));
   }, []);
   // 重置游戏
   const resetGame = useCallback(async () => {Alert.alert(;))
-      "重置游戏", "确定要重置当前游戏吗？所有进度将丢失。',[;
+
         {
-      text: "取消",
-      style: 'cancel' },{
-      text: "确定", "
+
+      style: 'cancel' ;},{
+
       style: 'destructive',onPress: async () => {await startNewGame();
-            setState(prev => ({ ...prev, currentEvent: null }));
+            setState(prev => ({ ...prev, currentEvent: null ;}));
           }
         }
       ]
@@ -147,10 +147,10 @@ export const useMazeGame = ({mazeId,userId,onGameComplete,onError;)
     try {
       // 这里可以实现提示逻辑
       const hints = [;
-        "尝试探索不同的方向", "注意寻找知识节点',"完成挑战可以获得更多分数",收集所有奖励物品';
+
       ];
       const randomHint = hints[Math.floor(Math.random() * hints.length)];
-      Alert.alert('提示', randomHint);
+
       // 更新提示使用次数
       setState(prev => ({
         ...prev,
@@ -160,15 +160,15 @@ export const useMazeGame = ({mazeId,userId,onGameComplete,onError;)
         } : null;
       }));
     } catch (error) {
-      console.error('获取提示失败:', error);
+
     }
   }, [state.progress, state.maze]);
   // 清除当前事件
-  const clearCurrentEvent = useCallback() => {setState(prev => ({ ...prev, currentEvent: null }));
+  const clearCurrentEvent = useCallback() => {setState(prev => ({ ...prev, currentEvent: null ;}));
   }, []);
   // 更新游戏设置
   const updateSettings = useCallback(async (newSettings: Partial<GameSettings>) => {try {const updatedSettings = await cornMazeService.updateGameSettings(userId, newSettings);)
-      setState(prev => ({ ...prev, settings: updatedSettings }));
+      setState(prev => ({ ...prev, settings: updatedSettings ;}));
       // 重新启动自动保存
       if (updatedSettings.autoSave) {
         startAutoSave();
@@ -176,7 +176,7 @@ export const useMazeGame = ({mazeId,userId,onGameComplete,onError;)
         stopAutoSave();
       }
     } catch (error) {
-      console.error('更新设置失败:', error);
+
     }
   }, [userId]);
   // 启动自动保存
@@ -185,9 +185,9 @@ export const useMazeGame = ({mazeId,userId,onGameComplete,onError;)
       if (state.progress && !state.isPaused) {
         try {
           // 这里可以实现自动保存逻辑
-          console.log('自动保存游戏进度');
+
         } catch (error) {
-          console.error('自动保存失败:', error);
+
         }
       }
     }, 30000); // 每30秒自动保存
@@ -239,12 +239,12 @@ export const useMazeGame = ({mazeId,userId,onGameComplete,onError;)
   }, [initializeGame, stopAutoSave]);
   return {
     // 状态
-    maze: state.maze,
-    progress: state.progress,
-    settings: state.settings,
-    loading: state.loading,
-    error: state.error,
-    isPaused: state.isPaused,
+    maze: state.maze;
+    progress: state.progress;
+    settings: state.settings;
+    loading: state.loading;
+    error: state.error;
+    isPaused: state.isPaused;
     currentEvent: state.currentEvent,// 操作;
     movePlayer,togglePause,resetGame,getHint,clearCurrentEvent,updateSettings;
     // 计算属性;

@@ -11,9 +11,9 @@ import React,{ Suspense, lazy } from "react";
 };
 //   ;
 {/
-  DiagnosisScreen: createLazyComponent() => import("../screens/diagnosis/DiagnosisScreen")/      ),
+  DiagnosisScreen: createLazyComponent() => import("../screens/diagnosis/DiagnosisScreen")/      );
   FiveDiagnosisScreen: createLazyComponent() => import("../screens/diagnosis/FiveDiagnosisScreen");/      ),
-  XiaoaiScreen: createLazyComponent() => import("../screens/agents/XiaoaiScreen")/      ),
+  XiaoaiScreen: createLazyComponent() => import("../screens/agents/XiaoaiScreen")/      );
   XiaokeScreen: createLazyComponent() => import("../screens/agents/XiaokeScreen");/      ),
   LaokeScreen: createLazyComponent() => import("../screens/agents/LaokeScreen");/      ),
   SoerScreen: createLazyComponent() => import("../screens/agents/SoerScreen");),/

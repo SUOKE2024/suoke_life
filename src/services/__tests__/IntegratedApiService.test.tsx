@@ -1,6 +1,4 @@
-import { IntegratedApiService, integratedApiService } from "../IntegratedApiService";
-import { IntegratedApiService, integratedApiService } from "../IntegratedApiService";
-import React from "react";
+
 describe("IntegratedApiService", () => {
   beforeEach(() => {
     jest.clearAllMocks();

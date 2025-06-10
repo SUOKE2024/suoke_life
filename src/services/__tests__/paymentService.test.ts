@@ -1,5 +1,4 @@
 import { paymentService } from "../paymentService";
-import { paymentService } from "../paymentService";
 describe("paymentService", () => {
   beforeEach(() => {
     jest.clearAllMocks();

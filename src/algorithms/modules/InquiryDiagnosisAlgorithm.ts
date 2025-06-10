@@ -1,6 +1,6 @@
-import { InquiryConfig } from "../../placeholder";../config/AlgorithmConfig";/import { TCMKnowledgeBase } from "../knowledge/    TCMKnowledgeBase;
+;/import { TCMKnowledgeBase } from "../knowledge/    TCMKnowledgeBase;
 import React from "react";
-问诊算法模块     实现中医问诊功能，包括症状分析、病史分析、自然语言处理     @author 索克生活技术团队   @version 1.0.0;
+
 export interface InquiryData {
   symptoms?: SymptomData[];
   medicalHistory?: MedicalHistoryData;
@@ -11,65 +11,65 @@ export interface InquiryData {
   sleepPattern?: SleepPattern;
   dietaryHabits?: DietaryHabits;
   emotionalState?: EmotionalState;
-  metadata?: Record<string, any>;
+  metadata?: Record<string; any>;
 }
 export interface SymptomData {
   name: string,description: string,severity: number;
-  , duration: string;,
-  frequency: string;,
-  triggers: string[];,
-  relievingFactors: string[];,
+  , duration: string;
+  frequency: string;
+  triggers: string[];
+  relievingFactors: string[];
   associatedSymptoms: string[];
   location?: string;
   quality?: string;
 }
 export interface MedicalHistoryData {
-  previousDiagnoses: string[];,
-  surgeries: string[];,
-  hospitalizations: string[];,
-  medications: MedicationData[];,
+  previousDiagnoses: string[];
+  surgeries: string[];
+  hospitalizations: string[];
+  medications: MedicationData[];
   allergies: string[],immunizations: string[],familyHistory: string[];
 }
 export interface MedicationData {
-  name: string;,
-  dosage: string;,
+  name: string;
+  dosage: string;
   frequency: string,duration: string,purpose: string;
   sideEffects?: string[];
 }
 export interface LifestyleData {
-  occupation: string;,
-  exerciseHabits: string;,
+  occupation: string;
+  exerciseHabits: string;
   smokingStatus: string,alcoholConsumption: string,stressLevel: number;
-  , workEnvironment: string;,
+  , workEnvironment: string;
   hobbies: string[];
 }
 export interface FamilyHistoryData {
-  parents: string[];,
-  siblings: string[];,
+  parents: string[];
+  siblings: string[];
   grandparents: string[],commonDiseases: string[],geneticConditions: string[];
 }
 export interface PainAssessment {
-  location: string[],intensity: number;,
+  location: string[],intensity: number;
   quality: string  / 刺痛、胀痛、隐痛等*  , aggravatingFactors: string[], * /
   relievingFactors: string[];
   radiationPattern?: string;
 }
 export interface SleepPattern {
-  bedtime: string;,
+  bedtime: string;
   wakeTime: string,sleepDuration: number,sleepQuality: number;
   , difficulties: string[]  / 入睡困难、易醒等* ;
 } * /
 export interface DietaryHabits {
-  mealTimes: string[];,
-  appetite: string;,
-  preferences: string[];,
+  mealTimes: string[];
+  appetite: string;
+  preferences: string[];
   aversions: string[],digestiveIssues: string[],waterIntake: number;
 ///     , specialDiets: string[];
 }
 export interface EmotionalState {
   mood: string,stressLevel: number;
-  , anxietyLevel: number  / 1-10* ///,
-  copingMechanisms: string[];,
+  , anxietyLevel: number  / 1-10* ///;
+  copingMechanisms: string[];
   socialSupport: string;
 }
 export interface InquiryResult {
@@ -79,91 +79,91 @@ export interface InquiryResult {
   syndromePatterns?: SyndromePattern[];
 }
 export interface InquiryFeatures {
-  symptoms: ProcessedSymptom[];,
-  constitution: ConstitutionalFeatures;,
-  lifestyle: LifestyleFeatures;,
+  symptoms: ProcessedSymptom[];
+  constitution: ConstitutionalFeatures;
+  lifestyle: LifestyleFeatures;
   emotional: EmotionalFeatures;
 }
 export interface ProcessedSymptom {
-  name: string;,
-  tcmCategory: string;,
-  severity: number;,
+  name: string;
+  tcmCategory: string;
+  severity: number;
   chronicity: string,pattern: string,organSystem: string[];
 }
 export interface ConstitutionalFeatures {
-  bodyType: string;,
-  energyLevel: string;,
-  temperaturePreference: string;,
-  digestiveStrength: string;,
+  bodyType: string;
+  energyLevel: string;
+  temperaturePreference: string;
+  digestiveStrength: string;
   sleepQuality: string;
 }
 export interface LifestyleFeatures {
-  activityLevel: string;,
-  stressFactors: string[];,
-  environmentalFactors: string[];,
+  activityLevel: string;
+  stressFactors: string[];
+  environmentalFactors: string[];
   socialFactors: string[];
 }
 export interface EmotionalFeatures {
-  dominantEmotion: string;,
-  emotionalStability: string;,
-  stressResponse: string;,
+  dominantEmotion: string;
+  emotionalStability: string;
+  stressResponse: string;
   mentalEnergy: string;
 }
 export interface SymptomAnalysis {
-  primarySymptoms: AnalyzedSymptom[];,
-  secondarySymptoms: AnalyzedSymptom[];,
-  symptomPatterns: SymptomPattern[];,
-  organSystemInvolvement: OrganSystemAnalysis[];,
+  primarySymptoms: AnalyzedSymptom[];
+  secondarySymptoms: AnalyzedSymptom[];
+  symptomPatterns: SymptomPattern[];
+  organSystemInvolvement: OrganSystemAnalysis[];
   pathogenesis: PathogenesisAnalysis;
 }
 export interface AnalyzedSymptom {
-  symptom: ProcessedSymptom;,
-  tcmSignificance: string;,
-  organCorrelation: string[];,
-  syndromeImplication: string[];,
+  symptom: ProcessedSymptom;
+  tcmSignificance: string;
+  organCorrelation: string[];
+  syndromeImplication: string[];
   severity: "mild" | "moderate" | "severe";
 }
 export interface SymptomPattern {
-  name: string;,
-  symptoms: string[];,
-  confidence: number;,
+  name: string;
+  symptoms: string[];
+  confidence: number;
   tcmInterpretation: string;
 };
 export interface OrganSystemAnalysis {
   system: string,involvement: number;
-  , symptoms: string[];,
+  , symptoms: string[];
   dysfunction: string;
 }
 export interface PathogenesisAnalysis {
-  primaryCause: string;,
-  secondaryCauses: string[];,
-  pathogenicFactors: string[];,
-  diseaseStage: string;,
+  primaryCause: string;
+  secondaryCauses: string[];
+  pathogenicFactors: string[];
+  diseaseStage: string;
   prognosis: string;
 }
 export interface ConstitutionalAnalysis {
-  bodyType: string;,
-  constitution: string;,
-  strengths: string[];,
-  weaknesses: string[];,
-  tendencies: string[];,
+  bodyType: string;
+  constitution: string;
+  strengths: string[];
+  weaknesses: string[];
+  tendencies: string[];
   recommendations: string[];
 }
 export interface SyndromePattern {
-  name: string;,
-  confidence: number;,
-  supportingSymptoms: string[];,
-  contradictingSymptoms: string[];,
+  name: string;
+  confidence: number;
+  supportingSymptoms: string[];
+  contradictingSymptoms: string[];
   tcmExplanation: string;
 }
 export interface UserProfile {
-  age: number;,
-  gender: "male" | "female" | "other";,
-  height: number;,
-  weight: number;,
-  occupation: string;,
-  medicalHistory: string[];,
-  allergies: string[];,
+  age: number;
+  gender: "male" | "female" | "other";
+  height: number;
+  weight: number;
+  occupation: string;
+  medicalHistory: string[];
+  allergies: string[];
   medications: string[];
 }
 // 问诊算法类export class InquiryDiagnosisAlgorithm  {private config: InquiryConfig;
@@ -194,49 +194,49 @@ export interface UserProfile {
     userProfile?: UserProfile;
   ): Promise<InquiryResult /    >  {
     if (!this.config.enabled) {
-      throw new Error("问诊功能未启用";);
+
     }
     try {
       this.emit("algorithm:progress", {
-      stage: "preprocessing",
+      stage: "preprocessing";
       progress: 0.1;
       });
       const processedData = await this.preprocessData(da;t;a;);
       this.emit("algorithm:progress", {
-      stage: "nlp_processing",
+      stage: "nlp_processing";
       progress: 0.3;
       });
       const nlpResults = await this.processNaturalLanguage(processedDa;t;a;);
       this.emit("algorithm:progress", {
-      stage: "feature_extraction",
+      stage: "feature_extraction";
       progress: 0.5;
       });
       const features = await this.extractFeatures(processedData, nlpResul;t;s;);
       this.emit("algorithm:progress", {
-      stage: "analysis",
-      progress: 0.7});
+      stage: "analysis";
+      progress: 0.7;});
       const analyses = await this.performAnalyses(features, userProfi;l;e;);
       this.emit("algorithm:progress", {
-      stage: "integration",
-      progress: 0.9});
+      stage: "integration";
+      progress: 0.9;});
       const result = await this.integrateResults(features, analys;e;s;);
       this.emit("algorithm:progress", {
-      stage: "completed",
-      progress: 1.0});
+      stage: "completed";
+      progress: 1.0;});
       return resu;l;t;
     } catch (error) {
-      this.emit("algorithm:error", { error, stage: "inquiry_analysis"});
+      this.emit("algorithm:error", { error, stage: "inquiry_analysis";});
       throw error;
     }
   }
   ///    >  {
-    const processed: ProcessedInquiryData = {symptoms: [],
-      medicalHistory: data.medicalHistory,
-      lifestyle: data.lifestyle,
-      familyHistory: data.familyHistory,
-      painAssessment: data.painAssessment,
-      sleepPattern: data.sleepPattern,
-      dietaryHabits: data.dietaryHabits,
+    const processed: ProcessedInquiryData = {symptoms: [];
+      medicalHistory: data.medicalHistory;
+      lifestyle: data.lifestyle;
+      familyHistory: data.familyHistory;
+      painAssessment: data.painAssessment;
+      sleepPattern: data.sleepPattern;
+      dietaryHabits: data.dietaryHabits;
       emotionalState: data.emotionalState;
     };
     if (data.symptoms) {
@@ -251,18 +251,18 @@ export interface UserProfile {
   ///    >  {
     return symptoms.map(sympto;m;); => ({
       ...symptom,
-      name: this.normalizeSymptomName(symptom.name),
-      description: this.normalizeText(symptom.description)}));
+      name: this.normalizeSymptomName(symptom.name);
+      description: this.normalizeText(symptom.description);}));
   }
   // 预处理文本  private async preprocessText(text: string): Promise<string>  {
     return text.trim().toLowerCase;
   }
   ///    >  {
-    const results: NLPResults = {extractedSymptoms: [],
-      medicalEntities: [],
-      sentimentAnalysis: null,
+    const results: NLPResults = {extractedSymptoms: [];
+      medicalEntities: [];
+      sentimentAnalysis: null;
       keyPhrases: []
-    };
+    ;};
     if (data.currentComplaints) {
       results.extractedSymptoms = await this.nlpProcessor.extractSymptoms()
         data.currentComplaints;);
@@ -275,26 +275,26 @@ export interface UserProfile {
   }
   // 特征提取  private async extractFeatures(data: ProcessedInquiryData,)
     nlpResults: NLPResults): Promise<InquiryFeatures /    >  {
-    const features: InquiryFeatures = {symptoms: [],
+    const features: InquiryFeatures = {symptoms: [];
       constitution: {,
-  bodyType: ",
+  bodyType: ";
         energyLevel: ",",
-        temperaturePreference: ",
+        temperaturePreference: ";
         digestiveStrength: ",",
         sleepQuality: ""
-      },
+      ;},
       lifestyle: {,
-  activityLevel: ",
-        stressFactors: [],
-        environmentalFactors: [],
+  activityLevel: ";
+        stressFactors: [];
+        environmentalFactors: [];
         socialFactors: []
-      },
+      ;},
       emotional: {,
   dominantEmotion: ",",
-        emotionalStability: ",
+        emotionalStability: ";
         stressResponse: ",",
         mentalEnergy: ""
-      }
+      ;}
     };
     features.symptoms = await this.symptomAnalyzer.processSymptoms()
       data.symptoms || [],
@@ -307,7 +307,7 @@ export interface UserProfile {
   // 执行各项分析  private async performAnalyses(features: InquiryFeatures,)
     userProfile?: UserProfile;
   ): Promise<AnalysisResults /    >  {
-    const results: AnalysisResults = {};
+    const results: AnalysisResults = {;};
     results.symptomAnalysis = await this.symptomAnalyzer.analyzeSymptoms()
       features.symptoms,
       userProfile;);
@@ -347,24 +347,24 @@ export interface UserProfile {
       const primarySymptoms = analyses.symptomAnalysis.primarySymptoms;
         .map(s) => s.symptom.name)
         .join("、");
-      analysisTexts.push(`主要症状：${primarySymptoms}`);
+
     }
     if (analyses.constitutionalAnalysis) {
       analysisTexts.push()
-        `体质类型：${analyses.constitutionalAnalysis.constitution}`
+
       );
     }
     if (analyses.syndromePatterns && analyses.syndromePatterns.length > 0) {
       const topPattern = analyses.syndromePatterns[0];
       analysisTexts.push()
-        `主要证候：${topPattern.name}（置信度：${()
+
           topPattern.confidence * 100;
         ).toFixed(1)}%）`;
       );
     }
     const comprehensiveAnalysis =
       await this.knowledgeBase.generateCalculationAnalysis({ inquiryAnalysis: anal;y;s;e;s ; });
-    return [...analysisTexts, ", "综合问诊分析：", comprehensiveAnalysis].join(\n;")
+
     ;);
   }
   private normalizeSymptomName(name: string): string  {
@@ -375,40 +375,40 @@ export interface UserProfile {
   }
   private async extractConstitutionalFeatures(data: ProcessedInquiryData): Promise<ConstitutionalFeatures /    >  {
     return {
-      bodyType: "适中",
-      energyLevel: "正常",temperaturePreference: "适中",digestiveStrength: "正常",sleepQuality: data.sleepPattern?.sleepQualit;y? data.sleepPattern.sleepQuality > 7;
-          ? "良好"
-          : "一般"
-        : "未知"
-    };
+
+
+
+
+
+    ;};
   }
   private async extractLifestyleFeatures(data: ProcessedInquiryData;);: Promise<LifestyleFeatures /    >  {
-    return {activityLevel: data.lifestyle?.exerciseHabits || "未知", "stressFactors: data.lifestyle?.stressLeve;l? [`压力水平：${data.lifestyle.stressLevel}`]
+
         : [],
       environmentalFactors: data.lifestyle?.workEnvironment;? [data.lifestyle.workEnvironment]
         : [],
       socialFactors: []
-    };
+    ;};
   }
   private async extractEmotionalFeatures(data: ProcessedInquiryData,)
     nlpResults: NLPResults;);: Promise<EmotionalFeatures /    >  {
-    return {dominantEmotion: data.emotionalState?.mood || "平和",emotionalStability: data.emotionalState?.stressLeve;l? data.emotionalState.stressLevel < 5;
-          ? "稳定"
-          : "不稳定"
-        : "未知",
-      stressResponse: "正常",
-      mentalEnergy: "充沛"
+
+
+
+
+
+
     };
   }
   private async analyzeConstitution(features: InquiryFeatures,)
     userProfile?: UserProfile;
   ): Promise<ConstitutionalAnalysis /    >  {
-    return {bodyType: features.constitution.bodyType,constitution: "平和质",strengths: ["消化良好", "睡眠正常"],weaknesses: [],tendencies: [],recommendations: ["保持现有生活方式", "适度运动"];};
+
   }
   // 模拟事件发射  public on(event: string, callback: (data: unknown) => void): void {
-    }
+    ;}
   public emit(event: string, data?: unknown): void  {
-    }
+    ;}
   // 清理资源  public async cleanup(): Promise<void> {
     await Promise.all()
       [
@@ -431,9 +431,9 @@ export interface UserProfile {
   emotionalState?: EmotionalState;
 }
 interface NLPResults {
-  extractedSymptoms: string[];,
-  medicalEntities: string[];,
-  sentimentAnalysis: unknown;,
+  extractedSymptoms: string[];
+  medicalEntities: string[];
+  sentimentAnalysis: unknown;
   keyPhrases: string[];
 }
 interface AnalysisResults {
@@ -442,16 +442,16 @@ interface AnalysisResults {
   syndromePatterns?: SyndromePattern[];
 }
 //
-  constructor(private config: unknown, private knowledgeBase: TCMKnowledgeBase) {}
+  constructor(private config: unknown, private knowledgeBase: TCMKnowledgeBase) {;}
   async processSymptoms(symptoms: SymptomData[],)
     extractedSymptoms: string[]);: Promise<ProcessedSymptom[] /    >  {
     return symptoms.map(symptom;) => ({
-      name: symptom.name,
-      tcmCategory: "气血",
-      severity: symptom.severity,
-      chronicity: symptom.duration,
-      pattern: "虚证",
-      organSystem: ["脾", "胃"]
+      name: symptom.name;
+
+      severity: symptom.severity;
+      chronicity: symptom.duration;
+
+
     }));
   }
   async analyzeSymptoms(symptoms: ProcessedSymptom[],)
@@ -459,56 +459,56 @@ interface AnalysisResults {
   );: Promise<SymptomAnalysis /    >  {
     return {
       primarySymptoms: symptoms.map(s) => ({),
-  symptom: s,
-        tcmSignificance: "脾胃虚弱",
-        organCorrelation: s.organSystem,
-        syndromeImplication: ["脾虚证"],
+  symptom: s;
+
+        organCorrelation: s.organSystem;
+
         severity: "moderate" as const;
       })),
-      secondarySymptoms: [],
+      secondarySymptoms: [];
       symptomPatterns: [{,
-  name: "脾胃虚弱",
-          symptoms: symptoms.map(s) => s.name),
-          confidence: 0.8,
-          tcmInterpretation: "脾胃功能失调"
+
+          symptoms: symptoms.map(s) => s.name);
+          confidence: 0.8;
+
         };
       ],organSystemInvolvement: [{,
-  system: "脾胃",
-      involvement: 0.8,symptoms: symptoms.map(s) => s.name),dysfunction: "运化失常";
-        };
+
+
+        ;};
       ],pathogenesis: {,
-  primaryCause: "饮食不节",
-      secondaryCauses: ["情志不遂"],pathogenicFactors: ["湿邪"],diseaseStage: "初期",prognosis: "良好";
-      };
+
+
+      ;};
     };
   }
   async cleanup(): Promise<void> {}
 }
 class NLPProcessor {
-  constructor(private config: unknown, private knowledgeBase: TCMKnowledgeBase) {}
+  constructor(private config: unknown, private knowledgeBase: TCMKnowledgeBase) {;}
   async extractSymptoms(text: string): Promise<string[]>  {
-    return ["乏力", "食欲不振"];
-  }
+
+  ;}
   async extractMedicalEntities(data: ProcessedInquiryData);: Promise<string[]>  {
-    return ["头痛", "失眠"];
+
   }
   async analyzeSentiment(data: ProcessedInquiryData);: Promise<any>  {
     return {
-      mood: "neutral",
+      mood: "neutral";
       confidence: 0.;7 ;};
   }
   async extractKeyPhrases(data: ProcessedInquiryData): Promise<string[]>  {
-    return ["睡眠不好", "消化不良"];
-  }
+
+  ;}
   async cleanup(): Promise<void> {}
 }
 class PatternRecognizer {
-  constructor(private config: unknown, private knowledgeBase: TCMKnowledgeBase) {}
+  constructor(private config: unknown, private knowledgeBase: TCMKnowledgeBase) {;}
   async identifyPatterns(features: InquiryFeatures;);: Promise<SyndromePattern[] /    >  {
     return [;
       {
-      name: "脾气虚证",
-      confidence: 0.8,supportingSymptoms: features.symptoms.map(s) => s.name),contradictingSymptoms: [],tcmExplanation: "脾气不足，运化失常";
+
+
       };
     ];
   };

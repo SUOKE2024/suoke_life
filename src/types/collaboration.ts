@@ -60,66 +60,66 @@ export enum MessageType {
 
 // 智能体协作接口
 export interface AgentCollaboration {
-  id: string;,
-  initiator: AgentType;,
-  participants: AgentType[];,
-  status: CollaborationStatus;,
-  context: CollaborationContext;,
-  messages: CollaborationMessage[];,
-  createdAt: Date;,
+  id: string;
+  initiator: AgentType;
+  participants: AgentType[];
+  status: CollaborationStatus;
+  context: CollaborationContext;
+  messages: CollaborationMessage[];
+  createdAt: Date;
   updatedAt: Date;
 }
 
 // 协作上下文
 export interface CollaborationContext {
-  userId: string;,
-  sessionId: string;,
-  task: string;,
-  priority: 'low' | 'medium' | 'high';,
+  userId: string;
+  sessionId: string;
+  task: string;
+  priority: 'low' | 'medium' | 'high';
   metadata: Record<string, any>;
 }
 
 // 协作消息
 export interface CollaborationMessage {
-  id: string;,
-  from: AgentType;,
-  to: AgentType[];,
-  type: MessageType;,
-  content: any;,
+  id: string;
+  from: AgentType;
+  to: AgentType[];
+  type: MessageType;
+  content: any;
   timestamp: Date;
 }
 
 // 协作任务
 export interface CollaborationTask {
-  id: string;,
-  title: string;,
-  description: string;,
-  requiredCapabilities: string[];,
-  priority: TaskPriority;,
-  status: TaskStatus;,
+  id: string;
+  title: string;
+  description: string;
+  requiredCapabilities: string[];
+  priority: TaskPriority;
+  status: TaskStatus;
   createdAt: Date;
   updatedAt?: Date;
   completedAt?: Date;
   assignedAgents: string[];
   result?: any;
-  metadata?: Record<string, any>;
+  metadata?: Record<string; any>;
 }
 
 // 体质分析结果
 export interface ConstitutionAnalysis {
-  primaryType: ConstitutionType;,
-  secondaryTypes: ConstitutionType[];,
-  confidence: number;,
-  characteristics: string[];,
-  recommendations: string[];,
+  primaryType: ConstitutionType;
+  secondaryTypes: ConstitutionType[];
+  confidence: number;
+  characteristics: string[];
+  recommendations: string[];
   analysisDate: Date;
 }
 
 // 症状数据
 export interface SymptomData {
-  name: string;,
+  name: string;
   severity: number; // 1-10;,
-  duration: string;,
+  duration: string;
   frequency: string;
   description?: string;
 }
@@ -128,7 +128,7 @@ export interface SymptomData {
 export interface VitalSigns {
   heartRate?: number;
   bloodPressure?: {
-    systolic: number;,
+    systolic: number;
   diastolic: number;
   };
   temperature?: number;
@@ -138,43 +138,43 @@ export interface VitalSigns {
 
 // 生活方式数据
 export interface LifestyleData {
-  sleepHours: number;,
-  exerciseFrequency: number;,
-  dietType: string;,
-  stressLevel: number;,
-  smokingStatus: boolean;,
+  sleepHours: number;
+  exerciseFrequency: number;
+  dietType: string;
+  stressLevel: number;
+  smokingStatus: boolean;
   alcoholConsumption: string;
 }
 
 // 健康数据接口
 export interface HealthData {
-  userId: string;,
-  constitution: ConstitutionAnalysis;,
-  symptoms: SymptomData[];,
-  vitalSigns: VitalSigns;,
-  lifestyle: LifestyleData;,
+  userId: string;
+  constitution: ConstitutionAnalysis;
+  symptoms: SymptomData[];
+  vitalSigns: VitalSigns;
+  lifestyle: LifestyleData;
   timestamp: Date;
 }
 
 // 诊断结果
 export interface DiagnosisResult {
   tcmDiagnosis: {,
-  syndrome: string;,
-  pattern: string;,
-  constitution: ConstitutionType;,
-  meridians: string[];,
-  organs: string[];,
-  pathogenesis: string;,
-  treatmentPrinciple: string;,
+  syndrome: string;
+  pattern: string;
+  constitution: ConstitutionType;
+  meridians: string[];
+  organs: string[];
+  pathogenesis: string;
+  treatmentPrinciple: string;
   confidence: number;
   };
   modernDiagnosis: {,
-  primaryDiagnosis: string;,
-  differentialDiagnosis: string[];,
-  icdCodes: string[];,
-  severity: 'mild' | 'moderate' | 'severe';,
-  prognosis: string;,
-  recommendedTests: string[];,
+  primaryDiagnosis: string;
+  differentialDiagnosis: string[];
+  icdCodes: string[];
+  severity: 'mild' | 'moderate' | 'severe';
+  prognosis: string;
+  recommendedTests: string[];
   confidence: number;
   };
   confidence: number;
@@ -194,14 +194,14 @@ export interface TreatmentResult {
       procedures?: string[];
       lifestyleModifications?: string[];
     };
-    duration: string;,
+    duration: string;
   targetConstitution: ConstitutionType;
   };
   validation: {,
-  safetyCheck: boolean;,
-  drugInteractions: string[];,
-  contraindications: string[];,
-  suggestedAdjustments: string[];,
+  safetyCheck: boolean;
+  drugInteractions: string[];
+  contraindications: string[];
+  suggestedAdjustments: string[];
   approvalStatus: 'approved' | 'needs_modification' | 'rejected';
   };
   adjustments: string[];
@@ -213,7 +213,7 @@ export interface CollaborationResult {
   diagnosis?: DiagnosisResult;
   treatment?: TreatmentResult;
   lifestyle?: any;
-  confidence: number;,
-  recommendations: string[];,
+  confidence: number;
+  recommendations: string[];
   timestamp: Date;
 }

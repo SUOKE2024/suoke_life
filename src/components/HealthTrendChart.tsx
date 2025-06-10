@@ -17,7 +17,7 @@ export const HealthTrendChart: React.FC<HealthTrendChartProps> = ({
   title,
   data,
   unit,
-}) => {
+;}) => {
   const max = useMemo(() => {
     return Math.max(...data.map((d) => d.value), 1);
   }, [data]);
@@ -49,10 +49,10 @@ export const HealthTrendChart: React.FC<HealthTrendChartProps> = ({
           style={[
             styles.chartLine,
             {
-              left: x1,
+              left: x1;
               top: Math.min(y1, y2),
               width: Math.max(2, x2 - x1),
-              height: Math.abs(y2 - y1) || 2,
+              height: Math.abs(y2 - y1) || 2;
             },
           ]}
         />
@@ -75,48 +75,48 @@ export const HealthTrendChart: React.FC<HealthTrendChartProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 16,
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 12,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    marginVertical: 16;
+    backgroundColor: '#fff';
+    borderRadius: 12;
+    padding: 12;
+    elevation: 2;
+    shadowColor: '#000';
+    shadowOffset: { width: 0, height: 2 ;},
+    shadowOpacity: 0.1;
+    shadowRadius: 4;
   },
   title: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 8,
-    color: '#333',
+    fontSize: 16;
+    fontWeight: 'bold';
+    marginBottom: 8;
+    color: '#333';
   },
   chart: {
-    backgroundColor: '#E3F2FD',
-    borderRadius: 8,
-    overflow: 'hidden',
-    marginBottom: 8,
-    alignSelf: 'center',
-    position: 'relative',
+    backgroundColor: '#E3F2FD';
+    borderRadius: 8;
+    overflow: 'hidden';
+    marginBottom: 8;
+    alignSelf: 'center';
+    position: 'relative';
   },
   chartLine: {
-    position: 'absolute',
-    backgroundColor: '#4FC3F7',
-    borderRadius: 2,
+    position: 'absolute';
+    backgroundColor: '#4FC3F7';
+    borderRadius: 2;
   },
   labels: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 4,
+    flexDirection: 'row';
+    justifyContent: 'space-between';
+    marginTop: 4;
   },
   label: {
-    fontSize: 12,
-    color: '#888',
+    fontSize: 12;
+    color: '#888';
   },
   unit: {
-    fontSize: 12,
-    color: '#4FC3F7',
-    alignSelf: 'flex-end',
-    marginTop: 2,
+    fontSize: 12;
+    color: '#4FC3F7';
+    alignSelf: 'flex-end';
+    marginTop: 2;
   },
 });

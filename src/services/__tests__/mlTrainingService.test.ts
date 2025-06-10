@@ -1,5 +1,4 @@
 import { MLTrainingService, mlTrainingService } from "../mlTrainingService";
-import { MLTrainingService, mlTrainingService } from "../mlTrainingService";
 describe("mlTrainingService", () => {
   beforeEach(() => {
     jest.clearAllMocks();

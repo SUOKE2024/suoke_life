@@ -16,10 +16,10 @@ export const BlockchainStatusCard: React.FC<BlockchainStatusCardProps> = ({
     if (status?.consensusStatus === 'SYNCING') return '#FFE66D';
     return '#FF6B6B';
   };
-  const getStatusText = () => {if (!isConnected) return '未连接';
-    if (status?.consensusStatus === 'SYNCED') return '已同步';
-    if (status?.consensusStatus === 'SYNCING') return '同步中';
-    return '错误';
+
+
+
+
   };
   const formatTimestamp = (timestamp: number) => {return new Date(timestamp).toLocaleString('zh-CN');
   };
@@ -27,13 +27,13 @@ export const BlockchainStatusCard: React.FC<BlockchainStatusCardProps> = ({
   };
   return (
   <TouchableOpacity;
-      style={[styles.container, { borderLeftColor: getStatusColor() }}]}
+      style={[styles.container, { borderLeftColor: getStatusColor() ;}}]}
       onPress={onPress}
       activeOpacity={0.7}
     >
       <View style={styles.header}>
         <View style={styles.statusIndicator}>
-          <View style={[styles.statusDot, { backgroundColor: getStatusColor() }}]} />
+          <View style={[styles.statusDot, { backgroundColor: getStatusColor() ;}}]} />
           <Text style={styles.statusText}>{getStatusText()}</Text>
         </View>
         <TouchableOpacity onPress={refresh} style={styles.refreshButton}>
@@ -57,7 +57,7 @@ export const BlockchainStatusCard: React.FC<BlockchainStatusCardProps> = ({
           {showDetails  && <>
               <View style={styles.row}>
                 <Text style={styles.label}>网络ID:</Text>
-                <Text style={styles.value}>{status.networkId}</Text>
+                <Text style={styles.value;}>{status.networkId}</Text>
               </View>
               <View style={styles.row}>
                 <Text style={styles.label}>交易池:</Text>
@@ -79,63 +79,63 @@ export const BlockchainStatusCard: React.FC<BlockchainStatusCardProps> = ({
 };
 const styles = StyleSheet.create({
   container: {,
-  backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    padding: 16,
-    marginVertical: 8,
-    marginHorizontal: 16,
-    borderLeftWidth: 4,
-    shadowColor: '#000',
+  backgroundColor: '#FFFFFF';
+    borderRadius: 12;
+    padding: 16;
+    marginVertical: 8;
+    marginHorizontal: 16;
+    borderLeftWidth: 4;
+    shadowColor: '#000';
     shadowOffset: {,
-  width: 0,
+  width: 0;
       height: 2;
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
+    shadowOpacity: 0.1;
+    shadowRadius: 3.84;
     elevation: 5;
   },
   header: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
     marginBottom: 12;
   },
   statusIndicator: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
     alignItems: 'center'
-  },
+  ;},
   statusDot: {,
-  width: 8,
-    height: 8,
-    borderRadius: 4,
+  width: 8;
+    height: 8;
+    borderRadius: 4;
     marginRight: 8;
   },
   statusText: {,
-  fontSize: 16,
-    fontWeight: '600',
+  fontSize: 16;
+    fontWeight: '600';
     color: '#2C3E50'
-  },
+  ;},
   refreshButton: {,
-  paddingHorizontal: 12,
-    paddingVertical: 6,
-    backgroundColor: '#F8F9FA',
+  paddingHorizontal: 12;
+    paddingVertical: 6;
+    backgroundColor: '#F8F9FA';
     borderRadius: 6;
   },
   refreshText: {,
-  fontSize: 14,
+  fontSize: 14;
     color: '#6C757D'
-  },
+  ;},
   content: {,
   marginBottom: 8;
   },
   row: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
     paddingVertical: 4;
   },
   label: {,
-  fontSize: 14,
+  fontSize: 14;
     color: '#6C757D',flex: 1;
   },value: {fontSize: 14,fontWeight: '500',color: '#2C3E50',flex: 1,textAlign: 'right';
   },lastUpdate: {fontSize: 12,color: '#ADB5BD',textAlign: 'center',marginTop: 8;
@@ -171,7 +171,7 @@ export const BlockchainStatusIndicator: React.FC<{
 };
 // 区块链网络统计组件
 export const BlockchainNetworkStats: React.FC = () => {
-  const { status, isConnected } = useBlockchainStatusMonitor();
+  const { status, isConnected ;} = useBlockchainStatusMonitor();
   if (!isConnected || !status) {
     return (;)
       <View style={statsStyles.statsContainer}}>;
@@ -201,22 +201,22 @@ export const BlockchainNetworkStats: React.FC = () => {
 };
 const statsStyles = StyleSheet.create({
   statsContainer: {,
-  flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    backgroundColor: '#F8F9FA',
-    borderRadius: 8,
-    padding: 12,
+  flexDirection: 'row';
+    alignItems: 'center';
+    justifyContent: 'space-around';
+    backgroundColor: '#F8F9FA';
+    borderRadius: 8;
+    padding: 12;
     margin: 16;
   },
   statItem: {,
-  alignItems: 'center',
+  alignItems: 'center';
     flex: 1;
   },
   statValue: {,
-  fontSize: 18,
-    fontWeight: '700',
-    color: '#2C3E50',
+  fontSize: 18;
+    fontWeight: '700';
+    color: '#2C3E50';
     marginBottom: 2;
   },
   statLabel: {fontSize: 12,color: '#6C757D',textAlign: 'center';

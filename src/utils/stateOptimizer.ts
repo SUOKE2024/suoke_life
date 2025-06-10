@@ -1,32 +1,32 @@
 // 状态优化器工具 - 提供状态更新优化、状态变化追踪、状态性能监控等功能
 // 应用状态管理优化工具   提供状态更新优化、状态变化追踪、状态性能监控等功能
 export interface StateChangeEvent {
-  stateName: string;,
-  oldValue: unknown;,
-  newValue: unknown;,
-  timestamp: number;,
-  duration: number;,
+  stateName: string;
+  oldValue: unknown;
+  newValue: unknown;
+  timestamp: number;
+  duration: number;
   source: string;
 }
 export interface StatePerformanceData {
-  stateName: string;,
-  updateCount: number;,
-  averageUpdateTime: number;,
-  lastUpdateTime: number;,
-  totalChanges: number;,
-  unnecessaryUpdates: number;,
+  stateName: string;
+  updateCount: number;
+  averageUpdateTime: number;
+  lastUpdateTime: number;
+  totalChanges: number;
+  unnecessaryUpdates: number;
   timestamp: number;
 }
 export interface StateOptimizationSuggestion {
-  type: 'batching' | 'memoization' | 'normalization' | 'splitting';,
-  severity: 'low' | 'medium' | 'high';,
-  message: string;,
-  stateName: string;,
+  type: 'batching' | 'memoization' | 'normalization' | 'splitting';
+  severity: 'low' | 'medium' | 'high';
+  message: string;
+  stateName: string;
   impact: number;
 }
 // 批量更新项接口
 interface BatchUpdateItem {
-  update: unknown;,
+  update: unknown;
   resolve: () => void;
 }
 // 状态优化器类
@@ -51,10 +51,10 @@ startStateUpdate(stateName: string): void {
   }
   // 结束状态更新跟踪
 endStateUpdate()
-    stateName: string,
-    oldValue: unknown,
-    newValue: unknown,
-    source: string = 'unknown',
+    stateName: string;
+    oldValue: unknown;
+    newValue: unknown;
+    source: string = 'unknown';
   ): void {
     const startTime = this.activeUpdates.get(stateName);
     if (!startTime) return;
@@ -77,16 +77,16 @@ private isUnnecessaryUpdate(oldValue: unknown, newValue: unknown): boolean {
   }
   // 记录状态变化
 private recordStateChange()
-    stateName: string,
-    oldValue: unknown,
-    newValue: unknown,
-    duration: number,
-    source: string,
+    stateName: string;
+    oldValue: unknown;
+    newValue: unknown;
+    duration: number;
+    source: string;
   ): void {
     const event: StateChangeEvent = { stateName,
       oldValue,
       newValue,
-      timestamp: Date.now(),
+      timestamp: Date.now();
       duration,
       source };
     const history = this.stateHistory.get(stateName) || [];
@@ -99,9 +99,9 @@ if (history.length > this.maxHistorySize) {
   }
   // 更新性能数据
 private updatePerformanceData()
-    stateName: string,
-    duration: number,
-    isUnnecessary: boolean,
+    stateName: string;
+    duration: number;
+    isUnnecessary: boolean;
   ): void {
     const existing = this.stateData.get(stateName);
     if (existing) {
@@ -109,21 +109,21 @@ private updatePerformanceData()
       const newAverageTime = (existing.averageUpdateTime * existing.updateCount + duration) / newUpdateCount;
       this.stateData.set(stateName, {
         ...existing,
-        updateCount: newUpdateCount,
-        averageUpdateTime: newAverageTime,
-        lastUpdateTime: duration,
-        totalChanges: existing.totalChanges + 1,
-        unnecessaryUpdates: existing.unnecessaryUpdates + (isUnnecessary ? 1 : 0),
-        timestamp: Date.now() });
+        updateCount: newUpdateCount;
+        averageUpdateTime: newAverageTime;
+        lastUpdateTime: duration;
+        totalChanges: existing.totalChanges + 1;
+        unnecessaryUpdates: existing.unnecessaryUpdates + (isUnnecessary ? 1 : 0);
+        timestamp: Date.now() ;});
     } else {
       this.stateData.set(stateName, {
         stateName,
-        updateCount: 1,
-        averageUpdateTime: duration,
-        lastUpdateTime: duration,
-        totalChanges: 1,
-        unnecessaryUpdates: isUnnecessary ? 1 : 0,
-        timestamp: Date.now() });
+        updateCount: 1;
+        averageUpdateTime: duration;
+        lastUpdateTime: duration;
+        totalChanges: 1;
+        unnecessaryUpdates: isUnnecessary ? 1 : 0;
+        timestamp: Date.now() ;});
     }
   }
   // 批量状态更新
@@ -177,39 +177,39 @@ getOptimizationSuggestions(): StateOptimizationSuggestion[] {
       const unnecessaryRate = data.unnecessaryUpdates / data.updateCount;
       if (unnecessaryRate > 0.3) {
         suggestions.push({
-      type: "memoization",
-      severity: unnecessaryRate > 0.7 ? 'high' : 'medium',
-          message: `状态 ${stateName} 有 ${(unnecessaryRate * 100).toFixed(1)}% 的不必要更新，建议使用记忆化优化`,
+      type: "memoization";
+      severity: unnecessaryRate > 0.7 ? 'high' : 'medium';
+          message: `状态 ${stateName;} 有 ${(unnecessaryRate * 100).toFixed(1)}% 的不必要更新，建议使用记忆化优化`,
           stateName,
-          impact: unnecessaryRate});
+          impact: unnecessaryRate;});
       }
       if (data.updateCount > 100 && data.averageUpdateTime > 5) {
         suggestions.push({
-      type: "batching",
-      severity: 'medium',
-          message: `状态 ${stateName} 更新频繁，建议使用批量更新优化`,
+      type: "batching";
+      severity: 'medium';
+
           stateName,
-          impact: data.updateCount / 100});
+          impact: data.updateCount / 100;});
       }
       if (data.averageUpdateTime > 16) {
         suggestions.push({
-      type: "normalization",
-      severity: 'high',
-          message: `状态 ${stateName} 更新耗时过长，建议优化数据结构或拆分状态`,
+      type: "normalization";
+      severity: 'high';
+
           stateName,
-          impact: data.averageUpdateTime / 16});
+          impact: data.averageUpdateTime / 16;});
       }
     });
     return suggestions.sort(a, b) => b.impact - a.impact);
   }
   // 获取状态统计
 getStateStats(): {
-    totalStates: number,
-  totalUpdates: number;,
-  averageUpdateTime: number,
-  unnecessaryUpdateRate: number;,
-  slowestStates: StatePerformanceData[],
-  mostUpdatedStates: StatePerformanceData[];,
+    totalStates: number;
+  totalUpdates: number;
+  averageUpdateTime: number;
+  unnecessaryUpdateRate: number;
+  slowestStates: StatePerformanceData[];
+  mostUpdatedStates: StatePerformanceData[];
   suggestions: StateOptimizationSuggestion[];
   } {
     const states = Array.from(this.stateData.values());
@@ -235,24 +235,24 @@ clearStateData(stateName?: string): void {
   }
   // 导出状态数据
 exportStateData(): {
-    performanceData: StatePerformanceData[],
+    performanceData: StatePerformanceData[];
   history: Record<string, StateChangeEvent[]>;
         stats: {,
-  totalStates: number;,
-  totalUpdates: number,
-  averageUpdateTime: number;,
-  unnecessaryUpdateRate: number,
-  slowestStates: StatePerformanceData[];,
-  mostUpdatedStates: StatePerformanceData[],
+  totalStates: number;
+  totalUpdates: number;
+  averageUpdateTime: number;
+  unnecessaryUpdateRate: number;
+  slowestStates: StatePerformanceData[];
+  mostUpdatedStates: StatePerformanceData[];
   suggestions: StateOptimizationSuggestion[];
     };
     timestamp: number;
   } {
-    const history: Record<string, StateChangeEvent[]> = {};
+    const history: Record<string, StateChangeEvent[]> = {;};
     this.stateHistory.forEach(events, stateName) => {
       history[stateName] = [...events];
     });
-    return { performanceData: Array.from(this.stateData.values()), history, stats: this.getStateStats(), timestamp: Date.now() };
+    return { performanceData: Array.from(this.stateData.values()), history, stats: this.getStateStats(), timestamp: Date.now() ;};
   }
 }
 // 导出单例实例

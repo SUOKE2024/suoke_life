@@ -1,6 +1,5 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "../../placeholder";react-native;
-import React from "react";
-export const AgentCard: React.FC  = () => {}
+react";
+export const AgentCard: React.FC  = () => {;}
   return (
   <View style={styles.container}>
       <Text style={styles.title}>智能体助手</    Text>
@@ -26,39 +25,39 @@ export const AgentCard: React.FC  = () => {}
   );
 }
 const styles = StyleSheet.create({container: {),
-  backgroundColor: white",
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
+  backgroundColor: white";
+    borderRadius: 12;
+    padding: 16;
+    marginBottom: 16;
     shadowColor: "#000,",
     shadowOffset: {,
-  width: 0,
+  width: 0;
       height: 2;
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
+    shadowOpacity: 0.1;
+    shadowRadius: 3.84;
     elevation: 5;
   },
   title: {,
-  fontSize: 18,
-    fontWeight: "bold",
-    color: #333",
+  fontSize: 18;
+    fontWeight: "bold";
+    color: #333";
     marginBottom: 16;
   },
   agents: {,
   flexDirection: "row,",
     justifyContent: "space-around"
-  },
+  ;},
   agent: {,
-  alignItems: center",
+  alignItems: center";
     padding: 8;
   },
   agentIcon: {,
-  fontSize: 24,
+  fontSize: 24;
     marginBottom: 4;
   },
   agentName: {,
-  fontSize: 12,
+  fontSize: 12;
     color: '#666';
   };
 });

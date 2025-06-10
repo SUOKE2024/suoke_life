@@ -21,13 +21,13 @@ describe('SoerAgent', () => {
 
     it('should process messages correctly', async () => {
       const context = {
-        userId: 'test-user',
-        sessionId: 'test-session',
-        timestamp: new Date(),
-        metadata: {},
+        userId: 'test-user';
+        sessionId: 'test-session';
+        timestamp: new Date();
+        metadata: {;},
       };
 
-      const response = await soerAgent.processMessage('你好，索儿', context);
+
 
       expect(response).toBeDefined();
       expect(response.success).toBe(true);
@@ -35,10 +35,10 @@ describe('SoerAgent', () => {
 
     it('should handle invalid inputs gracefully', async () => {
       const context = {
-        userId: 'test-user',
-        sessionId: 'test-session',
-        timestamp: new Date(),
-        metadata: {},
+        userId: 'test-user';
+        sessionId: 'test-session';
+        timestamp: new Date();
+        metadata: {;},
       };
 
       const response = await soerAgent.processMessage('', context);
@@ -67,14 +67,14 @@ describe('SoerAgent', () => {
       const startTime = performance.now();
 
       const context = {
-        userId: 'test-user',
-        sessionId: 'test-session',
-        timestamp: new Date(),
-        metadata: {},
+        userId: 'test-user';
+        sessionId: 'test-session';
+        timestamp: new Date();
+        metadata: {;},
       };
 
       for (let i = 0; i < iterations; i++) {
-        await soerAgent.processMessage('测试消息', context);
+
       }
 
       const endTime = performance.now();
@@ -86,14 +86,14 @@ describe('SoerAgent', () => {
 
     it('should handle multiple concurrent requests', async () => {
       const context = {
-        userId: 'test-user',
-        sessionId: 'test-session',
-        timestamp: new Date(),
-        metadata: {},
+        userId: 'test-user';
+        sessionId: 'test-session';
+        timestamp: new Date();
+        metadata: {;},
       };
 
-      const promises = Array.from({ length: 5 }, (_, i) =>
-        soerAgent.processMessage(`测试消息 ${i}`, context)
+      const promises = Array.from({ length: 5 ;}, (_, i) =>
+
       );
 
       const results = await Promise.all(promises);

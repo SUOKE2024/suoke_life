@@ -14,11 +14,11 @@ import { Direction, GameSettings } from '../../types/maze';
   Dimensions;
 } from 'react-native';
 interface GameControlsProps {
-  onMove: (direction: Direction) => void;,
-  disabled: boolean;,
+  onMove: (direction: Direction) => void;
+  disabled: boolean;
   gameSettings: GameSettings | null;
 }
-const { width: screenWidth } = Dimensions.get('window');
+const { width: screenWidth ;} = Dimensions.get('window');
 const GameControls: React.FC<GameControlsProps> = ({
   onMove,
   disabled,
@@ -37,7 +37,7 @@ const GameControls: React.FC<GameControlsProps> = ({
     }
     // 按钮缩放动画
     Animated.spring(buttonScales[direction], {
-      toValue: 0.9,
+      toValue: 0.9;
       useNativeDriver: true;
     }).start();
   };
@@ -59,7 +59,7 @@ const GameControls: React.FC<GameControlsProps> = ({
   ) => {return (;
       <Animated.View;
         style={[;
-          styles.directionButton,style,{transform: [{ scale: buttonScales[direction] }}],opacity: disabled ? 0.5 : 1;
+          styles.directionButton,style,{transform: [{ scale: buttonScales[direction] ;}}],opacity: disabled ? 0.5 : 1;
           };
         ]};
       >;
@@ -81,7 +81,7 @@ const GameControls: React.FC<GameControlsProps> = ({
       {// 控制说明}
       <View style={styles.instructionContainer}>
         <Text style={styles.instructionText}>
-          {disabled ? '移动中...' : '点击方向键或滑动屏幕移动'}
+
         </Text>
       </View>
       {// 方向控制器}
@@ -91,7 +91,7 @@ const GameControls: React.FC<GameControlsProps> = ({
           Direction.NORTH,
           'keyboard-arrow-up',
           styles.northButton,
-          '北'
+
         )}
         {// 中间行：左、右方向键}
         <View style={styles.middleRow}>
@@ -99,7 +99,7 @@ const GameControls: React.FC<GameControlsProps> = ({
             Direction.WEST,
             'keyboard-arrow-left',
             styles.westButton,
-            '西'
+
           )}
           {// 中心指示器}
           <View style={styles.centerIndicator}>
@@ -109,7 +109,7 @@ const GameControls: React.FC<GameControlsProps> = ({
             Direction.EAST,
             'keyboard-arrow-right',
             styles.eastButton,
-            '东'
+
           )}
         </View>
         {// 下方向键}
@@ -117,7 +117,7 @@ const GameControls: React.FC<GameControlsProps> = ({
           Direction.SOUTH,
           'keyboard-arrow-down',
           styles.southButton,
-          '南'
+
         )}
       </View>
       {// 控制提示}
@@ -142,45 +142,45 @@ const GameControls: React.FC<GameControlsProps> = ({
 };
 const styles = StyleSheet.create({
   container: {,
-  backgroundColor: '#1B5E20',
-    paddingVertical: 20,
-    paddingHorizontal: 16,
+  backgroundColor: '#1B5E20';
+    paddingVertical: 20;
+    paddingHorizontal: 16;
     alignItems: 'center'
-  },
+  ;},
   instructionContainer: {,
   marginBottom: 16;
   },
   instructionText: {,
-  color: '#C8E6C9',
-    fontSize: 14,
-    textAlign: 'center',
+  color: '#C8E6C9';
+    fontSize: 14;
+    textAlign: 'center';
     fontWeight: '500'
-  },
+  ;},
   controlsContainer: {,
-  alignItems: 'center',
+  alignItems: 'center';
     marginBottom: 16;
   },
   directionButton: {,
-  width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: '#2E7D32',
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
+  width: 60;
+    height: 60;
+    borderRadius: 30;
+    backgroundColor: '#2E7D32';
+    elevation: 3;
+    shadowColor: '#000';
+    shadowOffset: { width: 0, height: 2 ;},
+    shadowOpacity: 0.25;
     shadowRadius: 3.84;
   },
   buttonTouchable: {,
-  flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  flex: 1;
+    justifyContent: 'center';
+    alignItems: 'center';
     borderRadius: 30;
   },
   buttonLabel: {,
-  color: '#FFFFFF',
-    fontSize: 10,
-    fontWeight: 'bold',
+  color: '#FFFFFF';
+    fontSize: 10;
+    fontWeight: 'bold';
     marginTop: 2;
   },
   northButton: {,
@@ -190,10 +190,10 @@ const styles = StyleSheet.create({
   marginTop: 12;
   },
   middleRow: {,
-  flexDirection: 'row',
-    alignItems: 'center',
+  flexDirection: 'row';
+    alignItems: 'center';
     justifyContent: 'center'
-  },
+  ;},
   westButton: {,
   marginRight: 20;
   },
@@ -201,22 +201,22 @@ const styles = StyleSheet.create({
   marginLeft: 20;
   },
   centerIndicator: {,
-  width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#388E3C',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 2,
+  width: 40;
+    height: 40;
+    borderRadius: 20;
+    backgroundColor: '#388E3C';
+    justifyContent: 'center';
+    alignItems: 'center';
+    borderWidth: 2;
     borderColor: '#4CAF50'
-  },
+  ;},
   hintContainer: {,
   flexDirection: 'row',justifyContent: 'center',flexWrap: 'wrap',marginTop: 8;
   },hintItem: {,
-  flexDirection: "row",
+  flexDirection: "row";
       alignItems: 'center',marginHorizontal: 8,marginVertical: 4;
   },hintText: {,
-  color: "#81C784",
+  color: "#81C784";
       fontSize: 12,marginLeft: 4;
   };
 });

@@ -1,5 +1,4 @@
 import { ErrorHandler, errorHandler, handleError, getErrorStats, clearErrorLog } from "../errorHandler";
-import { ErrorHandler, errorHandler, handleError, getErrorStats, clearErrorLog } from "../errorHandler";
 describe("errorHandler", () => {
   beforeEach(() => {
     jest.clearAllMocks();

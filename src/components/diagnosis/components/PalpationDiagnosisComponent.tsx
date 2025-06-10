@@ -18,7 +18,7 @@ import {;
 export const PalpationDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
   onComplete,
   onCancel
-}) => {
+;}) => {
   const [isRecording, setIsRecording] = useState(false);
   const [recordingType, setRecordingType] = useState<
     'pulse' | 'pressure' | null;
@@ -35,15 +35,15 @@ export const PalpationDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
       const pulseAnimationLoop = Animated.loop(
         Animated.sequence([
           Animated.timing(pulseAnimation, {
-            toValue: 1.2,
-            duration: 600,
+            toValue: 1.2;
+            duration: 600;
             useNativeDriver: true
-          }),
+          ;}),
           Animated.timing(pulseAnimation, {
-            toValue: 1,
-            duration: 600,
+            toValue: 1;
+            duration: 600;
             useNativeDriver: true
-          })
+          ;})
         ])
       );
       pulseAnimationLoop.start();
@@ -66,7 +66,7 @@ export const PalpationDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
       clearInterval(interval);
       setIsRecording(false);
       setRecordingType(null);
-      Alert.alert('录制完成', '脉搏数据已采集完成');
+
     }, 30000);
   }, []);
 
@@ -78,34 +78,34 @@ export const PalpationDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
     setTimeout() => {
       const mockPressureData = {
         leftWrist: {,
-  cun: { strength: 'moderate', rhythm: 'regular', depth: 'normal' },
-          guan: { strength: 'weak', rhythm: 'regular', depth: 'deep' },
-          chi: { strength: 'strong', rhythm: 'regular', depth: 'shallow' }
+  cun: { strength: 'moderate', rhythm: 'regular', depth: 'normal' ;},
+          guan: { strength: 'weak', rhythm: 'regular', depth: 'deep' ;},
+          chi: { strength: 'strong', rhythm: 'regular', depth: 'shallow' ;}
         },
         rightWrist: {,
-  cun: { strength: 'moderate', rhythm: 'regular', depth: 'normal' },
-          guan: { strength: 'moderate', rhythm: 'regular', depth: 'normal' },
-          chi: { strength: 'weak', rhythm: 'irregular', depth: 'deep' }
+  cun: { strength: 'moderate', rhythm: 'regular', depth: 'normal' ;},
+          guan: { strength: 'moderate', rhythm: 'regular', depth: 'normal' ;},
+          chi: { strength: 'weak', rhythm: 'irregular', depth: 'deep' ;}
         }
       };
 
       setPressureData(mockPressureData);
       setIsRecording(false);
       setRecordingType(null);
-      Alert.alert('测试完成', '按压数据已采集完成');
+
     }, 10000);
   }, []);
 
   const analyzePalpation = useCallback(async () => {
     if (pulseData.length === 0 && !pressureData) {
-      Alert.alert('提示', '请至少完成一项检测');
+
       return;
     }
 
     setIsAnalyzing(true);
     try {
       // 模拟切诊分析过程
-      await new Promise(resolve) => setTimeout(resolve, 2000));
+      await new Promise(resolve => setTimeout(resolve, 2000));
 
       const avgPulseRate =
         pulseData.length > 0;
@@ -116,48 +116,48 @@ export const PalpationDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
         pulseAnalysis:
           pulseData.length > 0;
             ? {
-                rate: avgPulseRate,
-                rhythm: '规律',
-                strength: '中等',
-                quality: '滑脉',
+                rate: avgPulseRate;
+
+
+
                 interpretation:
                   avgPulseRate > 90;
-                    ? '脉率偏快，可能有热证'
+
                     : avgPulseRate < 60;
-                      ? '脉率偏慢，可能有寒证'
-                      : '脉率正常',
+
+
                 confidence: 0.89
-              }
+              ;}
             : null,
         pressureAnalysis: pressureData;
           ? {
               leftWrist: {,
-  overall: '左手脉象整体偏弱',
-                cun: '心肺功能正常',
-                guan: '肝胆功能稍弱',
-                chi: '肾功能良好'
-              },
+
+
+
+
+              ;},
               rightWrist: {,
-  overall: '右手脉象基本正常',
-                cun: '心肺功能正常',
-                guan: '脾胃功能正常',
-                chi: '肾功能稍弱'
-              },
+
+
+
+
+              ;},
               confidence: 0.85
-            }
+            ;}
           : null,
         syndromePattern: {,
-  pattern: '气血两虚',
-          description: '气血不足，脏腑功能偏弱',
-          severity: '轻度',
-          recommendations: ['补气养血', '调理脾胃', '适当休息', '营养均衡']
-        },
-        overallAssessment: '切诊结果显示整体体质偏虚，建议调理'
+
+
+
+
+        ;},
+
       };
 
       setAnalysisResult(mockResult);
     } catch (error) {
-      Alert.alert('错误', '切诊分析失败，请重试');
+
     } finally {
       setIsAnalyzing(false);
     }
@@ -166,11 +166,11 @@ export const PalpationDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
   const handleComplete = useCallback() => {
     const data: PalpationDiagnosisData = {
       pulseData,
-      touchData: pressureData,
+      touchData: pressureData;
       metadata: {
         analysisResult,
         timestamp: new Date().toISOString()
-      }
+      ;}
     };
     onComplete(data);
   }, [pulseData, pressureData, analysisResult, onComplete]);
@@ -179,29 +179,29 @@ export const PalpationDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
     <View style={styles.testSection}>
       <Text style={styles.sectionTitle}>脉诊检测</Text>
       <Text style={styles.sectionDescription}>
-        将手指轻放在手腕脉搏处，保持30秒进行脉搏检测
+
       </Text>
 
       <View style={styles.pulseContainer}>
         <Animated.View;
           style={[
             styles.pulseIndicator,
-            { transform: [{ scale: pulseAnimation }] },
+            { transform: [{ scale: pulseAnimation ;}] },
             isRecording && recordingType === 'pulse' && styles.pulseRecording
           ]}
         >
           <Text style={styles.pulseText}>
-            {isRecording && recordingType === 'pulse' ? '检测中...' : '脉搏'}
+
           </Text>
         </Animated.View>
 
         {pulseData.length > 0 && (
           <View style={styles.pulseDataContainer}>
             <Text style={styles.pulseDataText}>
-              已采集数据点: {pulseData.length}
+
             </Text>
             <Text style={styles.pulseDataText}>
-              平均脉率:{' '}
+
               {Math.round(
                 pulseData.reduce(a, b) => a + b, 0) / pulseData.length;
               )}{' '}
@@ -223,10 +223,10 @@ export const PalpationDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
       >
         <Text style={styles.testButtonText}>
           {isRecording && recordingType === 'pulse'
-            ? '检测中...'
+
             : pulseData.length > 0;
-              ? '重新检测'
-              : '开始脉诊'}
+
+
         </Text>
       </TouchableOpacity>
     </View>
@@ -236,7 +236,7 @@ export const PalpationDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
     <View style={styles.testSection}>
       <Text style={styles.sectionTitle}>按诊检测</Text>
       <Text style={styles.sectionDescription}>
-        按压手腕不同位置，检测寸关尺三部脉象
+
       </Text>
 
       <View style={styles.pressureContainer}>
@@ -283,10 +283,10 @@ export const PalpationDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
       >
         <Text style={styles.testButtonText}>
           {isRecording && recordingType === 'pressure'
-            ? '检测中...'
+
             : pressureData;
-              ? '重新检测'
-              : '开始按诊'}
+
+
         </Text>
       </TouchableOpacity>
     </View>
@@ -306,19 +306,19 @@ export const PalpationDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
               脉率：{analysisResult.pulseAnalysis.rate} 次/分
             </Text>
             <Text style={styles.analysisText}>
-              节律：{analysisResult.pulseAnalysis.rhythm}
+
             </Text>
             <Text style={styles.analysisText}>
-              强度：{analysisResult.pulseAnalysis.strength}
+
             </Text>
             <Text style={styles.analysisText}>
-              脉质：{analysisResult.pulseAnalysis.quality}
+
             </Text>
             <Text style={styles.analysisText}>
-              解读：{analysisResult.pulseAnalysis.interpretation}
+
             </Text>
             <Text style={styles.confidenceText}>
-              置信度：
+
               {(analysisResult.pulseAnalysis.confidence * 100).toFixed(1)}%
             </Text>
           </View>
@@ -333,13 +333,13 @@ export const PalpationDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
                 {analysisResult.pressureAnalysis.leftWrist.overall}
               </Text>
               <Text style={styles.analysisText}>
-                寸部：{analysisResult.pressureAnalysis.leftWrist.cun}
+
               </Text>
               <Text style={styles.analysisText}>
-                关部：{analysisResult.pressureAnalysis.leftWrist.guan}
+
               </Text>
               <Text style={styles.analysisText}>
-                尺部：{analysisResult.pressureAnalysis.leftWrist.chi}
+
               </Text>
             </View>
             <View style={styles.wristAnalysis}>
@@ -348,17 +348,17 @@ export const PalpationDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
                 {analysisResult.pressureAnalysis.rightWrist.overall}
               </Text>
               <Text style={styles.analysisText}>
-                寸部：{analysisResult.pressureAnalysis.rightWrist.cun}
+
               </Text>
               <Text style={styles.analysisText}>
-                关部：{analysisResult.pressureAnalysis.rightWrist.guan}
+
               </Text>
               <Text style={styles.analysisText}>
-                尺部：{analysisResult.pressureAnalysis.rightWrist.chi}
+
               </Text>
             </View>
             <Text style={styles.confidenceText}>
-              置信度：
+
               {(analysisResult.pressureAnalysis.confidence * 100).toFixed(1)}%
             </Text>
           </View>
@@ -367,18 +367,18 @@ export const PalpationDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
         <View style={styles.recommendationSection}>
           <Text style={styles.analysisTitle}>证候分析</Text>
           <Text style={styles.analysisText}>
-            证候：{analysisResult.syndromePattern.pattern}
+
           </Text>
           <Text style={styles.analysisText}>
-            描述：{analysisResult.syndromePattern.description}
+
           </Text>
           <Text style={styles.analysisText}>
-            程度：{analysisResult.syndromePattern.severity}
+
           </Text>
 
           <Text style={styles.analysisTitle}>调理建议</Text>
           {analysisResult.syndromePattern.recommendations.map(rec: string, index: number) => (
-              <Text key={index} style={styles.recommendationText}>
+              <Text key={index;} style={styles.recommendationText}>
                 • {rec}
               </Text>
             )
@@ -392,7 +392,7 @@ export const PalpationDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <Text style={styles.title}>切诊分析</Text>
       <Text style={styles.subtitle}>
-        通过触摸脉搏和按压穴位，检测身体内在状况
+
       </Text>
 
       {renderPulseSection()}
@@ -430,183 +430,183 @@ export const PalpationDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
 
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
+  flex: 1;
     padding: spacing.md
-  },
+  ;},
   title: {,
-  fontSize: 20,
-    fontWeight: '600',
-    color: colors.textPrimary,
+  fontSize: 20;
+    fontWeight: '600';
+    color: colors.textPrimary;
     marginBottom: spacing.sm
-  },
+  ;},
   subtitle: {,
-  fontSize: 14,
-    color: colors.textSecondary,
-    marginBottom: spacing.lg,
+  fontSize: 14;
+    color: colors.textSecondary;
+    marginBottom: spacing.lg;
     lineHeight: 20
-  },
+  ;},
   testSection: {,
-  marginBottom: spacing.lg,
-    backgroundColor: colors.surface,
-    borderRadius: 8,
+  marginBottom: spacing.lg;
+    backgroundColor: colors.surface;
+    borderRadius: 8;
     padding: spacing.md
-  },
+  ;},
   sectionTitle: {,
-  fontSize: 16,
-    fontWeight: '600',
-    color: colors.textPrimary,
+  fontSize: 16;
+    fontWeight: '600';
+    color: colors.textPrimary;
     marginBottom: spacing.xs
-  },
+  ;},
   sectionDescription: {,
-  fontSize: 14,
-    color: colors.textSecondary,
+  fontSize: 14;
+    color: colors.textSecondary;
     marginBottom: spacing.md
-  },
+  ;},
   pulseContainer: {,
-  alignItems: 'center',
+  alignItems: 'center';
     marginBottom: spacing.md
-  },
+  ;},
   pulseIndicator: {,
-  width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: colors.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
+  width: 80;
+    height: 80;
+    borderRadius: 40;
+    backgroundColor: colors.primary;
+    justifyContent: 'center';
+    alignItems: 'center';
     marginBottom: spacing.md
-  },
+  ;},
   pulseRecording: {,
   backgroundColor: colors.error
-  },
+  ;},
   pulseText: {,
-  fontSize: 14,
-    fontWeight: '600',
+  fontSize: 14;
+    fontWeight: '600';
     color: colors.white
-  },
+  ;},
   pulseDataContainer: {,
   alignItems: 'center'
-  },
+  ;},
   pulseDataText: {,
-  fontSize: 12,
-    color: colors.textSecondary,
+  fontSize: 12;
+    color: colors.textSecondary;
     marginBottom: spacing.xs
-  },
+  ;},
   pressureContainer: {,
-  flexDirection: 'row',
-    justifyContent: 'space-around',
+  flexDirection: 'row';
+    justifyContent: 'space-around';
     marginBottom: spacing.md
-  },
+  ;},
   wristDiagram: {,
   alignItems: 'center'
-  },
+  ;},
   wristTitle: {,
-  fontSize: 14,
-    fontWeight: '600',
-    color: colors.textPrimary,
+  fontSize: 14;
+    fontWeight: '600';
+    color: colors.textPrimary;
     marginBottom: spacing.sm
-  },
+  ;},
   pulsePoints: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
     gap: spacing.sm
-  },
+  ;},
   pulsePoint: {,
-  width: 30,
-    height: 30,
-    borderRadius: 15,
-    backgroundColor: colors.border,
-    justifyContent: 'center',
+  width: 30;
+    height: 30;
+    borderRadius: 15;
+    backgroundColor: colors.border;
+    justifyContent: 'center';
     alignItems: 'center'
-  },
+  ;},
   pulsePointText: {,
-  fontSize: 12,
-    color: colors.textSecondary,
+  fontSize: 12;
+    color: colors.textSecondary;
     fontWeight: '600'
-  },
+  ;},
   testButton: {,
-  backgroundColor: colors.primary,
-    paddingVertical: spacing.md,
-    paddingHorizontal: spacing.lg,
-    borderRadius: 8,
+  backgroundColor: colors.primary;
+    paddingVertical: spacing.md;
+    paddingHorizontal: spacing.lg;
+    borderRadius: 8;
     alignItems: 'center'
-  },
+  ;},
   testButtonRecording: {,
   backgroundColor: colors.error
-  },
+  ;},
   testButtonText: {,
-  fontSize: 16,
-    fontWeight: '600',
+  fontSize: 16;
+    fontWeight: '600';
     color: colors.white
-  },
+  ;},
   actionContainer: {,
   marginVertical: spacing.md
-  },
+  ;},
   button: {,
-  paddingVertical: spacing.md,
-    paddingHorizontal: spacing.lg,
-    borderRadius: 8,
+  paddingVertical: spacing.md;
+    paddingHorizontal: spacing.lg;
+    borderRadius: 8;
     alignItems: 'center'
-  },
+  ;},
   analyzeButton: {,
   backgroundColor: colors.primary
-  },
+  ;},
   completeButton: {,
   backgroundColor: colors.success
-  },
+  ;},
   buttonText: {,
-  fontSize: 16,
-    fontWeight: '600',
+  fontSize: 16;
+    fontWeight: '600';
     color: colors.white
-  },
+  ;},
   resultContainer: {,
-  backgroundColor: colors.surface,
-    borderRadius: 8,
-    padding: spacing.md,
+  backgroundColor: colors.surface;
+    borderRadius: 8;
+    padding: spacing.md;
     marginTop: spacing.md
-  },
+  ;},
   resultTitle: {,
-  fontSize: 18,
-    fontWeight: '600',
-    color: colors.textPrimary,
+  fontSize: 18;
+    fontWeight: '600';
+    color: colors.textPrimary;
     marginBottom: spacing.md
-  },
+  ;},
   analysisSection: {,
-  marginBottom: spacing.md,
-    paddingBottom: spacing.md,
-    borderBottomWidth: 1,
+  marginBottom: spacing.md;
+    paddingBottom: spacing.md;
+    borderBottomWidth: 1;
     borderBottomColor: colors.border
-  },
+  ;},
   analysisTitle: {,
-  fontSize: 16,
-    fontWeight: '600',
-    color: colors.textPrimary,
+  fontSize: 16;
+    fontWeight: '600';
+    color: colors.textPrimary;
     marginBottom: spacing.sm
-  },
+  ;},
   analysisText: {,
-  fontSize: 14,
-    color: colors.textSecondary,
+  fontSize: 14;
+    color: colors.textSecondary;
     marginBottom: spacing.xs
-  },
+  ;},
   confidenceText: {,
-  fontSize: 12,
-    color: colors.primary,
+  fontSize: 12;
+    color: colors.primary;
     fontWeight: '500'
-  },
+  ;},
   wristAnalysis: {,
   marginBottom: spacing.sm
-  },
+  ;},
   wristAnalysisTitle: {,
-  fontSize: 14,
-    fontWeight: '600',
-    color: colors.textPrimary,
+  fontSize: 14;
+    fontWeight: '600';
+    color: colors.textPrimary;
     marginBottom: spacing.xs
-  },
+  ;},
   recommendationSection: {,
   marginTop: spacing.sm
-  },
+  ;},
   recommendationText: {,
-  fontSize: 14,
-    color: colors.textSecondary,
-    marginBottom: spacing.xs,
+  fontSize: 14;
+    color: colors.textSecondary;
+    marginBottom: spacing.xs;
     lineHeight: 20
-  }
+  ;}
 });

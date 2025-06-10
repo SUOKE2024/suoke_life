@@ -1,5 +1,4 @@
 import { StateOptimizer, stateOptimizer, trackStateUpdate, batchStateUpdate, getStatePerformanceData, getStateOptimizationSuggestions, getStateStats, clearStatePerformanceData } from "../stateOptimizer";
-import { StateOptimizer, stateOptimizer, trackStateUpdate, batchStateUpdate, getStatePerformanceData, getStateOptimizationSuggestions, getStateStats, clearStatePerformanceData } from "../stateOptimizer";
 describe("stateOptimizer", () => {
   beforeEach(() => {
     jest.clearAllMocks();

@@ -1,13 +1,13 @@
 // 索克生活核心类型定义
 // 用户类型
 export interface User {
-  id: string;,
-  username: string;,
+  id: string;
+  username: string;
   email: string;
   phone?: string;
   avatar?: string;
   profile?: UserProfile;
-  createdAt: string;,
+  createdAt: string;
   updatedAt: string;
 }
 // 用户档案

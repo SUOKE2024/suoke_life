@@ -1,5 +1,4 @@
 import { debounce, throttle, deepClone, generateId, sleep, unique, uniqueBy, groupBy, formatNumber, formatFileSize, generateRandomColor, getDeviceInfo, isEmpty, safeJsonParse } from "../commonUtils";
-import { debounce, throttle, deepClone, generateId, sleep, unique, uniqueBy, groupBy, formatNumber, formatFileSize, generateRandomColor, getDeviceInfo, isEmpty, safeJsonParse } from "../commonUtils";
 describe("commonUtils", () => {
   beforeEach(() => {
     jest.clearAllMocks();

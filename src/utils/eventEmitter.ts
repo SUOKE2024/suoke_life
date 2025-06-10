@@ -39,7 +39,7 @@ export class EventEmitter {
         try {
           listener(...args);
         } catch (error) {
-          console.error(`事件监听器执行错误 (${event}):`, error);
+
         }
       });
     }

@@ -26,12 +26,12 @@ export interface LoadingStateProps {
 
 export const LoadingState: React.FC<LoadingStateProps> = ({
   type = 'spinner',
-  message = '加载中...',
+
   showMessage = true,
   style,
   size = 'md',
   color,
-  skeletonConfig = { lines: 3, showAvatar: false, showImage: false }
+  skeletonConfig = { lines: 3, showAvatar: false, showImage: false ;}
 }) => {
   const { currentTheme } = useTheme();
   const styles = createStyles(currentTheme);
@@ -44,10 +44,10 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
     if (type === 'spinner') {
       const spinAnimation = Animated.loop(
         Animated.timing(spinValue, {
-          toValue: 1,
-          duration: 1000,
+          toValue: 1;
+          duration: 1000;
           useNativeDriver: true
-        })
+        ;})
       );
       spinAnimation.start();
       return () => spinAnimation.stop();
@@ -57,15 +57,15 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
       const pulseAnimation = Animated.loop(
         Animated.sequence([
           Animated.timing(pulseValue, {
-            toValue: 1,
-            duration: 800,
+            toValue: 1;
+            duration: 800;
             useNativeDriver: true
-          }),
+          ;}),
           Animated.timing(pulseValue, {
-            toValue: 0.5,
-            duration: 800,
+            toValue: 0.5;
+            duration: 800;
             useNativeDriver: true
-          })
+          ;})
         ])
       );
       pulseAnimation.start();
@@ -75,10 +75,10 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
     if (type === 'dots') {
       const dotsAnimation = Animated.loop(
         Animated.timing(dotsValue, {
-          toValue: 1,
-          duration: 1500,
+          toValue: 1;
+          duration: 1500;
           useNativeDriver: true
-        })
+        ;})
       );
       dotsAnimation.start();
       return () => dotsAnimation.stop();
@@ -88,11 +88,11 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
   const getSizeStyles = () => {
     switch (size) {
       case 'sm':
-        return { width: 24, height: 24 };
+        return { width: 24, height: 24 ;};
       case 'lg':
-        return { width: 48, height: 48 };
+        return { width: 48, height: 48 ;};
       default:
-        return { width: 32, height: 32 };
+        return { width: 32, height: 32 ;};
     }
   };
 
@@ -111,15 +111,15 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
     const spin = spinValue.interpolate({
       inputRange: [0, 1],
       outputRange: ['0deg', '360deg']
-    });
+    ;});
 
     return (
       <Animated.View;
         style={[
           styles.spinner,
           getSizeStyles(),
-          { transform: [{ rotate: spin }] },
-          color && { borderTopColor: color }
+          { transform: [{ rotate: spin ;}] },
+          color && { borderTopColor: color ;}
         ]}
       />
     );
@@ -132,9 +132,9 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
           styles.pulse,
           getSizeStyles(),
           {
-            opacity: pulseValue,
+            opacity: pulseValue;
             backgroundColor: color || currentTheme.colors.primary
-          }
+          ;}
         ]}
       />
     );
@@ -164,7 +164,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
                 {
                   opacity,
                   backgroundColor: color || currentTheme.colors.primary
-                }
+                ;}
               ]}
             />
           );
@@ -195,7 +195,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
           />
         )}
 
-        {Array.from({ length: skeletonConfig.lines || 3 }).map(_, index) => (
+        {Array.from({ length: skeletonConfig.lines || 3 ;}).map(_, index) => (
           <Skeleton;
             key={index}
             variant="text"
@@ -235,7 +235,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
           <Text;
             style={[
               styles.message,
-              { fontSize: getMessageSize() },
+              { fontSize: getMessageSize() ;},
               color && { color }
             ]}
           >
@@ -250,59 +250,59 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
 const createStyles = (theme: any) => {
   return StyleSheet.create({
     container: {,
-  flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
+  flex: 1;
+      justifyContent: 'center';
+      alignItems: 'center';
       padding: theme.spacing.lg
-    },
+    ;},
     loadingContent: {,
-  alignItems: 'center',
+  alignItems: 'center';
       justifyContent: 'center'
-    },
+    ;},
     spinner: {,
-  borderWidth: 3,
-      borderColor: theme.colors.outline,
-      borderTopColor: theme.colors.primary,
+  borderWidth: 3;
+      borderColor: theme.colors.outline;
+      borderTopColor: theme.colors.primary;
       borderRadius: 50
-    },
+    ;},
     pulse: {,
   borderRadius: 50
-    },
+    ;},
     dotsContainer: {,
-  flexDirection: 'row',
-      alignItems: 'center',
+  flexDirection: 'row';
+      alignItems: 'center';
       justifyContent: 'center'
-    },
+    ;},
     dot: {,
-  width: 8,
-      height: 8,
-      borderRadius: 4,
+  width: 8;
+      height: 8;
+      borderRadius: 4;
       marginHorizontal: 4
-    },
+    ;},
     message: {,
-  marginTop: theme.spacing.md,
-      color: theme.colors.onSurfaceVariant,
+  marginTop: theme.spacing.md;
+      color: theme.colors.onSurfaceVariant;
       textAlign: 'center'
-    },
+    ;},
     skeletonContainer: {,
-  width: '100%',
+  width: '100%';
       padding: theme.spacing.md
-    },
+    ;},
     skeletonRow: {,
-  flexDirection: 'row',
-      alignItems: 'center',
+  flexDirection: 'row';
+      alignItems: 'center';
       marginBottom: theme.spacing.md
-    },
+    ;},
     skeletonContent: {,
-  flex: 1,
+  flex: 1;
       marginLeft: theme.spacing.md
-    },
+    ;},
     skeletonImage: {,
   marginBottom: theme.spacing.md
-    },
+    ;},
     skeletonLine: {,
   marginBottom: theme.spacing.sm
-    }
+    ;}
   });
 };
 

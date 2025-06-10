@@ -33,18 +33,18 @@ import GameSettingsModal from './GameSettingsModal';
 } from '../../types/maze';
 // GameCompletionModal 已替换为 MazeCompletionScreen;
 interface MazeGameScreenProps {
-  route: {;,
-  params: {;,
-  mazeId: string;,
+  route: {
+  params: {
+  mazeId: string;
   userId: string;
       resumeGame?: boolean;
 };
   };
   navigation: any;
 }
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
-const MazeGameScreen: React.FC<MazeGameScreenProps> = ({ route, navigation }) => {
-  const { mazeId, userId, resumeGame: shouldResumeGame = false } = route.params;
+const { width: screenWidth, height: screenHeight ;} = Dimensions.get('window');
+const MazeGameScreen: React.FC<MazeGameScreenProps> = ({ route, navigation ;}) => {
+  const { mazeId, userId, resumeGame: shouldResumeGame = false ;} = route.params;
   // 状态管理
   const [maze, setMaze] = useState<Maze | null>(null);
   const [progress, setProgress] = useState<MazeProgress | null>(null);
@@ -89,7 +89,7 @@ const MazeGameScreen: React.FC<MazeGameScreenProps> = ({ route, navigation }) =>
       }
     } catch (err) {
       console.error('Failed to initialize game:', err);
-      setError('游戏初始化失败，请重试');
+
     } finally {
       setLoading(false);
     }
@@ -138,12 +138,12 @@ const MazeGameScreen: React.FC<MazeGameScreenProps> = ({ route, navigation }) =>
           // 触发震动反馈
         }
         if (moveResponse.message) {
-          Alert.alert('提示', moveResponse.message);
+
         }
       }
     } catch (err) {
       console.error('Move failed:', err);
-      Alert.alert("错误", "移动失败，请重试');
+
     } finally {
       setIsMoving(false);
     }
@@ -167,11 +167,11 @@ const MazeGameScreen: React.FC<MazeGameScreenProps> = ({ route, navigation }) =>
         break;
       case GameEventType.REWARD:
         if (moveResponse.reward) {
-          Alert.alert('🎉 获得奖励！',
-            `${moveResponse.reward.name}\n${moveResponse.reward.description}`,
+
+            `${moveResponse.reward.name;}\n${moveResponse.reward.description}`,
             [{
-      text: "太棒了！", "
-      style: 'default' }]
+
+      style: 'default' ;}]
           );
         }
         break;
@@ -200,11 +200,11 @@ const MazeGameScreen: React.FC<MazeGameScreenProps> = ({ route, navigation }) =>
   * 退出游戏
   */
   const exitGame = useCallback() => {Alert.alert(;)
-      "退出游戏", "确定要退出当前游戏吗？游戏进度将会保存。',[;
+
         {
-      text: "取消",
-      style: 'cancel' },{
-      text: "退出", "
+
+      style: 'cancel' ;},{
+
       style: 'destructive',onPress: () => {stopGameTimer();
             navigation.goBack();
           }
@@ -289,7 +289,7 @@ const MazeGameScreen: React.FC<MazeGameScreenProps> = ({ route, navigation }) =>
         <View style={styles.errorContainer}>;
           <Text style={styles.errorText}>{error}</Text>;
           <Text style={styles.retryText} onPress={initializeGame}>;
-            点击重试;
+
           </Text>;
         </View>;
       </SafeAreaView>;
@@ -369,30 +369,30 @@ const MazeGameScreen: React.FC<MazeGameScreenProps> = ({ route, navigation }) =>
 };
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
+  flex: 1;
     backgroundColor: '#1B5E20'
-  },
+  ;},
   loadingContainer: {,
-  flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  flex: 1;
+    justifyContent: 'center';
+    alignItems: 'center';
     backgroundColor: '#1B5E20'
-  },
+  ;},
   loadingText: {,
-  color: '#FFFFFF',
-    fontSize: 16,
-    marginTop: 16,
+  color: '#FFFFFF';
+    fontSize: 16;
+    marginTop: 16;
     fontWeight: '500'
-  },
+  ;},
   errorContainer: {,
-  flex: 1,
-    justifyContent: 'center',
+  flex: 1;
+    justifyContent: 'center';
     alignItems: 'center',backgroundColor: '#1B5E20',padding: 20;
   },errorText: {,
-  color: "#FFCDD2",
+  color: "#FFCDD2";
       fontSize: 16,textAlign: 'center',marginBottom: 16;
   },retryText: {,
-  color: "#4CAF50",
+  color: "#4CAF50";
       fontSize: 16,fontWeight: 'bold',textDecorationLine: 'underline';
   };
 });

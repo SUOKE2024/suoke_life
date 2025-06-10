@@ -15,27 +15,27 @@ describe('FiveDiagnosisEngine', () => {
     }
   });
 
-  describe('基础功能测试', () => {
-    it('应该能够正确初始化', () => {
+
+
       expect(engine).toBeDefined();
       expect(engine).toBeInstanceOf(FiveDiagnosisEngine);
     });
 
-    it('应该能够处理有效输入', async () => {
+
       const validInput: DiagnosisInput = {
-        userId: 'test_user',
-        sessionId: 'test_session',
-        timestamp: Date.now(),
+        userId: 'test_user';
+        sessionId: 'test_session';
+        timestamp: Date.now();
         userProfile: {
-          age: 30,
-          gender: 'male',
-          height: 175,
-          weight: 70,
-          occupation: '测试',
-          medicalHistory: [],
-          allergies: [],
+          age: 30;
+          gender: 'male';
+          height: 175;
+          weight: 70;
+
+          medicalHistory: [];
+          allergies: [];
           medications: []
-        }
+        ;}
       };
 
       const result = await engine.analyze(validInput);
@@ -45,41 +45,41 @@ describe('FiveDiagnosisEngine', () => {
       expect(result.timestamp).toBeDefined();
     });
 
-    it('应该优雅地处理边界情况', async () => {
+
       const edgeCaseInput: DiagnosisInput = {
-        userId: '',
-        sessionId: '',
-        timestamp: 0,
+        userId: '';
+        sessionId: '';
+        timestamp: 0;
         userProfile: {
-          age: 0,
-          gender: 'other',
-          height: 0,
-          weight: 0,
-          occupation: '',
-          medicalHistory: [],
-          allergies: [],
+          age: 0;
+          gender: 'other';
+          height: 0;
+          weight: 0;
+          occupation: '';
+          medicalHistory: [];
+          allergies: [];
           medications: []
-        }
+        ;}
       };
 
       await expect(engine.analyze(edgeCaseInput)).resolves.toBeDefined();
     });
 
-    it('应该返回正确的输出格式', async () => {
+
       const testInput: DiagnosisInput = {
-        userId: 'format_test',
-        sessionId: 'format_session',
-        timestamp: Date.now(),
+        userId: 'format_test';
+        sessionId: 'format_session';
+        timestamp: Date.now();
         userProfile: {
-          age: 25,
-          gender: 'female',
-          height: 160,
-          weight: 55,
-          occupation: '测试',
-          medicalHistory: [],
-          allergies: [],
+          age: 25;
+          gender: 'female';
+          height: 160;
+          weight: 55;
+
+          medicalHistory: [];
+          allergies: [];
           medications: []
-        }
+        ;}
       };
 
       const result = await engine.analyze(testInput);
@@ -90,23 +90,23 @@ describe('FiveDiagnosisEngine', () => {
     });
   });
 
-  describe('性能测试', () => {
-    it('应该在性能阈值内执行', async () => {
+
+
       const iterations = 5;
       const testInput: DiagnosisInput = {
-        userId: 'perf_test',
-        sessionId: 'perf_session',
-        timestamp: Date.now(),
+        userId: 'perf_test';
+        sessionId: 'perf_session';
+        timestamp: Date.now();
         userProfile: {
-          age: 30,
-          gender: 'male',
-          height: 175,
-          weight: 70,
-          occupation: '测试',
-          medicalHistory: [],
-          allergies: [],
+          age: 30;
+          gender: 'male';
+          height: 175;
+          weight: 70;
+
+          medicalHistory: [];
+          allergies: [];
           medications: []
-        }
+        ;}
       };
 
       const startTime = performance.now();
@@ -120,21 +120,21 @@ describe('FiveDiagnosisEngine', () => {
       expect(averageTime).toBeLessThan(1000);
     });
 
-    it('应该高效处理大数据集', async () => {
+
       const largeDataset = new Array(100).fill(0).map((_, i) => ({
-        userId: `user_${i}`,
-        sessionId: `session_${i}`,
-        timestamp: Date.now(),
+        userId: `user_${i;}`,
+        sessionId: `session_${i;}`,
+        timestamp: Date.now();
         userProfile: {
-          age: 20 + (i % 60),
-                     gender: (i % 2 === 0 ? 'male' : 'female') as 'male' | 'female',
-          height: 150 + (i % 50),
-          weight: 50 + (i % 50),
-          occupation: '测试',
-          medicalHistory: [],
-          allergies: [],
+          age: 20 + (i % 60);
+                     gender: (i % 2 === 0 ? 'male' : 'female') as 'male' | 'female';
+          height: 150 + (i % 50);
+          weight: 50 + (i % 50);
+
+          medicalHistory: [];
+          allergies: [];
           medications: []
-        }
+        ;}
       }));
 
       const startTime = performance.now();
@@ -149,25 +149,25 @@ describe('FiveDiagnosisEngine', () => {
       expect(endTime - startTime).toBeLessThan(5000);
     });
 
-    it('应该不会造成内存泄漏', async () => {
+
       const initialMemory = process.memoryUsage().heapUsed;
       
       // 执行多次分析
       for (let i = 0; i < 50; i++) {
         const testInput: DiagnosisInput = {
-          userId: `memory_test_${i}`,
-          sessionId: `memory_session_${i}`,
-          timestamp: Date.now(),
+          userId: `memory_test_${i;}`,
+          sessionId: `memory_session_${i;}`,
+          timestamp: Date.now();
           userProfile: {
-            age: 30,
-            gender: 'male',
-            height: 175,
-            weight: 70,
-            occupation: '测试',
-            medicalHistory: [],
-            allergies: [],
+            age: 30;
+            gender: 'male';
+            height: 175;
+            weight: 70;
+
+            medicalHistory: [];
+            allergies: [];
             medications: []
-          }
+          ;}
         };
         await engine.analyze(testInput);
       }

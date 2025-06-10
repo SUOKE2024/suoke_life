@@ -2,27 +2,27 @@
 * * AI模型优化服务
 * 负责优化和管理AI模型的性能
 export interface ModelMetrics {
-  accuracy: number;,
-  latency: number;,
-  memoryUsage: number;,
-  cpuUsage: number;,
+  accuracy: number;
+  latency: number;
+  memoryUsage: number;
+  cpuUsage: number;
   throughput: number;
 }
 export interface OptimizationConfig {
-  targetAccuracy: number;,
-  maxLatency: number;,
-  maxMemoryUsage: number;,
-  enableQuantization: boolean;,
-  enablePruning: boolean;,
+  targetAccuracy: number;
+  maxLatency: number;
+  maxMemoryUsage: number;
+  enableQuantization: boolean;
+  enablePruning: boolean;
   enableDistillation: boolean;
 }
 export interface ModelInfo {
-  id: string;,
-  name: string;,
-  version: string;,
+  id: string;
+  name: string;
+  version: string;
   type: "classification | "regression" | nlp" | "vision;",
-  size: number;,
-  metrics: ModelMetrics;,
+  size: number;
+  metrics: ModelMetrics;
   isOptimized: boolean;
 }
 export class AIModelOptimizationService {private models: Map<string, ModelInfo> = new Map();
@@ -36,46 +36,46 @@ export class AIModelOptimizationService {private models: Map<string, ModelInfo> 
   private initializeDefaultModels(): void {
     const defaultModels: ModelInfo[] = [;
       {
-      id: "health-classifier",
-      name: 健康分类模型",
+      id: "health-classifier";
+
         version: "1.0.0,",
-        type: "classification",
-        size: 50.5,
+        type: "classification";
+        size: 50.5;
         metrics: {,
-  accuracy: 0.92,
-          latency: 120,
-          memoryUsage: 256,
-          cpuUsage: 45,
+  accuracy: 0.92;
+          latency: 120;
+          memoryUsage: 256;
+          cpuUsage: 45;
           throughput: 100;
         },
         isOptimized: false;
       },
       {
-        id: symptom-analyzer",
-        name: "症状分析模型,",
-        version: "1.2.0",
-        type: nlp",
-        size: 75.2,
+        id: symptom-analyzer";
+
+        version: "1.2.0";
+        type: nlp";
+        size: 75.2;
         metrics: {,
-  accuracy: 0.89,
-          latency: 200,
-          memoryUsage: 512,
-          cpuUsage: 60,
+  accuracy: 0.89;
+          latency: 200;
+          memoryUsage: 512;
+          cpuUsage: 60;
           throughput: 80;
         },
         isOptimized: false;
       },
       {
       id: "health-predictor,",
-      name: "健康预测模型",
-        version: 2.0.0",
+
+        version: 2.0.0";
         type: "regression,",
-        size: 32.1,
+        size: 32.1;
         metrics: {,
-  accuracy: 0.95,
-          latency: 80,
-          memoryUsage: 128,
-          cpuUsage: 30,
+  accuracy: 0.95;
+          latency: 80;
+          memoryUsage: 128;
+          cpuUsage: 30;
           throughput: 150;
         },
         isOptimized: true;
@@ -101,7 +101,7 @@ export class AIModelOptimizationService {private models: Map<string, ModelInfo> 
     try {
       const model = this.models.get(modelId);
       if (!model) {
-        throw new Error(`模型 ${modelId} 不存在`);
+
       }
       if (model.isOptimized) {
         return false;
@@ -136,20 +136,20 @@ if (!this.isOptimizing) {
   /**
 * * 优化模型
   public async optimizeModel()
-    modelId: string,
+    modelId: string;
     config?: OptimizationConfig;
   ): Promise<ModelInfo | null> {
     try {
       const model = this.models.get(modelId);
       if (!model) {
-        throw new Error(`模型 ${modelId} 不存在`);
+
       }
       // 使用默认配置或提供的配置
-const optimizationConfig: OptimizationConfig = config || {targetAccuracy: 0.90,
-        maxLatency: 100,
-        maxMemoryUsage: 200,
-        enableQuantization: true,
-        enablePruning: true,
+const optimizationConfig: OptimizationConfig = config || {targetAccuracy: 0.90;
+        maxLatency: 100;
+        maxMemoryUsage: 200;
+        enableQuantization: true;
+        enablePruning: true;
         enableDistillation: false;
       };
       // 模拟优化过程
@@ -159,8 +159,8 @@ const optimizedMetrics = await this.performOptimization(;)
       );
       // 更新模型信息
 const optimizedModel: ModelInfo = {...model,
-        metrics: optimizedMetrics,
-        isOptimized: true,
+        metrics: optimizedMetrics;
+        isOptimized: true;
         size: model.size * 0.7, // 假设优化后大小减少30%
         version: this.incrementVersion(model.version);
       }
@@ -173,7 +173,7 @@ const optimizedModel: ModelInfo = {...model,
   /**
 * * 执行优化算法
   private async performOptimization()
-    originalMetrics: ModelMetrics,
+    originalMetrics: ModelMetrics;
     config: OptimizationConfig;
   ): Promise<ModelMetrics> {
     // 模拟优化过程的延迟
@@ -212,47 +212,47 @@ optimizedMetrics.accuracy = Math.min(optimizedMetrics.accuracy, 1.0);
   public getOptimizationRecommendations(modelId: string): string[] {
     const model = this.models.get(modelId);
     if (!model) {
-      return ["模型不存在];"
+
     }
     const recommendations: string[] = [];
     if (model.metrics.latency > 150) {
-      recommendations.push("建议启用量化以减少延迟");
+
     }
     if (model.metrics.memoryUsage > 400) {
-      recommendations.push(建议启用剪枝以减少内存使用");"
+
     }
     if (model.metrics.accuracy < 0.9) {
-      recommendations.push("建议重新训练模型以提高准确率);"
+
     }
     if (model.size > 100) {
-      recommendations.push("建议使用知识蒸馏减小模型大小");
+
     }
     if (model.metrics.cpuUsage > 70) {
-      recommendations.push(建议优化模型架构以减少CPU使用");"
+
     }
     if (recommendations.length === 0) {
-      recommendations.push("模型性能良好，无需特殊优化);"
+
     }
     return recommendations;
   }
   /**
 * * 比较优化前后的性能
   public comparePerformance()
-    originalMetrics: ModelMetrics,
+    originalMetrics: ModelMetrics;
     optimizedMetrics: ModelMetrics;
   ): Record<string, number> {
-    return {accuracyChange: (optimizedMetrics.accuracy - originalMetrics.accuracy) / originalMetrics.accuracy) * 100,;
-      latencyImprovement: (originalMetrics.latency - optimizedMetrics.latency) / originalMetrics.latency) * 100,;
-      memoryReduction: (originalMetrics.memoryUsage - optimizedMetrics.memoryUsage) / originalMetrics.memoryUsage) * 100,;
-      cpuReduction: (originalMetrics.cpuUsage - optimizedMetrics.cpuUsage) / originalMetrics.cpuUsage) * 100,;
+    return {accuracyChange: (optimizedMetrics.accuracy - originalMetrics.accuracy) / originalMetrics.accuracy) * 100;
+      latencyImprovement: (originalMetrics.latency - optimizedMetrics.latency) / originalMetrics.latency) * 100;
+      memoryReduction: (originalMetrics.memoryUsage - optimizedMetrics.memoryUsage) / originalMetrics.memoryUsage) * 100;
+      cpuReduction: (originalMetrics.cpuUsage - optimizedMetrics.cpuUsage) / originalMetrics.cpuUsage) * 100;
       throughputImprovement: (optimizedMetrics.throughput - originalMetrics.throughput) / originalMetrics.throughput) * 100;
     };
   }
   /**
 * * 获取优化队列状态
   public getOptimizationStatus(): {
-    queueLength: number,
-  isOptimizing: boolean;,
+    queueLength: number;
+  isOptimizing: boolean;
   currentQueue: string[];
   } {
     return {queueLength: this.optimizationQueue.length,isOptimizing: this.isOptimizing,currentQueue: [...this.optimizationQueue];
@@ -274,22 +274,22 @@ optimizedMetrics.accuracy = Math.min(optimizedMetrics.accuracy, 1.0);
 * * 导出模型性能报告
   public generatePerformanceReport(): string {
     const models = this.getAllModels();
-    let report = "=== AI模型性能报告 ===\n\n";
+
     models.forEach(model => {})
-      report += `模型: ${model.name} (${model.id})\n`;
-      report += `版本: ${model.version}\n`;
-      report += `类型: ${model.type}\n`;
-      report += `大小: ${model.size.toFixed(1)} MB\n`;
-      report += `优化状态: ${model.isOptimized ? 已优化" : "未优化}\n`;
+
+
+
+
+
       report += `准确率: ${(model.metrics.accuracy * 100).toFixed(1)}%\n`;
-      report += `延迟: ${model.metrics.latency}ms\n`;
-      report += `内存使用: ${model.metrics.memoryUsage}MB\n`;
-      report += `CPU使用: ${model.metrics.cpuUsage}%\n`;
+
+
+
       report += `吞吐量: ${model.metrics.throughput} req/    s\n`;
       report += "\n';"'
     });
     const optimizedCount = models.filter(m => m.isOptimized).length;
-    report += `总计: ${models.length} 个模型，${optimizedCount} 个已优化\n`;
+
     return report;
   }
 }

@@ -12,20 +12,20 @@ import {;
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface ApiTestResult {
-  name: string;,
-  category: string;,
+  name: string;
+  category: string;
   status: 'PASSED' | 'FAILED' | 'PENDING';
   duration?: number;
-  endpoint: string;,
+  endpoint: string;
   method: string;
   error?: string;
 }
 
 interface TestSummary {
-  total: number;,
-  passed: number;,
-  failed: number;,
-  successRate: number;,
+  total: number;
+  passed: number;
+  failed: number;
+  successRate: number;
   avgDuration: number;
 }
 
@@ -38,62 +38,62 @@ export const ApiIntegrationDemo: React.FC = () => {
   );
   const [testResults, setTestResults] = useState<ApiTestResult[]>([]);
   const [summary, setSummary] = useState<TestSummary>({
-    total: 0,
-    passed: 0,
-    failed: 0,
-    successRate: 0,
+    total: 0;
+    passed: 0;
+    failed: 0;
+    successRate: 0;
     avgDuration: 0
-  });
+  ;});
 
   const mockTestResults: ApiTestResult[] = [
     {
-      name: '健康检查',
-      category: 'auth',
-      status: 'PASSED',
-      duration: 145,
-      endpoint: '/health',
+
+      category: 'auth';
+      status: 'PASSED';
+      duration: 145;
+      endpoint: '/health';
       method: 'GET'
-    },
+    ;},
     {
-      name: '用户登录',
-      category: 'auth',
-      status: 'PASSED',
-      duration: 234,
-      endpoint: '/auth/login',
+
+      category: 'auth';
+      status: 'PASSED';
+      duration: 234;
+      endpoint: '/auth/login';
       method: 'POST'
-    },
+    ;},
     {
-      name: '获取用户信息',
-      category: 'user',
-      status: 'PASSED',
-      duration: 189,
-      endpoint: '/user/profile',
+
+      category: 'user';
+      status: 'PASSED';
+      duration: 189;
+      endpoint: '/user/profile';
       method: 'GET'
+    ;},
+    {
+
+      category: 'diagnosis';
+      status: 'FAILED';
+      duration: 315;
+      endpoint: '/diagnosis/inquiry';
+      method: 'POST';
+
     },
     {
-      name: '启动问诊',
-      category: 'diagnosis',
-      status: 'FAILED',
-      duration: 315,
-      endpoint: '/diagnosis/inquiry',
-      method: 'POST',
-      error: '连接超时'
-    },
-    {
-      name: '智能体状态',
-      category: 'agents',
-      status: 'PASSED',
-      duration: 167,
-      endpoint: '/agents/status',
+
+      category: 'agents';
+      status: 'PASSED';
+      duration: 167;
+      endpoint: '/agents/status';
       method: 'GET'
-    }
+    ;}
   ];
 
   const loadTestResults = useCallback(async () => {
     setLoading(true);
     try {
       // 模拟API调用
-      await new Promise(resolve) => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
       setTestResults(mockTestResults);
 
@@ -109,29 +109,29 @@ export const ApiIntegrationDemo: React.FC = () => {
         total,
         passed,
         failed,
-        successRate: (passed / total) * 100,
+        successRate: (passed / total) * 100;
         avgDuration
       });
     } catch (error) {
-      Alert.alert('错误', '加载测试结果失败');
+
     } finally {
       setLoading(false);
     }
   }, []);
 
   const runAllTests = useCallback(async () => {
-    Alert.alert('运行测试', '确定要运行所有API测试吗？', [
-      { text: '取消', style: 'cancel' },
+
+
       {
-        text: '开始测试',
+
         onPress: async () => {
           setLoading(true);
           try {
-            await new Promise(resolve) => setTimeout(resolve, 2000));
+            await new Promise(resolve => setTimeout(resolve, 2000));
             await loadTestResults();
-            Alert.alert('测试完成', '所有API测试已完成，请查看结果。');
+
           } catch (error) {
-            Alert.alert('测试失败', '测试过程中发生错误');
+
           } finally {
             setLoading(false);
           }
@@ -144,11 +144,11 @@ export const ApiIntegrationDemo: React.FC = () => {
     async (testName: string) => {
       try {
         setLoading(true);
-        await new Promise(resolve) => setTimeout(resolve, 1000));
-        Alert.alert('重试完成', `${testName} 测试已重新运行`);
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
         await loadTestResults();
       } catch (error) {
-        Alert.alert('重试失败', '重试过程中发生错误');
+
       } finally {
         setLoading(false);
       }
@@ -176,13 +176,13 @@ export const ApiIntegrationDemo: React.FC = () => {
             <Text style={styles.statLabel}>总计</Text>
           </View>
           <View style={styles.statItem}>
-            <Text style={[styles.statValue, { color: '#27AE60' }]}>
+            <Text style={[styles.statValue, { color: '#27AE60' ;}]}>
               {summary.passed}
             </Text>
             <Text style={styles.statLabel}>通过</Text>
           </View>
           <View style={styles.statItem}>
-            <Text style={[styles.statValue, { color: '#E74C3C' }]}>
+            <Text style={[styles.statValue, { color: '#E74C3C' ;}]}>
               {summary.failed}
             </Text>
             <Text style={styles.statLabel}>失败</Text>
@@ -202,7 +202,7 @@ export const ApiIntegrationDemo: React.FC = () => {
         disabled={loading}
       >
         <Text style={styles.actionButtonText}>
-          {loading ? '运行中...' : '运行所有测试'}
+
         </Text>
       </TouchableOpacity>
     </View>
@@ -220,7 +220,7 @@ export const ApiIntegrationDemo: React.FC = () => {
                 {
                   backgroundColor:
                     result.status === 'PASSED' ? '#27AE60' : '#E74C3C'
-                }
+                ;}
               ]}
             >
               <Text style={styles.statusText}>{result.status}</Text>
@@ -275,7 +275,7 @@ export const ApiIntegrationDemo: React.FC = () => {
         <Text style={styles.title}>API集成测试</Text>
         <TouchableOpacity onPress={onRefresh} disabled={refreshing}>
           <Text style={styles.refreshButton}>
-            {refreshing ? '刷新中...' : '刷新'}
+
           </Text>
         </TouchableOpacity>
       </View>
@@ -291,7 +291,7 @@ export const ApiIntegrationDemo: React.FC = () => {
               currentTab === 'overview' && styles.activeTabText
             ]}
           >
-            概览
+
           </Text>
         </TouchableOpacity>
         <TouchableOpacity;
@@ -304,7 +304,7 @@ export const ApiIntegrationDemo: React.FC = () => {
               currentTab === 'results' && styles.activeTabText
             ]}
           >
-            测试结果
+
           </Text>
         </TouchableOpacity>
         <TouchableOpacity;
@@ -317,7 +317,7 @@ export const ApiIntegrationDemo: React.FC = () => {
               currentTab === 'live' && styles.activeTabText
             ]}
           >
-            实时测试
+
           </Text>
         </TouchableOpacity>
       </View>
@@ -339,206 +339,206 @@ export const ApiIntegrationDemo: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
+  flex: 1;
     backgroundColor: '#F5F7FA'
-  },
+  ;},
   header: {,
-  flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
+  flexDirection: 'row';
+    alignItems: 'center';
+    justifyContent: 'space-between';
+    paddingHorizontal: 20;
+    paddingVertical: 16;
+    backgroundColor: '#FFFFFF';
+    borderBottomWidth: 1;
     borderBottomColor: '#E1E8ED'
-  },
+  ;},
   backButton: {,
-  fontSize: 24,
+  fontSize: 24;
     color: '#2C3E50'
-  },
+  ;},
   title: {,
-  fontSize: 18,
-    fontWeight: 'bold',
+  fontSize: 18;
+    fontWeight: 'bold';
     color: '#2C3E50'
-  },
+  ;},
   refreshButton: {,
-  fontSize: 16,
-    color: '#3498DB',
+  fontSize: 16;
+    color: '#3498DB';
     fontWeight: '600'
-  },
+  ;},
   tabContainer: {,
-  flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
+  flexDirection: 'row';
+    backgroundColor: '#FFFFFF';
+    borderBottomWidth: 1;
     borderBottomColor: '#E1E8ED'
-  },
+  ;},
   tab: {,
-  flex: 1,
-    paddingVertical: 16,
-    alignItems: 'center',
-    borderBottomWidth: 2,
+  flex: 1;
+    paddingVertical: 16;
+    alignItems: 'center';
+    borderBottomWidth: 2;
     borderBottomColor: 'transparent'
-  },
+  ;},
   activeTab: {,
   borderBottomColor: '#3498DB'
-  },
+  ;},
   tabText: {,
-  fontSize: 16,
+  fontSize: 16;
     color: '#7F8C8D'
-  },
+  ;},
   activeTabText: {,
-  color: '#3498DB',
+  color: '#3498DB';
     fontWeight: '600'
-  },
+  ;},
   content: {,
   flex: 1
-  },
+  ;},
   loadingContainer: {,
-  flex: 1,
-    justifyContent: 'center',
+  flex: 1;
+    justifyContent: 'center';
     alignItems: 'center'
-  },
+  ;},
   loadingText: {,
-  marginTop: 16,
-    fontSize: 16,
+  marginTop: 16;
+    fontSize: 16;
     color: '#7F8C8D'
-  },
+  ;},
   overviewContainer: {,
   padding: 20
-  },
+  ;},
   summaryCard: {,
-  backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    padding: 20,
-    marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+  backgroundColor: '#FFFFFF';
+    borderRadius: 12;
+    padding: 20;
+    marginBottom: 20;
+    shadowColor: '#000';
+    shadowOffset: { width: 0, height: 2 ;},
+    shadowOpacity: 0.1;
+    shadowRadius: 4;
     elevation: 3
-  },
+  ;},
   summaryTitle: {,
-  fontSize: 18,
-    fontWeight: 'bold',
-    color: '#2C3E50',
+  fontSize: 18;
+    fontWeight: 'bold';
+    color: '#2C3E50';
     marginBottom: 16
-  },
+  ;},
   statsGrid: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
     justifyContent: 'space-between'
-  },
+  ;},
   statItem: {,
   alignItems: 'center'
-  },
+  ;},
   statValue: {,
-  fontSize: 24,
-    fontWeight: 'bold',
+  fontSize: 24;
+    fontWeight: 'bold';
     color: '#2C3E50'
-  },
+  ;},
   statLabel: {,
-  fontSize: 14,
-    color: '#7F8C8D',
+  fontSize: 14;
+    color: '#7F8C8D';
     marginTop: 4
-  },
+  ;},
   actionButton: {,
-  backgroundColor: '#3498DB',
-    borderRadius: 8,
-    paddingVertical: 16,
+  backgroundColor: '#3498DB';
+    borderRadius: 8;
+    paddingVertical: 16;
     alignItems: 'center'
-  },
+  ;},
   actionButtonText: {,
-  color: '#FFFFFF',
-    fontSize: 16,
+  color: '#FFFFFF';
+    fontSize: 16;
     fontWeight: '600'
-  },
+  ;},
   resultsContainer: {,
   padding: 20
-  },
+  ;},
   resultCard: {,
-  backgroundColor: '#FFFFFF',
-    borderRadius: 8,
-    padding: 16,
+  backgroundColor: '#FFFFFF';
+    borderRadius: 8;
+    padding: 16;
     marginBottom: 12
-  },
+  ;},
   resultHeader: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
     marginBottom: 8
-  },
+  ;},
   resultName: {,
-  fontSize: 16,
-    fontWeight: '600',
+  fontSize: 16;
+    fontWeight: '600';
     color: '#2C3E50'
-  },
+  ;},
   statusBadge: {,
-  paddingHorizontal: 8,
-    paddingVertical: 4,
+  paddingHorizontal: 8;
+    paddingVertical: 4;
     borderRadius: 4
-  },
+  ;},
   statusText: {,
-  color: '#FFFFFF',
-    fontSize: 12,
+  color: '#FFFFFF';
+    fontSize: 12;
     fontWeight: '600'
-  },
+  ;},
   resultCategory: {,
-  fontSize: 14,
-    color: '#7F8C8D',
+  fontSize: 14;
+    color: '#7F8C8D';
     marginBottom: 4
-  },
+  ;},
   resultEndpoint: {,
-  fontSize: 14,
-    color: '#7F8C8D',
+  fontSize: 14;
+    color: '#7F8C8D';
     marginBottom: 4
-  },
+  ;},
   resultDuration: {,
-  fontSize: 14,
-    color: '#7F8C8D',
+  fontSize: 14;
+    color: '#7F8C8D';
     marginBottom: 4
-  },
+  ;},
   resultError: {,
-  fontSize: 14,
-    color: '#E74C3C',
+  fontSize: 14;
+    color: '#E74C3C';
     marginBottom: 8
-  },
+  ;},
   retryButton: {,
-  backgroundColor: '#E74C3C',
-    borderRadius: 4,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
+  backgroundColor: '#E74C3C';
+    borderRadius: 4;
+    paddingVertical: 8;
+    paddingHorizontal: 12;
     alignSelf: 'flex-start'
-  },
+  ;},
   retryButtonText: {,
-  color: '#FFFFFF',
-    fontSize: 14,
+  color: '#FFFFFF';
+    fontSize: 14;
     fontWeight: '600'
-  },
+  ;},
   liveContainer: {,
   padding: 20
-  },
+  ;},
   liveTitle: {,
-  fontSize: 18,
-    fontWeight: 'bold',
-    color: '#2C3E50',
+  fontSize: 18;
+    fontWeight: 'bold';
+    color: '#2C3E50';
     marginBottom: 20
-  },
+  ;},
   liveActions: {,
   gap: 12
-  },
+  ;},
   liveButton: {,
-  backgroundColor: '#FFFFFF',
-    borderRadius: 8,
-    paddingVertical: 16,
-    paddingHorizontal: 20,
-    alignItems: 'center',
-    borderWidth: 1,
+  backgroundColor: '#FFFFFF';
+    borderRadius: 8;
+    paddingVertical: 16;
+    paddingHorizontal: 20;
+    alignItems: 'center';
+    borderWidth: 1;
     borderColor: '#E1E8ED'
-  },
+  ;},
   liveButtonText: {,
-  fontSize: 16,
-    color: '#3498DB',
+  fontSize: 16;
+    color: '#3498DB';
     fontWeight: '600'
-  }
+  ;}
 });
 
 export default ApiIntegrationDemo;

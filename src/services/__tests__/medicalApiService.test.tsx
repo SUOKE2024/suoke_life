@@ -1,6 +1,4 @@
-import { medicalApiService } from "../medicalApiService";
-import { medicalApiService } from "../medicalApiService";
-import React from "react";
+
 describe("medicalApiService", () => {
   beforeEach(() => {
     jest.clearAllMocks();

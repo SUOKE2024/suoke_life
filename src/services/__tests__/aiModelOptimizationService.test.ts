@@ -1,5 +1,4 @@
 import { aiModelOptimizationService } from "../aiModelOptimizationService";
-import { aiModelOptimizationService } from "../aiModelOptimizationService";
 describe("aiModelOptimizationService", () => {
   beforeEach(() => {
     jest.clearAllMocks();

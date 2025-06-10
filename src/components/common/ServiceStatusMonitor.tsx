@@ -15,10 +15,10 @@ const { width } = Dimensions.get('window');
 
 // 服务状态类型
 interface ServiceStatus {
-  id: string;,
-  name: string;,
-  endpoint: string;,
-  status: 'healthy' | 'unhealthy' | 'unknown' | 'maintenance';,
+  id: string;
+  name: string;
+  endpoint: string;
+  status: 'healthy' | 'unhealthy' | 'unknown' | 'maintenance';
   lastCheck: Date;
   responseTime?: number;
   version?: string;
@@ -28,9 +28,9 @@ interface ServiceStatus {
 
 // 服务分类
 interface ServiceCategory {
-  id: string;,
-  name: string;,
-  services: ServiceStatus[];,
+  id: string;
+  name: string;
+  services: ServiceStatus[];
   color: string;
 }
 
@@ -44,7 +44,7 @@ const ServiceStatusMonitor: React.FC<ServiceStatusMonitorProps> = ({
   onServicePress,
   showDetails = true,
   refreshInterval = 30000, // 30秒刷新一次
-}) => {
+;}) => {
   const [serviceCategories, setServiceCategories] = useState<ServiceCategory[]>(
     []
   );
@@ -55,129 +55,129 @@ const ServiceStatusMonitor: React.FC<ServiceStatusMonitorProps> = ({
   // 微服务配置
   const microservicesConfig = {
     agents: {,
-  name: '智能体服务',
-      color: '#4A90E2',
+
+      color: '#4A90E2';
       services: [
         {
-          id: 'xiaoai',
-          name: '小艾服务',
-          endpoint: 'http://localhost:8015',
+          id: 'xiaoai';
+
+          endpoint: 'http://localhost:8015';
           port: 8015
-        },
+        ;},
         {
-          id: 'xiaoke',
-          name: '小克服务',
-          endpoint: 'http://localhost:8016',
+          id: 'xiaoke';
+
+          endpoint: 'http://localhost:8016';
           port: 8016
-        },
+        ;},
         {
-          id: 'laoke',
-          name: '老克服务',
-          endpoint: 'http://localhost:8017',
+          id: 'laoke';
+
+          endpoint: 'http://localhost:8017';
           port: 8017
-        },
+        ;},
         {
-          id: 'soer',
-          name: '索儿服务',
-          endpoint: 'http://localhost:8018',
+          id: 'soer';
+
+          endpoint: 'http://localhost:8018';
           port: 8018
-        }
+        ;}
       ]
     },
     diagnosis: {,
-  name: '诊断服务',
-      color: '#FF6B6B',
+
+      color: '#FF6B6B';
       services: [
         {
-          id: 'look',
-          name: '望诊服务',
-          endpoint: 'http://localhost:8020',
+          id: 'look';
+
+          endpoint: 'http://localhost:8020';
           port: 8020
-        },
+        ;},
         {
-          id: 'inquiry',
-          name: '问诊服务',
-          endpoint: 'http://localhost:8021',
+          id: 'inquiry';
+
+          endpoint: 'http://localhost:8021';
           port: 8021
-        },
+        ;},
         {
-          id: 'listen',
-          name: '闻诊服务',
-          endpoint: 'http://localhost:8022',
+          id: 'listen';
+
+          endpoint: 'http://localhost:8022';
           port: 8022
-        },
+        ;},
         {
-          id: 'calculation',
-          name: '算诊服务',
-          endpoint: 'http://localhost:8023',
+          id: 'calculation';
+
+          endpoint: 'http://localhost:8023';
           port: 8023
-        },
+        ;},
         {
-          id: 'palpation',
-          name: '切诊服务',
-          endpoint: 'http://localhost:8024',
+          id: 'palpation';
+
+          endpoint: 'http://localhost:8024';
           port: 8024
-        }
+        ;}
       ]
     },
     core: {,
-  name: '核心服务',
-      color: '#4CAF50',
+
+      color: '#4CAF50';
       services: [
         {
-          id: 'api-gateway',
-          name: 'API网关',
-          endpoint: 'http://localhost:8000',
+          id: 'api-gateway';
+
+          endpoint: 'http://localhost:8000';
           port: 8000
-        },
+        ;},
         {
-          id: 'user-management',
-          name: '用户管理',
-          endpoint: 'http://localhost:8001',
+          id: 'user-management';
+
+          endpoint: 'http://localhost:8001';
           port: 8001
-        },
+        ;},
         {
-          id: 'unified-knowledge',
-          name: '统一知识',
-          endpoint: 'http://localhost:8002',
+          id: 'unified-knowledge';
+
+          endpoint: 'http://localhost:8002';
           port: 8002
-        },
+        ;},
         {
-          id: 'unified-health-data',
-          name: '统一健康数据',
-          endpoint: 'http://localhost:8003',
+          id: 'unified-health-data';
+
+          endpoint: 'http://localhost:8003';
           port: 8003
-        },
+        ;},
         {
-          id: 'unified-support',
-          name: '统一支持',
-          endpoint: 'http://localhost:8004',
+          id: 'unified-support';
+
+          endpoint: 'http://localhost:8004';
           port: 8004
-        }
+        ;}
       ]
     },
     infrastructure: {,
-  name: '基础设施',
-      color: '#9C27B0',
+
+      color: '#9C27B0';
       services: [
         {
-          id: 'blockchain',
-          name: '区块链服务',
-          endpoint: 'http://localhost:8005',
+          id: 'blockchain';
+
+          endpoint: 'http://localhost:8005';
           port: 8005
-        },
+        ;},
         {
-          id: 'communication',
-          name: '通信服务',
-          endpoint: 'http://localhost:8006',
+          id: 'communication';
+
+          endpoint: 'http://localhost:8006';
           port: 8006
-        },
+        ;},
         {
-          id: 'utility',
-          name: '工具服务',
-          endpoint: 'http://localhost:8007',
+          id: 'utility';
+
+          endpoint: 'http://localhost:8007';
           port: 8007
-        }
+        ;}
       ]
     }
   };
@@ -193,11 +193,11 @@ const ServiceStatusMonitor: React.FC<ServiceStatusMonitorProps> = ({
         const timeoutId = setTimeout() => controller.abort(), 5000);
 
         const response = await fetch(`${service.endpoint}/health`, {
-          method: 'GET',
-          signal: controller.signal,
+          method: 'GET';
+          signal: controller.signal;
           headers: {
             'Content-Type': 'application/json'
-          }
+          ;}
         });
 
         clearTimeout(timeoutId);
@@ -207,24 +207,24 @@ const ServiceStatusMonitor: React.FC<ServiceStatusMonitorProps> = ({
         if (response.ok) {
           const healthData = await response.json();
           return {
-            id: service.id,
-            name: service.name,
-            endpoint: service.endpoint,
-            status: 'healthy',
-            lastCheck: new Date(),
+            id: service.id;
+            name: service.name;
+            endpoint: service.endpoint;
+            status: 'healthy';
+            lastCheck: new Date();
             responseTime,
-            version: healthData.version || '1.0.0',
+            version: healthData.version || '1.0.0';
             uptime: healthData.uptime || Math.random() * 86400, // 模拟运行时间
-          };
+          ;};
         } else {
           return {
-            id: service.id,
-            name: service.name,
-            endpoint: service.endpoint,
-            status: 'unhealthy',
-            lastCheck: new Date(),
+            id: service.id;
+            name: service.name;
+            endpoint: service.endpoint;
+            status: 'unhealthy';
+            lastCheck: new Date();
             responseTime,
-            errorMessage: `HTTP ${response.status}`
+            errorMessage: `HTTP ${response.status;}`
           };
         }
       } catch (error) {
@@ -234,17 +234,17 @@ const ServiceStatusMonitor: React.FC<ServiceStatusMonitorProps> = ({
           mockStatus === 'healthy' ? 50 + Math.random() * 200 : undefined;
 
         return {
-          id: service.id,
-          name: service.name,
-          endpoint: service.endpoint,
-          status: mockStatus,
-          lastCheck: new Date(),
+          id: service.id;
+          name: service.name;
+          endpoint: service.endpoint;
+          status: mockStatus;
+          lastCheck: new Date();
           responseTime,
-          version: mockStatus === 'healthy' ? '1.0.0' : undefined,
-          uptime: mockStatus === 'healthy' ? Math.random() * 86400 : undefined,
+          version: mockStatus === 'healthy' ? '1.0.0' : undefined;
+          uptime: mockStatus === 'healthy' ? Math.random() * 86400 : undefined;
           errorMessage:
             mockStatus === 'unhealthy' ? 'Connection failed' : undefined
-        };
+        ;};
       }
     },
     []
@@ -262,11 +262,11 @@ const ServiceStatusMonitor: React.FC<ServiceStatusMonitorProps> = ({
       );
 
       categories.push({
-        id: categoryKey,
-        name: categoryConfig.name,
-        services: serviceStatuses,
+        id: categoryKey;
+        name: categoryConfig.name;
+        services: serviceStatuses;
         color: categoryConfig.color
-      });
+      ;});
     }
 
     setServiceCategories(categories);
@@ -351,17 +351,17 @@ const ServiceStatusMonitor: React.FC<ServiceStatusMonitorProps> = ({
         <View;
           style={[
             styles.statusBadge,
-            { backgroundColor: getStatusColor(service.status) }
+            { backgroundColor: getStatusColor(service.status) ;}
           ]}
         >
           <Text style={styles.statusText}>
             {service.status === 'healthy'
-              ? '正常'
+
               : service.status === 'unhealthy'
-                ? '异常'
+
                 : service.status === 'maintenance'
-                  ? '维护'
-                  : '未知'}
+
+
           </Text>
         </View>
       </View>
@@ -425,7 +425,7 @@ const ServiceStatusMonitor: React.FC<ServiceStatusMonitorProps> = ({
     return (
       <View key={category.id} style={styles.categoryContainer}>
         <View;
-          style={[styles.categoryHeader, { borderLeftColor: category.color }]}
+          style={[styles.categoryHeader, { borderLeftColor: category.color ;}]}
         >
           <Text style={styles.categoryTitle}>{category.name}</Text>
           <Text style={styles.categoryStats}>
@@ -463,7 +463,7 @@ const ServiceStatusMonitor: React.FC<ServiceStatusMonitorProps> = ({
       <View style={styles.overviewContainer}>
         <Text style={styles.overviewTitle}>服务状态概览</Text>
         <Text style={styles.lastUpdateText}>
-          最后更新: {lastUpdate.toLocaleTimeString('zh-CN')}
+
         </Text>
 
         <View style={styles.statsContainer}>
@@ -478,7 +478,7 @@ const ServiceStatusMonitor: React.FC<ServiceStatusMonitorProps> = ({
                 <View;
                   style={[
                     styles.statIndicator,
-                    { backgroundColor: category.color }
+                    { backgroundColor: category.color ;}
                   ]}
                 />
                 <Text style={styles.statLabel}>{category.name}</Text>
@@ -499,166 +499,166 @@ const ServiceStatusMonitor: React.FC<ServiceStatusMonitorProps> = ({
 
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
+  flex: 1;
     backgroundColor: '#F8F9FA'
-  },
+  ;},
   loadingContainer: {,
-  flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  flex: 1;
+    justifyContent: 'center';
+    alignItems: 'center';
     paddingVertical: 40
-  },
+  ;},
   loadingText: {,
-  marginTop: 10,
-    fontSize: 14,
+  marginTop: 10;
+    fontSize: 14;
     color: '#666'
-  },
+  ;},
   overviewContainer: {,
-  backgroundColor: '#FFFFFF',
-    margin: 16,
-    padding: 16,
-    borderRadius: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
+  backgroundColor: '#FFFFFF';
+    margin: 16;
+    padding: 16;
+    borderRadius: 12;
+    shadowColor: '#000';
+    shadowOffset: { width: 0, height: 1 ;},
+    shadowOpacity: 0.1;
+    shadowRadius: 2;
     elevation: 2
-  },
+  ;},
   overviewTitle: {,
-  fontSize: 18,
-    fontWeight: '600',
-    color: '#333',
+  fontSize: 18;
+    fontWeight: '600';
+    color: '#333';
     marginBottom: 4
-  },
+  ;},
   lastUpdateText: {,
-  fontSize: 12,
-    color: '#999',
+  fontSize: 12;
+    color: '#999';
     marginBottom: 16
-  },
+  ;},
   statsContainer: {,
-  flexDirection: 'row',
-    flexWrap: 'wrap',
+  flexDirection: 'row';
+    flexWrap: 'wrap';
     gap: 12
-  },
+  ;},
   statItem: {,
-  flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#F5F5F5',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
+  flexDirection: 'row';
+    alignItems: 'center';
+    backgroundColor: '#F5F5F5';
+    paddingHorizontal: 12;
+    paddingVertical: 6;
+    borderRadius: 16;
     minWidth: (width - 64) / 2
-  },
+  ;},
   statIndicator: {,
-  width: 8,
-    height: 8,
-    borderRadius: 4,
+  width: 8;
+    height: 8;
+    borderRadius: 4;
     marginRight: 8
-  },
+  ;},
   statLabel: {,
-  fontSize: 12,
-    color: '#666',
+  fontSize: 12;
+    color: '#666';
     flex: 1
-  },
+  ;},
   statValue: {,
-  fontSize: 12,
-    fontWeight: '600',
+  fontSize: 12;
+    fontWeight: '600';
     color: '#333'
-  },
+  ;},
   categoryContainer: {,
-  backgroundColor: '#FFFFFF',
-    margin: 16,
-    marginTop: 0,
-    borderRadius: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
+  backgroundColor: '#FFFFFF';
+    margin: 16;
+    marginTop: 0;
+    borderRadius: 12;
+    shadowColor: '#000';
+    shadowOffset: { width: 0, height: 1 ;},
+    shadowOpacity: 0.1;
+    shadowRadius: 2;
     elevation: 2
-  },
+  ;},
   categoryHeader: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 16,
-    borderLeftWidth: 4,
-    borderBottomWidth: 1,
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
+    padding: 16;
+    borderLeftWidth: 4;
+    borderBottomWidth: 1;
     borderBottomColor: '#F0F0F0'
-  },
+  ;},
   categoryTitle: {,
-  fontSize: 16,
-    fontWeight: '600',
+  fontSize: 16;
+    fontWeight: '600';
     color: '#333'
-  },
+  ;},
   categoryStats: {,
-  fontSize: 12,
+  fontSize: 12;
     color: '#666'
-  },
+  ;},
   servicesContainer: {,
-  padding: 16,
+  padding: 16;
     paddingTop: 0
-  },
+  ;},
   serviceItem: {,
-  backgroundColor: '#F8F9FA',
-    padding: 12,
-    borderRadius: 8,
+  backgroundColor: '#F8F9FA';
+    padding: 12;
+    borderRadius: 8;
     marginTop: 12
-  },
+  ;},
   serviceHeader: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
+  flexDirection: 'row';
+    justifyContent: 'space-between';
     alignItems: 'center'
-  },
+  ;},
   serviceInfo: {,
-  flexDirection: 'row',
-    alignItems: 'center',
+  flexDirection: 'row';
+    alignItems: 'center';
     flex: 1
-  },
+  ;},
   statusIcon: {,
   marginRight: 8
-  },
+  ;},
   serviceName: {,
-  fontSize: 14,
-    fontWeight: '500',
-    color: '#333',
+  fontSize: 14;
+    fontWeight: '500';
+    color: '#333';
     flex: 1
-  },
+  ;},
   statusBadge: {,
-  paddingHorizontal: 8,
-    paddingVertical: 2,
+  paddingHorizontal: 8;
+    paddingVertical: 2;
     borderRadius: 10
-  },
+  ;},
   statusText: {,
-  fontSize: 10,
-    color: '#FFFFFF',
+  fontSize: 10;
+    color: '#FFFFFF';
     fontWeight: '600'
-  },
+  ;},
   serviceDetails: {,
-  marginTop: 8,
-    paddingTop: 8,
-    borderTopWidth: 1,
+  marginTop: 8;
+    paddingTop: 8;
+    borderTopWidth: 1;
     borderTopColor: '#E0E0E0'
-  },
+  ;},
   detailRow: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
     marginBottom: 4
-  },
+  ;},
   detailLabel: {,
-  fontSize: 11,
-    color: '#666',
+  fontSize: 11;
+    color: '#666';
     flex: 1
-  },
+  ;},
   detailValue: {,
-  fontSize: 11,
-    color: '#333',
-    flex: 2,
+  fontSize: 11;
+    color: '#333';
+    flex: 2;
     textAlign: 'right'
-  },
+  ;},
   errorText: {,
   color: '#F44336'
-  }
+  ;}
 });
 
 export default ServiceStatusMonitor;

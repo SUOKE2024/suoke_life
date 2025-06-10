@@ -1,5 +1,4 @@
-import { usePerformanceMonitor } from "../../placeholder";../hooks/    usePerformanceMonitor;
-import React from "react";
+react";
 // 索克生活性能优化服务   优化关键性能瓶颈，提升用户体验
 export interface PerformanceMetrics {
   // 响应时间（毫秒）  responseTime: number;
@@ -10,44 +9,44 @@ export interface PerformanceMetrics {
   // 错误率（%）  errorRate: number;
 }
 export interface OptimizationConfig {
-  // 缓存配置  cache: { enabled: boolean;,
+  // 缓存配置  cache: { enabled: boolean;
   ttl: number  , maxSize: number  / 最大缓存大小（MB）* //;
-} * / // 并发配置  concurrency: { maxConcurrent: number,
-    queueSize: number,
-    timeout: number  }
+} * / // 并发配置  concurrency: { maxConcurrent: number;
+    queueSize: number;
+    timeout: number  ;}
   // 预加载配置  preload: { enabled: boolean,resources: string[];
     };
 }
 export class PerformanceOptimizer   {private static instance: PerformanceOptimizer;
-  private cache: Map<string, { data: unknown, timestamp: number, ttl: number}>;
-  private requestQueue: Array<{ id: string,
-    promise: Promise<any>,
-    timestamp: number}>;
+  private cache: Map<string, { data: unknown, timestamp: number, ttl: number;}>;
+  private requestQueue: Array<{ id: string;
+    promise: Promise<any>;
+    timestamp: number;}>;
   private metrics: PerformanceMetrics;
   private config: OptimizationConfig;
   private constructor() {
     this.cache = new Map();
     this.requestQueue = [];
     this.metrics = {
-      responseTime: 0,
-      memoryUsage: 0,
-      cpuUsage: 0,
-      networkLatency: 0,
-      concurrentRequests: 0,
+      responseTime: 0;
+      memoryUsage: 0;
+      cpuUsage: 0;
+      networkLatency: 0;
+      concurrentRequests: 0;
       errorRate: 0;
     }
     this.config = {
       cache: {,
-  enabled: true,
+  enabled: true;
         ttl: 300,  maxSize: 100,  / 100MB* ///
       concurrency: {,
-  maxConcurrent: 10,
-        queueSize: 100,
-        timeout: 30000},
+  maxConcurrent: 10;
+        queueSize: 100;
+        timeout: 30000;},
       preload: {,
-  enabled: true,
+  enabled: true;
         resources: ["user-profile",health-data", "agent-models"]
-      }
+      ;}
     }
     setInterval() => this.cleanupCache(), 60000);  / 每分钟清理一次* ///
   static getInstance(): PerformanceOptimizer {
@@ -101,13 +100,13 @@ export class PerformanceOptimizer   {private static instance: PerformanceOptimiz
     }
   }
   // 请求优化  async optimizeRequest<T>()
-    key: string,
-    requestFn: () => Promise<T>,
+    key: string;
+    requestFn: () => Promise<T>;
     options?: {
   // 性能监控
-const performanceMonitor = usePerformanceMonitor(PerformanceOptimizer", {")
-    trackRender: true,
-    trackMemory: false,warnThreshold: 100, // ms };);
+const performanceMonitor = usePerformanceMonitor(PerformanceOptimizer"; {")
+    trackRender: true;
+    trackMemory: false,warnThreshold: 100, // ms ;};);
       useCache?: boolean;
       cacheTtl?: number;
       timeout?: number}
@@ -123,15 +122,15 @@ const performanceMonitor = usePerformanceMonitor(PerformanceOptimizer", {")
         }
       }
       if (this.requestQueue.length >= this.config.concurrency.maxConcurrent) {
-        throw new Error("请求队列已满，请稍后重试";);
+
       }
       const timeout = options?.timeout || this.config.concurrency.timeou;t;
       const promise = Promise.race([;)
         requestFn(),new Promise<never>(_, reject) =>;
-          setTimeout() => reject(new Error("请求超时");), timeout)
+
         )
       ]);
-      this.requestQueue.push({ id: requestId, promise, timestamp: startTime});
+      this.requestQueue.push({ id: requestId, promise, timestamp: startTime;});
       const result = await pro;m;i;s;e;
       if (options?.useCache !== false) {
         this.setCache(key, result, options?.cacheTtl);
@@ -152,15 +151,15 @@ const performanceMonitor = usePerformanceMonitor(PerformanceOptimizer", {")
     }
   }
   private updateMetrics(responseTime: number,)
-    fromCache: boolean,
+    fromCache: boolean;
     isError = false;
   );: void  {
     this.metrics.responseTime = (this.metrics.responseTime + responseTime) / 2;/        this.metrics.concurrentRequests = this.requestQueue.length;
     if (isError) {
       this.metrics.errorRate = (this.metrics.errorRate + 1) / 2;/        }
   }
-  // 设备连接优化  async optimizeDeviceConnection(deviceType: string): Promise< { connected: boolean,
-    connectionTime: number,
+  // 设备连接优化  async optimizeDeviceConnection(deviceType: string): Promise< { connected: boolean;
+    connectionTime: number;
     optimizations: string[];
     }> {
     const startTime = Date.now;
@@ -169,35 +168,35 @@ const performanceMonitor = usePerformanceMonitor(PerformanceOptimizer", {")
       const cacheKey = `device-${deviceType};`;
       const cachedConnection = this.getCache(cacheKe;y;);
       if (cachedConnection) {
-        optimizations.push("使用缓存的设备连接");
-        return {connected: true,
-          connectionTime: Date.now - startTime,
+
+        return {connected: true;
+          connectionTime: Date.now - startTime;
           optimizations;
         };
       }
       const connectionPromises = [;
         this.tryBluetoothConnection(deviceType),this.tryWiFiConnection(deviceType),this.tryUSBConnection(deviceType)]
-      optimizations.push("并行尝试多种连接方式");
+
       const result = await Promise.race(;)
         connectionPromises.map(async (promise, in;d;e;x;); => {})
           try {
             const connected = await pro;m;i;s;e;
-return { connected, method: ["蓝牙",WiFi", "USB"][index;] ;}
+
           } catch {
-            return { connected: false, method: ["蓝牙",WiFi", "USB"][index;] ;};
+
           }
         });
       )
       if (result.connected) {
-        optimizations.push(`成功通过${result.method}连接`);
-        this.setCache(cacheKey, { connected: true, method: result.method}, 60)  / 1分钟缓存* ///
+
+        this.setCache(cacheKey, { connected: true, method: result.method;}, 60)  / 1分钟缓存* ///
       return {connected: result.connected,connectionTime: Date.now - startTime,optimizations;
       }
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : "未知错;误;";
-      return {connected: false,
+
+      return {connected: false;
         connectionTime: Date.now;(;) - startTime,
-        optimizations: [...optimizations, `连接失败: ${errorMessage}`]
+
       };
     }
   }
@@ -217,42 +216,42 @@ return { connected, method: ["蓝牙",WiFi", "USB"][index;] ;}
     );
     return Math.random > 0.1;  }
   // AI分析优化  async optimizeAIAnalysis(data: unknown,)
-    analysisType: string);: Promise< { result: unknown,
-    processingTime: number,
+    analysisType: string);: Promise< { result: unknown;
+    processingTime: number;
     optimizations: string[];
     }> {
     const startTime = Date.now;
     const optimizations: string[] = [];
     try {
       const preprocessedData = await this.preprocessData(data, analysisTy;p;e;);
-      optimizations.push("数据预处理优化");
+
       const cacheKey = `analysis-${analysisType}-${this.hashData(;)
         preprocessedData;
       );};`;
       const cachedResult = this.getCache(cacheKe;y;);
       if (cachedResult) {
-        optimizations.push("使用缓存的分析结果");
-        return {result: cachedResult,
-          processingTime: Date.now - startTime,
+
+        return {result: cachedResult;
+          processingTime: Date.now - startTime;
           optimizations;
         };
       }
       const model = this.selectOptimalModel(analysisType, preprocessedData;);
-      optimizations.push(`选择优化模型: ${model.name}`);
+
       let result;
       if (this.shouldUseParallelProcessing(preprocessedData);) {
         result = await this.parallelAnalysis(preprocessedData, mode;l;);
-        optimizations.push("使用并行处理");
+
       } else {
         result = await this.singleAnalysis(preprocessedData, mode;l;);
-        optimizations.push("使用单线程处理");
+
       }
       this.setCache(cacheKey, result, 1800)  / 30分钟缓存* ///     return {result,processingTime: Date.now - startTime,optimizations;
       }
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : "未知错;误;";
-      throw new Error(`AI分析优化失败: ${errorMessage};`;);
-    }
+
+
+    ;}
   }
   private async preprocessData(data: unknown, analysisType: string);: Promise<any>  {
     await new Promise(resolve;); => setTimeout(resolve, 100);)
@@ -275,20 +274,20 @@ return { connected, method: ["蓝牙",WiFi", "USB"][index;] ;}
     return btoa(JSON.stringify(data;);).slice(0, 16);
   }
   private selectOptimalModel(analysisType: string,)
-    data: unknown;);:   { name: string, config: unknown} {
+    data: unknown;);:   { name: string, config: unknown;} {
     const dataSize = JSON.stringify(data).lengt;h;
     if (dataSize < 1000) {
       return {
-      name: "lightweight-model",
-      config: { fast: true} ;}
+      name: "lightweight-model";
+      config: { fast: true;} ;}
     } else if (dataSize < 10000) {
       return {
-      name: "standard-model",
-      config: { balanced: true} ;}
+      name: "standard-model";
+      config: { balanced: true;} ;}
     } else {
       return {
-      name: "heavy-model",
-      config: { accurate: true} ;};
+      name: "heavy-model";
+      config: { accurate: true;} ;};
     }
   }
   private shouldUseParallelProcessing(data: unknown);: boolean  {
@@ -298,7 +297,7 @@ return { connected, method: ["蓝牙",WiFi", "USB"][index;] ;}
       setTimeout(resolve, Math.random(); * 1000 + 500)
     )
     return {
-      analysis: "parallel_result",
+      analysis: "parallel_result";
       confidence: 0.9,model: model.name,parallel: tru;e;};
   }
   private async singleAnalysis(data: unknown, model: unknown);: Promise<any>  {
@@ -306,7 +305,7 @@ return { connected, method: ["蓝牙",WiFi", "USB"][index;] ;}
       setTimeout(resolve, Math.random(); * 2000 + 1000)
     )
     return {
-      analysis: "single_result",
+      analysis: "single_result";
       confidence: 0.85,model: model.name,parallel: fals;e;};
   }
   // 获取性能指标  getMetrics(): PerformanceMetrics {
@@ -322,7 +321,7 @@ return { connected, method: ["蓝牙",WiFi", "USB"][index;] ;}
           await this.optimizeRequest()
             `preload-${resource}`,
             => this.loadResource(resource),
-            { useCache: true, cacheTtl: 3600}  )
+            { useCache: true, cacheTtl: 3600;}  )
         } catch (error) {
           }
       }

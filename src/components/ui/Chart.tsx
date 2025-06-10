@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
-const { width: screenWidth } = Dimensions.get('window');
+const { width: screenWidth ;} = Dimensions.get('window');
 
 export interface ChartDataPoint {
   /** 标签 */
@@ -79,7 +79,7 @@ export const Chart: React.FC<ChartProps> = ({
   formatValue = (value) => value.toString(),
   smooth = false,
   fillOpacity = 0.3
-}) => {
+;}) => {
   const { currentTheme } = useTheme();
   const styles = createStyles(currentTheme);
 
@@ -136,10 +136,10 @@ export const Chart: React.FC<ChartProps> = ({
           style={[
             styles.gridLine,
             {
-              top: y,
-              width: width - 60,
+              top: y;
+              width: width - 60;
               left: 40
-            }
+            ;}
           ]}
         />
       );
@@ -166,7 +166,7 @@ export const Chart: React.FC<ChartProps> = ({
             styles.yLabel,
             {
               top: y
-            }
+            ;}
           ]}
         >
           {formatYLabel(value)}
@@ -189,9 +189,9 @@ export const Chart: React.FC<ChartProps> = ({
         style={[
           styles.xLabel,
           {
-            left: 50 + index * barWidth + barWidth / 2,
+            left: 50 + index * barWidth + barWidth / 2;
             bottom: 5
-          }
+          ;}
         ]}
       >
         {formatXLabel(item.label)}
@@ -216,12 +216,12 @@ export const Chart: React.FC<ChartProps> = ({
             style={[
               styles.bar,
               {
-                width: barWidth,
+                width: barWidth;
                 height: Math.max(barHeight, 2),
-                left: 50 + index * (barWidth + barSpacing),
-                bottom: 20,
+                left: 50 + index * (barWidth + barSpacing);
+                bottom: 20;
                 backgroundColor: color
-              }
+              ;}
             ]}
           />
           {showValues && (
@@ -229,9 +229,9 @@ export const Chart: React.FC<ChartProps> = ({
               style={[
                 styles.valueLabel,
                 {
-                  left: 50 + index * (barWidth + barSpacing) + barWidth / 2,
+                  left: 50 + index * (barWidth + barSpacing) + barWidth / 2;
                   bottom: 25 + barHeight
-                }
+                ;}
               ]}
             >
               {formatValue(item.value)}
@@ -250,7 +250,7 @@ export const Chart: React.FC<ChartProps> = ({
     const points = data.map(item, index) => {
       const x = 50 + index * pointWidth;
       const y = height - 20 - normalizeValue(item.value) * (height - 60);
-      return { x, y, value: item.value };
+      return { x, y, value: item.value ;};
     });
 
     // 生成路径
@@ -283,10 +283,10 @@ export const Chart: React.FC<ChartProps> = ({
               style={[
                 styles.linePoint,
                 {
-                  left: point.x - 4,
-                  top: point.y - 4,
+                  left: point.x - 4;
+                  top: point.y - 4;
                   backgroundColor: colors[0]
-                }
+                ;}
               ]}
             />
             {showValues && (
@@ -294,9 +294,9 @@ export const Chart: React.FC<ChartProps> = ({
                 style={[
                   styles.valueLabel,
                   {
-                    left: point.x,
+                    left: point.x;
                     top: point.y - 20
-                  }
+                  ;}
                 ]}
               >
                 {formatValue(data[index].value)}
@@ -322,12 +322,12 @@ export const Chart: React.FC<ChartProps> = ({
               style={[
                 styles.line,
                 {
-                  width: lineWidth,
-                  left: prevPoint.x,
-                  top: prevPoint.y,
-                  transform: [{ rotate: `${angle}rad` }],
+                  width: lineWidth;
+                  left: prevPoint.x;
+                  top: prevPoint.y;
+                  transform: [{ rotate: `${angle;}rad` }],
                   backgroundColor: colors[0]
-                }
+                ;}
               ]}
             />
           );
@@ -366,13 +366,13 @@ export const Chart: React.FC<ChartProps> = ({
             style={[
               styles.pieSlice,
               {
-                width: radius * 2 * percentage,
-                height: radius * 2 * percentage,
-                borderRadius: radius * percentage,
-                backgroundColor: color,
-                left: centerX - radius * percentage,
+                width: radius * 2 * percentage;
+                height: radius * 2 * percentage;
+                borderRadius: radius * percentage;
+                backgroundColor: color;
+                left: centerX - radius * percentage;
                 top: centerY - radius * percentage
-              }
+              ;}
             ]}
           />
           {showValues && (
@@ -380,9 +380,9 @@ export const Chart: React.FC<ChartProps> = ({
               style={[
                 styles.pieLabel,
                 {
-                  left: labelX,
+                  left: labelX;
                   top: labelY
-                }
+                ;}
               ]}
             >
               {`${(percentage * 100).toFixed(1)}%`}
@@ -406,35 +406,35 @@ export const Chart: React.FC<ChartProps> = ({
       const y = index * (barHeight + spacing);
 
       return (
-        <View key={index} style={ top: y }}>
+        <View key={index} style={ top: y ;}}>
           <View;
             style={[
               styles.progressBackground,
               {
-                width: width - 100,
-                height: barHeight,
+                width: width - 100;
+                height: barHeight;
                 left: 80
-              }
+              ;}
             ]}
           />
           <View;
             style={[
               styles.progressBar,
               {
-                width: (width - 100) * progress,
-                height: barHeight,
-                left: 80,
+                width: (width - 100) * progress;
+                height: barHeight;
+                left: 80;
                 backgroundColor: color
-              }
+              ;}
             ]}
           />
           <Text;
             style={[
               styles.progressLabel,
               {
-                left: 10,
+                left: 10;
                 top: barHeight / 2 - 8
-              }
+              ;}
             ]}
           >
             {formatXLabel(item.label)}
@@ -444,9 +444,9 @@ export const Chart: React.FC<ChartProps> = ({
               style={[
                 styles.progressValue,
                 {
-                  right: 10,
+                  right: 10;
                   top: barHeight / 2 - 8
-                }
+                ;}
               ]}
             >
               {formatValue(item.value)}
@@ -468,7 +468,7 @@ export const Chart: React.FC<ChartProps> = ({
 
           return (
             <View key={index} style={styles.legendItem}>
-              <View style={[styles.legendColor, { backgroundColor: color }]} />
+              <View style={[styles.legendColor, { backgroundColor: color ;}]} />
               <Text style={styles.legendLabel}>{formatXLabel(item.label)}</Text>
             </View>
           );
@@ -513,120 +513,120 @@ export const Chart: React.FC<ChartProps> = ({
 const createStyles = (theme: any) => {
   return StyleSheet.create({
     container: {,
-  backgroundColor: theme.colors.surface,
-      borderRadius: theme.borderRadius.md,
+  backgroundColor: theme.colors.surface;
+      borderRadius: theme.borderRadius.md;
       padding: theme.spacing.md
-    },
+    ;},
     title: {,
-  fontSize: theme.typography.fontSize.lg,
-      fontWeight: theme.typography.fontWeight.semibold,
-      color: theme.colors.onSurface,
-      textAlign: 'center',
+  fontSize: theme.typography.fontSize.lg;
+      fontWeight: theme.typography.fontWeight.semibold;
+      color: theme.colors.onSurface;
+      textAlign: 'center';
       marginBottom: theme.spacing.md
-    },
+    ;},
     chartContainer: {,
-  position: 'relative',
+  position: 'relative';
       backgroundColor: theme.colors.surface
-    },
+    ;},
     gridLine: {,
-  position: 'absolute',
-      height: 1,
-      backgroundColor: theme.colors.outline,
+  position: 'absolute';
+      height: 1;
+      backgroundColor: theme.colors.outline;
       opacity: 0.3
-    },
+    ;},
     yLabel: {,
-  position: 'absolute',
-      left: 5,
-      fontSize: theme.typography.fontSize.xs,
-      color: theme.colors.onSurfaceVariant,
-      textAlign: 'right',
+  position: 'absolute';
+      left: 5;
+      fontSize: theme.typography.fontSize.xs;
+      color: theme.colors.onSurfaceVariant;
+      textAlign: 'right';
       width: 30
-    },
+    ;},
     xLabel: {,
-  position: 'absolute',
-      fontSize: theme.typography.fontSize.xs,
-      color: theme.colors.onSurfaceVariant,
-      textAlign: 'center',
-      transform: [{ translateX: -20 }],
+  position: 'absolute';
+      fontSize: theme.typography.fontSize.xs;
+      color: theme.colors.onSurfaceVariant;
+      textAlign: 'center';
+      transform: [{ translateX: -20 ;}],
       width: 40
-    },
+    ;},
     bar: {,
-  position: 'absolute',
+  position: 'absolute';
       borderRadius: theme.borderRadius.sm
-    },
+    ;},
     valueLabel: {,
-  position: 'absolute',
-      fontSize: theme.typography.fontSize.xs,
-      color: theme.colors.onSurface,
-      textAlign: 'center',
-      transform: [{ translateX: -15 }],
+  position: 'absolute';
+      fontSize: theme.typography.fontSize.xs;
+      color: theme.colors.onSurface;
+      textAlign: 'center';
+      transform: [{ translateX: -15 ;}],
       width: 30
-    },
+    ;},
     linePoint: {,
-  position: 'absolute',
-      width: 8,
-      height: 8,
-      borderRadius: 4,
-      borderWidth: 2,
+  position: 'absolute';
+      width: 8;
+      height: 8;
+      borderRadius: 4;
+      borderWidth: 2;
       borderColor: theme.colors.surface
-    },
+    ;},
     line: {,
-  position: 'absolute',
-      height: 2,
+  position: 'absolute';
+      height: 2;
       transformOrigin: 'left center'
-    },
+    ;},
     pieSlice: {,
   position: 'absolute'
-    },
+    ;},
     pieLabel: {,
-  position: 'absolute',
-      fontSize: theme.typography.fontSize.xs,
-      color: theme.colors.onSurface,
-      textAlign: 'center',
-      transform: [{ translateX: -15 }, { translateY: -8 }],
+  position: 'absolute';
+      fontSize: theme.typography.fontSize.xs;
+      color: theme.colors.onSurface;
+      textAlign: 'center';
+      transform: [{ translateX: -15 ;}, { translateY: -8 ;}],
       width: 30
-    },
+    ;},
     progressBackground: {,
-  position: 'absolute',
-      backgroundColor: theme.colors.surfaceVariant,
+  position: 'absolute';
+      backgroundColor: theme.colors.surfaceVariant;
       borderRadius: theme.borderRadius.sm
-    },
+    ;},
     progressBar: {,
-  position: 'absolute',
+  position: 'absolute';
       borderRadius: theme.borderRadius.sm
-    },
+    ;},
     progressLabel: {,
-  position: 'absolute',
-      fontSize: theme.typography.fontSize.sm,
+  position: 'absolute';
+      fontSize: theme.typography.fontSize.sm;
       color: theme.colors.onSurface
-    },
+    ;},
     progressValue: {,
-  position: 'absolute',
-      fontSize: theme.typography.fontSize.sm,
+  position: 'absolute';
+      fontSize: theme.typography.fontSize.sm;
       color: theme.colors.onSurface
-    },
+    ;},
     legend: {,
-  flexDirection: 'row',
-      flexWrap: 'wrap',
-      justifyContent: 'center',
+  flexDirection: 'row';
+      flexWrap: 'wrap';
+      justifyContent: 'center';
       marginTop: theme.spacing.md
-    },
+    ;},
     legendItem: {,
-  flexDirection: 'row',
-      alignItems: 'center',
-      marginRight: theme.spacing.md,
+  flexDirection: 'row';
+      alignItems: 'center';
+      marginRight: theme.spacing.md;
       marginBottom: theme.spacing.xs
-    },
+    ;},
     legendColor: {,
-  width: 12,
-      height: 12,
-      borderRadius: 6,
+  width: 12;
+      height: 12;
+      borderRadius: 6;
       marginRight: theme.spacing.xs
-    },
+    ;},
     legendLabel: {,
-  fontSize: theme.typography.fontSize.sm,
+  fontSize: theme.typography.fontSize.sm;
       color: theme.colors.onSurface
-    }
+    ;}
   });
 };
 

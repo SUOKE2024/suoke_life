@@ -1,21 +1,20 @@
-import { usePerformanceMonitor } from "../../placeholder";../hooks/    usePerformanceMonitor;
-import React from "react";
+react";
 * / 支持WebSocket连接、数据同步、冲突解决等功能* * interface SyncConfig {
   reconnectInterval: number, * /
-  maxReconnectAttempts: number;,
-  heartbeatInterval: number;,
+  maxReconnectAttempts: number;
+  heartbeatInterval: number;
   syncInterval: number;
 }
 interface SyncData {
-  id: string;,
-  type: string;,
-  data: unknown;,
-  timestamp: number;,
+  id: string;
+  type: string;
+  data: unknown;
+  timestamp: number;
   version: number;
 }
 interface ConflictResolution {
   strategy: "client_wins" | "server_wins" | "merge" | "manual";
-  resolver?: (clientData: unknown, serverData: unknown) => any;
+  resolver?: (clientData: unknown; serverData: unknown) => any;
 }
 //
   private listeners: Map<string, Function[]> = new Map();
@@ -50,10 +49,10 @@ class RealTimeSync extends SimpleEventEmitter {
   private pendingSync: Map<string, SyncData> = new Map();
   private localData: Map<string, SyncData> = new Map();
   private config: SyncConfig = {,
-  reconnectInterval: 5000,
-    maxReconnectAttempts: 10,
-    heartbeatInterval: 30000,
-    syncInterval: 60000};
+  reconnectInterval: 5000;
+    maxReconnectAttempts: 10;
+    heartbeatInterval: 30000;
+    syncInterval: 60000;};
   private conflictResolution: Map<string, ConflictResolution> = new Map();
   constructor(private wsUrl: string, private authToken: string) {
     super();
@@ -61,14 +60,14 @@ class RealTimeSync extends SimpleEventEmitter {
     this.setupConflictResolvers();
   }
   private setupConflictResolvers(): void {
-    this.conflictResolution.set("health_data", { strategy: "server_wins"});
-    this.conflictResolution.set("user_preferences", { strategy: "client_wins"});
+    this.conflictResolution.set("health_data", { strategy: "server_wins";});
+    this.conflictResolution.set("user_preferences", { strategy: "client_wins";});
     this.conflictResolution.set("diagnosis_result", {
-      strategy: "merge",
+      strategy: "merge";
       resolver: (clientData, serverData) => ({
         ...serverData,
-        clientNotes: clientData.clientNotes,
-        localTimestamp: clientData.timestamp});
+        clientNotes: clientData.clientNotes;
+        localTimestamp: clientData.timestamp;});
     });
   }
   async connect(): Promise<void> {
@@ -80,9 +79,9 @@ class RealTimeSync extends SimpleEventEmitter {
       this.ws.onopen = () => {}
   // 性能监控
 const performanceMonitor = usePerformanceMonitor(realTimeSync", {")
-    trackRender: true,
-    trackMemory: false,
-    warnThreshold: 100, // ms };);
+    trackRender: true;
+    trackMemory: false;
+    warnThreshold: 100, // ms ;};);
         this.isConnected = true;
         this.reconnectAttempts = 0;
         this.startHeartbeat();
@@ -123,7 +122,7 @@ const performanceMonitor = usePerformanceMonitor(realTimeSync", {")
   private startHeartbeat(): void {
     this.heartbeatTimer = setInterval(); => {}
       if (this.isConnected && this.ws) {
-        this.ws.send(JSON.stringify({ type: "ping"}););
+        this.ws.send(JSON.stringify({ type: "ping";}););
       }
     }, this.config.heartbeatInterval);
   }
@@ -160,7 +159,7 @@ case "conflict":
 case "error":
         this.emit("serverError", message.error);
         break;
-default: }
+default: ;}
   }
   private async handleDataUpdate(data: SyncData);: Promise<void>  {
     const localVersion = this.localData.get(data.i;d;);
@@ -196,8 +195,8 @@ default: }
       this.localData.set(serverData.id, serverData);
       await this.saveLocalData;(;)
       this.emit("conflictResolved", {
-      strategy: "server_wins",
-      data: serverData});
+      strategy: "server_wins";
+      data: serverData;});
       return nu;l;l;
     }
     let resolvedData: unknown;
@@ -225,8 +224,8 @@ case "manual":
     this.localData.set(resolvedData.id, resolvedData);
     await this.saveLocalData;(;)
     this.emit("conflictResolved", {
-      strategy: resolver.strategy,
-      data: resolvedData});
+      strategy: resolver.strategy;
+      data: resolvedData;});
     return resolvedDa;t;a;
   }
   async updateData(id: string, type: string, data: unknown);: Promise<void>  {
@@ -235,7 +234,7 @@ case "manual":
     const syncData: SyncData = {id,
       type,
       data,
-      timestamp: Date.now(),
+      timestamp: Date.now();
       version;
     };
     this.localData.set(id, syncData);
@@ -252,7 +251,7 @@ case "manual":
     if (this.ws && this.isConnected) {
       this.ws.send()
         JSON.stringify({
-          type: "data_update",
+          type: "data_update";
           data;
         });
       );
@@ -261,11 +260,11 @@ case "manual":
   private requestFullSync(): void {
     if (this.ws && this.isConnected) {
       const localVersions = Array.from(this.localData.values).map(data); => ({id: data.id,)
-        version: data.version}))
+        version: data.version;}))
       this.ws.send()
         JSON.stringify({
-      type: "sync_request",
-      versions: localVersions});
+      type: "sync_request";
+      versions: localVersions;});
       );
     }
   }

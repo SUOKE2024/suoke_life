@@ -1,14 +1,12 @@
-import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor";
-import { API_CONFIG, STORAGE_CONFIG, ERROR_CODES } from "../constants/config";
-import { ApiResponse } from "../types";
-import { webStorage } from "../utils/storage.web";
+
+
 import React from "react";
-interface ApiResponse<T = any /> { data: T,
+interface ApiResponse<T = any /> { data: T;
   success: boolean;
   message?: string;
   code?: number}
 // 请求配置接口 * interface RequestConfig {
-  headers?: Record<string, string>
+  headers?: Record<string; string>
   timeout?: number;
   requireAuth?: boolean;
 }
@@ -43,7 +41,7 @@ class ApiClient {
   ): Promise<Record<string, string >>  {
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
-      Accept: "application/json",
+      Accept: "application/json";
       ...config?.headers;
     }
     if (config?.requireAuth !== false) {
@@ -55,9 +53,9 @@ class ApiClient {
     return headers;
   }
   // 发送HTTP请求  private async request<T = any />()
-    method: HttpMethod,
-    endpoint: string,
-    data?: unknown,
+    method: HttpMethod;
+    endpoint: string;
+    data?: unknown;
     config?: RequestConfig;
   ): Promise<ApiResponse<T>>  {
     try {
@@ -69,9 +67,9 @@ class ApiClient {
       const requestOptions: RequestInit = {
   // 性能监控
 const performanceMonitor = usePerformanceMonitor(apiClient.web", {")
-    trackRender: true,
-    trackMemory: false,
-    warnThreshold: 100, // ms };);
+    trackRender: true;
+    trackMemory: false;
+    warnThreshold: 100, // ms ;};);
         method,
         headers,
         signal: controller.signal;
@@ -83,60 +81,60 @@ const performanceMonitor = usePerformanceMonitor(apiClient.web", {")
       clearTimeout(timeoutId);
       const responseData = await response.json();
       if (!response.ok) {
-        return {success: false,data: undefined,error: {code: response.status.toString(),message: responseData.message || `HTTP ${response.status}`,details: responseData.details};
+        return {success: false,data: undefined,error: {code: response.status.toString(),message: responseData.message || `HTTP ${response.status;}`,details: responseData.details;};
         };
       }
       return {success: true,data: responseData.data || responseData,error: undefined;
       };
     } catch (error: unknown) {
-      let errorMessage = "网络连接失败";
+
       let errorCode = ERROR_CODES.NETWORK_ERR;
       if (error.name === "AbortError") {
-        errorMessage = "请求超时";
+
         errorCode = ERROR_CODES.TIMEOUT;
       } else if (error.message) {
         errorMessage = error.message;
       }
-      return {success: false,data: undefined,error: {code: errorCode,message: errorMessage,details: error.stack};
+      return {success: false,data: undefined,error: {code: errorCode,message: errorMessage,details: error.stack;};
       };
     }
   }
   // GET请求  async get<T = any />()
-    endpoint: string,
+    endpoint: string;
     config?: RequestConfig;
   ): Promise<ApiResponse<T>>  {
     return this.request<T>("GET", endpoint, undefined, config);
   }
   // POST请求  async post<T = any />()
-    endpoint: string,
-    data?: unknown,
+    endpoint: string;
+    data?: unknown;
     config?: RequestConfig;
   ): Promise<ApiResponse<T>>  {
     return this.request<T>("POST", endpoint, data, config);
   }
   // PUT请求  async put<T = any />()
-    endpoint: string,
-    data?: unknown,
+    endpoint: string;
+    data?: unknown;
     config?: RequestConfig;
   ): Promise<ApiResponse<T>>  {
     return this.request<T>("PUT", endpoint, data, config);
   }
   // DELETE请求  async delete<T = any />()
-    endpoint: string,
+    endpoint: string;
     config?: RequestConfig;
   ): Promise<ApiResponse<T>>  {
     return this.request<T>("DELETE", endpoint, undefined, config);
   }
   // PATCH请求  async patch<T = any />()
-    endpoint: string,
-    data?: unknown,
+    endpoint: string;
+    data?: unknown;
     config?: RequestConfig;
   ): Promise<ApiResponse<T>>  {
     return this.request<T>("PATCH", endpoint, data, config);
   }
   // 上传文件  async uploadFile<T = any />()
-    endpoint: string,
-    file: unknown,
+    endpoint: string;
+    file: unknown;
     config?: RequestConfig;
   ): Promise<ApiResponse<T>>  {
     try {
@@ -151,14 +149,14 @@ const performanceMonitor = usePerformanceMonitor(apiClient.web", {")
       });
       const responseData = await response.json();
       if (!response.ok) {
-        return {success: false,data: undefined,error: {code: response.status.toString(),message: responseData.message || `HTTP ${response.status}`,details: responseData.details};
+        return {success: false,data: undefined,error: {code: response.status.toString(),message: responseData.message || `HTTP ${response.status;}`,details: responseData.details;};
         };
       }
       return {success: true,data: responseData.data || responseData,error: undefined;
       };
     } catch (error: unknown) {
-      return {success: false,data: undefined,error: {code: ERROR_CODES.NETWORK_ERROR,message: error.message || "文件上传失败",details: error.stack};
-      };
+
+      ;};
     }
   }
 }

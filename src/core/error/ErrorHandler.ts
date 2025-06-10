@@ -8,9 +8,9 @@ this.reportError(error, context);
   }
   private reportError(error: any, context?: string): void {
     // 模拟错误上报
-const errorReport = {message: error.message || String(error),
-      context: context || unknown",
-      timestamp: new Date().toISOString(),
+const errorReport = {message: error.message || String(error);
+      context: context || unknown";
+      timestamp: new Date().toISOString();
       stack: error.stack || "No stack trace available;"
     };
     // 在实际应用中，这里会发送到错误监控服务

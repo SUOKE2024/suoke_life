@@ -3,14 +3,14 @@ import { Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 // 存储键常量
 const STORAGE_KEYS = {
-      AUTH_TOKEN: "@suoke_life:auth_token",
+      AUTH_TOKEN: "@suoke_life:auth_token";
       REFRESH_TOKEN: '@suoke_life:refresh_token',USER_ID: '@suoke_life:user_id',DEVICE_ID: '@suoke_life:device_id';
 };
 /**
 * 存储认证令牌
 */
 export const storeAuthTokens = async (;);
-  accessToken: string,
+  accessToken: string;
   refreshToken: string;
 ): Promise<void> => {
   try {
@@ -19,8 +19,8 @@ export const storeAuthTokens = async (;);
       [STORAGE_KEYS.REFRESH_TOKEN, refreshToken]
     ]);
   } catch (error) {
-    console.error('存储认证令牌失败:', error);
-    throw new Error('存储认证令牌失败');
+
+
   }
 };
 /**
@@ -28,7 +28,7 @@ export const storeAuthTokens = async (;);
 */
 export const getAuthToken = async (): Promise<string | null> => {try {return await AsyncStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
   } catch (error) {
-    console.error('获取访问令牌失败:', error);
+
     return null;
   }
 };
@@ -37,7 +37,7 @@ export const getAuthToken = async (): Promise<string | null> => {try {return awa
 */
 export const getRefreshToken = async (): Promise<string | null> => {try {return await AsyncStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
   } catch (error) {
-    console.error('获取刷新令牌失败:', error);
+
     return null;
   }
 };
@@ -48,8 +48,8 @@ export const clearAuthTokens = async (): Promise<void> => {try {await AsyncStora
       STORAGE_KEYS.AUTH_TOKEN,STORAGE_KEYS.REFRESH_TOKEN,STORAGE_KEYS.USER_ID;
     ]);
   } catch (error) {
-    console.error('清除认证信息失败:', error);
-    throw new Error('清除认证信息失败');
+
+
   }
 };
 /**
@@ -57,8 +57,8 @@ export const clearAuthTokens = async (): Promise<void> => {try {await AsyncStora
 */
 export const storeUserId = async (userId: string): Promise<void> => {try {await AsyncStorage.setItem(STORAGE_KEYS.USER_ID, userId);
   } catch (error) {
-    console.error('存储用户ID失败:', error);
-    throw new Error('存储用户ID失败');
+
+
   }
 };
 /**
@@ -66,7 +66,7 @@ export const storeUserId = async (userId: string): Promise<void> => {try {await 
 */
 export const getUserId = async (): Promise<string | null> => {try {return await AsyncStorage.getItem(STORAGE_KEYS.USER_ID);
   } catch (error) {
-    console.error('获取用户ID失败:', error);
+
     return null;
   }
 };
@@ -89,7 +89,7 @@ export const getDeviceId = async (): Promise<string> => {try {// 先尝试从存
     }
     return deviceId;
   } catch (error) {
-    console.error('获取设备ID失败:', error);
+
     // 返回一个临时的设备ID;
     return generateRandomDeviceId();
   }
@@ -114,9 +114,9 @@ export const isLoggedIn = async (): Promise<boolean> => {try {const token = awai
 /**
 * 获取认证头
 */
-export const getAuthHeader = async (): Promise<{ Authorization: string } | {}> => {try {const token = await getAuthToken();
+export const getAuthHeader = async (): Promise<{ Authorization: string ;} | {}> => {try {const token = await getAuthToken();
     if (token) {
-      return { Authorization: `Bearer ${token}` };
+      return { Authorization: `Bearer ${token;}` };
     }
     return {};
   } catch (error) {
@@ -143,7 +143,7 @@ export const getUserInfoFromToken = (token: string): any => {try {const payload 
     return {userId: payload.sub,username: payload.username,email: payload.email,exp: payload.exp,iat: payload.iat;
     };
   } catch (error) {
-    console.error('解析令牌失败:', error);
+
     return null;
   }
 };

@@ -1,6 +1,4 @@
-import { ApiIntegrationService, apiIntegrationService } from "../ApiIntegrationService";
-import { ApiIntegrationService, apiIntegrationService } from "../ApiIntegrationService";
-import React from "react";
+
 describe("ApiIntegrationService", () => {
   beforeEach(() => {
     jest.clearAllMocks();

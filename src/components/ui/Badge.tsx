@@ -18,7 +18,7 @@ export interface BadgeProps {
     | 'info';
   size?: 'small' | 'medium' | 'large';
   position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
-  offset?: [number, number]; // [x, y]
+  offset?: [number; number]; // [x, y]
   text?: string;
   style?: ViewStyle;
   textStyle?: TextStyle;
@@ -45,7 +45,7 @@ export const Badge: React.FC<BadgeProps> = ({
   badgeTextStyle,
   accessible = true,
   testID
-}) => {
+;}) => {
   const { currentTheme } = useTheme();
 
   // 计算显示的内容
@@ -77,39 +77,39 @@ export const Badge: React.FC<BadgeProps> = ({
     switch (variant) {
       case 'primary':
         return {
-          backgroundColor: currentTheme.colors.primary,
+          backgroundColor: currentTheme.colors.primary;
           color: currentTheme.colors.onPrimary
-        };
+        ;};
       case 'secondary':
         return {
-          backgroundColor: currentTheme.colors.secondary,
+          backgroundColor: currentTheme.colors.secondary;
           color: currentTheme.colors.onSecondary
-        };
+        ;};
       case 'success':
         return {
-          backgroundColor: '#4CAF50',
+          backgroundColor: '#4CAF50';
           color: '#ffffff'
-        };
+        ;};
       case 'warning':
         return {
-          backgroundColor: '#FF9800',
+          backgroundColor: '#FF9800';
           color: '#ffffff'
-        };
+        ;};
       case 'error':
         return {
-          backgroundColor: currentTheme.colors.error,
+          backgroundColor: currentTheme.colors.error;
           color: '#ffffff'
-        };
+        ;};
       case 'info':
         return {
-          backgroundColor: '#2196F3',
+          backgroundColor: '#2196F3';
           color: '#ffffff'
-        };
+        ;};
       default:
         return {,
-  backgroundColor: currentTheme.colors.outline,
+  backgroundColor: currentTheme.colors.outline;
           color: currentTheme.colors.onSurface
-        };
+        ;};
     }
   };
 
@@ -118,28 +118,28 @@ export const Badge: React.FC<BadgeProps> = ({
     switch (size) {
       case 'small':
         return {
-          minWidth: dot ? 6 : 16,
-          height: dot ? 6 : 16,
-          borderRadius: dot ? 3 : 8,
-          fontSize: 10,
+          minWidth: dot ? 6 : 16;
+          height: dot ? 6 : 16;
+          borderRadius: dot ? 3 : 8;
+          fontSize: 10;
           paddingHorizontal: dot ? 0 : 4
-        };
+        ;};
       case 'large':
         return {
-          minWidth: dot ? 10 : 24,
-          height: dot ? 10 : 24,
-          borderRadius: dot ? 5 : 12,
-          fontSize: 14,
+          minWidth: dot ? 10 : 24;
+          height: dot ? 10 : 24;
+          borderRadius: dot ? 5 : 12;
+          fontSize: 14;
           paddingHorizontal: dot ? 0 : 8
-        };
+        ;};
       default: // medium;
         return {
-          minWidth: dot ? 8 : 20,
-          height: dot ? 8 : 20,
-          borderRadius: dot ? 4 : 10,
-          fontSize: 12,
+          minWidth: dot ? 8 : 20;
+          height: dot ? 8 : 20;
+          borderRadius: dot ? 4 : 10;
+          fontSize: 12;
           paddingHorizontal: dot ? 0 : 6
-        };
+        ;};
     }
   };
 
@@ -150,32 +150,32 @@ export const Badge: React.FC<BadgeProps> = ({
     switch (position) {
       case 'top-left':
         return {
-          position: 'absolute' as const,
-          top: offsetY,
-          left: offsetX,
+          position: 'absolute' as const;
+          top: offsetY;
+          left: offsetX;
           zIndex: 1
-        };
+        ;};
       case 'bottom-right':
         return {
-          position: 'absolute' as const,
-          bottom: offsetY,
-          right: offsetX,
+          position: 'absolute' as const;
+          bottom: offsetY;
+          right: offsetX;
           zIndex: 1
-        };
+        ;};
       case 'bottom-left':
         return {
-          position: 'absolute' as const,
-          bottom: offsetY,
-          left: offsetX,
+          position: 'absolute' as const;
+          bottom: offsetY;
+          left: offsetX;
           zIndex: 1
-        };
+        ;};
       default: // top-right;
         return {
-          position: 'absolute' as const,
-          top: offsetY,
-          right: offsetX,
+          position: 'absolute' as const;
+          top: offsetY;
+          right: offsetX;
           zIndex: 1
-        };
+        ;};
     }
   };
 
@@ -186,30 +186,30 @@ export const Badge: React.FC<BadgeProps> = ({
   const styles = StyleSheet.create({
     container: {,
   position: 'relative'
-    },
+    ;},
     badge: {
       ...positionStyle,
-      backgroundColor: variantColors.backgroundColor,
-      minWidth: sizeConfig.minWidth,
-      height: sizeConfig.height,
-      borderRadius: sizeConfig.borderRadius,
-      paddingHorizontal: sizeConfig.paddingHorizontal,
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderWidth: 2,
+      backgroundColor: variantColors.backgroundColor;
+      minWidth: sizeConfig.minWidth;
+      height: sizeConfig.height;
+      borderRadius: sizeConfig.borderRadius;
+      paddingHorizontal: sizeConfig.paddingHorizontal;
+      justifyContent: 'center';
+      alignItems: 'center';
+      borderWidth: 2;
       borderColor: currentTheme.colors.surface
-    },
+    ;},
     badgeText: {,
-  color: variantColors.color,
-      fontSize: sizeConfig.fontSize,
-      fontWeight: '600',
-      textAlign: 'center',
+  color: variantColors.color;
+      fontSize: sizeConfig.fontSize;
+      fontWeight: '600';
+      textAlign: 'center';
       lineHeight: sizeConfig.fontSize + 2
-    },
+    ;},
     standalone: {,
-  position: 'relative',
+  position: 'relative';
       alignSelf: 'flex-start'
-    }
+    ;}
   });
 
   // 如果没有子元素，返回独立的徽章
@@ -220,12 +220,12 @@ export const Badge: React.FC<BadgeProps> = ({
           <View;
             style={[
               styles.badge,
-              { position: 'relative', top: 0, right: 0, left: 0, bottom: 0 },
+              { position: 'relative', top: 0, right: 0, left: 0, bottom: 0 ;},
               badgeStyle
             ]}
             accessible={accessible}
             accessibilityRole="text"
-            accessibilityLabel={`徽章: ${displayContent || '提示点'}`}
+
           >
             {!dot && (
               <Text style={[styles.badgeText, badgeTextStyle]}>
@@ -247,7 +247,7 @@ export const Badge: React.FC<BadgeProps> = ({
           style={[styles.badge, badgeStyle]}
           accessible={accessible}
           accessibilityRole="text"
-          accessibilityLabel={`徽章: ${displayContent || '提示点'}`}
+
         >
           {!dot && (
             <Text style={[styles.badgeText, badgeTextStyle]}>

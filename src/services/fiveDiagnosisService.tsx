@@ -11,51 +11,51 @@ export interface FiveDiagnosisInput {
     tongueImage?: string;
     faceImage?: string;
     bodyImage?: string;
-    metadata?: Record<string, any>;
+    metadata?: Record<string; any>;
   };
   listeningData?: {
     voiceRecording?: string;
     breathingPattern?: number[];
     coughSound?: string;
-    metadata?: Record<string, any>;
+    metadata?: Record<string; any>;
   };
   inquiryData?: {
-    symptoms: string[];,
-  medicalHistory: string[];,
+    symptoms: string[];
+  medicalHistory: string[];
   lifestyle: Record<string, any>;
     familyHistory?: string[];
-    metadata?: Record<string, any>;
+    metadata?: Record<string; any>;
   };
   palpationData?: {
     pulseData?: number[];
-    touchData?: Record<string, any>;
+    touchData?: Record<string; any>;
     temperatureData?: number[];
     pressureData?: number[];
-    metadata?: Record<string, any>;
+    metadata?: Record<string; any>;
   };
   calculationData?: {
     birthDate: string;
     birthTime?: string;
     location?: string;
     currentTime?: string;
-    metadata?: Record<string, any>;
+    metadata?: Record<string; any>;
   };
 }
 
 // 五诊结果接口
 export interface FiveDiagnosisResult {
-  sessionId: string;,
-  userId: string;,
-  timestamp: string;,
-  overallConfidence: number;,
+  sessionId: string;
+  userId: string;
+  timestamp: string;
+  overallConfidence: number;
   primarySyndrome: {,
-  name: string;,
-  confidence: number;,
+  name: string;
+  confidence: number;
   description: string;
   };
   constitutionType: {,
-  type: string;,
-  characteristics: string[];,
+  type: string;
+  characteristics: string[];
   recommendations: string[];
   };
   diagnosticResults: {
@@ -67,31 +67,31 @@ export interface FiveDiagnosisResult {
   };
   fusionAnalysis: {,
   evidenceStrength: Record<string, number>;
-    syndromePatterns: any[];,
+    syndromePatterns: any[];
   riskFactors: string[];
   };
   healthRecommendations: {,
-  lifestyle: string[];,
-  diet: string[];,
-  exercise: string[];,
-  treatment: string[];,
+  lifestyle: string[];
+  diet: string[];
+  exercise: string[];
+  treatment: string[];
   prevention: string[];
   };
   qualityMetrics: {,
-  dataQuality: number;,
-  resultReliability: number;,
+  dataQuality: number;
+  resultReliability: number;
   completeness: number;
   };
 }
 
 // 五诊服务状态
 export interface FiveDiagnosisServiceStatus {
-  isInitialized: boolean;,
+  isInitialized: boolean;
   isProcessing: boolean;
   lastError?: string;
   performanceMetrics: {,
-  averageResponseTime: number;,
-  successRate: number;,
+  averageResponseTime: number;
+  successRate: number;
   totalSessions: number;
   };
 }
@@ -99,23 +99,23 @@ export interface FiveDiagnosisServiceStatus {
 // API配置
 const DIAGNOSIS_API_CONFIG = {
   calculation: {,
-  baseUrl: 'http://localhost:8003',
+  baseUrl: 'http://localhost:8003';
     timeout: 30000;
   },
   look: {,
-  baseUrl: "http://localhost:8080",
+  baseUrl: "http://localhost:8080";
     timeout: 30000;
   },
   listen: {,
-  baseUrl: "http://localhost:8000",
+  baseUrl: "http://localhost:8000";
     timeout: 30000;
   },
   inquiry: {,
-  baseUrl: "http://localhost:8001",
+  baseUrl: "http://localhost:8001";
     timeout: 30000;
   },
   palpation: {,
-  baseUrl: "http://localhost:8002",
+  baseUrl: "http://localhost:8002";
     timeout: 30000;
   }
 };
@@ -123,9 +123,9 @@ const DIAGNOSIS_API_CONFIG = {
 // 错误处理类
 export class FiveDiagnosisError extends Error {
   constructor(
-    message: string,
-    public code?: string,
-    public service?: string,
+    message: string;
+    public code?: string;
+    public service?: string;
     public retryable: boolean = false;
   ) {
     super(message);
@@ -137,8 +137,8 @@ export class FiveDiagnosisError extends Error {
 class DiagnosisDataValidator {
   static validateInput(input: FiveDiagnosisInput): void {
     if (!input.userId) {
-      throw new FiveDiagnosisError("用户ID不能为空", "INVALID_USER_ID");
-    }
+
+    ;}
     
     // 至少需要一种诊断数据
     const hasData =
@@ -149,38 +149,38 @@ class DiagnosisDataValidator {
       input.calculationData;
       
     if (!hasData) {
-      throw new FiveDiagnosisError("至少需要提供一种诊断数据", "NO_DIAGNOSIS_DATA");
+
     }
   }
 
   static validateLookingData(data: any): void {
     if (data && !data.faceImage && !data.tongueImage) {
-      throw new FiveDiagnosisError("望诊需要面部或舌部图像", "INVALID_LOOKING_DATA");
-    }
+
+    ;}
   }
 
   static validateListeningData(data: any): void {
     if (data && !data.voiceRecording) {
-      throw new FiveDiagnosisError("闻诊需要语音录音", "INVALID_LISTENING_DATA");
-    }
+
+    ;}
   }
 
   static validateInquiryData(data: any): void {
     if (data && (!data.symptoms || data.symptoms.length === 0)) {
-      throw new FiveDiagnosisError("问诊需要症状信息", "INVALID_INQUIRY_DATA");
-    }
+
+    ;}
   }
 
   static validatePalpationData(data: any): void {
     if (data && !data.pulseData) {
-      throw new FiveDiagnosisError("切诊需要脉象数据", "INVALID_PALPATION_DATA");
-    }
+
+    ;}
   }
 
   static validateCalculationData(data: any): void {
     if (data && !data.birthDate) {
-      throw new FiveDiagnosisError("算诊需要出生日期", "INVALID_CALCULATION_DATA");
-    }
+
+    ;}
   }
 }
 
@@ -191,12 +191,12 @@ export class FiveDiagnosisService {
   private isInitialized: boolean = false;
   private processingQueue: Map<string, Promise<FiveDiagnosisResult>> = new Map();
   private performanceMetrics = {
-    averageResponseTime: 0,
-    successRate: 0,
-    totalSessions: 0,
-    successfulSessions: 0,
+    averageResponseTime: 0;
+    successRate: 0;
+    totalSessions: 0;
+    successfulSessions: 0;
     responseTimes: [] as number[]
-  };
+  ;};
 
   constructor() {
     this.config = new AlgorithmConfig();
@@ -217,15 +217,15 @@ export class FiveDiagnosisService {
       
       this.isInitialized = true;
     } catch (error) {
-      throw new FiveDiagnosisError(`五诊服务初始化失败: ${error}`, 'INIT_FAILED');
+
     }
   }
 
   // 执行五诊分析
   async performDiagnosis(input: FiveDiagnosisInput): Promise<FiveDiagnosisResult> {
     if (!this.isInitialized) {
-      throw new FiveDiagnosisError("服务未初始化", "SERVICE_NOT_INITIALIZED");
-    }
+
+    ;}
 
     // 验证输入数据
     DiagnosisDataValidator.validateInput(input);
@@ -263,10 +263,10 @@ export class FiveDiagnosisService {
   // 获取诊断历史
   async getDiagnosisHistory(userId: string, limit: number = 10): Promise<FiveDiagnosisResult[]> {
     try {
-      const response = await apiClient.get(`/diagnosis/history/${userId}?limit=${limit}`);
+      const response = await apiClient.get(`/diagnosis/history/${userId;}?limit=${limit}`);
       return response.data;
     } catch (error) {
-      throw new FiveDiagnosisError(`获取诊断历史失败: ${error}`, 'HISTORY_FETCH_FAILED');
+
     }
   }
 
@@ -275,7 +275,7 @@ export class FiveDiagnosisService {
     try {
       await apiClient.post('/diagnosis/save', result);
     } catch (error) {
-      console.error('保存诊断结果失败:', error);
+
       // 不抛出错误，避免影响主流程
     }
   }
@@ -283,10 +283,10 @@ export class FiveDiagnosisService {
   // 获取个性化建议
   async getPersonalizedRecommendations(userId: string): Promise<any> {
     try {
-      const response = await apiClient.get(`/diagnosis/recommendations/${userId}`);
+      const response = await apiClient.get(`/diagnosis/recommendations/${userId;}`);
       return response.data;
     } catch (error) {
-      throw new FiveDiagnosisError(`获取个性化建议失败: ${error}`, 'RECOMMENDATIONS_FETCH_FAILED');
+
     }
   }
 
@@ -313,7 +313,7 @@ export class FiveDiagnosisService {
       // 更新引擎配置
       this.engine.updateConfig(this.config);
     } catch (error) {
-      console.warn('加载远程配置失败，使用默认配置:', error);
+
     }
   }
 
@@ -324,12 +324,12 @@ export class FiveDiagnosisService {
       try {
         const config = DIAGNOSIS_API_CONFIG[service as keyof typeof DIAGNOSIS_API_CONFIG];
         const response = await fetch(`${config.baseUrl}/health`, {
-          method: 'GET',
+          method: 'GET';
           timeout: 5000;
         } as any);
-        return { service, status: response.ok ? 'healthy' : 'unhealthy' };
+        return { service, status: response.ok ? 'healthy' : 'unhealthy' ;};
       } catch (error) {
-        return { service, status: 'unhealthy', error };
+        return { service, status: 'unhealthy', error ;};
       }
     });
 
@@ -337,16 +337,16 @@ export class FiveDiagnosisService {
     const unhealthyServices = results.filter(r => r.status === 'unhealthy');
     
     if (unhealthyServices.length > 0) {
-      console.warn('部分诊断服务不可用:', unhealthyServices);
+
     }
   }
 
   // 执行综合诊断
   private async executeComprehensiveDiagnosis(
-    input: FiveDiagnosisInput,
+    input: FiveDiagnosisInput;
     sessionId: string;
   ): Promise<FiveDiagnosisResult> {
-    const diagnosticResults: any = {};
+    const diagnosticResults: any = {;};
     const promises: Promise<any>[] = [];
 
     // 望诊
@@ -355,7 +355,7 @@ export class FiveDiagnosisService {
       promises.push(
         this.performLookingDiagnosis(input.lookingData)
           .then(result => { diagnosticResults.looking = result; })
-          .catch(error => { diagnosticResults.looking = { error: error.message }; })
+          .catch(error => { diagnosticResults.looking = { error: error.message ;}; })
       );
     }
 
@@ -365,7 +365,7 @@ export class FiveDiagnosisService {
       promises.push(
         this.performListeningDiagnosis(input.listeningData)
           .then(result => { diagnosticResults.listening = result; })
-          .catch(error => { diagnosticResults.listening = { error: error.message }; })
+          .catch(error => { diagnosticResults.listening = { error: error.message ;}; })
       );
     }
 
@@ -375,7 +375,7 @@ export class FiveDiagnosisService {
       promises.push(
         this.performInquiryDiagnosis(input.inquiryData)
           .then(result => { diagnosticResults.inquiry = result; })
-          .catch(error => { diagnosticResults.inquiry = { error: error.message }; })
+          .catch(error => { diagnosticResults.inquiry = { error: error.message ;}; })
       );
     }
 
@@ -385,7 +385,7 @@ export class FiveDiagnosisService {
       promises.push(
         this.performPalpationDiagnosis(input.palpationData)
           .then(result => { diagnosticResults.palpation = result; })
-          .catch(error => { diagnosticResults.palpation = { error: error.message }; })
+          .catch(error => { diagnosticResults.palpation = { error: error.message ;}; })
       );
     }
 
@@ -395,7 +395,7 @@ export class FiveDiagnosisService {
       promises.push(
         this.performCalculationDiagnosis(input.calculationData)
           .then(result => { diagnosticResults.calculation = result; })
-          .catch(error => { diagnosticResults.calculation = { error: error.message }; })
+          .catch(error => { diagnosticResults.calculation = { error: error.message ;}; })
       );
     }
 
@@ -404,7 +404,7 @@ export class FiveDiagnosisService {
 
     // 执行综合分析
     const comprehensiveResult = await this.performComprehensiveAnalysis({
-      userId: input.userId,
+      userId: input.userId;
       sessionId,
       diagnosticResults;
     });
@@ -415,107 +415,107 @@ export class FiveDiagnosisService {
   // 望诊分析
   private async performLookingDiagnosis(data: any): Promise<any> {
     try {
-      const response = await fetch(`${DIAGNOSIS_API_CONFIG.look.baseUrl}/analyze`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+      const response = await fetch(`${DIAGNOSIS_API_CONFIG.look.baseUrl;}/analyze`, {
+        method: 'POST';
+        headers: { 'Content-Type': 'application/json' ;},
+        body: JSON.stringify(data);
         timeout: DIAGNOSIS_API_CONFIG.look.timeout;
       } as any);
       
       if (!response.ok) {
-        throw new Error(`望诊服务错误: ${response.status}`);
+
       }
       
       return await response.json();
     } catch (error) {
-      throw new FiveDiagnosisError(`望诊分析失败: ${error}`, 'LOOKING_ANALYSIS_FAILED', 'look', true);
+
     }
   }
 
   // 闻诊分析
   private async performListeningDiagnosis(data: any): Promise<any> {
     try {
-      const response = await fetch(`${DIAGNOSIS_API_CONFIG.listen.baseUrl}/analyze`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+      const response = await fetch(`${DIAGNOSIS_API_CONFIG.listen.baseUrl;}/analyze`, {
+        method: 'POST';
+        headers: { 'Content-Type': 'application/json' ;},
+        body: JSON.stringify(data);
         timeout: DIAGNOSIS_API_CONFIG.listen.timeout;
       } as any);
       
       if (!response.ok) {
-        throw new Error(`闻诊服务错误: ${response.status}`);
+
       }
       
       return await response.json();
     } catch (error) {
-      throw new FiveDiagnosisError(`闻诊分析失败: ${error}`, 'LISTENING_ANALYSIS_FAILED', 'listen', true);
+
     }
   }
 
   // 问诊分析
   private async performInquiryDiagnosis(data: any): Promise<any> {
     try {
-      const response = await fetch(`${DIAGNOSIS_API_CONFIG.inquiry.baseUrl}/analyze`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+      const response = await fetch(`${DIAGNOSIS_API_CONFIG.inquiry.baseUrl;}/analyze`, {
+        method: 'POST';
+        headers: { 'Content-Type': 'application/json' ;},
+        body: JSON.stringify(data);
         timeout: DIAGNOSIS_API_CONFIG.inquiry.timeout;
       } as any);
       
       if (!response.ok) {
-        throw new Error(`问诊服务错误: ${response.status}`);
+
       }
       
       return await response.json();
     } catch (error) {
-      throw new FiveDiagnosisError(`问诊分析失败: ${error}`, 'INQUIRY_ANALYSIS_FAILED', 'inquiry', true);
+
     }
   }
 
   // 切诊分析
   private async performPalpationDiagnosis(data: any): Promise<any> {
     try {
-      const response = await fetch(`${DIAGNOSIS_API_CONFIG.palpation.baseUrl}/analyze`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+      const response = await fetch(`${DIAGNOSIS_API_CONFIG.palpation.baseUrl;}/analyze`, {
+        method: 'POST';
+        headers: { 'Content-Type': 'application/json' ;},
+        body: JSON.stringify(data);
         timeout: DIAGNOSIS_API_CONFIG.palpation.timeout;
       } as any);
       
       if (!response.ok) {
-        throw new Error(`切诊服务错误: ${response.status}`);
+
       }
       
       return await response.json();
     } catch (error) {
-      throw new FiveDiagnosisError(`切诊分析失败: ${error}`, 'PALPATION_ANALYSIS_FAILED', 'palpation', true);
+
     }
   }
 
   // 算诊分析
   private async performCalculationDiagnosis(data: any): Promise<any> {
     try {
-      const response = await fetch(`${DIAGNOSIS_API_CONFIG.calculation.baseUrl}/analyze`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+      const response = await fetch(`${DIAGNOSIS_API_CONFIG.calculation.baseUrl;}/analyze`, {
+        method: 'POST';
+        headers: { 'Content-Type': 'application/json' ;},
+        body: JSON.stringify(data);
         timeout: DIAGNOSIS_API_CONFIG.calculation.timeout;
       } as any);
       
       if (!response.ok) {
-        throw new Error(`算诊服务错误: ${response.status}`);
+
       }
       
       return await response.json();
     } catch (error) {
-      throw new FiveDiagnosisError(`算诊分析失败: ${error}`, 'CALCULATION_ANALYSIS_FAILED', 'calculation', true);
+
     }
   }
 
   // 综合分析
   private async performComprehensiveAnalysis(params: {,
-  userId: string;,
-  sessionId: string;,
+  userId: string;
+  sessionId: string;
   diagnosticResults: any;
   }): Promise<FiveDiagnosisResult> {
     try {
@@ -523,41 +523,41 @@ export class FiveDiagnosisService {
       const fusionResult = await this.engine.performFusionAnalysis(params.diagnosticResults);
       
       return {
-        sessionId: params.sessionId,
-        userId: params.userId,
-        timestamp: new Date().toISOString(),
-        overallConfidence: fusionResult.confidence || 0.8,
+        sessionId: params.sessionId;
+        userId: params.userId;
+        timestamp: new Date().toISOString();
+        overallConfidence: fusionResult.confidence || 0.8;
         primarySyndrome: fusionResult.primarySyndrome || {,
-  name: "待进一步分析",
-          confidence: 0.5,
-          description: "需要更多诊断数据"
+
+          confidence: 0.5;
+
         },
         constitutionType: fusionResult.constitutionType || {,
-  type: "平和质",
-          characteristics: ["体质平衡"],
-          recommendations: ["保持现有生活方式"]
-        },
-        diagnosticResults: params.diagnosticResults,
+
+
+
+        ;},
+        diagnosticResults: params.diagnosticResults;
         fusionAnalysis: fusionResult.fusionAnalysis || {,
-  evidenceStrength: {},
-          syndromePatterns: [],
+  evidenceStrength: {;},
+          syndromePatterns: [];
           riskFactors: []
-        },
+        ;},
         healthRecommendations: fusionResult.recommendations || {,
-  lifestyle: ["规律作息"],
-          diet: ["均衡饮食"],
-          exercise: ["适量运动"],
-          treatment: ["定期检查"],
-          prevention: ["预防为主"]
-        },
+
+
+
+
+
+        ;},
         qualityMetrics: {,
-  dataQuality: this.calculateDataQuality(params.diagnosticResults),
-          resultReliability: fusionResult.confidence || 0.8,
+  dataQuality: this.calculateDataQuality(params.diagnosticResults);
+          resultReliability: fusionResult.confidence || 0.8;
           completeness: this.calculateCompleteness(params.diagnosticResults)
-        }
+        ;}
       };
     } catch (error) {
-      throw new FiveDiagnosisError(`综合分析失败: ${error}`, 'COMPREHENSIVE_ANALYSIS_FAILED');
+
     }
   }
 
@@ -614,11 +614,11 @@ export class FiveDiagnosisService {
   // 获取服务状态
   getStatus(): FiveDiagnosisServiceStatus {
     return {
-      isInitialized: this.isInitialized,
-      isProcessing: this.processingQueue.size > 0,
+      isInitialized: this.isInitialized;
+      isProcessing: this.processingQueue.size > 0;
       performanceMetrics: {,
-  averageResponseTime: this.performanceMetrics.averageResponseTime,
-        successRate: this.performanceMetrics.successRate,
+  averageResponseTime: this.performanceMetrics.averageResponseTime;
+        successRate: this.performanceMetrics.successRate;
         totalSessions: this.performanceMetrics.totalSessions;
       }
     };
@@ -646,7 +646,7 @@ export const useFiveDiagnosis = () => {
   const performanceMonitor = usePerformanceMonitor();
   
   return {
-    service: fiveDiagnosisService,
+    service: fiveDiagnosisService;
     performanceMonitor,
     
     // 便捷方法
@@ -663,11 +663,11 @@ export const useFiveDiagnosis = () => {
     },
     
     getHistory: (userId: string, limit?: number) => 
-      fiveDiagnosisService.getDiagnosisHistory(userId, limit),
+      fiveDiagnosisService.getDiagnosisHistory(userId; limit),
       
     getRecommendations: (userId: string) => 
-      fiveDiagnosisService.getPersonalizedRecommendations(userId),
+      fiveDiagnosisService.getPersonalizedRecommendations(userId);
       
     getStatus: () => fiveDiagnosisService.getStatus()
-  };
+  ;};
 };

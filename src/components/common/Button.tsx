@@ -1,16 +1,8 @@
 import React from "react";
-import {;
-    ActivityIndicator,
-    StyleSheet,
-    Text,
-    TextStyle,
-    TouchableOpacity,
-    ViewStyle;
-} from "react-native";
-import { colors, spacing } from "../../constants/theme";
+
 
 interface ButtonProps {
-  title: string;,
+  title: string;
   onPress: () => void;
   variant?: "primary" | "secondary" | "outline";
   size?: "small" | "medium" | "large";
@@ -29,7 +21,7 @@ export const Button: React.FC<ButtonProps> = ({
   disabled = false,
   style,
   textStyle
-}) => {
+;}) => {
   const buttonStyle = [
     styles.button,
     styles[variant],
@@ -68,60 +60,60 @@ export const Button: React.FC<ButtonProps> = ({
 
 const styles = StyleSheet.create({
   button: {,
-  borderRadius: 12,
-    alignItems: "center",
-    justifyContent: "center",
+  borderRadius: 12;
+    alignItems: "center";
+    justifyContent: "center";
     flexDirection: "row"
-  },
+  ;},
   primary: {,
   backgroundColor: colors.primary
-  },
+  ;},
   secondary: {,
   backgroundColor: colors.secondary
-  },
+  ;},
   outline: {,
-  backgroundColor: "transparent",
-    borderWidth: 2,
+  backgroundColor: "transparent";
+    borderWidth: 2;
     borderColor: colors.primary
-  },
+  ;},
   small: {,
-  paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
+  paddingHorizontal: spacing.md;
+    paddingVertical: spacing.sm;
     minHeight: 36
-  },
+  ;},
   medium: {,
-  paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
+  paddingHorizontal: spacing.lg;
+    paddingVertical: spacing.md;
     minHeight: 48
-  },
+  ;},
   large: {,
-  paddingHorizontal: spacing.xl,
-    paddingVertical: spacing.lg,
+  paddingHorizontal: spacing.xl;
+    paddingVertical: spacing.lg;
     minHeight: 56
-  },
+  ;},
   text: {,
-  fontWeight: "600",
+  fontWeight: "600";
     textAlign: "center"
-  },
+  ;},
   primaryText: {,
   color: colors.surface
-  },
+  ;},
   secondaryText: {,
   color: colors.surface
-  },
+  ;},
   outlineText: {,
   color: colors.primary
-  },
+  ;},
   smallText: {,
   fontSize: 14
-  },
+  ;},
   mediumText: {,
   fontSize: 16
-  },
+  ;},
   largeText: {,
   fontSize: 18
-  },
+  ;},
   disabled: {,
   opacity: 0.6
-  }
+  ;}
 });

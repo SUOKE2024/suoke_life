@@ -1,4 +1,4 @@
-importAsyncStorage from "@react-native-async-storage/async-storage";/import { STORAGE_CONFIG } from "../constants/config";/import en from "./locales/en.json";/import zh from "./locales/zh.json"; 国际化配置 (简化版)
+importAsyncStorage from "@react-native-async-storage/async-storage";/./locales/en.json";/import zh from "./locales/zh.json"; 国际化配置 (简化版)
 //
 //;
   zh,e;n;};
@@ -22,7 +22,7 @@ importAsyncStorage from "@react-native-async-storage/async-storage";/import { ST
 // 获取当前语言export const getCurrentLanguage = (): string =;
 > ;{return currentLangua;g;e;
 };
-// 获取嵌套对象的值const getNestedValue = (obj: unknown, path: string): string => {};
+// 获取嵌套对象的值const getNestedValue = (obj: unknown, path: string): string => {;};
   return path.split(".").reduce(current,k;e;y;); => {}
     return current && current[key] !== undefined ? current[key] : nu;l;l;
   }, obj);

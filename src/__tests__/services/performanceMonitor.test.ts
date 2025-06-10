@@ -4,7 +4,7 @@ import { configureStore } from '@reduxjs/toolkit';
 describe('performanceMonitor', () => {
   const mockStore = configureStore({
     reducer: {
-      test: (state = {}, action) => state,
+      test: (state = {;}, action) => state,
     },
   });
 
@@ -12,11 +12,11 @@ describe('performanceMonitor', () => {
     jest.clearAllMocks();
   });
 
-  it('应该能够渲染组件', () => {
+
     expect(true).toBeTruthy();
   });
 
-  it('应该通过基本测试', () => {
+
     expect(mockStore).toBeDefined();
   });
 

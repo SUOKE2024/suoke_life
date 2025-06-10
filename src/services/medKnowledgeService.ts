@@ -1,86 +1,86 @@
 import { apiClient } from './apiClient';
 // 数据类型定义
 export interface Constitution {
-  id: string;,
-  name: string;,
-  type: string;,
-  characteristics: string[];,
-  description: string;,
-  recommendations: string[];,
-  symptoms: string[];,
-  lifestyle: {;,
-  diet: string[];,
-  exercise: string[];,
-  sleep: string[];,
+  id: string;
+  name: string;
+  type: string;
+  characteristics: string[];
+  description: string;
+  recommendations: string[];
+  symptoms: string[];
+  lifestyle: {
+  diet: string[];
+  exercise: string[];
+  sleep: string[];
   emotion: string[];
 };
-  created_at: string,
+  created_at: string;
   updated_at: string;
 }
 export interface Symptom {
-  id: string;,
-  name: string;,
-  category: string;,
-  description: string;,
-  severity: 'mild' | 'moderate' | 'severe';,
-  related_constitutions: string[];,
-  related_syndromes: string[];,
-  treatments: string[];,
-  created_at: string;,
+  id: string;
+  name: string;
+  category: string;
+  description: string;
+  severity: 'mild' | 'moderate' | 'severe';
+  related_constitutions: string[];
+  related_syndromes: string[];
+  treatments: string[];
+  created_at: string;
   updated_at: string;
 }
 export interface Acupoint {
-  id: string;,
-  name: string;,
-  chinese_name: string;,
-  location: string;,
-  meridian: string;,
-  functions: string[];,
-  indications: string[];,
-  techniques: string[];,
+  id: string;
+  name: string;
+  chinese_name: string;
+  location: string;
+  meridian: string;
+  functions: string[];
+  indications: string[];
+  techniques: string[];
   precautions: string[];
   coordinates?: {
-    x: number;,
+    x: number;
   y: number;
     z?: number;
 };
-  created_at: string,
+  created_at: string;
   updated_at: string;
 }
 export interface Herb {
-  id: string;,
-  name: string;,
-  chinese_name: string;,
-  latin_name: string;,
-  category: string;,
-  properties: {;,
+  id: string;
+  name: string;
+  chinese_name: string;
+  latin_name: string;
+  category: string;
+  properties: {
   nature: string; // 性;,
   flavor: string; // 味,
   meridian: string[]; // 归经
 };
-  functions: string[],
-  indications: string[];,
-  dosage: string,
-  contraindications: string[];,
-  interactions: string[],
-  created_at: string;,
+  functions: string[];
+  indications: string[];
+  dosage: string;
+  contraindications: string[];
+  interactions: string[];
+  created_at: string;
   updated_at: string;
 }
 export interface Syndrome {
-  id: string;,
-  name: string;,
-  category: string;,
-  description: string;,
-  symptoms: string[];,
-  tongue_manifestation: string;,
-  pulse_manifestation: string;,
-  treatment_principles: string[];,
-  formulas: string[];,
-  created_at: string;,
+  id: string;
+  name: string;
+  category: string;
+  description: string;
+  symptoms: string[];
+  tongue_manifestation: string;
+  pulse_manifestation: string;
+  treatment_principles: string[];
+  formulas: string[];
+  created_at: string;
   updated_at: string;
 }
 export interface KnowledgeQuery {
-  query: string;,
+  query: string;
   type: 'symptom' | 'treatment' | 'medicine' | 'general' | 'constitution' | 'acupoint';
   context?: {
     userId?: string;
@@ -96,14 +96,14 @@ export interface KnowledgeQuery {
   };
 }
 export interface KnowledgeResult {
-  id: string;,
-  title: string;,
-  content: string;,
-  type: string;,
-  relevance: number;,
-  source: string;,
-  category: string;,
-  tags: string[];,
+  id: string;
+  title: string;
+  content: string;
+  type: string;
+  relevance: number;
+  source: string;
+  category: string;
+  tags: string[];
   related_items: {;
     constitutions?: Constitution[];
     symptoms?: Symptom[];
@@ -113,30 +113,30 @@ export interface KnowledgeResult {
   last_updated: string;
 }
 export interface GraphData {
-  nodes: GraphNode[];,
-  edges: GraphEdge[];,
-  statistics: {;,
-  total_nodes: number;,
-  total_edges: number;,
+  nodes: GraphNode[];
+  edges: GraphEdge[];
+  statistics: {
+  total_nodes: number;
+  total_edges: number;
   node_types: Record<string, number>;
     edge_types: Record<string, number>;
 };
 }
 export interface GraphNode {
-  id: string;,
-  label: string;,
-  type: string;,
+  id: string;
+  label: string;
+  type: string;
   properties: Record<string, any>;
   position?: { x: number; y: number;
 };
 }
 export interface GraphEdge {
-  id: string;,
-  source: string;,
-  target: string;,
+  id: string;
+  source: string;
+  target: string;
   type: string;
   weight?: number;
-  properties?: Record<string, any>;
+  properties?: Record<string; any>;
 }
 export interface RecommendationRequest {
   userId: string;
@@ -148,15 +148,15 @@ export interface RecommendationRequest {
 };
 }
 export interface HealthRecommendation {
-  id: string;,
-  type: 'lifestyle' | 'diet' | 'exercise' | 'treatment' | 'prevention';,
-  title: string;,
-  description: string;,
-  priority: 'low' | 'medium' | 'high';,
-  evidence_level: number;,
-  implementation: {;,
-  frequency: string;,
-  duration: string;,
+  id: string;
+  type: 'lifestyle' | 'diet' | 'exercise' | 'treatment' | 'prevention';
+  title: string;
+  description: string;
+  priority: 'low' | 'medium' | 'high';
+  evidence_level: number;
+  implementation: {
+  frequency: string;
+  duration: string;
   instructions: string[];
 };
   contraindications?: string[];
@@ -179,16 +179,16 @@ export class MedKnowledgeService {
       return response.data;
     } catch (error) {
       console.error('Failed to fetch constitutions:', error);
-      throw new Error('获取体质信息失败');
+
     }
   }
   async getConstitutionById(id: string): Promise<Constitution> {
     try {
-      const response = await apiClient.get(`${this.baseUrl}/constitutions/${id}`);
+      const response = await apiClient.get(`${this.baseUrl;}/constitutions/${id}`);
       return response.data;
     } catch (error) {
       console.error(`Failed to fetch constitution ${id}:`, error);
-      throw new Error('获取体质详情失败');
+
     }
   }
   async getConstitutionRecommendations(constitutionId: string): Promise<HealthRecommendation[]> {
@@ -199,7 +199,7 @@ export class MedKnowledgeService {
       return response.data;
     } catch (error) {
       console.error(`Failed to fetch constitution recommendations:`, error);
-      throw new Error('获取体质建议失败');
+
     }
   }
   // 症状相关API;
@@ -209,16 +209,16 @@ export class MedKnowledgeService {
       return response.data;
     } catch (error) {
       console.error('Failed to fetch symptoms:', error);
-      throw new Error('获取症状信息失败');
+
     }
   }
   async getSymptomById(id: string): Promise<Symptom> {
     try {
-      const response = await apiClient.get(`${this.baseUrl}/symptoms/${id}`);
+      const response = await apiClient.get(`${this.baseUrl;}/symptoms/${id}`);
       return response.data;
     } catch (error) {
       console.error(`Failed to fetch symptom ${id}:`, error);
-      throw new Error('获取症状详情失败');
+
     }
   }
   async searchSymptoms(query: string): Promise<Symptom[]> {
@@ -229,7 +229,7 @@ export class MedKnowledgeService {
       return response.data;
     } catch (error) {
       console.error('Failed to search symptoms:', error);
-      throw new Error('搜索症状失败');
+
     }
   }
   // 穴位相关API;
@@ -239,16 +239,16 @@ export class MedKnowledgeService {
       return response.data;
     } catch (error) {
       console.error('Failed to fetch acupoints:', error);
-      throw new Error('获取穴位信息失败');
+
     }
   }
   async getAcupointById(id: string): Promise<Acupoint> {
     try {
-      const response = await apiClient.get(`${this.baseUrl}/acupoints/${id}`);
+      const response = await apiClient.get(`${this.baseUrl;}/acupoints/${id}`);
       return response.data;
     } catch (error) {
       console.error(`Failed to fetch acupoint ${id}:`, error);
-      throw new Error('获取穴位详情失败');
+
     }
   }
   async getAcupointsByConstitution(constitutionId: string): Promise<Acupoint[]> {
@@ -259,7 +259,7 @@ export class MedKnowledgeService {
       return response.data;
     } catch (error) {
       console.error('Failed to fetch acupoints by constitution:', error);
-      throw new Error('获取体质相关穴位失败');
+
     }
   }
   // 中药相关API;
@@ -269,16 +269,16 @@ export class MedKnowledgeService {
       return response.data;
     } catch (error) {
       console.error('Failed to fetch herbs:', error);
-      throw new Error('获取中药信息失败');
+
     }
   }
   async getHerbById(id: string): Promise<Herb> {
     try {
-      const response = await apiClient.get(`${this.baseUrl}/herbs/${id}`);
+      const response = await apiClient.get(`${this.baseUrl;}/herbs/${id}`);
       return response.data;
     } catch (error) {
       console.error(`Failed to fetch herb ${id}:`, error);
-      throw new Error('获取中药详情失败');
+
     }
   }
   async getHerbsBySymptom(symptomId: string): Promise<Herb[]> {
@@ -289,7 +289,7 @@ export class MedKnowledgeService {
       return response.data;
     } catch (error) {
       console.error('Failed to fetch herbs by symptom:', error);
-      throw new Error('获取症状相关中药失败');
+
     }
   }
   // 证型相关API;
@@ -299,38 +299,38 @@ export class MedKnowledgeService {
       return response.data;
     } catch (error) {
       console.error('Failed to fetch syndromes:', error);
-      throw new Error('获取证型信息失败');
+
     }
   }
   async getSyndromeById(id: string): Promise<Syndrome> {
     try {
-      const response = await apiClient.get(`${this.baseUrl}/syndromes/${id}`);
+      const response = await apiClient.get(`${this.baseUrl;}/syndromes/${id}`);
       return response.data;
     } catch (error) {
       console.error(`Failed to fetch syndrome ${id}:`, error);
-      throw new Error('获取证型详情失败');
+
     }
   }
   // 知识搜索API;
   async searchKnowledge(query: KnowledgeQuery): Promise<KnowledgeResult[]> {
     try {
-      const response = await apiClient.post(`${this.baseUrl}/search`, query);
+      const response = await apiClient.post(`${this.baseUrl;}/search`, query);
       return response.data;
     } catch (error) {
       console.error('Failed to search knowledge:', error);
-      throw new Error('知识搜索失败');
+
     }
   }
   async getRecommendedKnowledge(userId: string, context?: any): Promise<KnowledgeResult[]> {
     try {
-      const contextParam = context ? `?context=${encodeURIComponent(JSON.stringify(context))}` : '';
+      const contextParam = context ? `?context=${encodeURIComponent(JSON.stringify(context));}` : '';
       const response = await apiClient.get(;)
         `${this.baseUrl}/knowledge/recommendations/${userId}${contextParam}`;
       );
       return response.data;
     } catch (error) {
       console.error('Failed to get recommended knowledge:', error);
-      throw new Error('获取推荐知识失败');
+
     }
   }
   // 知识图谱API;
@@ -340,7 +340,7 @@ export class MedKnowledgeService {
       return response.data;
     } catch (error) {
       console.error('Failed to fetch knowledge graph:', error);
-      throw new Error('获取知识图谱失败');
+
     }
   }
   async getGraphStatistics(): Promise<any> {
@@ -349,7 +349,7 @@ export class MedKnowledgeService {
       return response.data;
     } catch (error) {
       console.error('Failed to fetch graph statistics:', error);
-      throw new Error('获取图谱统计失败');
+
     }
   }
   async getEntityRelationships(entityType: string, entityId: string): Promise<any> {
@@ -360,7 +360,7 @@ export class MedKnowledgeService {
       return response.data;
     } catch (error) {
       console.error('Failed to fetch entity relationships:', error);
-      throw new Error('获取实体关系失败');
+
     }
   }
   async getEntityNeighbors(entityType: string, entityId: string): Promise<any> {
@@ -371,7 +371,7 @@ export class MedKnowledgeService {
       return response.data;
     } catch (error) {
       console.error('Failed to fetch entity neighbors:', error);
-      throw new Error('获取相邻实体失败');
+
     }
   }
   async findGraphPaths(fromId: string, toId: string): Promise<any> {
@@ -384,7 +384,7 @@ export class MedKnowledgeService {
       return response.data;
     } catch (error) {
       console.error('Failed to find graph paths:', error);
-      throw new Error('查找图谱路径失败');
+
     }
   }
   // 个性化推荐API;
@@ -396,17 +396,17 @@ export class MedKnowledgeService {
       return response.data;
     } catch (error) {
       console.error('Failed to get personalized recommendations:', error);
-      throw new Error('获取个性化推荐失败');
+
     }
   }
   // 健康检查API;
-  async healthCheck(): Promise<{ status: string; timestamp: string }> {
+  async healthCheck(): Promise<{ status: string; timestamp: string ;}> {
     try {
       const response = await apiClient.get(`${this.baseUrl}/health`);
       return response.data;
     } catch (error) {
       console.error('Health check failed:', error);
-      throw new Error('服务健康检查失败');
+
     }
   }
 }

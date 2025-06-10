@@ -1,5 +1,4 @@
 import { AccessibilityService, defaultAccessibilityConfig, accessibilityService, AgentAccessibilityHelper } from "../accessibilityService";
-import { AccessibilityService, defaultAccessibilityConfig, accessibilityService, AgentAccessibilityHelper } from "../accessibilityService";
 describe("accessibilityService", () => {
   beforeEach(() => {
     jest.clearAllMocks();

@@ -19,13 +19,13 @@ export interface AgentConfig {
 }
 // 小艾智能体配置 - 首页聊天频道版主 & 四诊协调智能体
 export const XIAOAI_CONFIG: AgentConfig = {
-  id: 'xiaoai-001',
-  name: '小艾',
-  type: AgentType.XIAOAI,
+  id: 'xiaoai-001';
+
+  type: AgentType.XIAOAI;
   description:
-    '索克生活APP首页（聊天频道）版主，为用户提供语音引导、交互、问诊，以及包括导盲、导医、手语识别等无障碍服务，统筹协调望诊、闻诊、问诊、切诊、算诊服务。',
-  channel: '首页聊天频道',
-  role: '四诊协调智能体',
+
+
+
   capabilities: [
     'voice_interaction', // 实时语音交互与多语种支持
     'dialect_recognition', // 方言识别
@@ -49,23 +49,23 @@ export const XIAOAI_CONFIG: AgentConfig = {
     visionRecognition: true, // 视觉识别组件
     fourDiagnosisIntegration: true, // 四诊合参模块集成
     healthArchiveIntegration: true, // 健康档案系统集成
-  },
-  apiEndpoint: 'http://localhost:50053',
-  port: 50053,
-  enabled: true,
-  maxConcurrentTasks: 10,
-  responseTimeout: 30000,
-  retryAttempts: 3,
+  ;},
+  apiEndpoint: 'http://localhost:50053';
+  port: 50053;
+  enabled: true;
+  maxConcurrentTasks: 10;
+  responseTimeout: 30000;
+  retryAttempts: 3;
 };
 // 小克智能体配置 - SUOKE频道版主 & 服务管理智能体
 export const XIAOKE_CONFIG: AgentConfig = {
-  id: 'xiaoke-001',
-  name: '小克',
-  type: AgentType.XIAOKE,
+  id: 'xiaoke-001';
+
+  type: AgentType.XIAOKE;
   description:
-    '索克生活APP SUOKE频道版主，负责索克生活服务订阅、优质农产品预（定）制、供应链管理、农事活动体验、第三方API服务集成、索克店铺管理等工作。',
-  channel: 'SUOKE频道',
-  role: '服务管理智能体',
+
+
+
   capabilities: [
     'doctor_matching', // 名医资源智能匹配
     'appointment_management', // 预约管理
@@ -86,23 +86,23 @@ export const XIAOKE_CONFIG: AgentConfig = {
     blockchainTraceability: true, // 区块链溯源
     apiGateway: true, // API网关
     paymentProcessing: true, // 支付处理
-  },
-  apiEndpoint: 'http://localhost:50054',
-  port: 50054,
-  enabled: true,
-  maxConcurrentTasks: 15,
-  responseTimeout: 25000,
-  retryAttempts: 3,
+  ;},
+  apiEndpoint: 'http://localhost:50054';
+  port: 50054;
+  enabled: true;
+  maxConcurrentTasks: 15;
+  responseTimeout: 25000;
+  retryAttempts: 3;
 };
 // 老克智能体配置 - 探索频道版主 & 知识传播智能体
 export const LAOKE_CONFIG: AgentConfig = {
-  id: 'laoke-001',
-  name: '老克',
-  type: AgentType.LAOKE,
+  id: 'laoke-001';
+
+  type: AgentType.LAOKE;
   description:
-    '索克生活APP探索频道版主，负责知识传播、知识培训和用户博客管理等工作，兼任索克游戏NPC。',
-  channel: '探索频道',
-  role: '知识传播智能体',
+
+
+
   capabilities: [
     'knowledge_retrieval', // 中医知识库RAG检索
     'personalized_learning', // 个性化学习路径
@@ -122,23 +122,23 @@ export const LAOKE_CONFIG: AgentConfig = {
     arvrInteraction: true, // AR/VR互动系统
     contentAudit: true, // 内容审核
     gamificationEngine: true, // 游戏化引擎
-  },
-  apiEndpoint: 'http://localhost:50055',
-  port: 50055,
-  enabled: true,
-  maxConcurrentTasks: 12,
-  responseTimeout: 20000,
-  retryAttempts: 3,
+  ;},
+  apiEndpoint: 'http://localhost:50055';
+  port: 50055;
+  enabled: true;
+  maxConcurrentTasks: 12;
+  responseTimeout: 20000;
+  retryAttempts: 3;
 };
 // 索儿智能体配置 - LIFE频道版主 & 生活健康管理智能体
 export const SOER_CONFIG: AgentConfig = {
-  id: 'soer-001',
-  name: '索儿',
-  type: AgentType.SOER,
+  id: 'soer-001';
+
+  type: AgentType.SOER;
   description:
-    '索克生活APP LIFE频道版主，为用户提供生活（健康）管理、陪伴等服务，整合用户饮食起居、实时感知（通过手机、智能手表、运动装备、医疗装备等）等工作。',
-  channel: 'LIFE频道',
-  role: '生活健康管理智能体',
+
+
+
   capabilities: [
     'habit_cultivation', // 健康生活习惯培养
     'behavior_intervention', // 行为干预
@@ -164,13 +164,13 @@ export const SOER_CONFIG: AgentConfig = {
     reinforcementLearning: true, // 强化学习
     emotionalComputing: true, // 情感计算
     iotIntegration: true, // 物联网设备集成
-  },
-  apiEndpoint: 'http://localhost:50056',
-  port: 50056,
-  enabled: true,
-  maxConcurrentTasks: 20,
-  responseTimeout: 15000,
-  retryAttempts: 3,
+  ;},
+  apiEndpoint: 'http://localhost:50056';
+  port: 50056;
+  enabled: true;
+  maxConcurrentTasks: 20;
+  responseTimeout: 15000;
+  retryAttempts: 3;
 };
 // 智能体配置映射
 export const AGENT_CONFIGS: Record<AgentType, AgentConfig> = {
@@ -178,7 +178,7 @@ export const AGENT_CONFIGS: Record<AgentType, AgentConfig> = {
   [AgentType.XIAOKE]: XIAOKE_CONFIG,
   [AgentType.LAOKE]: LAOKE_CONFIG,
   [AgentType.SOER]: SOER_CONFIG,
-};
+;};
 // 智能体协作配置
 export interface CollaborationConfig {
   primaryAgent: AgentType;
@@ -188,35 +188,35 @@ export interface CollaborationConfig {
 }
 export const COLLABORATION_SCENARIOS: CollaborationConfig[] = [
   {
-    primaryAgent: AgentType.XIAOAI,
+    primaryAgent: AgentType.XIAOAI;
     supportingAgents: [AgentType.XIAOKE, AgentType.LAOKE, AgentType.SOER],
-    scenario: 'comprehensive_health_assessment',
-    description: '小艾主导的综合健康评估，整合四诊数据，其他智能体提供专业支持',
+    scenario: 'comprehensive_health_assessment';
+
   },
   {
-    primaryAgent: AgentType.XIAOKE,
+    primaryAgent: AgentType.XIAOKE;
     supportingAgents: [AgentType.XIAOAI, AgentType.SOER],
-    scenario: 'personalized_service_recommendation',
-    description: '小克主导的个性化服务推荐，结合健康数据和用户偏好',
+    scenario: 'personalized_service_recommendation';
+
   },
   {
-    primaryAgent: AgentType.LAOKE,
+    primaryAgent: AgentType.LAOKE;
     supportingAgents: [AgentType.XIAOAI, AgentType.SOER],
-    scenario: 'knowledge_based_health_education',
-    description: '老克主导的知识传播，结合个人健康状况提供教育内容',
+    scenario: 'knowledge_based_health_education';
+
   },
   {
-    primaryAgent: AgentType.SOER,
+    primaryAgent: AgentType.SOER;
     supportingAgents: [AgentType.XIAOAI, AgentType.XIAOKE],
-    scenario: 'lifestyle_health_management',
-    description: '索儿主导的生活健康管理，整合多源数据提供全面健康指导',
+    scenario: 'lifestyle_health_management';
+
   },
 ];
 // 默认智能体配置
 export const DEFAULT_AGENT_CONFIG = {
-  timeout: 30000,
-  retries: 3,
-  maxConcurrentTasks: 10,
-  healthCheckInterval: 60000,
-  logLevel: 'info' as const,
+  timeout: 30000;
+  retries: 3;
+  maxConcurrentTasks: 10;
+  healthCheckInterval: 60000;
+  logLevel: 'info' as const;
 };

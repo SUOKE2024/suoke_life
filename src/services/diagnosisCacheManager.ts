@@ -12,53 +12,53 @@ interface CacheConfig {
 }
 // 缓存条目
 interface CacheEntry<T> {
-  data: T,
-  timestamp: number;,
-  expiresAt: number,
-  size: number;,
-  accessCount: number,
+  data: T;
+  timestamp: number;
+  expiresAt: number;
+  size: number;
+  accessCount: number;
   lastAccessed: number;
 }
 // 诊断会话缓存
 interface DiagnosisSessionCache {
-  sessionId: string;,
-  userId: string;,
-  startTime: number;,
-  lastUpdateTime: number;,
-  currentStep: string;,
-  collectedData: Partial<FiveDiagnosisInput>;,
+  sessionId: string;
+  userId: string;
+  startTime: number;
+  lastUpdateTime: number;
+  currentStep: string;
+  collectedData: Partial<FiveDiagnosisInput>;
   isCompleted: boolean;
 }
 // 诊断结果缓存
 interface DiagnosisResultCache {
-  resultId: string;,
-  sessionId: string;,
-  userId: string;,
-  result: FiveDiagnosisResult;,
-  createdAt: number;,
+  resultId: string;
+  sessionId: string;
+  userId: string;
+  result: FiveDiagnosisResult;
+  createdAt: number;
   isSynced: boolean;
 }
 export class DiagnosisCacheManager {
   private config: CacheConfig;
   private memoryCache: Map<string, CacheEntry<any>>;
   private cacheStats: {,
-  hits: number;,
-  misses: number,
-  evictions: number;,
+  hits: number;
+  misses: number;
+  evictions: number;
   totalSize: number;
   };
   constructor(config?: Partial<CacheConfig>) {
     this.config = {
-      maxAge: 24 * 60 * 60 * 1000, // 24小时
+      maxAge: 24 * 60 * 60 * 1000; // 24小时
       maxSize: 100, // 最多100个条目
-      compressionEnabled: true,
+      compressionEnabled: true;
       ...config;
     };
     this.memoryCache = new Map();
     this.cacheStats = {
-      hits: 0,
-      misses: 0,
-      evictions: 0,
+      hits: 0;
+      misses: 0;
+      evictions: 0;
       totalSize: 0;
     };
     // 定期清理过期缓存
@@ -67,13 +67,13 @@ export class DiagnosisCacheManager {
   // 保存诊断会话
   async saveSession(session: DiagnosisSessionCache): Promise<void> {
     try {
-      const key = `${SESSION_PREFIX}${session.sessionId}`;
+      const key = `${SESSION_PREFIX;}${session.sessionId}`;
       const cacheEntry: CacheEntry<DiagnosisSessionCache> = {,
-  data: session,
-        timestamp: Date.now(),
-        expiresAt: Date.now() + this.config.maxAge,
-        size: this.calculateSize(session),
-        accessCount: 1,
+  data: session;
+        timestamp: Date.now();
+        expiresAt: Date.now() + this.config.maxAge;
+        size: this.calculateSize(session);
+        accessCount: 1;
         lastAccessed: Date.now();
       };
       // 保存到内存缓存
@@ -82,16 +82,16 @@ export class DiagnosisCacheManager {
       await AsyncStorage.setItem(key, JSON.stringify(cacheEntry));
       // 更新统计信息
       this.updateCacheStats();
-      console.log(`诊断会话已缓存: ${session.sessionId}`);
+
     } catch (error) {
-      console.error('保存诊断会话失败:', error);
+
       throw error;
     }
   }
   // 获取诊断会话
   async getSession(sessionId: string): Promise<DiagnosisSessionCache | null> {
     try {
-      const key = `${SESSION_PREFIX}${sessionId}`;
+      const key = `${SESSION_PREFIX;}${sessionId}`;
       // 先从内存缓存获取
       let cacheEntry = this.memoryCache.get(key);
       if (!cacheEntry) {
@@ -115,7 +115,7 @@ export class DiagnosisCacheManager {
       this.cacheStats.hits++;
       return cacheEntry.data;
     } catch (error) {
-      console.error('获取诊断会话失败:', error);
+
       this.cacheStats.misses++;
       return null;
     }
@@ -123,13 +123,13 @@ export class DiagnosisCacheManager {
   // 保存诊断结果
   async saveResult(result: DiagnosisResultCache): Promise<void> {
     try {
-      const key = `${RESULT_PREFIX}${result.resultId}`;
+      const key = `${RESULT_PREFIX;}${result.resultId}`;
       const cacheEntry: CacheEntry<DiagnosisResultCache> = {,
-  data: result,
-        timestamp: Date.now(),
+  data: result;
+        timestamp: Date.now();
         expiresAt: Date.now() + this.config.maxAge * 7, // 结果保存7天
-        size: this.calculateSize(result),
-        accessCount: 1,
+        size: this.calculateSize(result);
+        accessCount: 1;
         lastAccessed: Date.now();
       };
       // 保存到内存缓存
@@ -138,16 +138,16 @@ export class DiagnosisCacheManager {
       await AsyncStorage.setItem(key, JSON.stringify(cacheEntry));
       // 更新统计信息
       this.updateCacheStats();
-      console.log(`诊断结果已缓存: ${result.resultId}`);
+
     } catch (error) {
-      console.error('保存诊断结果失败:', error);
+
       throw error;
     }
   }
   // 获取诊断结果
   async getResult(resultId: string): Promise<DiagnosisResultCache | null> {
     try {
-      const key = `${RESULT_PREFIX}${resultId}`;
+      const key = `${RESULT_PREFIX;}${resultId}`;
       // 先从内存缓存获取
       let cacheEntry = this.memoryCache.get(key);
       if (!cacheEntry) {
@@ -171,7 +171,7 @@ export class DiagnosisCacheManager {
       this.cacheStats.hits++;
       return cacheEntry.data;
     } catch (error) {
-      console.error('获取诊断结果失败:', error);
+
       this.cacheStats.misses++;
       return null;
     }
@@ -194,34 +194,34 @@ export class DiagnosisCacheManager {
       // 按创建时间倒序排列
       return results.sort(a, b) => b.createdAt - a.createdAt);
     } catch (error) {
-      console.error('获取用户诊断结果失败:', error);
+
       return [];
     }
   }
   // 删除会话
   async deleteSession(sessionId: string): Promise<void> {
     try {
-      const key = `${SESSION_PREFIX}${sessionId}`;
+      const key = `${SESSION_PREFIX;}${sessionId}`;
       // 从内存缓存删除
       this.memoryCache.delete(key);
       // 从持久化存储删除
       await AsyncStorage.removeItem(key);
-      console.log(`诊断会话已删除: ${sessionId}`);
+
     } catch (error) {
-      console.error('删除诊断会话失败:', error);
+
     }
   }
   // 删除结果
   async deleteResult(resultId: string): Promise<void> {
     try {
-      const key = `${RESULT_PREFIX}${resultId}`;
+      const key = `${RESULT_PREFIX;}${resultId}`;
       // 从内存缓存删除
       this.memoryCache.delete(key);
       // 从持久化存储删除
       await AsyncStorage.removeItem(key);
-      console.log(`诊断结果已删除: ${resultId}`);
+
     } catch (error) {
-      console.error('删除诊断结果失败:', error);
+
     }
   }
   // 清理过期缓存
@@ -243,9 +243,9 @@ export class DiagnosisCacheManager {
           }
         }
       }
-      console.log(`清理了 ${cleanedCount} 个过期缓存条目`);
+
     } catch (error) {
-      console.error('清理过期缓存失败:', error);
+
     }
   }
   // 清空所有缓存
@@ -259,14 +259,14 @@ export class DiagnosisCacheManager {
       this.memoryCache.clear();
       // 重置统计信息
       this.cacheStats = {
-        hits: 0,
-        misses: 0,
-        evictions: 0,
+        hits: 0;
+        misses: 0;
+        evictions: 0;
         totalSize: 0;
       };
-      console.log('所有诊断缓存已清空');
+
     } catch (error) {
-      console.error('清空缓存失败:', error);
+
     }
   }
   // 获取缓存统计信息
@@ -302,7 +302,7 @@ export class DiagnosisCacheManager {
       return {totalSize,sessionCount,resultCount,memorySize: this.cacheStats.totalSize;
       };
     } catch (error) {
-      console.error('获取缓存大小信息失败:', error);
+
       return {totalSize: 0,sessionCount: 0,resultCount: 0,memorySize: 0;
       };
     }

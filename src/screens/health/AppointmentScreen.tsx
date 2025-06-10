@@ -18,7 +18,7 @@ const { width } = Dimensions.get('window');
 interface AppointmentScreenProps {
   navigation: any;
 }
-const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => {
+const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation ;}) => {
   const {
     appointments,
     selectedAppointment,
@@ -49,7 +49,7 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
   }, [getAppointments]);
   // 预约项点击
   const handleAppointmentPress = useCallback(appointment: Appointment) => {selectAppointment(appointment);
-    navigation.navigate('AppointmentDetail', { appointmentId: appointment.id });
+    navigation.navigate('AppointmentDetail', { appointmentId: appointment.id ;});
   }, [selectAppointment, navigation]);
   // 取消预约
   const handleCancelPress = useCallback(appointment: Appointment) => {selectAppointment(appointment);
@@ -62,13 +62,13 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
       if (success) {
         setShowCancelModal(false);
         setCancelReason('');
-        Alert.alert("取消成功", "预约已取消');
+
         handleRefresh();
       } else {
-        Alert.alert("取消失败", "请稍后重试');
+
       }
     } catch (error) {
-      Alert.alert("取消失败", "请稍后重试');
+
     }
   }, [selectedAppointment, cancelAppointment, handleRefresh]);
   // 重新预约
@@ -83,7 +83,7 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
         onPress={() => setActiveTab('upcoming')};
       >;
         <Text style={[styles.tabText, activeTab === 'upcoming' && styles.activeTabText]}>;
-          即将到来 ({upcomingAppointments.length});
+
         </Text>;
       </TouchableOpacity>;
       <TouchableOpacity;
@@ -91,13 +91,13 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
         onPress={() => setActiveTab('past')};
       >;
         <Text style={[styles.tabText, activeTab === 'past' && styles.activeTabText]}>;
-          历史记录 ({pastAppointments.length});
+
         </Text>;
       </TouchableOpacity>;
     </View>;
   );
   // 渲染预约卡片
-  const renderAppointmentCard = ({ item }: { item: Appointment }) => {const isUpcoming = new Date(item.scheduledTime) > new Date();
+  const renderAppointmentCard = ({ item }: { item: Appointment ;}) => {const isUpcoming = new Date(item.scheduledTime) > new Date();
     const canCancel = isUpcoming && item.status === 'confirmed';
     return (
   <TouchableOpacity;
@@ -118,7 +118,7 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
         <View style={styles.timeContainer}>
           <Icon name="schedule" size={16} color="#666" />
           <Text style={styles.timeText}>
-            {formatDateTime(item.scheduledTime)} · {item.duration}分钟
+
           </Text>
         </View>
         {item.location  && <View style={styles.locationContainer}>
@@ -161,26 +161,26 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
     );
   };
   // 拨打电话
-  const handleCall = useCallback(phoneNumber: string) => {const url = `tel:${phoneNumber}`;
+  const handleCall = useCallback(phoneNumber: string) => {const url = `tel:${phoneNumber;}`;
     Linking.canOpenURL(url);
       .then(supported) => {
         if (supported) {
           return Linking.openURL(url);
         } else {
-          Alert.alert("错误", "无法拨打电话');
+
         }
       })
-      .catch(err) => console.error('拨打电话失败:', err));
+
   }, []);
   // 渲染空状态
   const renderEmptyState = () => (
   <View style={styles.emptyContainer}>
       <Icon name="event-busy" size={64} color="#ccc" />
       <Text style={styles.emptyText}>;
-        {activeTab === 'upcoming' ? '暂无即将到来的预约' : '暂无历史预约记录'};
+
       </Text>;
       <Text style={styles.emptySubtext}>;
-        {activeTab === 'upcoming' ? '去搜索医疗资源并预约吧' : '完成预约后会在这里显示'};
+
       </Text>;
       {activeTab === 'upcoming' && (;)
         <TouchableOpacity;
@@ -216,7 +216,7 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
           <Text style={styles.reasonLabel}>取消原因（可选）：</Text>;
           <TextInput;
             style={styles.reasonInput};
-            placeholder="请输入取消原因...";
+
             value={cancelReason};
             onChangeText={setCancelReason};
             multiline;
@@ -244,35 +244,35 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
     </Modal>
   );
   // 获取状态样式
-  const getStatusStyle = (status: string) => {switch (status) {case 'confirmed':return { backgroundColor: '#E8F5E8' };
+  const getStatusStyle = (status: string) => {switch (status) {case 'confirmed':return { backgroundColor: '#E8F5E8' ;};
       case 'pending':
-        return { backgroundColor: '#FFF3CD' };
+        return { backgroundColor: '#FFF3CD' ;};
       case 'completed':
-        return { backgroundColor: '#E3F2FD' };
+        return { backgroundColor: '#E3F2FD' ;};
       case 'cancelled':
-        return { backgroundColor: '#FFEBEE' };
+        return { backgroundColor: '#FFEBEE' ;};
       default:
-        return { backgroundColor: '#F5F5F5' };
+        return { backgroundColor: '#F5F5F5' ;};
     }
   };
-  const getStatusTextStyle = (status: string) => {switch (status) {case 'confirmed':return { color: '#2E7D32' };
+  const getStatusTextStyle = (status: string) => {switch (status) {case 'confirmed':return { color: '#2E7D32' ;};
       case 'pending':
-        return { color: '#F57C00' };
+        return { color: '#F57C00' ;};
       case 'completed':
-        return { color: '#1976D2' };
+        return { color: '#1976D2' ;};
       case 'cancelled':
-        return { color: '#D32F2F' };
+        return { color: '#D32F2F' ;};
       default:
-        return { color: '#666' };
+        return { color: '#666' ;};
     }
   };
-  const getStatusLabel = (status: string) => {switch (status) {case 'confirmed':return '已确认';
+
       case 'pending':
-        return '待确认';
+
       case 'completed':
-        return '已完成';
+
       case 'cancelled':
-        return '已取消';
+
       default:
         return status;
     }
@@ -286,13 +286,13 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
     const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
     let dateStr = '';
     if (daysDiff === 0) {
-      dateStr = '今天';
+
     } else if (daysDiff === 1) {
-      dateStr = '明天';
+
     } else if (daysDiff === -1) {
-      dateStr = '昨天';
+
     } else {
-      dateStr = `${date.getMonth() + 1}月${date.getDate()}日`;
+
     }
     const timeStr = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
     return `${dateStr} ${timeStr}`;
@@ -344,275 +344,275 @@ const AppointmentScreen: React.FC<AppointmentScreenProps> = ({ navigation }) => 
 };
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
+  flex: 1;
     backgroundColor: '#f5f5f5'
-  },
+  ;},
   // 头部
   header: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
+    paddingHorizontal: 16;
+    paddingVertical: 12;
+    backgroundColor: '#fff';
+    borderBottomWidth: 1;
     borderBottomColor: '#e0e0e0'
-  },
+  ;},
   headerTitle: {,
-  fontSize: 18,
-    fontWeight: '600',
+  fontSize: 18;
+    fontWeight: '600';
     color: '#333'
-  },
+  ;},
   addButton: {,
   padding: 8;
   },
   // 标签页
   tabContainer: {,
-  flexDirection: 'row',
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
+  flexDirection: 'row';
+    backgroundColor: '#fff';
+    borderBottomWidth: 1;
     borderBottomColor: '#e0e0e0'
-  },
+  ;},
   tab: {,
-  flex: 1,
-    paddingVertical: 12,
-    alignItems: 'center',
-    borderBottomWidth: 2,
+  flex: 1;
+    paddingVertical: 12;
+    alignItems: 'center';
+    borderBottomWidth: 2;
     borderBottomColor: 'transparent'
-  },
+  ;},
   activeTab: {,
   borderBottomColor: '#007AFF'
-  },
+  ;},
   tabText: {,
-  fontSize: 14,
-    color: '#666',
+  fontSize: 14;
+    color: '#666';
     fontWeight: '500'
-  },
+  ;},
   activeTabText: {,
   color: '#007AFF'
-  },
+  ;},
   // 列表
   listContainer: {,
-  paddingHorizontal: 16,
+  paddingHorizontal: 16;
     paddingTop: 16;
   },
   // 预约卡片
   appointmentCard: {,
-  backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+  backgroundColor: '#fff';
+    borderRadius: 12;
+    padding: 16;
+    marginBottom: 12;
+    shadowColor: '#000';
+    shadowOffset: { width: 0, height: 2 ;},
+    shadowOpacity: 0.1;
+    shadowRadius: 4;
     elevation: 3;
   },
   cardHeader: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'flex-start';
     marginBottom: 12;
   },
   appointmentInfo: {,
   flex: 1;
   },
   resourceName: {,
-  fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
+  fontSize: 16;
+    fontWeight: '600';
+    color: '#333';
     marginBottom: 4;
   },
   serviceType: {,
-  fontSize: 14,
+  fontSize: 14;
     color: '#666'
-  },
+  ;},
   statusBadge: {,
-  paddingHorizontal: 8,
-    paddingVertical: 4,
+  paddingHorizontal: 8;
+    paddingVertical: 4;
     borderRadius: 12;
   },
   statusText: {,
-  fontSize: 12,
+  fontSize: 12;
     fontWeight: '500'
-  },
+  ;},
   timeContainer: {,
-  flexDirection: 'row',
-    alignItems: 'center',
+  flexDirection: 'row';
+    alignItems: 'center';
     marginBottom: 8;
   },
   timeText: {,
-  marginLeft: 8,
-    fontSize: 14,
+  marginLeft: 8;
+    fontSize: 14;
     color: '#333'
-  },
+  ;},
   locationContainer: {,
-  flexDirection: 'row',
-    alignItems: 'center',
+  flexDirection: 'row';
+    alignItems: 'center';
     marginBottom: 8;
   },
   locationText: {,
-  marginLeft: 8,
-    fontSize: 14,
+  marginLeft: 8;
+    fontSize: 14;
     color: '#666'
-  },
+  ;},
   notesText: {,
-  fontSize: 14,
-    color: '#666',
+  fontSize: 14;
+    color: '#666';
     marginBottom: 8;
   },
   priceText: {,
-  fontSize: 14,
-    fontWeight: '600',
-    color: '#FF6B35',
+  fontSize: 14;
+    fontWeight: '600';
+    color: '#FF6B35';
     marginBottom: 12;
   },
   cardActions: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
     justifyContent: 'flex-end'
-  },
+  ;},
   actionButton: {,
-  flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    marginLeft: 8,
-    borderRadius: 6,
+  flexDirection: 'row';
+    alignItems: 'center';
+    paddingHorizontal: 12;
+    paddingVertical: 6;
+    marginLeft: 8;
+    borderRadius: 6;
     backgroundColor: '#f8f8f8'
-  },
+  ;},
   cancelActionButton: {,
   backgroundColor: '#FFEBEE'
-  },
+  ;},
   actionButtonText: {,
-  marginLeft: 4,
-    fontSize: 12,
-    color: '#007AFF',
+  marginLeft: 4;
+    fontSize: 12;
+    color: '#007AFF';
     fontWeight: '500'
-  },
+  ;},
   cancelActionText: {,
   color: '#FF3B30'
-  },
+  ;},
   // 空状态
   emptyContainer: {,
-  flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  flex: 1;
+    justifyContent: 'center';
+    alignItems: 'center';
     paddingVertical: 60;
   },
   emptyText: {,
-  fontSize: 18,
-    fontWeight: '500',
-    color: '#666',
-    marginTop: 16,
+  fontSize: 18;
+    fontWeight: '500';
+    color: '#666';
+    marginTop: 16;
     marginBottom: 8;
   },
   emptySubtext: {,
-  fontSize: 14,
-    color: '#999',
-    textAlign: 'center',
+  fontSize: 14;
+    color: '#999';
+    textAlign: 'center';
     marginBottom: 20;
   },
   searchButton: {,
-  backgroundColor: '#007AFF',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
+  backgroundColor: '#007AFF';
+    paddingHorizontal: 20;
+    paddingVertical: 12;
     borderRadius: 8;
   },
   searchButtonText: {,
-  color: '#fff',
-    fontSize: 16,
+  color: '#fff';
+    fontSize: 16;
     fontWeight: '500'
-  },
+  ;},
   // 错误状态
   errorContainer: {,
-  flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  flex: 1;
+    justifyContent: 'center';
+    alignItems: 'center';
     paddingHorizontal: 20;
   },
   errorText: {,
-  fontSize: 16,
-    color: '#666',
-    textAlign: 'center',
+  fontSize: 16;
+    color: '#666';
+    textAlign: 'center';
     marginBottom: 20;
   },
   retryButton: {,
-  backgroundColor: '#007AFF',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+  backgroundColor: '#007AFF';
+    paddingHorizontal: 20;
+    paddingVertical: 10;
     borderRadius: 8;
   },
   retryButtonText: {,
-  color: '#fff',
-    fontSize: 16,
+  color: '#fff';
+    fontSize: 16;
     fontWeight: '500'
-  },
+  ;},
   // 取消预约模态框
   modalOverlay: {,
-  flex: 1,
+  flex: 1;
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
+    justifyContent: 'center';
     alignItems: 'center'
-  },
+  ;},
   modalContent: {,
-  backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 20,
-    width: width * 0.85,
+  backgroundColor: '#fff';
+    borderRadius: 12;
+    padding: 20;
+    width: width * 0.85;
     maxWidth: 400;
   },
   modalTitle: {,
-  fontSize: 18,
-    fontWeight: '600',
-    color: '#333',
-    textAlign: 'center',
+  fontSize: 18;
+    fontWeight: '600';
+    color: '#333';
+    textAlign: 'center';
     marginBottom: 20;
   },
   appointmentSummary: {,
-  backgroundColor: '#f8f8f8',
-    padding: 12,
-    borderRadius: 8,
+  backgroundColor: '#f8f8f8';
+    padding: 12;
+    borderRadius: 8;
     marginBottom: 16;
   },
   summaryText: {,
-  fontSize: 16,
-    fontWeight: '500',
-    color: '#333',
+  fontSize: 16;
+    fontWeight: '500';
+    color: '#333';
     marginBottom: 4;
   },
   summarySubtext: {,
-  fontSize: 14,
+  fontSize: 14;
     color: '#666'
-  },
+  ;},
   reasonLabel: {,
-  fontSize: 14,
-    color: '#333',
+  fontSize: 14;
+    color: '#333';
     marginBottom: 8;
   },
   reasonInput: {,
-  borderWidth: 1,
-    borderColor: '#e0e0e0',
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 14,
-    color: '#333',
-    marginBottom: 20,
+  borderWidth: 1;
+    borderColor: '#e0e0e0';
+    borderRadius: 8;
+    padding: 12;
+    fontSize: 14;
+    color: '#333';
+    marginBottom: 20;
     minHeight: 80;
   },
   modalButtons: {,
   flexDirection: 'row'
-  },
+  ;},
   modalButton: {,
-  flex: 1,
-    paddingVertical: 12,
-    borderRadius: 8,
+  flex: 1;
+    paddingVertical: 12;
+    borderRadius: 8;
     alignItems: 'center'
-  },
+  ;},
   cancelButton: {,
-  backgroundColor: '#f0f0f0',
+  backgroundColor: '#f0f0f0';
     marginRight: 8;
   },confirmButton: {,
-  backgroundColor: "#FF3B30",
+  backgroundColor: "#FF3B30";
       marginLeft: 8;
   },cancelButtonText: {fontSize: 16,color: '#666',fontWeight: '500';
   },confirmButtonText: {fontSize: 16,color: '#fff',fontWeight: '500';

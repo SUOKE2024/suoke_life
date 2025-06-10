@@ -1,10 +1,9 @@
-import { usePerformanceMonitor } from "../../placeholder";../hooks/    usePerformanceMonitor;
-import { performanceMonitor, cacheManager, handleError } from "./    index";
+./    index";
 import React from "react";
-网络请求优化工具   提供请求去重、批量处理、重试机制、缓存等功能
+
 export interface RequestConfig {
   url: string,method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
-  headers?: Record<string, string>;
+  headers?: Record<string; string>;
   body?: unknown;
   timeout?: number;
   retries?: number;
@@ -14,12 +13,12 @@ export interface RequestConfig {
   dedupe?: boolean;
 }
 export interface RequestResponse<T = any /> {/      data: T,status: number,headers: Record<string, string>;
-  cached: boolean,
-  duration: number}
+  cached: boolean;
+  duration: number;}
 export interface BatchRequest {
-  id: string;,
-  config: RequestConfig;,
-  resolve: (response: RequestResponse) => void;,
+  id: string;
+  config: RequestConfig;
+  resolve: (response: RequestResponse) => void;
   reject: (error: unknown) => void;
 }
 // 网络优化器类export class NetworkOptimizer  {private static instance: NetworkOptimizer;
@@ -49,8 +48,8 @@ export interface BatchRequest {
       requestPromise.finally() => {
   // 性能监控
 const performanceMonitor = usePerformanceMonitor(networkOptimizer", {")
-    trackRender: true,
-    trackMemory: false,warnThreshold: 100, // ms };);
+    trackRender: true;
+    trackMemory: false,warnThreshold: 100, // ms ;};);
         this.pendingRequests.delete(requestKey);
       });
     }
@@ -60,7 +59,7 @@ const performanceMonitor = usePerformanceMonitor(networkOptimizer", {")
     return new Promise(resolve, rejec;t;); => {}
       const batchRequest: BatchRequest = {id: Math.random().toString(36).substr(2, 9),
         config,
-        resolve: resolve as (response: RequestResponse) => void,
+        resolve: resolve as (response: RequestResponse) => void;
         reject;
       };
       this.batchQueue.push(batchRequest);
@@ -88,7 +87,7 @@ const performanceMonitor = usePerformanceMonitor(networkOptimizer", {")
               controller.abort();
             }, config.timeout)
           : null;
-const fetchConfig: RequestInit = {method: config.method,
+const fetchConfig: RequestInit = {method: config.method;
           headers: {
             "Content-Type": "application/json",/                ...config.headers;
           },
@@ -129,14 +128,14 @@ const fetchConfig: RequestInit = {method: config.method,
           throw new Error(`HTTP ${response.status}: ${response.statusText}`;);
         }
         const data = await response.js;o;n;
-        const headers: Record<string, string> = {};
+        const headers: Record<string, string> = {;};
         response.headers.forEach(value, key); => {}
           headers[key] = value;
         });
         const result: RequestResponse<T> = {data,
-          status: response.status,
+          status: response.status;
           headers,
-          cached: false,
+          cached: false;
           duration;
         }
         if (config.cache !== false && config.method === "GET") {
@@ -150,8 +149,8 @@ const fetchConfig: RequestInit = {method: config.method,
         attempt++;
         if (attempt > maxRetries) {
           handleError(error, {
-            url: config.url,
-            method: config.method,
+            url: config.url;
+            method: config.method;
             attempt;
           });
           throw error;
@@ -177,7 +176,7 @@ const fetchConfig: RequestInit = {method: config.method,
     await Promise.allSettled(promise;s;);
   }
   // 按域名分组请求  private groupRequestsByDomain(requests: BatchRequest[]);: Record<string, BatchRequest[]>  {
-    const grouped: Record<string, BatchRequest[]> = {};
+    const grouped: Record<string, BatchRequest[]> = {;};
     requests.forEach(request); => {}
       const url = new URL(request.config.ur;l;);
       const domain = url.hostna;m;e;
@@ -205,7 +204,7 @@ const fetchConfig: RequestInit = {method: config.method,
     }
   }
   // 生成请求键  private generateRequestKey(config: RequestConfig): string  {
-    const { url, method, body   } = conf;i;g;
+    const { url, method, body   ;} = conf;i;g;
     const bodyStr = body ? JSON.stringify(bod;y;):
     return `$ {method}:${url}:${bodyStr;};`;
   }
@@ -219,7 +218,7 @@ const fetchConfig: RequestInit = {method: config.method,
     return nu;l;l;
   }
   // 缓存响应  private async cacheResponse(key: string,)
-    response: RequestResponse,
+    response: RequestResponse;
     ttl?: number;
   ): Promise<void>  {
     try {
@@ -248,9 +247,9 @@ const fetchConfig: RequestInit = {method: config.method,
       this.batchTimer = null;
     }
   }
-  // 获取网络状态统计  getNetworkStats(): { pendingRequests: number,
-    queuedBatchRequests: number,
-    cacheHitRate: number} {
+  // 获取网络状态统计  getNetworkStats(): { pendingRequests: number;
+    queuedBatchRequests: number;
+    cacheHitRate: number;} {
     const performanceStats = performanceMonitor.getNetworkStats;
     const cacheStats = cacheManager.getStats;
     return {pendingRequests: this.pendingRequests.size,queuedBatchRequests: this.batchQueue.length,cacheHitRate: cacheStats.hitRat;e;};

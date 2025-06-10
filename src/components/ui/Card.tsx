@@ -1,5 +1,5 @@
 import {   View, StyleSheet, ViewStyle, TouchableOpacity   } from 'react-native';
-import { colors, spacing, borderRadius, shadows } from "../../constants/theme";/    import React from "react";
+react";
 // 索克生活 - Card组件   统一的卡片容器组件
 export interface CardProps {
   children: React.ReactNode;
@@ -20,8 +20,8 @@ const Card: React.FC<CardProps />  = ({/      children,variant = "default",)
   testID;
 }) => {}
   const cardStyle: ViewStyle[] = [;styles.base,styles[variant],
-    { padding: getPadding(padding)   },
-    ...(margin ? [{ margin: getMargin(margin)   }] :  []),
+    { padding: getPadding(padding)   ;},
+    ...(margin ? [{ margin: getMargin(margin)   ;}] :  []),
     ...(disabled ? [styles.disabled] :  []),
     ...(style ? [style] :  [])
   ];
@@ -40,25 +40,25 @@ style={cardStyle}}
   }
   return spacing[paddin;g;];
 };
-const getMargin = (margin: keyof typeof spacing | number): number => {}
+const getMargin = (margin: keyof typeof spacing | number): number => {;}
   if (typeof margin === "number") {return ma;r;g;i;n;
   }
   return spacing[margi;n;];
 };
 const styles = StyleSheet.create({base: {),
-  borderRadius: borderRadius.lg,
-    backgroundColor: colors.surface},
+  borderRadius: borderRadius.lg;
+    backgroundColor: colors.surface;},
   default: {,
-  backgroundColor: colors.surface,
+  backgroundColor: colors.surface;
     ...shadows.sm;
   },
   outlined: {,
-  backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border},
+  backgroundColor: colors.surface;
+    borderWidth: 1;
+    borderColor: colors.border;},
   elevated: {,
-  backgroundColor: colors.surface,
+  backgroundColor: colors.surface;
     ...shadows.lg;
   },
-  filled: { backgroundColor: colors.surfaceSecondary  }, disabled: { opacity: 0.6  } };);
+  filled: { backgroundColor: colors.surfaceSecondary  ;}, disabled: { opacity: 0.6  ;} };);
 export default React.memo(Card);

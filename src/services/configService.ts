@@ -4,23 +4,23 @@
 */
 export interface AppConfig {
   // API网关配置
-  gateway: {;,
-  baseUrl: string;,
-  timeout: number;,
-  retryAttempts: number;,
+  gateway: {
+  baseUrl: string;
+  timeout: number;
+  retryAttempts: number;
   retryDelay: number;
 };
     // 功能开关
   features: {
     [featureName: string]: {,
-  enabled: boolean;,
+  enabled: boolean;
   rolloutPercentage: number;
     };
   };
     // 用户界面配置
   ui: {,
-  theme: 'light' | 'dark' | 'auto';,
-  language: string,
+  theme: 'light' | 'dark' | 'auto';
+  language: string;
   enableAnimations: boolean;
   };
 }
@@ -36,9 +36,9 @@ class ConfigService {
   */
   async initialize(): Promise<void> {
     try {
-      console.log('配置服务初始化完成');
+
     } catch (error) {
-      console.error('配置服务初始化失败:', error);
+
       this.config = { ...this.defaultConfig };
     }
   }
@@ -63,9 +63,9 @@ class ConfigService {
   async set(path: string, value: any): Promise<void> {
     try {
       this.setNestedValue(this.config, path, value);
-      console.log(`配置已更新: ${path} = ${JSON.stringify(value)}`);
+
     } catch (error) {
-      console.error('配置设置失败:', error);
+
       throw error;
     }
   }
@@ -73,34 +73,34 @@ class ConfigService {
   * 检查功能开关
   */
   isFeatureEnabled(featureName: string): boolean {
-    const feature = this.get(`features.${featureName}`);
+    const feature = this.get(`features.${featureName;}`);
     return feature && feature.enabled;
   }
   private getDefaultConfig(): AppConfig {
     return {
       gateway: {,
-  baseUrl: 'https://api.suoke-life.com',
-        timeout: 30000,
-        retryAttempts: 3,
+  baseUrl: 'https://api.suoke-life.com';
+        timeout: 30000;
+        retryAttempts: 3;
         retryDelay: 1000;
       },
       features: {
         'ai-diagnosis': {
-          enabled: true,
+          enabled: true;
           rolloutPercentage: 100;
         },
         'blockchain-health': {
-          enabled: true,
+          enabled: true;
           rolloutPercentage: 50;
         },
         'corn-maze': {
-          enabled: true,
+          enabled: true;
           rolloutPercentage: 100;
         }
       },
       ui: {,
-  theme: 'auto',
-        language: 'zh-CN',
+  theme: 'auto';
+        language: 'zh-CN';
         enableAnimations: true;
       }
     };

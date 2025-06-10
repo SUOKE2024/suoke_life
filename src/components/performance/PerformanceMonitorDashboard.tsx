@@ -23,15 +23,15 @@ interface PerformanceMonitorDashboardProps {
 
 export const PerformanceMonitorDashboard: React.FC<
   PerformanceMonitorDashboardProps
-> = ({ isVisible = true, updateInterval = 1000 }) => {
+> = ({ isVisible = true, updateInterval = 1000 ;}) => {
   const [metrics, setMetrics] = useState<PerformanceMetrics>({
-    frameRate: 0,
-    memoryUsage: 0,
-    networkLatency: 0,
-    cacheHitRate: 0,
-    renderTime: 0,
-    jsHeapSize: 0,
-    timestamp: Date.now(),
+    frameRate: 0;
+    memoryUsage: 0;
+    networkLatency: 0;
+    cacheHitRate: 0;
+    renderTime: 0;
+    jsHeapSize: 0;
+    timestamp: Date.now();
   });
 
   const [isMonitoring, setIsMonitoring] = useState(false);
@@ -49,9 +49,9 @@ export const PerformanceMonitorDashboard: React.FC<
         memoryUsage: Math.random() * 100 + 50, // 50-150 MB
         networkLatency: Math.random() * 200 + 50, // 50-250 ms
         cacheHitRate: Math.random() * 0.4 + 0.6, // 60-100%
-        renderTime: performance.now() - startTime,
+        renderTime: performance.now() - startTime;
         jsHeapSize: Math.random() * 50 + 20, // 20-70 MB
-        timestamp: Date.now(),
+        timestamp: Date.now();
       };
 
       setMetrics(newMetrics);
@@ -67,15 +67,15 @@ export const PerformanceMonitorDashboard: React.FC<
     const newAlerts: string[] = [];
 
     if (metrics.frameRate < 30) {
-      newAlerts.push(`低帧率警告: ${metrics.frameRate.toFixed(1)} fps`);
+
     }
 
     if (metrics.memoryUsage > 120) {
-      newAlerts.push(`内存使用过高: ${metrics.memoryUsage.toFixed(1)} MB`);
+
     }
 
     if (metrics.networkLatency > 200) {
-      newAlerts.push(`网络延迟过高: ${metrics.networkLatency.toFixed(0)} ms`);
+
     }
 
     if (metrics.cacheHitRate < 0.7) {
@@ -88,8 +88,8 @@ export const PerformanceMonitorDashboard: React.FC<
 
     // 如果有严重性能问题，显示警告
     if (newAlerts.length > 2) {
-      Alert.alert('性能警告', '检测到多个性能问题，建议检查应用状态', [
-        { text: '确定' },
+
+
       ]);
     }
   }, []);
@@ -114,8 +114,8 @@ export const PerformanceMonitorDashboard: React.FC<
   }, [isVisible, startMonitoring, stopMonitoring]);
 
   const getMetricColor = (
-    value: number,
-    thresholds: { good: number; warning: number }
+    value: number;
+    thresholds: { good: number; warning: number ;}
   ) => {
     if (value <= thresholds.good) return '#4CAF50'; // 绿色
     if (value <= thresholds.warning) return '#FF9800'; // 橙色
@@ -123,11 +123,11 @@ export const PerformanceMonitorDashboard: React.FC<
   };
 
   const getFrameRateColor = (fps: number) =>
-    getMetricColor(fps, { good: 50, warning: 30 });
+    getMetricColor(fps, { good: 50, warning: 30 ;});
   const getMemoryColor = (mb: number) =>
-    getMetricColor(mb, { good: 80, warning: 120 });
+    getMetricColor(mb, { good: 80, warning: 120 ;});
   const getLatencyColor = (ms: number) =>
-    getMetricColor(ms, { good: 100, warning: 200 });
+    getMetricColor(ms, { good: 100, warning: 200 ;});
 
   if (!isVisible) {
     return null;
@@ -140,7 +140,7 @@ export const PerformanceMonitorDashboard: React.FC<
         <View
           style={[
             styles.statusIndicator,
-            { backgroundColor: isMonitoring ? '#4CAF50' : '#F44336' },
+            { backgroundColor: isMonitoring ? '#4CAF50' : '#F44336' ;},
           ]}
         />
       </View>
@@ -155,7 +155,7 @@ export const PerformanceMonitorDashboard: React.FC<
           <Text
             style={[
               styles.metricValue,
-              { color: getFrameRateColor(metrics.frameRate) },
+              { color: getFrameRateColor(metrics.frameRate) ;},
             ]}
           >
             {metrics.frameRate.toFixed(1)}
@@ -165,8 +165,8 @@ export const PerformanceMonitorDashboard: React.FC<
               style={[
                 styles.progressFill,
                 {
-                  width: `${Math.min((metrics.frameRate / 60) * 100, 100)}%`,
-                  backgroundColor: getFrameRateColor(metrics.frameRate),
+                  width: `${Math.min((metrics.frameRate / 60) * 100, 100);}%`,
+                  backgroundColor: getFrameRateColor(metrics.frameRate);
                 },
               ]}
             />
@@ -179,7 +179,7 @@ export const PerformanceMonitorDashboard: React.FC<
           <Text
             style={[
               styles.metricValue,
-              { color: getMemoryColor(metrics.memoryUsage) },
+              { color: getMemoryColor(metrics.memoryUsage) ;},
             ]}
           >
             {metrics.memoryUsage.toFixed(1)}
@@ -189,8 +189,8 @@ export const PerformanceMonitorDashboard: React.FC<
               style={[
                 styles.progressFill,
                 {
-                  width: `${Math.min((metrics.memoryUsage / 150) * 100, 100)}%`,
-                  backgroundColor: getMemoryColor(metrics.memoryUsage),
+                  width: `${Math.min((metrics.memoryUsage / 150) * 100, 100);}%`,
+                  backgroundColor: getMemoryColor(metrics.memoryUsage);
                 },
               ]}
             />
@@ -203,7 +203,7 @@ export const PerformanceMonitorDashboard: React.FC<
           <Text
             style={[
               styles.metricValue,
-              { color: getLatencyColor(metrics.networkLatency) },
+              { color: getLatencyColor(metrics.networkLatency) ;},
             ]}
           >
             {metrics.networkLatency.toFixed(0)}
@@ -213,8 +213,8 @@ export const PerformanceMonitorDashboard: React.FC<
               style={[
                 styles.progressFill,
                 {
-                  width: `${Math.min((metrics.networkLatency / 300) * 100, 100)}%`,
-                  backgroundColor: getLatencyColor(metrics.networkLatency),
+                  width: `${Math.min((metrics.networkLatency / 300) * 100, 100);}%`,
+                  backgroundColor: getLatencyColor(metrics.networkLatency);
                 },
               ]}
             />
@@ -224,7 +224,7 @@ export const PerformanceMonitorDashboard: React.FC<
         {/* 缓存命中率 */}
         <View style={styles.metricCard}>
           <Text style={styles.metricLabel}>缓存命中率</Text>
-          <Text style={[styles.metricValue, { color: '#2196F3' }]}>
+          <Text style={[styles.metricValue, { color: '#2196F3' ;}]}>
             {(metrics.cacheHitRate * 100).toFixed(1)}%
           </Text>
           <View style={styles.progressBar}>
@@ -232,8 +232,8 @@ export const PerformanceMonitorDashboard: React.FC<
               style={[
                 styles.progressFill,
                 {
-                  width: `${metrics.cacheHitRate * 100}%`,
-                  backgroundColor: '#2196F3',
+                  width: `${metrics.cacheHitRate * 100;}%`,
+                  backgroundColor: '#2196F3';
                 },
               ]}
             />
@@ -243,7 +243,7 @@ export const PerformanceMonitorDashboard: React.FC<
         {/* 渲染时间 */}
         <View style={styles.metricCard}>
           <Text style={styles.metricLabel}>渲染时间 (ms)</Text>
-          <Text style={[styles.metricValue, { color: '#9C27B0' }]}>
+          <Text style={[styles.metricValue, { color: '#9C27B0' ;}]}>
             {metrics.renderTime.toFixed(2)}
           </Text>
         </View>
@@ -251,7 +251,7 @@ export const PerformanceMonitorDashboard: React.FC<
         {/* JS堆大小 */}
         <View style={styles.metricCard}>
           <Text style={styles.metricLabel}>JS堆大小 (MB)</Text>
-          <Text style={[styles.metricValue, { color: '#FF5722' }]}>
+          <Text style={[styles.metricValue, { color: '#FF5722' ;}]}>
             {metrics.jsHeapSize.toFixed(1)}
           </Text>
         </View>
@@ -271,7 +271,7 @@ export const PerformanceMonitorDashboard: React.FC<
 
       <View style={styles.footer}>
         <Text style={styles.footerText}>
-          最后更新: {new Date(metrics.timestamp).toLocaleTimeString()}
+
         </Text>
       </View>
     </View>
@@ -280,91 +280,91 @@ export const PerformanceMonitorDashboard: React.FC<
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-    padding: 16,
+    flex: 1;
+    backgroundColor: '#f5f5f5';
+    padding: 16;
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 16,
-    paddingBottom: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    flexDirection: 'row';
+    alignItems: 'center';
+    justifyContent: 'space-between';
+    marginBottom: 16;
+    paddingBottom: 12;
+    borderBottomWidth: 1;
+    borderBottomColor: '#e0e0e0';
   },
   title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333',
+    fontSize: 20;
+    fontWeight: 'bold';
+    color: '#333';
   },
   statusIndicator: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
+    width: 12;
+    height: 12;
+    borderRadius: 6;
   },
   metricsContainer: {
-    flex: 1,
+    flex: 1;
   },
   metricCard: {
-    backgroundColor: '#fff',
-    padding: 16,
-    marginBottom: 12,
-    borderRadius: 8,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    backgroundColor: '#fff';
+    padding: 16;
+    marginBottom: 12;
+    borderRadius: 8;
+    elevation: 2;
+    shadowColor: '#000';
+    shadowOffset: { width: 0, height: 2 ;},
+    shadowOpacity: 0.1;
+    shadowRadius: 4;
   },
   metricLabel: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 4,
+    fontSize: 14;
+    color: '#666';
+    marginBottom: 4;
   },
   metricValue: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 8,
+    fontSize: 24;
+    fontWeight: 'bold';
+    marginBottom: 8;
   },
   progressBar: {
-    height: 4,
-    backgroundColor: '#e0e0e0',
-    borderRadius: 2,
-    overflow: 'hidden',
+    height: 4;
+    backgroundColor: '#e0e0e0';
+    borderRadius: 2;
+    overflow: 'hidden';
   },
   progressFill: {
-    height: '100%',
-    borderRadius: 2,
+    height: '100%';
+    borderRadius: 2;
   },
   alertsContainer: {
-    backgroundColor: '#fff3cd',
-    padding: 16,
-    borderRadius: 8,
-    borderLeftWidth: 4,
-    borderLeftColor: '#ffc107',
-    marginBottom: 12,
+    backgroundColor: '#fff3cd';
+    padding: 16;
+    borderRadius: 8;
+    borderLeftWidth: 4;
+    borderLeftColor: '#ffc107';
+    marginBottom: 12;
   },
   alertsTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#856404',
-    marginBottom: 8,
+    fontSize: 16;
+    fontWeight: 'bold';
+    color: '#856404';
+    marginBottom: 8;
   },
   alertText: {
-    fontSize: 14,
-    color: '#856404',
-    marginBottom: 4,
+    fontSize: 14;
+    color: '#856404';
+    marginBottom: 4;
   },
   footer: {
-    paddingTop: 12,
-    borderTopWidth: 1,
-    borderTopColor: '#e0e0e0',
-    alignItems: 'center',
+    paddingTop: 12;
+    borderTopWidth: 1;
+    borderTopColor: '#e0e0e0';
+    alignItems: 'center';
   },
   footerText: {
-    fontSize: 12,
-    color: '#666',
+    fontSize: 12;
+    color: '#666';
   },
 });
 

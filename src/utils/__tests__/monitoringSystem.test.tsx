@@ -1,6 +1,4 @@
-import { MonitoringSystem, monitoringSystem } from "../monitoringSystem";
-import { MonitoringSystem, monitoringSystem } from "../monitoringSystem";
-import React from "react";
+
 describe("monitoringSystem", () => {
   beforeEach(() => {
     jest.clearAllMocks();

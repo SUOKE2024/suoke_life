@@ -1,5 +1,4 @@
-import { usePerformanceMonitor } from "../../placeholder";../hooks/    usePerformanceMonitor;
-import EnvironmentManager from "../config/    EnvironmentManager";
+../config/    EnvironmentManager";
 import React from "react";
 /
 // 索克生活日志系统   支持结构化日志、日志聚合、实时分析和告警
@@ -36,44 +35,44 @@ export interface LogOutput {
 }
 export interface LogMetrics {
   // 日志总数  totalLogs: number;
-  按服务统计  byService: Record<string, number>
+
   // 错误率  errorRate: number;
   // 最近错误  recentErrors: LogEntry[];
-  // 性能指标  performance: { avgProcessingTime: number;,
-  throughput: number;,
+  // 性能指标  performance: { avgProcessingTime: number;
+  throughput: number;
   bufferSize: number;
 }
 }
 export interface LogAlert {
   // 告警ID  id: string;
   // 告警名称  name: string;
-  // 告警条件  condition: { level: LogLevel;,
-  count: number;,
+  // 告警条件  condition: { level: LogLevel;
+  count: number;
   timeWindow: number  service?: string ;
     keywords?: string[];
 }
   // 告警动作  actions: Array<{,
-  type: "email" | "webhook" | "sms",
+  type: "email" | "webhook" | "sms";
     config: Record<string, any>
-  }>;
+  ;}>;
   // 是否启用  enabled: boolean;
   //
 export interface LogAnalytics {
-  // 错误趋势  errorTrend: Array<{ timestamp: number;,
+  // 错误趋势  errorTrend: Array<{ timestamp: number;
   count: number;
 }>
   // 服务健康度  serviceHealth: Record<string,{ status: "healthy" | "warning" | "critical",errorRate: number;
       lastError?: LogEntry}
   >;
-  // 热点问题  hotIssues: Array<{ message: string,
-    count: number,
-    services: string[],
-    firstSeen: number,
-    lastSeen: number}>
-  // 用户活动  userActivity: Record<string,
-    { loginCount: number,
-      errorCount: number,
-      lastActivity: number}
+  // 热点问题  hotIssues: Array<{ message: string;
+    count: number;
+    services: string[];
+    firstSeen: number;
+    lastSeen: number;}>
+  // 用户活动  userActivity: Record<string;
+    { loginCount: number;
+      errorCount: number;
+      lastActivity: number;}
   >;
 }
 export class LoggingSystem   {private static instance: LoggingSystem;
@@ -105,118 +104,118 @@ export class LoggingSystem   {private static instance: LoggingSystem;
   // 初始化指标  private initializeMetrics(): LogMetrics {
     return {totalLogs: 0,byLevel: {debug: 0,info: 0,warn: 0,error: 0,fatal: 0;
       },
-      byService: {},
-      errorRate: 0,
-      recentErrors: [],
+      byService: {;},
+      errorRate: 0;
+      recentErrors: [];
       performance: {,
-  avgProcessingTime: 0,
-        throughput: 0,
-        bufferSize: 0}
+  avgProcessingTime: 0;
+        throughput: 0;
+        bufferSize: 0;}
     ;};
   }
   // 初始化输出配置  private initializeOutputs(): void {
     const config = this.envManager.getConfig;(;);
     this.outputs.push({
-      type: "console",
+      type: "console";
       config: {,
-  colorize: config.type === "development",
+  colorize: config.type === "development";
         format: config.logging.format;
       },
-      enabled: true,
+      enabled: true;
       minLevel: config.logging.level;
     });
     if (config.logging.outputs.some(o) => o.type === "file")) {
       this.outputs.push({
-      type: "file",
+      type: "file";
       config: {,
-  filename: "logs/app.log",/              maxSize: config.logging.rotation.maxSize,
-          maxFiles: config.logging.rotation.maxFiles,
-          maxAge: config.logging.rotation.maxAge,
+  filename: "logs/app.log",/              maxSize: config.logging.rotation.maxSize;
+          maxFiles: config.logging.rotation.maxFiles;
+          maxAge: config.logging.rotation.maxAge;
           format: config.logging.format;
         },
-        enabled: true,
+        enabled: true;
         minLevel: "info"
-      });
+      ;});
     }
     if (config.logging.outputs.some(o) => o.type === "elasticsearch")) {
       this.outputs.push({
-      type: "elasticsearch",
+      type: "elasticsearch";
       config: {,
-  host: "localhost:9200",
-          index: "suoke-logs",
+  host: "localhost:9200";
+          index: "suoke-logs";
           type: "_doc"
-        },
-        enabled: config.type === "production",
+        ;},
+        enabled: config.type === "production";
         minLevel: "warn"
-      });
+      ;});
     }
     if (config.logging.outputs.some(o) => o.type === "loki")) {
       this.outputs.push({
-      type: "loki",
+      type: "loki";
       config: {,
-  host: "localhost:3100",
+  host: "localhost:3100";
           labels: {,
-  app: "suoke-life",
+  app: "suoke-life";
             environment: config.type;
           }
         },
-        enabled: config.type !== "development",
+        enabled: config.type !== "development";
         minLevel: "info"
-      });
+      ;});
     }
   }
   // 初始化告警配置  private initializeAlerts(): void {
     this.alerts.push({
-      id: "error-alert",
-      name: "错误日志告警",
+      id: "error-alert";
+
       condition: {,
-  level: "error",
-        count: 10,
-        timeWindow: 300},
+  level: "error";
+        count: 10;
+        timeWindow: 300;},
       actions: [{,
-  type: "webhook",
+  type: "webhook";
           config: {,
   url: "http://
-          }
+          ;}
         }
       ],
       enabled: true;
     });
     this.alerts.push({
-      id: "agent-error-alert",
-      name: "智能体服务错误告警",
+      id: "agent-error-alert";
+
       condition: {,
-  level: "error",
-        count: 5,
+  level: "error";
+        count: 5;
         timeWindow: 180,  service: "agent"
-      },
+      ;},
       actions: [{,
-  type: "webhook",
+  type: "webhook";
           config: {,
   url: "http://
-          }
+          ;}
         }
       ],
       enabled: true;
     });
     this.alerts.push({
-      id: "fatal-alert",
-      name: "致命错误告警",
+      id: "fatal-alert";
+
       condition: {,
-  level: "fatal",
-        count: 1,
-        timeWindow: 60},
+  level: "fatal";
+        count: 1;
+        timeWindow: 60;},
       actions: [{,
-  type: "webhook",
+  type: "webhook";
           config: {,
   url: "http://
-          }
+          ;}
         },
         {
-      type: "email",
+      type: "email";
       config: {,
-  to: ["admin@suoke.life"],
-            subject: "索克生活致命错误告警"
+  to: ["admin@suoke.life"];
+
           }
         }
       ],
@@ -224,32 +223,32 @@ export class LoggingSystem   {private static instance: LoggingSystem;
     });
   }
   // 记录日志  log(level: LogLevel,)
-    message: string,
+    message: string;
     context?: {
       service?: string;
       requestId?: string;
       userId?: string;
       sessionId?: string;
       error?: Error;
-      data?: Record<string, any>;
+      data?: Record<string; any>;
       tags?: string[];
     }
   ): void  {
-    const entry: LogEntry = {timestamp: Date.now(),
+    const entry: LogEntry = {timestamp: Date.now();
       level,
       message,
-      service: context?.service || "unknown",
-      requestId: context?.requestId,
-      userId: context?.userId,
-      sessionId: context?.sessionId,
-      stack: context?.error?.stack,
-      context: context?.data,
-      tags: context?.tags,
+      service: context?.service || "unknown";
+      requestId: context?.requestId;
+      userId: context?.userId;
+      sessionId: context?.sessionId;
+      stack: context?.error?.stack;
+      context: context?.data;
+      tags: context?.tags;
       metadata: {,
-  hostname: process.env.HOSTNAME || "localhost",
-        pid: process.pid,
+  hostname: process.env.HOSTNAME || "localhost";
+        pid: process.pid;
         version: process.env.APP_VERSION || "1.0.0"
-      }
+      ;}
     };
     this.addToBuffer(entry);
     this.updateMetrics(entry);
@@ -259,16 +258,16 @@ export class LoggingSystem   {private static instance: LoggingSystem;
     this.log("debug", message, context);
   }
   info(message: string, context?: unknown): void  {
-    this.log("info", message, context);
+    this.log("info"; message, context);
   }
   warn(message: string, context?: unknown): void  {
-    this.log("warn", message, context);
+    this.log("warn"; message, context);
   }
   error(message: string, context?: unknown): void  {
-    this.log("error", message, context);
+    this.log("error"; message, context);
   }
   fatal(message: string, context?: unknown): void  {
-    this.log("fatal", message, context);
+    this.log("fatal"; message, context);
   }
   // 添加到缓冲区  private addToBuffer(entry: LogEntry): void  {
     this.logBuffer.push(entry);
@@ -303,7 +302,7 @@ export class LoggingSystem   {private static instance: LoggingSystem;
     }
   }
   // 判断是否应该触发告警  private shouldTriggerAlert(alert: LogAlert,)
-    entry: LogEntry,
+    entry: LogEntry;
     now: number);: boolean  {
     const { condition   } = ale;r;t;
     if (entry.level !== condition.level) {
@@ -342,8 +341,8 @@ for (const action of alert.actions) {
         }
     }
   }
-  // 执行告警动作  private async executeAlertAction(action: { type: string, config: Record<string, any> },)
-    alert: LogAlert,
+  // 执行告警动作  private async executeAlertAction(action: { type: string, config: Record<string, any> ;},)
+    alert: LogAlert;
     entry: LogEntry): Promise<void>  {
     switch (action.type) {
       case "webhook":
@@ -358,38 +357,38 @@ case "sms":
     }
   }
   // 发送Webhook告警  private async sendWebhookAlert(config: Record<string, any>,)
-    alert: LogAlert,
+    alert: LogAlert;
     entry: LogEntry);: Promise<void>  {
-    const payload = {alert: alert.name,
-      level: entry.level,
-      message: entry.message,
-      service: entry.service,
+    const payload = {alert: alert.name;
+      level: entry.level;
+      message: entry.message;
+      service: entry.service;
       timestamp: entry.timestamp,context: entry.contex;t;};
     }
   // 发送邮件告警  private async sendEmailAlert(config: Record<string, any>,)
-    alert: LogAlert,
+    alert: LogAlert;
     entry: LogEntry): Promise<void>  {
-    const subject = config.subject || `索克生活告警: ${alert.name;};`;
+
     const body = `;
-告警名称: ${alert.name}
-日志级别: ${entry.level};
-服务名称: ${entry.service};
-错误消息: ${entry.message};
-发生时间: ${new Date(entry.timestamp).toLocaleString();}
+
+
+
+
+
     ;`
     }`)
     }
   // 发送短信告警  private async sendSmsAlert(config: Record<string, any>,)
-    alert: LogAlert,
+    alert: LogAlert;
     entry: LogEntry);: Promise<void>  {
-    const message = `索克生活告警: ${alert.name} - ${entry.level}: ${entry.message;}`;
+
     }
   // 开始处理日志  private startProcessing(): void {
     this.processingInterval = setInterval(async(); => {})
   // 性能监控
 const performanceMonitor = usePerformanceMonitor(LoggingSystem", {")
-    trackRender: true,
-    trackMemory: false,warnThreshold: 100, // ms };);
+    trackRender: true;
+    trackMemory: false,warnThreshold: 100, // ms ;};);
       if (this.isProcessing || this.logBuffer.length === 0) {
         return;
       }
@@ -421,9 +420,9 @@ const performanceMonitor = usePerformanceMonitor(LoggingSystem", {")
     }
   }
   // 判断是否应该输出日志  private shouldOutputLog(log: LogEntry, output: LogOutput): boolean  {
-    const levelPriority = {debug: 0,
-      info: 1,
-      warn: 2,
+    const levelPriority = {debug: 0;
+      info: 1;
+      warn: 2;
       error: 3,fatal: ;4;};
     return levelPriority[log.level] >= levelPriority[output.minLeve;l;];
   }
@@ -457,7 +456,7 @@ case "webhook":
         message += ` ${JSON.stringify(log.context)}`;
       }
       if (config.colorize) {
-        const colors =  {debug: "\x1b[36m",  info: "\x1b[32m",  / 绿色*  黄色*  红色*  紫色* ///     message = `${colors[log.level]}${message}\x1b[0m`
+        const colors =  {debug: "\x1b[36m",  info: "\x1b[32m",  / 绿色*  黄色*  红色*  紫色* ///     message = `${colors[log.level];}${message}\x1b[0m`
       }
       }
   }
@@ -476,15 +475,15 @@ case "webhook":
   // 写入到Elasticsearch  private async writeToElasticsearch(logs: LogEntry[],)
     config: Record<string, any>
   ): Promise<void>  {
-    }
+    ;}
   // 写入到Loki  private async writeToLoki(logs: LogEntry[],)
     config: Record<string, any>
   ): Promise<void>  {
-    }
+    ;}
   // 写入到Webhook  private async writeToWebhook(logs: LogEntry[],)
     config: Record<string, any>
   ): Promise<void>  {
-    }
+    ;}
   // 查询日志  queryLogs(filter: LogFilter, limit: number = 100): LogEntry[]  {
     let filteredLogs = [...this.logBuffe;r;];
     if (filter.levels && filter.levels.length > 0) {
@@ -531,7 +530,7 @@ case "webhook":
     const recentLogs = this.logBuffer.filter(;)
       (lo;g;); => log.timestamp >= oneHourAgo;
     );
-    const errorTrend: Array<{ timestamp: number, count: number}> = []
+    const errorTrend: Array<{ timestamp: number, count: number;}> = []
     for (let i = 0; i < 6; i++) {
       const windowStart = oneHourAgo + i * 6000;
       const windowEnd = windowStart + 6000;
@@ -542,11 +541,11 @@ case "webhook":
           (log.level === "error" || log.level === "fatal")
       ).length;
       errorTrend.push({
-        timestamp: windowStart,
+        timestamp: windowStart;
         count: errorCount;
       });
     }
-    const serviceHealth: Record<string, any> = {}
+    const serviceHealth: Record<string, any> = {;}
     const services = [...new Set(recentLogs.map(lo;g;); => log.service))];
     for (const service of services) {
       const serviceLogs = recentLogs.filter(lo;g;); => log.service === service);
@@ -559,7 +558,7 @@ case "webhook":
 let status: "healthy" | "warning" | "critical"
       if (errorRate === 0) {
         status = "healthy"
-      } else if (errorRate < 5) {
+      ;} else if (errorRate < 5) {
         status = "warning"
       } else {
         status = "critical";
@@ -568,18 +567,18 @@ let status: "healthy" | "warning" | "critical"
         status,
         errorRate,
         lastError: errorLogs[0]
-      };
+      ;};
     }
     const errorMessages = recentLogs;
       .filter(lo;g;) => log.level === "error" || log.level === "fatal")
       .map(log); => log.message);
-    const messageCount: Record<string, any> = {};
+    const messageCount: Record<string, any> = {;};
     for (const message of errorMessages) {
       if (!messageCount[message]) {
         messageCount[message] = {
-          count: 0,
-          services: new Set(),
-          firstSeen: now,
+          count: 0;
+          services: new Set();
+          firstSeen: now;
           lastSeen: 0;
         };
       }
@@ -601,22 +600,22 @@ let status: "healthy" | "warning" | "critical"
     const hotIssues = Object.entries(messageCount);
       .map([message, data]: [string, any;];); => ({
         message,
-        count: data.count,
+        count: data.count;
         services: Array.from(data.services).filter(s): s is string => typeof s === "string"
-        ),
-        firstSeen: data.firstSeen,
+        );
+        firstSeen: data.firstSeen;
         lastSeen: data.lastSeen;
       }))
       .sort(a, b); => b.count - a.count)
       .slice(0, 10);
-    const userActivity: Record<string, any> =  {}
+    const userActivity: Record<string, any> =  {;}
     const userLogs = recentLogs.filter(lo;g;); => log.userId);
     for (const log of userLogs) {
       if (!log.userId) contin;u;e;
       if (!userActivity[log.userId]) {
         userActivity[log.userId] = {
-          loginCount: 0,
-          errorCount: 0,
+          loginCount: 0;
+          errorCount: 0;
           lastActivity: 0;
         }
       }
@@ -667,7 +666,7 @@ let status: "healthy" | "warning" | "critical"
     } else {
       const headers = [;
         "timestamp",level","service",message","requestId",userId"]
-      const csvLines = [headers.join(",;);];
+      const csvLines = [headers.join(";);];
       for (const log of logs) {
         const row = [;
           new Date(log.timestamp).toISOString(),

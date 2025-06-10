@@ -36,29 +36,29 @@ export const BenchmarkReport: React.FC<BenchmarkReportProps> = ({
   const [reportUrls, setReportUrls] = useState<{html?: string;
     json?: string;
   }>({});
-  const [generatingReport, setGeneratingReport] = useState<{html: boolean,
+  const [generatingReport, setGeneratingReport] = useState<{html: boolean;
   json: boolean;
-  }>({ html: false, json: false });
+  }>({ html: false, json: false ;});
   // 生成报告
-  const handleGenerateReport = async (format: 'html' | 'json') => {try {setGeneratingReport(prev => ({ ...prev, [format]: true }));
+  const handleGenerateReport = async (format: 'html' | 'json') => {try {setGeneratingReport(prev => ({ ...prev, [format]: true ;}));
       const response = await dispatch(generateReport({taskId,format ;))
       })).unwrap();
       setReportUrls(prev => ({
         ...prev,
         [format]: response.reportUrl;
       }));
-      Alert.alert('报告生成成功',
-        `${format.toUpperCase()}格式报告已生成`,
+
+
         [
-          { text: '确定' },
+
           {
-      text: "打开报告", "
+
       onPress: () => openReport(response.reportUrl);
           }
         ]
       );
     } catch (error) {
-      Alert.alert('生成失败', `生成${format.toUpperCase()}报告失败: ${error}`);
+
     } finally {
       setGeneratingReport(prev => ({ ...prev, [format]: false }));
     }
@@ -68,17 +68,17 @@ export const BenchmarkReport: React.FC<BenchmarkReportProps> = ({
       if (supported) {
         await Linking.openURL(url);
       } else {
-        Alert.alert("无法打开", "无法打开报告链接');
+
       }
     } catch (error) {
-      Alert.alert("打开失败", "打开报告时发生错误');
+
     }
   };
   // 分享报告
-  const shareReport = async (url: string, format: string) => {try {await Share.share({message: `基准测试报告 (${format.toUpperCase()}): ${url}`,url: url,title: '基准测试报告';)
+
       });
     } catch (error) {
-      console.error('分享失败:', error);
+
     }
   };
   // 格式化时间
@@ -114,8 +114,8 @@ export const BenchmarkReport: React.FC<BenchmarkReportProps> = ({
       {// 报告头部}
       <Card style={styles.card}>
         <Card.Title;
-          title="基准测试报告"
-          subtitle={`任务ID: ${taskId}`}
+
+
           right={() => onClose  && <IconButton icon="close" onPress={onClose} />
           )}
         />
@@ -123,10 +123,10 @@ export const BenchmarkReport: React.FC<BenchmarkReportProps> = ({
           <View style={styles.headerInfo}>
             <View style={styles.statusRow}>
               <Chip;
-                style={[styles.statusChip, { backgroundColor: '#4CAF50' }}]}
-                textStyle={ color: 'white' }}
+                style={[styles.statusChip, { backgroundColor: '#4CAF50' ;}}]}
+                textStyle={ color: 'white' ;}}
               >
-                已完成
+
               </Chip>
               <Text style={styles.timestampText}>
                 {new Date(result.timestamp).toLocaleString()}
@@ -171,7 +171,7 @@ export const BenchmarkReport: React.FC<BenchmarkReportProps> = ({
           <Card.Content>
             <View style={styles.scoreContainer}>
               <View style={styles.scoreCircle}>
-                <Text style={[styles.scoreText, { color: '#4CAF50' }}]}>
+                <Text style={[styles.scoreText, { color: '#4CAF50' ;}}]}>
                   {averageScore.toFixed(1)}
                 </Text>
                 <Text style={styles.scoreLabel}>平均分</Text>
@@ -203,7 +203,7 @@ export const BenchmarkReport: React.FC<BenchmarkReportProps> = ({
           <Card.Title title="预测结果" />
           <Card.Content>
             <Text style={styles.predictionsCount}>
-              共 {result.predictions.length} 个预测结果
+
             </Text>
             <DataTable>
               <DataTable.Header>
@@ -236,7 +236,7 @@ export const BenchmarkReport: React.FC<BenchmarkReportProps> = ({
               ))}
             </DataTable>
             {result.predictions.length > 5  && <Text style={styles.moreResultsText}>
-                还有 {result.predictions.length - 5} 个结果...
+
               </Text>
             )}
           </Card.Content>
@@ -276,7 +276,7 @@ export const BenchmarkReport: React.FC<BenchmarkReportProps> = ({
                 disabled={generatingReport.html || generatingReport.json}
                 style={styles.exportButton}
               >
-                生成HTML报告
+
               </Button>
               {reportUrls.html  && <View style={styles.reportActions}>
                   <IconButton;
@@ -299,7 +299,7 @@ export const BenchmarkReport: React.FC<BenchmarkReportProps> = ({
                 disabled={generatingReport.html || generatingReport.json}
                 style={styles.exportButton}
               >
-                生成JSON报告
+
               </Button>
               {reportUrls.json  && <View style={styles.reportActions}>
                   <IconButton;
@@ -321,90 +321,90 @@ export const BenchmarkReport: React.FC<BenchmarkReportProps> = ({
 };
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
+  flex: 1;
     backgroundColor: '#f5f5f5'
-  },
+  ;},
   card: {,
-  margin: 16,
+  margin: 16;
     marginBottom: 8;
   },
   noDataText: {,
-  textAlign: 'center',
-    color: '#666',
-    fontStyle: 'italic',
+  textAlign: 'center';
+    color: '#666';
+    fontStyle: 'italic';
     padding: 32;
   },
   headerInfo: {,
   marginTop: 8;
   },
   statusRow: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
     marginBottom: 8;
   },
   statusChip: {,
   height: 28;
   },
   timestampText: {,
-  fontSize: 12,
+  fontSize: 12;
     color: '#666'
-  },
+  ;},
   durationRow: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
     alignItems: 'center'
-  },
+  ;},
   durationLabel: {,
-  fontSize: 14,
-    color: '#666',
+  fontSize: 14;
+    color: '#666';
     marginRight: 8;
   },
   durationValue: {,
-  fontSize: 14,
-    fontWeight: '500',
+  fontSize: 14;
+    fontWeight: '500';
     color: '#333'
-  },
+  ;},
   scoreContainer: {,
-  alignItems: 'center',
+  alignItems: 'center';
     marginVertical: 16;
   },
   scoreCircle: {,
   alignItems: 'center'
-  },
+  ;},
   scoreText: {,
-  fontSize: 36,
+  fontSize: 36;
     fontWeight: 'bold'
-  },
+  ;},
   scoreLabel: {,
-  fontSize: 14,
-    color: '#666',
+  fontSize: 14;
+    color: '#666';
     marginTop: 4;
   },
   scoreProgress: {,
-  height: 8,
-    borderRadius: 4,
-    marginTop: 16,
+  height: 8;
+    borderRadius: 4;
+    marginTop: 16;
     marginBottom: 16;
   },
   metricsTable: {,
   marginTop: 16;
   },
   predictionsCount: {,
-  fontSize: 14,
-    color: '#666',
+  fontSize: 14;
+    color: '#666';
     marginBottom: 8;
   },
   moreResultsText: {,
-  textAlign: 'center',
-    color: '#666',
-    fontStyle: 'italic',
+  textAlign: 'center';
+    color: '#666';
+    fontStyle: 'italic';
     marginTop: 8;
   },
   exportContainer: {,
   marginTop: 8;
   },
   exportRow: {,
-  flexDirection: "row",
+  flexDirection: "row";
       alignItems: 'center',justifyContent: 'space-between',marginVertical: 8;
   },exportButton: {flex: 1,marginRight: 8;
   },reportActions: {flexDirection: 'row';

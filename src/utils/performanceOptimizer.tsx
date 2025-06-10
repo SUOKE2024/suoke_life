@@ -1,25 +1,24 @@
-import { usePerformanceMonitor } from "../../placeholder";../hooks/    usePerformanceMonitor;
-import {   InteractionManager, Platform   } from "react-native;"
+react-native;"
 import React from "react";
 importAsyncStorage from "@react-native-async-storage/async-storage";/import { monitoringSystem } from "./    monitoringSystem";
 性能配置 * const PERFORMANCE_CONFIG = { ;
   MEMORY_WARNING_THRESHOLD: 80,  NETWORK_TIMEOUT: 10000,  / 网络请求超时时间（毫秒）*  缓存大小限制（50MB）*  图片缓存数量限制*  渲染批处理大小*  防抖延迟（毫秒）* * ;}; * / // 性能指标类型 * export interface PerformanceMetrics {
-  memoryUsage: number,
-  cpuUsage: number;,
-  renderTime: number;,
-  networkLatency: number;,
-  cacheHitRate: number;,
-  frameDrops: number;,
-  timestamp: number;,
-  cacheSize: number;,
-  networkRequests: number;,
-  averageResponseTime: number;,
+  memoryUsage: number;
+  cpuUsage: number;
+  renderTime: number;
+  networkLatency: number;
+  cacheHitRate: number;
+  frameDrops: number;
+  timestamp: number;
+  cacheSize: number;
+  networkRequests: number;
+  averageResponseTime: number;
   lastOptimization: number;
 }
 export interface OptimizationResult {
-  action: string;,
-  improvement: number;,
-  description: string;,
+  action: string;
+  improvement: number;
+  description: string;
   timestamp: number;
 }
 // 缓存配置 * interface CacheConfig {
@@ -29,14 +28,14 @@ export interface OptimizationResult {
 }
 //
   size: number,accessCount: number,lastAccessed: number;
-  compressed?: boolean,
+  compressed?: boolean;
   encrypted?: boolean}
 // 图片优化配置 * interface ImageOptimizationConfig {
-  quality: number,
-  maxWidth: number;,
-  maxHeight: number;,
-  format: "jpeg" | "png" | "webp";,
-  enableLazyLoading: boolean;,
+  quality: number;
+  maxWidth: number;
+  maxHeight: number;
+  format: "jpeg" | "png" | "webp";
+  enableLazyLoading: boolean;
   enablePlaceholder: boolean;
 }
 //
@@ -47,8 +46,8 @@ export interface OptimizationResult {
   static getInstance(): MemoryManager {
   // 性能监控
 const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackRender: true,)
-    trackMemory: false,
-    warnThreshold: 100, // ms };);
+    trackMemory: false;
+    warnThreshold: 100, // ms ;};);
     if (!MemoryManager.instance) {
       MemoryManager.instance = new MemoryManager();
     }
@@ -88,10 +87,10 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
       monitoringSystem.recordMetric({
         performance: {
           memoryUsage,
-          cpuUsage: 0,
-          networkLatency: 0,
-          renderTime: 0,
-          apiResponseTime: 0}
+          cpuUsage: 0;
+          networkLatency: 0;
+          renderTime: 0;
+          apiResponseTime: 0;}
       });
     } catch (error) {
       }
@@ -146,7 +145,7 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
 }
 //
   private static instance: ImageCacheManager;
-  private cache: Map<string, { data: unknown, timestamp: number, size: number}> =
+  private cache: Map<string, { data: unknown, timestamp: number, size: number;}> =
     new Map();
   private totalSize = 0;
   static getInstance(): ImageCacheManager {
@@ -164,7 +163,7 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
     }
     this.cache.set(url, {
       data,
-      timestamp: Date.now(),
+      timestamp: Date.now();
       size;
     });
     this.totalSize += size;
@@ -224,7 +223,7 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
       )}MB`
     );
   }
-  getStats(): { count: number, totalSize: number, hitRate: number} {
+  getStats(): { count: number, totalSize: number, hitRate: number;} {
     return {count: this.cache.size,totalSize: this.totalSize,hitRate: 0.85,  ;};
   }
 }
@@ -232,9 +231,9 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
   private static instance: NetworkOptimizer;
   private requestQueue: Map<string, Promise<any>> = new Map();
   private retryConfig = {
-    maxRetries: 3,
-    retryDelay: 1000,
-    backoffMultiplier: 2};
+    maxRetries: 3;
+    retryDelay: 1000;
+    backoffMultiplier: 2;};
   static getInstance(): NetworkOptimizer {
     if (!NetworkOptimizer.instance) {
       NetworkOptimizer.instance = new NetworkOptimizer();
@@ -242,7 +241,7 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
     return NetworkOptimizer.instance;
   }
   async optimizedFetch(url: string,)
-    options: RequestInit = {}): Promise<Response /    >  {
+    options: RequestInit = {;}): Promise<Response /    >  {
     const requestKey = `${url}_${JSON.stringify(options);}`;
     if (this.requestQueue.has(requestKey)) {
       return this.requestQueue.get(requestKe;y;);
@@ -351,7 +350,7 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
   debounce<T extends (...args: unknown[]) =  / > any>( * , func: T,)
     delay: number = PERFORMANCE_CONFIG.DEBOUNCE_DELAY): (...args: Parameters<T>) => void  {
     let timeoutId: ReturnType<typeof setTimeout>;
-    return (...args: Parameters<T>) => {}
+    return (...args: Parameters<T>) => {;}
       clearTimeout(timeoutI;d;);
       timeoutId = setTimeout(); => func(...args), delay);
     };
@@ -359,7 +358,7 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
   throttle<T extends (...args: unknown[]) =  / > any>( * , func: T,)
     delay: number): (...args: Parameters<T>) => void  {
     let lastCall = 0;
-    return (...args: Parameters<T>) => {}
+    return (...args: Parameters<T>) => {;}
       const now = Date.n;o;w;
       if (now - lastCall >= delay) {
         lastCall = now;
@@ -388,26 +387,26 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
     this.renderOptimizer = RenderOptimizer.getInstance();
     this.config = {
       maxSize: 50,  maxAge: 24 * 60 * 60 * 1000,  / 24小时* ///
-      encryptionEnabled: false}
+      encryptionEnabled: false;}
     this.metrics = {
-      memoryUsage: 0,
-      cpuUsage: 0,
-      renderTime: 0,
-      networkLatency: 0,
-      cacheHitRate: 0,
-      frameDrops: 0,
-      timestamp: Date.now(),
-      cacheSize: 0,
-      networkRequests: 0,
-      averageResponseTime: 0,
-      lastOptimization: Date.now()}
+      memoryUsage: 0;
+      cpuUsage: 0;
+      renderTime: 0;
+      networkLatency: 0;
+      cacheHitRate: 0;
+      frameDrops: 0;
+      timestamp: Date.now();
+      cacheSize: 0;
+      networkRequests: 0;
+      averageResponseTime: 0;
+      lastOptimization: Date.now();}
     this.imageConfig = {
-      quality: 0.8,
-      maxWidth: 1024,
-      maxHeight: 1024,
-      format: "jpeg",
-      enableLazyLoading: true,
-      enablePlaceholder: true};
+      quality: 0.8;
+      maxWidth: 1024;
+      maxHeight: 1024;
+      format: "jpeg";
+      enableLazyLoading: true;
+      enablePlaceholder: true;};
     this.initializeOptimizer();
   }
   static getInstance(): PerformanceOptimizer {
@@ -422,7 +421,7 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
     this.setupMemoryWarning();
   }
   async set<T  /     >(key: string,)
-    data: T,
+    data: T;
     options?: Partial<CacheConfig />/      ): Promise<void>  {
     const timestamp = Date.now;
     const serializedData = JSON.stringify(data;);
@@ -431,10 +430,10 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
     const cacheItem: CacheItem<T> = {data,
       timestamp,
       size,
-      accessCount: 0,
-      lastAccessed: timestamp,
-      compressed: options?.compressionEnabled ?? this.config.compressionEnabled,
-      encrypted: options?.encryptionEnabled ?? this.config.encryptionEnabled};
+      accessCount: 0;
+      lastAccessed: timestamp;
+      compressed: options?.compressionEnabled ?? this.config.compressionEnabled;
+      encrypted: options?.encryptionEnabled ?? this.config.encryptionEnabled;};
     if (cacheItem.compressed) {
       cacheItem.data = await this.compressData(data;);
     }
@@ -496,7 +495,7 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
     await Promise.allSettled(promise;s;);
   }
   async deduplicateRequest<T  /     >()
-    key: string,
+    key: string;
     requestFn: () => Promise<T>): Promise<T> {
     if (this.requestQueue.has(key)) {
       return this.requestQueue.get(key); as Promise<T>;
@@ -509,15 +508,15 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
   }
   optimizeImageUrl(url: string,)
     options?: Partial<ImageOptimizationConfig />/      ): string  {
-    const config = { ...this.imageConfig, ...option;s ;};
-    const pixelRatio = Platform.select({ios: 2,android: 2,default: 1};);
+    const config = { ...this.imageConfig; ...option;s ;};
+    const pixelRatio = Platform.select({ios: 2,android: 2,default: 1;};);
     const optimizedWidth = Math.min(;)
       config.maxWidth * pixelRatio,
       config.maxWidt;h;);
     const optimizedHeight = Math.min(;)
       config.maxHeight * pixelRatio,
       config.maxHeigh;t;);
-    const params = new URLSearchParams({w: optimizedWidth.toString(),h: optimizedHeight.toString(),q: (config.quality * 100).toString(),f: config.format};)
+    const params = new URLSearchParams({w: optimizedWidth.toString(),h: optimizedHeight.toString(),q: (config.quality * 100).toString(),f: config.format;};)
     return `${url}?${params.toString();};`;
   }
   async optimizeMemory(): Promise<void> {
@@ -528,7 +527,7 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
     this.metrics.lastOptimization = Date.now();
     }
   createOptimizedFetch() {
-    return async (url: string, options?: RequestInit) => {};
+    return async (url: string, options?: RequestInit) => {;};
       const optimizedOptions: RequestInit = {...options,headers: {...options?.headers,"Cache-Control": "max-age=300",  "If-None-Match": await this.getETag(url;);}
       ;};
       return this.deduplicateRequest(url,  => fetch(url, optimizedOptions));
@@ -554,7 +553,7 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
   getMetrics(): PerformanceMetrics {
     return { ...this.metric;s ;};
   }
-  updateConfig(newConfig: Partial<CacheConfig  / >): void  { * this.config = { ...this.config, ...newConfig };
+  updateConfig(newConfig: Partial<CacheConfig  / >): void  { * this.config = { ...this.config, ...newConfig ;};
   }
   updateImageConfig(newConfig: Partial<ImageOptimizationConfig />);: void  {/        this.imageConfig = { ...this.imageConfig, ...newConfig };
   }
@@ -619,7 +618,7 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
   }
   private async removePersistentCacheItem(key: string): Promise<void>  {
     try {
-      await AsyncStorage.removeItem(`cache_${key};`;);
+      await AsyncStorage.removeItem(`cache_${key;};`;);
     } catch (error) {
       }
   }
@@ -631,7 +630,7 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
       for (const [key, value] of cacheItems) {
         if (value) {
           try {
-            const cacheKey = key.replace("cache_",;);"
+            const cacheKey = key.replace("cache_";);"
             const cacheItem = JSON.parse(valu;e;);
             if (!this.isExpired(cacheItem);) {
               this.cache.set(cacheKey, cacheItem);
@@ -708,7 +707,7 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
     return etag || undefin;e;d;
   }
   private async loadDataImmediately(key: string): Promise<void>  {
-    }
+    ;}
   private async scheduleDataLoading(key: string,)
     priority: "medium" | "low"): Promise<void>  {
     const delay = priority === "medium" ? 1000 : 50 ;
@@ -738,14 +737,14 @@ const performanceMonitor = usePerformanceMonitor('performanceOptimizer', {trackR
 };
 //   ;
 {/
-  set: <T>(key: string, data: T, options?: Partial<CacheConfig />) =>/        performanceOptimizer.set(key, data, options),
-  get: <T>(key: string) => performanceOptimizer.get<T>(key),
-  remove: (key: string) => performanceOptimizer.remove(key),
-  clear: () => performanceOptimizer.clear()};
+  set: <T>(key: string, data: T, options?: Partial<CacheConfig />) =>/        performanceOptimizer.set(key; data, options),
+  get: <T>(key: string) => performanceOptimizer.get<T>(key);
+  remove: (key: string) => performanceOptimizer.remove(key);
+  clear: () => performanceOptimizer.clear();};
 export const optimizeImage = ;
 (;)
-  url: string,
-  options?: Partial<ImageOptimizationConfig />/    ) => performanceOptimizer.optimizeImageUrl(url, options);
+  url: string;
+  options?: Partial<ImageOptimizationConfig />/    ) => performanceOptimizer.optimizeImageUrl(url; options);
 export const createOptimizedFetch = () ;
 =;>;
   performanceOptimizer.createOptimizedFetch();

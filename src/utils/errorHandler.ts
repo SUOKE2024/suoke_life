@@ -21,40 +21,40 @@ export enum ErrorSeverity {
 }
 // 错误接口
 export interface AppError {
-  id: string;,
-  type: ErrorType;,
-  severity: ErrorSeverity;,
+  id: string;
+  type: ErrorType;
+  severity: ErrorSeverity;
   message: string;
   details?: any;
   timestamp: number;
   userId?: string;
   sessionId?: string;
   stackTrace?: string;
-  context?: Record<string, any>;
+  context?: Record<string; any>;
   resolved?: boolean;
 }
 // 错误处理配置
 interface ErrorHandlerConfig {
-  enableCrashlytics: boolean;,
-  enableLocalLogging: boolean;,
-  enableUserNotification: boolean;,
-  maxErrorsInMemory: number;,
+  enableCrashlytics: boolean;
+  enableLocalLogging: boolean;
+  enableUserNotification: boolean;
+  maxErrorsInMemory: number;
   autoReportThreshold: ErrorSeverity;
 }
 // 默认配置
 const defaultConfig: ErrorHandlerConfig = {,
-  enableCrashlytics: true,
-  enableLocalLogging: true,
-  enableUserNotification: true,
-  maxErrorsInMemory: 100,
-  autoReportThreshold: ErrorSeverity.HIGH};
+  enableCrashlytics: true;
+  enableLocalLogging: true;
+  enableUserNotification: true;
+  maxErrorsInMemory: 100;
+  autoReportThreshold: ErrorSeverity.HIGH;};
 // 错误处理器类
 export class ErrorHandler {
   private static instance: ErrorHandler;
   private config: ErrorHandlerConfig;
   private errorQueue: AppError[] = [];
   private errorListeners: Set<(error: AppError) => void> = new Set();
-  private constructor(config: Partial<ErrorHandlerConfig> = {}) {
+  private constructor(config: Partial<ErrorHandlerConfig> = {;}) {
     this.config = { ...defaultConfig, ...config };
     this.setupGlobalErrorHandlers();
   }
@@ -71,11 +71,11 @@ export class ErrorHandler {
     const originalHandler = global.onunhandledrejection;
     global.onunhandledrejection = (event) => {
       this.handleError({
-        type: ErrorType.UNKNOWN,
-        severity: ErrorSeverity.HIGH,
-        message: 'Unhandled Promise Rejection',
-        details: event.reason,
-        stackTrace: event.reason?.stack});
+        type: ErrorType.UNKNOWN;
+        severity: ErrorSeverity.HIGH;
+        message: 'Unhandled Promise Rejection';
+        details: event.reason;
+        stackTrace: event.reason?.stack;});
       if (originalHandler) {
         originalHandler(event);
       }
@@ -84,23 +84,23 @@ export class ErrorHandler {
     const originalErrorHandler = global.ErrorUtils?.getGlobalHandler();
     global.ErrorUtils?.setGlobalHandler(error, isFatal) => {
       this.handleError({
-        type: ErrorType.UNKNOWN,
-        severity: isFatal ? ErrorSeverity.CRITICAL : ErrorSeverity.HIGH,
-        message: error.message || 'JavaScript Error',
-        details: error,
-        stackTrace: error.stack});
+        type: ErrorType.UNKNOWN;
+        severity: isFatal ? ErrorSeverity.CRITICAL : ErrorSeverity.HIGH;
+        message: error.message || 'JavaScript Error';
+        details: error;
+        stackTrace: error.stack;});
       if (originalErrorHandler) {
         originalErrorHandler(error, isFatal);
       }
     });
   }
   // 处理错误
-  public handleError(errorInput: Partial<AppError> & { type: ErrorType; message: string }): AppError {
+  public handleError(errorInput: Partial<AppError> & { type: ErrorType; message: string ;}): AppError {
     const error: AppError = {,
-  id: this.generateErrorId(),
-      severity: ErrorSeverity.MEDIUM,
-      timestamp: Date.now(),
-      resolved: false,
+  id: this.generateErrorId();
+      severity: ErrorSeverity.MEDIUM;
+      timestamp: Date.now();
+      resolved: false;
       ...errorInput};
     // 添加到错误队列
     this.addToErrorQueue(error);
@@ -115,75 +115,75 @@ export class ErrorHandler {
     return error;
   }
   // 处理网络错误
-  public handleNetworkError(error: any, context?: Record<string, any>): AppError {
-    let message = '网络连接失败';
+  public handleNetworkError(error: any, context?: Record<string; any>): AppError {
+
     let severity = ErrorSeverity.MEDIUM;
     if (error.code === 'NETWORK_ERROR') {
-      message = '网络不可用，请检查网络连接';
+
       severity = ErrorSeverity.HIGH;
     } else if (error.status === 401) {
-      message = '身份验证失败，请重新登录';
+
       severity = ErrorSeverity.HIGH;
     } else if (error.status === 403) {
-      message = '权限不足，无法访问该资源';
+
       severity = ErrorSeverity.MEDIUM;
     } else if (error.status === 404) {
-      message = '请求的资源不存在';
+
       severity = ErrorSeverity.LOW;
     } else if (error.status >= 500) {
-      message = '服务器内部错误，请稍后重试';
+
       severity = ErrorSeverity.HIGH;
     }
     return this.handleError({
-      type: ErrorType.NETWORK,
+      type: ErrorType.NETWORK;
       severity,
       message,
       details: {,
-  status: error.status,
-        statusText: error.statusText,
-        url: error.config?.url,
-        method: error.config?.method},
+  status: error.status;
+        statusText: error.statusText;
+        url: error.config?.url;
+        method: error.config?.method;},
       context});
   }
   // 处理智能体服务错误
-  public handleAgentServiceError(error: any, agentId?: string, context?: Record<string, any>): AppError {
-    let message = '智能体服务异常';
+  public handleAgentServiceError(error: any, agentId?: string; context?: Record<string; any>): AppError {
+
     let severity = ErrorSeverity.MEDIUM;
     if (error.message?.includes('offline')) {
-      message = `智能体${agentId ? ` ${agentId}` : ''} 当前离线`;
+
       severity = ErrorSeverity.LOW;
     } else if (error.message?.includes('busy')) {
-      message = `智能体${agentId ? ` ${agentId}` : ''} 当前忙碌`;
+
       severity = ErrorSeverity.LOW;
     } else if (error.message?.includes('timeout')) {
-      message = '智能体响应超时，请稍后重试';
+
       severity = ErrorSeverity.MEDIUM;
     } else if (error.message?.includes('not found')) {
-      message = '智能体不存在或已被删除';
+
       severity = ErrorSeverity.HIGH;
     }
     return this.handleError({
-      type: ErrorType.AGENT_SERVICE,
+      type: ErrorType.AGENT_SERVICE;
       severity,
       message,
-      details: { agentId, originalError: error },
+      details: { agentId, originalError: error ;},
       context});
   }
   // 处理验证错误
   public handleValidationError(field: string, value: any, rule: string): AppError {
     return this.handleError({
-      type: ErrorType.VALIDATION,
-      severity: ErrorSeverity.LOW,
-      message: `字段 ${field} 验证失败`,
-      details: { field, value, rule }});
+      type: ErrorType.VALIDATION;
+      severity: ErrorSeverity.LOW;
+
+      details: { field, value, rule ;}});
   }
   // 处理权限错误
-  public handlePermissionError(permission: string, context?: Record<string, any>): AppError {
+  public handlePermissionError(permission: string, context?: Record<string; any>): AppError {
     return this.handleError({
-      type: ErrorType.PERMISSION,
-      severity: ErrorSeverity.MEDIUM,
-      message: `缺少权限: ${permission}`,
-      details: { permission },
+      type: ErrorType.PERMISSION;
+      severity: ErrorSeverity.MEDIUM;
+
+      details: { permission ;},
       context});
   }
   // 添加错误监听器
@@ -234,11 +234,11 @@ export class ErrorHandler {
     const logLevel = this.getLogLevel(error.severity);
     const logMessage = `[${error.type}] ${error.message}`;
     console[logLevel](logMessage, {
-      id: error.id,
-      severity: error.severity,
-      timestamp: new Date(error.timestamp).toISOString(),
-      details: error.details,
-      context: error.context});
+      id: error.id;
+      severity: error.severity;
+      timestamp: new Date(error.timestamp).toISOString();
+      details: error.details;
+      context: error.context;});
   }
   // 上报错误
   private reportError(error: AppError): void {
@@ -247,18 +247,18 @@ export class ErrorHandler {
     try {
       // 上报到Crashlytics;
       crashlytics().recordError(new Error(error.message), {
-        errorId: error.id,
-        errorType: error.type,
-        severity: error.severity,
-        timestamp: error.timestamp,
-        details: JSON.stringify(error.details),
-        context: JSON.stringify(error.context)});
+        errorId: error.id;
+        errorType: error.type;
+        severity: error.severity;
+        timestamp: error.timestamp;
+        details: JSON.stringify(error.details);
+        context: JSON.stringify(error.context);});
       // 设置自定义属性
       crashlytics().setAttributes({
-        errorType: error.type,
-        severity: error.severity,
-        userId: error.userId || 'unknown',
-        sessionId: error.sessionId || 'unknown'});
+        errorType: error.type;
+        severity: error.severity;
+        userId: error.userId || 'unknown';
+        sessionId: error.sessionId || 'unknown';});
     } catch (reportError) {
       console.warn('Failed to report error to Crashlytics:', reportError);
     }
@@ -284,12 +284,12 @@ export class ErrorHandler {
       message,
       [
         {
-      text: "确定",
-      style: 'default'},
+
+      style: 'default';},
         ...(error.severity >= ErrorSeverity.HIGH ? [{
-      text: "反馈问题",
-      style: 'default',
-          onPress: () => this.openFeedback(error)}] : [])],
+
+      style: 'default';
+          onPress: () => this.openFeedback(error);}] : [])],
     );
   }
   // 获取日志级别
@@ -301,7 +301,7 @@ export class ErrorHandler {
         return 'warn';
       case ErrorSeverity.HIGH:
       case ErrorSeverity.CRITICAL:
-        return 'error',
+        return 'error';
   default:
         return 'log';
     }
@@ -310,22 +310,22 @@ export class ErrorHandler {
   private getErrorTitle(type: ErrorType): string {
     switch (type) {
       case ErrorType.NETWORK:
-        return '网络错误';
+
       case ErrorType.AUTHENTICATION:
-        return '身份验证错误';
+
       case ErrorType.VALIDATION:
-        return '输入验证错误';
+
       case ErrorType.PERMISSION:
-        return '权限错误';
+
       case ErrorType.AGENT_SERVICE:
-        return '智能体服务错误';
+
       case ErrorType.DATA_PROCESSING:
-        return '数据处理错误';
+
       case ErrorType.UI_RENDERING:
-        return '界面渲染错误',
+
   default:
-        return '系统错误';
-    }
+
+    ;}
   }
   // 获取用户友好的错误消息
   private getUserFriendlyMessage(error: AppError): string {
@@ -336,16 +336,16 @@ export class ErrorHandler {
     // 根据错误类型返回通用消息
     switch (error.type) {
       case ErrorType.NETWORK:
-        return '网络连接出现问题，请检查网络设置后重试。';
+
       case ErrorType.AUTHENTICATION:
-        return '身份验证失败，请重新登录。';
+
       case ErrorType.AGENT_SERVICE:
-        return '智能体服务暂时不可用，请稍后重试。';
+
       case ErrorType.DATA_PROCESSING:
-        return '数据处理出现问题，请稍后重试。',
+
   default:
-        return '系统出现异常，我们正在努力修复。';
-    }
+
+    ;}
   }
   // 检查是否为用户友好的消息
   private isUserFriendlyMessage(message: string): boolean {
@@ -363,22 +363,22 @@ export class ErrorHandler {
   }
   // 更新配置
   public updateConfig(newConfig: Partial<ErrorHandlerConfig>): void {
-    this.config = { ...this.config, ...newConfig };
+    this.config = { ...this.config, ...newConfig ;};
   }
   // 获取错误统计
   public getErrorStats(): {
-    total: number,
+    total: number;
   byType: Record<ErrorType, number>;
     bySeverity: Record<ErrorSeverity, number>;
-    resolved: number,
+    resolved: number;
   unresolved: number;
   } {
     const stats = {
-      total: this.errorQueue.length,
-      byType: {} as Record<ErrorType, number>,
-      bySeverity: {} as Record<ErrorSeverity, number>,
-      resolved: 0,
-      unresolved: 0};
+      total: this.errorQueue.length;
+      byType: {;} as Record<ErrorType, number>,
+      bySeverity: {;} as Record<ErrorSeverity, number>,
+      resolved: 0;
+      unresolved: 0;};
     // 初始化计数器
     Object.values(ErrorType).forEach(type => {
       stats.byType[type] = 0;
@@ -402,15 +402,15 @@ export class ErrorHandler {
 // 创建全局错误处理器实例
 export const errorHandler = ErrorHandler.getInstance();
 // 便捷函数
-export const handleError = (error: Partial<AppError> & { type: ErrorType; message: string }) =>
+export const handleError = (error: Partial<AppError> & { type: ErrorType; message: string ;}) =>
   errorHandler.handleError(error);
-export const handleNetworkError = (error: any, context?: Record<string, any>) =>;
+export const handleNetworkError = (error: any, context?: Record<string; any>) =>;
   errorHandler.handleNetworkError(error, context);
-export const handleAgentServiceError = (error: any, agentId?: string, context?: Record<string, any>) =>;
+export const handleAgentServiceError = (error: any, agentId?: string; context?: Record<string; any>) =>;
   errorHandler.handleAgentServiceError(error, agentId, context);
 export const handleValidationError = (field: string, value: any, rule: string) =>;
   errorHandler.handleValidationError(field, value, rule);
-export const handlePermissionError = (permission: string, context?: Record<string, any>) =>;
+export const handlePermissionError = (permission: string, context?: Record<string; any>) =>;
   errorHandler.handlePermissionError(permission, context);
 // React Hook for error handling;
 export const useErrorHandler = () => {
@@ -420,10 +420,10 @@ export const useErrorHandler = () => {
     handleAgentServiceError,
     handleValidationError,
     handlePermissionError,
-    getErrorHistory: () => errorHandler.getErrorHistory(),
-    getErrorStats: () => errorHandler.getErrorStats(),
-    addErrorListener: (listener: (error: AppError) => void) => errorHandler.addErrorListener(listener),
-    resolveError: (errorId: string) => errorHandler.resolveError(errorId),
-    clearErrorHistory: () => errorHandler.clearErrorHistory()};
+    getErrorHistory: () => errorHandler.getErrorHistory();
+    getErrorStats: () => errorHandler.getErrorStats();
+    addErrorListener: (listener: (error: AppError) => void) => errorHandler.addErrorListener(listener);
+    resolveError: (errorId: string) => errorHandler.resolveError(errorId);
+    clearErrorHistory: () => errorHandler.clearErrorHistory();};
 };
 export default errorHandler;

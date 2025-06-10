@@ -42,8 +42,8 @@ import React from "react";
     case "soer":
       const { SoerAgentImpl   } = await import("./soer/SoerAgentImpl.;j;s";);/          return new SoerAgentImpl;
     default:
-      throw new Error(`未知的智能体类型: ${agentType}`;);
-  }
+
+  ;}
 };
 //   ;
 c ;(; /)
@@ -99,120 +99,120 @@ c ;(; /)
     "stress_management",companionship",
     "crisis_support"
   ]
-} as const;
+;} as const;
 //   ;
 {xiaoai: {
-  name: "小艾",
-    title: "健康助手 & 首页聊天频道版主",
-    description: "专注于健康管理、中医四诊合参、智能问诊和无障碍服务",
-    primaryChannel: "chat",
-    specialties: ["中医诊断", "健康分析", "语音交互", "无障碍服务"]
+
+
+
+    primaryChannel: "chat";
+
   },
   xiaoke: {
-  name: "小克",
-    title: "SUOKE频道版主",
-    description: "负责服务订阅、农产品预制、供应链管理等商业化服务",
-    primaryChannel: "suoke",
-    specialties: ["名医匹配", "服务推荐", "供应链管理", "第三方集成"]
+
+
+
+    primaryChannel: "suoke";
+
   },
   laoke: {
-  name: "老克",
-    title: "探索频道版主",
-    description: "负责知识传播、培训和博物馆导览，兼任玉米迷宫NPC",
-    primaryChannel: "explore",
-    specialties: ["知识管理", "教育培训", "内容策展", "游戏引导"]
+
+
+
+    primaryChannel: "explore";
+
   },
   soer: {
-  name: "索儿",
-    title: "LIFE频道版主",
-    description: "提供生活健康管理、陪伴服务和数据整合分析",
-    primaryChannel: "life",
-    specialties: ["生活方式管理", "情感支持", "数据整合", "健康陪伴"]
+
+
+
+    primaryChannel: "life";
+
   }
 } as const;
 //   ;
 {
-      chat: "xiaoai",
-      suoke: "xiaoke",
-  explore: "laoke",
+      chat: "xiaoai";
+      suoke: "xiaoke";
+  explore: "laoke";
   life: "soer"
-} as const;
+;} as const;
 //   ;
-{SEQUENTIAL: "sequential",  PARALLEL: "parallel",  / 并行协作*  层次协作*  共识协作* * } as const * / //   ;
+{SEQUENTIAL: "sequential",  PARALLEL: "parallel",  / 并行协作*  层次协作*  共识协作* * ;} as const * / //   ;
 {
-      DIAGNOSIS: "diagnosis",
-      RECOMMENDATION: "recommendation",
-  EDUCATION: "education",
-  LIFESTYLE: "lifestyle",
-  EMERGENCY: "emergency",
+      DIAGNOSIS: "diagnosis";
+      RECOMMENDATION: "recommendation";
+  EDUCATION: "education";
+  LIFESTYLE: "lifestyle";
+  EMERGENCY: "emergency";
   COORDINATION: "coordination"
-} as const;
+;} as const;
 //   ;
 {
-      LOW: "low",
-      MEDIUM: "medium",
-  HIGH: "high",
+      LOW: "low";
+      MEDIUM: "medium";
+  HIGH: "high";
   CRITICAL: "critical"
-} as const;
+;} as const;
 //   ;
 {
-      INITIALIZING: "initializing",
-      ACTIVE: "active",
-  INACTIVE: "inactive",
-  ERROR: "error",
+      INITIALIZING: "initializing";
+      ACTIVE: "active";
+  INACTIVE: "inactive";
+  ERROR: "error";
   MAINTENANCE: "maintenance"
-} as const;
+;} as const;
 //   ;
 {
-      HEALTHY: "healthy",
-      DEGRADED: "degraded",
-  UNHEALTHY: "unhealthy",
+      HEALTHY: "healthy";
+      DEGRADED: "degraded";
+  UNHEALTHY: "unhealthy";
   OFFLINE: "offline"
-} as const;
+;} as const;
 //   ;
 { diagnosis: {
-    primary: "xiaoai",
+    primary: "xiaoai";
     supporting: ["xiaoke",laoke", "soer"],
     mode: COLLABORATION_MODES.HIERARCHICAL;
   },
   service_recommendation: {
-    primary: "xiaoke",
+    primary: "xiaoke";
     supporting: ["xiaoai",soer"],
     mode: COLLABORATION_MODES.PARALLEL;
   },
   learning_path: {
-    primary: "laoke",
+    primary: "laoke";
     supporting: ["xiaoai",soer"],
     mode: COLLABORATION_MODES.SEQUENTIAL;
   },
   lifestyle_management: {
-    primary: "soer",
+    primary: "soer";
     supporting: ["xiaoai",xiaoke", "laoke"],
     mode: COLLABORATION_MODES.CONSENSUS;
   }
 } as const;
 //   ;
 {
-      version: "1.0.0",
-      buildDate: new Date().toISOString(),
-  description: "索克生活四智能体协作系统",
-  architecture: "distributed_autonomous_collaboration",
+      version: "1.0.0";
+      buildDate: new Date().toISOString();
+
+  architecture: "distributed_autonomous_collaboration";
   supportedLanguages: ["zh-CN",zh-TW", "en-US"],
-  supportedDialects: ["普通话", "粤语", "闽南语", "上海话"],
-  tcmIntegration: true,
-  modernMedicineIntegration: true,
-  blockchainSupport: true,
-  multimodalSupport: true,
-  accessibilityCompliant: true,
+
+  tcmIntegration: true;
+  modernMedicineIntegration: true;
+  blockchainSupport: true;
+  multimodalSupport: true;
+  accessibilityCompliant: true;
   privacyCompliant: true;
 } as const;
 //   ;
-{enableLoadBalancing: true,
-  enableFailover: true,
-  enableHealthMonitoring: true,
-  maxRetries: 3,
-  timeoutMs: 30000,
-  healthCheckIntervalMs: 60000,
+{enableLoadBalancing: true;
+  enableFailover: true;
+  enableHealthMonitoring: true;
+  maxRetries: 3;
+  timeoutMs: 30000;
+  healthCheckIntervalMs: 60000;
   logLevel: "info" as const;
 } as const;
 //   ;
@@ -255,7 +255,7 @@ L;S;): AgentType => {/    }
 };
 //   ;
 >  ;{if (typeof status === "string") {
-    return `状态: ${status;}`;
+
   }
   const uptime = status.uptime ? Math.floor(status.uptime / 100;0;);: 0;/  const hours = Math.floor(uptime / 360;0;);/  const minutes = Math.floor(uptime % 360;0;); / 60);// return `$ {status.agentType || "unknown"}: ${status.status || "unknown";
   } (${hours}h ${minutes}m, 负载: ${(status.currentLoad || 0) * 100).toFixed(;)

@@ -18,7 +18,7 @@ export interface CalculationData {
   currentTime: string;
   currentLocation: string;
   lunarData?: LunarData;
-  metadata?: Record<string, any>;
+  metadata?: Record<string; any>;
 }
 
 export interface LunarData {
@@ -113,11 +113,11 @@ export interface YinYangAnalysis {
     harmony: number;
   };
   organYinYang: {
-    liver: { yin: number; yang: number };
-    heart: { yin: number; yang: number };
-    spleen: { yin: number; yang: number };
-    lung: { yin: number; yang: number };
-    kidney: { yin: number; yang: number };
+    liver: { yin: number; yang: number ;};
+    heart: { yin: number; yang: number ;};
+    spleen: { yin: number; yang: number ;};
+    lung: { yin: number; yang: number ;};
+    kidney: { yin: number; yang: number ;};
   };
   recommendations: string[];
 }
@@ -245,7 +245,7 @@ export class CalculationDiagnosisAlgorithm {
    * 执行算诊分析
    */
   public async analyze(
-    data: CalculationData,
+    data: CalculationData;
     userProfile?: UserProfile
   ): Promise<CalculationResult> {
     const startTime = Date.now();
@@ -327,7 +327,7 @@ export class CalculationDiagnosisAlgorithm {
         processingTime
       };
     } catch (error) {
-      throw new Error(`算诊分析失败: ${error instanceof Error ? error.message : '未知错误'}`);
+
     }
   }
 
@@ -341,11 +341,11 @@ export class CalculationDiagnosisAlgorithm {
     // 标准化日期时间格式
     const processedData = {
       ...data,
-      birthDate: this.standardizeDate(data.birthDate),
-      birthTime: this.standardizeTime(data.birthTime),
-      currentDate: this.standardizeDate(data.currentDate),
+      birthDate: this.standardizeDate(data.birthDate);
+      birthTime: this.standardizeTime(data.birthTime);
+      currentDate: this.standardizeDate(data.currentDate);
       currentTime: this.standardizeTime(data.currentTime)
-    };
+    ;};
 
     return processedData;
   }
@@ -355,21 +355,21 @@ export class CalculationDiagnosisAlgorithm {
    */
   private validateInputData(data: CalculationData): void {
     if (!data.birthDate || !data.birthTime) {
-      throw new Error('出生日期和时间不能为空');
-    }
+
+    ;}
     
     if (!data.currentDate || !data.currentTime) {
-      throw new Error('当前日期和时间不能为空');
+
     }
 
     // 验证日期格式
     if (!this.isValidDate(data.birthDate) || !this.isValidDate(data.currentDate)) {
-      throw new Error('日期格式无效');
+
     }
 
     // 验证时间格式
     if (!this.isValidTime(data.birthTime) || !this.isValidTime(data.currentTime)) {
-      throw new Error('时间格式无效');
+
     }
   }
 
@@ -412,65 +412,65 @@ export class CalculationDiagnosisAlgorithm {
     // 这里应该实现真正的农历计算逻辑
     // 目前返回模拟数据
     return {
-      year: '甲子',
-      month: '丙寅',
-      day: '戊辰',
-      hour: '庚午',
-      yearStem: '甲',
-      yearBranch: '子',
-      monthStem: '丙',
-      monthBranch: '寅',
-      dayStem: '戊',
-      dayBranch: '辰',
-      hourStem: '庚',
-      hourBranch: '午',
-      zodiac: '鼠',
-      solarTerm: '立春'
-    };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    ;};
   }
 
   /**
    * 五行分析
    */
   private async analyzeFiveElements(
-    lunarData: LunarData,
+    lunarData: LunarData;
     userProfile?: UserProfile
   ): Promise<FiveElementsAnalysis> {
     // 实现五行分析逻辑
     return {
       birthElements: {
-        wood: 0.2,
-        fire: 0.3,
-        earth: 0.2,
-        metal: 0.15,
+        wood: 0.2;
+        fire: 0.3;
+        earth: 0.2;
+        metal: 0.15;
         water: 0.15
-      },
+      ;},
       currentElements: {
-        wood: 0.25,
-        fire: 0.2,
-        earth: 0.25,
-        metal: 0.15,
+        wood: 0.25;
+        fire: 0.2;
+        earth: 0.25;
+        metal: 0.15;
         water: 0.15
-      },
+      ;},
       balance: {
-        overall: 0.8,
-        deficiency: ['金'],
-        excess: ['火'],
+        overall: 0.8;
+
+
         harmony: 0.75
-      },
+      ;},
       interactions: {
-        generation: [],
-        restriction: [],
-        overacting: [],
+        generation: [];
+        restriction: [];
+        overacting: [];
         insulting: []
-      },
+      ;},
       organCorrelation: {
-        liver: 0.8,
-        heart: 0.9,
-        spleen: 0.7,
-        lung: 0.6,
+        liver: 0.8;
+        heart: 0.9;
+        spleen: 0.7;
+        lung: 0.6;
         kidney: 0.7
-      }
+      ;}
     };
   }
 
@@ -478,34 +478,34 @@ export class CalculationDiagnosisAlgorithm {
    * 阴阳分析
    */
   private async analyzeYinYang(
-    lunarData: LunarData,
+    lunarData: LunarData;
     userProfile?: UserProfile
   ): Promise<YinYangAnalysis> {
     // 实现阴阳分析逻辑
     return {
       birthYinYang: {
-        yin: 0.45,
-        yang: 0.55,
+        yin: 0.45;
+        yang: 0.55;
         balance: 0.8
-      },
+      ;},
       currentYinYang: {
-        yin: 0.5,
-        yang: 0.5,
+        yin: 0.5;
+        yang: 0.5;
         balance: 0.9
-      },
+      ;},
       dynamicBalance: {
-        trend: 'stable',
-        stability: 0.85,
+        trend: 'stable';
+        stability: 0.85;
         harmony: 0.8
-      },
+      ;},
       organYinYang: {
-        liver: { yin: 0.6, yang: 0.4 },
-        heart: { yin: 0.3, yang: 0.7 },
-        spleen: { yin: 0.5, yang: 0.5 },
-        lung: { yin: 0.7, yang: 0.3 },
-        kidney: { yin: 0.8, yang: 0.2 }
+        liver: { yin: 0.6, yang: 0.4 ;},
+        heart: { yin: 0.3, yang: 0.7 ;},
+        spleen: { yin: 0.5, yang: 0.5 ;},
+        lung: { yin: 0.7, yang: 0.3 ;},
+        kidney: { yin: 0.8, yang: 0.2 ;}
       },
-      recommendations: ['保持阴阳平衡', '适度运动', '规律作息']
+
     };
   }
 
@@ -513,38 +513,38 @@ export class CalculationDiagnosisAlgorithm {
    * 气机分析
    */
   private async analyzeQiFlow(
-    lunarData: LunarData,
+    lunarData: LunarData;
     userProfile?: UserProfile
   ): Promise<QiFlowAnalysis> {
     // 实现气机分析逻辑
     return {
       meridianFlow: {
-        '肺经': {
-          strength: 0.8,
-          direction: 'forward',
-          blockages: [],
+
+          strength: 0.8;
+          direction: 'forward';
+          blockages: [];
           openness: 0.9
-        }
+        ;}
       },
       dailyRhythm: {
         '3-5': {
-          dominantMeridian: '肺经',
-          qiStrength: 0.9,
-          recommendations: ['深呼吸', '养肺']
+
+          qiStrength: 0.9;
+
         }
       },
       seasonalFlow: {
-        currentSeason: '春',
-        qiDirection: '升发',
-        strength: 0.8,
+
+
+        strength: 0.8;
         adaptability: 0.7
-      },
+      ;},
       overallFlow: {
-        circulation: 0.8,
-        vitality: 0.85,
-        balance: 0.75,
+        circulation: 0.8;
+        vitality: 0.85;
+        balance: 0.75;
         blockages: []
-      }
+      ;}
     };
   }
 
@@ -552,28 +552,28 @@ export class CalculationDiagnosisAlgorithm {
    * 体质计算
    */
   private async calculateConstitution(
-    lunarData: LunarData,
+    lunarData: LunarData;
     userProfile?: UserProfile
   ): Promise<ConstitutionCalculation> {
     // 实现体质计算逻辑
     return {
-      primaryConstitution: '平和质',
-      secondaryConstitution: '气虚质',
-      constitutionStrength: 0.8,
-      adaptability: 0.75,
-      vulnerabilities: ['易感冒'],
-      strengths: ['适应力强'],
+
+
+      constitutionStrength: 0.8;
+      adaptability: 0.75;
+
+
       seasonalVariations: {
-        spring: 0.8,
-        summer: 0.9,
-        autumn: 0.7,
+        spring: 0.8;
+        summer: 0.9;
+        autumn: 0.7;
         winter: 0.6
-      },
+      ;},
       lifeStageInfluence: {
-        current: '青年期',
-        characteristics: ['精力充沛', '新陈代谢旺盛'],
-        recommendations: ['保持运动', '合理饮食']
-      }
+
+
+
+      ;}
     };
   }
 
@@ -583,29 +583,29 @@ export class CalculationDiagnosisAlgorithm {
   private async analyzeSeasonalInfluence(lunarData: LunarData): Promise<SeasonalInfluence> {
     // 实现季节影响分析逻辑
     return {
-      currentSeason: '春',
+
       seasonalQi: {
-        dominant: '木',
-        strength: 0.8,
-        direction: '升发'
+
+        strength: 0.8;
+
       },
       solarTerm: {
-        current: lunarData.solarTerm,
-        influence: '阳气初生',
-        recommendations: ['养肝', '疏肝理气']
+        current: lunarData.solarTerm;
+
+
       },
       climaticFactors: {
-        wind: 0.7,
-        cold: 0.3,
-        heat: 0.2,
-        dampness: 0.4,
-        dryness: 0.2,
+        wind: 0.7;
+        cold: 0.3;
+        heat: 0.2;
+        dampness: 0.4;
+        dryness: 0.2;
         fire: 0.1
-      },
+      ;},
       adaptation: {
-        required: ['防风', '养肝'],
-        difficulty: 0.3,
-        support: ['适度运动', '调节情志']
+
+        difficulty: 0.3;
+
       }
     };
   }
@@ -616,17 +616,17 @@ export class CalculationDiagnosisAlgorithm {
   private async analyzeTimeInfluence(lunarData: LunarData): Promise<TimeInfluence> {
     // 实现时间影响分析逻辑
     return {
-      currentHour: lunarData.hour,
-      dominantMeridian: '肺经',
+      currentHour: lunarData.hour;
+
       qiActivity: {
-        level: 0.8,
-        direction: '升',
-        quality: '清'
+        level: 0.8;
+
+
       },
-      optimalActivities: ['深呼吸', '冥想'],
-      healthFocus: ['养肺', '调息'],
+
+
       energyLevel: 0.8
-    };
+    ;};
   }
 
   /**
@@ -641,12 +641,12 @@ export class CalculationDiagnosisAlgorithm {
     timeInfluence: TimeInfluence;
   }): Promise<string> {
     // 生成综合分析报告
-    return `基于您的出生信息和当前时间的算诊分析显示：
-您的主要体质类型为${data.constitution.primaryConstitution}，
+
+
 五行平衡度为${(data.fiveElements.balance.overall * 100).toFixed(1)}%，
 阴阳平衡度为${(data.yinYang.currentYinYang.balance * 100).toFixed(1)}%。
-当前季节${data.seasonalInfluence.currentSeason}对您的影响较为适中，
-建议重点关注${data.timeInfluence.healthFocus.join('、')}。`;
+
+
   }
 
   /**
@@ -690,22 +690,22 @@ export class CalculationDiagnosisAlgorithm {
     
     // 五行失衡警告
     if (data.fiveElements.balance.overall < 0.6) {
-      warnings.push('五行失衡较为严重，建议及时调理');
+
     }
     
     // 阴阳失衡警告
     if (data.yinYang.currentYinYang.balance < 0.6) {
-      warnings.push('阴阳失衡，需要重点关注');
+
     }
     
     // 气机不畅警告
     if (data.qiFlow.overallFlow.circulation < 0.6) {
-      warnings.push('气机运行不畅，建议加强运动');
+
     }
     
     // 体质脆弱性警告
     if (data.constitution.vulnerabilities.length > 0) {
-      warnings.push(`注意防范：${data.constitution.vulnerabilities.join('、')}`);
+
     }
 
     return warnings;

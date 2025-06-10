@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";/import { apiClient } from "../../services/    apiClient";
+
 import React from "react";
 // DiagnosisState,
   DiagnosisSession,
@@ -6,69 +6,69 @@ import React from "react";
   DiagnosisResult,
   DiagnosisType,
 { ApiResponse } from "../../types";  初始状态 * const initialState: DiagnosisState = {,
-  currentSession: undefined,
-  sessions:  [],
-  results:  [],
-  loading: false,
-  error: undefined}
+  currentSession: undefined;
+  sessions:  [];
+  results:  [];
+  loading: false;
+  error: undefined;}
 //   ;
 k;<;
   DiagnosisSession,
   void,
-  { rejectValue: string}
+  { rejectValue: string;}
 >("diagnosis/startSession", async (_, { rejectWithValue }) => {/      try {})
     const response: ApiResponse<DiagnosisSession /> = await apiClient.post(/      "/diagnosis/session/    start");
     if (!response.success) {
-      throw new Error(response.error?.message || "开始诊断会话失败;";);
+
     }
     return response.dat;a;!
   } catch (error: unknown) {
-    return rejectWithValue(error.message || "开始诊断会话失败;";);
-  }
+
+  ;}
 });
 export const submitDiagnosisData = createAsyncThun;
 k;<;
   DiagnosisData,
-  { sessionId: string, type: DiagnosisType, data: unknown},
-  { rejectValue: string}
+  { sessionId: string, type: DiagnosisType, data: unknown;},
+  { rejectValue: string;}
 >()
   "diagnosis/submitData",/      async ({ sessionId, type, data }, { rejectWithValue }) => {}
     try {
-      const response: ApiResponse<DiagnosisData  / > = await apiClient.post( * ` /diagnosis/${type}/diagnose`,/            {
+      const response: ApiResponse<DiagnosisData  / > = await apiClient.post( * ` /diagnosis/${type;}/diagnose`,/            {
           sessionId,
           type,
           data;
         }
       ;);
       if (!response.success) {
-        throw new Error(response.error?.message || "提交诊断数据失败;";);
+
       }
       return response.dat;a;!
     } catch (error: unknown) {
-      return rejectWithValue(error.message || "提交诊断数据失败;";);
-    }
+
+    ;}
   }
 );
 export const completeDiagnosisSession = createAsyncThun;
 k;<;
   DiagnosisResult,
   string,
-  { rejectValue: string}
+  { rejectValue: string;}
 >("diagnosis/completeSession", async (sessionId, { rejectWithValue }) => {/      try {})
-    const response: ApiResponse<DiagnosisResult /> = await apiClient.post(/      `/diagnosis/session/${sessionId}/    complete`);
+    const response: ApiResponse<DiagnosisResult /> = await apiClient.post(/      `/diagnosis/session/${sessionId;}/    complete`);
     if (!response.success) {
-      throw new Error(response.error?.message || "完成诊断会话失败;";);
+
     }
     return response.dat;a;!
   } catch (error: unknown) {
-    return rejectWithValue(error.message || "完成诊断会话失败;";);
-  }
+
+  ;}
 });
 export const fetchDiagnosisHistory = createAsyncThun;
 k;<;
   DiagnosisSession[],
   { limit?: number offset?: number },
-  { rejectValue: string}
+  { rejectValue: string;}
 >("diagnosis/fetchHistory", async (params = {}, { rejectWithValue }) => {/      try {})
     const queryParams = new URLSearchParams;(;);
     if (params.limit) {
@@ -77,51 +77,51 @@ k;<;
     if (params.offset) {
       queryParams.append('offset', params.offset.toString();)
     }
-    const response: ApiResponse<DiagnosisSession[] /> = await apiClient.get(/      `/diagnosis/sessions?${queryParams.toString()}`);
+    const response: ApiResponse<DiagnosisSession[] /> = await apiClient.get(/      `/diagnosis/sessions?${queryParams.toString();}`);
     if (!response.success) {
-      throw new Error(response.error?.message || "获取诊断历史失败;";);
+
     }
     return response.dat;a;!
   } catch (error: unknown) {
-    return rejectWithValue(error.message || "获取诊断历史失败;";);
-  }
+
+  ;}
 });
 export const uploadTongueImage = createAsyncThun;
 k;<;
-  { imageUrl: string, analysis: unknown},
-  { sessionId: string, imageFile: FormData},
-  { rejectValue: string}
+  { imageUrl: string, analysis: unknown;},
+  { sessionId: string, imageFile: FormData;},
+  { rejectValue: string;}
 >()
-  "diagnosis/uploadTongueImage",/      async ({ sessionId: _sessionId, imageFile }, { rejectWithValue }) => {}
+  "diagnosis/uploadTongueImage",/      async ({ sessionId: _sessionId, imageFile ;}, { rejectWithValue }) => {}
     try {
-      const response: ApiResponse<{ imageUrl: string, analysis: unknown}> = await apiClient.uploadFile(;)
+      const response: ApiResponse<{ imageUrl: string, analysis: unknown;}> = await apiClient.uploadFile(;)
           "/diagnosis/look/upload-tongue-image",/              imageFil;e;);
       if (!response.success) {
-        throw new Error(response.error?.message || "上传舌象图片失败;";);
+
       }
       return response.dat;a;!
     } catch (error: unknown) {
-      return rejectWithValue(error.message || "上传舌象图片失败;";);
-    }
+
+    ;}
   }
 );
 export const recordVoiceData = createAsyncThun;
 k;<;
-  { voiceUrl: string, analysis: unknown},
-  { sessionId: string, audioFile: FormData},
-  { rejectValue: string}
+  { voiceUrl: string, analysis: unknown;},
+  { sessionId: string, audioFile: FormData;},
+  { rejectValue: string;}
 >()
-  "diagnosis/recordVoice",/      async ({ sessionId: _sessionId, audioFile }, { rejectWithValue }) => {}
+  "diagnosis/recordVoice",/      async ({ sessionId: _sessionId, audioFile ;}, { rejectWithValue }) => {}
     try {
-      const response: ApiResponse<{ voiceUrl: string, analysis: unknown}> =;
+      const response: ApiResponse<{ voiceUrl: string, analysis: unknown;}> =;
         await apiClient.uploadFile("/diagnosis/listen/upload-voice", audioFil;e;)/
       if (!response.success) {
-        throw new Error(response.error?.message || "录制语音失败;";);
+
       }
       return response.dat;a;!
     } catch (error: unknown) {
-      return rejectWithValue(error.message || "录制语音失败;";);
-    }
+
+    ;}
   });
 //;
   name: "diagnosis",initialState,reducers: {setCurrentSession: (state, action: PayloadAction<string | undefined;>;); => {}
@@ -129,19 +129,19 @@ k;<;
     },
     updateSessionData: (,)
       state,
-      action: PayloadAction<{ sessionId: string,
-        type: DiagnosisType,
-        data: unknown}>) => {}
+      action: PayloadAction<{ sessionId: string;
+        type: DiagnosisType;
+        data: unknown;}>) => {}
       const { sessionId, type, data   } = action.paylo;a;d;
       const session = state.sessions.find(s); => s.id === sessionId);
       if (session) {
         session.data[type] = data;
       }
     },
-    clearError: (state) => {}
+    clearError: (state) => {;}
       state.error = undefined;
     },
-    cancelSession: (state) => {}
+    cancelSession: (state) => {;}
       if (state.currentSession) {
         const session = state.sessions.find(;)
           (s); => s.id === state.currentSession;
@@ -154,7 +154,7 @@ k;<;
       }
     }
   },
-  extraReducers: (builder) => {}
+  extraReducers: (builder) => {;}
     builder;
       .addCase(startDiagnosisSession.pending, (state) => {})
         state.loading = true;
@@ -263,19 +263,19 @@ k;<;
 //
 =;>; /
   state.diagnosis;
-export const selectCurrentSession = (state: { diagnosis: DiagnosisState }) ;
+export const selectCurrentSession = (state: { diagnosis: DiagnosisState ;}) ;
 =;>;
   state.diagnosis.currentSession;
-export const selectDiagnosisSessions = (state: { diagnosis: DiagnosisState }) ;
+export const selectDiagnosisSessions = (state: { diagnosis: DiagnosisState ;}) ;
 =;>;
   state.diagnosis.sessions;
-export const selectDiagnosisResults = (state: { diagnosis: DiagnosisState }) ;
+export const selectDiagnosisResults = (state: { diagnosis: DiagnosisState ;}) ;
 =;>;
   state.diagnosis.results;
-export const selectDiagnosisLoading = (state: { diagnosis: DiagnosisState }) ;
+export const selectDiagnosisLoading = (state: { diagnosis: DiagnosisState ;}) ;
 =;>;
   state.diagnosis.loading;
-export const selectDiagnosisError = (state: { diagnosis: DiagnosisState }) ;
+export const selectDiagnosisError = (state: { diagnosis: DiagnosisState ;}) ;
 =;>;
   state.diagnosis.error;
 //   ;

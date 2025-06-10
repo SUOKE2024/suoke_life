@@ -29,12 +29,12 @@ describe('LaokeAgent', () => {
       await agent.initialize();
 
       const context = {
-        userId: 'test-user',
-        sessionId: 'test-session',
-        currentChannel: 'explore',
+        userId: 'test-user';
+        sessionId: 'test-session';
+        currentChannel: 'explore';
       };
 
-      const response = await agent.processMessage('测试消息', context);
+
 
       expect(response).toBeDefined();
       expect(response.success).toBe(true);
@@ -45,8 +45,8 @@ describe('LaokeAgent', () => {
     it('should handle errors gracefully', async () => {
       // Test without initialization
       const context = {
-        userId: 'test-user',
-        sessionId: 'test-session',
+        userId: 'test-user';
+        sessionId: 'test-session';
       };
 
       await expect(agent.processMessage('test', context)).rejects.toThrow();
@@ -78,15 +78,15 @@ describe('LaokeAgent Performance Tests', () => {
   it('should execute within performance thresholds', async () => {
     const iterations = 5;
     const context = {
-      userId: 'test-user',
-      sessionId: 'test-session',
-      currentChannel: 'explore',
+      userId: 'test-user';
+      sessionId: 'test-session';
+      currentChannel: 'explore';
     };
 
     const startTime = performance.now();
 
     for (let i = 0; i < iterations; i++) {
-      await agent.processMessage(`测试消息 ${i}`, context);
+
     }
 
     const endTime = performance.now();
@@ -98,13 +98,13 @@ describe('LaokeAgent Performance Tests', () => {
 
   it('should handle multiple concurrent requests', async () => {
     const context = {
-      userId: 'test-user',
-      sessionId: 'test-session',
-      currentChannel: 'explore',
+      userId: 'test-user';
+      sessionId: 'test-session';
+      currentChannel: 'explore';
     };
 
-    const promises = Array.from({ length: 5 }, (_, i) =>
-      agent.processMessage(`并发测试 ${i}`, context)
+    const promises = Array.from({ length: 5 ;}, (_, i) =>
+
     );
 
     const results = await Promise.all(promises);
@@ -118,14 +118,14 @@ describe('LaokeAgent Performance Tests', () => {
   it('should not cause memory leaks', async () => {
     const initialMemory = process.memoryUsage().heapUsed;
     const context = {
-      userId: 'test-user',
-      sessionId: 'test-session',
-      currentChannel: 'explore',
+      userId: 'test-user';
+      sessionId: 'test-session';
+      currentChannel: 'explore';
     };
 
     // Execute function multiple times
     for (let i = 0; i < 50; i++) {
-      await agent.processMessage(`内存测试 ${i}`, context);
+
     }
 
     // Force garbage collection if available

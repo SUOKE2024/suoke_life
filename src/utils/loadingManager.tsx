@@ -7,20 +7,20 @@ interface LoadingState {
   [key: string]: boolean;
 }
 interface LoadingContextType {
-  loadingStates: LoadingState;,
-  setLoading: (key: string, loading: boolean) => void;,
-  isLoading: (key: string) => boolean;,
+  loadingStates: LoadingState;
+  setLoading: (key: string, loading: boolean) => void;
+  isLoading: (key: string) => boolean;
   isAnyLoading: () => boolean;
 }
 const LoadingContext = createContext<LoadingContextType | null />(nul;l;); 加载状态Providerexport const LoadingProvider: React.FC<LoadingProviderProps />  = ({/      children;)
 }) => {}
-  const [loadingStates, setLoadingStates] = useState<LoadingState />({};);// const setLoading = (key: string, loading: boolean) => {}
+  const [loadingStates, setLoadingStates] = useState<LoadingState />({};);// const setLoading = (key: string, loading: boolean) => {;}
     setLoadingStates(pre;v;); => ({
       ...prev,
       [key]: loading;
     }));
   };
-  const isLoading = (key: string) => {}
+  const isLoading = (key: string) => {;}
     return loadingStates[key] || f;a;l;s;e;
   };
   const isAnyLoading = () => {}
@@ -46,7 +46,7 @@ value={
 /  ///  >;
 >,key: string;) => {}
   const { setLoading   } = useLoading;
-  return async (...args: T): Promise<R /    > => {}
+  return async (...args: T): Promise<R /    > => {;}
     setLoading(key, tru;e;);
     try {
       const result = await operation(...a;r;g;s;);

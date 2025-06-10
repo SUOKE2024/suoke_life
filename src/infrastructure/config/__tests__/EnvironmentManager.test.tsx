@@ -1,6 +1,4 @@
-import { EnvironmentManager } from "../EnvironmentManager";
-import { EnvironmentManager } from "../EnvironmentManager";
-import React from "react";
+
 describe("EnvironmentManager", () => {
   beforeEach(() => {
     jest.clearAllMocks();

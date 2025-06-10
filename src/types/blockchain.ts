@@ -103,8 +103,8 @@ export enum BlockchainErrorCode {
 }
 export class BlockchainError extends Error {
   constructor(
-    public code: BlockchainErrorCode,
-    message: string,
+    public code: BlockchainErrorCode;
+    message: string;
     public details?: any
   ) {
     super(message);

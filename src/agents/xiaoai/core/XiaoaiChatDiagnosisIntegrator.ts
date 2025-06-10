@@ -110,7 +110,7 @@ export class XiaoaiChatDiagnosisIntegrator {
    * 处理聊天消息，智能调用四诊服务
    */
   async processChatMessage(
-    message: string,
+    message: string;
     context: ChatContext
   ): Promise<ChatResponse> {
     try {
@@ -118,7 +118,7 @@ export class XiaoaiChatDiagnosisIntegrator {
         message,
         context
       );
-      const diagnosisResults: FourDiagnosisResults = {};
+      const diagnosisResults: FourDiagnosisResults = {;};
 
       if (diagnosisIntent.needsInquiry) {
         diagnosisResults.inquiry = await this.performInquiry(
@@ -175,39 +175,39 @@ export class XiaoaiChatDiagnosisIntegrator {
    * 分析用户消息的四诊意图
    */
   private async analyzeDiagnosisIntent(
-    message: string,
+    message: string;
     context: ChatContext
   ): Promise<DiagnosisIntent> {
     const symptomKeywords = [
-      '咳嗽',
-      '胸闷',
-      '头痛',
-      '发热',
-      '乏力',
-      '失眠',
-      '腹痛',
-      '恶心',
-      '呕吐',
-      '腹泻',
-      '便秘',
-      '心悸',
-      '气短',
-      '眩晕',
-      '耳鸣',
-      '视力模糊',
-      '关节痛',
-      '肌肉痛',
-      '皮疹',
-      '瘙痒',
-      '出汗',
-      '怕冷',
-      '怕热',
-      '口干',
-      '口苦',
-      '食欲不振',
-      '消化不良',
-      '月经不调',
-      '痛经',
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     ];
 
     const extractedSymptoms = symptomKeywords.filter((keyword) =>
@@ -215,12 +215,12 @@ export class XiaoaiChatDiagnosisIntegrator {
     );
 
     const emergencyKeywords = [
-      '急性',
-      '剧烈',
-      '严重',
-      '突然',
-      '无法忍受',
-      '呼吸困难',
+
+
+
+
+
+
     ];
     const urgencyLevel = emergencyKeywords.some((keyword) =>
       message.includes(keyword)
@@ -232,30 +232,30 @@ export class XiaoaiChatDiagnosisIntegrator {
 
     const needsInquiry =
       extractedSymptoms.length > 0 ||
-      message.includes('症状') ||
-      message.includes('不舒服') ||
-      message.includes('身体') ||
-      message.includes('健康');
+
+
+
+
 
     const needsLookDiagnosis =
       context.hasImages ||
-      message.includes('看看') ||
-      message.includes('舌头') ||
-      message.includes('面色') ||
-      message.includes('照片');
+
+
+
+
 
     const needsListenDiagnosis =
       context.hasAudio ||
-      message.includes('听听') ||
-      message.includes('声音') ||
-      message.includes('咳嗽声') ||
-      message.includes('录音');
+
+
+
+
 
     const needsPalpationDiagnosis =
       context.hasPalpationData ||
-      message.includes('脉搏') ||
-      message.includes('按压') ||
-      message.includes('触诊');
+
+
+
 
     const confidence = this.calculateIntentConfidence(
       extractedSymptoms.length,
@@ -272,7 +272,7 @@ export class XiaoaiChatDiagnosisIntegrator {
       needsPalpationDiagnosis,
       confidence,
       extractedSymptoms,
-      urgencyLevel: urgencyLevel as 'low' | 'medium' | 'high' | 'emergency',
+      urgencyLevel: urgencyLevel as 'low' | 'medium' | 'high' | 'emergency';
     };
   }
 
@@ -280,11 +280,11 @@ export class XiaoaiChatDiagnosisIntegrator {
    * 执行问诊
    */
   private async performInquiry(
-    userId: string,
+    userId: string;
     message: string
   ): Promise<InquiryResult> {
     try {
-      let sessionId = this.activeSessions.get(`inquiry_${userId}`);
+      let sessionId = this.activeSessions.get(`inquiry_${userId;}`);
       if (!sessionId) {
         sessionId = await diagnosisServiceClient.inquiry.startSession(userId);
         this.activeSessions.set(`inquiry_${userId}`, sessionId);
@@ -296,11 +296,11 @@ export class XiaoaiChatDiagnosisIntegrator {
       // 暂时使用模拟数据
       return {
         sessionId,
-        response: '已收到您的症状描述',
-        extractedSymptoms: [],
-        confidence: 0.8,
-        nextQuestions: [],
-        isComplete: false,
+
+        extractedSymptoms: [];
+        confidence: 0.8;
+        nextQuestions: [];
+        isComplete: false;
       };
     } catch (error) {
       throw error;
@@ -344,7 +344,7 @@ export class XiaoaiChatDiagnosisIntegrator {
       // 确保数据包含timestamp字段
       const dataWithTimestamp = {
         ...primaryData,
-        timestamp: primaryData.timestamp || Date.now(),
+        timestamp: primaryData.timestamp || Date.now();
       };
       return await diagnosisServiceClient.palpation.analyzePalpation(
         dataWithTimestamp
@@ -365,50 +365,50 @@ export class XiaoaiChatDiagnosisIntegrator {
 
     if (diagnosisResults.inquiry) {
       evidences.push(
-        '问诊：' +
+
           diagnosisResults.inquiry.extractedSymptoms.map((s) => s).join('、')
       );
     }
 
     if (diagnosisResults.look) {
-      evidences.push('望诊：' + diagnosisResults.look.analysis);
+
     }
 
     if (diagnosisResults.listen) {
-      evidences.push('闻诊：' + diagnosisResults.listen.analysis);
+
     }
 
     if (diagnosisResults.palpation) {
-      evidences.push('切诊：' + diagnosisResults.palpation.analysis);
+
     }
 
     return {
-      overallAssessment: `综合四诊分析：${evidences.join('；')}`,
+
       tcmDiagnosis: {
-        syndrome: '待进一步分析',
-        pathogenesis: '基于四诊合参的病机分析',
-        treatment: '个性化治疗方案',
-        prognosis: '良好',
-      },
+
+
+
+
+      ;},
       healthRecommendations: [
         {
-          category: 'lifestyle',
-          title: '生活方式调整',
-          description: '基于四诊结果的生活建议',
-          priority: 'medium',
-          timeframe: '1-2周',
+          category: 'lifestyle';
+
+
+          priority: 'medium';
+
         },
       ],
-      riskFactors: [],
+      riskFactors: [];
       followUpActions: [
         {
-          action: '定期复查',
-          timeframe: '1周后',
-          priority: 'medium',
-          description: '观察症状变化',
+
+
+          priority: 'medium';
+
         },
       ],
-      confidence: 0.85,
+      confidence: 0.85;
     };
   }
 
@@ -416,9 +416,9 @@ export class XiaoaiChatDiagnosisIntegrator {
    * 生成包含诊断结果的聊天回复
    */
   private generateChatResponseWithDiagnosis(
-    originalMessage: string,
-    diagnosisResults: FourDiagnosisResults,
-    context: ChatContext,
+    originalMessage: string;
+    diagnosisResults: FourDiagnosisResults;
+    context: ChatContext;
     intent: DiagnosisIntent
   ): ChatResponse {
     let responseText = '';
@@ -426,18 +426,18 @@ export class XiaoaiChatDiagnosisIntegrator {
     const suggestions: string[] = [];
 
     if (intent.urgencyLevel === 'high' || intent.urgencyLevel === 'emergency') {
-      responseText = '我注意到你描述的症状比较严重，让我立即为你进行详细分析。';
+
     } else if (intent.extractedSymptoms.length > 0) {
-      responseText = `我了解到你有${intent.extractedSymptoms.join('、')}等症状，让我帮你分析一下。`;
+
     } else {
-      responseText = '我来帮你了解一下你的健康状况。';
+
     }
 
     if (diagnosisResults.integrated) {
       responseText += `\n\n${diagnosisResults.integrated.overallAssessment}`;
 
       if (diagnosisResults.integrated.healthRecommendations.length > 0) {
-        responseText += '\n\n我的建议：';
+
         diagnosisResults.integrated.healthRecommendations.forEach(
           (rec, index) => {
             responseText += `\n${index + 1}. ${rec.title}：${rec.description}`;
@@ -446,37 +446,37 @@ export class XiaoaiChatDiagnosisIntegrator {
       }
     } else {
       if (diagnosisResults.inquiry) {
-        responseText += '\n\n基于我们的对话，我了解了你的症状情况。';
+
       }
 
       if (diagnosisResults.look) {
-        responseText += `\n\n望诊分析：${diagnosisResults.look.analysis}`;
+
       }
 
       if (diagnosisResults.listen) {
-        responseText += `\n\n闻诊分析：${diagnosisResults.listen.analysis}`;
+
       }
 
       if (diagnosisResults.palpation) {
-        responseText += `\n\n切诊分析：${diagnosisResults.palpation.analysis}`;
+
       }
     }
 
     if (intent.needsInquiry && !diagnosisResults.inquiry) {
       actions.push({
-        type: 'inquiry',
-        prompt: '我想了解一下你的具体症状，可以详细说说吗？',
-        autoStart: true,
+        type: 'inquiry';
+
+        autoStart: true;
       });
     }
 
     return {
-      text: responseText,
+      text: responseText;
       actions,
       suggestions,
       diagnosisResults,
-      confidence: intent.confidence,
-      timestamp: new Date(),
+      confidence: intent.confidence;
+      timestamp: new Date();
     };
   }
 
@@ -484,17 +484,17 @@ export class XiaoaiChatDiagnosisIntegrator {
    * 生成错误回复
    */
   private generateErrorResponse(
-    originalMessage: string,
+    originalMessage: string;
     error: any
   ): ChatResponse {
     return {
-      text: '抱歉，在分析你的消息时遇到了一些问题。请稍后再试，或者换个方式描述你的情况。',
-      actions: [],
-      suggestions: ['重新描述症状', '稍后再试'],
-      diagnosisResults: {},
-      confidence: 0,
-      timestamp: new Date(),
-      error: error.message,
+
+      actions: [];
+
+      diagnosisResults: {;},
+      confidence: 0;
+      timestamp: new Date();
+      error: error.message;
     };
   }
 
@@ -510,10 +510,10 @@ export class XiaoaiChatDiagnosisIntegrator {
    * 计算意图置信度
    */
   private calculateIntentConfidence(
-    symptomCount: number,
-    needsInquiry: boolean,
-    needsLook: boolean,
-    needsListen: boolean,
+    symptomCount: number;
+    needsInquiry: boolean;
+    needsLook: boolean;
+    needsListen: boolean;
     needsPalpation: boolean
   ): number {
     let confidence = 0.5; // 基础置信度

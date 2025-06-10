@@ -6,21 +6,21 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export interface CacheEntry {
-  id: string;,
-  type: 'inference_result' | 'user_data' | 'model_config' | 'health_record';,
-  data: any;,
+  id: string;
+  type: 'inference_result' | 'user_data' | 'model_config' | 'health_record';
+  data: any;
   timestamp: number;
   expiresAt?: number;
-  priority: 'low' | 'normal' | 'high' | 'critical';,
-  size: number;,
+  priority: 'low' | 'normal' | 'high' | 'critical';
+  size: number;
   syncStatus: 'pending' | 'synced' | 'failed';
 }
 
 export interface CacheConfig {
-  maxSizeMB: number;,
-  maxEntries: number;,
-  defaultTTL: number;,
-  compressionEnabled: boolean;,
+  maxSizeMB: number;
+  maxEntries: number;
+  defaultTTL: number;
+  compressionEnabled: boolean;
   encryptionEnabled: boolean;
 }
 
@@ -31,11 +31,11 @@ export class OfflineCacheManager {
 
   constructor(config?: Partial<CacheConfig>) {
     this.config = {
-      maxSizeMB: 100,
-      maxEntries: 1000,
-      defaultTTL: 24 * 60 * 60 * 1000,
-      compressionEnabled: true,
-      encryptionEnabled: true,
+      maxSizeMB: 100;
+      maxEntries: 1000;
+      defaultTTL: 24 * 60 * 60 * 1000;
+      compressionEnabled: true;
+      encryptionEnabled: true;
       ...config
     };
   }
@@ -44,20 +44,20 @@ export class OfflineCacheManager {
     if (this.isInitialized) return;
 
     try {
-      console.log('正在初始化离线缓存管理器...');
+
       await this.loadCacheFromStorage();
       await this.cleanExpiredEntries();
       this.isInitialized = true;
-      console.log('离线缓存管理器初始化完成');
+
     } catch (error) {
-      console.error('离线缓存管理器初始化失败:', error);
+
       throw error;
     }
   }
 
   async set(
-    key: string,
-    data: any,
+    key: string;
+    data: any;
     options?: {
       type?: CacheEntry['type'];
       priority?: CacheEntry['priority'];
@@ -72,21 +72,21 @@ export class OfflineCacheManager {
 
     try {
       const entry: CacheEntry = {,
-  id: key,
+  id: key;
         type,
         data,
-        timestamp: Date.now(),
-        expiresAt: ttl > 0 ? Date.now() + ttl : undefined,
+        timestamp: Date.now();
+        expiresAt: ttl > 0 ? Date.now() + ttl : undefined;
         priority,
-        size: this.calculateDataSize(data),
+        size: this.calculateDataSize(data);
         syncStatus: 'synced'
-      };
+      ;};
 
       this.cache.set(key, entry);
       await this.persistCacheEntry(entry);
-      console.log(`缓存已存储: ${key}`);
+
     } catch (error) {
-      console.error(`缓存存储失败: ${key}`, error);
+
       throw error;
     }
   }
@@ -111,7 +111,7 @@ export class OfflineCacheManager {
 
       return entry.data;
     } catch (error) {
-      console.error(`缓存读取失败: ${key}`, error);
+
       return null;
     }
   }
@@ -121,12 +121,12 @@ export class OfflineCacheManager {
       this.cache.delete(key);
       await AsyncStorage.removeItem(`cache_${key}`);
     } catch (error) {
-      console.error(`缓存删除失败: ${key}`, error);
+
     }
   }
 
   getCacheStats(): {
-    totalEntries: number;,
+    totalEntries: number;
   totalSizeMB: number;
   } {
     const totalSize = Array.from(this.cache.values()).reduce(sum, entry) => sum + entry.size,
@@ -134,9 +134,9 @@ export class OfflineCacheManager {
     );
 
     return {
-      totalEntries: this.cache.size,
+      totalEntries: this.cache.size;
       totalSizeMB: Math.round(totalSize / (1024 * 1024)) * 100) / 100
-    };
+    ;};
   }
 
   getOfflineCapabilities(): string[] {
@@ -162,7 +162,7 @@ export class OfflineCacheManager {
         }
       }
     } catch (error) {
-      console.error('加载缓存失败:', error);
+
     }
   }
 
@@ -182,12 +182,12 @@ export class OfflineCacheManager {
   }
 
   private async persistCacheEntry(entry: CacheEntry): Promise<void> {
-    await AsyncStorage.setItem(`cache_${entry.id}`, JSON.stringify(entry));
+    await AsyncStorage.setItem(`cache_${entry.id;}`, JSON.stringify(entry));
   }
 
   private async loadCacheEntry(key: string): Promise<CacheEntry | null> {
     try {
-      const entryJson = await AsyncStorage.getItem(`cache_${key}`);
+      const entryJson = await AsyncStorage.getItem(`cache_${key;}`);
       return entryJson ? JSON.parse(entryJson) : null;
     } catch (error) {
       return null;

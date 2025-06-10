@@ -1,7 +1,6 @@
-import {   View, StyleSheet, ViewStyle   } from "react-native";
-import { usePerformanceMonitor } from "../hooks/    usePerformanceMonitor";
+
 import React from "react";
-import { spacing  } from "../../placeholder";../../constants/theme";/    importReact from "react;
+;/    importReact from "react;
 // * 索克生活 - Container组件;
 * 统一的容器布局组件
 export interface ContainerProps {
@@ -21,7 +20,7 @@ export interface ContainerProps {
   testID?: string;
 }
 const Container: React.FC<ContainerProps /> = ({/   const performanceMonitor = usePerformanceMonitor(Container", { /    ";))
-    trackRender: true,trackMemory: false,warnThreshold: 100};);
+    trackRender: true,trackMemory: false,warnThreshold: 100;};);
   children,
   padding,
   margin,
@@ -34,12 +33,12 @@ const Container: React.FC<ContainerProps /> = ({/   const performanceMonitor = u
 }) => {}
   const containerStyle = useMemo() => [;)
     styles.base,
-    { flexDirection: direction},
-    padding && { padding: getPadding(padding)   },
-    margin && { margin: getMargin(margin)   },
+    { flexDirection: direction;},
+    padding && { padding: getPadding(padding)   ;},
+    margin && { margin: getMargin(margin)   ;},
     flex && { flex },
-    justify && { justifyContent: justify},
-    align && { alignItems: align},
+    justify && { justifyContent: justify;},
+    align && { alignItems: align;},
     style;
   ].filter(Boolean); as ViewStyle[], []);
   performanceMonitor.recordRender();
@@ -50,9 +49,9 @@ const Container: React.FC<ContainerProps /> = ({/   const performanceMonitor = u
 //
   if (typeof padding === "number") { ///      return spacing[padding;];
 };
-const getMargin = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => (margin: keyof typeof spacing | number): number => {}
+const getMargin = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => (margin: keyof typeof spacing | number): number => {;}
   if (typeof margin === "number") { ///      return spacing[margin;];
 };
-const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({ base: {flexDirection: "column"})
+const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo(); => useMemo() => StyleSheet.create({ base: {flexDirection: "column";})
 }), []);
 export default React.memo(Container);

@@ -12,7 +12,7 @@ import {;
 interface ErrorBoundaryProps {
   children: ReactNode;
   fallback?: ReactNode;
-  onError?: (error: Error, errorInfo: ErrorInfo) => void;
+  onError?: (error: Error; errorInfo: ErrorInfo) => void;
   showDetails?: boolean;
   style?: ViewStyle;
   titleStyle?: TextStyle;
@@ -22,8 +22,8 @@ interface ErrorBoundaryProps {
 }
 
 interface ErrorBoundaryState {
-  hasError: boolean;,
-  error: Error | null;,
+  hasError: boolean;
+  error: Error | null;
   errorInfo: ErrorInfo | null;
 }
 
@@ -34,15 +34,15 @@ export class ErrorBoundary extends Component<
   constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = {
-      hasError: false,
-      error: null,
+      hasError: false;
+      error: null;
       errorInfo: null
-    };
+    ;};
   }
 
   static getDerivedStateFromError(error: Error): Partial<ErrorBoundaryState> {
     return {
-      hasError: true,
+      hasError: true;
       error
     };
   }
@@ -51,7 +51,7 @@ export class ErrorBoundary extends Component<
     this.setState({
       error,
       errorInfo
-    });
+    ;});
 
     // 调用错误回调
     this.props.onError?.(error, errorInfo);
@@ -65,10 +65,10 @@ export class ErrorBoundary extends Component<
 
   handleRetry = () => {
     this.setState({
-      hasError: false,
-      error: null,
+      hasError: false;
+      error: null;
       errorInfo: null
-    });
+    ;});
   };
 
   render() {
@@ -83,11 +83,11 @@ export class ErrorBoundary extends Component<
         <View style={[styles.container, this.props.style]}>
           <View style={styles.content}>
             <Text style={[styles.title, this.props.titleStyle]}>
-              😵 出现了一些问题
+
             </Text>
 
             <Text style={[styles.message, this.props.messageStyle]}>
-              应用遇到了意外错误，请尝试重新加载页面。
+
             </Text>
 
             {this.props.showDetails && this.state.error && (
@@ -113,12 +113,12 @@ export class ErrorBoundary extends Component<
               onPress={this.handleRetry}
               accessible;
               accessibilityRole="button"
-              accessibilityLabel="重试"
+
             >
               <Text;
                 style={[styles.retryButtonText, this.props.buttonTextStyle]}
               >
-                🔄 重试
+
               </Text>
             </TouchableOpacity>
           </View>
@@ -132,88 +132,88 @@ export class ErrorBoundary extends Component<
 
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
-    backgroundColor: '#f8f9fa',
-    justifyContent: 'center',
-    alignItems: 'center',
+  flex: 1;
+    backgroundColor: '#f8f9fa';
+    justifyContent: 'center';
+    alignItems: 'center';
     padding: 20
-  },
+  ;},
   content: {,
-  backgroundColor: '#ffffff',
-    borderRadius: 12,
-    padding: 24,
-    maxWidth: 400,
-    width: '100%',
-    shadowColor: '#000',
+  backgroundColor: '#ffffff';
+    borderRadius: 12;
+    padding: 24;
+    maxWidth: 400;
+    width: '100%';
+    shadowColor: '#000';
     shadowOffset: {,
-  width: 0,
+  width: 0;
       height: 2
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
+    ;},
+    shadowOpacity: 0.1;
+    shadowRadius: 8;
     elevation: 4
-  },
+  ;},
   title: {,
-  fontSize: 24,
-    fontWeight: '600',
-    color: '#1a1a1a',
-    textAlign: 'center',
+  fontSize: 24;
+    fontWeight: '600';
+    color: '#1a1a1a';
+    textAlign: 'center';
     marginBottom: 12
-  },
+  ;},
   message: {,
-  fontSize: 16,
-    color: '#666666',
-    textAlign: 'center',
-    lineHeight: 24,
+  fontSize: 16;
+    color: '#666666';
+    textAlign: 'center';
+    lineHeight: 24;
     marginBottom: 24
-  },
+  ;},
   detailsContainer: {,
-  backgroundColor: '#f5f5f5',
-    borderRadius: 8,
-    padding: 12,
-    marginBottom: 24,
+  backgroundColor: '#f5f5f5';
+    borderRadius: 8;
+    padding: 12;
+    marginBottom: 24;
     maxHeight: 200
-  },
+  ;},
   detailsTitle: {,
-  fontSize: 14,
-    fontWeight: '600',
-    color: '#333333',
-    marginBottom: 8,
+  fontSize: 14;
+    fontWeight: '600';
+    color: '#333333';
+    marginBottom: 8;
     marginTop: 12
-  },
+  ;},
   errorText: {,
-  fontSize: 12,
-    color: '#d32f2f',
-    fontFamily: 'monospace',
+  fontSize: 12;
+    color: '#d32f2f';
+    fontFamily: 'monospace';
     lineHeight: 16
-  },
+  ;},
   stackText: {,
-  fontSize: 11,
-    color: '#666666',
-    fontFamily: 'monospace',
+  fontSize: 11;
+    color: '#666666';
+    fontFamily: 'monospace';
     lineHeight: 14
-  },
+  ;},
   retryButton: {,
-  backgroundColor: '#2196f3',
-    borderRadius: 8,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
+  backgroundColor: '#2196f3';
+    borderRadius: 8;
+    paddingVertical: 12;
+    paddingHorizontal: 24;
     alignItems: 'center'
-  },
+  ;},
   retryButtonText: {,
-  color: '#ffffff',
-    fontSize: 16,
+  color: '#ffffff';
+    fontSize: 16;
     fontWeight: '600'
-  }
+  ;}
 });
 
 // 高阶组件版本
 export function withErrorBoundary<P extends object>(
-  Component: React.ComponentType<P>,
-  errorBoundaryProps?: Omit<ErrorBoundaryProps, 'children'>
+  Component: React.ComponentType<P>;
+  errorBoundaryProps?: Omit<ErrorBoundaryProps; 'children'>
 ) {
   const WrappedComponent = (props: P) => (
-    <ErrorBoundary {...errorBoundaryProps}>
+    <ErrorBoundary {...errorBoundaryProps;}>
       <Component {...props} />
     </ErrorBoundary>
   );

@@ -5,17 +5,17 @@ interface HealthPathwayVisualizerProps {
 import React from "react";
 const PATHWAY =  [;
   {
-      key: "inspection",
-      label: "检测", desc: "健康数据采集与检;测" ;},
+      key: "inspection";
+
   {
-      key: "syndrome",
-      label: "辨证", desc: "中医辨证分析"},
+      key: "syndrome";
+
   {
-      key: "regulation",
-      label: "调理", desc: "个性化调理方案"},
+      key: "regulation";
+
   {
-      key: "preservation",
-      label: "养生", desc: "日常养生与预防"}
+      key: "preservation";
+
 ];
 export const HealthPathwayVisualizer: React.FC<HealthPathwayVisualizerProps /    > void;
 /    }>  = ({ currentStage, onStagePress }) => {}
@@ -31,37 +31,37 @@ key={stage.key}
     </View>/      );
 }
 const styles = StyleSheet.create({container: {),
-  flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginVertical: 24,
+  flexDirection: "row";
+    justifyContent: "space-between";
+    alignItems: "center";
+    marginVertical: 24;
     paddingHorizontal: 8;
   },
   stage: {,
-  flex: 1,
-    alignItems: "center",
-    padding: 8,
+  flex: 1;
+    alignItems: "center";
+    padding: 8;
     opacity: 0.5;
   },
   activeStage: {,
-  opacity: 1,
-    backgroundColor: "#E0F7FA",
+  opacity: 1;
+    backgroundColor: "#E0F7FA";
     borderRadius: 8;
   },
   label: {,
-  fontSize: 16,
-    fontWeight: "bold",
+  fontSize: 16;
+    fontWeight: "bold";
     color: "#333"
-  },
-  activeLabel: { color: "#00796B"  },
+  ;},
+  activeLabel: { color: "#00796B"  ;},
   desc: {,
-  fontSize: 12,
-    color: "#666",
-    marginTop: 4,
+  fontSize: 12;
+    color: "#666";
+    marginTop: 4;
     textAlign: "center"
-  },
+  ;},
   arrow: {,
-  width: 24,
-    height: 2,
-    backgroundColor: "#B2DFDB",
-    marginVertical: 8,alignSelf: "center"};};);
+  width: 24;
+    height: 2;
+    backgroundColor: "#B2DFDB";
+    marginVertical: 8,alignSelf: "center";};};);

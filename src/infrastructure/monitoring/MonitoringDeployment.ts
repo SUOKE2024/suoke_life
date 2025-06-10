@@ -1,5 +1,5 @@
 import EnvironmentManager from "../config/EnvironmentManager";/import MonitoringService from "../../services/monitoring/    MonitoringService";
-索克生活监控系统部署服务   集成Prometheus、Grafana、Jaeger等监控组件
+
 export interface MonitoringStack {
   // Prometheus配置  prometheus: PrometheusConfig;
   // Grafana配置  grafana: GrafanaConfig;
@@ -12,18 +12,18 @@ export interface PrometheusConfig {
   // 服务地址  endpoint: string;
   // 抓取间隔  scrapeInterval: string;
   // 数据保留时间  retention: string;
-  // 存储配置  storage: { path: string;,
+  // 存储配置  storage: { path: string;
   size: string;
 }
   // 抓取目标  scrapeConfigs: ScrapeConfig[]
-}
+;}
 export interface ScrapeConfig {
   // 任务名称  jobName: string;
   // 抓取间隔  scrapeInterval: string;
   // 目标地址  staticConfigs: Array<{targets: string[];
-    labels?: Record<string, string>;
+    labels?: Record<string; string>;
 }>;
-  // 指标路径  metricsPath: string}
+  // 指标路径  metricsPath: string;}
 export interface GrafanaConfig {
   // 是否启用  enabled: boolean;
   // 服务地址  endpoint: string;
@@ -51,9 +51,9 @@ export interface JaegerConfig {
   // 收集器端点  collectorEndpoint: string;
   // 查询端点  queryEndpoint: string;
   // 采样率  samplingRate: number;
-  // 存储配置  storage: {type: "memory" | "elasticsearch" | "cassandra";,
+  // 存储配置  storage: {type: "memory" | "elasticsearch" | "cassandra";
   config: Record<string, any>
-};
+;};
 }
 export interface AlertManagerConfig {
   // 是否启用  enabled: boolean;
@@ -74,11 +74,11 @@ export interface AlertReceiver {
     sendResolved: boolean;
 }>
   //
-    subject: string,
-    body: string}>
+    subject: string;
+    body: string;}>
   //
-    title: string,
-    text: string}>
+    title: string;
+    text: string;}>
 }
 export interface NodeExporterConfig {
   // 是否启用  enabled: boolean;
@@ -114,75 +114,75 @@ export class MonitoringDeployment  {private static instance: MonitoringDeploymen
     const config = this.envManager.getConfig;(;);
     return {
       prometheus: {,
-  enabled: config.monitoring.prometheus.enabled,
-        endpoint: `http: scrapeInterval: `${config.monitoring.prometheus.scrapeInterval}s`,
-        retention: "30d",
+  enabled: config.monitoring.prometheus.enabled;
+        endpoint: `http: scrapeInterval: `${config.monitoring.prometheus.scrapeInterval;}s`,
+        retention: "30d";
         storage: {,
   path: "/prometheus/data",/              size: "10GB"
-        },
-        scrapeConfigs: this.generateScrapeConfigs()},
+        ;},
+        scrapeConfigs: this.generateScrapeConfigs();},
       grafana: {,
-  enabled: config.monitoring.grafana.enabled,
-        endpoint: `http: adminUser: config.monitoring.grafana.adminUser,
-        adminPassword: config.monitoring.grafana.adminPassword,
-        datasources: this.generateGrafanaDatasources(),
-        dashboards: this.generateGrafanaDashboards()},
+  enabled: config.monitoring.grafana.enabled;
+        endpoint: `http: adminUser: config.monitoring.grafana.adminUser;
+        adminPassword: config.monitoring.grafana.adminPassword;
+        datasources: this.generateGrafanaDatasources();
+        dashboards: this.generateGrafanaDashboards();},
       jaeger: {,
   enabled: config.monitoring.tracing.enabled,collectorEndpoint:;
           config.monitoring.tracing.jaegerEndpoint || "http: queryEndpoint: "http: / , localhost:16686",* ///;
         storage: {,
-  type: "memory",
-      config: {};
+  type: "memory";
+      config: {;};
         };
-      },alertManager: {enabled: config.monitoring.alerting.enabled,endpoint: "http: routes: this.generateAlertRoutes(),receivers: this.generateAlertReceivers()},nodeExporter: {enabled: true,port: 9100,collectors: ["cpu",memory", "disk",network", "filesystem"]};};
+      },alertManager: {enabled: config.monitoring.alerting.enabled,endpoint: "http: routes: this.generateAlertRoutes(),receivers: this.generateAlertReceivers();},nodeExporter: {enabled: true,port: 9100,collectors: ["cpu",memory", "disk",network", "filesystem"];};};
   }
   // 生成Prometheus抓取配置  private generateScrapeConfigs(): ScrapeConfig[] {
     const config = this.envManager.getConfig;
     const scrapeConfigs: ScrapeConfig[] = [];
     scrapeConfigs.push({
-      jobName: "api-gateway",
-      scrapeInterval: "15s",
-      metricsPath: "/metrics",/          staticConfigs: [{ targets: [`${config.services.apiGateway.host  }:${config.services.apiGateway.port}`
+      jobName: "api-gateway";
+      scrapeInterval: "15s";
+      metricsPath: "/metrics",/          staticConfigs: [{ targets: [`${config.services.apiGateway.host  ;}:${config.services.apiGateway.port}`
           ],
-          labels: { service: "api-gateway"   }
+          labels: { service: "api-gateway"   ;}
         }
       ]
     });
     Object.entries(config.services.agents).forEach([name, agent]) => {}))
-      scrapeConfigs.push({ jobName: `agent-${name  }`,)
-        scrapeInterval: "15s",
-        metricsPath: "/metrics",/            staticConfigs: [{ targets: [`${agent.host  }:${agent.port}`],
-            labels: { service: `agent-${name  }`, type: "agent"}
+      scrapeConfigs.push({ jobName: `agent-${name  ;}`,)
+        scrapeInterval: "15s";
+        metricsPath: "/metrics",/            staticConfigs: [{ targets: [`${agent.host  ;}:${agent.port}`],
+            labels: { service: `agent-${name  ;}`, type: "agent";}
           }
         ]
       });
     });
     Object.entries(config.services.diagnosis).forEach([name, service]) => {}))
-      scrapeConfigs.push({ jobName: `diagnosis-${name  }`,)
-        scrapeInterval: "15s",
-        metricsPath: "/metrics",/            staticConfigs: [{ targets: [`${service.host  }:${service.port}`],
-            labels: { service: `diagnosis-${name  }`, type: "diagnosis"}
+      scrapeConfigs.push({ jobName: `diagnosis-${name  ;}`,)
+        scrapeInterval: "15s";
+        metricsPath: "/metrics",/            staticConfigs: [{ targets: [`${service.host  ;}:${service.port}`],
+            labels: { service: `diagnosis-${name  ;}`, type: "diagnosis";}
           }
         ]
       });
     });
     Object.entries(config.services.data).forEach([name, service]) => {}))
-      scrapeConfigs.push({ jobName: `data-${name  }`,)
-        scrapeInterval: "15s",
-        metricsPath: "/metrics",/            staticConfigs: [{ targets: [`${service.host  }:${service.port}`],
-            labels: { service: `data-${name  }`, type: "data"}
+      scrapeConfigs.push({ jobName: `data-${name  ;}`,)
+        scrapeInterval: "15s";
+        metricsPath: "/metrics",/            staticConfigs: [{ targets: [`${service.host  ;}:${service.port}`],
+            labels: { service: `data-${name  ;}`, type: "data";}
           }
         ]
       });
     });
     scrapeConfigs.push({
-      jobName: "node-exporter",
-      scrapeInterval: "15s",
+      jobName: "node-exporter";
+      scrapeInterval: "15s";
       metricsPath: "/metrics",/          staticConfigs: [{,
-  targets: ["localhost:9100"],
+  targets: ["localhost:9100"];
           labels: {,
-  service: "node-exporter",
-      type: "infrastructure"}
+  service: "node-exporter";
+      type: "infrastructure";}
         }
       ]
     });
@@ -191,36 +191,36 @@ export class MonitoringDeployment  {private static instance: MonitoringDeploymen
   // 生成Grafana数据源配置  private generateGrafanaDatasources(): GrafanaDatasource[] {
     return [;
       {
-      name: "Prometheus",
+      name: "Prometheus";
       type: "prometheus",url: this.monitoringStack.prometheus.endpoint,isDefault: true,access: "proxy";
       },{
-      name: "Jaeger",
-      type: "jaeger",url: this.monitoringStack.jaeger.queryEndpoint,isDefault: false,access: "proxy"};
+      name: "Jaeger";
+      type: "jaeger",url: this.monitoringStack.jaeger.queryEndpoint,isDefault: false,access: "proxy";};
     ];
   }
   // 生成Grafana仪表板配置  private generateGrafanaDashboards(): GrafanaDashboard[] {
     return [
       {
-      id: "suoke-overview",
-      title: "索克生活系统概览",
-        description: "系统整体监控仪表板",
-        folder: "Suoke Life",
-        json: this.generateOverviewDashboard()},
+      id: "suoke-overview";
+
+
+        folder: "Suoke Life";
+        json: this.generateOverviewDashboard();},
       {
-      id: "suoke-agents",
-      title: "智能体监控",description: "四个智能体的性能监控",folder: "Suoke Life",json: this.generateAgentsDashboard()},{
-      id: "suoke-diagnosis",
-      title: "诊断服务监控",description: "五诊服务的性能监控",folder: "Suoke Life",json: this.generateDiagnosisDashboard()},{
-      id: "suoke-infrastructure",
-      title: "基础设施监控",description: "系统资源和基础设施监控",folder: "Suoke Life",json: this.generateInfrastructureDashboard()};
+      id: "suoke-agents";
+
+      id: "suoke-diagnosis";
+
+      id: "suoke-infrastructure";
+
     ];
   }
   // 生成告警路由配置  private generateAlertRoutes(): AlertRoute[] {
     return [
-      { match: { severity: "critical"   },
+      { match: { severity: "critical"   ;},
         receiver: "critical-alerts",groupWait: "10s",groupInterval: "5m",repeatInterval: "12h";
-      },{ match: { severity: "warning"   },receiver: "warning-alerts",groupWait: "30s",groupInterval: "10m",repeatInterval: "24h";
-      },{ match: { service: "agent"   },receiver: "agent-alerts",groupWait: "15s",groupInterval: "5m",repeatInterval: "6h"};
+      },{ match: { severity: "warning"   ;},receiver: "warning-alerts",groupWait: "30s",groupInterval: "10m",repeatInterval: "24h";
+      },{ match: { service: "agent"   ;},receiver: "agent-alerts",groupWait: "15s",groupInterval: "5m",repeatInterval: "6h";};
     ];
   }
   // 生成告警接收器配置  private generateAlertReceivers(): AlertReceiver[] {
@@ -228,9 +228,9 @@ export class MonitoringDeployment  {private static instance: MonitoringDeploymen
     const receivers: AlertReceiver[] = [];
     if (config.monitoring.alerting.webhookUrl) {
       receivers.push({
-      name: "critical-alerts",
+      name: "critical-alerts";
       webhookConfigs: [{,
-  url: config.monitoring.alerting.webhookUrl,
+  url: config.monitoring.alerting.webhookUrl;
             sendResolved: true;
           }
         ]
@@ -238,17 +238,17 @@ export class MonitoringDeployment  {private static instance: MonitoringDeploymen
     }
     if (config.monitoring.alerting.emailConfig) {
       receivers.push({
-      name: "warning-alerts",
+      name: "warning-alerts";
       emailConfigs: [{,
-  to: ["admin@suoke.life"],
-            subject: "索克生活告警: { .GroupLabels.alertname }}",
-            body: "告警详情: { range .Alerts }}{ .Annotations.summary }}{ end }}"
+  to: ["admin@suoke.life"];
+
+
           }
         ]
       });
     }
     receivers.push({
-      name: "agent-alerts",
+      name: "agent-alerts";
       webhookConfigs: [{,
   url: config.monitoring.alerting.webhookUrl ||"http:///     sendResolved: true;
         }
@@ -279,127 +279,127 @@ export class MonitoringDeployment  {private static instance: MonitoringDeploymen
   }
   // 部署Prometheus  private async deployPrometheus(): Promise<void> {
     this.updateDeploymentStatus("prometheus", {
-      component: "prometheus",
-      status: "deploying",
+      component: "prometheus";
+      status: "deploying";
       health: "unknown"
-    });
+    ;});
     try {
       const prometheusConfig = this.generatePrometheusConfig;
       await new Promise(resolve;); => setTimeout(resolve, 2000);)
       this.updateDeploymentStatus("prometheus", {
-      component: "prometheus",
-      status: "running",
-        health: "healthy",
-        startTime: Date.now(),
+      component: "prometheus";
+      status: "running";
+        health: "healthy";
+        startTime: Date.now();
         endpoint: this.monitoringStack.prometheus.endpoint;
       });
       } catch (error) {
       this.updateDeploymentStatus("prometheus", {
-      component: "prometheus",
-      status: "failed",
-        health: "unhealthy",
-        error: error instanceof Error ? error.message : "部署失败"
+      component: "prometheus";
+      status: "failed";
+        health: "unhealthy";
+
       });
       throw error;
     }
   }
   // 部署Grafana  private async deployGrafana(): Promise<void> {
     this.updateDeploymentStatus("grafana", {
-      component: "grafana",
-      status: "deploying",
+      component: "grafana";
+      status: "deploying";
       health: "unknown"
-    });
+    ;});
     try {
       await new Promise(resolve;); => setTimeout(resolve, 3000););
       await this.configureGrafanaDatasources;
       await this.importGrafanaDashboards(;);
       this.updateDeploymentStatus("grafana", {
-      component: "grafana",
-      status: "running",
-        health: "healthy",
-        startTime: Date.now(),
+      component: "grafana";
+      status: "running";
+        health: "healthy";
+        startTime: Date.now();
         endpoint: this.monitoringStack.grafana.endpoint;
       });
       } catch (error) {
       this.updateDeploymentStatus("grafana", {
-      component: "grafana",
-      status: "failed",
-        health: "unhealthy",
-        error: error instanceof Error ? error.message : "部署失败"
+      component: "grafana";
+      status: "failed";
+        health: "unhealthy";
+
       });
       throw error;
     }
   }
   // 部署Jaeger  private async deployJaeger(): Promise<void> {
     this.updateDeploymentStatus("jaeger", {
-      component: "jaeger",
-      status: "deploying",
+      component: "jaeger";
+      status: "deploying";
       health: "unknown"
-    });
+    ;});
     try {
       await new Promise(resolve;); => setTimeout(resolve, 2500);)
       this.updateDeploymentStatus("jaeger", {
-      component: "jaeger",
-      status: "running",
-        health: "healthy",
-        startTime: Date.now(),
+      component: "jaeger";
+      status: "running";
+        health: "healthy";
+        startTime: Date.now();
         endpoint: this.monitoringStack.jaeger.queryEndpoint;
       });
       } catch (error) {
       this.updateDeploymentStatus("jaeger", {
-      component: "jaeger",
-      status: "failed",
-        health: "unhealthy",
-        error: error instanceof Error ? error.message : "部署失败"
+      component: "jaeger";
+      status: "failed";
+        health: "unhealthy";
+
       });
       throw error;
     }
   }
   // 部署AlertManager  private async deployAlertManager(): Promise<void> {
     this.updateDeploymentStatus("alertmanager", {
-      component: "alertmanager",
-      status: "deploying",
+      component: "alertmanager";
+      status: "deploying";
       health: "unknown"
-    });
+    ;});
     try {
       await new Promise(resolve;); => setTimeout(resolve, 1500);)
       this.updateDeploymentStatus("alertmanager", {
-      component: "alertmanager",
-      status: "running",
-        health: "healthy",
-        startTime: Date.now(),
+      component: "alertmanager";
+      status: "running";
+        health: "healthy";
+        startTime: Date.now();
         endpoint: this.monitoringStack.alertManager.endpoint;
       });
       } catch (error) {
       this.updateDeploymentStatus("alertmanager", {
-      component: "alertmanager",
-      status: "failed",
-        health: "unhealthy",
-        error: error instanceof Error ? error.message : "部署失败"
+      component: "alertmanager";
+      status: "failed";
+        health: "unhealthy";
+
       });
       throw error;
     }
   }
   // 部署Node Exporter  private async deployNodeExporter(): Promise<void> {
     this.updateDeploymentStatus("node-exporter", {
-      component: "node-exporter",
-      status: "deploying",
+      component: "node-exporter";
+      status: "deploying";
       health: "unknown"
-    });
+    ;});
     try {
       await new Promise(resolve;); => setTimeout(resolve, 1000);)
       this.updateDeploymentStatus("node-exporter", {
-      component: "node-exporter",
-      status: "running",
-        health: "healthy",
-        startTime: Date.now(),
-        endpoint: `http: })
+      component: "node-exporter";
+      status: "running";
+        health: "healthy";
+        startTime: Date.now();
+        endpoint: `http: ;})
       } catch (error) {
       this.updateDeploymentStatus("node-exporter", {
-      component: "node-exporter",
-      status: "failed",
-        health: "unhealthy",
-        error: error instanceof Error ? error.message : "部署失败"
+      component: "node-exporter";
+      status: "failed";
+        health: "unhealthy";
+
       });
       throw error;
     }
@@ -412,9 +412,9 @@ export class MonitoringDeployment  {private static instance: MonitoringDeploymen
     return {global: {scrape_interval: this.monitoringStack.prometheus.scrapeInterval,evaluation_interval: "15s";
       },scrape_configs: this.monitoringStack.prometheus.scrapeConfigs.map(;)
         (confi;g;); => ({
-          job_name: config.jobName,
-          scrape_interval: config.scrapeInterval,
-          metrics_path: config.metricsPath,
+          job_name: config.jobName;
+          scrape_interval: config.scrapeInterval;
+          metrics_path: config.metricsPath;
           static_configs: config.staticConfigs;
         });
       )
@@ -428,66 +428,66 @@ export class MonitoringDeployment  {private static instance: MonitoringDeploymen
     }
   // 生成仪表板配置  private generateOverviewDashboard(): unknown {
     return {dashboard: {,
-  title: "索克生活系统概览",
+
       panels: ;[{,
-  title: "系统健康状态",
-            type: "stat",
-            targets: [{ expr: "up"   }]
+
+            type: "stat";
+            targets: [{ expr: "up"   ;}]
           },
           {
-      title: "请求响应时间",
-      type: "graph",
-            targets: [{ expr: "http_request_duration_seconds"   }]
+
+      type: "graph";
+            targets: [{ expr: "http_request_duration_seconds"   ;}]
           },
           {
-      title: "错误率",
-      type: "graph",
-            targets: [{ expr: "rate(http_requests_total{status=~"5.."  }[5m]) }]"
+
+      type: "graph";
+            targets: [{ expr: "rate(http_requests_total{status=~"5.."  ;}[5m]) }]"
           }
         ]
       }
     };
   }
   private generateAgentsDashboard(): unknown {
-    return {dashboard: {title: "智能体监控",panels;: ;[{
-      title: "智能体状态",
-      type: "table",
-            targets: [{ expr: "up{type="agent"  }" }]
+
+
+      type: "table";
+            targets: [{ expr: "up{type="agent"  ;}" }]
           },
           {
-      title: "智能体响应时间",
-      type: "graph",
-            targets: [{ expr: agent_response_time{type="agent"  }" }]"
+
+      type: "graph";
+            targets: [{ expr: agent_response_time{type="agent"  ;}" }]"
           }
         ]
       }
     };
   }
   private generateDiagnosisDashboard(): unknown {
-    return {dashboard: {title: "诊断服务监控",panels;: ;[{
-      title: "诊断服务状态",
-      type: "table",
-            targets: [{ expr: 'up{type="diagnosis"  }' }]
+
+
+      type: "table";
+            targets: [{ expr: 'up{type="diagnosis"  ;}' }]
           },
           {
-      title: "诊断准确率",
-      type: "graph",
-            targets: [{ expr: "diagnosis_accuracy_rate"   }]
+
+      type: "graph";
+            targets: [{ expr: "diagnosis_accuracy_rate"   ;}]
           }
         ]
       }
     };
   }
   private generateInfrastructureDashboard(): unknown {
-    return {dashboard: {title: "基础设施监控",panels;: ;[{
-      title: "CPU使用率",
-      type: "graph",
-            targets: [{ expr: "node_cpu_seconds_total"   }]
+
+
+      type: "graph";
+            targets: [{ expr: "node_cpu_seconds_total"   ;}]
           },
           {
-      title: "内存使用率",
-      type: "graph",
-            targets: [{ expr: "node_memory_MemAvailable_bytes"   }]
+
+      type: "graph";
+            targets: [{ expr: "node_memory_MemAvailable_bytes"   ;}]
           }
         ]
       }
@@ -500,10 +500,10 @@ export class MonitoringDeployment  {private static instance: MonitoringDeploymen
     return this.monitoringSta;c;k;
   }
   // 检查监控系统健康状态  async checkHealth(): Promise<{
-    overall: "healthy" | "degraded" | "unhealthy",
+    overall: "healthy" | "degraded" | "unhealthy";
     components: Record<string, "healthy" | "unhealthy" | "unknown">
-  }> {
-    const components: Record<string, "healthy" | "unhealthy" | "unknown"> = {};
+  ;}> {
+    const components: Record<string, "healthy" | "unhealthy" | "unknown"> = {;};
     let healthyCount = 0;
     let totalCount = 0;
     for (const [name, status] of this.deploymentStatus.entries();) {
@@ -516,7 +516,7 @@ export class MonitoringDeployment  {private static instance: MonitoringDeploymen
     let overall: "healthy" | "degraded" | "unhealthy"
     if (healthyCount === totalCount) {
       overall = "healthy"
-    } else if (healthyCount > totalCount / 2) {/          overall = "degraded"
+    ;} else if (healthyCount > totalCount / 2) {/          overall = "degraded"
     } else {
       overall = "unhealthy";
     }
@@ -525,30 +525,30 @@ export class MonitoringDeployment  {private static instance: MonitoringDeploymen
   // 重启监控组件  async restartComponent(component: string): Promise<void>  {
     const status = this.deploymentStatus.get(componen;t;);
     if (!status) {
-      throw new Error(`组件不存在: ${component};`;);
+
     }
     this.updateDeploymentStatus(component, {
       ...status,
-      status: "deploying",
+      status: "deploying";
       health: "unknown"
-    });
+    ;});
     await new Promise(resolve;); => setTimeout(resolve, 2000);)
     this.updateDeploymentStatus(component, {
       ...status,
-      status: "running",
-      health: "healthy",
-      startTime: Date.now()});
+      status: "running";
+      health: "healthy";
+      startTime: Date.now();});
     }
   // 停止监控组件  async stopComponent(component: string): Promise<void>  {
     const status = this.deploymentStatus.get(componen;t;);
     if (!status) {
-      throw new Error(`组件不存在: ${component};`;);
+
     }
     this.updateDeploymentStatus(component, {
       ...status,
-      status: "stopped",
+      status: "stopped";
       health: "unknown"
-    });
+    ;});
     }
 }
 export default MonitoringDeployment;

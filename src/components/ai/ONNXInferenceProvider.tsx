@@ -1,14 +1,4 @@
-import React, {import { AppState, AppStateStatus, NetInfo } from "../../placeholder";react-native;
-import {import {/**;
-* * ONNX 推理提供者组件
-* 为索克生活应用提供设备端AI推理的React Context和钩子
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  useCallback,
-  useRef,
-  { ReactNode  } from "react";
+import React, {react";
   ONNXRuntimeManager,
   createONNXRuntimeManager,
   TensorData,
@@ -21,10 +11,10 @@ import {import {/**;
 /**
 * * 推理状态
 export interface InferenceState {
-  isInitialized: boolean;,
-  isLoading: boolean;,
-  error: string | null;,
-  loadedModels: string[];,
+  isInitialized: boolean;
+  isLoading: boolean;
+  error: string | null;
+  loadedModels: string[];
   systemStatus: any;
 }
 /**
@@ -33,24 +23,24 @@ export interface ONNXInferenceContextType {
   // 状态;
 state: InferenceState;
   // 核心功能
-initialize: () => Promise<void>;,
+initialize: () => Promise<void>;
   destroy: () => Promise<void>;
   // 模型管理
 loadModel: (modelPath: string, modelType?: string) => Promise<ONNXModel>;
   unloadModel: (modelId: string) => Promise<void>;
   // 推理功能
 runInference: (;),
-  modelId: string;,
+  modelId: string;
   inputs: Record<string, TensorData>;
     options?: InferenceOptions;
   ) => Promise<Record<string, TensorData>>;
   // 索克生活专用推理
-runTCMDiagnosis: (patientData: TCMPatientData) => Promise<TCMDiagnosisResult>;,
-  runHealthAssessment: (healthData: HealthData) => Promise<HealthAssessmentResult>;,
-  runSymptomAnalysis: (symptoms: SymptomData) => Promise<SymptomAnalysisResult>;,
+runTCMDiagnosis: (patientData: TCMPatientData) => Promise<TCMDiagnosisResult>;
+  runHealthAssessment: (healthData: HealthData) => Promise<HealthAssessmentResult>;
+  runSymptomAnalysis: (symptoms: SymptomData) => Promise<SymptomAnalysisResult>;
   runLifestyleRecommendation: (userData: UserData) => Promise<LifestyleRecommendationResult>;
   // 配置管理
-updateConfig: (config: Partial<ONNXRuntimeConfig>) => void;,
+updateConfig: (config: Partial<ONNXRuntimeConfig>) => void;
   getSystemStatus: () => any;
 }
 /**
@@ -64,57 +54,57 @@ export interface InferenceOptions {
 /**
 * * 索克生活数据类型
 export interface TCMPatientData {
-  pulse: number[];,
-  tongue: number[];,
-  complexion: number[];,
+  pulse: number[];
+  tongue: number[];
+  complexion: number[];
   symptoms: number[];
 }
 export interface HealthData {
-  vitals: number[];,
-  biomarkers: number[];,
+  vitals: number[];
+  biomarkers: number[];
   lifestyle: number[];
 }
 export interface SymptomData {
-  symptoms: number[];,
-  duration: number[];,
+  symptoms: number[];
+  duration: number[];
   severity: number[];
 }
 export interface UserData {
-  age: number;,
-  gender: number;,
-  activity: number;,
-  diet: number;,
+  age: number;
+  gender: number;
+  activity: number;
+  diet: number;
   sleep: number;
 }
 /**
 * * 结果类型
 export interface TCMDiagnosisResult {
-  syndrome: {type: string;,
+  syndrome: {type: string;
   confidence: number;
 };
   constitution: {,
-  type: string;,
+  type: string;
   confidence: number;
   };
   recommendations: string[];
 }
 export interface HealthAssessmentResult {
-  overallScore: number;,
-  riskFactors: number[];,
+  overallScore: number;
+  riskFactors: number[];
   recommendations: string[];
 }
 export interface SymptomAnalysisResult {
-  possibleConditions: Array<{name: string;,
+  possibleConditions: Array<{name: string;
   probability: number;
 }>
   urgency: ";low" | medium" | "high,
   recommendations: string[];
 }
 export interface LifestyleRecommendationResult {
-  exercise: number;,
-  diet: number;,
-  sleep: number;,
-  stress: number;,
+  exercise: number;
+  diet: number;
+  sleep: number;
+  stress: number;
   recommendations: string[];
 }
 // 创建上下文
@@ -132,9 +122,9 @@ export const ONNXInferenceProvider: React.FC<ONNXInferenceProviderProps>  = ({
   preloadModels = [];
 }) => {};
   const [state, setState] = useState<InferenceState>({isInitialized: false,)
-    isLoading: false,
-    error: null,
-    loadedModels: [],
+    isLoading: false;
+    error: null;
+    loadedModels: [];
     systemStatus: null;
   });
   const managerRef = useRef<ONNXRuntimeManager | null>(null);
@@ -143,7 +133,7 @@ export const ONNXInferenceProvider: React.FC<ONNXInferenceProviderProps>  = ({
 const initialize = useCallback(async() => {})
     if (state.isInitialized || state.isLoading) {return;
     }
-    setState(prev => ({ ...prev, isLoading: true, error: null }));
+    setState(prev => ({ ...prev, isLoading: true, error: null ;}));
     try {
       // 创建管理器实例
 managerRef.current = createONNXRuntimeManager();
@@ -158,15 +148,15 @@ if (preloadModels.length > 0) {
       }
       setState(prev => ({
         ...prev,
-        isInitialized: true,
-        isLoading: false,
+        isInitialized: true;
+        isLoading: false;
         systemStatus: managerRef.current?.getSystemStatus();
       }));
       } catch (error) {
       setState(prev => ({
         ...prev,
-        isLoading: false,
-        error: error.message || "初始化失败"
+        isLoading: false;
+
       }));
     }
   }, [state.isInitialized, state.isLoading, preloadModels]);
@@ -178,10 +168,10 @@ const destroy = useCallback(async() => {})
       await managerRef.current.destroy();
       managerRef.current = null;
       setState({
-        isInitialized: false,
-        isLoading: false,
-        error: null,
-        loadedModels: [],
+        isInitialized: false;
+        isLoading: false;
+        error: null;
+        loadedModels: [];
         systemStatus: null;
       });
       } catch (error) {
@@ -189,14 +179,14 @@ const destroy = useCallback(async() => {})
   }, []);
   // 加载模型
 const loadModel = useCallback(async (;))
-    modelPath: string,
+    modelPath: string;
     modelType?: string;
   ): Promise<ONNXModel> => {}
-    if (!managerRef.current) {throw new Error("ONNX Runtime 未初始化);"
+
     }
     try {
       const model = await managerRef.current.deployModel(modelPath, {quantize: true,)
-        optimize: true,
+        optimize: true;
         cache: true;
       });
       setState(prev => ({
@@ -210,14 +200,14 @@ const loadModel = useCallback(async (;))
     }
   }, []);
   // 卸载模型
-const unloadModel = useCallback(async (modelId: string): Promise<void> => {})
-    if (!managerRef.current) {throw new Error(ONNX Runtime 未初始化");"
+const unloadModel = useCallback(async (modelId: string): Promise<void> => {;})
+
     }
     try {
       await managerRef.current.getInferenceEngine().unloadModel(modelId);
       setState(prev => ({
         ...prev,
-        loadedModels: prev.loadedModels.filter(id => id !== modelId),
+        loadedModels: prev.loadedModels.filter(id => id !== modelId);
         systemStatus: managerRef.current?.getSystemStatus();
       }));
     } catch (error) {
@@ -226,15 +216,15 @@ const unloadModel = useCallback(async (modelId: string): Promise<void> => {})
   }, []);
   // 运行推理
 const runInference = useCallback(async (;))
-    modelId: string,
+    modelId: string;
     inputs: Record<string, TensorData>,
-    options: InferenceOptions = {}
+    options: InferenceOptions = {;}
   ): Promise<Record<string, TensorData>> => {}
-    if (!managerRef.current) {throw new Error("ONNX Runtime 未初始化");
+
     }
     try {
       const result = await managerRef.current.smartInference(modelId, inputs, {useCache: options.useCache ?? true,)
-        preprocessInputs: options.preprocessInputs ?? true,
+        preprocessInputs: options.preprocessInputs ?? true;
         postprocessOutputs: options.postprocessOutputs ?? true;
       });
       // 更新系统状态
@@ -252,25 +242,25 @@ const runTCMDiagnosis = useCallback(async (;))
     patientData: TCMPatientData;
   ): Promise<TCMDiagnosisResult> => {}
     const inputs: Record<string, TensorData> = {pulse: {,
-  data: new Float32Array(patientData.pulse),
+  data: new Float32Array(patientData.pulse);
         dims: [1, patientData.pulse.length],
         type: "float32"
-      },
+      ;},
       tongue: {,
-  data: new Float32Array(patientData.tongue),
+  data: new Float32Array(patientData.tongue);
         dims: [1, patientData.tongue.length],
         type: "float32"
-      },
+      ;},
       complexion: {,
-  data: new Float32Array(patientData.complexion),
+  data: new Float32Array(patientData.complexion);
         dims: [1, patientData.complexion.length],
         type: float32""
-      },
+      ;},
       symptoms: {,
-  data: new Float32Array(patientData.symptoms),
+  data: new Float32Array(patientData.symptoms);
         dims: [1, patientData.symptoms.length],
         type: "float32"
-      };
+      ;};
     };
     const outputs = await runInference("tcm_diagnosis", inputs);
     return parseTCMDiagnosisResult(outputs);
@@ -280,20 +270,20 @@ const runHealthAssessment = useCallback(async (;))
     healthData: HealthData;
   ): Promise<HealthAssessmentResult> => {}
     const inputs: Record<string, TensorData> = {vitals: {,
-  data: new Float32Array(healthData.vitals),
+  data: new Float32Array(healthData.vitals);
         dims: [1, healthData.vitals.length],
         type: float32""
-      },
+      ;},
       biomarkers: {,
-  data: new Float32Array(healthData.biomarkers),
+  data: new Float32Array(healthData.biomarkers);
         dims: [1, healthData.biomarkers.length],
         type: "float32"
-      },
+      ;},
       lifestyle: {,
-  data: new Float32Array(healthData.lifestyle),
+  data: new Float32Array(healthData.lifestyle);
         dims: [1, healthData.lifestyle.length],
         type: "float32"
-      };
+      ;};
     };
     const outputs = await runInference(health_assessment", inputs);"
     return parseHealthAssessmentResult(outputs);
@@ -303,20 +293,20 @@ const runSymptomAnalysis = useCallback(async (;))
     symptoms: SymptomData;
   ): Promise<SymptomAnalysisResult> => {}
     const inputs: Record<string, TensorData> = {symptoms: {,
-  data: new Float32Array(symptoms.symptoms),
+  data: new Float32Array(symptoms.symptoms);
         dims: [1, symptoms.symptoms.length],
         type: "float32"
-      },
+      ;},
       duration: {,
-  data: new Float32Array(symptoms.duration),
+  data: new Float32Array(symptoms.duration);
         dims: [1, symptoms.duration.length],
         type: "float32"
-      },
+      ;},
       severity: {,
-  data: new Float32Array(symptoms.severity),
+  data: new Float32Array(symptoms.severity);
         dims: [1, symptoms.severity.length],
         type: float32""
-      };
+      ;};
     };
     const outputs = await runInference("symptom_analysis, inputs);"
     return parseSymptomAnalysisResult(outputs);
@@ -327,7 +317,7 @@ const runLifestyleRecommendation = useCallback(async (;))
   ): Promise<LifestyleRecommendationResult> => {}
     const inputs: Record<string, TensorData> = {user_data: {,
   data: new Float32Array([)
-          userData.age,
+          userData.age;
           userData.gender,
           userData.activity,
           userData.diet,
@@ -335,24 +325,24 @@ const runLifestyleRecommendation = useCallback(async (;))
         ]),
         dims: [1, 5],
         type: "float32"
-      };
+      ;};
     };
     const outputs = await runInference(lifestyle_recommendation", inputs);"
     return parseLifestyleRecommendationResult(outputs);
   }, [runInference]);
   // 更新配置
-const updateConfig = useCallback(config: Partial<ONNXRuntimeConfig>) => {}
+const updateConfig = useCallback(config: Partial<ONNXRuntimeConfig>) => {;}
     // 这里可以实现配置更新逻辑
 }, []);
   // 获取系统状态
   const getSystemStatus = useCallback(() => {
     if (!managerRef.current) {
       return {
-        isInitialized: false,
-        modelsLoaded: 0,
-        memoryUsage: 0,
+        isInitialized: false;
+        modelsLoaded: 0;
+        memoryUsage: 0;
         performanceMetrics: null
-      };
+      ;};
     }
     
     return managerRef.current.getSystemStatus();
@@ -373,7 +363,7 @@ const netInfo = await NetInfo.fetch();
       }
   }, []);
   // 预加载模型
-const preloadModelsAsync = useCallback(async (modelPaths: string[]) => {})
+const preloadModelsAsync = useCallback(async (modelPaths: string[]) => {;})
     for (const modelPath of modelPaths) {
       try {await loadModel(modelPath);
         } catch (error) {
@@ -382,7 +372,7 @@ const preloadModelsAsync = useCallback(async (modelPaths: string[]) => {})
   }, [loadModel]);
   // 应用状态变化处理
 useEffect() => {
-    const handleAppStateChange = (nextAppState: AppStateStatus) => {}
+    const handleAppStateChange = (nextAppState: AppStateStatus) => {;}
       if (appStateRef.current.match(/inactive|background/    ) && nextAppState === "active) {"
         // 应用从后台回到前台，可能需要重新初始化
 if (state.isInitialized && managerRef.current) {
@@ -445,7 +435,7 @@ export const useTCMDiagnosis = () => {}
   const [isRunning, setIsRunning] = useState(false);
   const [result, setResult] = useState<TCMDiagnosisResult | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const diagnose = useCallback(async (patientData: TCMPatientData) => {})
+  const diagnose = useCallback(async (patientData: TCMPatientData) => {;})
     setIsRunning(true);
     setError(null);
     try {
@@ -453,7 +443,7 @@ export const useTCMDiagnosis = () => {}
       setResult(diagnosisResult);
       return diagnosisResult;
     } catch (err) {
-      const errorMessage = err.message || "中医诊断失败;"
+
       setError(errorMessage);
       throw err;
     } finally {
@@ -470,7 +460,7 @@ export const useHealthAssessment = () => {}
   const [isRunning, setIsRunning] = useState(false);
   const [result, setResult] = useState<HealthAssessmentResult | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const assess = useCallback(async (healthData: HealthData) => {})
+  const assess = useCallback(async (healthData: HealthData) => {;})
     setIsRunning(true);
     setError(null);
     try {
@@ -478,7 +468,7 @@ export const useHealthAssessment = () => {}
       setResult(assessmentResult);
       return assessmentResult;
     } catch (err) {
-      const errorMessage = err.message || "健康评估失败";
+
       setError(errorMessage);
       throw err;
     } finally {
@@ -501,13 +491,13 @@ const syndromeOutput = outputs[syndrome"];"
     return {syndrome: {type: getSyndromeType(syndromeIndex),confidence: Math.max(...syndromeProbs);
       },
       constitution: {,
-  type: getConstitutionType(constitutionIndex),
+  type: getConstitutionType(constitutionIndex);
         confidence: Math.max(...constitutionProbs);
       },
       recommendations: getTCMRecommendations(syndromeIndex, constitutionIndex);
     };
   }
-  throw new Error("中医诊断结果解析失败");
+
 }
 function parseHealthAssessmentResult(outputs: Record<string, TensorData>): HealthAssessmentResult {
   const scoreOutput = outputs[health_score"];"
@@ -518,7 +508,7 @@ function parseHealthAssessmentResult(outputs: Record<string, TensorData>): Healt
     return {overallScore: score,riskFactors,recommendations: getHealthRecommendations(score, riskFactors);
     };
   }
-  throw new Error("健康评估结果解析失败");
+
 }
 function parseSymptomAnalysisResult(outputs: Record<string, TensorData>): SymptomAnalysisResult {
   const conditionsOutput = outputs[conditions"];"
@@ -533,7 +523,7 @@ function parseSymptomAnalysisResult(outputs: Record<string, TensorData>): Sympto
     return {possibleConditions,urgency,recommendations: getSymptomRecommendations(urgency, possibleConditions);
     };
   }
-  throw new Error("症状分析结果解析失败");
+
 }
 function parseLifestyleRecommendationResult(outputs: Record<string, TensorData>): LifestyleRecommendationResult {
   const recommendationOutput = outputs[recommendations"];"
@@ -542,52 +532,52 @@ function parseLifestyleRecommendationResult(outputs: Record<string, TensorData>)
     return {exercise: recommendations[0],diet: recommendations[1],sleep: recommendations[2],stress: recommendations[3],recommendations: getLifestyleRecommendations(recommendations);
     };
   }
-  throw new Error("生活方式推荐结果解析失败);"
+
 }
 // 辅助函数：获取类型名称和建议
 function getSyndromeType(index: number): string {
-  const syndromes = ["气虚", " 血虚", "阴虚, "阳虚", " 气滞", "血瘀, "痰湿", " 湿热"];"
-  return syndromes[index] || "未知;"
-}
+
+
+;}
 function getConstitutionType(index: number): string {
-  const constitutions = ["平和质", " 气虚质", "阳虚质, "阴虚质", " 痰湿质", "湿热质, "血瘀质", " 气郁质", "特禀质];
-  return constitutions[index] || "未知";
-}
+
+
+;}
 function getTCMRecommendations(syndromeIndex: number, constitutionIndex: number): string[] {
   // 根据证型和体质返回建议
 return [;
-    建议调整饮食结构", "适当进行运动锻炼,保持良好作息", "定期复查"";
+
   ];
 }
 function getHealthRecommendations(score: number, riskFactors: number[]): string[] {
   const recommendations = [];
   if (score < 60) {
-    recommendations.push("建议立即咨询医生);"
+
   } else if (score < 80) {
-    recommendations.push("建议改善生活方式");
+
   } else {
-    recommendations.push(继续保持良好状态");"
+
   }
   return recommendations;
 }
 function getConditionName(index: number): string {
-  const conditions = ["感冒, "发热", " 咳嗽", "头痛, "胃痛", " 失眠", "疲劳, "过敏"];"
-  return conditions[index] || `症状${index}`;
-}
+
+
+;}
 function getSymptomRecommendations(urgency: string, conditions: any[]): string[] {
   if (urgency === high") {"
-    return ["建议立即就医, "密切观察症状变化"];"
-  } else if (urgency === medium") {"
-    return ["建议近期就医, "注意休息"];"
+
+  ;} else if (urgency === medium") {"
+
   } else {
-    return [注意观察", "适当休息];
+
   }
 }
 function getLifestyleRecommendations(scores: number[]): string[] {
   const recommendations = [];
-  if (scores[0] < 0.5) recommendations.push("增加运动量");
-  if (scores[1] < 0.5) recommendations.push(改善饮食结构");"
-  if (scores[2] < 0.5) recommendations.push("保证充足睡眠);"
-  if (scores[3] < 0.5) recommendations.push("学会压力管理');"'
+
+
+
+
   return recommendations;
 }  */

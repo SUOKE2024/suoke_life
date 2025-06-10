@@ -1,6 +1,4 @@
-import { MLTrainingService, mlTrainingService } from "../mlTrainingService";
-import { MLTrainingService, mlTrainingService } from "../mlTrainingService";
-import React from "react";
+
 describe("mlTrainingService", () => {
   beforeEach(() => {
     jest.clearAllMocks();

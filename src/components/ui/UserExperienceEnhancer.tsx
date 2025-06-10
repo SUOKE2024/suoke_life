@@ -1,5 +1,4 @@
-import { Ionicons } from "@expo/vector-icons/import { colors, spacing, typography  } from ;../../constants/theme";/import { useAppSelector } from ../../    store;
-import { usePerformanceMonitor } from "../../placeholder";../hooks/usePerformanceMonitor";/      View,"
+
 import React from "react";
 // import React,{ useState, useEffect, useCallback, useRef } from "react;";
   Text,
@@ -33,10 +32,10 @@ const { width, height   } = Dimensions.get(";window;";);
   onRetry?: () => void;
 }
 // 手势配置 * interface GestureConfig {
-  enableSwipe: boolean,
-  enablePinch: boolean;,
-  enableRotation: boolean;,
-  enableDoubleTap: boolean;,
+  enableSwipe: boolean;
+  enablePinch: boolean;
+  enableRotation: boolean;
+  enableDoubleTap: boolean;
   swipeThreshold: number;
   onSwipeLeft?: () => void;
   onSwipeRight?: () => void;
@@ -47,11 +46,11 @@ const { width, height   } = Dimensions.get(";window;";);
   onRotation?: (rotation: number) => void;
 }
 // 动画配置 * interface AnimationConfig {
-  enableEntrance: boolean,
-  enableExit: boolean;,
-  enableHover: boolean;,
-  enablePress: boolean;,
-  duration: number;,
+  enableEntrance: boolean;
+  enableExit: boolean;
+  enableHover: boolean;
+  enablePress: boolean;
+  duration: number;
   easing: "ease" | linear" | "bounce | "spring";
 };
 interface UserExperienceEnhancerProps {
@@ -59,13 +58,13 @@ interface UserExperienceEnhancerProps {
   loading?: LoadingState;
   error?: ErrorState;
   haptic?: HapticFeedback;
-  gesture?: Partial<GestureConfig />;/  animation?: Partial<AnimationConfig />/  onInteraction?: (type: string, data?: unknown) => void;
+  gesture?: Partial<GestureConfig />;/  animation?: Partial<AnimationConfig />/  onInteraction?: (type: string; data?: unknown) => void;
 };
-export const UserExperienceEnhancer: React.FC<UserExperienceEnhancerProps /> = ({/   const performanceMonitor = usePerformanceMonitor(UserExperienceEnhancer",;))
+export const UserExperienceEnhancer: React.FC<UserExperienceEnhancerProps /> = ({/   const performanceMonitor = usePerformanceMonitor(UserExperienceEnhancer";))
 {/
-    trackRender: true,
-    trackMemory: true,
-    warnThreshold: 50});
+    trackRender: true;
+    trackMemory: true;
+    warnThreshold: 50;});
   children,
   loading,
   error,
@@ -80,23 +79,23 @@ const { theme   } = useAppSelector(state => state.u;i;);
   const [translateX] = useState<any>(new Animated.Value(0););
   const [translateY] = useState<any>(new Animated.Value(0););
   const [rotateAnim] = useState<any>(new Animated.Value(0););
-  const [gestureState, setGestureState] = useState<object>({scale: 1,rotation: 0,translateX: 0,translateY: 0});
+  const [gestureState, setGestureState] = useState<object>({scale: 1,rotation: 0,translateX: 0,translateY: 0;});
   const [isPressed, setIsPressed] = useState<boolean>(false;);
   const [isHovered, setIsHovered] = useState<boolean>(fals;e;);
   const panRef = useRef<PanGestureHandler  / >(null;); * const tapRef = useRef<TapGestureHandler  / >(null;);/  const doubleTapRef = useRef<TapGestureHandler />(nul;l;);/
   const defaultGestureConfig: GestureConfig = {,
-  enableSwipe: true,
-    enablePinch: false,
-    enableRotation: false,
-    enableDoubleTap: true,
-    swipeThreshold: 50,
+  enableSwipe: true;
+    enablePinch: false;
+    enableRotation: false;
+    enableDoubleTap: true;
+    swipeThreshold: 50;
     ...gesture;
   };
-const defaultAnimationConfig: AnimationConfig = {enableEntrance: true,
-    enableExit: true,
-    enableHover: true,
-    enablePress: true,
-    duration: 300,
+const defaultAnimationConfig: AnimationConfig = {enableEntrance: true;
+    enableExit: true;
+    enableHover: true;
+    enablePress: true;
+    duration: 300;
     easing: "ease,"
     ...animation;
   };
@@ -104,8 +103,8 @@ const defaultAnimationConfig: AnimationConfig = {enableEntrance: true,
 const effectStart = performance.now();
     if (defaultAnimationConfig.enableEntrance) {
       Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: defaultAnimationConfig.duration,useNativeDriver: true}).start();
+        toValue: 1;
+        duration: defaultAnimationConfig.duration,useNativeDriver: true;}).start();
     };
 const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
@@ -149,40 +148,40 @@ const { translationX, translationY, velocityX, velocityY, state   } = event.nati
       translateY.setValue(translationY);
       setGestureState(prev => ({
         ...prev,
-        translateX: translationX,
-        translateY: translationY}););
+        translateX: translationX;
+        translateY: translationY;}););
     } else if (state === State.END) {
       const { swipeThreshold   } = defaultGestureConfi;g;
       if (Math.abs(translationX); > swipeThreshold || Math.abs(translationY); > swipeThreshold) {
         if (Math.abs(translationX); > Math.abs(translationY);) {
           if (translationX > 0 && defaultGestureConfig.onSwipeRight) {
             defaultGestureConfig.onSwipeRight();
-            triggerHapticFeedback({ type: light"});"
-            onInteraction?.("swipe, { direction: "right"});"
+            triggerHapticFeedback({ type: light";});"
+            onInteraction?.("swipe, { direction: "right";});"
           } else if (translationX < 0 && defaultGestureConfig.onSwipeLeft) {
             defaultGestureConfig.onSwipeLeft();
-            triggerHapticFeedback({ type: light"});"
-            onInteraction?.("swipe, { direction: "left"});"
+            triggerHapticFeedback({ type: light";});"
+            onInteraction?.("swipe, { direction: "left";});"
           }
         } else {
           if (translationY > 0 && defaultGestureConfig.onSwipeDown) {
             defaultGestureConfig.onSwipeDown();
-            triggerHapticFeedback({ type: light"});"
-            onInteraction?.("swipe, { direction: "down"});"
+            triggerHapticFeedback({ type: light";});"
+            onInteraction?.("swipe, { direction: "down";});"
           } else if (translationY < 0 && defaultGestureConfig.onSwipeUp) {
             defaultGestureConfig.onSwipeUp();
-            triggerHapticFeedback({ type: light"});"
-            onInteraction?.("swipe, { direction: "up"});"
+            triggerHapticFeedback({ type: light";});"
+            onInteraction?.("swipe, { direction: "up";});"
           }
         }
       }
       Animated.parallel([)
         Animated.spring(translateX, {
-          toValue: 0,
-          useNativeDriver: true}),
+          toValue: 0;
+          useNativeDriver: true;}),
         Animated.spring(translateY, {
-          toValue: 0,
-          useNativeDriver: true});
+          toValue: 0;
+          useNativeDriver: true;});
       ]).start();
     };
 const effectEnd = performance.now();
@@ -192,7 +191,7 @@ const effectEnd = performance.now();
     if (event.nativeEvent.state === State.ACTIVE) {
       if (defaultGestureConfig.onDoubleTap) {
         defaultGestureConfig.onDoubleTap();
-        triggerHapticFeedback({ type: medium"});"
+        triggerHapticFeedback({ type: medium";});"
         onInteraction?.("doubleTap);"
       }
     };
@@ -203,10 +202,10 @@ const effectEnd = performance.now();
     setIsPressed(true);
     if (defaultAnimationConfig.enablePress) {
       Animated.spring(scaleAnim, {
-        toValue: 0.95,
-        useNativeDriver: true}).start();
+        toValue: 0.95;
+        useNativeDriver: true;}).start();
     }
-    triggerHapticFeedback({ type: "light"});
+    triggerHapticFeedback({ type: "light";});
     onInteraction?.(pressIn");"
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
@@ -215,8 +214,8 @@ const effectEnd = performance.now();
     setIsPressed(false);
     if (defaultAnimationConfig.enablePress) {
       Animated.spring(scaleAnim, {
-        toValue: 1,
-        useNativeDriver: true}).start();
+        toValue: 1;
+        useNativeDriver: true;}).start();
     }
     onInteraction?.("pressOut);"
       const effectEnd = performance.now();
@@ -225,9 +224,9 @@ const effectEnd = performance.now();
   const handleMouseEnter = useCallback() => {;
     if (Platform.OS === "web" && defaultAnimationConfig.enableHover) {setIsHovered(true);
       Animated.timing(scaleAnim, {
-        toValue: 1.05,
-        duration: 200,
-        useNativeDriver: true}).start();
+        toValue: 1.05;
+        duration: 200;
+        useNativeDriver: true;}).start();
     };
 const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
@@ -236,9 +235,9 @@ const effectEnd = performance.now();
     if (Platform.OS === web" && defaultAnimationConfig.enableHover) {"
       setIsHovered(false);
       Animated.timing(scaleAnim, {
-        toValue: 1,
-        duration: 200,
-        useNativeDriver: true}).start();
+        toValue: 1;
+        duration: 200;
+        useNativeDriver: true;}).start();
     };
 const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
@@ -259,7 +258,7 @@ animationType="fade" />/        <View style={styles.loadingOverlay}>/          <
             {loading.type === "progress"  && <>
                 <View style={styles.progressContainer}>/                  <View style={styles.progressBar}>/                        <View;
 style={[styles.progressFill,
-                        { width: `${(loading.progress || 0) * 100  }}%` };
+                        { width: `${(loading.progress || 0) * 100  ;}}%` };
                       ]};
                     />/                  </View>/                  <Text style={styles.progressText}>/                    {Math.round(loading.progress || ;0;) * 100)}%
                   </Text>/                </View>/                    {loading.message   && <Text style={styles.loadingMessage}>{loading.message}</Text>/                    )}
@@ -293,8 +292,8 @@ const effectEnd = performance.now;
               name={getErrorIcon;(;) as any}
               size={48}
               color={colors.error} />/            <Text style={styles.errorTitle}>/              {error.type === "network" ? 网络连接失败" :"
-              error.type === "validation ? "数据验证失败" :"
-              error.type === server" ? "服务器错误 : "未知错误"}
+
+
             </Text>/                {error.message   && <Text style={styles.errorMessage}>{error.message}</Text>/                )}
             <View style={styles.errorActions}>/                  {error.retryable && error.onRetry   && <TouchableOpacity;
 style={styles.retryButton}
@@ -311,15 +310,15 @@ style={styles.dismissButton}
     const effectEnd = performance.now;
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-    const animatedStyle = {opacity: fadeAnim,
-      transform;: ;[{ scale: scaleAnim},
+    const animatedStyle = {opacity: fadeAnim;
+      transform;: ;[{ scale: scaleAnim;},
         { translateX },
         { translateY },
         {
           rotate: rotateAnim.interpolate({),
   inputRange: [0, 1],
             outputRange: ["0deg, "360deg"]"
-          });
+          ;});
         }
       ]
     }
@@ -336,8 +335,8 @@ ref={doubleTapRef}
 onTouchStart={handlePressIn}
                 onTouchEnd={handlePressOut}
                 {...(Platform.OS === web" && {")
-                  onMouseEnter: handleMouseEnter,
-                  onMouseLeave: handleMouseLeave})} />/                    {children};
+                  onMouseEnter: handleMouseEnter;
+                  onMouseLeave: handleMouseLeave;})} />/                    {children};
               </Animated.View>/            </TapGestureHandler>/          </Animated.View>/        </PanGestureHandler>/          ;)
     }
     return (;)
@@ -346,8 +345,8 @@ style={animatedStyle}}
         onTouchStart={handlePressIn}
         onTouchEnd={handlePressOut}
         {...(Platform.OS === "web && {")
-          onMouseEnter: handleMouseEnter,
-          onMouseLeave: handleMouseLeave})} />/            {children};
+          onMouseEnter: handleMouseEnter;
+          onMouseLeave: handleMouseLeave;})} />/            {children};
       </    Animated.View>);
   };
   return (;)
@@ -358,128 +357,128 @@ style={animatedStyle}}
 };
 const styles = StyleSheet.create({ container: {flex;: ;1  },)
   loadingOverlay: {,
-  flex: 1,
+  flex: 1;
     backgroundColor: "rgba(0, 0, 0, 0.5);",
-    justifyContent: center",
-    alignItems: "center},",
+    justifyContent: center";
+    alignItems: "center;},",
   loadingContainer: {,
-  backgroundColor: colors.surface,
-    borderRadius: 16,
-    padding: spacing.xl,
-    alignItems: "center",
-    minWidth: 200},
+  backgroundColor: colors.surface;
+    borderRadius: 16;
+    padding: spacing.xl;
+    alignItems: "center";
+    minWidth: 200;},
   loadingMessage: {,
-  fontSize: typography.fontSize.base,
-    color: colors.textPrimary,
-    marginTop: spacing.md,
-    textAlign: center"},"
+  fontSize: typography.fontSize.base;
+    color: colors.textPrimary;
+    marginTop: spacing.md;
+    textAlign: center";},"
   progressContainer: {,
   width: "100%,",
-    alignItems: "center"},
+    alignItems: "center";},
   progressBar: {,
-  width: 100%",
-    height: 8,
-    backgroundColor: colors.gray200,
-    borderRadius: 4,
+  width: 100%";
+    height: 8;
+    backgroundColor: colors.gray200;
+    borderRadius: 4;
     overflow: "hidden,",
-    marginBottom: spacing.sm},
+    marginBottom: spacing.sm;},
   progressFill: {,
-  height: "100%",
-    backgroundColor: colors.primary,
-    borderRadius: 4},
+  height: "100%";
+    backgroundColor: colors.primary;
+    borderRadius: 4;},
   progressText: {,
-  fontSize: typography.fontSize.sm,
-    color: colors.textSecondary,
-    fontWeight: 600"},"
-  skeletonContainer: { width: "100%  },"
+  fontSize: typography.fontSize.sm;
+    color: colors.textSecondary;
+    fontWeight: 600";},"
+  skeletonContainer: { width: "100%  ;},"
   skeletonLine: {,
-  height: 16,
-    backgroundColor: colors.gray200,
-    borderRadius: 8,
-    marginBottom: spacing.sm},
+  height: 16;
+    backgroundColor: colors.gray200;
+    borderRadius: 8;
+    marginBottom: spacing.sm;},
   errorOverlay: {,
-  flex: 1,
+  flex: 1;
     backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: center",
+    justifyContent: center";
     alignItems: "center,",
-    paddingHorizontal: spacing.lg},
+    paddingHorizontal: spacing.lg;},
   errorContainer: {,
-  backgroundColor: colors.surface,
-    borderRadius: 16,
-    padding: spacing.xl,
-    alignItems: "center",
-    maxWidth: 320,
-    width: 100%"},"
+  backgroundColor: colors.surface;
+    borderRadius: 16;
+    padding: spacing.xl;
+    alignItems: "center";
+    maxWidth: 320;
+    width: 100%";},"
   errorTitle: {,
-  fontSize: typography.fontSize.lg,
-    color: colors.textPrimary,
+  fontSize: typography.fontSize.lg;
+    color: colors.textPrimary;
     fontWeight: "600,",
-    marginTop: spacing.md,
-    marginBottom: spacing.sm,
-    textAlign: "center"},
+    marginTop: spacing.md;
+    marginBottom: spacing.sm;
+    textAlign: "center";},
   errorMessage: {,
-  fontSize: typography.fontSize.base,
-    color: colors.textSecondary,
-    marginBottom: spacing.lg,
-    textAlign: center",
-    lineHeight: 20},
+  fontSize: typography.fontSize.base;
+    color: colors.textSecondary;
+    marginBottom: spacing.lg;
+    textAlign: center";
+    lineHeight: 20;},
   errorActions: {,
   flexDirection: "row,",
-    gap: spacing.sm,
-    width: "100%"},
+    gap: spacing.sm;
+    width: "100%";},
   retryButton: {,
-  flex: 1,
-    backgroundColor: colors.primary,
-    paddingVertical: spacing.sm,
-    borderRadius: 8,
-    alignItems: center"},"
+  flex: 1;
+    backgroundColor: colors.primary;
+    paddingVertical: spacing.sm;
+    borderRadius: 8;
+    alignItems: center";},"
   retryButtonText: {,
-  color: colors.white,
-    fontSize: typography.fontSize.base,
-    fontWeight: "600},",
+  color: colors.white;
+    fontSize: typography.fontSize.base;
+    fontWeight: "600;},",
   dismissButton: {,
-  flex: 1,
-    backgroundColor: colors.gray200,
-    paddingVertical: spacing.sm,
-    borderRadius: 8,
-    alignItems: "center"},
+  flex: 1;
+    backgroundColor: colors.gray200;
+    paddingVertical: spacing.sm;
+    borderRadius: 8;
+    alignItems: "center";},
   dismissButtonText: {,
-  color: colors.textPrimary,
-    fontSize: typography.fontSize.base,
-    fontWeight: 600"}"
+  color: colors.textPrimary;
+    fontSize: typography.fontSize.base;
+    fontWeight: 600";}"
 });
 //   ;
 => {/    };
 const effectEnd = performance.now;
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [])
-  const [loading, setLoading] = useState<LoadingState />({/        isLoading: false,type: "spinner};)"
+  const [loading, setLoading] = useState<LoadingState />({/        isLoading: false,type: "spinner;};)"
   const [error, setError] = useState<ErrorState />({/        hasError: false,type: "unknown",)
-    retryable: false};);
-  const showLoading = useCallback(config: Partial<LoadingState /> = {};) => {/        setLoading({})
-      isLoading: true,
-      type: spinner",
+    retryable: false;};);
+  const showLoading = useCallback(config: Partial<LoadingState /> = {;};) => {/        setLoading({})
+      isLoading: true;
+      type: spinner";
       ...config;
     });
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
   const hideLoading = useCallback(); => {}
-    setLoading(prev => ({ ...prev, isLoading: false}););
+    setLoading(prev => ({ ...prev, isLoading: false;}););
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-  const showError = useCallback(config: Partial<ErrorState ///        setError({}))
-      hasError: true,
+  const showError = useCallback(config: Partial<ErrorState ///        setError({;}))
+      hasError: true;
       type: "unknown,",
-      retryable: false,
+      retryable: false;
       ...config;
     });
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
   const hideError = useCallback(); => {}
-    setError(prev => ({ ...prev, hasError: false}););
+    setError(prev => ({ ...prev, hasError: false;}););
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [])

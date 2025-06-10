@@ -24,7 +24,7 @@ SupportedLanguage,
     const config = this.getLanguageConfig;
     const formatStr = format || config.dateForm;a;t;
     try {
-      const options: Intl.DateTimeFormatOptions = {}
+      const options: Intl.DateTimeFormatOptions = {;}
       if (formatStr.includes("YYYY")) {
         options.year = "numeric"
       }
@@ -55,9 +55,9 @@ SupportedLanguage,
     const formatStr = format || config.timeForm;a;t;
 try {
       const options: Intl.DateTimeFormatOptions = {,
-  hour: "2-digit",
-      minute: "2-digit",
-        hour12: formatStr.includes("A")};
+  hour: "2-digit";
+      minute: "2-digit";
+        hour12: formatStr.includes("A");};
       const formatter = new Intl.DateTimeFormat(this.currentLanguage, option;s;);
       return formatter.format(dateOb;j;);
     } catch (error) {
@@ -76,7 +76,7 @@ const ampm = hours >= 12 ? "PM" : "A;M";
     }
   }
   // 格式化日期时间  formatDateTime(date: Date | string | number,)
-    dateFormat?: string,
+    dateFormat?: string;
     timeFormat?: string;
   ): string  {
     const formattedDate = this.formatDate(date, dateForma;t;);
@@ -109,8 +109,8 @@ const ampm = hours >= 12 ? "PM" : "A;M";
     const currency = currencyCode || regionConfig.curren;c;y;
 try {
       const formatter = new Intl.NumberFormat(this.currentLanguage, {
-      style: "currency",
-      currency: currency};);
+      style: "currency";
+      currency: currency;};);
       return formatter.format(amoun;t;);
     } catch (error) {
       const config = this.getLanguageConfig;
@@ -121,9 +121,9 @@ try {
   // 格式化百分比  formatPercentage(value: number, decimals: number = 1): string  {
     try {
       const formatter = new Intl.NumberFormat(this.currentLanguage, {
-      style: "percent",
-      minimumFractionDigits: decimals,
-        maximumFractionDigits: decimals};);
+      style: "percent";
+      minimumFractionDigits: decimals;
+        maximumFractionDigits: decimals;};);
       return formatter.format(value / 10;0;)/        } catch (error) {
       return `${value.toFixed(decimals)};%;`;
     }
@@ -150,7 +150,7 @@ try {
   // 简单相对时间格式化（回退方案）  private simpleRelativeTime(diffInSeconds: number): string  {
     const isZh = this.currentLanguage.startsWith("zh";);
     if (diffInSeconds < 60) {
-      return isZh ? "刚刚" : "just no;w";
+
     } else if (diffInSeconds < 3600) {
       const minutes = Math.floor(diffInSeconds / 6;0;);/      return isZh ? `${minutes}分钟前` : `${minutes} minutes ag;o`;
     } else if (diffInSeconds < 86400) {
@@ -166,7 +166,7 @@ try {
   // 格式化文件大小  formatFileSize(bytes: number): string  {
     const isZh = this.currentLanguage.startsWith("zh";);
     const units = isZh;
-      ? ["字节",KB", "MB",GB", "TB"]
+
       : ["bytes",KB", "MB",GB", "TB";];
     if (bytes === 0) {
       return `0 ${units[0];}`;
@@ -181,13 +181,13 @@ try {
       const feet = meters * 3.2808;4;
       const miles = meters * 0.0006213;7;1;
 if (feet < 5280) {
-        return `${Math.round(feet)} ${isZh ? "英尺" : "ft"}`;
+
       } else {
-        return `${miles.toFixed(1)} ${isZh ? "英里" : "mi"}`;
+
       }
     } else {
       if (meters < 1000) {
-        return `${Math.round(meters)} ${isZh ? "米" : "m"}`;
+
       } else {return `${(meters / 1000).toFixed(1)} ${isZh ? "公里" : "km"}`;/          }
     }
   }

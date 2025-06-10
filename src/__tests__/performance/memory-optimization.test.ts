@@ -12,21 +12,21 @@ import {
 
 // Mock AsyncStorage
 jest.mock('@react-native-async-storage/async-storage', () => ({
-  getItem: jest.fn(),
-  setItem: jest.fn(),
-  removeItem: jest.fn(),
-  getAllKeys: jest.fn(() => Promise.resolve([])),
-  multiRemove: jest.fn(),
+  getItem: jest.fn();
+  setItem: jest.fn();
+  removeItem: jest.fn();
+  getAllKeys: jest.fn(() => Promise.resolve([]));
+  multiRemove: jest.fn();
 }));
 
 // Mock RNFS
 jest.mock('react-native-fs', () => ({
-  DocumentDirectoryPath: '/mock/path',
-  exists: jest.fn(() => Promise.resolve(true)),
-  mkdir: jest.fn(),
+  DocumentDirectoryPath: '/mock/path';
+  exists: jest.fn(() => Promise.resolve(true));
+  mkdir: jest.fn();
 }));
 
-describe('内存优化功能测试', () => {
+
   beforeEach(() => {
     jest.clearAllMocks();
     jest.clearAllTimers();
@@ -37,8 +37,8 @@ describe('内存优化功能测试', () => {
     jest.useRealTimers();
   });
 
-  describe('ONNX推理引擎优化', () => {
-    test('应该根据设备内存动态生成配置', async () => {
+
+
       const config = await createDynamicConfig();
 
       expect(config).toHaveProperty('EDGE_COMPUTE');
@@ -57,7 +57,7 @@ describe('内存优化功能测试', () => {
       );
     });
 
-    test('应该正确检测设备内存信息', async () => {
+
       const memoryInfo = await getDeviceMemoryInfo();
 
       expect(memoryInfo).toHaveProperty('totalMemory');
@@ -69,7 +69,7 @@ describe('内存优化功能测试', () => {
       expect(['LOW', 'MEDIUM', 'HIGH']).toContain(memoryInfo.memoryTier);
     });
 
-    test('低内存设备应该使用保守配置', async () => {
+
       // Mock低内存设备
       jest
         .spyOn(
@@ -78,8 +78,8 @@ describe('内存优化功能测试', () => {
         )
         .mockResolvedValue({
           totalMemory: 512 * 1024 * 1024, // 512MB
-          availableMemory: 300 * 1024 * 1024,
-          memoryTier: 'LOW',
+          availableMemory: 300 * 1024 * 1024;
+          memoryTier: 'LOW';
         });
 
       const config = await createDynamicConfig();
@@ -91,7 +91,7 @@ describe('内存优化功能测试', () => {
     });
   });
 
-  describe('本地模型管理器优化', () => {
+
     beforeEach(async () => {
       await localModelManager.initialize();
     });
@@ -100,7 +100,7 @@ describe('内存优化功能测试', () => {
       await localModelManager.dispose();
     });
 
-    test('应该实现懒加载策略', async () => {
+
       const availableModels = localModelManager.getAvailableModels();
       const loadedModels = localModelManager.getLoadedModels();
 
@@ -111,7 +111,7 @@ describe('内存优化功能测试', () => {
       );
     });
 
-    test('应该正确管理模型优先级', async () => {
+
       const models = localModelManager.getAvailableModels();
 
       const highPriorityModels = models.filter((m) => m.priority === 'high');
@@ -125,7 +125,7 @@ describe('内存优化功能测试', () => {
       expect(lowPriorityModels.length).toBeGreaterThan(0);
     });
 
-    test('应该在内存不足时自动卸载模型', async () => {
+
       // 加载多个模型
       const models = localModelManager.getAvailableModels();
       for (const model of models) {
@@ -144,7 +144,7 @@ describe('内存优化功能测试', () => {
       expect(finalLoadedCount).toBeLessThanOrEqual(initialLoadedCount);
     });
 
-    test('应该提供准确的内存统计', () => {
+
       const memoryStats = localModelManager.getMemoryStats();
 
       expect(memoryStats).toHaveProperty('totalMemory');
@@ -159,9 +159,9 @@ describe('内存优化功能测试', () => {
       expect(memoryStats.loadedModels).toBeGreaterThanOrEqual(0);
     });
 
-    test('应该正确执行推理并缓存结果', async () => {
+
       const modelId = 'health_basic_assessment';
-      const inputData = { symptoms: ['headache', 'fever'] };
+      const inputData = { symptoms: ['headache', 'fever'] ;};
 
       // 第一次推理
       const result1 = await localModelManager.runInference(modelId, inputData);
@@ -180,14 +180,14 @@ describe('内存优化功能测试', () => {
     });
   });
 
-  describe('优化缓存系统', () => {
+
     beforeEach(() => {
       optimizedCacheService.clear();
     });
 
-    test('应该正确设置和获取缓存项', async () => {
+
       const key = 'test_key';
-      const value = { data: 'test_data', timestamp: Date.now() };
+      const value = { data: 'test_data', timestamp: Date.now() ;};
 
       await optimizedCacheService.set(key, value);
       const retrieved = await optimizedCacheService.get(key);
@@ -195,12 +195,12 @@ describe('内存优化功能测试', () => {
       expect(retrieved).toEqual(value);
     });
 
-    test('应该实现TTL过期机制', async () => {
+
       const key = 'expiring_key';
-      const value = { data: 'test_data' };
+      const value = { data: 'test_data' ;};
       const shortTTL = 1000; // 1秒
 
-      await optimizedCacheService.set(key, value, { ttl: shortTTL });
+      await optimizedCacheService.set(key, value, { ttl: shortTTL ;});
 
       // 立即获取应该成功
       let retrieved = await optimizedCacheService.get(key);
@@ -214,16 +214,16 @@ describe('内存优化功能测试', () => {
       expect(retrieved).toBeNull();
     });
 
-    test('应该实现优先级淘汰策略', async () => {
+
       // 设置不同优先级的缓存项
       await optimizedCacheService.set('high_priority', 'data1', {
-        priority: 'high',
+        priority: 'high';
       });
       await optimizedCacheService.set('medium_priority', 'data2', {
-        priority: 'medium',
+        priority: 'medium';
       });
       await optimizedCacheService.set('low_priority', 'data3', {
-        priority: 'low',
+        priority: 'low';
       });
 
       // 触发内存清理
@@ -234,7 +234,7 @@ describe('内存优化功能测试', () => {
       expect(highPriorityData).not.toBeNull();
     });
 
-    test('应该实现压缩功能', async () => {
+
       const largeData = 'x'.repeat(2000); // 大于压缩阈值的数据
       const key = 'large_data';
 
@@ -244,7 +244,7 @@ describe('内存优化功能测试', () => {
       expect(retrieved).toBe(largeData);
     });
 
-    test('应该提供准确的内存使用统计', async () => {
+
       await optimizedCacheService.set('test1', 'data1');
       await optimizedCacheService.set('test2', 'data2');
 
@@ -260,13 +260,13 @@ describe('内存优化功能测试', () => {
       expect(memoryUsage.percentage).toBeLessThanOrEqual(100);
     });
 
-    test('应该在达到内存限制时自动清理', async () => {
+
       // 创建一个小内存限制的缓存服务实例
       const testCacheService =
         new (require('../../core/cache/OptimizedCacheService').OptimizedCacheService)(
           {
             maxMemorySize: 1024, // 1KB限制
-            maxItems: 10,
+            maxItems: 10;
           }
         );
 
@@ -283,8 +283,8 @@ describe('内存优化功能测试', () => {
     });
   });
 
-  describe('内存监控集成测试', () => {
-    test('应该能够获取完整的内存统计信息', () => {
+
+
       const modelStats = localModelManager.getMemoryStats();
       const cacheStats = optimizedCacheService.getMemoryUsage();
 
@@ -297,10 +297,10 @@ describe('内存优化功能测试', () => {
       expect(cacheStats.current).toBeGreaterThanOrEqual(0);
     });
 
-    test('应该能够执行内存优化操作', async () => {
+
       // 加载一些模型和缓存数据
       await localModelManager.loadModel('health_basic_assessment');
-      await optimizedCacheService.set('test_data', { large: 'x'.repeat(1000) });
+      await optimizedCacheService.set('test_data', { large: 'x'.repeat(1000) ;});
 
       const initialModelStats = localModelManager.getMemoryStats();
       const initialCacheStats = optimizedCacheService.getMemoryUsage();
@@ -317,8 +317,8 @@ describe('内存优化功能测试', () => {
     });
   });
 
-  describe('性能基准测试', () => {
-    test('模型加载时间应该在可接受范围内', async () => {
+
+
       const modelId = 'health_basic_assessment';
 
       const startTime = Date.now();
@@ -329,11 +329,11 @@ describe('内存优化功能测试', () => {
       expect(loadTime).toBeLessThan(1000);
     });
 
-    test('推理时间应该在可接受范围内', async () => {
+
       const modelId = 'health_basic_assessment';
       await localModelManager.loadModel(modelId);
 
-      const inputData = { symptoms: ['headache'] };
+      const inputData = { symptoms: ['headache'] ;};
 
       const startTime = Date.now();
       await localModelManager.runInference(modelId, inputData);
@@ -343,8 +343,8 @@ describe('内存优化功能测试', () => {
       expect(inferenceTime).toBeLessThan(200);
     });
 
-    test('缓存操作应该快速执行', async () => {
-      const testData = { test: 'data' };
+
+      const testData = { test: 'data' ;};
 
       // 测试写入性能
       const writeStart = Date.now();
@@ -362,19 +362,19 @@ describe('内存优化功能测试', () => {
     });
   });
 
-  describe('错误处理和边界情况', () => {
-    test('应该正确处理不存在的模型', async () => {
+
+
       await expect(
         localModelManager.loadModel('non_existent_model')
       ).rejects.toThrow('Model not found');
     });
 
-    test('应该正确处理缓存键不存在的情况', async () => {
+
       const result = await optimizedCacheService.get('non_existent_key');
       expect(result).toBeNull();
     });
 
-    test('应该正确处理内存不足的情况', async () => {
+
       // Mock内存不足的情况
       jest
         .spyOn(localModelManager as any, 'canLoadModel')
@@ -385,10 +385,10 @@ describe('内存优化功能测试', () => {
       ).rejects.toThrow('Insufficient memory');
     });
 
-    test('应该正确处理无效的缓存数据', async () => {
+
       // 设置无效的TTL
       await expect(
-        optimizedCacheService.set('test', 'data', { ttl: -1 })
+        optimizedCacheService.set('test', 'data', { ttl: -1 ;})
       ).resolves.not.toThrow();
     });
   });
@@ -396,8 +396,8 @@ describe('内存优化功能测试', () => {
 
 // 性能测试辅助函数
 export const runPerformanceTest = async (
-  testName: string,
-  testFn: () => Promise<void>,
+  testName: string;
+  testFn: () => Promise<void>;
   iterations = 10
 ) => {
   const times: number[] = [];
@@ -413,10 +413,10 @@ export const runPerformanceTest = async (
   const minTime = Math.min(...times);
   const maxTime = Math.max(...times);
 
-  console.log(`${testName} 性能测试结果:`);
-  console.log(`  平均时间: ${avgTime.toFixed(2)}ms`);
-  console.log(`  最短时间: ${minTime}ms`);
-  console.log(`  最长时间: ${maxTime}ms`);
+
+
+
+
 
   return { avgTime, minTime, maxTime };
 };

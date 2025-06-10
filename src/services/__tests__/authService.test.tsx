@@ -1,6 +1,4 @@
-import { authService } from "../authService";
-import { authService } from "../authService";
-import React from "react";
+
 describe("authService", () => {
   beforeEach(() => {
     jest.clearAllMocks();

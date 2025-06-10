@@ -15,31 +15,31 @@ export const AuthNavigator: React.FC = () => {
     <AuthStack.Navigator;
       initialRouteName="Welcome"
       screenOptions={
-        headerShown: false,
-        animation: 'slide_from_right',
-        gestureEnabled: true,
+        headerShown: false;
+        animation: 'slide_from_right';
+        gestureEnabled: true;
         gestureDirection: 'horizontal'
-      }}
+      ;}}
     >
       <AuthStack.Screen;
         name="Welcome"
         component={WelcomeScreen}
-        options={ animation: 'fade' }}
+        options={ animation: 'fade' ;}}
       />
       <AuthStack.Screen;
         name="Login"
         component={LoginScreen}
-        options={ animation: 'slide_from_bottom' }}
+        options={ animation: 'slide_from_bottom' ;}}
       />
       <AuthStack.Screen;
         name="Register"
         component={RegisterScreen}
-        options={ animation: 'slide_from_right' }}
+        options={ animation: 'slide_from_right' ;}}
       />
       <AuthStack.Screen;
         name="ForgotPassword"
         component={ForgotPasswordScreen}
-        options={ animation: 'slide_from_right' }}
+        options={ animation: 'slide_from_right' ;}}
       />
     </AuthStack.Navigator>
   );

@@ -1,5 +1,4 @@
 import { permissionManager } from "../permissions";
-import { permissionManager } from "../permissions";
 describe("permissions", () => {
   beforeEach(() => {
     jest.clearAllMocks();

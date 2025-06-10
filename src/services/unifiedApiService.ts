@@ -16,28 +16,28 @@ export class UnifiedApiService {
     return apiClient.post("AUTH",/logout');
   }
   async refreshToken(refreshToken: string) {
-    return apiClient.post("AUTH",/refresh', { refreshToken });
+    return apiClient.post("AUTH",/refresh', { refreshToken ;});
   }
   async getCurrentUser() {
     return apiClient.get("AUTH",/me');
   }
   async forgotPassword(email: string) {
-    return apiClient.post("AUTH",/forgot-password', { email });
+    return apiClient.post("AUTH",/forgot-password', { email ;});
   }
-  async resetPassword(data: { email: string; code: string; newPassword: string }) {
+  async resetPassword(data: { email: string; code: string; newPassword: string ;}) {
     return apiClient.post("AUTH",/reset-password', data);
   }
   async changePassword(oldPassword: string, newPassword: string) {
-    return apiClient.post("AUTH",/change-password', { oldPassword, newPassword });
+    return apiClient.post("AUTH",/change-password', { oldPassword, newPassword ;});
   }
   async verifyPassword(password: string) {
-    return apiClient.post("AUTH",/verify-password', { password });
+    return apiClient.post("AUTH",/verify-password', { password ;});
   }
   async checkEmailExists(email: string) {
-    return apiClient.get('AUTH', `/check-email?email=${encodeURIComponent(email)}`);
+    return apiClient.get('AUTH', `/check-email?email=${encodeURIComponent(email);}`);
   }
   async checkUsernameExists(username: string) {
-    return apiClient.get('AUTH', `/check-username?username=${encodeURIComponent(username)}`);
+    return apiClient.get('AUTH', `/check-username?username=${encodeURIComponent(username);}`);
   }
   // ==================== 用户服务 API ====================
     async getUserProfile(userId?: string) {
@@ -82,19 +82,19 @@ export class UnifiedApiService {
     return apiClient.post("HEALTH_DATA",/data', data);
   }
   async addHealthDataBatch(dataList: any[]) {
-    return apiClient.post("HEALTH_DATA",/data/batch', { data: dataList });
+    return apiClient.post("HEALTH_DATA",/data/batch', { data: dataList ;});
   }
   async updateHealthData(id: string, updates: any) {
-    return apiClient.put('HEALTH_DATA', `/data/${id}`, updates);
+    return apiClient.put('HEALTH_DATA', `/data/${id;}`, updates);
   }
   async deleteHealthData(id: string) {
-    return apiClient.delete('HEALTH_DATA', `/data/${id}`);
+    return apiClient.delete('HEALTH_DATA', `/data/${id;}`);
   }
   async getHealthMetrics(timeRange: string) {
-    return apiClient.get('HEALTH_DATA', `/metrics?timeRange=${timeRange}`);
+    return apiClient.get('HEALTH_DATA', `/metrics?timeRange=${timeRange;}`);
   }
   async exportHealthData(format: string = 'json') {
-    return apiClient.get('HEALTH_DATA', `/export?format=${format}`);
+    return apiClient.get('HEALTH_DATA', `/export?format=${format;}`);
   }
   async syncHealthData() {
     return apiClient.get("HEALTH_DATA",/sync');
@@ -105,20 +105,20 @@ export class UnifiedApiService {
     return apiClient.get('AGENTS', endpoint);
   }
   async startAgentChat(agentId: string, userId: string) {
-    return apiClient.post("AGENTS",/chat/start', { agentId, userId });
+    return apiClient.post("AGENTS",/chat/start', { agentId, userId ;});
   }
   async sendAgentMessage(sessionId: string, message: string, type: string = 'text') {
-    return apiClient.post("AGENTS",/chat/message', { sessionId, message, type });
+    return apiClient.post("AGENTS",/chat/message', { sessionId, message, type ;});
   }
   async endAgentChat(sessionId: string) {
-    return apiClient.post("AGENTS",/chat/end', { sessionId });
+    return apiClient.post("AGENTS",/chat/end', { sessionId ;});
   }
   async getAgentPerformance(agentId?: string) {
     const endpoint = agentId ? `/performance/${agentId}` : '/performance';
     return apiClient.get('AGENTS', endpoint);
   }
   async updateAgentSettings(agentId: string, settings: any) {
-    return apiClient.put('AGENTS', `/settings/${agentId}`, settings);
+    return apiClient.put('AGENTS', `/settings/${agentId;}`, settings);
   }
   // ==================== 五诊服务 API (原四诊升级) ====================
     // 传统四诊方法
@@ -143,25 +143,25 @@ export class UnifiedApiService {
     return apiClient.post("DIAGNOSIS",/ziwu', birthData);
   }
   async performConstitutionAnalysis(personalData: {),
-  birthYear: number;,
-  birthMonth: number,
-  birthDay: number;,
-  birthHour: number,
+  birthYear: number;
+  birthMonth: number;
+  birthDay: number;
+  birthHour: number;
   gender: string;
     location?: string;
   }) {
     return apiClient.post("DIAGNOSIS",/constitution', personalData);
   }
   async performBaguaAnalysis(baguaData: {),
-  birthDate: string;,
+  birthDate: string;
   gender: string;
     question?: string;
   }) {
     return apiClient.post("DIAGNOSIS",/bagua', baguaData);
   }
   async performWuyunAnalysis(timeData: {),
-  year: number;,
-  month: number,
+  year: number;
+  month: number;
   day: number;
     location?: string;
   }) {
@@ -187,7 +187,7 @@ export class UnifiedApiService {
     return apiClient.post("DIAGNOSIS",/fiveDiagnosis', fiveDiagnosisData);
   }
   async getComprehensiveDiagnosis(diagnosisId: string) {
-    return apiClient.get('DIAGNOSIS', `/comprehensive/${diagnosisId}`);
+    return apiClient.get('DIAGNOSIS', `/comprehensive/${diagnosisId;}`);
   }
   async getDiagnosisHistory(userId?: string) {
     const endpoint = userId ? `/history/${userId}` : '/history';
@@ -195,22 +195,22 @@ export class UnifiedApiService {
   }
   // ==================== RAG服务 API ====================
     async queryRAG(query: string, context?: any) {
-    return apiClient.post("RAG",/query', { query, context });
+    return apiClient.post("RAG";/query', { query, context });
   }
   async streamQueryRAG(query: string, context?: any) {
-    return apiClient.post("RAG",/stream-query', { query, context });
+    return apiClient.post("RAG";/stream-query', { query, context });
   }
-  async multimodalQueryRAG(query: string, files?: any[], context?: any) {
-    return apiClient.post("RAG",/multimodal-query', { query, files, context });
+  async multimodalQueryRAG(query: string, files?: any[]; context?: any) {
+    return apiClient.post("RAG";/multimodal-query', { query, files, context });
   }
   async getTCMAnalysis(symptoms: string[], constitution?: string) {
-    return apiClient.post("RAG",/tcm/analysis', { symptoms, constitution });
+    return apiClient.post("RAG";/tcm/analysis', { symptoms, constitution });
   }
   async getHerbRecommendation(constitution: string, symptoms: string[]) {
-    return apiClient.post("RAG",/tcm/herbs', { constitution, symptoms });
+    return apiClient.post("RAG",/tcm/herbs', { constitution, symptoms ;});
   }
   async getSyndromeAnalysis(symptoms: string[]) {
-    return apiClient.post("RAG",/tcm/syndrome', { symptoms });
+    return apiClient.post("RAG",/tcm/syndrome', { symptoms ;});
   }
   async getConstitutionAnalysis(userData: any) {
     return apiClient.post("RAG",/tcm/constitution', userData);
@@ -221,29 +221,29 @@ export class UnifiedApiService {
     return apiClient.get('BLOCKCHAIN', endpoint);
   }
   async verifyRecord(recordId: string) {
-    return apiClient.post("BLOCKCHAIN",/verify', { recordId });
+    return apiClient.post("BLOCKCHAIN",/verify', { recordId ;});
   }
   async mintHealthNFT(healthData: any) {
     return apiClient.post("BLOCKCHAIN",/mint', healthData);
   }
   async transferHealthNFT(tokenId: string, toAddress: string) {
-    return apiClient.post("BLOCKCHAIN",/transfer', { tokenId, toAddress });
+    return apiClient.post("BLOCKCHAIN",/transfer', { tokenId, toAddress ;});
   }
   // ==================== 消息总线服务 API ====================
     async publishMessage(topic: string, message: any) {
-    return apiClient.post("MESSAGE_BUS",/publish', { topic, message });
+    return apiClient.post("MESSAGE_BUS",/publish', { topic, message ;});
   }
   async subscribeToTopic(topic: string, callback: string) {
-    return apiClient.post("MESSAGE_BUS",/subscribe', { topic, callback });
+    return apiClient.post("MESSAGE_BUS",/subscribe', { topic, callback ;});
   }
   async createTopic(topicName: string, config?: any) {
-    return apiClient.post("MESSAGE_BUS",/topics', { name: topicName, config });
+    return apiClient.post("MESSAGE_BUS";/topics', { name: topicName, config ;});
   }
   async getTopics() {
     return apiClient.get("MESSAGE_BUS",/topics');
   }
   // ==================== 其他服务 API ====================
-    async getMedicalResources(location?: string, type?: string) {
+    async getMedicalResources(location?: string; type?: string) {
     const params = new URLSearchParams();
     if (location) params.append('location', location);
     if (type) params.append('type', type);
@@ -254,7 +254,7 @@ export class UnifiedApiService {
     return apiClient.get("CORN_MAZE",/status');
   }
   async startCornMazeGame(difficulty: string) {
-    return apiClient.post("CORN_MAZE",/start', { difficulty });
+    return apiClient.post("CORN_MAZE",/start', { difficulty ;});
   }
   async getAccessibilitySettings() {
     return apiClient.get("ACCESSIBILITY",/settings');
@@ -299,7 +299,7 @@ export class UnifiedApiService {
         case 'DELETE':
           return apiClient.delete(req.service, req.endpoint);
         default:
-          throw new Error(`Unsupported method: ${req.method}`);
+          throw new Error(`Unsupported method: ${req.method;}`);
       }
     });
     return Promise.allSettled(promises);
@@ -310,7 +310,7 @@ export class UnifiedApiService {
   async healthCheckAllServices() {
     const services = Object.keys(API_GATEWAY_CONFIG.SERVICES);
     const healthChecks = services.map(service =>)
-      this.getServiceHealth(service).catch(error => ({ service, error: error.message }))
+      this.getServiceHealth(service).catch(error => ({ service, error: error.message ;}))
     );
     return Promise.allSettled(healthChecks);
   }
@@ -319,9 +319,9 @@ export class UnifiedApiService {
   */
   async getApiStats() {
     return {
-      cacheStats: apiClient.getCacheStats(),
-      circuitBreakerState: apiClient.getCircuitBreakerState(),
-      gatewayHealth: await apiClient.healthCheck()};
+      cacheStats: apiClient.getCacheStats();
+      circuitBreakerState: apiClient.getCircuitBreakerState();
+      gatewayHealth: await apiClient.healthCheck();};
   }
 }
 // 导出单例实例

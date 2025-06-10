@@ -3,18 +3,18 @@ import { EventEmitter } from '../utils/eventEmitter';
 import { RAG_CONFIG, getCurrentEnvConfig } from '../constants/config';
 // RAG查询请求接口
 export interface RAGQueryRequest {
-  query: string;,
+  query: string;
   userId: string;
   sessionId?: string;
-  context?: Record<string, any>;
+  context?: Record<string; any>;
   taskType?: 'consultation' | 'diagnosis' | 'treatment' | 'prevention';
   urgency?: 'low' | 'medium' | 'high' | 'urgent';
   complexity?: 'simple' | 'moderate' | 'complex' | 'expert';
   preferredAgent?: 'xiaoai' | 'xiaoke' | 'laoke' | 'soer';
   multimodalData?: Array<{
-    type: 'image' | 'audio' | 'video' | 'sensor';,
+    type: 'image' | 'audio' | 'video' | 'sensor';
   data: string | ArrayBuffer;
-    metadata?: Record<string, any>;
+    metadata?: Record<string; any>;
 }>;
   maxTokens?: number;
   temperature?: number;
@@ -22,42 +22,42 @@ export interface RAGQueryRequest {
 }
 // RAG查询响应接口
 export interface RAGQueryResponse {
-  requestId: string;,
-  answer: string;,
+  requestId: string;
+  answer: string;
   sources: Array<{;,
-  id: string;,
-  title: string;,
+  id: string;
+  title: string;
   source: string;
     url?: string;
-    snippet: string;,
+    snippet: string;
   score: number;
 }>;
-  confidence: number,
-  reasoningChain: string[];,
+  confidence: number;
+  reasoningChain: string[];
   agentInfo: {,
-  agentName: string;,
-  agentType: string,
+  agentName: string;
+  agentType: string;
   processingTime: number;
   };
-  processingTime: number,
-  followUpQuestions: string[];,
+  processingTime: number;
+  followUpQuestions: string[];
   metadata: Record<string, any>;
 }
 // 流式响应接口
 export interface StreamResponse {
-  requestId: string;,
-  answerFragment: string;,
+  requestId: string;
+  answerFragment: string;
   isFinal: boolean;
   sources?: Array<{
-    id: string;,
-  title: string;,
-  source: string;,
+    id: string;
+  title: string;
+  source: string;
   snippet: string;
 }>;
 }
 // 中医分析请求接口
 export interface TCMAnalysisRequest {
-  symptoms: string[];,
+  symptoms: string[];
   userId: string;
   constitutionType?:
     | 'qi_deficiency'
@@ -83,28 +83,28 @@ export interface TCMAnalysisRequest {
 }
 // 中医分析响应接口
 export interface TCMAnalysisResponse {
-  requestId: string;,
-  syndromeAnalysis: {;,
-  primarySyndrome: string;,
-  secondarySyndromes: string[];,
-  confidence: number;,
+  requestId: string;
+  syndromeAnalysis: {
+  primarySyndrome: string;
+  secondarySyndromes: string[];
+  confidence: number;
   reasoning: string[];
 };
   constitutionAssessment: {,
-  constitutionType: string;,
-  score: number,
-  characteristics: string[];,
+  constitutionType: string;
+  score: number;
+  characteristics: string[];
   recommendations: string[];
   };
-  treatmentPrinciples: string[],
-  lifestyleRecommendations: string[];,
-  reasoningChain: string[],
+  treatmentPrinciples: string[];
+  lifestyleRecommendations: string[];
+  reasoningChain: string[];
   confidence: number;
 }
 // 中药推荐请求接口
 export interface HerbRecommendationRequest {
-  syndromeType: string;,
-  constitutionType: string;,
+  syndromeType: string;
+  constitutionType: string;
   userId: string;
   contraindications?: string[];
   allergies?: string[];
@@ -115,41 +115,41 @@ export interface HerbRecommendationRequest {
 }
 // 中药推荐响应接口
 export interface HerbRecommendationResponse {
-  requestId: string;,
+  requestId: string;
   recommendedFormulas: Array<{;,
-  name: string;,
+  name: string;
   composition: Array<{;,
-  herb: string;,
-  dosage: string;,
+  herb: string;
+  dosage: string;
   function: string;
 }>;
-    preparation: string,
-  dosage: string;,
-  duration: string,
+    preparation: string;
+  dosage: string;
+  duration: string;
   confidence: number;
   }>;
   singleHerbs: Array<{,
-  name: string;,
-  function: string,
-  dosage: string;,
+  name: string;
+  function: string;
+  dosage: string;
   precautions: string[];
   }>;
-  safetyWarnings: string[],
+  safetyWarnings: string[];
   usageInstructions: {,
-  preparation: string,
-  administration: string;,
-  timing: string,
+  preparation: string;
+  administration: string;
+  timing: string;
   duration: string;
   };
-  contraindications: string[],
+  contraindications: string[];
   monitoringAdvice: string[];
 }
 // 文档索引请求接口
 export interface DocumentIndexRequest {
-  content: string;,
-  title: string;,
+  content: string;
+  title: string;
   source: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string; any>;
   documentType?: string;
   collectionName?: string;
 }
@@ -175,7 +175,7 @@ export class RAGService extends EventEmitter {
       this.emit('initialized');
     } catch (error) {
       this.emit('error', error);
-      throw new Error(`RAG服务初始化失败: ${error}`);
+
     }
   }
   // 检查服务健康状态
@@ -186,7 +186,7 @@ export class RAGService extends EventEmitter {
       const controller = new AbortController();
       const timeoutId = setTimeout() => controller.abort(), this.config.PERFORMANCE.TIMEOUT);
       const response = await fetch(healthUrl, {
-      method: "GET",
+      method: "GET";
       signal: controller.signal;
       });
       clearTimeout(timeoutId);
@@ -194,7 +194,7 @@ export class RAGService extends EventEmitter {
       return data?.status === 'healthy';
     } catch (error) {
       this.recordError(error);
-      throw new Error(`RAG服务健康检查失败: ${error}`);
+
     }
   }
   // 记录错误
@@ -203,7 +203,7 @@ export class RAGService extends EventEmitter {
     this.lastErrorTime = Date.now();
     this.emit('error', {
       error,
-      errorCount: this.errorCount,
+      errorCount: this.errorCount;
       timestamp: this.lastErrorTime;
     });
   }
@@ -227,7 +227,7 @@ export class RAGService extends EventEmitter {
     if (this.queryCache.has(cacheKey)) {
       const cachedResult = this.queryCache.get(cacheKey)!;
       this.recordPerformance('query_cache_hit', Date.now() - startTime);
-      this.emit('cache_hit', { cacheKey, result: cachedResult });
+      this.emit('cache_hit', { cacheKey, result: cachedResult ;});
       return cachedResult;
     }
     try {
@@ -236,7 +236,7 @@ export class RAGService extends EventEmitter {
       const controller = new AbortController();
       const timeoutId = setTimeout() => controller.abort(), this.config.PERFORMANCE.TIMEOUT);
       const response = await fetch(queryUrl, {
-      method: "POST",
+      method: "POST";
       headers: {'Content-Type': 'application/json';
         },body: JSON.stringify(request),signal: controller.signal;
       });
@@ -268,7 +268,7 @@ export class RAGService extends EventEmitter {
       const controller = new AbortController();
       const timeoutId = setTimeout() => controller.abort(), this.config.PERFORMANCE.TIMEOUT);
       const response = await fetch(queryUrl, {
-      method: "POST",
+      method: "POST";
       headers: {'Content-Type': 'application/json';
         },body: JSON.stringify(request),signal: controller.signal;
       });
@@ -288,7 +288,7 @@ export class RAGService extends EventEmitter {
   }
   // 流式RAG查询
   async streamQuery()
-    request: RAGQueryRequest,
+    request: RAGQueryRequest;
     onChunk: (chunk: StreamResponse) => void;
   ): Promise<void> {
     if (!this.isInitialized) {
@@ -299,12 +299,12 @@ export class RAGService extends EventEmitter {
       this.emit('streamStart', { requestId, request });
       // 使用fetch进行流式请求
       const response = await fetch('/rag/query/stream', {
-      method: "POST",
+      method: "POST";
       headers: {'Content-Type': 'application/json';
-        },body: JSON.stringify({ ...request, requestId });
+        },body: JSON.stringify({ ...request, requestId ;});
       });
       if (!response.body) {
-        throw new Error('流式响应不支持');
+
       }
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
@@ -325,7 +325,7 @@ export class RAGService extends EventEmitter {
                 return;
               }
             } catch (parseError) {
-              console.warn('解析流式数据失败:', parseError);
+
             }
           }
         }
@@ -344,7 +344,7 @@ export class RAGService extends EventEmitter {
       this.emit('tcmAnalysisStart', request);
       const response = await apiClient.post('/rag/tcm/analysis', request);
       if (!response.data) {
-        throw new Error('中医分析失败：无响应数据');
+
       }
       const result = response.data as TCMAnalysisResponse;
       this.emit('tcmAnalysisComplete', { request, result });
@@ -363,7 +363,7 @@ export class RAGService extends EventEmitter {
       this.emit('herbRecommendationStart', request);
       const response = await apiClient.post('/rag/tcm/herbs', request);
       if (!response.data) {
-        throw new Error('中药推荐失败：无响应数据');
+
       }
       const result = response.data as HerbRecommendationResponse;
       this.emit('herbRecommendationComplete', { request, result });
@@ -376,23 +376,23 @@ export class RAGService extends EventEmitter {
   // 文档索引
   async indexDocument()
     request: DocumentIndexRequest;
-  ): Promise<{ documentId: string; success: boolean }> {
+  ): Promise<{ documentId: string; success: boolean ;}> {
     if (!this.isInitialized) {
       await this.initialize();
     }
     try {
       const response = await apiClient.post('/rag/documents/index', request);
       if (!response.data) {
-        throw new Error('文档索引失败：无响应数据');
+
       }
-      return response.data as { documentId: string; success: boolean };
+      return response.data as { documentId: string; success: boolean ;};
     } catch (error) {
       throw error;
     }
   }
   // 搜索文档
   async searchDocuments()
-    query: string,
+    query: string;
     options: {
       limit?: number;
       threshold?: number;
@@ -401,10 +401,10 @@ export class RAGService extends EventEmitter {
     } = {}
   ): Promise<
     Array<{
-      id: string,
-  title: string;,
-  content: string,
-  score: number;,
+      id: string;
+  title: string;
+  content: string;
+  score: number;
   metadata: Record<string, any>;
     }>
   > {
@@ -412,16 +412,16 @@ export class RAGService extends EventEmitter {
       await this.initialize();
     }
     try {
-      const params = new URLSearchParams({query,limit: options.limit?.toString() || '10',threshold: options.threshold?.toString() || '0.7',...(options.documentType && { documentType: options.documentType }),...(options.collectionName && { collectionName: options.collectionName });)
+      const params = new URLSearchParams({query,limit: options.limit?.toString() || '10',threshold: options.threshold?.toString() || '0.7',...(options.documentType && { documentType: options.documentType ;}),...(options.collectionName && { collectionName: options.collectionName ;});)
       });
       const response = await apiClient.get(`/rag/documents/search?${params}`);
       if (!response.data) {
-        throw new Error('文档搜索失败：无响应数据');
+
       }
-      return response.data as Array<{id: string,
-  title: string;,
-  content: string,
-  score: number;,
+      return response.data as Array<{id: string;
+  title: string;
+  content: string;
+  score: number;
   metadata: Record<string, any>;
       }>;
     } catch (error) {
@@ -434,7 +434,7 @@ export class RAGService extends EventEmitter {
     this.emit('cacheCleared');
   }
   // 获取缓存统计
-  getCacheStats(): { size: number; keys: string[] } {
+  getCacheStats(): { size: number; keys: string[] ;} {
     return {size: this.queryCache.size,keys: Array.from(this.queryCache.keys());
     };
   }
@@ -454,12 +454,12 @@ export class RAGService extends EventEmitter {
   }
   // 健康检查增强
   async performHealthCheck(): Promise<{
-    isHealthy: boolean,
+    isHealthy: boolean;
   services: {,
-  rag: boolean,
+  rag: boolean;
   tcm: boolean;
     };
-    latency: number,
+    latency: number;
   timestamp: number;
   }> {
     const startTime = Date.now();
@@ -477,7 +477,7 @@ export class RAGService extends EventEmitter {
       return result;
     } catch (error) {
       this.recordError(error);
-      return {isHealthy: false,services: { rag: false, tcm: false },latency: Date.now() - startTime,timestamp: Date.now();
+      return {isHealthy: false,services: { rag: false, tcm: false ;},latency: Date.now() - startTime,timestamp: Date.now();
       };
     }
   }
@@ -487,7 +487,7 @@ export class RAGService extends EventEmitter {
     const timeoutId = setTimeout() => controller.abort(), 5000); // 5秒超时
     try {
       const response = await fetch(`${serviceUrl}/health`, {
-      method: "GET",
+      method: "GET";
       signal: controller.signal;
       });
       clearTimeout(timeoutId);
@@ -499,7 +499,7 @@ export class RAGService extends EventEmitter {
   }
   // 智能重试机制
   async queryWithRetry()
-    request: RAGQueryRequest,
+    request: RAGQueryRequest;
     maxRetries: number = 3;
   ): Promise<RAGQueryResponse> {
     let lastError: Error | null = null;
@@ -519,7 +519,7 @@ export class RAGService extends EventEmitter {
         }
       }
     }
-    throw lastError || new Error('查询失败，已达到最大重试次数');
+
   }
   // 批量查询
   async batchQuery(requests: RAGQueryRequest[]): Promise<RAGQueryResponse[]> {
@@ -532,14 +532,14 @@ export class RAGService extends EventEmitter {
         if (result.status === 'fulfilled') {
           responses.push(result.value);
         } else {
-          errors.push(new Error(`批量查询第${index + 1}项失败: ${result.reason}`));
+
         }
       });
       this.recordPerformance('batch_query', Date.now() - startTime);
       this.emit('batch_query_completed', {
-        total: requests.length,
-        successful: responses.length,
-        failed: errors.length,
+        total: requests.length;
+        successful: responses.length;
+        failed: errors.length;
         responses,
         errors;
       });
@@ -553,14 +553,14 @@ export class RAGService extends EventEmitter {
   async warmupCache(commonQueries: string[]): Promise<void> {
     const startTime = Date.now();
     try {
-      const warmupRequests = commonQueries.map(query => ({query,userId: 'system',taskType: 'consultation' as const,context: { warmup: true };))
+      const warmupRequests = commonQueries.map(query => ({query,userId: 'system',taskType: 'consultation' as const,context: { warmup: true ;};))
       }));
       await this.batchQuery(warmupRequests);
       this.recordPerformance('cache_warmup', Date.now() - startTime);
-      this.emit('cache_warmed_up', { queries: commonQueries.length });
+      this.emit('cache_warmed_up', { queries: commonQueries.length ;});
     } catch (error) {
       this.recordError(error);
-      throw new Error(`缓存预热失败: ${error}`);
+
     }
   }
   // 清理资源

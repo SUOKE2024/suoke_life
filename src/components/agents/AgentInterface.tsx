@@ -1,5 +1,4 @@
-import {import { AgentType, AgentContext, AgentResponse } from "../../agents/types";
-import { executeAgentTask, AgentSystemUtils } from "../../agents";
+
 import React, { useState, useEffect, useCallback, useRef } from "react";
   View,
   Text,
@@ -27,9 +26,9 @@ interface AgentInterfaceProps {
 * 消息类型
 */
 interface Message {
-  id: string;,
-  type: "user" | "agent";,
-  content: string;,
+  id: string;
+  type: "user" | "agent";
+  content: string;
   timestamp: Date;
   agentType?: AgentType;
   metadata?: any;
@@ -58,8 +57,8 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
   useEffect() => {
     // 组件挂载时的淡入动画
     Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 500,
+      toValue: 1;
+      duration: 500;
       useNativeDriver: true;
     }).start();
     // 添加欢迎消息
@@ -77,10 +76,10 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
   */
   const addWelcomeMessage = useCallback() => {const agentRole = AgentSystemUtils.getAgentRole(currentAgent);
     const welcomeMessage: Message = {,
-  id: `welcome_${Date.now()}`,
-      type: "agent",
-      content: `你好！我是${agentRole.name}，${agentRole.description}。有什么可以帮助您的吗？`,
-      timestamp: new Date(),
+  id: `welcome_${Date.now();}`,
+      type: "agent";
+
+      timestamp: new Date();
       agentType: currentAgent;
     };
     setMessages([welcomeMessage]);
@@ -90,9 +89,9 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
   */
   const sendMessage = useCallback(async () => {if (!inputText.trim() || isLoading) {return;})
     const userMessage: Message = {,
-  id: `user_${Date.now()}`,
-      type: "user",
-      content: inputText.trim(),
+  id: `user_${Date.now();}`,
+      type: "user";
+      content: inputText.trim();
       timestamp: new Date();
     };
     setMessages(prev) => [...prev, userMessage]);
@@ -103,16 +102,16 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
         userId,
         sessionId,
         currentChannel,
-        timestamp: new Date(),
+        timestamp: new Date();
         previousMessages: messages.slice(-5), // 最近5条消息作为上下文
-      };
+      ;};
       const response = await executeAgentTask(inputText.trim(), context);
       const agentMessage: Message = {,
-  id: `agent_${Date.now()}`,
-        type: "agent",
-        content: response.response,
-        timestamp: new Date(),
-        agentType: currentAgent,
+  id: `agent_${Date.now();}`,
+        type: "agent";
+        content: response.response;
+        timestamp: new Date();
+        agentType: currentAgent;
         metadata: response.metadata;
       };
       setMessages(prev) => [...prev, agentMessage]);
@@ -121,10 +120,10 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
       }
     } catch (error) {
       const errorMessage: Message = {,
-  id: `error_${Date.now()}`,
-        type: "agent",
-        content: "抱歉，处理您的请求时出现了问题。请稍后再试。", "
-        timestamp: new Date(),
+  id: `error_${Date.now();}`,
+        type: "agent";
+
+        timestamp: new Date();
         agentType: currentAgent;
       };
       setMessages(prev) => [...prev, errorMessage]);
@@ -151,10 +150,10 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
   const switchAgent = useCallback(newAgentType: AgentType) => {setCurrentAgent(newAgentType);
     const agentRole = AgentSystemUtils.getAgentRole(newAgentType);
     const switchMessage: Message = {,
-  id: `switch_${Date.now()}`,
-      type: "agent",
-      content: `已切换到${agentRole.name}。${agentRole.description}`,
-      timestamp: new Date(),
+  id: `switch_${Date.now();}`,
+      type: "agent";
+
+      timestamp: new Date();
       agentType: newAgentType;
     };
     setMessages(prev) => [...prev, switchMessage]);
@@ -162,11 +161,11 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
   /**
   * 清空对话
   */
-  const clearMessages = useCallback() => {Alert.alert("清空对话", "确定要清空当前对话吗？", [;)
+
       {
-      text: "取消",
-      style: "cancel" },{
-      text: "确定", "
+
+      style: "cancel" ;},{
+
       onPress: () => {setMessages([]);
           addWelcomeMessage();
         }
@@ -240,7 +239,7 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
     );
   }, [currentAgent, switchAgent]);
   return (;)
-    <Animated.View style={[styles.container, { opacity: fadeAnim }}, style]}>;
+    <Animated.View style={[styles.container, { opacity: fadeAnim ;}}, style]}>;
       {// 智能体选择器};
       {renderAgentSelector()};
       {// 消息列表};
@@ -248,7 +247,7 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
         ref={scrollViewRef};
         style={styles.messagesContainer};
         onContentSizeChange={() =>;
-          scrollViewRef.current?.scrollToEnd({ animated: true });
+          scrollViewRef.current?.scrollToEnd({ animated: true ;});
         }
       >
         {messages.map(renderMessage)}
@@ -264,7 +263,7 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
           style={styles.textInput}
           value={inputText}
           onChangeText={setInputText}
-          placeholder="输入您的问题..."
+
           multiline;
           maxLength={500}
           editable={!isLoading}
@@ -289,127 +288,127 @@ export const AgentInterface: React.FC<AgentInterfaceProps> = ({
 const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
+  flex: 1;
     backgroundColor: "#f5f5f5"
-  },
+  ;},
   agentSelector: {,
-  backgroundColor: "#fff",
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderBottomWidth: 1,
+  backgroundColor: "#fff";
+    paddingVertical: 10;
+    paddingHorizontal: 15;
+    borderBottomWidth: 1;
     borderBottomColor: "#e0e0e0"
-  },
+  ;},
   agentButton: {,
-  paddingHorizontal: 15,
-    paddingVertical: 8,
-    marginRight: 10,
-    backgroundColor: "#f0f0f0",
-    borderRadius: 20,
-    borderWidth: 1,
+  paddingHorizontal: 15;
+    paddingVertical: 8;
+    marginRight: 10;
+    backgroundColor: "#f0f0f0";
+    borderRadius: 20;
+    borderWidth: 1;
     borderColor: "#d0d0d0"
-  },
+  ;},
   selectedAgentButton: {,
-  backgroundColor: "#007AFF",
+  backgroundColor: "#007AFF";
     borderColor: "#007AFF"
-  },
+  ;},
   agentButtonText: {,
-  fontSize: 14,
-    color: "#333",
+  fontSize: 14;
+    color: "#333";
     fontWeight: "500"
-  },
+  ;},
   selectedAgentButtonText: {,
   color: "#fff"
-  },
+  ;},
   messagesContainer: {,
-  flex: 1,
+  flex: 1;
     padding: 15;
   },
   messageContainer: {,
-  marginBottom: 15,
+  marginBottom: 15;
     maxWidth: width * 0.8;
   },
   userMessage: {,
   alignSelf: "flex-end"
-  },
+  ;},
   agentMessage: {,
   alignSelf: "flex-start"
-  },
+  ;},
   agentName: {,
-  fontSize: 12,
-    color: "#666",
-    marginBottom: 5,
+  fontSize: 12;
+    color: "#666";
+    marginBottom: 5;
     fontWeight: "600"
-  },
+  ;},
   messageText: {,
-  fontSize: 16,
-    lineHeight: 22,
-    padding: 12,
+  fontSize: 16;
+    lineHeight: 22;
+    padding: 12;
     borderRadius: 18;
   },
   userMessageText: {,
-  backgroundColor: "#007AFF",
+  backgroundColor: "#007AFF";
     color: "#fff"
-  },
+  ;},
   agentMessageText: {,
-  backgroundColor: "#fff",
-    color: "#333",
-    borderWidth: 1,
+  backgroundColor: "#fff";
+    color: "#333";
+    borderWidth: 1;
     borderColor: "#e0e0e0"
-  },
+  ;},
   timestamp: {,
-  fontSize: 11,
-    color: "#999",
-    marginTop: 5,
+  fontSize: 11;
+    color: "#999";
+    marginTop: 5;
     textAlign: "center"
-  },
+  ;},
   loadingContainer: {,
-  flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+  flexDirection: "row";
+    alignItems: "center";
+    justifyContent: "center";
     padding: 15;
   },
   loadingText: {,
-  marginLeft: 10,
-    fontSize: 14,
+  marginLeft: 10;
+    fontSize: 14;
     color: "#666"
-  },
+  ;},
   inputContainer: {,
-  flexDirection: "row",
-    padding: 15,
-    backgroundColor: "#fff",
-    borderTopWidth: 1,
-    borderTopColor: "#e0e0e0",
+  flexDirection: "row";
+    padding: 15;
+    backgroundColor: "#fff";
+    borderTopWidth: 1;
+    borderTopColor: "#e0e0e0";
     alignItems: "flex-end"
-  },
+  ;},
   textInput: {,
-  flex: 1,
-    borderWidth: 1,
-    borderColor: "#d0d0d0",
-    borderRadius: 20,
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    fontSize: 16,
-    maxHeight: 100,
+  flex: 1;
+    borderWidth: 1;
+    borderColor: "#d0d0d0";
+    borderRadius: 20;
+    paddingHorizontal: 15;
+    paddingVertical: 10;
+    fontSize: 16;
+    maxHeight: 100;
     marginRight: 10;
   },
   sendButton: {,
-  backgroundColor: "#007AFF",
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderRadius: 20,
+  backgroundColor: "#007AFF";
+    paddingHorizontal: 20;
+    paddingVertical: 12;
+    borderRadius: 20;
     marginRight: 5;
   },
   disabledButton: {,
   backgroundColor: "#ccc"
-  },
+  ;},
   sendButtonText: {,
-  color: "#fff",
+  color: "#fff";
       fontSize: 16,fontWeight: "600";
   },clearButton: {,
-  backgroundColor: "#ff3b30",
+  backgroundColor: "#ff3b30";
       paddingHorizontal: 15,paddingVertical: 12,borderRadius: 20;
   },clearButtonText: {,
-  color: "#fff",
+  color: "#fff";
       fontSize: 14,fontWeight: "600";
   };
 });

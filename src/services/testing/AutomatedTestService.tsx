@@ -1,5 +1,4 @@
-import { usePerformanceMonitor } from "../../placeholder";../hooks/    usePerformanceMonitor;
-import React from "react";
+react";
 // 索克生活自动化测试服务   实现持续集成测试、回归测试和性能测试
 export interface TestCase {
   // 测试用例ID  id: string;
@@ -41,9 +40,9 @@ export interface TestSuite {
   // 套件名称  name: string;
   // 套件描述  description: string;
   // 测试用例  testCases: TestCase[];
-  // 套件配置  config: { parallel: boolean;,
-  maxConcurrency: number;,
-  timeout: number;,
+  // 套件配置  config: { parallel: boolean;
+  maxConcurrency: number;
+  timeout: number;
   retries: number;
 }
 }
@@ -66,8 +65,8 @@ export interface CoverageReport {
   // 覆盖行数  coveredLines: number;
   // 覆盖率百分比  percentage: number;
   // 文件覆盖率  files: Record<string;
-    { lines: number;,
-  covered: number;,
+    { lines: number;
+  covered: number;
   percentage: number;
 }
   >
@@ -76,15 +75,15 @@ export interface PerformanceReport {
   // 平均响应时间  averageResponseTime: number;
   // 最大响应时间  maxResponseTime: number;
   // 最小响应时间  minResponseTime: number;
-  // 内存使用  memoryUsage: { peak: number;,
+  // 内存使用  memoryUsage: { peak: number;
   average: number;
 }
-  // CPU使用率  cpuUsage: { peak: number,
-    average: number}
-  // 网络请求统计  networkStats: { totalRequests: number,
-    successfulRequests: number,
-    failedRequests: number,
-    averageLatency: number}
+  // CPU使用率  cpuUsage: { peak: number;
+    average: number;}
+  // 网络请求统计  networkStats: { totalRequests: number;
+    successfulRequests: number;
+    failedRequests: number;
+    averageLatency: number;}
 }
 export class AutomatedTestService   {private static instance: AutomatedTestService;
   private testSuites: Map<string, TestSuite>;
@@ -104,106 +103,106 @@ export class AutomatedTestService   {private static instance: AutomatedTestServi
   }
   // 初始化默认测试套件  private initializeDefaultTestSuites(): void {
     const apiTestSuite: TestSuite = {,
-  id: "api-integration",
-      name: "API集成测试",
-      description: "测试所有API端点的集成功能",
+  id: "api-integration";
+
+
       testCases: [{,
-  id: "auth-login",
-          name: "用户登录测试",
-          description: "测试用户登录功能",
-          type: "integration",
-          priority: "critical",
+  id: "auth-login";
+
+
+          type: "integration";
+          priority: "critical";
           tags: ["auth",login"],
-          testFn: this.testUserLogin.bind(this),
-          timeout: 10000,
+          testFn: this.testUserLogin.bind(this);
+          timeout: 10000;
           retries: 2;
         },
         {
-      id: "health-data-upload",
-      name: "健康数据上传测试",
-          description: "测试健康数据上传功能",
-          type: "integration",
-          priority: "high",
+      id: "health-data-upload";
+
+
+          type: "integration";
+          priority: "high";
           tags: ["health",upload"],
-          testFn: this.testHealthDataUpload.bind(this),
-          timeout: 15000,
-          retries: 1,
+          testFn: this.testHealthDataUpload.bind(this);
+          timeout: 15000;
+          retries: 1;
           dependencies: ["auth-login"]
-        }
+        ;}
       ],
       config: {,
-  parallel: false,
-        maxConcurrency: 1,
-        timeout: 30000,
+  parallel: false;
+        maxConcurrency: 1;
+        timeout: 30000;
         retries: 1;
       }
     }
     const agentTestSuite: TestSuite = {,
-  id: "agent-collaboration",
-      name: "智能体协作测试",
-      description: "测试四个智能体的协作功能",
+  id: "agent-collaboration";
+
+
       testCases: [{,
-  id: "agent-communication",
-          name: "智能体通信测试",
-          description: "测试智能体之间的通信协议",
-          type: "integration",
-          priority: "high",
+  id: "agent-communication";
+
+
+          type: "integration";
+          priority: "high";
           tags: ["agent",communication"],
-          testFn: this.testAgentCommunication.bind(this),
-          timeout: 20000,
+          testFn: this.testAgentCommunication.bind(this);
+          timeout: 20000;
           retries: 2;
         },
         {
-      id: "agent-workflow",
-      name: "智能体工作流测试",
-          description: "测试智能体协作工作流",
-          type: "e2e",
-          priority: "high",
+      id: "agent-workflow";
+
+
+          type: "e2e";
+          priority: "high";
           tags: ["agent",workflow"],
-          testFn: this.testAgentWorkflow.bind(this),
-          timeout: 30000,
-          retries: 1,
+          testFn: this.testAgentWorkflow.bind(this);
+          timeout: 30000;
+          retries: 1;
           dependencies: ["agent-communication"]
-        }
+        ;}
       ],
       config: {,
-  parallel: true,
-        maxConcurrency: 2,
-        timeout: 60000,
+  parallel: true;
+        maxConcurrency: 2;
+        timeout: 60000;
         retries: 1;
       }
     }
     const performanceTestSuite: TestSuite = {,
-  id: "performance",
-      name: "性能测试",
-      description: "测试系统性能指标",
+  id: "performance";
+
+
       testCases: [{,
-  id: "load-test",
-          name: "负载测试",
-          description: "测试系统在高负载下的表现",
-          type: "performance",
-          priority: "medium",
+  id: "load-test";
+
+
+          type: "performance";
+          priority: "medium";
           tags: ["performance",load"],
-          testFn: this.testSystemLoad.bind(this),
-          timeout: 60000,
+          testFn: this.testSystemLoad.bind(this);
+          timeout: 60000;
           retries: 0;
         },
         {
-      id: "stress-test",
-      name: "压力测试",
-          description: "测试系统的极限承载能力",
-          type: "performance",
-          priority: "medium",
+      id: "stress-test";
+
+
+          type: "performance";
+          priority: "medium";
           tags: ["performance",stress"],
-          testFn: this.testSystemStress.bind(this),
-          timeout: 120000,
+          testFn: this.testSystemStress.bind(this);
+          timeout: 120000;
           retries: 0;
         }
       ],
       config: {,
-  parallel: false,
-        maxConcurrency: 1,
-        timeout: 180000,
+  parallel: false;
+        maxConcurrency: 1;
+        timeout: 180000;
         retries: 0;
       }
     }
@@ -214,21 +213,21 @@ export class AutomatedTestService   {private static instance: AutomatedTestServi
   ///    >  {
     const suite = this.testSuites.get(suiteI;d;);
     if (!suite) {
-      throw new Error(`测试套件不存在: ${suiteId};`;);
+
     }
     const runId = `run-${Date.now()}-${Math.random();
       .toString(36);
       .substr(2, 9);};`
-    const testRun: TestRun = {id: runId,
+    const testRun: TestRun = {id: runId;
       suiteId,
-      status: "running",
-      startTime: Date.now(),
-      totalTests: suite.testCases.length,
-      passedTests: 0,
-      failedTests: 0,
-      skippedTests: 0,
+      status: "running";
+      startTime: Date.now();
+      totalTests: suite.testCases.length;
+      passedTests: 0;
+      failedTests: 0;
+      skippedTests: 0;
       results: []
-    };
+    ;};
     this.testRuns.set(runId, testRun);
     this.activeRuns.add(runId);
     try {
@@ -242,7 +241,7 @@ export class AutomatedTestService   {private static instance: AutomatedTestServi
       testRun.coverage = await this.generateCoverageReport(testRun;);
       testRun.performance = await this.generatePerformanceReport(testRun;);
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : "未知错;误;";
+
       testRun.status = "failed";
       testRun.endTime = Date.now();
       } finally {
@@ -284,17 +283,17 @@ export class AutomatedTestService   {private static instance: AutomatedTestServi
         )
         if (failedDependencies.length > 0) {
           result = {
-            testId: testCase.id,
-            status: "skipped",
-            duration: 0,
+            testId: testCase.id;
+            status: "skipped";
+            duration: 0;
             startTime,
-            endTime: startTime,
+            endTime: startTime;
             error: {,
-  message: `依赖测试失败: ${failedDependencies;
+
                 .map(d) => d.testId)
-                .join(",)}`,
+                .join(",);}`,
               type: "DependencyError"
-            }
+            ;}
           };
           testRun.skippedTests++;
           testRun.results.push(result);
@@ -303,39 +302,39 @@ export class AutomatedTestService   {private static instance: AutomatedTestServi
       }
       const testResult = await Promise.race([;)
         testCase.testFn(),new Promise<never>(_, reject) =>;
-          setTimeou;t;() => reject(new Error("测试超时");), testCase.timeout)
+
         )
       ])
       result = {
   // 性能监控
 const performanceMonitor = usePerformanceMonitor(AutomatedTestService", {")
-    trackRender: true,
-    trackMemory: false,warnThreshold: 100, // ms };);
+    trackRender: true;
+    trackMemory: false,warnThreshold: 100, // ms ;};);
         ...testResult,
-        testId: testCase.id,
+        testId: testCase.id;
         duration: Date.now(); - startTime,
         startTime,
-        endTime: Date.now()}
+        endTime: Date.now();}
       if (result.status === "passed") {
         testRun.passedTests++;
       } else {
         testRun.failedTests++
       }
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : "未知错;误;";
+
       const errorStack = error instanceof Error ? error.stack : undefin;e;d;
 result = {
-        testId: testCase.id,
-        status: "error",
-        duration: Date.now() - startTime,
+        testId: testCase.id;
+        status: "error";
+        duration: Date.now() - startTime;
         startTime,
-        endTime: Date.now(),
+        endTime: Date.now();
         error: {,
-  message: errorMessage,
-          stack: errorStack,
+  message: errorMessage;
+          stack: errorStack;
           type:
             error instanceof Error ? error.constructor.name : "UnknownError"
-        }
+        ;}
       };
       testRun.failedTests++;
     }
@@ -345,9 +344,9 @@ result = {
     const sorted: TestCase[] = [];
     const visited = new Set<string>;
     const visiting = new Set<string>;
-    const visit = (testCase: TestCase) => {}
+    const visit = (testCase: TestCase) => {;}
       if (visiting.has(testCase.i;d;)) {
-        throw new Error(`检测到循环依赖: ${testCase.id};`;);
+
       }
       if (visited.has(testCase.id);) {
         return;
@@ -375,24 +374,24 @@ result = {
     try {
       await new Promise(resolve;); => setTimeout(resolve, 1000);)
       assertions.push({
-      description: "登录接口响应正常",
-      passed: true,
-        expected: 200,
+
+      passed: true;
+        expected: 200;
         actual: 200;
       });
       assertions.push({
-      description: "返回有效的token",
-      passed: true,
-        expected: "string",
+
+      passed: true;
+        expected: "string";
         actual: "mock_token_123"
-      });
+      ;});
       return {
-      testId: "auth-login",
+      testId: "auth-login";
       status: "passed",duration: 0,startTime: 0,endTime: 0,assertion;s;}
     } catch (error) {
       return {
-      testId: "auth-login",
-      status: "failed",duration: 0,startTime: 0,endTime: 0,assertions,error: {message: error instanceof Error ? error.message : "登录测试失败",type: "TestError"};};
+      testId: "auth-login";
+
     }
   }
   private async testHealthDataUpload(): Promise<TestResult /    > {
@@ -400,18 +399,18 @@ result = {
     try {
       await new Promise(resolve;); => setTimeout(resolve, 1500);)
       assertions.push({
-      description: "数据上传成功",
-      passed: true,
-        expected: "success",
+
+      passed: true;
+        expected: "success";
         actual: "success"
-      });
+      ;});
       return {
-      testId: "health-data-upload",
+      testId: "health-data-upload";
       status: "passed",duration: 0,startTime: 0,endTime: 0,assertion;s;}
     } catch (error) {
       return {
-      testId: "health-data-upload",
-      status: "failed",duration: 0,startTime: 0,endTime: 0,assertions,error: {message: error instanceof Error ? error.message : "数据上传测试失败",type: "TestError"};};
+      testId: "health-data-upload";
+
     }
   }
   private async testAgentCommunication(): Promise<TestResult /    > {
@@ -419,19 +418,19 @@ result = {
     try {
       await new Promise(resolve;); => setTimeout(resolve, 2000);)
       assertions.push({
-      description: "智能体间通信正常",
-      passed: true,
-        expected: "connected",
+
+      passed: true;
+        expected: "connected";
         actual: "connected"
-      });
+      ;});
       return {
-      testId: "agent-communication",
+      testId: "agent-communication";
       status: "passed",duration: 0,startTime: 0,endTime: 0,assertion;s;}
     } catch (error) {
       return {
-      testId: "agent-communication",
+      testId: "agent-communication";
       status: "failed",duration: 0,startTime: 0,endTime: 0,assertions,error: {message:;
-            error instanceof Error ? error.message : "智能体通信测试失败",type: "TestError"};};
+
     }
   }
   private async testAgentWorkflow(): Promise<TestResult /    > {
@@ -439,23 +438,23 @@ result = {
     try {
       await new Promise(resolve;); => setTimeout(resolve, 3000);)
       assertions.push({
-      description: "工作流执行完成",
-      passed: true,
-        expected: "completed",
+
+      passed: true;
+        expected: "completed";
         actual: "completed"
-      });
+      ;});
       return {
-      testId: "agent-workflow",
+      testId: "agent-workflow";
       status: "passed",duration: 0,startTime: 0,endTime: 0,assertion;s;}
     } catch (error) {
       return {
-      testId: "agent-workflow",
+      testId: "agent-workflow";
       status: "failed",duration: 0,startTime: 0,endTime: 0,assertions,error: {message:;
-            error instanceof Error ? error.message : "智能体工作流测试失败",type: "TestError"};};
+
     }
   }
   private async testSystemLoad(): Promise<TestResult /    > {
-    const metrics: Record<string, number> = {};
+    const metrics: Record<string, number> = {;};
     try {
       const startTime = Date.now;
       await new Promise(resolve;); => setTimeout(resolve, 5000););
@@ -463,28 +462,28 @@ result = {
       metrics.throughput = Math.random(); * 1000 + 800;
       metrics.errorRate = Math.random(); * 2;
 return {
-      testId: "load-test",
+      testId: "load-test";
       status: "passed",duration: 0,startTime: 0,endTime: 0,metric;s;}
     } catch (error) {
       return {
-      testId: "load-test",
-      status: "failed",duration: 0,startTime: 0,endTime: 0,metrics,error: {message: error instanceof Error ? error.message : "负载测试失败",type: "TestError"};};
+      testId: "load-test";
+
     }
   }
   private async testSystemStress(): Promise<TestResult /    > {
-    const metrics: Record<string, number> = {};
+    const metrics: Record<string, number> = {;};
     try {
       await new Promise(resolve;); => setTimeout(resolve, 8000););
       metrics.maxConcurrency = Math.random(); * 500 + 200;
       metrics.memoryPeak = Math.random(); * 1000 + 500;
       metrics.cpuPeak = Math.random(); * 100 + 50;
 return {
-      testId: "stress-test",
+      testId: "stress-test";
       status: "passed",duration: 0,startTime: 0,endTime: 0,metric;s;}
     } catch (error) {
       return {
-      testId: "stress-test",
-      status: "failed",duration: 0,startTime: 0,endTime: 0,metrics,error: {message: error instanceof Error ? error.message : "压力测试失败",type: "TestError"};};
+      testId: "stress-test";
+
     }
   }
   ///    >  {
@@ -492,20 +491,20 @@ return {
     const coveredLines = Math.floor(totalLines * (0.7 + Math.random * 0.2));
     return {totalLines,coveredLines,percentage: (coveredLines / totalLines) * 100,/          files: {"src/agents/XiaoaiAgentImpl.ts": {/              lines: 500,covered: 450,percentage: 90;
         },
-        "src/agents/XiaokeAgentImpl.ts": {/              lines: 400,
-          covered: 320,
+        "src/agents/XiaokeAgentImpl.ts": {/              lines: 400;
+          covered: 320;
           percentage: 80;
         },
-        "src/services/api/ApiService.ts": {/              lines: 300,
-          covered: 240,
-          percentage: 80}}
+        "src/services/api/ApiService.ts": {/              lines: 300;
+          covered: 240;
+          percentage: 80;}}
     ;};
   }
   ///    >  {
     const responseTimes = testRun.results.map(r); => r.duration);
     return {averageResponseTime:;
-        responseTimes.reduce(a,b;); => a + b, 0) / responseTimes.length,/          maxResponseTime: Math.max(...responseTimes),
-      minResponseTime: Math.min(...responseTimes),
+        responseTimes.reduce(a,b;); => a + b, 0) / responseTimes.length,/          maxResponseTime: Math.max(...responseTimes);
+      minResponseTime: Math.min(...responseTimes);
       memoryUsage: {,
   peak: Math.random(); * 1000 + 500,
         average: Math.random(); * 800 + 400;
@@ -515,9 +514,9 @@ return {
         average: Math.random(); * 60 + 30;
       },
       networkStats: {,
-  totalRequests: testRun.totalTests * 5,
-        successfulRequests: testRun.passedTests * 5,
-        failedRequests: testRun.failedTests * 5,
+  totalRequests: testRun.totalTests * 5;
+        successfulRequests: testRun.passedTests * 5;
+        failedRequests: testRun.failedTests * 5;
         averageLatency: Math.random(); * 200 + 50;
       }
     };

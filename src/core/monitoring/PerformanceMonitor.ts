@@ -3,20 +3,20 @@
 * 监控应用性能指标并提供优化建议
 */
 export interface PerformanceMetric {
-  name: string;,
-  value: number;,
-  unit: string;,
-  timestamp: number;,
+  name: string;
+  value: number;
+  unit: string;
+  timestamp: number;
   category: 'network' | 'rendering' | 'memory' | 'cpu' | 'user_interaction';
   threshold?: number;
   status: 'good' | 'warning' | 'critical';
 }
 export interface PerformanceReport {
-  timestamp: number;,
-  metrics: PerformanceMetric[];,
-  summary: {;,
-  score: number;,
-  issues: string[];,
+  timestamp: number;
+  metrics: PerformanceMetric[];
+  summary: {
+  score: number;
+  issues: string[];
   recommendations: string[];
 };
 }
@@ -42,7 +42,7 @@ export class PerformanceMonitor {
     this.isMonitoring = true;
     this.collectInitialMetrics();
     this.startPeriodicCollection();
-    console.log('🚀 性能监控已启动');
+
   }
   /**
   * 停止性能监控
@@ -51,26 +51,26 @@ export class PerformanceMonitor {
     this.isMonitoring = false;
     this.observers.forEach(observer => observer.disconnect());
     this.observers = [];
-    console.log('⏹️ 性能监控已停止');
+
   }
   /**
   * 记录自定义性能指标
   */
   public recordMetric()
-    name: string,
-    value: number,
-    unit: string,
-    category: PerformanceMetric['category'],
-    threshold?: number,
+    name: string;
+    value: number;
+    unit: string;
+    category: PerformanceMetric['category'];
+    threshold?: number;
   ): void {
     const metric: PerformanceMetric = {
       name,
       value,
       unit,
-      timestamp: Date.now(),
+      timestamp: Date.now();
       category,
       threshold,
-      status: this.getMetricStatus(value, threshold)};
+      status: this.getMetricStatus(value, threshold);};
     this.metrics.push(metric);
     this.trimMetrics();
   }
@@ -78,8 +78,8 @@ export class PerformanceMonitor {
   * 测量函数执行时间
   */
   public async measureFunction<T>()
-    name: string,
-    fn: () => Promise<T> | T,
+    name: string;
+    fn: () => Promise<T> | T;
   ): Promise<T> {
     const startTime = performance.now();
     try {
@@ -107,7 +107,7 @@ export class PerformanceMonitor {
   */
   public measureApiRequest(url: string, duration: number, status: number): void {
     this.recordMetric()
-      `api_request_${this.getUrlPath(url)}`,
+      `api_request_${this.getUrlPath(url);}`,
       duration,
       "ms",network',
       2000, // 2s threshold;
@@ -129,12 +129,12 @@ export class PerformanceMonitor {
     const issues = this.identifyIssues(recentMetrics);
     const recommendations = this.generateRecommendations(issues);
     return {
-      timestamp: Date.now(),
-      metrics: recentMetrics,
+      timestamp: Date.now();
+      metrics: recentMetrics;
       summary: {
         score,
         issues,
-        recommendations}};
+        recommendations;}};
   }
   /**
   * 获取关键性能指标
@@ -153,28 +153,28 @@ export class PerformanceMonitor {
       return metric?.value || 0;
     };
     return {
-      fcp: getLatestMetric('first_contentful_paint'),
-      lcp: getLatestMetric('largest_contentful_paint'),
-      fid: getLatestMetric('first_input_delay'),
-      cls: getLatestMetric('cumulative_layout_shift'),
-      ttfb: getLatestMetric('time_to_first_byte')};
+      fcp: getLatestMetric('first_contentful_paint');
+      lcp: getLatestMetric('largest_contentful_paint');
+      fid: getLatestMetric('first_input_delay');
+      cls: getLatestMetric('cumulative_layout_shift');
+      ttfb: getLatestMetric('time_to_first_byte');};
   }
   /**
   * 获取内存使用情况
   */
   public getMemoryUsage(): {
-    used: number,
-  total: number;,
+    used: number;
+  total: number;
   percentage: number;
   } {
     if ('memory' in performance) {
       const memory = (performance as any).memory;
       return {
-        used: memory.usedJSHeapSize,
-        total: memory.totalJSHeapSize,
-        percentage: (memory.usedJSHeapSize / memory.totalJSHeapSize) * 100};
+        used: memory.usedJSHeapSize;
+        total: memory.totalJSHeapSize;
+        percentage: (memory.usedJSHeapSize / memory.totalJSHeapSize) * 100;};
     }
-    return { used: 0, total: 0, percentage: 0 };
+    return { used: 0, total: 0, percentage: 0 ;};
   }
   /**
   * 设置性能观察器
@@ -191,7 +191,7 @@ export class PerformanceMonitor {
           }
         });
       });
-      navObserver.observe({ entryTypes: ['navigation'] });
+      navObserver.observe({ entryTypes: ['navigation'] ;});
       this.observers.push(navObserver);
     } catch (e) {
       console.warn('Navigation observer not supported');
@@ -205,7 +205,7 @@ export class PerformanceMonitor {
           }
         });
       });
-      resourceObserver.observe({ entryTypes: ['resource'] });
+      resourceObserver.observe({ entryTypes: ['resource'] ;});
       this.observers.push(resourceObserver);
     } catch (e) {
       console.warn('Resource observer not supported');
@@ -219,7 +219,7 @@ export class PerformanceMonitor {
           }
         });
       });
-      interactionObserver.observe({ entryTypes: ['event'] });
+      interactionObserver.observe({ entryTypes: ['event'] ;});
       this.observers.push(interactionObserver);
     } catch (e) {
       console.warn('Event observer not supported');
@@ -286,7 +286,7 @@ export class PerformanceMonitor {
   */
   private recordInteractionMetric(entry: PerformanceEventTiming): void {
     this.recordMetric()
-      `interaction_${entry.name}`,
+      `interaction_${entry.name;}`,
       entry.duration,
       "ms",user_interaction',
       100, // 100ms threshold;
@@ -307,9 +307,9 @@ export class PerformanceMonitor {
   private calculatePerformanceScore(metrics: PerformanceMetric[]): number {
     if (metrics.length === 0) return 100;
     const weights = {
-      good: 1,
-      warning: 0.7,
-      critical: 0.3};
+      good: 1;
+      warning: 0.7;
+      critical: 0.3;};
     const totalWeight = metrics.reduce(sum, metric) => sum + weights[metric.status], 0);
     const maxWeight = metrics.length;
     return Math.round(totalWeight / maxWeight) * 100);
@@ -322,20 +322,20 @@ export class PerformanceMonitor {
     const criticalMetrics = metrics.filter(m => m.status === 'critical');
     const warningMetrics = metrics.filter(m => m.status === 'warning');
     if (criticalMetrics.length > 0) {
-      issues.push(`发现 ${criticalMetrics.length} 个严重性能问题`);
+
     }
     if (warningMetrics.length > 0) {
-      issues.push(`发现 ${warningMetrics.length} 个性能警告`);
+
     }
     // 检查特定问题
     const memoryMetric = metrics.find(m => m.name === 'memory_usage');
     if (memoryMetric && memoryMetric.value > 90) {
-      issues.push('内存使用率过高');
+
     }
     const apiMetrics = metrics.filter(m => m.name.startsWith('api_request_'));
     const slowApis = apiMetrics.filter(m => m.value > 3000);
     if (slowApis.length > 0) {
-      issues.push(`${slowApis.length} 个API请求响应过慢`);
+
     }
     return issues;
   }
@@ -344,17 +344,17 @@ export class PerformanceMonitor {
   */
   private generateRecommendations(issues: string[]): string[] {
     const recommendations: string[] = [];
-    if (issues.some(issue => issue.includes('内存'))) {
-      recommendations.push('考虑优化内存使用，清理不必要的对象引用');
+
+
     }
     if (issues.some(issue => issue.includes('API'))) {
-      recommendations.push('优化API请求，考虑使用缓存或请求合并');
+
     }
-    if (issues.some(issue => issue.includes('严重'))) {
-      recommendations.push('立即检查严重性能问题，可能影响用户体验');
+
+
     }
     if (recommendations.length === 0) {
-      recommendations.push('性能表现良好，继续保持');
+
     }
     return recommendations;
   }

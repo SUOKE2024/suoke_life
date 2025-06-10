@@ -290,7 +290,7 @@ export class FiveDiagnosisEngine {
       this.emit("engine:initialized");
       
     } catch (error) {
-      this.emit("engine:initialization_failed", { error });
+      this.emit("engine:initialization_failed", { error ;});
       throw error;
     }
   }
@@ -317,7 +317,7 @@ export class FiveDiagnosisEngine {
       await this.normalizeInput(input);
       
       // 执行各诊法分析
-      const diagnosisResults: DiagnosisResult['diagnosisResults'] = {};
+      const diagnosisResults: DiagnosisResult['diagnosisResults'] = {;};
       
       if (input.lookingData) {
         diagnosisResults.looking = await this.performLookingDiagnosis(input.lookingData);
@@ -347,20 +347,20 @@ export class FiveDiagnosisEngine {
       
       // 计算性能指标
       const performanceMetrics = {
-        processingTime: Date.now() - startTime,
-        memoryUsage: process.memoryUsage().heapUsed,
+        processingTime: Date.now() - startTime;
+        memoryUsage: process.memoryUsage().heapUsed;
         algorithmVersions: {
-          engine: "1.0.0",
+          engine: "1.0.0";
           knowledgeBase: "1.0.0"
-        }
+        ;}
       };
       
       const result: DiagnosisResult = {
-        sessionId: input.sessionId,
-        userId: input.userId,
-        timestamp: Date.now(),
-        confidence: fusionResult.confidence,
-        analysis: this.generateOverallAnalysis(fusionResult),
+        sessionId: input.sessionId;
+        userId: input.userId;
+        timestamp: Date.now();
+        confidence: fusionResult.confidence;
+        analysis: this.generateOverallAnalysis(fusionResult);
         diagnosisResults,
         fusionResult,
         qualityReport,
@@ -373,7 +373,7 @@ export class FiveDiagnosisEngine {
       return result;
       
     } catch (error) {
-      this.emit("analysis:failed", { error, input });
+      this.emit("analysis:failed", { error, input ;});
       throw error;
     }
   }
@@ -384,23 +384,23 @@ export class FiveDiagnosisEngine {
   private async performLookingDiagnosis(data: LookingData): Promise<LookingResult> {
     // 模拟望诊分析
     return {
-      confidence: 0.85,
+      confidence: 0.85;
       features: [
-        { type: "tongue_color", value: "red", significance: 0.8 },
-        { type: "face_complexion", value: "pale", significance: 0.7 }
+        { type: "tongue_color", value: "red", significance: 0.8 ;},
+        { type: "face_complexion", value: "pale", significance: 0.7 ;}
       ],
-      analysis: "舌红苔薄，面色偏白，提示气血不足，可能存在脾胃虚弱的情况。",
+
       tongueAnalysis: {
-        color: "红",
-        coating: "薄白",
-        texture: "正常",
-        moisture: "适中"
-      },
+
+
+
+
+      ;},
       faceAnalysis: {
-        complexion: "偏白",
-        expression: "疲倦",
-        eyeCondition: "略显无神"
-      }
+
+
+
+      ;}
     };
   }
 
@@ -410,19 +410,19 @@ export class FiveDiagnosisEngine {
   private async performListeningDiagnosis(data: ListeningData): Promise<ListeningResult> {
     // 模拟闻诊分析
     return {
-      confidence: 0.75,
+      confidence: 0.75;
       voiceAnalysis: {
-        tone: "低沉",
-        volume: "偏小",
-        clarity: "清晰",
-        rhythm: "缓慢"
-      },
+
+
+
+
+      ;},
       breathingAnalysis: {
-        pattern: "浅表",
-        depth: "偏浅",
+
+
         rate: 18
-      },
-      analysis: "声音低沉，呼吸偏浅，提示肺气不足，可能存在肺脾气虚的情况。"
+      ;},
+
     };
   }
 
@@ -432,15 +432,15 @@ export class FiveDiagnosisEngine {
   private async performInquiryDiagnosis(data: InquiryData): Promise<InquiryResult> {
     // 模拟问诊分析
     return {
-      confidence: 0.90,
+      confidence: 0.90;
       symptomAnalysis: data.symptoms.map(symptom => ({
         symptom,
-        severity: data.severity || 5,
-        pattern: "虚证",
+        severity: data.severity || 5;
+
         significance: 0.8
-      })),
-      syndromePatterns: ["脾胃虚弱", "气血不足"],
-      analysis: "主要症状表现为虚证特征，符合脾胃虚弱、气血不足的证候特点。"
+      ;})),
+
+
     };
   }
 
@@ -450,13 +450,13 @@ export class FiveDiagnosisEngine {
   private async performPalpationDiagnosis(data: PalpationData): Promise<PalpationResult> {
     // 模拟切诊分析
     return {
-      confidence: 0.80,
+      confidence: 0.80;
       pulseAnalysis: {
-        type: "细弱脉",
-        characteristics: ["细", "弱", "缓"],
-        pathology: ["气血不足", "脾胃虚弱"]
-      },
-      analysis: "脉象细弱，提示气血不足，脾胃功能偏弱。"
+
+
+
+      ;},
+
     };
   }
 
@@ -466,18 +466,18 @@ export class FiveDiagnosisEngine {
   private async performCalculationDiagnosis(data: CalculationData): Promise<CalculationResult> {
     // 模拟算诊分析
     return {
-      confidence: 0.70,
+      confidence: 0.70;
       fiveElements: {
-        primary: "土",
-        secondary: ["金", "水"],
+
+
         balance: 0.6
-      },
+      ;},
       constitution: {
-        type: "脾虚质",
-        characteristics: ["消化功能偏弱", "容易疲劳", "面色偏黄"],
-        tendencies: ["湿邪内生", "气血生化不足"]
-      },
-      analysis: "五行以土为主，金水相生，但土气偏弱，体质偏向脾虚，需要健脾益气。"
+
+
+
+      ;},
+
     };
   }
 
@@ -485,7 +485,7 @@ export class FiveDiagnosisEngine {
    * 执行融合分析
    */
   private async performFusionAnalysis(
-    diagnosisResults: DiagnosisResult['diagnosisResults'],
+    diagnosisResults: DiagnosisResult['diagnosisResults'];
     input: DiagnosisInput
   ): Promise<FusionResult> {
     // 模拟融合分析
@@ -498,40 +498,40 @@ export class FiveDiagnosisEngine {
       : 0.5;
 
     return {
-      confidence: averageConfidence,
+      confidence: averageConfidence;
       primarySyndromes: [
         {
-          name: "脾胃虚弱",
-          confidence: 0.85,
-          evidence: ["舌淡苔白", "脉细弱", "面色偏白", "声音低沉"]
+
+          confidence: 0.85;
+
         },
         {
-          name: "气血不足",
-          confidence: 0.80,
-          evidence: ["面色无华", "脉细弱", "疲倦乏力"]
+
+          confidence: 0.80;
+
         }
       ],
       constitutionAnalysis: {
-        primaryType: "脾虚质",
-        secondaryTypes: ["气虚质"],
+
+
         confidence: 0.82
-      },
+      ;},
       recommendations: [
         {
-          type: "饮食调理",
-          description: "多食健脾益气食物，如山药、薏米、红枣等",
+
+
           priority: 1
-        },
+        ;},
         {
-          type: "运动建议",
-          description: "适量有氧运动，如散步、太极拳等",
+
+
           priority: 2
-        },
+        ;},
         {
-          type: "生活起居",
-          description: "规律作息，避免过度劳累",
+
+
           priority: 3
-        }
+        ;}
       ]
     };
   }
@@ -540,7 +540,7 @@ export class FiveDiagnosisEngine {
    * 生成质量报告
    */
   private async generateQualityReport(
-    diagnosisResults: DiagnosisResult['diagnosisResults'],
+    diagnosisResults: DiagnosisResult['diagnosisResults'];
     fusionResult: FusionResult
   ): Promise<DiagnosisResult['qualityReport']> {
     const warnings: string[] = [];
@@ -549,20 +549,20 @@ export class FiveDiagnosisEngine {
     // 检查数据完整性
     const availableDiagnoses = Object.keys(diagnosisResults).length;
     if (availableDiagnoses < 3) {
-      warnings.push("诊断数据不够完整，建议补充更多诊法数据");
+
     }
     
     // 检查置信度
     if (fusionResult.confidence < 0.7) {
-      warnings.push("整体诊断置信度偏低，建议进一步检查");
+
     }
     
     // 生成建议
-    recommendations.push("建议结合临床医生的专业判断");
-    recommendations.push("定期复查以跟踪病情变化");
+
+
     
     return {
-      overallScore: fusionResult.confidence,
+      overallScore: fusionResult.confidence;
       warnings,
       recommendations
     };
@@ -575,7 +575,7 @@ export class FiveDiagnosisEngine {
     const primarySyndrome = fusionResult.primarySyndromes[0];
     const constitution = fusionResult.constitutionAnalysis;
     
-    return `根据中医五诊综合分析，患者主要表现为${primarySyndrome.name}，体质类型为${constitution.primaryType}。建议采用健脾益气的治疗原则，配合适当的饮食调理和生活方式调整。`;
+
   }
 
   /**
@@ -583,8 +583,8 @@ export class FiveDiagnosisEngine {
    */
   private async validateInput(input: DiagnosisInput): Promise<void> {
     if (!input.userId || !input.sessionId) {
-      throw new Error("用户ID和会话ID不能为空");
-    }
+
+    ;}
     
     if (!input.timestamp) {
       input.timestamp = Date.now();
@@ -641,44 +641,44 @@ export class FiveDiagnosisEngine {
   // 验证方法（简化实现）
   private async validateLookingData(data: LookingData): Promise<void> {
     // 验证望诊数据
-  }
+  ;}
 
   private async validateListeningData(data: ListeningData): Promise<void> {
     // 验证闻诊数据
-  }
+  ;}
 
   private async validateInquiryData(data: InquiryData): Promise<void> {
     // 验证问诊数据
-  }
+  ;}
 
   private async validatePalpationData(data: PalpationData): Promise<void> {
     // 验证切诊数据
-  }
+  ;}
 
   private async validateCalculationData(data: CalculationData): Promise<void> {
     // 验证算诊数据
-  }
+  ;}
 
   // 标准化方法（简化实现）
   private async normalizeLookingData(data: LookingData): Promise<void> {
     // 标准化望诊数据
-  }
+  ;}
 
   private async normalizeListeningData(data: ListeningData): Promise<void> {
     // 标准化闻诊数据
-  }
+  ;}
 
   private async normalizeInquiryData(data: InquiryData): Promise<void> {
     // 标准化问诊数据
-  }
+  ;}
 
   private async normalizePalpationData(data: PalpationData): Promise<void> {
     // 标准化切诊数据
-  }
+  ;}
 
   private async normalizeCalculationData(data: CalculationData): Promise<void> {
     // 标准化算诊数据
-  }
+  ;}
 
   /**
    * 事件发射器
@@ -689,7 +689,7 @@ export class FiveDiagnosisEngine {
       try {
         listener(data);
       } catch (error) {
-        console.error(`事件监听器执行失败: ${event}`, error);
+
       }
     });
   }
@@ -735,9 +735,9 @@ export class FiveDiagnosisEngine {
     lastMaintenanceTime: number;
   } {
     return {
-      isInitialized: this.isInitialized,
-      sessionCount: this.sessionCount,
+      isInitialized: this.isInitialized;
+      sessionCount: this.sessionCount;
       lastMaintenanceTime: this.lastMaintenanceTime
-    };
+    ;};
   }
 }

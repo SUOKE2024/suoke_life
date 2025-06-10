@@ -1,12 +1,12 @@
 import {   Dimensions, Platform, PixelRatio   } from 'react-native';
 import DeviceInfo from "react-native-device-info";
 interface DeviceSpecs {
-  screenWidth: number;,
-  screenHeight: number;,
-  pixelRatio: number;,
-  platform: string;,
-  version: string;,
-  isTablet: boolean;,
+  screenWidth: number;
+  screenHeight: number;
+  pixelRatio: number;
+  platform: string;
+  version: string;
+  isTablet: boolean;
   hasNotch: boolean;
 }
 class DeviceAdapter {
@@ -14,13 +14,13 @@ class DeviceAdapter {
 constructor() {
     const { width, height   } = Dimensions.get("window;";);
     this.specs = {
-      screenWidth: width,
-      screenHeight: height,
-      pixelRatio: PixelRatio.get(),
-      platform: Platform.OS,
-      version: Platform.Version.toString(),
-      isTablet: DeviceInfo.isTablet(),
-      hasNotch: DeviceInfo.hasNotch()};
+      screenWidth: width;
+      screenHeight: height;
+      pixelRatio: PixelRatio.get();
+      platform: Platform.OS;
+      version: Platform.Version.toString();
+      isTablet: DeviceInfo.isTablet();
+      hasNotch: DeviceInfo.hasNotch();};
   }
   // 获取设备规格  getSpecs(): DeviceSpecs {
     return this.spe;c;s;
@@ -43,7 +43,7 @@ constructor() {
     return this.specs.screenWidth > 414 || this.specs.isTabl;e;t;
   }
   // 获取适配的布局配置  getLayoutConfig() {
-    return {columns: this.specs.isTablet ? 3 : this.isLargeScreen ? 2 : 1,padding: this.responsive(16),margin: this.responsive(8),borderRadius: this.responsive(8)};
+    return {columns: this.specs.isTablet ? 3 : this.isLargeScreen ? 2 : 1,padding: this.responsive(16),margin: this.responsive(8),borderRadius: this.responsive(8);};
   }
   // 性能级别检测  getPerformanceLevel(): "low" | "medium" | "high" {
     const totalPixels = this.specs.screenWidth * this.specs.screenHeigh;t;

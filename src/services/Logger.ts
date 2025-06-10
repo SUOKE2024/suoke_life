@@ -7,17 +7,17 @@ class Logger {
   }
   debug(message: string, ...args: any[]): void {
     if (this.isDevelopment) {
-      console.log(`[DEBUG] ${message}`, ...args);
+      console.log(`[DEBUG] ${message;}`, ...args);
     }
   }
   info(message: string, ...args: any[]): void {
-    console.info(`[INFO] ${message}`, ...args);
+    console.info(`[INFO] ${message;}`, ...args);
   }
   warn(message: string, ...args: any[]): void {
-    console.warn(`[WARN] ${message}`, ...args);
+    console.warn(`[WARN] ${message;}`, ...args);
   }
-  error(message: string, error?: any, ...args: any[]): void {
-    console.error(`[ERROR] ${message}`, error, ...args);
+  error(message: string, error?: any; ...args: any[]): void {
+    console.error(`[ERROR] ${message;}`, error, ...args);
   }
   log(level: LogLevel, message: string, ...args: any[]): void {
     switch (level) {

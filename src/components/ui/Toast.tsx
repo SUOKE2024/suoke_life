@@ -9,7 +9,7 @@ import {;
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
-const { width: screenWidth } = Dimensions.get('window');
+const { width: screenWidth ;} = Dimensions.get('window');
 
 export interface ToastProps {
   /** Toast内容 */
@@ -45,7 +45,7 @@ export const Toast: React.FC<ToastProps> = ({
   icon,
   style,
   textStyle
-}) => {
+;}) => {
   const { currentTheme } = useTheme();
   const styles = createStyles(currentTheme, type, position);
 
@@ -59,16 +59,16 @@ export const Toast: React.FC<ToastProps> = ({
   const showToast = () => {
     Animated.parallel([
       Animated.spring(translateY, {
-        toValue: 0,
-        useNativeDriver: true,
-        tension: 100,
+        toValue: 0;
+        useNativeDriver: true;
+        tension: 100;
         friction: 8
-      }),
+      ;}),
       Animated.timing(opacity, {
-        toValue: 1,
-        duration: 300,
+        toValue: 1;
+        duration: 300;
         useNativeDriver: true
-      })
+      ;})
     ]).start();
   };
 
@@ -76,15 +76,15 @@ export const Toast: React.FC<ToastProps> = ({
   const hideToast = () => {
     Animated.parallel([
       Animated.timing(translateY, {
-        toValue: position === 'top' ? -100 : 100,
-        duration: 250,
+        toValue: position === 'top' ? -100 : 100;
+        duration: 250;
         useNativeDriver: true
-      }),
+      ;}),
       Animated.timing(opacity, {
-        toValue: 0,
-        duration: 250,
+        toValue: 0;
+        duration: 250;
         useNativeDriver: true
-      })
+      ;})
     ]).start() => {
       onClose?.();
     });
@@ -103,11 +103,11 @@ export const Toast: React.FC<ToastProps> = ({
     if (icon) return icon;
 
     const iconMap = {
-      info: 'ℹ️',
-      success: '✅',
-      warning: '⚠️',
+      info: 'ℹ️';
+      success: '✅';
+      warning: '⚠️';
       error: '❌'
-    };
+    ;};
 
     return <Text style={styles.icon}>{iconMap[type]}</Text>;
   };
@@ -141,7 +141,7 @@ export const Toast: React.FC<ToastProps> = ({
           styles.container,
           {
             opacity,
-            transform: [{ translateY }]
+            transform: [{ translateY ;}]
           },
           style
         ]}
@@ -172,31 +172,31 @@ const createStyles = (theme: any, type: string, position: string) => {
       case 'success':
         return {
           background:
-            theme.colors.successContainer || theme.colors.primaryContainer,
-          border: theme.colors.success,
+            theme.colors.successContainer || theme.colors.primaryContainer;
+          border: theme.colors.success;
           text:
             theme.colors.onSuccessContainer || theme.colors.onPrimaryContainer
-        };
+        ;};
       case 'warning':
         return {
           background:
-            theme.colors.warningContainer || theme.colors.primaryContainer,
-          border: theme.colors.warning,
+            theme.colors.warningContainer || theme.colors.primaryContainer;
+          border: theme.colors.warning;
           text:
             theme.colors.onWarningContainer || theme.colors.onPrimaryContainer
-        };
+        ;};
       case 'error':
         return {
-          background: theme.colors.errorContainer,
-          border: theme.colors.error,
+          background: theme.colors.errorContainer;
+          border: theme.colors.error;
           text: theme.colors.onErrorContainer
-        };
+        ;};
       default:
         return {,
-  background: theme.colors.surfaceVariant,
-          border: theme.colors.primary,
+  background: theme.colors.surfaceVariant;
+          border: theme.colors.primary;
           text: theme.colors.onSurfaceVariant
-        };
+        ;};
     }
   };
 
@@ -204,58 +204,58 @@ const createStyles = (theme: any, type: string, position: string) => {
 
   return StyleSheet.create({
     overlay: {,
-  position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      justifyContent: position === 'top' ? 'flex-start' : 'flex-end',
-      alignItems: 'center',
-      paddingTop: position === 'top' ? 50 : 0,
-      paddingBottom: position === 'bottom' ? 50 : 0,
-      paddingHorizontal: theme.spacing.md,
-      pointerEvents: 'box-none',
+  position: 'absolute';
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      justifyContent: position === 'top' ? 'flex-start' : 'flex-end';
+      alignItems: 'center';
+      paddingTop: position === 'top' ? 50 : 0;
+      paddingBottom: position === 'bottom' ? 50 : 0;
+      paddingHorizontal: theme.spacing.md;
+      pointerEvents: 'box-none';
       zIndex: 1000
-    },
+    ;},
     container: {,
-  maxWidth: screenWidth - 32,
-      backgroundColor: colors.background,
-      borderRadius: theme.borderRadius.lg,
-      borderLeftWidth: 4,
-      borderLeftColor: colors.border,
-      shadowColor: theme.colors.shadow,
+  maxWidth: screenWidth - 32;
+      backgroundColor: colors.background;
+      borderRadius: theme.borderRadius.lg;
+      borderLeftWidth: 4;
+      borderLeftColor: colors.border;
+      shadowColor: theme.colors.shadow;
       shadowOffset: {,
-  width: 0,
+  width: 0;
         height: 4
-      },
-      shadowOpacity: 0.15,
-      shadowRadius: 8,
+      ;},
+      shadowOpacity: 0.15;
+      shadowRadius: 8;
       elevation: 8
-    },
+    ;},
     content: {,
-  flexDirection: 'row',
-      alignItems: 'center',
+  flexDirection: 'row';
+      alignItems: 'center';
       padding: theme.spacing.md
-    },
+    ;},
     icon: {,
-  fontSize: 20,
+  fontSize: 20;
       marginRight: theme.spacing.sm
-    },
+    ;},
     message: {,
-  flex: 1,
-      fontSize: theme.typography.fontSize.sm,
-      color: colors.text,
+  flex: 1;
+      fontSize: theme.typography.fontSize.sm;
+      color: colors.text;
       lineHeight: theme.typography.fontSize.sm * 1.4
-    },
+    ;},
     closeButton: {,
-  padding: theme.spacing.xs,
+  padding: theme.spacing.xs;
       marginLeft: theme.spacing.sm
-    },
+    ;},
     closeText: {,
-  fontSize: 18,
-      color: colors.text,
+  fontSize: 18;
+      color: colors.text;
       fontWeight: theme.typography.fontWeight.bold
-    }
+    ;}
   });
 };
 

@@ -1,5 +1,4 @@
-import { SafeAreaView } from "react-native-safe-area-context";
-import React from "react";
+
 // ScreenHeader.tsx   索克生活APP - 自动生成的类型安全文件     @description TODO: 添加文件描述 @author 索克生活开发团队   @version 1.0.0;
 import Icon from "../../components/common/Icon";
 import { colors, spacing, fonts } from ../../constants/theme"// ";
@@ -46,19 +45,19 @@ style={styles.iconButton}
               activeOpacity={0.7}
             accessibilityLabel="输入框左侧图标" />/              <Iconname={leftIcon || (showBackButton ? "arrow-left" : menu")}"
                 size={24}
-                color={isDark ? colors.white: textColor} />/            </TouchableOpacity>/              )}
+                color={isDark ? colors.white: textColor;} />/            </TouchableOpacity>/              )}
         </View>/
         {///              {centerComponent || ()
             <View style={styles.titleContainer}>/                  <Text;
 style={[
                   styles.title,
-                  { color: isDark ? colors.white : textColor}}
+                  { color: isDark ? colors.white : textColor;}}
                 ]}
                 numberOfLines={1} />/                    {title}
               </Text>/                  {subtitle  && <Text;
 style={[
                     styles.subtitle,
-                    { color: isDark ? colors.white : colors.textSecondary}}
+                    { color: isDark ? colors.white : colors.textSecondary;}}
                   ]}
                   numberOfLines={1} />/                      {subtitle}
                 </Text>/                  )}
@@ -70,54 +69,54 @@ style={styles.iconButton}
                 activeOpacity={0.7}
               accessibilityLabel="输入框右侧图标" />/                    <Iconname={rightIcon || "dots-vertical}"
                   size={24}
-                  color={isDark ? colors.white: textColor} />/              </TouchableOpacity>/                )
+                  color={isDark ? colors.white: textColor;} />/              </TouchableOpacity>/                )
           )}
         </View>/      </View>/    </SafeAreaView>/      );
 }
 const styles = StyleSheet.create({container: {),
-  shadowColor: colors.black,
+  shadowColor: colors.black;
     shadowOffset: {,
-  width: 0,
+  width: 0;
       height: 2;
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
+    shadowOpacity: 0.1;
+    shadowRadius: 3;
     elevation: 4;
   },
   header: {,
-  flexDirection: "row",
-    alignItems: center",
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
+  flexDirection: "row";
+    alignItems: center";
+    paddingHorizontal: spacing.md;
+    paddingVertical: spacing.sm;
     minHeight: 56;
   },
   leftSection: {,
-  width: 48,
+  width: 48;
     alignItems: "flex-start"
-  },
+  ;},
   centerSection: {,
-  flex: 1,
-    alignItems: "center",
+  flex: 1;
+    alignItems: "center";
     paddingHorizontal: spacing.sm;
   },
   rightSection: {,
-  width: 48,
+  width: 48;
     alignItems: flex-end""
-  },
+  ;},
   iconButton: {,
-  width: 40,
-    height: 40,
-    borderRadius: 20,
+  width: 40;
+    height: 40;
+    borderRadius: 20;
     justifyContent: "center,",
     alignItems: "center"
-  },
-  titleContainer: { alignItems: center"  },"
+  ;},
+  titleContainer: { alignItems: center"  ;},"
   title: {,
-  fontSize: fonts.size.lg,
+  fontSize: fonts.size.lg;
     fontWeight: "bold,",
     textAlign: "center"
-  },
+  ;},
   subtitle: {,
-  fontSize: fonts.size.sm,
-    textAlign: center",
-    marginTop: 2};};);
+  fontSize: fonts.size.sm;
+    textAlign: center";
+    marginTop: 2;};};);

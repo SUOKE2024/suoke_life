@@ -1,38 +1,37 @@
-import { usePerformanceMonitor } from "../../placeholder";../hooks/    usePerformanceMonitor;
-import { apiClient } from "./    apiClient";
+./    apiClient";
 import React from "react";
-高级数据分析服务   索克生活APP - 健康数据分析和预测服务
+
 | "risk_assessment"  *  | "pattern_recognition"  *  | "predictive_modeling"  *  | "correlation_analysis"  *  | "anomaly_detection"  *  | "cohort_analysis"  *  | "survival_analysis"  *  | "time_series"  *  | "clustering"  *  | "classification"  *  | "regression"  *  | "deep_learning"  *  | "nlp_analysis"  *  | "image_analysi;"
 s";  * / 图像分析* ///     "
 // 数据源类型 * export interface DataSource {
   /
-  id: string;,
+  id: string;
   name: string,type: "database" | "api" | "file" | "stream" | "sensor" | "manual",connection: {url?: string;
-    credentials?: Record<string, any>;
-    headers?: Record<string, string>;
-    parameters?: Record<string, any>;
+    credentials?: Record<string; any>;
+    headers?: Record<string; string>;
+    parameters?: Record<string; any>;
 }
   schema: { fields: Array<{,
-  name: string,
-      type: "string" | "number" | "boolean" | "date" | "array" | "object",
+  name: string;
+      type: "string" | "number" | "boolean" | "date" | "array" | "object";
       required: boolean;
       description?: string}>;
     primaryKey?: string;
     indexes?: string[];
   };
-  refreshRate: number //,
-  status: "active" | "inactive" | "error"}
+  refreshRate: number //;
+  status: "active" | "inactive" | "error";}
 // 分析配置 * export interface AnalysisConfig {
-  id: string,
-  name: string;,
-  description: string;,
-  type: AnalysisType;,
-  dataSources: string[];,
-  parameters: {timeRange?:  {start: string;,
+  id: string;
+  name: string;
+  description: string;
+  type: AnalysisType;
+  dataSources: string[];
+  parameters: {timeRange?:  {start: string;
   end: string;
 }
-    filters?: Array<{ field: string,
-      operator:   | "eq"| "ne",
+    filters?: Array<{ field: string;
+      operator:   | "eq"| "ne";
         | "gt"
         | "gte"
         | "lt"
@@ -41,10 +40,10 @@ s";  * / 图像分析* ///     "
         | "nin";
         | "contains";
         | "regex";
-      value: unknown}>;
+      value: unknown;}>;
     groupBy?: string[]
-    aggregations?: Array<{ field: string,
-      function:   | "count"| "sum",
+    aggregations?: Array<{ field: string;
+      function:   | "count"| "sum";
         | "avg"
         | "min"
         | "max"
@@ -56,67 +55,67 @@ s";  * / 图像分析* ///     "
     features?: string[];
     targetVariable?: string;
     algorithms?: string[];
-    hyperparameters?: Record<string, any>;
+    hyperparameters?: Record<string; any>;
   }
-  schedule?:  { enabled: boolean,
+  schedule?:  { enabled: boolean;
     frequency: "hourly" | "daily" | "weekly" | "monthly";
     time?: string;
     timezone?: string}
-  notifications?:  { enabled: boolean,
-    recipients: string[],
+  notifications?:  { enabled: boolean;
+    recipients: string[];
     conditions: Array<{,
-  metric: string,
-      threshold: number,
-      operator: "gt" | "lt" | "eq"}>;
+  metric: string;
+      threshold: number;
+      operator: "gt" | "lt" | "eq";}>;
   };
-  createdAt: string,
-  updatedAt: string,
-  createdBy: string}
+  createdAt: string;
+  updatedAt: string;
+  createdBy: string;}
 // 分析结果 * export interface AnalysisResult {
-  id: string,
+  id: string;
   configId: string,status: "running" | "completed" | "failed" | "cancelled",startTime: string;
   endTime?: string;
-  duration?: number;  results: {summary: {totalRecords: number;,
-  processedRecords: number;,
-  errorRecords: number;,
-  insights: string[];,
+  duration?: number;  results: {summary: {totalRecords: number;
+  processedRecords: number;
+  errorRecords: number;
+  insights: string[];
   recommendations: string[];
 };
     data: {
       raw?: unknown[];
       processed?: unknown[];
-      aggregated?: Record<string, any>;
-      predictions?: Array<{ timestamp: string,
-        value: number,
+      aggregated?: Record<string; any>;
+      predictions?: Array<{ timestamp: string;
+        value: number;
         confidence: number;
         bounds?:  {
-          lower: number,
-          upper: number};
+          lower: number;
+          upper: number;};
       }>;
       clusters?: Array<{
-        id: string,
-        center: number[],
-        members: unknown[],
+        id: string;
+        center: number[];
+        members: unknown[];
         characteristics: Record<string, any>;
       }>
-      correlations?: Array<{ variable1: string,
-        variable2: string,
-        coefficient: number,
-        pValue: number,
-        significance: "high" | "medium" | "low" | "none"}>;
-      anomalies?: Array<{ timestamp: string,
-        value: unknown,
-        score: number,
-        reason: string}>;
-      patterns?: Array<{ pattern: string,
-        frequency: number,
-        confidence: number,
+      correlations?: Array<{ variable1: string;
+        variable2: string;
+        coefficient: number;
+        pValue: number;
+        significance: "high" | "medium" | "low" | "none";}>;
+      anomalies?: Array<{ timestamp: string;
+        value: unknown;
+        score: number;
+        reason: string;}>;
+      patterns?: Array<{ pattern: string;
+        frequency: number;
+        confidence: number;
         examples: unknown[];
         }>;
     }
     visualizations: Array<{,
-  id: string,
-      type:   | "line"| "bar",
+  id: string;
+      type:   | "line"| "bar";
         | "scatter"
         | "heatmap"
         | "histogram"
@@ -125,9 +124,9 @@ s";  * / 图像分析* ///     "
         | "radar"
         | "sankey"
         | "treemap";
-      title: string,
-      description: string,
-      data: unknown,
+      title: string;
+      description: string;
+      data: unknown;
       config: Record<string, any>;
     }>;
     metrics: {
@@ -142,55 +141,55 @@ s";  * / 图像分析* ///     "
       silhouetteScore?: number;
       inertia?: number};
     model?:  {
-      type: string,
+      type: string;
       parameters: Record<string, any>;
       features: string[];
-      importance?: Record<string, number>;
+      importance?: Record<string; number>;
       performance: Record<string, number>;
       serialized?: string};
   }
-  logs: Array<{ timestamp: string,
-    level: "info" | "warning" | "error",
+  logs: Array<{ timestamp: string;
+    level: "info" | "warning" | "error";
     message: string;
     details?: unknown}>;
-  error?:  { code: string,
+  error?:  { code: string;
     message: string;
     stack?: string};
 }
 // 仪表板配置 * export interface DashboardConfig {
-  id: string,
-  name: string;,
-  description: string;,
-  layout: {rows: number;,
-  columns: number;,
-  widgets: Array<{id: string;,
-  type: "chart" | "metric" | "table" | "text" | "image" | "iframe";,
-  position: {row: number;,
-  column: number;,
-  rowSpan: number;,
+  id: string;
+  name: string;
+  description: string;
+  layout: {rows: number;
+  columns: number;
+  widgets: Array<{id: string;
+  type: "chart" | "metric" | "table" | "text" | "image" | "iframe";
+  position: {row: number;
+  column: number;
+  rowSpan: number;
   columnSpan: number;
 };
       config: {title?: string;
         analysisId?: string;
         visualizationId?: string;
-        refreshRate?: number;  filters?: Record<string, any>
-        style?: Record<string, any>;
+        refreshRate?: number;  filters?: Record<string; any>
+        style?: Record<string; any>;
       };
     }>;
   };
-  permissions: { viewers: string[],
-    editors: string[],
+  permissions: { viewers: string[];
+    editors: string[];
     owners: string[];
     };
-  isPublic: boolean,
-  createdAt: string,
-  updatedAt: string,
-  createdBy: string}
+  isPublic: boolean;
+  createdAt: string;
+  updatedAt: string;
+  createdBy: string;}
 // 报告配置 * export interface ReportConfig {
-    id: string;,
-  name: string;,
-  description: string;,
-  template: {sections: Array<{id: string;,
+    id: string;
+  name: string;
+  description: string;
+  template: {sections: Array<{id: string;
   type: | "title"| "summary"| "chart";
         | "table";
         | "text";
@@ -199,29 +198,29 @@ s";  * / 图像分析* ///     "
       content?: string;
       analysisId?: string;
       visualizationId?: string;
-      config?: Record<string, any>;
+      config?: Record<string; any>;
 }>
-    style: { theme: "light" | "dark" | "medical" | "corporate",
-      colors: string[],
+    style: { theme: "light" | "dark" | "medical" | "corporate";
+      colors: string[];
       fonts: {,
-  title: string,
-        body: string,
-        code: string}
-      layout: { margin: number,
-        spacing: number,
-        pageSize: "A4" | "A3" | "Letter" | "Legal",
-        orientation: "portrait" | "landscape"};
+  title: string;
+        body: string;
+        code: string;}
+      layout: { margin: number;
+        spacing: number;
+        pageSize: "A4" | "A3" | "Letter" | "Legal";
+        orientation: "portrait" | "landscape";};
     };
   }
-  schedule?:  { enabled: boolean,
-    frequency: "daily" | "weekly" | "monthly" | "quarterly",
-    time: string,
-    timezone: string,
+  schedule?:  { enabled: boolean;
+    frequency: "daily" | "weekly" | "monthly" | "quarterly";
+    time: string;
+    timezone: string;
     recipients: string[];
     };
-  createdAt: string,
-  updatedAt: string,
-  createdBy: string}
+  createdAt: string;
+  updatedAt: string;
+  createdBy: string;}
 //
   private dataSources: Map<string, DataSource> = new Map();
   private analysisConfigs: Map<string, AnalysisConfig> = new Map();
@@ -247,8 +246,8 @@ s";  * / 图像分析* ///     "
       const id = this.generateId("ds";);
       const newDataSource: DataSource = {id,
         ...dataSource,
-        lastUpdated: new Date().toISOString(),
-        status: "active"};
+        lastUpdated: new Date().toISOString();
+        status: "active";};
       this.dataSources.set(id, newDataSource);
       await apiClient.post(" / api * v1 /analytics/data-sources", newDataSource;);/
       await this.testDataSourceConnection(id;);
@@ -263,8 +262,8 @@ s";  * / 图像分析* ///     "
       const now = new Date().toISOString;
       const newConfig: AnalysisConfig = {id,
         ...config,
-        createdAt: now,
-        updatedAt: now};
+        createdAt: now;
+        updatedAt: now;};
       this.analysisConfigs.set(id, newConfig);
       await apiClient.post(" / api * v1 /analytics/configs", newConfig;);/
       return newConf;i;g;
@@ -273,8 +272,8 @@ s";  * / 图像分析* ///     "
     }
   }
   // 运行分析  async runAnalysis(configId: string,)
-    options?:  {
-      async?: boolean,
+    options?: {
+      async?: boolean;
       priority?: "low" | "normal" | "high"
       timeout?: number;  }
   ): Promise<AnalysisResult /    >  {
@@ -288,26 +287,26 @@ s";  * / 图像分析* ///     "
       }
       const resultId = this.generateId("ar;";);
       const startTime = new Date().toISOString;(;);
-      const result: AnalysisResult = {id: resultId,
+      const result: AnalysisResult = {id: resultId;
         configId,
-        status: "running",
+        status: "running";
         startTime,
         results: {,
   summary: {,
-  totalRecords: 0,
-            processedRecords: 0,
-            errorRecords: 0,
-            insights:  [],
+  totalRecords: 0;
+            processedRecords: 0;
+            errorRecords: 0;
+            insights:  [];
             recommendations:  []
-          },
-          data: {},
-          visualizations:  [],
-          metrics: {}
+          ;},
+          data: {;},
+          visualizations:  [];
+          metrics: {;}
         },
         logs: [{,
-  timestamp: startTime,
-            level: "info",
-            message: "Analysis started"}
+  timestamp: startTime;
+            level: "info";
+            message: "Analysis started";}
         ]
       };
       this.analysisResults.set(resultId, result);
@@ -344,8 +343,8 @@ s";  * / 图像分析* ///     "
       const now = new Date().toISOString;
       const newDashboard: DashboardConfig = {id,
         ...dashboard,
-        createdAt: now,
-        updatedAt: now};
+        createdAt: now;
+        updatedAt: now;};
       this.dashboards.set(id, newDashboard);
       await apiClient.post(" / api * v1 /analytics/dashboards", newDashboard;);/
       return newDashboa;r;d;
@@ -358,11 +357,11 @@ s";  * / 图像分析* ///     "
       format?: "pdf" | "html" | "excel" | "word"
       includeData?: boolean;
       compress?: boolean}
-  );: Promise< { reportId: string,
-    downloadUrl: string,
-    format: string,
-    size: number,
-    generatedAt: string}> {
+  );: Promise< { reportId: string;
+    downloadUrl: string;
+    format: string;
+    size: number;
+    generatedAt: string;}> {
     try {
       const reportConfig = this.reports.get(reportConfigI;d;);
       if (!reportConfig) {
@@ -370,10 +369,10 @@ s";  * / 图像分析* ///     "
       }
       const response = await apiClient.post(;)
         "/api/v1/analytics/reports/generate",/            {
-          configId: reportConfigId,
+          configId: reportConfigId;
           options: {,
-  format: options?.format || "pdf",
-            includeData: options?.includeData || false,
+  format: options?.format || "pdf";
+            includeData: options?.includeData || false;
             compress: options?.compress || fals;e;}
         ;}
       ;);
@@ -383,20 +382,20 @@ s";  * / 图像分析* ///     "
     }
   }
   // 健康趋势分析  async analyzeHealthTrends(userId: string,)
-    metrics: string[],
-    timeRange: { start: string, end: string}): Promise< { trends: Array<{,
-  metric: string,
-      trend: "increasing" | "decreasing" | "stable" | "volatile",
-      slope: number,
+    metrics: string[];
+    timeRange: { start: string, end: string;}): Promise< { trends: Array<{,
+  metric: string;
+      trend: "increasing" | "decreasing" | "stable" | "volatile";
+      slope: number;
       correlation: number;
       seasonality?:  {
         detected: boolean;
         period?: number;
         strength?: number};
     }>;
-    insights: string[],
+    insights: string[];
     recommendations: string[]
-  }> {
+  ;}> {
     try {
       const response = await apiClient.post("/api/v1/analytics/health-trends", {/            userId,metrics,)
         timeRan;g;e;};);
@@ -408,21 +407,21 @@ s";  * / 图像分析* ///     "
   // 风险评估  async assessRisk(userId: string,)
     riskFactors: Record<string, any>,
     models?: string[]
-  ): Promise< { overallRisk: {,
-  score: number //,
-  confidence: number}
-    specificRisks: Array<{ type: string,
-      score: number,
-      level: "low" | "medium" | "high" | "critical",
+  ): Promise< { overallRisk: {;
+  score: number //;
+  confidence: number;}
+    specificRisks: Array<{ type: string;
+      score: number;
+      level: "low" | "medium" | "high" | "critical";
       factors: Array<{,
-  factor: string,
-        contribution: number,
-        value: unknown}>
+  factor: string;
+        contribution: number;
+        value: unknown;}>
     }>
-    recommendations: Array<{ priority: "low" | "medium" | "high" | "urgent",
-      category: string,
-      action: string,
-      expectedImpact: number}>
+    recommendations: Array<{ priority: "low" | "medium" | "high" | "urgent";
+      category: string;
+      action: string;
+      expectedImpact: number;}>
   }> {
     try {
       const response = await apiClient.post(;)
@@ -438,22 +437,22 @@ s";  * / 图像分析* ///     "
     }
   }
   // 异常检测  async detectAnomalies(dataSourceId: string,)
-    field: string,
-    algorithm:   | "isolation_forest"| "one_class_svm",
+    field: string;
+    algorithm:   | "isolation_forest"| "one_class_svm";
       | "local_outlier_factor"
       | "statistical" = "isolation_forest",
     sensitivity: number = 0.1): Promise< {,
   anomalies: Array<{,
-  timestamp: string,
-      value: unknown,
-      score: number,
-      severity: "low" | "medium" | "high",
+  timestamp: string;
+      value: unknown;
+      score: number;
+      severity: "low" | "medium" | "high";
       context: Record<string, any>;
     }>;
-    statistics: { totalPoints: number,
-      anomalyCount: number,
-      anomalyRate: number,
-      threshold: number}
+    statistics: { totalPoints: number;
+      anomalyCount: number;
+      anomalyRate: number;
+      threshold: number;}
   }> {
     try {
       const response = await apiClient.post(;)
@@ -469,14 +468,14 @@ s";  * / 图像分析* ///     "
     }
   }
   // 预测建模  async createPredictiveModel(name: string,)
-    dataSourceId: string,
-    targetVariable: string,
-    features: string[],
-    algorithm:   | "linear_regression"| "random_forest",
+    dataSourceId: string;
+    targetVariable: string;
+    features: string[];
+    algorithm:   | "linear_regression"| "random_forest";
       | "xgboost"
       | "neural_network"
       | "auto" = "auto",
-    validationSplit: number = 0.2);: Promise< { modelId: string,
+    validationSplit: number = 0.2);: Promise< { modelId: string;
     performance: {
       accuracy?: number;
       rmse?: number;
@@ -485,8 +484,8 @@ s";  * / 图像分析* ///     "
     featureImportance: Record<string, number>;
     predictions: Array<{ timestamp: string;
       actual?: number;
-      predicted: number,
-      confidence: number}>
+      predicted: number;
+      confidence: number;}>
   }> {
     try {
       const response = await apiClient.post(;)
@@ -504,18 +503,18 @@ s";  * / 图像分析* ///     "
     }
   }
   // 聚类分析  async performClustering(dataSourceId: string,)
-    features: string[],
-    algorithm: "kmeans" | "dbscan" | "hierarchical" = "kmeans",
+    features: string[];
+    algorithm: "kmeans" | "dbscan" | "hierarchical" = "kmeans";
     numClusters?: number;
   );: Promise< {
     clusters: Array<{,
-  id: string,
-      center: number[],
-      size: number,
+  id: string;
+      center: number[];
+      size: number;
       characteristics: Record<string, any>;
       members: Array<{,
-  id: string,
-        distance: number,
+  id: string;
+        distance: number;
         data: Record<string, any>;
       }>;
     }>;
@@ -523,7 +522,7 @@ s";  * / 图像分析* ///     "
       inertia?: number;
       calinski_harabasz?: number};
     recommendations: string[]
-  }> {
+  ;}> {
     try {
       const response = await apiClient.post("/api/v1/analytics/clustering", {/            dataSourceId,features,)
         algorithm,
@@ -534,16 +533,16 @@ s";  * / 图像分析* ///     "
     }
   }
   // 相关性分析  async analyzeCorrelations(dataSourceId: string,)
-    variables: string[],
-    method: "pearson" | "spearman" | "kendall" = "pearson"): Promise< { correlationMatrix: number[][],
+    variables: string[];
+    method: "pearson" | "spearman" | "kendall" = "pearson"): Promise< { correlationMatrix: number[][];
     significantCorrelations: Array<{,
-  variable1: string,
-      variable2: string,
-      coefficient: number,
-      pValue: number,
-      significance: "high" | "medium" | "low" | "none"}>;
+  variable1: string;
+      variable2: string;
+      coefficient: number;
+      pValue: number;
+      significance: "high" | "medium" | "low" | "none";}>;
     insights: string[]
-  }> {
+  ;}> {
     try {
       const response = await apiClient.post("/api/v1/analytics/correlations", {/            dataSourceId,variables,)
         meth;o;d;};);
@@ -601,9 +600,9 @@ s";  * / 图像分析* ///     "
     setInterval(async() => {})
   // 性能监控
 const performanceMonitor = usePerformanceMonitor(advancedAnalyticsService", {")
-    trackRender: true,
-    trackMemory: false,
-    warnThreshold: 100, // ms };);
+    trackRender: true;
+    trackMemory: false;
+    warnThreshold: 100, // ms ;};);
       await this.checkScheduledAnalyses;
     }, 60 * 1000);
   }
@@ -677,15 +676,15 @@ case "monthly":
       result.status = "failed";
       result.endTime = new Date().toISOString();
       result.error = {
-      code: "EXECUTION_ERROR",
-      message: error instanceof Error ? error.message : "Unknown error"};
+      code: "EXECUTION_ERROR";
+      message: error instanceof Error ? error.message : "Unknown error";};
       this.analysisResults.set(result.id, result);
       this.runningAnalyses.delete(config.id);
       throw error;
     }
   }
   private generateId(prefix: string): string  {
-    return `${prefix}_${Date.now()}_${Math.random();
+    return `${prefix;}_${Date.now()}_${Math.random();
       .toString(36);
       .substring(2, 8);};`;
   }

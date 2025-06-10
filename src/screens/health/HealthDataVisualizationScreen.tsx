@@ -24,22 +24,22 @@ import {;
   typography
 } from '../../constants/theme';
 
-const { width: screenWidth } = Dimensions.get('window');
+const { width: screenWidth ;} = Dimensions.get('window');
 
 interface HealthMetric {
-  id: string;,
-  name: string;,
-  value: number;,
-  unit: string;,
-  trend: 'up' | 'down' | 'neutral';,
-  change: number;,
-  color: string;,
+  id: string;
+  name: string;
+  value: number;
+  unit: string;
+  trend: 'up' | 'down' | 'neutral';
+  change: number;
+  color: string;
   icon: string;
 }
 
 interface ChartData {
-  label: string;,
-  value: number;,
+  label: string;
+  value: number;
   date: string;
 }
 
@@ -52,70 +52,70 @@ const HealthDataVisualizationScreen: React.FC = () => {
   // 模拟健康指标数据
   const [healthMetrics] = useState<HealthMetric[]>([
     {
-      id: '1',
-      name: '心率',
-      value: 72,
-      unit: 'bpm',
-      trend: 'neutral',
-      change: 0,
-      color: colors.error,
+      id: '1';
+
+      value: 72;
+      unit: 'bpm';
+      trend: 'neutral';
+      change: 0;
+      color: colors.error;
       icon: 'heart-pulse'
-    },
+    ;},
     {
-      id: '2',
-      name: '血压',
-      value: 120,
-      unit: 'mmHg',
-      trend: 'down',
-      change: -5,
-      color: colors.primary,
+      id: '2';
+
+      value: 120;
+      unit: 'mmHg';
+      trend: 'down';
+      change: -5;
+      color: colors.primary;
       icon: 'water'
-    },
+    ;},
     {
-      id: '3',
-      name: '体重',
-      value: 68.5,
-      unit: 'kg',
-      trend: 'down',
-      change: -1.2,
-      color: colors.warning,
+      id: '3';
+
+      value: 68.5;
+      unit: 'kg';
+      trend: 'down';
+      change: -1.2;
+      color: colors.warning;
       icon: 'scale-bathroom'
-    },
+    ;},
     {
-      id: '4',
-      name: '睡眠',
-      value: 7.5,
-      unit: '小时',
-      trend: 'up',
-      change: 0.5,
-      color: colors.info,
+      id: '4';
+
+      value: 7.5;
+
+      trend: 'up';
+      change: 0.5;
+      color: colors.info;
       icon: 'sleep'
-    }
+    ;}
   ]);
 
   // 模拟图表数据
   const [chartData] = useState<ChartData[]>([
-    { label: '周一', value: 8000, date: '2024-01-01' },
-    { label: '周二', value: 9500, date: '2024-01-02' },
-    { label: '周三', value: 7200, date: '2024-01-03' },
-    { label: '周四', value: 10200, date: '2024-01-04' },
-    { label: '周五', value: 8800, date: '2024-01-05' },
-    { label: '周六', value: 12000, date: '2024-01-06' },
-    { label: '周日', value: 6500, date: '2024-01-07' }
+
+
+
+
+
+
+
   ]);
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     // 模拟数据刷新
-    await new Promise(resolve) => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 1000));
     setRefreshing(false);
   }, []);
 
   const handleExportData = () => {
-    Alert.alert('导出数据', '选择导出格式', [
-      { text: 'PDF报告', onPress: () => console.log('导出PDF') },
-      { text: 'Excel表格', onPress: () => console.log('导出Excel') },
-      { text: '取消', style: 'cancel' }
+
+
+
+
     ]);
   };
 
@@ -159,7 +159,7 @@ const HealthDataVisualizationScreen: React.FC = () => {
                     timeRange === range && styles.timeRangeTextActive
                   ]}
                 >
-                  {range === 'week' ? '周' : range === 'month' ? '月' : '年'}
+
                 </Text>
               </TouchableOpacity>
             ))}
@@ -176,7 +176,7 @@ const HealthDataVisualizationScreen: React.FC = () => {
           <View style={styles.recommendationContent}>
             <Text style={styles.recommendationTitle}>运动建议</Text>
             <Text style={styles.recommendationText}>
-              您本周的运动量较上周减少了15%，建议增加30分钟的有氧运动。
+
             </Text>
           </View>
         </View>
@@ -185,7 +185,7 @@ const HealthDataVisualizationScreen: React.FC = () => {
           <View style={styles.recommendationContent}>
             <Text style={styles.recommendationTitle}>睡眠优化</Text>
             <Text style={styles.recommendationText}>
-              您的睡眠质量有所改善，建议保持规律的作息时间。
+
             </Text>
           </View>
         </View>
@@ -208,7 +208,7 @@ const HealthDataVisualizationScreen: React.FC = () => {
             data={chartData.map(item) => ({
               ...item,
               value: 70 + Math.random() * 20
-            }))}
+            ;}))}
             type="area"
             height={150}
             showGrid={false}
@@ -225,7 +225,7 @@ const HealthDataVisualizationScreen: React.FC = () => {
             data={chartData.map(item) => ({
               ...item,
               value: 68 + Math.random() * 2
-            }))}
+            ;}))}
             type="line"
             height={150}
             showGrid={false}
@@ -242,7 +242,7 @@ const HealthDataVisualizationScreen: React.FC = () => {
             data={chartData.map(item) => ({
               ...item,
               value: 6 + Math.random() * 3
-            }))}
+            ;}))}
             type="bar"
             height={150}
             showGrid={false}
@@ -273,7 +273,7 @@ const HealthDataVisualizationScreen: React.FC = () => {
             </TouchableOpacity>
           </View>
           <Text style={styles.reportSummary}>
-            本周整体健康状况良好，运动量达标，睡眠质量有所改善。
+
           </Text>
         </View>
 
@@ -289,7 +289,7 @@ const HealthDataVisualizationScreen: React.FC = () => {
             </TouchableOpacity>
           </View>
           <Text style={styles.reportSummary}>
-            月度健康指标稳定，建议继续保持良好的生活习惯。
+
           </Text>
         </View>
 
@@ -322,9 +322,9 @@ const HealthDataVisualizationScreen: React.FC = () => {
         activeKey={activeTab}
         onChange={setActiveTab}
         items={[
-          { key: 'overview', title: '概览', content: null },
-          { key: 'trends', title: '趋势', content: null },
-          { key: 'reports', title: '报告', content: null }
+
+
+
         ]}
       />
 
@@ -345,188 +345,188 @@ const HealthDataVisualizationScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
+  flex: 1;
     backgroundColor: colors.background
-  },
+  ;},
   header: {,
-  flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-    backgroundColor: colors.surface,
-    borderBottomWidth: 1,
+  flexDirection: 'row';
+    alignItems: 'center';
+    justifyContent: 'space-between';
+    paddingHorizontal: spacing.lg;
+    paddingVertical: spacing.md;
+    backgroundColor: colors.surface;
+    borderBottomWidth: 1;
     borderBottomColor: colors.border
-  },
+  ;},
   backButton: {,
-  width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.gray100,
-    justifyContent: 'center',
+  width: 40;
+    height: 40;
+    borderRadius: 20;
+    backgroundColor: colors.gray100;
+    justifyContent: 'center';
     alignItems: 'center'
-  },
+  ;},
   headerTitle: {,
-  fontSize: typography.fontSize.lg,
-    fontWeight: '600' as const,
+  fontSize: typography.fontSize.lg;
+    fontWeight: '600' as const;
     color: colors.text
-  },
+  ;},
   settingsButton: {,
-  width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.gray100,
-    justifyContent: 'center',
+  width: 40;
+    height: 40;
+    borderRadius: 20;
+    backgroundColor: colors.gray100;
+    justifyContent: 'center';
     alignItems: 'center'
-  },
+  ;},
   content: {,
   flex: 1
-  },
+  ;},
   tabContent: {,
-  flex: 1,
+  flex: 1;
     padding: spacing.lg
-  },
+  ;},
   sectionTitle: {,
-  fontSize: typography.fontSize.lg,
-    fontWeight: '600' as const,
-    color: colors.text,
+  fontSize: typography.fontSize.lg;
+    fontWeight: '600' as const;
+    color: colors.text;
     marginBottom: spacing.md
-  },
+  ;},
   metricsContainer: {,
   marginBottom: spacing.xl
-  },
+  ;},
   metricsGrid: {,
-  flexDirection: 'row',
-    flexWrap: 'wrap',
+  flexDirection: 'row';
+    flexWrap: 'wrap';
     justifyContent: 'space-between'
-  },
+  ;},
   metricCard: {,
-  width: (screenWidth - spacing.lg * 3) / 2,
+  width: (screenWidth - spacing.lg * 3) / 2;
     marginBottom: spacing.md
-  },
+  ;},
   chartContainer: {,
-  backgroundColor: colors.surface,
-    borderRadius: borderRadius.lg,
-    padding: spacing.lg,
-    marginBottom: spacing.xl,
+  backgroundColor: colors.surface;
+    borderRadius: borderRadius.lg;
+    padding: spacing.lg;
+    marginBottom: spacing.xl;
     ...shadows.sm
   },
   chartHeader: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
     marginBottom: spacing.lg
-  },
+  ;},
   timeRangeSelector: {,
-  flexDirection: 'row',
-    backgroundColor: colors.gray100,
-    borderRadius: borderRadius.md,
+  flexDirection: 'row';
+    backgroundColor: colors.gray100;
+    borderRadius: borderRadius.md;
     padding: 2
-  },
+  ;},
   timeRangeButton: {,
-  paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
+  paddingHorizontal: spacing.sm;
+    paddingVertical: spacing.xs;
     borderRadius: borderRadius.sm
-  },
+  ;},
   timeRangeButtonActive: {,
   backgroundColor: colors.primary
-  },
+  ;},
   timeRangeText: {,
-  fontSize: typography.fontSize.sm,
+  fontSize: typography.fontSize.sm;
     color: colors.textSecondary
-  },
+  ;},
   timeRangeTextActive: {,
   color: colors.white
-  },
+  ;},
   recommendationsContainer: {,
   marginBottom: spacing.xl
-  },
+  ;},
   recommendationCard: {,
-  flexDirection: 'row',
-    backgroundColor: colors.surface,
-    borderRadius: borderRadius.lg,
-    padding: spacing.lg,
-    marginBottom: spacing.md,
+  flexDirection: 'row';
+    backgroundColor: colors.surface;
+    borderRadius: borderRadius.lg;
+    padding: spacing.lg;
+    marginBottom: spacing.md;
     ...shadows.sm
   },
   recommendationContent: {,
-  flex: 1,
+  flex: 1;
     marginLeft: spacing.md
-  },
+  ;},
   recommendationTitle: {,
-  fontSize: typography.fontSize.base,
-    fontWeight: '600' as const,
-    color: colors.text,
+  fontSize: typography.fontSize.base;
+    fontWeight: '600' as const;
+    color: colors.text;
     marginBottom: spacing.xs
-  },
+  ;},
   recommendationText: {,
-  fontSize: typography.fontSize.sm,
-    color: colors.textSecondary,
+  fontSize: typography.fontSize.sm;
+    color: colors.textSecondary;
     lineHeight: 20
-  },
+  ;},
   trendsContainer: {,
   flex: 1
-  },
+  ;},
   trendCard: {,
-  backgroundColor: colors.surface,
-    borderRadius: borderRadius.lg,
-    padding: spacing.lg,
-    marginBottom: spacing.lg,
+  backgroundColor: colors.surface;
+    borderRadius: borderRadius.lg;
+    padding: spacing.lg;
+    marginBottom: spacing.lg;
     ...shadows.sm
   },
   trendHeader: {,
-  flexDirection: 'row',
-    alignItems: 'center',
+  flexDirection: 'row';
+    alignItems: 'center';
     marginBottom: spacing.md
-  },
+  ;},
   trendTitle: {,
-  fontSize: typography.fontSize.base,
-    fontWeight: '600' as const,
-    color: colors.text,
+  fontSize: typography.fontSize.base;
+    fontWeight: '600' as const;
+    color: colors.text;
     marginLeft: spacing.sm
-  },
+  ;},
   reportsContainer: {,
   flex: 1
-  },
+  ;},
   reportCard: {,
-  backgroundColor: colors.surface,
-    borderRadius: borderRadius.lg,
-    padding: spacing.lg,
-    marginBottom: spacing.lg,
+  backgroundColor: colors.surface;
+    borderRadius: borderRadius.lg;
+    padding: spacing.lg;
+    marginBottom: spacing.lg;
     ...shadows.sm
   },
   reportHeader: {,
-  flexDirection: 'row',
-    alignItems: 'center',
+  flexDirection: 'row';
+    alignItems: 'center';
     marginBottom: spacing.sm
-  },
+  ;},
   reportInfo: {,
-  flex: 1,
+  flex: 1;
     marginLeft: spacing.md
-  },
+  ;},
   reportTitle: {,
-  fontSize: typography.fontSize.base,
-    fontWeight: '600' as const,
+  fontSize: typography.fontSize.base;
+    fontWeight: '600' as const;
     color: colors.text
-  },
+  ;},
   reportDate: {,
-  fontSize: typography.fontSize.sm,
-    color: colors.textSecondary,
+  fontSize: typography.fontSize.sm;
+    color: colors.textSecondary;
     marginTop: 2
-  },
+  ;},
   downloadButton: {,
-  width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: colors.gray100,
-    justifyContent: 'center',
+  width: 36;
+    height: 36;
+    borderRadius: 18;
+    backgroundColor: colors.gray100;
+    justifyContent: 'center';
     alignItems: 'center'
-  },
+  ;},
   reportSummary: {,
-  fontSize: typography.fontSize.sm,
-    color: colors.textSecondary,
+  fontSize: typography.fontSize.sm;
+    color: colors.textSecondary;
     lineHeight: 20
-  }
+  ;}
 });
 
 export default HealthDataVisualizationScreen;

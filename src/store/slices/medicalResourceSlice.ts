@@ -2,22 +2,22 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../index';
 // 类型定义
 export interface MedicalResource {
-  id: string;,
-  type: 'hospital' | 'clinic' | 'pharmacy' | 'specialist' | 'doctor';,
-  name: string;,
-  location: {;,
-  address: string;,
+  id: string;
+  type: 'hospital' | 'clinic' | 'pharmacy' | 'specialist' | 'doctor';
+  name: string;
+  location: {
+  address: string;
   coordinates: { lat: number; lng: number;
 };
-    city: string,
+    city: string;
   district: string;
   };
-  services: string[],
-  rating: number;,
+  services: string[];
+  rating: number;
   availability: {,
-  isOpen: boolean;,
-  hours: string,
-  nextAvailable: string;,
+  isOpen: boolean;
+  hours: string;
+  nextAvailable: string;
   slots: TimeSlot[];
   };
   contact: {,
@@ -33,28 +33,28 @@ export interface MedicalResource {
   reviews?: Review[];
 }
 export interface TimeSlot {
-  id: string;,
-  startTime: string;,
-  endTime: string;,
+  id: string;
+  startTime: string;
+  endTime: string;
   available: boolean;
   price?: number;
 }
 export interface Review {
-  id: string;,
-  userId: string;,
-  userName: string;,
-  rating: number;,
-  comment: string;,
+  id: string;
+  userId: string;
+  userName: string;
+  rating: number;
+  comment: string;
   date: string;
 }
 export interface Appointment {
-  id: string;,
-  resourceId: string;,
-  resourceName: string;,
-  userId: string;,
-  serviceType: string;,
-  scheduledTime: string;,
-  duration: number;,
+  id: string;
+  resourceId: string;
+  resourceName: string;
+  userId: string;
+  serviceType: string;
+  scheduledTime: string;
+  duration: number;
   status: 'pending' | 'confirmed' | 'completed' | 'cancelled';
   notes?: string;
   price?: number;
@@ -64,14 +64,14 @@ export interface Appointment {
 export interface ResourceFilters {
   type?: string[];
   location?: {
-    lat: number;,
-  lng: number;,
+    lat: number;
+  lng: number;
   radius: number;
 };
   services?: string[];
   rating?: number;
   priceRange?: {
-    min: number,
+    min: number;
   max: number;
   };
   availability?: 'now' | 'today' | 'week';
@@ -85,163 +85,163 @@ export interface SearchQuery {
 }
 interface MedicalResourceState {
   // 资源数据
-  resources: MedicalResource[];,
-  searchResults: MedicalResource[];,
-  selectedResource: MedicalResource | null;,
+  resources: MedicalResource[];
+  searchResults: MedicalResource[];
+  selectedResource: MedicalResource | null;
   nearbyResources: MedicalResource[];
   // 预约数据
-  appointments: Appointment[];,
+  appointments: Appointment[];
   selectedAppointment: Appointment | null;
   // 搜索和筛选
-  searchQuery: SearchQuery;,
-  searchHistory: string[];,
+  searchQuery: SearchQuery;
+  searchHistory: string[];
   filters: ResourceFilters;
   // 加载状态
-  loading: {;,
-  search: boolean;,
-  details: boolean;,
-  booking: boolean;,
-  appointments: boolean;,
+  loading: {
+  search: boolean;
+  details: boolean;
+  booking: boolean;
+  appointments: boolean;
   nearby: boolean;
 };
   // 错误状态
   errors: {,
-  search: string | null;,
-  details: string | null,
-  booking: string | null;,
-  appointments: string | null,
+  search: string | null;
+  details: string | null;
+  booking: string | null;
+  appointments: string | null;
   nearby: string | null;
   };
   // UI状态
   ui: {,
-  showFilters: boolean;,
-  showMap: boolean,
+  showFilters: boolean;
+  showMap: boolean;
   viewMode: 'list' | 'grid' | 'map';
   };
   // 缓存和分页
   pagination: {,
-  currentPage: number;,
-  totalPages: number,
-  totalItems: number;,
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
   hasMore: boolean;
   };
   // 服务健康状态
   serviceHealth: {,
-  status: 'healthy' | 'unhealthy' | 'unknown';,
+  status: 'healthy' | 'unhealthy' | 'unknown';
   lastCheck: string | null;
     message?: string;
   };
 }
 const initialState: MedicalResourceState = {,
-  resources: [],
-  searchResults: [],
-  selectedResource: null,
-  nearbyResources: [],
-  appointments: [],
-  selectedAppointment: null,
+  resources: [];
+  searchResults: [];
+  selectedResource: null;
+  nearbyResources: [];
+  appointments: [];
+  selectedAppointment: null;
   searchQuery: {,
-  filters: {},
-    page: 1,
+  filters: {;},
+    page: 1;
     limit: 20;
   },
-  searchHistory: [],
-  filters: {},
+  searchHistory: [];
+  filters: {;},
   loading: {,
-  search: false,
-    details: false,
-    booking: false,
-    appointments: false,
+  search: false;
+    details: false;
+    booking: false;
+    appointments: false;
     nearby: false;
   },
   errors: {,
-  search: null,
-    details: null,
-    booking: null,
-    appointments: null,
+  search: null;
+    details: null;
+    booking: null;
+    appointments: null;
     nearby: null;
   },
   ui: {,
-  showFilters: false,
-    showMap: false,
+  showFilters: false;
+    showMap: false;
     viewMode: 'list'
-  },
+  ;},
   pagination: {,
-  currentPage: 1,
-    totalPages: 1,
-    totalItems: 0,
+  currentPage: 1;
+    totalPages: 1;
+    totalItems: 0;
     hasMore: false;
   },
   serviceHealth: {,
-  status: 'unknown',
+  status: 'unknown';
     lastCheck: null;
   }
 };
 // 异步Actions;
 export const searchMedicalResources = createAsyncThunk(;);
   'medicalResource/searchResources',
-  async (query: SearchQuery, { rejectWithValue }) => {
+  async (query: SearchQuery, { rejectWithValue ;}) => {
     try {
       const response = await fetch('/api/v1/medical-resources/search', {
-      method: "POST",
+      method: "POST";
       headers: {'Content-Type': 'application/json';
         },body: JSON.stringify(query);
       });
       if (!response.ok) {
-        throw new Error('搜索医疗资源失败');
+
       }
       const data = await response.json();
       return data;
     } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : '搜索失败');
+
     }
   }
 );
 export const getMedicalResourceDetails = createAsyncThunk(;);
   'medicalResource/getDetails',
-  async (resourceId: string, { rejectWithValue }) => {
+  async (resourceId: string, { rejectWithValue ;}) => {
     try {
       const response = await fetch(`/api/v1/medical-resources/${resourceId}`);
       if (!response.ok) {
-        throw new Error('获取资源详情失败');
+
       }
       const data = await response.json();
       return data;
     } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : '获取详情失败');
+
     }
   }
 );
 export const bookAppointment = createAsyncThunk(;);
   'medicalResource/bookAppointment',
-  async (appointmentData: Omit<Appointment, 'id' | 'status'>, { rejectWithValue }) => {
+  async (appointmentData: Omit<Appointment, 'id' | 'status'>, { rejectWithValue ;}) => {
     try {
       const response = await fetch('/api/v1/medical-resources/appointments', {
-      method: "POST",
+      method: "POST";
       headers: {'Content-Type': 'application/json';
         },body: JSON.stringify(appointmentData);
       });
       if (!response.ok) {
-        throw new Error('预约失败');
+
       }
       const data = await response.json();
       return data;
     } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : '预约失败');
+
     }
   }
 );
 export const getUserAppointments = createAsyncThunk(;);
   'medicalResource/getUserAppointments',
-  async (userId: string, { rejectWithValue }) => {
+  async (userId: string, { rejectWithValue ;}) => {
     try {
       const response = await fetch(`/api/v1/medical-resources/appointments/user/${userId}`);
       if (!response.ok) {
-        throw new Error('获取预约记录失败');
+
       }
       const data = await response.json();
       return data;
     } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : '获取预约记录失败');
+
     }
   }
 );
@@ -250,17 +250,17 @@ export const getNearbyResources = createAsyncThunk(;);
   async (location: { lat: number; lng: number; radius?: number }, { rejectWithValue }) => {
     try {
       const response = await fetch('/api/v1/medical-resources/nearby', {
-      method: "POST",
+      method: "POST";
       headers: {'Content-Type': 'application/json';
         },body: JSON.stringify(location);
       });
       if (!response.ok) {
-        throw new Error('获取附近资源失败');
+
       }
       const data = await response.json();
       return data;
     } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : '获取附近资源失败');
+
     }
   }
 );
@@ -270,12 +270,12 @@ export const checkServiceHealth = createAsyncThunk(;);
     try {
       const response = await fetch('/api/v1/medical-resources/health');
       if (!response.ok) {
-        throw new Error('服务健康检查失败');
+
       }
       const data = await response.json();
       return data;
     } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : '健康检查失败');
+
     }
   }
 );
@@ -289,11 +289,11 @@ const medicalResourceSlice = createSlice({name: 'medicalResource',initialState,r
     },
     // 更新搜索查询
     updateSearchQuery: (state, action: PayloadAction<Partial<SearchQuery>>) => {
-      state.searchQuery = { ...state.searchQuery, ...action.payload };
+      state.searchQuery = { ...state.searchQuery, ...action.payload ;};
     },
     // 更新筛选条件
     updateFilters: (state, action: PayloadAction<Partial<ResourceFilters>>) => {
-      state.filters = { ...state.filters, ...action.payload };
+      state.filters = { ...state.filters, ...action.payload ;};
       state.searchQuery.filters = { ...state.searchQuery.filters, ...action.payload };
     },
     // 添加搜索历史
@@ -333,7 +333,7 @@ const medicalResourceSlice = createSlice({name: 'medicalResource',initialState,r
     },
     // 重置状态
     resetState: (state) => {
-      return { ...initialState, searchHistory: state.searchHistory };
+      return { ...initialState, searchHistory: state.searchHistory ;};
     }
   },
   extraReducers: (builder) => {
@@ -347,9 +347,9 @@ const medicalResourceSlice = createSlice({name: 'medicalResource',initialState,r
         state.loading.search = false;
         state.searchResults = action.payload.data || [];
         state.pagination = {
-          currentPage: action.payload.pagination?.currentPage || 1,
-          totalPages: action.payload.pagination?.totalPages || 1,
-          totalItems: action.payload.pagination?.totalItems || 0,
+          currentPage: action.payload.pagination?.currentPage || 1;
+          totalPages: action.payload.pagination?.totalPages || 1;
+          totalItems: action.payload.pagination?.totalItems || 0;
           hasMore: action.payload.pagination?.hasMore || false;
         };
       })
@@ -418,15 +418,15 @@ const medicalResourceSlice = createSlice({name: 'medicalResource',initialState,r
     builder;
       .addCase(checkServiceHealth.fulfilled, (state, action) => {
         state.serviceHealth = {
-          status: action.payload.status === 'healthy' ? 'healthy' : 'unhealthy',
-          lastCheck: new Date().toISOString(),
+          status: action.payload.status === 'healthy' ? 'healthy' : 'unhealthy';
+          lastCheck: new Date().toISOString();
           message: action.payload.message;
         };
       })
       .addCase(checkServiceHealth.rejected, (state, action) => {
         state.serviceHealth = {
-      status: "unhealthy",
-      lastCheck: new Date().toISOString(),
+      status: "unhealthy";
+      lastCheck: new Date().toISOString();
           message: action.payload as string;
         };
       });

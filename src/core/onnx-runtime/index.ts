@@ -1,15 +1,6 @@
-import { ONNXInferenceEngine } from "../../placeholder";./    ONNXInferenceEngine;
-import { ModelLoader } from ./    ModelLoader;
-import { ModelQuantizer } from "./ModelQuantizer";
-import { ModelOptimizer } from "../../placeholder";./    ModelOptimizer;
-import { EdgeComputeManager } from ./    EdgeComputeManager;
-import { DeviceCapabilityDetector } from "./DeviceCapabilityDetector";
-import { TensorProcessor } from "../../placeholder";./    TensorProcessor;
-import { InferenceCache } from ./    InferenceCache;
-import {// ONNX Runtime 核心模块 - 设备端AI推理引擎;
-// 为索克生活项目提供完整的边缘计算和本地推理能力
-// 核心引擎
-export { ONNXInferenceEngine } from "./ONNXInferenceEngine;";
+./ModelQuantizer";
+./DeviceCapabilityDetector";
+./ONNXInferenceEngine;";
 export { ModelLoader } from;
 ./    ModelLoader;
 export { ModelQuantizer } from ./    ModelQuantizer;
@@ -129,7 +120,7 @@ await this.engine.initialize(config);
   /**
 * * 一键式模型部署 - 加载、优化、量化模型
   async deployModel()
-    modelPath: string,
+    modelPath: string;
     options?: {
       quantize?: boolean;
       optimize?: boolean;
@@ -163,7 +154,7 @@ await this.engine.loadModel(model);
   /**
 * * 智能推理 - 自动处理输入输出和缓存
   async smartInference()
-    modelId: string,
+    modelId: string;
     inputs: Record<string, TensorData>,
     options?: {
       useCache?: boolean;
@@ -244,13 +235,13 @@ export function getGlobalONNXRuntimeManager(): ONNXRuntimeManager {if (!globalMa
 export async function quickDeploy(;)
   modelPath: string,config?: InferenceConfig;
 ): Promise<{
-  manager: ONNXRuntimeManager,
+  manager: ONNXRuntimeManager;
   model: ONNXModel;
 }> {
   const manager = createONNXRuntimeManager();
   await manager.initialize(config);
   const model = await manager.deployModel(modelPath, {quantize: true,)
-    optimize: true,
+    optimize: true;
     cache: true;
   })
   return { manager, model }
@@ -260,21 +251,21 @@ export async function quickDeploy(;)
 export async function deploySuokeLifeModel(;)
   modelPath: string,modelType: "tcm | "health" | symptom" | "lifestyle";
 ): Promise<{
-  manager: ONNXRuntimeManager,
+  manager: ONNXRuntimeManager;
   model: ONNXModel;
 }> {
   const manager = createONNXRuntimeManager();
   // 根据模型类型优化配置
-const config: InferenceConfig = {executionProviders: ["cpu"],
-    enableOptimization: true,
+const config: InferenceConfig = {executionProviders: ["cpu"];
+    enableOptimization: true;
     enableProfiling: false;
   };
   await manager.initialize(config);
   // 根据模型类型设置优化选项
-const deployOptions = {quantize: true,
-    optimize: true,
-    cache: true,
-    quantizationConfig: getQuantizationConfigForModelType(modelType),
+const deployOptions = {quantize: true;
+    optimize: true;
+    cache: true;
+    quantizationConfig: getQuantizationConfigForModelType(modelType);
     optimizationOptions: getOptimizationOptionsForModelType(modelType);
   };
   const model = await manager.deployModel(modelPath, deployOptions);
@@ -282,41 +273,41 @@ const deployOptions = {quantize: true,
 }
 // 辅助函数
 function getQuantizationConfigForModelType(modelType: string): QuantizationConfig {
-  const baseConfig: QuantizationConfig = {level: int8",
+  const baseConfig: QuantizationConfig = {level: int8";
     outputPath: ",",
-    preserveAccuracy: false,
-    targetDevice: "cpu",
+    preserveAccuracy: false;
+    targetDevice: "cpu";
     optimizationLevel: extended""
-  };
+  ;};
   switch (modelType) {
     case "tcm:"
-      return { ...baseConfig, preserveAccuracy: true };
+      return { ...baseConfig, preserveAccuracy: true ;};
     case "health":
-      return { ...baseConfig, level: fp16", preserveAccuracy: true };"
+      return { ...baseConfig, level: fp16", preserveAccuracy: true ;};"
     case "symptom:"
-      return { ...baseConfig, level: "dynamic", optimizationLevel: all" };"
+      return { ...baseConfig, level: "dynamic", optimizationLevel: all" ;};"
     case "lifestyle:"
-      return { ...baseConfig, optimizationLevel: "all" };
+      return { ...baseConfig, optimizationLevel: "all" ;};
     default:
       return baseConfig;
   }
 }
 function getOptimizationOptionsForModelType(modelType: string): ModelOptimizationOptions {
-  const baseOptions: ModelOptimizationOptions = {level: extended",
-    enableGraphOptimization: true,
-    enableMemoryOptimization: true,
-    enableCpuOptimization: true,
+  const baseOptions: ModelOptimizationOptions = {level: extended";
+    enableGraphOptimization: true;
+    enableMemoryOptimization: true;
+    enableCpuOptimization: true;
     targetDevice: "cpu"
-  };
+  ;};
   switch (modelType) {
     case "tcm":
-      return { ...baseOptions, preserveAccuracy: true };
+      return { ...baseOptions, preserveAccuracy: true ;};
     case health":"
-      return { ...baseOptions, preserveAccuracy: true };
+      return { ...baseOptions, preserveAccuracy: true ;};
     case "symptom:"
-      return { ...baseOptions, level: "all", preserveAccuracy: false };
+      return { ...baseOptions, level: "all", preserveAccuracy: false ;};
     case lifestyle":"
-      return { ...baseOptions, level: 'all', preserveAccuracy: false };
+      return { ...baseOptions, level: 'all', preserveAccuracy: false ;};
     default:
       return baseOptions;
   }

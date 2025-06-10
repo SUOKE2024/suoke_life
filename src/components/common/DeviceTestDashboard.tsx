@@ -1,6 +1,6 @@
-import { usePerformanceMonitor  } from "../../placeholder";../hooks/usePerformanceMonitor";/      View,"
+;/      View,"
 import React from "react";
-importdeviceInfoManager from "../../utils/deviceInfo/import { performanceMonitor  } from "../../placeholder";../../utils/performanceMonitor";/importdeviceIntegrationTester from ../../utils/deviceIntegrationTest"// "
+importdeviceInfoManager from "../../utils/deviceInfo/;/importdeviceIntegrationTester from ../../utils/deviceIntegrationTest"// "
 import React,{ useState, useEffect } from "react;";
   Text,
   StyleSheet,
@@ -14,8 +14,8 @@ interface DeviceTestDashboardProps {
   onTestComplete?: (report: IntegrationTestReport) => void;
 }
 const DeviceTestDashboard: React.FC<DeviceTestDashboardProps /> = ({/   const performanceMonitor = usePerformanceMonitor("DeviceTestDashboard", {trackRender: true,))
-    trackMemory: true,
-    warnThreshold: 50};);
+    trackMemory: true;
+    warnThreshold: 50;};);
 onTestComplete }) => {}
   const [deviceInfo, setDeviceInfo] = useState<any>(nul;l;);
   const [testReport, setTestReport] = useState<IntegrationTestReport | null />(nul;l;);/      const [isRunningTest, setIsRunningTest] = useState<boolean>(fals;e;);
@@ -53,10 +53,10 @@ onTestComplete }) => {}
   };
   const runIntegrationTest = async() => {}
     setIsRunningTest(tru;e;);
-    setCurrentTest(准备测试环境...")"
+
     try {
       const testSteps = [;
-        "检查设备兼容性...,测试权限系统...", "测试原生模块...", "测试通知系统...,测试性能指标...", "测试网络连接...", "生成测试报告...,";];
+
       for (let i = 0; i < testSteps.length; i++) {
         setCurrentTest(testSteps[i]);
         await new Promise<void>(resolve => setTimeout(resolve, 100;0;););
@@ -64,33 +64,33 @@ onTestComplete }) => {}
       const report = await deviceIntegrationTester.runFullIntegrationTe;s;t;
       setTestReport(report);
       onTestComplete?.(report)
-      Alert.alert("测试完成", "
-        `测试通过率: ${report.overallResult.passRate.toFixed(1)}%\n` +
-        `总测试数: ${report.overallResult.totalTests}\n` +
-        `耗时: ${report.overallResult.totalDuration}ms`,
-        [{ text: 确定"}]"
+
+
+
+
+
       )
     } catch (error) {
-      Alert.alert("测试失败", " error instanceof Error ? error.message : 未知错误")} finally {"
+
       setIsRunningTest(false);
       setCurrentTest(");"
     }
   };
   const runQuickTest = async() => {}
     setIsRunningTest(tru;e;);
-    setCurrentTest("运行快速测试...");
+
     try {
       const compatibility = await deviceInfoManager.checkCompatibilit;y;
       const metrics = await deviceInfoManager.getCurrentPerformanceMetri;c;s;(;);
       Alert.alert()
-        快速测试结果", "
-        `设备兼容性: ${compatibility.compatible ? "✅ 兼容 : "❌ 不兼容"}\n` +"
-        `内存使用: ${metrics.memoryUsage.percentage.toFixed(1)}%\n` +
-        `网络延迟: ${metrics.networkLatency}ms`,
-        [{ text: 确定"}]"
+
+
+
+
+
       )
     } catch (error) {
-      Alert.alert("快速测试失败, error instanceof Error ? error.message : "未知错误")} finally {"
+
       setIsRunningTest(false);
       setCurrentTest(");"
     }
@@ -102,7 +102,7 @@ onTestComplete }) => {}
     setTestReport(null);
     performanceMonitor.clearPerformanceData();
     deviceInfoManager.clearPerformanceHistory();
-    Alert.alert("数据已清除, "所有测试数据和性能历史已清除");"
+
   };
   const renderDeviceInfo = useCallback(); => {}
     const effectEnd = performance.now;
@@ -123,15 +123,15 @@ onTestComplete }) => {}
               {performanceMetrics.memoryUsage.percentage.toFixed(1)}%
             </Text>/          </View>/          <View style={styles.metricItem}>/            <Text style={styles.metricLabel}>CPU使用</Text>/  >
               styles.metricValue,
-{ color: performanceMetrics.cpuUsage /> 80 ? "#ff4444" : #4CAF50"},/                ]}>,"
+{ color: performanceMetrics.cpuUsage /> 80 ? "#ff4444" : #4CAF50";},/                ]}>,"
               {performanceMetrics.cpuUsage.toFixed(1)}%
             </Text>/          </View>/          <View style={styles.metricItem}>/            <Text style={styles.metricLabel}>网络延迟</Text>/  >
               styles.metricValue,
-{ color: performanceMetrics.networkLatency /> 1000 ? "#ff4444 : "#4CAF50"},/                ]}>,"
+{ color: performanceMetrics.networkLatency /> 1000 ? "#ff4444 : "#4CAF50";},/                ]}>,"
               {performanceMetrics.networkLatency}ms;
             </Text>/          </View>/          <View style={styles.metricItem}>/            <Text style={styles.metricLabel}>渲染时间</Text>/  >
               styles.metricValue,
-{ color: performanceMetrics.renderTime /> 16 ? #ff4444" : "#4CAF50},/                ]}>,
+{ color: performanceMetrics.renderTime /> 16 ? #ff4444" : "#4CAF50;},/                ]}>,
               {performanceMetrics.renderTime.toFixed(1)}ms;
             </Text>/          </View>/        </View>/      </View>/        );
   };
@@ -147,7 +147,7 @@ onTestComplete }) => {}
         </Text>/            {suite.tests.map(test, index) => ())
           <View key={index} style={styles.testItem}>/  >
               styles.testName,
-              { color: test.passed ? #4CAF50" : "#ff4444}
+              { color: test.passed ? #4CAF50" : "#ff4444;}
             ]} />/              {test.passed ? "✅" : ❌"} {test.testName}"
             </Text>/            <Text style={styles.testDuration}>{test.duration}ms</Text>/                {test.error  && <Text style={styles.testError}>错误: {test.error}</Text>/                )}
           </View>/            ))}
@@ -197,160 +197,160 @@ style={[styles.button, styles.warningButton]}
     </ScrollView>/      ;);
 }
 const styles = StyleSheet.create({container: {),
-  flex: 1,
-    backgroundColor: #f5f5f5",
-    padding: 16},
+  flex: 1;
+    backgroundColor: #f5f5f5";
+    padding: 16;},
   title: {,
-  fontSize: 24,
+  fontSize: 24;
     fontWeight: "bold,",
-    textAlign: "center",
-    marginBottom: 20,
-    color: #333"},"
+    textAlign: "center";
+    marginBottom: 20;
+    color: #333";},"
   section: {,
   backgroundColor: "#fff,",
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
+    borderRadius: 12;
+    padding: 16;
+    marginBottom: 16;
     shadowColor: "#000",shadowOffset: { width: 0, height;: ;2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3},
+    shadowOpacity: 0.1;
+    shadowRadius: 4;
+    elevation: 3;},
   sectionTitle: {,
-  fontSize: 18,
-    fontWeight: bold",
-    marginBottom: 12,
-    color: "#333},",
+  fontSize: 18;
+    fontWeight: bold";
+    marginBottom: 12;
+    color: "#333;},",
   infoGrid: {,
-  flexDirection: "row",
-    flexWrap: wrap",
-    justifyContent: "space-between},",
+  flexDirection: "row";
+    flexWrap: wrap";
+    justifyContent: "space-between;},",
   infoItem: {,
-  width: "48%",
-    marginBottom: 12},
+  width: "48%";
+    marginBottom: 12;},
   infoLabel: {,
-  fontSize: 12,
-    color: #666",
-    marginBottom: 4},
+  fontSize: 12;
+    color: #666";
+    marginBottom: 4;},
   infoValue: {,
-  fontSize: 16,
+  fontSize: 16;
     fontWeight: "600,",
-    color: "#333"},
+    color: "#333";},
   metricsGrid: {,
-  flexDirection: row",
+  flexDirection: row";
     flexWrap: "wrap,",
-    justifyContent: "space-between"},
+    justifyContent: "space-between";},
   metricItem: {,
-  width: 48%",
+  width: 48%";
     alignItems: "center,",
-    marginBottom: 12},
+    marginBottom: 12;},
   metricLabel: {,
-  fontSize: 12,
-    color: "#666",
-    marginBottom: 4},
+  fontSize: 12;
+    color: "#666";
+    marginBottom: 4;},
   metricValue: {,
-  fontSize: 20,
-    fontWeight: bold"},"
+  fontSize: 20;
+    fontWeight: bold";},"
   buttonGrid: {,
   flexDirection: "row,",
-    flexWrap: "wrap",
-    justifyContent: space-between"},"
+    flexWrap: "wrap";
+    justifyContent: space-between";},"
   button: {,
   width: "48%,",
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    alignItems: "center",
-    marginBottom: 12},
-  primaryButton: { backgroundColor: #2196F3"  },"
+    paddingVertical: 12;
+    paddingHorizontal: 16;
+    borderRadius: 8;
+    alignItems: "center";
+    marginBottom: 12;},
+  primaryButton: { backgroundColor: #2196F3"  ;},"
   secondaryButton: {,
   backgroundColor: "#fff,",
-    borderWidth: 1,
-    borderColor: "#2196F3"},
-  warningButton: { backgroundColor: #ff9800"  },"
+    borderWidth: 1;
+    borderColor: "#2196F3";},
+  warningButton: { backgroundColor: #ff9800"  ;},"
   buttonText: {,
   color: "#fff,",
-    fontSize: 14,
-    fontWeight: "600"},
+    fontSize: 14;
+    fontWeight: "600";},
   buttonTextSecondary: {,
-  color: #2196F3",
-    fontSize: 14,
-    fontWeight: "600},",
+  color: #2196F3";
+    fontSize: 14;
+    fontWeight: "600;},",
   testProgress: {,
-  flexDirection: "row",
-    alignItems: center",
+  flexDirection: "row";
+    alignItems: center";
     justifyContent: "center,",
-    marginTop: 12,
-    padding: 12,
-    backgroundColor: "#f0f8ff",
-    borderRadius: 8},
+    marginTop: 12;
+    padding: 12;
+    backgroundColor: "#f0f8ff";
+    borderRadius: 8;},
   testProgressText: {,
-  marginLeft: 8,
-    fontSize: 14,
-    color: #2196F3"},"
+  marginLeft: 8;
+    fontSize: 14;
+    color: #2196F3";},"
   reportSummary: {,
   flexDirection: "row,",
-    justifyContent: "space-around",
-    marginBottom: 16,
-    padding: 12,
-    backgroundColor: #f8f9fa",
-    borderRadius: 8},
-  summaryItem: { alignItems: "center  },"
+    justifyContent: "space-around";
+    marginBottom: 16;
+    padding: 12;
+    backgroundColor: #f8f9fa";
+    borderRadius: 8;},
+  summaryItem: { alignItems: "center  ;},"
   summaryLabel: {,
-  fontSize: 12,
-    color: "#666",
-    marginBottom: 4},
+  fontSize: 12;
+    color: "#666";
+    marginBottom: 4;},
   summaryValue: {,
-  fontSize: 18,
-    fontWeight: bold",
-    color: "#333},",
-  testSuitesList: { maxHeight: 400  },
+  fontSize: 18;
+    fontWeight: bold";
+    color: "#333;},",
+  testSuitesList: { maxHeight: 400  ;},
   testSuite: {,
-  marginBottom: 16,
-    padding: 12,
-    backgroundColor: "#f8f9fa",
-    borderRadius: 8},
+  marginBottom: 16;
+    padding: 12;
+    backgroundColor: "#f8f9fa";
+    borderRadius: 8;},
   testSuiteHeader: {,
-  flexDirection: row",
+  flexDirection: row";
     justifyContent: "space-between,",
-    alignItems: "center",
-    marginBottom: 8},
+    alignItems: "center";
+    marginBottom: 8;},
   testSuiteName: {,
-  fontSize: 16,
-    fontWeight: 600",
-    color: "#333},",
+  fontSize: 16;
+    fontWeight: 600";
+    color: "#333;},",
   testSuiteStatus: {,
-  fontSize: 14,
-    fontWeight: "bold"},
+  fontSize: 14;
+    fontWeight: "bold";},
   testSuiteInfo: {,
-  fontSize: 12,
-    color: #666",
-    marginBottom: 8},
+  fontSize: 12;
+    color: #666";
+    marginBottom: 8;},
   testItem: {,
-  marginLeft: 12,
-    marginBottom: 4},
+  marginLeft: 12;
+    marginBottom: 4;},
   testName: {,
-  fontSize: 14,
-    fontWeight: "500},",
+  fontSize: 14;
+    fontWeight: "500;},",
   testDuration: {,
-  fontSize: 12,
-    color: "#666"},
+  fontSize: 12;
+    color: "#666";},
   testError: {,
-  fontSize: 12,
-    color: #ff4444",
-    fontStyle: "italic},",
+  fontSize: 12;
+    color: #ff4444";
+    fontStyle: "italic;},",
   recommendations: {,
-  marginTop: 16,
-    padding: 12,
-    backgroundColor: "#fff3cd",
-    borderRadius: 8},
+  marginTop: 16;
+    padding: 12;
+    backgroundColor: "#fff3cd";
+    borderRadius: 8;},
   recommendationsTitle: {,
-  fontSize: 16,
-    fontWeight: bold",
-    marginBottom: 8,
-    color: "#856404},",
+  fontSize: 16;
+    fontWeight: bold";
+    marginBottom: 8;
+    color: "#856404;},",
   recommendationItem: {,
-  fontSize: 14,
+  fontSize: 14;
     color: "#856404",'
-    marginBottom: 4}
+    marginBottom: 4;}
 });
 export default React.memo(DeviceTestDashboard);

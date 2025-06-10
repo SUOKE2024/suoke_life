@@ -98,7 +98,7 @@ export const DataDisplay: React.FC<DataDisplayProps> = ({
   collapsible = false,
   defaultExpanded = true,
   onExpandChange
-}) => {
+;}) => {
   const { currentTheme } = useTheme();
   const styles = createStyles(currentTheme, size, bordered, layout);
 
@@ -140,10 +140,10 @@ export const DataDisplay: React.FC<DataDisplayProps> = ({
         return '-';
 
       case 'boolean':
-        return value ? '是' : '否';
+
 
       default:
-        return `${value}${unit || ''}`;
+        return `${value;}${unit || ''}`;
     }
   };
 
@@ -189,8 +189,8 @@ export const DataDisplay: React.FC<DataDisplayProps> = ({
         <Text;
           style={[
             styles.label,
-            layout === 'horizontal' && { width: labelWidth },
-            { textAlign: labelAlign },
+            layout === 'horizontal' && { width: labelWidth ;},
+            { textAlign: labelAlign ;},
             labelStyle
           ]}
         >
@@ -203,7 +203,7 @@ export const DataDisplay: React.FC<DataDisplayProps> = ({
             <Text;
               style={[
                 styles.value,
-                { color: statusColor, textAlign: valueAlign },
+                { color: statusColor, textAlign: valueAlign ;},
                 valueStyle
               ]}
             >
@@ -218,7 +218,7 @@ export const DataDisplay: React.FC<DataDisplayProps> = ({
               style={styles.actionButton}
               onPress={() => {
                 // 这里可以实现复制功能
-                console.log('复制:', item.value);
+
               }}
             >
               <Text style={styles.actionText}>复制</Text>
@@ -250,7 +250,7 @@ export const DataDisplay: React.FC<DataDisplayProps> = ({
           {rowItems.map(item, index) => renderItem(item, i + index))}
           {// 填充空白项}
           {rowItems.length < columns &&
-            Array.from({ length: columns - rowItems.length }).map(_, index) => (
+            Array.from({ length: columns - rowItems.length ;}).map(_, index) => (
                 <View key={`empty-${index}`} style={styles.gridItem} />
               )
             )}
@@ -306,113 +306,113 @@ export const DataDisplay: React.FC<DataDisplayProps> = ({
 };
 
 const createStyles = (
-  theme: any,
-  size: 'sm' | 'md' | 'lg',
-  bordered: boolean,
+  theme: any;
+  size: 'sm' | 'md' | 'lg';
+  bordered: boolean;
   layout: string;
 ) => {
   const sizeConfig = {
     sm: {,
-  padding: theme.spacing.sm,
-      fontSize: theme.typography.fontSize.sm,
-      titleFontSize: theme.typography.fontSize.base,
+  padding: theme.spacing.sm;
+      fontSize: theme.typography.fontSize.sm;
+      titleFontSize: theme.typography.fontSize.base;
       spacing: theme.spacing.xs
-    },
+    ;},
     md: {,
-  padding: theme.spacing.md,
-      fontSize: theme.typography.fontSize.base,
-      titleFontSize: theme.typography.fontSize.lg,
+  padding: theme.spacing.md;
+      fontSize: theme.typography.fontSize.base;
+      titleFontSize: theme.typography.fontSize.lg;
       spacing: theme.spacing.sm
-    },
+    ;},
     lg: {,
-  padding: theme.spacing.lg,
-      fontSize: theme.typography.fontSize.lg,
-      titleFontSize: theme.typography.fontSize.xl,
+  padding: theme.spacing.lg;
+      fontSize: theme.typography.fontSize.lg;
+      titleFontSize: theme.typography.fontSize.xl;
       spacing: theme.spacing.md
-    }
+    ;}
   };
 
   const config = sizeConfig[size];
 
   return StyleSheet.create({
     container: {,
-  backgroundColor: theme.colors.surface,
-      borderRadius: theme.borderRadius.md,
+  backgroundColor: theme.colors.surface;
+      borderRadius: theme.borderRadius.md;
       ...(bordered && {
-        borderWidth: 1,
+        borderWidth: 1;
         borderColor: theme.colors.outline
-      })
+      ;})
     },
     titleContainer: {,
-  flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      padding: config.padding,
-      borderBottomWidth: 1,
+  flexDirection: 'row';
+      justifyContent: 'space-between';
+      alignItems: 'center';
+      padding: config.padding;
+      borderBottomWidth: 1;
       borderBottomColor: theme.colors.outline
-    },
+    ;},
     title: {,
-  fontSize: config.titleFontSize,
-      fontWeight: theme.typography.fontWeight.semibold,
+  fontSize: config.titleFontSize;
+      fontWeight: theme.typography.fontWeight.semibold;
       color: theme.colors.onSurface
-    },
+    ;},
     expandIcon: {,
-  fontSize: config.fontSize,
+  fontSize: config.fontSize;
       color: theme.colors.onSurfaceVariant
-    },
+    ;},
     listContainer: {,
   padding: config.padding
-    },
+    ;},
     gridContainer: {,
   padding: config.padding
-    },
+    ;},
     gridRow: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
       marginBottom: config.spacing
-    },
+    ;},
     item: {,
   marginBottom: config.spacing
-    },
+    ;},
     horizontalItem: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
       alignItems: 'center'
-    },
+    ;},
     gridItem: {,
-  flex: 1,
+  flex: 1;
       marginRight: config.spacing
-    },
+    ;},
     itemWithDivider: {,
-  borderBottomWidth: 1,
-      borderBottomColor: theme.colors.outline,
+  borderBottomWidth: 1;
+      borderBottomColor: theme.colors.outline;
       paddingBottom: config.spacing
-    },
+    ;},
     label: {,
-  fontSize: config.fontSize,
-      fontWeight: theme.typography.fontWeight.medium,
-      color: theme.colors.onSurfaceVariant,
+  fontSize: config.fontSize;
+      fontWeight: theme.typography.fontWeight.medium;
+      color: theme.colors.onSurfaceVariant;
       marginBottom: layout === 'vertical' ? theme.spacing.xs : 0
-    },
+    ;},
     valueContainer: {,
-  flexDirection: 'row',
-      alignItems: 'center',
+  flexDirection: 'row';
+      alignItems: 'center';
       flex: 1
-    },
+    ;},
     value: {,
-  fontSize: config.fontSize,
-      color: theme.colors.onSurface,
+  fontSize: config.fontSize;
+      color: theme.colors.onSurface;
       flex: 1
-    },
+    ;},
     actionButton: {,
-  marginLeft: theme.spacing.sm,
-      paddingHorizontal: theme.spacing.sm,
-      paddingVertical: theme.spacing.xs,
-      backgroundColor: theme.colors.primaryContainer,
+  marginLeft: theme.spacing.sm;
+      paddingHorizontal: theme.spacing.sm;
+      paddingVertical: theme.spacing.xs;
+      backgroundColor: theme.colors.primaryContainer;
       borderRadius: theme.borderRadius.sm
-    },
+    ;},
     actionText: {,
-  fontSize: theme.typography.fontSize.sm,
+  fontSize: theme.typography.fontSize.sm;
       color: theme.colors.onPrimaryContainer
-    }
+    ;}
   });
 };
 

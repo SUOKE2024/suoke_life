@@ -22,7 +22,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
   style,
   children,
   testID
-}) => {
+;}) => {
   const { currentTheme } = useTheme();
   const animatedValue = useRef(new Animated.Value(0)).current;
 
@@ -33,22 +33,22 @@ export const Skeleton: React.FC<SkeletonProps> = ({
       if (animation === 'pulse') {
         return Animated.sequence([
           Animated.timing(animatedValue, {
-            toValue: 1,
-            duration: 1000,
+            toValue: 1;
+            duration: 1000;
             useNativeDriver: true
-          }),
+          ;}),
           Animated.timing(animatedValue, {
-            toValue: 0,
-            duration: 1000,
+            toValue: 0;
+            duration: 1000;
             useNativeDriver: true
-          })
+          ;})
         ]);
       } else if (animation === 'wave') {
         return Animated.timing(animatedValue, {
-          toValue: 1,
-          duration: 1500,
+          toValue: 1;
+          duration: 1500;
           useNativeDriver: true
-        });
+        ;});
       }
       return null;
     };
@@ -70,23 +70,23 @@ export const Skeleton: React.FC<SkeletonProps> = ({
       case 'circular':
         const size = typeof width === 'number' ? width : 40;
         return {
-          width: size as number,
-          height: size as number,
+          width: size as number;
+          height: size as number;
           borderRadius: (size as number) / 2
-        };
+        ;};
       case 'rectangular':
         return {
-          width: width as any,
-          height: height as any,
+          width: width as any;
+          height: height as any;
           borderRadius: borderRadius || 4
-        };
+        ;};
       case 'text':
       default:
         return {,
-  width: width as any,
-          height: baseHeight,
+  width: width as any;
+          height: baseHeight;
           borderRadius: borderRadius || baseHeight / 2
-        };
+        ;};
     }
   };
 
@@ -97,7 +97,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
       const opacity = animatedValue.interpolate({
         inputRange: [0, 1],
         outputRange: [0.3, 0.7]
-      });
+      ;});
       return { opacity };
     }
 
@@ -105,8 +105,8 @@ export const Skeleton: React.FC<SkeletonProps> = ({
       const translateX = animatedValue.interpolate({
         inputRange: [0, 1],
         outputRange: [-100, 100]
-      });
-      return { transform: [{ translateX }] };
+      ;});
+      return { transform: [{ translateX ;}] };
     }
 
     return {};
@@ -117,18 +117,18 @@ export const Skeleton: React.FC<SkeletonProps> = ({
 
   const styles = StyleSheet.create({
     skeleton: {,
-  backgroundColor: currentTheme.colors.outline,
+  backgroundColor: currentTheme.colors.outline;
       overflow: 'hidden'
-    },
+    ;},
     wave: {,
-  position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: currentTheme.colors.surface,
+  position: 'absolute';
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      backgroundColor: currentTheme.colors.surface;
       opacity: 0.5
-    }
+    ;}
   });
 
   if (children) {
@@ -148,13 +148,13 @@ export const Skeleton: React.FC<SkeletonProps> = ({
         <Animated.View;
           style={[
             {
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
+              position: 'absolute';
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
               backgroundColor: currentTheme.colors.surface
-            },
+            ;},
             animationStyle
           ]}
         />
@@ -195,26 +195,26 @@ export const SkeletonList: React.FC<SkeletonListProps> = ({
   showTitle = true,
   showSubtitle = true,
   style
-}) => {
-  const items = Array.from({ length: count }, (_, index) => (
+;}) => {
+  const items = Array.from({ length: count ;}, (_, index) => (
     <View;
       key={index}
       style={
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: index < count - 1 ? spacing : 0,
+        flexDirection: 'row';
+        alignItems: 'center';
+        marginBottom: index < count - 1 ? spacing : 0;
         height: itemHeight
-      }}
+      ;}}
     >
       {showAvatar && (
-        <SkeletonCircle width={40} height={40} style={ marginRight: 12 }} />
+        <SkeletonCircle width={40} height={40} style={ marginRight: 12 ;}} />
       )}
-      <View style={ flex: 1 }}>
+      <View style={ flex: 1 ;}}>
         {showTitle && (
           <SkeletonText;
             width="70%"
             height={16}
-            style={ marginBottom: showSubtitle ? 8 : 0 }}
+            style={ marginBottom: showSubtitle ? 8 : 0 ;}}
           />
         )}
         {showSubtitle && <SkeletonText width="50%" height={12} />}

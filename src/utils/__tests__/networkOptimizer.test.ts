@@ -1,5 +1,4 @@
 import { NetworkOptimizer, networkOptimizer, optimizedRequest, batchRequest, cancelAllNetworkRequests, getNetworkStats } from "../networkOptimizer";
-import { NetworkOptimizer, networkOptimizer, optimizedRequest, batchRequest, cancelAllNetworkRequests, getNetworkStats } from "../networkOptimizer";
 describe("networkOptimizer", () => {
   beforeEach(() => {
     jest.clearAllMocks();

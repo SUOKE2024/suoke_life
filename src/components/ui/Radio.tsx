@@ -1,12 +1,10 @@
-import { TouchableOpacity, View, Text, StyleSheet, ViewStyle, TextStyle } from "../../placeholder";react-native;
-import { useTheme } from ../../contexts/    ThemeContext;
-import React, { useMemo, useCallback } from "react";
+react";
 /**
 * * 索克生活 - Radio组件;
 * 单选框组件，用于单选操作
 export interface RadioProps {
-  value: string;,
-  selected: boolean;,
+  value: string;
+  selected: boolean;
   onSelect: (value: string) => void;
   label?: string;
   description?: string;
@@ -27,7 +25,7 @@ export const Radio: React.FC<RadioProps>  = ({
   size = medium",
   labelPosition = "right,"
   style,
-  labelStyle,descriptionStyle}) => {};
+  labelStyle,descriptionStyle;}) => {};
   const { colors, spacing } = useTheme();
   const handlePress = useCallback() => {
     if (!disabled) {onSelect(value);
@@ -54,8 +52,8 @@ export const Radio: React.FC<RadioProps>  = ({
       backgroundColor: selected;
         ? (disabled ? colors.gray400 : colors.primary)
         : "transparent,"
-      justifyContent: "center",
-      alignItems: center"};"
+      justifyContent: "center";
+      alignItems: center";};"
   }, [selected, disabled, colors, getRadioSize]);
   const renderDot = useCallback() => {
     if (!selected) return null;
@@ -63,10 +61,10 @@ export const Radio: React.FC<RadioProps>  = ({
     return (;)
       <View;
 style={
-          width: dotSize,
-          height: dotSize,
-          borderRadius: dotSize /     2,
-          backgroundColor: colors.white}}
+          width: dotSize;
+          height: dotSize;
+          borderRadius: dotSize /     2;
+          backgroundColor: colors.white;}}
       /    >
     );
   }, [selected, getDotSize, colors.white]);
@@ -78,7 +76,7 @@ style={
           <Text;
 style={[
               styles.label,
-              { color: disabled ? colors.textDisabled : colors.text }},
+              { color: disabled ? colors.textDisabled : colors.text ;}},
               labelStyle]}
           >
             {label}
@@ -87,7 +85,7 @@ style={[
         {description  && <Text;
 style={[
               styles.description,
-              { color: colors.textTertiary }},
+              { color: colors.textTertiary ;}},
               descriptionStyle]}
           >
             {description}
@@ -99,16 +97,16 @@ style={[
   const containerStyle = useMemo() => [;
     styles.container,
     {
-      opacity: disabled ? 0.6 : 1,
-      flexDirection: labelPosition === "left ? "row-reverse" : row"},style].filter(Boolean) as ViewStyle[], [disabled, labelPosition, style]);
+      opacity: disabled ? 0.6 : 1;
+      flexDirection: labelPosition === "left ? "row-reverse" : row";},style].filter(Boolean) as ViewStyle[], [disabled, labelPosition, style]);
   return (;)
     <TouchableOpacity;
 style={containerStyle}}
       onPress={handlePress}
       disabled={disabled}
       accessibilityRole="radio"
-      accessibilityState={ checked: selected, disabled }}
-      accessibilityLabel="TODO: 添加无障碍标签"
+      accessibilityState={ checked: selected, disabled ;}}
+
     >
       {labelPosition === "left && renderLabel()}"
       <View style={getRadioStyle()}}>{renderDot()}</    View>
@@ -117,15 +115,15 @@ style={containerStyle}}
   );
 };
 const styles = StyleSheet.create({container: {),
-  flexDirection: row",
+  flexDirection: row";
     alignItems: "center,",
-    paddingVertical: 8},
+    paddingVertical: 8;},
   labelContainer: {,
-  flex: 1,
-    marginHorizontal: 12},
+  flex: 1;
+    marginHorizontal: 12;},
   label: {,
-  fontSize: 16,
-    fontWeight: "500'},"'
+  fontSize: 16;
+    fontWeight: "500';},"'
   description: {,
-  fontSize: 14,marginTop: 2}});
+  fontSize: 14,marginTop: 2;}});
 export default Radio; */

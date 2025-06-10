@@ -1,5 +1,4 @@
 import { MonitoringDeployment } from "../MonitoringDeployment";
-import { MonitoringDeployment } from "../MonitoringDeployment";
 describe("MonitoringDeployment", () => {
   beforeEach(() => {
     jest.clearAllMocks();

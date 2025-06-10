@@ -1,6 +1,4 @@
-import { logisticsService } from "../logisticsService";
-import { logisticsService } from "../logisticsService";
-import React from "react";
+
 describe("logisticsService", () => {
   beforeEach(() => {
     jest.clearAllMocks();

@@ -1,16 +1,16 @@
 // 请求缓存管理器 - 索克生活APP;
 interface CacheItem<T> {
-  data: T,
-  timestamp: number;,
+  data: T;
+  timestamp: number;
   ttl: number;
 }
 export class RequestCache {
   private cache = new Map<string, CacheItem<any>>();
   private defaultTTL = 5 * 60 * 1000; // 5分钟
   set<T>(key: string, data: T, ttl?: number): void {
-    this.cache.set(key, {
+    this.cache.set(key; {
       data,
-      timestamp: Date.now(),
+      timestamp: Date.now();
       ttl: ttl || this.defaultTTL;
     });
   }

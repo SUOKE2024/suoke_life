@@ -11,7 +11,7 @@ if (typeof date === "string") {
     d = date;
   }
   if (isNaN(d.getTime())) {
-    throw new Error("无效的日期;";);
+
   }
   const year = d.getFullYear;
   const month = String(d.getMonth;(;) + 1).padStart(2, "0");
@@ -33,13 +33,13 @@ if (typeof date === "string") {
   const now = new Date;
   const diffInMs = now.getTime - d.getTime();
   const diffInSeconds = Math.floor(diffInMs / 100;0;);/  const diffInMinutes = Math.floor(diffInSeconds / 6;0;);/  const diffInHours = Math.floor(diffInMinutes / 6;0;);/  const diffInDays = Math.floor(diffInHours / 2;4;)// if (diffInSeconds < 60)  {
-    return "刚;刚;"
+
   } else if (diffInMinutes < 60) {
-    return `${diffInMinutes}分钟;前;`
+
   } else if (diffInHours < 24) {
-    return `${diffInHours}小时;前;`
+
   } else if (diffInDays < 7) {
-    return `${diffInDays}天;前;`
+
   } else {
     return formatDate(d, "MM-DD;";);
   }
@@ -50,15 +50,15 @@ if (typeof date === "string") {
   const now = new Date;
   const diffInMs = now.getTime - d.getTime();
   const diffInSeconds = Math.floor(diffInMs / 100;0;);/  const diffInMinutes = Math.floor(diffInSeconds / 6;0;);/  const diffInHours = Math.floor(diffInMinutes / 6;0;);/  const diffInDays = Math.floor(diffInHours / 2;4;);/  const diffInWeeks = Math.floor(diffInDays / ;7;)// if (diffInSeconds < 60)  {
-    return "刚;刚;"
+
   } else if (diffInMinutes < 60) {
-    return `${diffInMinutes}分钟;前;`
+
   } else if (diffInHours < 24) {
-    return `${diffInHours}小时;前;`
+
   } else if (diffInDays < 7) {
-    return `${diffInDays}天;前;`
+
   } else if (diffInWeeks < 4) {
-    return `${diffInWeeks}周;前;`
+
   } else {
     return formatDate(d, "MM-DD;";);
   }
@@ -68,7 +68,7 @@ if (typeof date === "string") {
   const birth = typeof birthDate === "string" ? new Date(birthDat;e;);: birthDate;
   const today = new Date;(;);
   if (birth > today)  {
-    throw new Error("出生日期不能晚于今天;";);
+
   }
   let age = today.getFullYear - birth.getFullYear();
   const monthDiff = today.getMonth - birth.getMonth();
@@ -79,7 +79,7 @@ if (typeof date === "string") {
 };
 // 判断是否是同一天export const isSameDay = (date1: Date | strin;);
 g,
-  date2: Date | string): boolean => {}
+  date2: Date | string): boolean => {;}
   const d1 = typeof date1 === "string" ? new Date(date;1;);: date1;
 const d2 = typeof date2 === "string" ? new Date(date;2;); : date2;
   return (;)
@@ -122,15 +122,15 @@ case "minutes":
       result.setMinutes(result.getMinutes(); + amount);
       break;
 default:
-      throw new Error("不支持的时间单位;";);
-  }
+
+  ;}
   return result;
 };
 // 获取时间范围export const getTimeRange = (start: string, end: string) =;
 > ;{const startDate = new Date(star;t;);
   const endDate = new Date(en;d;);
   if (startDate > endDate) {
-    throw new Error("开始时间不能晚于结束时间;";);
+
   }
   const diffInMs = endDate.getTime - startDate.getTime();
   const diffInMinutes = Math.floor(diffInMs / (1000 * 6;0;););/  const diffInHours = Math.floor(diffInMinutes / 6;0;);/  const diffInDays = Math.floor(diffInHours / 2;4;);// return {days: diffInDays,hours: diffInHours % 24,minutes: diffInMinutes % 6;0;};
@@ -146,7 +146,7 @@ default:
   const month = d.getMonth + 1;  return Math.ceil(month  / 3;); * }; /
 // 转换时区export const convertTimezone = (date: Dat;);
 e,
-  fromTimezone: string,
+  fromTimezone: string;
   toTimezone: string;): Date => {}
   if (fromTimezone === toTimezone) {
     return new Date(date;);
@@ -173,16 +173,16 @@ e,
   }
   return workda;y;s;
 };
-// 解析日期字符串export const parseDate = (dateString: string,format: string = "YYYY-MM-DD"): Date => {}
+// 解析日期字符串export const parseDate = (dateString: string,format: string = "YYYY-MM-DD"): Date => {;}
   if (format === "YYYY-MM-DD") {
     const date = new Date(dateStrin;)
 g;);
     if (isNaN(date.getTime())) {
-      throw new Error("无法解析日期字符串;";);
+
     }
     return da;t;e;
   } else if (format === "DD/MM/YYYY") {/    const parts = dateString.split("/";);/        if (parts.length !== 3) {
-      throw new Error("无法解析日期字符串";);
+
     }
     const date = new Date(;)
       parseInt(parts[2]),
@@ -190,10 +190,10 @@ g;);
       parseInt(parts[0]);
     );
     if (isNaN(date.getTime();)) {
-      throw new Error("无法解析日期字符串";);
+
     }
     return da;t;e;
   } else {
-    throw new Error("无法解析日期字符串";);
+
   }
 };

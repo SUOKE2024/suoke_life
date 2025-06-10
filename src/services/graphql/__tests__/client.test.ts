@@ -22,17 +22,17 @@ describe('GraphQLClient', () => {
       const query = 'query { test }';
       // Mock the actual implementation
       jest.spyOn(client as any, 'executeRequest').mockResolvedValue({
-        data: { test: 'success' }
+        data: { test: 'success' ;}
       });
       const result = await client.query(query);
       expect(result).toBeDefined();
-      expect(result.data).toEqual({ test: 'success' });
+      expect(result.data).toEqual({ test: 'success' ;});
     });
     it('should handle query with variables', async () => {
-      const query = 'query($id: ID!) { user(id: $id) { name } }';
-      const variables = { id: '123' };
+      const query = 'query($id: ID!) { user(id: $id) { name ;} }';
+      const variables = { id: '123' ;};
       jest.spyOn(client as any, 'executeRequest').mockResolvedValue({
-        data: { user: { name: 'Test User' } }
+        data: { user: { name: 'Test User' ;} }
       });
       const result = await client.query(query, variables);
       expect(result).toBeDefined();
@@ -45,13 +45,13 @@ describe('GraphQLClient', () => {
   });
   describe('mutate method', () => {
     it('should execute mutation with valid inputs', async () => {
-      const mutation = 'mutation { createUser(input: {}) { id } }';
+      const mutation = 'mutation { createUser(input: {;}) { id } }';
       jest.spyOn(client as any, 'executeRequest').mockResolvedValue({
-        data: { createUser: { id: 'new-id' } }
+        data: { createUser: { id: 'new-id' ;} }
       });
       const result = await client.mutate(mutation);
       expect(result).toBeDefined();
-      expect(result.data).toEqual({ createUser: { id: 'new-id' } });
+      expect(result.data).toEqual({ createUser: { id: 'new-id' ;} });
     });
   });
   describe('authentication', () => {
@@ -84,7 +84,7 @@ describe('GraphQLClient Performance Tests', () => {
     const iterations = 10;
     const query = 'query { test }';
     jest.spyOn(client as any, 'executeRequest').mockResolvedValue({
-      data: { test: 'success' }
+      data: { test: 'success' ;}
     });
     const startTime = performance.now();
     for (let i = 0; i < iterations; i++) {
@@ -97,10 +97,10 @@ describe('GraphQLClient Performance Tests', () => {
   });
   it('should handle large datasets efficiently', async () => {
     const largeQuery = 'query { users { ' + 'id name email '.repeat(100) + '} }';
-    const largeDataset = new Array(1000).fill(0).map(((_, i) => ({id: i,name: `User ${i}`,email: `user${i}@test.com`;)))
+    const largeDataset = new Array(1000).fill(0).map(((_, i) => ({id: i,name: `User ${i;}`,email: `user${i;}@test.com`;)))
     }));
     jest.spyOn(client as any, 'executeRequest').mockResolvedValue({
-      data: { users: largeDataset }
+      data: { users: largeDataset ;}
     });
     const startTime = performance.now();
     await client.query(largeQuery);
@@ -112,7 +112,7 @@ describe('GraphQLClient Performance Tests', () => {
     const initialMemory = process.memoryUsage().heapUsed;
     const query = 'query { test }';
     jest.spyOn(client as any, 'executeRequest').mockResolvedValue({
-      data: { test: 'success' }
+      data: { test: 'success' ;}
     });
     // Execute function multiple times
     for (let i = 0; i < 100; i++) {

@@ -22,23 +22,23 @@ import {;
   typography
 } from '../../constants/theme';
 
-const { width: screenWidth } = Dimensions.get('window');
+const { width: screenWidth ;} = Dimensions.get('window');
 
 interface DiagnosisStep {
-  id: string;,
-  title: string;,
-  description: string;,
-  icon: string;,
-  color: string;,
-  completed: boolean;,
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  color: string;
+  completed: boolean;
   active: boolean;
   data?: any;
 }
 
 interface DiagnosisResult {
-  syndrome: string;,
-  confidence: number;,
-  symptoms: string[];,
+  syndrome: string;
+  confidence: number;
+  symptoms: string[];
   recommendations: string[];
   prescription?: string;
 }
@@ -61,60 +61,60 @@ const EnhancedDiagnosisScreen: React.FC = () => {
   // 四诊步骤
   const [steps, setSteps] = useState<DiagnosisStep[]>([
     {
-      id: 'look',
-      title: '望诊',
-      description: '观察面色、舌象、体态等外在表现',
-      icon: 'eye',
-      color: colors.primary,
-      completed: false,
+      id: 'look';
+
+
+      icon: 'eye';
+      color: colors.primary;
+      completed: false;
       active: true
-    },
+    ;},
     {
-      id: 'listen',
-      title: '闻诊',
-      description: '听声音、闻气味，了解内在状态',
-      icon: 'ear-hearing',
-      color: colors.secondary,
-      completed: false,
+      id: 'listen';
+
+
+      icon: 'ear-hearing';
+      color: colors.secondary;
+      completed: false;
       active: false
-    },
+    ;},
     {
-      id: 'inquiry',
-      title: '问诊',
-      description: '询问症状、病史、生活习惯等',
-      icon: 'comment-question',
-      color: colors.warning,
-      completed: false,
+      id: 'inquiry';
+
+
+      icon: 'comment-question';
+      color: colors.warning;
+      completed: false;
       active: false
-    },
+    ;},
     {
-      id: 'palpation',
-      title: '切诊',
-      description: '脉诊、按压，感知内在变化',
-      icon: 'hand-back-left',
-      color: colors.info,
-      completed: false,
+      id: 'palpation';
+
+
+      icon: 'hand-back-left';
+      color: colors.info;
+      completed: false;
       active: false
-    }
+    ;}
   ]);
 
   // 初始化动画
   useEffect() => {
     Animated.parallel([
       Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 800,
+        toValue: 1;
+        duration: 800;
         useNativeDriver: true
-      }),
+      ;}),
       Animated.timing(slideAnim, {
-        toValue: 0,
-        duration: 800,
+        toValue: 0;
+        duration: 800;
         useNativeDriver: true
-      }),
+      ;}),
       Animated.spring(scaleAnim, {
-        toValue: 1,
+        toValue: 1;
         useNativeDriver: true
-      })
+      ;})
     ]).start();
   }, []);
 
@@ -132,7 +132,7 @@ const EnhancedDiagnosisScreen: React.FC = () => {
       setSteps(prev) =>
         prev.map(step, index) => ({
           ...step,
-          completed: index === currentStep ? true : step.completed,
+          completed: index === currentStep ? true : step.completed;
           active:
             index === currentStep + 1;
               ? true;
@@ -147,18 +147,18 @@ const EnhancedDiagnosisScreen: React.FC = () => {
       // 滚动到下一步
       setTimeout() => {
         scrollViewRef.current?.scrollTo({
-          y: (currentStep + 1) * 200,
+          y: (currentStep + 1) * 200;
           animated: true
-        });
+        ;});
       }, 300);
     } else {
       // 完成所有步骤，开始分析
       setSteps(prev) =>
         prev.map(step, index) => ({
           ...step,
-          completed: index === currentStep ? true : step.completed,
+          completed: index === currentStep ? true : step.completed;
           active: false
-        }))
+        ;}))
       );
 
       startDiagnosisAnalysis();
@@ -170,21 +170,21 @@ const EnhancedDiagnosisScreen: React.FC = () => {
     setIsProcessing(true);
 
     // 模拟AI分析过程
-    await new Promise(resolve) => setTimeout(resolve, 3000));
+    await new Promise(resolve => setTimeout(resolve, 3000));
 
     // 模拟诊断结果
     const result: DiagnosisResult = {,
-  syndrome: '脾胃虚弱证',
-      confidence: 85,
-      symptoms: ['食欲不振', '腹胀', '乏力', '大便溏薄'],
+
+      confidence: 85;
+
       recommendations: [
-        '健脾益气，调理脾胃',
-        '饮食清淡，少食多餐',
-        '适当运动，增强体质',
-        '保持心情舒畅'
+
+
+
+
       ],
-      prescription: '四君子汤加减'
-    };
+
+    ;};
 
     setDiagnosisResult(result);
     setIsProcessing(false);
@@ -199,9 +199,9 @@ const EnhancedDiagnosisScreen: React.FC = () => {
     setSteps(prev) =>
       prev.map(step, index) => ({
         ...step,
-        completed: false,
+        completed: false;
         active: index === 0
-      }))
+      ;}))
     );
   };
 
@@ -219,10 +219,10 @@ const EnhancedDiagnosisScreen: React.FC = () => {
           isActive && styles.activeStepCard,
           isCompleted && styles.completedStepCard,
           {
-            opacity: fadeAnim,
+            opacity: fadeAnim;
             transform: [
-              { translateY: slideAnim },
-              { scale: isCurrent ? scaleAnim : 1 }
+              { translateY: slideAnim ;},
+              { scale: isCurrent ? scaleAnim : 1 ;}
             ]
           }
         ]}
@@ -231,7 +231,7 @@ const EnhancedDiagnosisScreen: React.FC = () => {
           <View;
             style={[
               styles.stepIcon,
-              { backgroundColor: step.color },
+              { backgroundColor: step.color ;},
               isCompleted && styles.completedStepIcon
             ]}
           >
@@ -271,7 +271,7 @@ const EnhancedDiagnosisScreen: React.FC = () => {
     switch (step.id) {
       case 'look':
         return (
-          <View style={styles.contentContainer}>
+          <View style={styles.contentContainer;}>
             <Text style={styles.contentTitle}>请上传面部照片和舌象照片</Text>
             <View style={styles.uploadContainer}>
               <TouchableOpacity style={styles.uploadButton}>
@@ -284,7 +284,7 @@ const EnhancedDiagnosisScreen: React.FC = () => {
               </TouchableOpacity>
             </View>
             <Button;
-              title="完成望诊"
+
               onPress={nextStep}
               style={styles.nextButton}
             />
@@ -302,10 +302,10 @@ const EnhancedDiagnosisScreen: React.FC = () => {
               </TouchableOpacity>
             </View>
             <Text style={styles.instructionText}>
-              请说话30秒，内容可以是朗读、日常对话等
+
             </Text>
             <Button;
-              title="完成闻诊"
+
               onPress={nextStep}
               style={styles.nextButton}
             />
@@ -319,7 +319,7 @@ const EnhancedDiagnosisScreen: React.FC = () => {
             <View style={styles.questionContainer}>
               <Text style={styles.questionText}>请选择您目前的症状：</Text>
               <View style={styles.symptomsGrid}>
-                {['头痛', '失眠', '食欲不振', '腹胀', '乏力', '心悸'].map(symptom) => (
+
                     <TouchableOpacity;
                       key={symptom}
                       style={styles.symptomButton}
@@ -331,7 +331,7 @@ const EnhancedDiagnosisScreen: React.FC = () => {
               </View>
             </View>
             <Button;
-              title="完成问诊"
+
               onPress={nextStep}
               style={styles.nextButton}
             />
@@ -344,7 +344,7 @@ const EnhancedDiagnosisScreen: React.FC = () => {
             <Text style={styles.contentTitle}>脉诊检测</Text>
             <View style={styles.pulseContainer}>
               <Text style={styles.instructionText}>
-                请将手指轻放在手腕脉搏处，保持静止30秒
+
               </Text>
               <View style={styles.pulseIndicator}>
                 <Icon name="heart-pulse" size={64} color={colors.info} />
@@ -352,7 +352,7 @@ const EnhancedDiagnosisScreen: React.FC = () => {
               </View>
             </View>
             <Button;
-              title="完成切诊"
+
               onPress={nextStep}
               style={styles.nextButton}
             />
@@ -417,12 +417,12 @@ const EnhancedDiagnosisScreen: React.FC = () => {
 
         <View style={styles.actionButtons}>
           <Button;
-            title="保存报告"
-            onPress={() => Alert.alert('保存成功', '诊断报告已保存到健康档案')}
+
+
             style={styles.actionButton}
           />
           <Button;
-            title="重新诊断"
+
             onPress={restart}
             variant="outline"
             style={styles.actionButton}
@@ -444,7 +444,7 @@ const EnhancedDiagnosisScreen: React.FC = () => {
                 rotate: fadeAnim.interpolate({,
   inputRange: [0, 1],
                   outputRange: ['0deg', '360deg']
-                })
+                ;})
               }
             ]
           }
@@ -454,7 +454,7 @@ const EnhancedDiagnosisScreen: React.FC = () => {
       </Animated.View>
       <Text style={styles.processingTitle}>AI 智能分析中</Text>
       <Text style={styles.processingText}>
-        正在综合四诊信息，进行中医证候分析...
+
       </Text>
       <ProgressBar progress={progress} style={styles.processingProgress} />
     </View>
@@ -502,368 +502,368 @@ const EnhancedDiagnosisScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
+  flex: 1;
     backgroundColor: colors.background
-  },
+  ;},
   header: {,
-  flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-    backgroundColor: colors.surface,
-    borderBottomWidth: 1,
+  flexDirection: 'row';
+    alignItems: 'center';
+    justifyContent: 'space-between';
+    paddingHorizontal: spacing.lg;
+    paddingVertical: spacing.md;
+    backgroundColor: colors.surface;
+    borderBottomWidth: 1;
     borderBottomColor: colors.border
-  },
+  ;},
   backButton: {,
-  width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.gray100,
-    justifyContent: 'center',
+  width: 40;
+    height: 40;
+    borderRadius: 20;
+    backgroundColor: colors.gray100;
+    justifyContent: 'center';
     alignItems: 'center'
-  },
+  ;},
   headerTitle: {,
-  fontSize: typography.fontSize.lg,
-    fontWeight: '600' as const,
+  fontSize: typography.fontSize.lg;
+    fontWeight: '600' as const;
     color: colors.text
-  },
+  ;},
   helpButton: {,
-  width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.gray100,
-    justifyContent: 'center',
+  width: 40;
+    height: 40;
+    borderRadius: 20;
+    backgroundColor: colors.gray100;
+    justifyContent: 'center';
     alignItems: 'center'
-  },
+  ;},
   progressContainer: {,
-  paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
+  paddingHorizontal: spacing.lg;
+    paddingVertical: spacing.md;
     backgroundColor: colors.surface
-  },
+  ;},
   progressBar: {,
   marginBottom: spacing.xs
-  },
+  ;},
   progressText: {,
-  fontSize: typography.fontSize.sm,
-    color: colors.textSecondary,
+  fontSize: typography.fontSize.sm;
+    color: colors.textSecondary;
     textAlign: 'center'
-  },
+  ;},
   content: {,
   flex: 1
-  },
+  ;},
   stepsContainer: {,
   padding: spacing.lg
-  },
+  ;},
   stepCard: {,
-  backgroundColor: colors.surface,
-    borderRadius: borderRadius.lg,
-    padding: spacing.lg,
-    marginBottom: spacing.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
+  backgroundColor: colors.surface;
+    borderRadius: borderRadius.lg;
+    padding: spacing.lg;
+    marginBottom: spacing.lg;
+    borderWidth: 1;
+    borderColor: colors.border;
     ...shadows.sm
   },
   activeStepCard: {,
-  borderColor: colors.primary,
+  borderColor: colors.primary;
     ...shadows.md
   },
   completedStepCard: {,
-  backgroundColor: colors.success + '10',
+  backgroundColor: colors.success + '10';
     borderColor: colors.success
-  },
+  ;},
   stepHeader: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
     alignItems: 'center'
-  },
+  ;},
   stepIcon: {,
-  width: 48,
-    height: 48,
-    borderRadius: 24,
-    justifyContent: 'center',
+  width: 48;
+    height: 48;
+    borderRadius: 24;
+    justifyContent: 'center';
     alignItems: 'center'
-  },
+  ;},
   completedStepIcon: {,
   backgroundColor: colors.success
-  },
+  ;},
   stepInfo: {,
-  flex: 1,
+  flex: 1;
     marginLeft: spacing.md
-  },
+  ;},
   stepTitle: {,
-  fontSize: typography.fontSize.lg,
-    fontWeight: '600' as const,
+  fontSize: typography.fontSize.lg;
+    fontWeight: '600' as const;
     color: colors.text
-  },
+  ;},
   activeStepTitle: {,
   color: colors.primary
-  },
+  ;},
   stepDescription: {,
-  fontSize: typography.fontSize.sm,
-    color: colors.textSecondary,
+  fontSize: typography.fontSize.sm;
+    color: colors.textSecondary;
     marginTop: 2
-  },
+  ;},
   stepStatus: {,
-  width: 24,
-    height: 24,
-    justifyContent: 'center',
+  width: 24;
+    height: 24;
+    justifyContent: 'center';
     alignItems: 'center'
-  },
+  ;},
   activeIndicator: {,
-  width: 12,
-    height: 12,
-    borderRadius: 6,
+  width: 12;
+    height: 12;
+    borderRadius: 6;
     backgroundColor: colors.primary
-  },
+  ;},
   stepContent: {,
-  marginTop: spacing.lg,
-    paddingTop: spacing.lg,
-    borderTopWidth: 1,
+  marginTop: spacing.lg;
+    paddingTop: spacing.lg;
+    borderTopWidth: 1;
     borderTopColor: colors.border
-  },
+  ;},
   contentContainer: {,
   alignItems: 'center'
-  },
+  ;},
   contentTitle: {,
-  fontSize: typography.fontSize.base,
-    fontWeight: '600' as const,
-    color: colors.text,
-    marginBottom: spacing.lg,
+  fontSize: typography.fontSize.base;
+    fontWeight: '600' as const;
+    color: colors.text;
+    marginBottom: spacing.lg;
     textAlign: 'center'
-  },
+  ;},
   uploadContainer: {,
-  flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
+  flexDirection: 'row';
+    justifyContent: 'space-around';
+    width: '100%';
     marginBottom: spacing.lg
-  },
+  ;},
   uploadButton: {,
-  alignItems: 'center',
-    padding: spacing.lg,
-    borderWidth: 2,
-    borderColor: colors.primary,
-    borderStyle: 'dashed',
-    borderRadius: borderRadius.md,
+  alignItems: 'center';
+    padding: spacing.lg;
+    borderWidth: 2;
+    borderColor: colors.primary;
+    borderStyle: 'dashed';
+    borderRadius: borderRadius.md;
     width: '45%'
-  },
+  ;},
   uploadText: {,
-  fontSize: typography.fontSize.sm,
-    color: colors.primary,
-    marginTop: spacing.sm,
+  fontSize: typography.fontSize.sm;
+    color: colors.primary;
+    marginTop: spacing.sm;
     textAlign: 'center'
-  },
+  ;},
   recordContainer: {,
-  alignItems: 'center',
+  alignItems: 'center';
     marginBottom: spacing.lg
-  },
+  ;},
   recordButton: {,
-  width: 120,
-    height: 120,
-    borderRadius: 60,
-    backgroundColor: colors.secondary + '20',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 3,
+  width: 120;
+    height: 120;
+    borderRadius: 60;
+    backgroundColor: colors.secondary + '20';
+    justifyContent: 'center';
+    alignItems: 'center';
+    borderWidth: 3;
     borderColor: colors.secondary
-  },
+  ;},
   recordText: {,
-  fontSize: typography.fontSize.sm,
-    color: colors.secondary,
+  fontSize: typography.fontSize.sm;
+    color: colors.secondary;
     marginTop: spacing.sm
-  },
+  ;},
   instructionText: {,
-  fontSize: typography.fontSize.sm,
-    color: colors.textSecondary,
-    textAlign: 'center',
-    marginBottom: spacing.lg,
+  fontSize: typography.fontSize.sm;
+    color: colors.textSecondary;
+    textAlign: 'center';
+    marginBottom: spacing.lg;
     lineHeight: 20
-  },
+  ;},
   questionContainer: {,
-  width: '100%',
+  width: '100%';
     marginBottom: spacing.lg
-  },
+  ;},
   questionText: {,
-  fontSize: typography.fontSize.base,
-    color: colors.text,
+  fontSize: typography.fontSize.base;
+    color: colors.text;
     marginBottom: spacing.md
-  },
+  ;},
   symptomsGrid: {,
-  flexDirection: 'row',
-    flexWrap: 'wrap',
+  flexDirection: 'row';
+    flexWrap: 'wrap';
     justifyContent: 'space-between'
-  },
+  ;},
   symptomButton: {,
-  width: '48%',
-    padding: spacing.md,
-    backgroundColor: colors.gray100,
-    borderRadius: borderRadius.md,
-    marginBottom: spacing.sm,
+  width: '48%';
+    padding: spacing.md;
+    backgroundColor: colors.gray100;
+    borderRadius: borderRadius.md;
+    marginBottom: spacing.sm;
     alignItems: 'center'
-  },
+  ;},
   symptomText: {,
-  fontSize: typography.fontSize.sm,
+  fontSize: typography.fontSize.sm;
     color: colors.text
-  },
+  ;},
   pulseContainer: {,
-  alignItems: 'center',
+  alignItems: 'center';
     marginBottom: spacing.lg
-  },
+  ;},
   pulseIndicator: {,
-  alignItems: 'center',
+  alignItems: 'center';
     marginTop: spacing.lg
-  },
+  ;},
   pulseText: {,
-  fontSize: typography.fontSize.base,
-    color: colors.info,
+  fontSize: typography.fontSize.base;
+    color: colors.info;
     marginTop: spacing.sm
-  },
+  ;},
   nextButton: {,
   width: '100%'
-  },
+  ;},
   processingContainer: {,
-  flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  flex: 1;
+    justifyContent: 'center';
+    alignItems: 'center';
     padding: spacing.xl
-  },
+  ;},
   processingIcon: {,
   marginBottom: spacing.lg
-  },
+  ;},
   processingTitle: {,
-  fontSize: typography.fontSize.xl,
-    fontWeight: '600' as const,
-    color: colors.text,
+  fontSize: typography.fontSize.xl;
+    fontWeight: '600' as const;
+    color: colors.text;
     marginBottom: spacing.sm
-  },
+  ;},
   processingText: {,
-  fontSize: typography.fontSize.base,
-    color: colors.textSecondary,
-    textAlign: 'center',
-    marginBottom: spacing.xl,
+  fontSize: typography.fontSize.base;
+    color: colors.textSecondary;
+    textAlign: 'center';
+    marginBottom: spacing.xl;
     lineHeight: 22
-  },
+  ;},
   processingProgress: {,
   width: '80%'
-  },
+  ;},
   resultContainer: {,
   padding: spacing.lg
-  },
+  ;},
   resultHeader: {,
-  flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+  flexDirection: 'row';
+    alignItems: 'center';
+    justifyContent: 'center';
     marginBottom: spacing.xl
-  },
+  ;},
   resultTitle: {,
-  fontSize: typography.fontSize.xl,
-    fontWeight: '600' as const,
-    color: colors.text,
+  fontSize: typography.fontSize.xl;
+    fontWeight: '600' as const;
+    color: colors.text;
     marginLeft: spacing.sm
-  },
+  ;},
   syndromeCard: {,
-  backgroundColor: colors.primary + '10',
-    borderRadius: borderRadius.lg,
-    padding: spacing.lg,
-    marginBottom: spacing.lg,
-    borderWidth: 1,
+  backgroundColor: colors.primary + '10';
+    borderRadius: borderRadius.lg;
+    padding: spacing.lg;
+    marginBottom: spacing.lg;
+    borderWidth: 1;
     borderColor: colors.primary
-  },
+  ;},
   syndromeTitle: {,
-  fontSize: typography.fontSize.sm,
-    color: colors.primary,
+  fontSize: typography.fontSize.sm;
+    color: colors.primary;
     marginBottom: spacing.xs
-  },
+  ;},
   syndromeName: {,
-  fontSize: typography.fontSize.xl,
-    fontWeight: '700' as const,
-    color: colors.primary,
+  fontSize: typography.fontSize.xl;
+    fontWeight: '700' as const;
+    color: colors.primary;
     marginBottom: spacing.sm
-  },
+  ;},
   confidenceContainer: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
     alignItems: 'center'
-  },
+  ;},
   confidenceLabel: {,
-  fontSize: typography.fontSize.sm,
+  fontSize: typography.fontSize.sm;
     color: colors.textSecondary
-  },
+  ;},
   confidenceValue: {,
-  fontSize: typography.fontSize.sm,
-    fontWeight: '600' as const,
+  fontSize: typography.fontSize.sm;
+    fontWeight: '600' as const;
     color: colors.primary
-  },
+  ;},
   symptomsCard: {,
-  backgroundColor: colors.surface,
-    borderRadius: borderRadius.lg,
-    padding: spacing.lg,
-    marginBottom: spacing.lg,
+  backgroundColor: colors.surface;
+    borderRadius: borderRadius.lg;
+    padding: spacing.lg;
+    marginBottom: spacing.lg;
     ...shadows.sm
   },
   cardTitle: {,
-  fontSize: typography.fontSize.base,
-    fontWeight: '600' as const,
-    color: colors.text,
+  fontSize: typography.fontSize.base;
+    fontWeight: '600' as const;
+    color: colors.text;
     marginBottom: spacing.md
-  },
+  ;},
   symptomItem: {,
-  flexDirection: 'row',
-    alignItems: 'center',
+  flexDirection: 'row';
+    alignItems: 'center';
     marginBottom: spacing.xs
-  },
+  ;},
   symptomItemText: {,
-  fontSize: typography.fontSize.sm,
-    color: colors.text,
+  fontSize: typography.fontSize.sm;
+    color: colors.text;
     marginLeft: spacing.xs
-  },
+  ;},
   recommendationsCard: {,
-  backgroundColor: colors.surface,
-    borderRadius: borderRadius.lg,
-    padding: spacing.lg,
-    marginBottom: spacing.lg,
+  backgroundColor: colors.surface;
+    borderRadius: borderRadius.lg;
+    padding: spacing.lg;
+    marginBottom: spacing.lg;
     ...shadows.sm
   },
   recommendationItem: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
     marginBottom: spacing.sm
-  },
+  ;},
   recommendationNumber: {,
-  width: 20,
-    height: 20,
-    borderRadius: 10,
-    backgroundColor: colors.primary,
-    color: colors.white,
-    fontSize: typography.fontSize.xs,
-    textAlign: 'center',
-    lineHeight: 20,
+  width: 20;
+    height: 20;
+    borderRadius: 10;
+    backgroundColor: colors.primary;
+    color: colors.white;
+    fontSize: typography.fontSize.xs;
+    textAlign: 'center';
+    lineHeight: 20;
     marginRight: spacing.sm
-  },
+  ;},
   recommendationText: {,
-  flex: 1,
-    fontSize: typography.fontSize.sm,
-    color: colors.text,
+  flex: 1;
+    fontSize: typography.fontSize.sm;
+    color: colors.text;
     lineHeight: 20
-  },
+  ;},
   prescriptionCard: {,
-  backgroundColor: colors.warning + '10',
-    borderRadius: borderRadius.lg,
-    padding: spacing.lg,
-    marginBottom: spacing.lg,
-    borderWidth: 1,
+  backgroundColor: colors.warning + '10';
+    borderRadius: borderRadius.lg;
+    padding: spacing.lg;
+    marginBottom: spacing.lg;
+    borderWidth: 1;
     borderColor: colors.warning
-  },
+  ;},
   prescriptionText: {,
-  fontSize: typography.fontSize.base,
-    fontWeight: '600' as const,
+  fontSize: typography.fontSize.base;
+    fontWeight: '600' as const;
     color: colors.warning
-  },
+  ;},
   actionButtons: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
+  flexDirection: 'row';
+    justifyContent: 'space-between';
     marginTop: spacing.lg
-  },
+  ;},
   actionButton: {,
   width: '48%'
-  }
+  ;}
 });
 
 export default EnhancedDiagnosisScreen;

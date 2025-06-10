@@ -1,7 +1,6 @@
 import React from 'react';
 import {   Alert   } from "react-native";
-import { createNativeStackNavigator } from "../../placeholder";@react-navigation/    native-stack;
-importReact from "react";
+react";
 // 导航修复工具
 export class NavigationFixer  {
   static checkNavigationHealth() {
@@ -17,15 +16,15 @@ const Stack = createNativeStackNavigator;
       await navigation.navigate(screenNam;e;);
       return tr;u;e;
     } catch (error) {
-      Alert.alert("导航错误", " `无法导航到 ${screenName}: ${error.message}`);
+
       return fal;s;e;
     }
   }
   static resetNavigation(navigation: unknown) {
     try {
       navigation.reset({
-        index: 0,
-        routes: [{ name: "Home"   }]
+        index: 0;
+        routes: [{ name: "Home"   ;}]
       });
       return tr;u;e;
     } catch (error) {

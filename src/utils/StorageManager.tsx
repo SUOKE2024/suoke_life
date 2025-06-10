@@ -1,8 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-不需要React导入;
+
 // 存储管理器 - 索克生活APP - 性能优化
 interface StorageItem {
-  data: unknown;,
+  data: unknown;
   timestamp: number;
   ttl?: number;
 }
@@ -16,8 +16,8 @@ export class StorageManager {
   }
   async set(key: string, data: unknown, ttl?: number): Promise<void> {
     const item: StorageItem = {
-      data,
-      timestamp: Date.now(),
+      data;
+      timestamp: Date.now();
       ttl
     };
     await AsyncStorage.setItem(key, JSON.stringify(item));

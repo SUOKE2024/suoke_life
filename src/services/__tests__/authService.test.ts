@@ -1,5 +1,4 @@
 import { authService } from "../authService";
-import { authService } from "../authService";
 describe("authService", () => {
   beforeEach(() => {
     jest.clearAllMocks();

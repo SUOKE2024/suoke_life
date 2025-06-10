@@ -1,43 +1,43 @@
 // 物流服务 - 处理配送、追踪等物流相关功能
 export interface DeliveryAddress {
-  id: string;,
-  name: string;,
-  phone: string;,
-  province: string;,
-  city: string;,
-  district: string;,
-  detail: string;,
+  id: string;
+  name: string;
+  phone: string;
+  province: string;
+  city: string;
+  district: string;
+  detail: string;
   isDefault: boolean;
 }
 export interface LogisticsOrder {
-  id: string;,
+  id: string;
   orderNumber: string;
   trackingNumber?: string;
-  status: "pending" | "picked_up" | "in_transit" | "delivered" | "cancelled";,
-  sender: DeliveryAddress;,
-  receiver: DeliveryAddress;,
+  status: "pending" | "picked_up" | "in_transit" | "delivered" | "cancelled";
+  sender: DeliveryAddress;
+  receiver: DeliveryAddress;
   items: Array<{;,
-  name: string;,
-  quantity: number;,
+  name: string;
+  quantity: number;
   weight: number;
 }>;
   estimatedDelivery?: Date;
   actualDelivery?: Date;
-  createdAt: Date,
+  createdAt: Date;
   updatedAt: Date;
 }
 export interface TrackingInfo {
-  timestamp: Date;,
-  status: string;,
-  location: string;,
+  timestamp: Date;
+  status: string;
+  location: string;
   description: string;
 }
 export interface DeliveryQuote {
-  carrierId: string;,
-  carrierName: string;,
-  serviceType: string;,
-  price: number;,
-  estimatedDays: number;,
+  carrierId: string;
+  carrierName: string;
+  serviceType: string;
+  price: number;
+  estimatedDays: number;
   features: string[];
 }
 /**
@@ -53,13 +53,13 @@ export class LogisticsService {private orders: Map<string, LogisticsOrder> = new
 private initializeDefaultData(): void {
     // 添加一些示例地址
 const defaultAddress: DeliveryAddress = {,
-  id: "addr-001",
-      name: "张三",
-      phone: "13800138000",
-      province: "北京市",
-      city: "北京市",
-      district: "朝阳区",
-      detail: "三里屯街道1号", "
+  id: "addr-001";
+
+      phone: "13800138000";
+
+
+
+
       isDefault: true;
     };
     this.addresses.set(defaultAddress.id, defaultAddress);
@@ -67,8 +67,8 @@ const defaultAddress: DeliveryAddress = {,
   // 创建物流订单
 async createOrder(orderData: Omit<LogisticsOrder, "id | "createdAt" | updatedAt">): Promise<LogisticsOrder> {
     const order: LogisticsOrder = {...orderData,
-      id: `order-${Date.now()}`,
-      createdAt: new Date(),
+      id: `order-${Date.now();}`,
+      createdAt: new Date();
       updatedAt: new Date();
     };
     this.orders.set(order.id, order);
@@ -84,7 +84,7 @@ async getOrder(orderId: string): Promise<LogisticsOrder | null> {
   }
   // 更新订单状态
 async updateOrderStatus()
-    orderId: string,
+    orderId: string;
     status: LogisticsOrder["status],"
     location?: string;
   ): Promise<boolean> {
@@ -100,9 +100,9 @@ async updateOrderStatus()
     // 添加追踪信息
 if (order.trackingNumber) {
       await this.addTrackingInfo(order.trackingNumber, {
-        timestamp: new Date(),
+        timestamp: new Date();
         status,
-        location: location || "处理中心", "
+
         description: this.getStatusDescription(status);
       });
     }
@@ -112,12 +112,12 @@ if (order.trackingNumber) {
   // 获取状态描述
 private getStatusDescription(status: LogisticsOrder["status"]): string {
     const descriptions = {
-      pending: "订单已创建，等待揽收",
-      picked_up: "快递已揽收",
-      in_transit: "运输中",
-      delivered: "已送达",
-      cancelled: "订单已取消";
-    };
+
+
+
+
+
+    ;};
     return descriptions[status];
   }
   // 追踪包裹
@@ -135,8 +135,8 @@ private generateMockTrackingInfo(): TrackingInfo[] {
     const now = new Date();
     return [
       {
-        timestamp: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000),
-        status: "pending",location: "发货仓库",description: "订单已创建，等待揽收";
+        timestamp: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000);
+
       },{timestamp: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000),status: "picked_up",location: "发货仓库",description: "快递已揽收";
       },{timestamp: new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000),status: "in_transit",location: "转运中心",description: "包裹正在运输中";
       };
@@ -150,35 +150,35 @@ async addTrackingInfo(trackingNumber: string, info: TrackingInfo): Promise<void>
   }
   // 获取配送报价
 async getDeliveryQuotes()
-    fromAddress: DeliveryAddress,
-    toAddress: DeliveryAddress,
+    fromAddress: DeliveryAddress;
+    toAddress: DeliveryAddress;
     weight: number;
   ): Promise<DeliveryQuote[]> {
     // 模拟不同快递公司的报价
 const quotes: DeliveryQuote[] = [;
       {
-      carrierId: "sf",
-      carrierName: "顺丰速运",
-        serviceType: "标准快递",
-        price: 15 + weight * 2,
-        estimatedDays: 1,
-        features: ["次日达", "保价服务", "签收确认"]
+      carrierId: "sf";
+
+
+        price: 15 + weight * 2;
+        estimatedDays: 1;
+
       },
       {
-      carrierId: "yt",
-      carrierName: "圆通速递",
-        serviceType: "经济快递",
-        price: 8 + weight * 1.5,
-        estimatedDays: 3,
-        features: ["经济实惠", "网点覆盖广"]
+      carrierId: "yt";
+
+
+        price: 8 + weight * 1.5;
+        estimatedDays: 3;
+
       },
       {
-      carrierId: "sto",
-      carrierName: "申通快递",
-        serviceType: "标准快递",
-        price: 10 + weight * 1.8,
-        estimatedDays: 2,
-        features: ["性价比高", "服务稳定"]
+      carrierId: "sto";
+
+
+        price: 10 + weight * 1.8;
+        estimatedDays: 2;
+
       }
     ];
     return quotes;
@@ -186,7 +186,7 @@ const quotes: DeliveryQuote[] = [;
   // 添加收货地址
 async addAddress(address: Omit<DeliveryAddress, id">): Promise<DeliveryAddress> {"
     const newAddress: DeliveryAddress = {...address,
-      id: `addr-${Date.now()}`
+      id: `addr-${Date.now();}`
     };
     // 如果设置为默认地址，取消其他地址的默认状态
 if (newAddress.isDefault) {
@@ -262,16 +262,16 @@ if (serviceType === "express") {
     return new Date(now.getTime() + hours * 60 * 60 * 1000);
   };
   // 获取订单统计;
-getOrderStats(): {total: number,
-  pending: number;,
-  inTransit: number,
-  delivered: number;,
+getOrderStats(): {total: number;
+  pending: number;
+  inTransit: number;
+  delivered: number;
   cancelled: number;
   } {
-    const stats = {total: this.orders.size,
-      pending: 0,
-      inTransit: 0,
-      delivered: 0,
+    const stats = {total: this.orders.size;
+      pending: 0;
+      inTransit: 0;
+      delivered: 0;
       cancelled: 0;
     };
     for (const order of this.orders.values()) {

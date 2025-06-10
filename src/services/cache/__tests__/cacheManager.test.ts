@@ -1,5 +1,4 @@
 import { CacheManager, createCacheManager, memoryCache, persistentCache, apiCache } from "../cacheManager";
-import { CacheManager, createCacheManager, memoryCache, persistentCache, apiCache } from "../cacheManager";
 describe("cacheManager", () => {
   beforeEach(() => {
     jest.clearAllMocks();

@@ -2,7 +2,7 @@ import React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ragService } from '../services/ragService';
-import {import type {queryRAG,;
+import {import type {queryRAG;
   analyzeTCM,
   recommendHerbs,
   streamQueryRAG,
@@ -33,53 +33,53 @@ import {import type {queryRAG,;
 // Hook返回类型定义
 export interface UseRAGReturn {
   // 状态
-  isQuerying: boolean;,
-  isStreaming: boolean;,
-  isAnalyzing: boolean;,
-  isRecommending: boolean;,
-  currentResult: RAGQueryResponse | null;,
-  queryHistory: RAGQueryResponse[];,
-  tcmAnalysisResult: any;,
-  herbRecommendationResult: any;,
+  isQuerying: boolean;
+  isStreaming: boolean;
+  isAnalyzing: boolean;
+  isRecommending: boolean;
+  currentResult: RAGQueryResponse | null;
+  queryHistory: RAGQueryResponse[];
+  tcmAnalysisResult: any;
+  herbRecommendationResult: any;
   error: string | null;
   // 统计信息
-  cacheStats: any;,
-  performanceMetrics: any;,
-  preferences: any;,
+  cacheStats: any;
+  performanceMetrics: any;
+  preferences: any;
   offlineStatus: any;
   // 基础查询方法
-  query: (request: RAGQueryRequest) => Promise<void>;,
+  query: (request: RAGQueryRequest) => Promise<void>;
   streamQuery: (request: RAGQueryRequest, onChunk?: (chunk: StreamResponse) => void) => Promise<void>;
   // 中医特色功能
-  analyzeTCMSymptoms: (request: TCMAnalysisRequest) => Promise<void>;,
+  analyzeTCMSymptoms: (request: TCMAnalysisRequest) => Promise<void>;
   getHerbRecommendations: (request: HerbRecommendationRequest) => Promise<void>;
   // 多模态查询
-  queryWithImage: (query: string, imageUri: string, userId: string) => Promise<void>;,
-  queryWithAudio: (query: string, audioUri: string, userId: string) => Promise<void>;,
+  queryWithImage: (query: string, imageUri: string, userId: string) => Promise<void>;
+  queryWithAudio: (query: string, audioUri: string, userId: string) => Promise<void>;
   queryWithSensorData: (query: string, sensorData: any, userId: string) => Promise<void>;
   // 状态管理
-  clearResult: () => void;,
-  clearError: () => void;,
+  clearResult: () => void;
+  clearError: () => void;
   updateUserPreferences: (prefs: Partial<any>) => void;
   // 缓存管理
-  clearQueryCache: () => void;,
+  clearQueryCache: () => void;
   getCacheInfo: () => any;
   // 性能管理
-  resetMetrics: () => void;,
+  resetMetrics: () => void;
   getPerformanceReport: () => any;
   // 离线支持
-  setOffline: (offline: boolean) => void;,
+  setOffline: (offline: boolean) => void;
   syncPendingQueries: () => Promise<void>;
   // 历史管理
-  getQueryHistory: () => RAGQueryResponse[];,
-  searchHistory: (keyword: string) => RAGQueryResponse[];,
-  exportHistory: () => string;,
+  getQueryHistory: () => RAGQueryResponse[];
+  searchHistory: (keyword: string) => RAGQueryResponse[];
+  exportHistory: () => string;
   importHistory: (data: string) => void;
   // 智能推荐
-  getSmartSuggestions: (context: string) => Promise<string[]>;,
+  getSmartSuggestions: (context: string) => Promise<string[]>;
   getRelatedQueries: (query: string) => Promise<string[]>;
   // 健康评估
-  performHealthAssessment: (symptoms: string[], constitution: string) => Promise<any>;,
+  performHealthAssessment: (symptoms: string[], constitution: string) => Promise<any>;
   getPreventionAdvice: (riskFactors: string[]) => Promise<any>;
 }
 // 自定义RAG Hook;
@@ -102,7 +102,7 @@ export const useRAG = (): UseRAGReturn => {const dispatch = useDispatch();
   // 基础查询方法
   const query = useCallback(async (request: RAGQueryRequest) => {try {await dispatch(queryRAG(request) as any);)
     } catch (error) {
-      console.error('RAG查询失败:', error);
+
     }
   }, [dispatch]);
   // 流式查询方法
@@ -111,26 +111,26 @@ export const useRAG = (): UseRAGReturn => {const dispatch = useDispatch();
   ) => {try {await dispatch(streamQueryRAG({request,onChunk: onChunk || () => {);
       }) as any);
     } catch (error) {
-      console.error('流式查询失败:', error);
+
     }
   }, [dispatch]);
   // 中医症状分析
   const analyzeTCMSymptoms = useCallback(async (request: TCMAnalysisRequest) => {try {await dispatch(analyzeTCM(request) as any);)
     } catch (error) {
-      console.error('中医分析失败:', error);
+
     }
   }, [dispatch]);
   // 中药推荐
   const getHerbRecommendations = useCallback(async (request: HerbRecommendationRequest) => {try {await dispatch(recommendHerbs(request) as any);)
     } catch (error) {
-      console.error('中药推荐失败:', error);
+
     }
   }, [dispatch]);
   // 多模态查询 - 图像
   const queryWithImage = useCallback(async (query: string, imageUri: string, userId: string) => {const request: RAGQueryRequest = {query,userId,taskType: 'diagnosis',multimodalData: [;)
         {
-      type: "image",
-      data: imageUri, metadata: { format: 'jpeg' } };
+      type: "image";
+      data: imageUri, metadata: { format: 'jpeg' ;} };
       ];
     };
     await dispatch(queryRAG(request) as any);
@@ -138,8 +138,8 @@ export const useRAG = (): UseRAGReturn => {const dispatch = useDispatch();
   // 多模态查询 - 音频
   const queryWithAudio = useCallback(async (query: string, audioUri: string, userId: string) => {const request: RAGQueryRequest = {query,userId,taskType: 'consultation',multimodalData: [;)
         {
-      type: "audio",
-      data: audioUri, metadata: { format: 'wav' } };
+      type: "audio";
+      data: audioUri, metadata: { format: 'wav' ;} };
       ];
     };
     await dispatch(queryRAG(request) as any);
@@ -147,8 +147,8 @@ export const useRAG = (): UseRAGReturn => {const dispatch = useDispatch();
   // 多模态查询 - 传感器数据
   const queryWithSensorData = useCallback(async (query: string, sensorData: any, userId: string) => {const request: RAGQueryRequest = {query,userId,taskType: 'diagnosis',multimodalData: [;)
         {
-      type: "sensor",
-      data: JSON.stringify(sensorData), metadata: { source: 'device' } };
+      type: "sensor";
+      data: JSON.stringify(sensorData), metadata: { source: 'device' ;} };
       ];
     };
     await dispatch(queryRAG(request) as any);
@@ -176,7 +176,7 @@ export const useRAG = (): UseRAGReturn => {const dispatch = useDispatch();
   }, [dispatch]);
   const syncPendingQueries = useCallback(async () => {if (!offlineStatus.isOffline && offlineStatus.pendingQueries.length > 0) {for (const pendingQuery of offlineStatus.pendingQueries) {try {await dispatch(queryRAG(pendingQuery) as any);)
         } catch (error) {
-          console.error('同步离线查询失败:', error);
+
         }
       }
     }
@@ -195,10 +195,10 @@ export const useRAG = (): UseRAGReturn => {const dispatch = useDispatch();
   const importHistory = useCallback(data: string) => {try {const parsed = JSON.parse(data);
       if (parsed.history && Array.isArray(parsed.history)) {
         // 这里需要实现导入逻辑
-        console.log('导入历史记录:', parsed.history.length, '条');
+
       }
     } catch (error) {
-      console.error('导入历史记录失败:', error);
+
     }
   }, []);
   // 智能推荐
@@ -207,7 +207,7 @@ export const useRAG = (): UseRAGReturn => {const dispatch = useDispatch();
       setSmartSuggestions(suggestions);
       return suggestions;
     } catch (error) {
-      console.error('获取智能建议失败:', error);
+
       return [];
     }
   }, []);
@@ -216,7 +216,7 @@ export const useRAG = (): UseRAGReturn => {const dispatch = useDispatch();
       setRelatedQueries(related);
       return related;
     } catch (error) {
-      console.error('获取相关查询失败:', error);
+
       return [];
     }
   }, []);
@@ -227,17 +227,17 @@ export const useRAG = (): UseRAGReturn => {const dispatch = useDispatch();
       await dispatch(analyzeTCM(request) as any);
       return tcmAnalysisResult;
     } catch (error) {
-      console.error('健康评估失败:", " error);
+
       return null;
     }
   }, [dispatch, tcmAnalysisResult]);
-  const getPreventionAdvice = useCallback(async (riskFactors: string[]) => {try {const request: RAGQueryRequest = {query: `基于以下风险因素提供预防建议: ${riskFactors.join(",)}`,userId: 'current-user',taskType: 'prevention',context: {riskFactors,requestType: 'prevention_advice';)
+
         };
       };
       await dispatch(queryRAG(request) as any);
       return currentResult;
     } catch (error) {
-      console.error('获取预防建议失败:', error);
+
       return null;
     }
   }, [dispatch, currentResult]);
@@ -270,13 +270,13 @@ export const useRAG = (): UseRAGReturn => {const dispatch = useDispatch();
     // 状态
     isQuerying,
     isStreaming,
-    isAnalyzing: ragState.isAnalyzing,
-    isRecommending: ragState.isRecommending,
+    isAnalyzing: ragState.isAnalyzing;
+    isRecommending: ragState.isRecommending;
     currentResult,
     queryHistory,
     tcmAnalysisResult,
     herbRecommendationResult,
-    error: ragState.error,
+    error: ragState.error;
     // 统计信息
     cacheStats,
     performanceMetrics,
@@ -294,7 +294,7 @@ export const useRAG = (): UseRAGReturn => {const dispatch = useDispatch();
     queryWithSensorData,
     // 状态管理
     clearResult,
-    clearError: clearErrorState,
+    clearError: clearErrorState;
     updateUserPreferences,
     // 缓存管理
     clearQueryCache,

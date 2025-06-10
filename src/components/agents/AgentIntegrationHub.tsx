@@ -1,24 +1,23 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "../../placeholder";react-native;
-import React, { useState, useEffect } from "react";
+react";
 export interface Agent {
-  id: string;,
-  name: string;,
-  type: xiaoai" | "xiaoke | "laoke" | soer;,
-  status: "online | "offline" | busy";,
-  capabilities: string[];,
+  id: string;
+  name: string;
+  type: xiaoai" | "xiaoke | "laoke" | soer;
+  status: "online | "offline" | busy";
+  capabilities: string[];
   lastActive: Date;
 }
 export interface AgentTask {
-  id: string;,
-  agentId: string;,
-  type: string;,
+  id: string;
+  agentId: string;
+  type: string;
   status: "pending | "running" | completed" | "failed;",
-  priority: "low" | medium" | "high;,
+  priority: "low" | medium" | "high;
   createdAt: Date;
 }
 export interface AgentIntegrationHubProps {
   onAgentSelect?: (agent: Agent) => void;
-  onTaskCreate?: (task: Omit<AgentTask, "id" | createdAt">) => void;"
+  onTaskCreate?: (task: Omit<AgentTask; "id" | createdAt">) => void;"
 }
 /**
 * * 智能体集成中心组件
@@ -36,59 +35,59 @@ export const AgentIntegrationHub: React.FC<AgentIntegrationHubProps>  = ({onAgen
 const mockAgents: Agent[] = [;
         {
       id: "xiaoai-001,",
-      name: "小艾",
-          type: xiaoai",
+
+          type: xiaoai";
           status: "online,",
-          capabilities: ["诊断分析", " 健康咨询", "症状识别],
+
           lastActive: new Date();
         },
         {
-      id: "xiaoke-001",
-      name: 小克",
+      id: "xiaoke-001";
+
           type: "xiaoke,",
-          status: "online",
-          capabilities: [数据分析", "趋势预测, "报告生成"],
+          status: "online";
+
           lastActive: new Date();
         },
         {
-          id: laoke-001",
-          name: "老克,",
-          type: "laoke",
-          status: busy",
-          capabilities: ["中医诊断, "方剂推荐", " 养生指导"],
+          id: laoke-001";
+
+          type: "laoke";
+          status: busy";
+
           lastActive: new Date();
         },
         {
       id: "soer-001,",
-      name: "索儿",
-          type: soer",
+
+          type: soer";
           status: "online,",
-          capabilities: ["生活管理", " 社区服务", "生态协调],
+
           lastActive: new Date();
         }
       ];
       const mockTasks: AgentTask[] = [;
         {
-      id: "task-001",
-      agentId: xiaoai-001",
-          type: "健康评估,",
-          status: "running",
-          priority: high",
+      id: "task-001";
+      agentId: xiaoai-001";
+
+          status: "running";
+          priority: high";
           createdAt: new Date();
         },
         {
       id: "task-002,",
-      agentId: "xiaoke-001",
-          type: 数据分析",
+      agentId: "xiaoke-001";
+
           status: "completed,",
-          priority: "medium",
+          priority: "medium";
           createdAt: new Date();
         },
         {
-          id: task-003",
+          id: task-003";
           agentId: "laoke-001,",
-          type: "中医诊断",
-          status: pending",
+
+          status: pending";
           priority: "high,",
           createdAt: new Date();
         }
@@ -100,7 +99,7 @@ const mockAgents: Agent[] = [;
       setLoading(false);
     }
   };
-  const getStatusColor = (status: Agent[status"]): string => {}"
+  const getStatusColor = (status: Agent[status"]): string => {;}"
     switch (status) {
       case "online:"
         return "#4CAF50";
@@ -112,7 +111,7 @@ const mockAgents: Agent[] = [;
         return "#757575;"
     }
   };
-  const getTaskStatusColor = (status: AgentTask["status"]): string => {}
+  const getTaskStatusColor = (status: AgentTask["status"]): string => {;}
     switch (status) {
       case completed":"
         return "#4CAF50;"
@@ -126,7 +125,7 @@ const mockAgents: Agent[] = [;
         return "#757575";
     }
   };
-  const getPriorityColor = (priority: AgentTask[priority"]): string => {}"
+  const getPriorityColor = (priority: AgentTask[priority"]): string => {;}"
     switch (priority) {
       case "high:"
         return "#F44336";
@@ -146,7 +145,7 @@ key={agent.id}
     >
       <View style={styles.agentHeader}>
         <Text style={styles.agentName}>{agent.name}</    Text>
-        <View style={[styles.statusDot, { backgroundColor: getStatusColor(agent.status) }}]} /    >
+        <View style={[styles.statusDot, { backgroundColor: getStatusColor(agent.status) ;}}]} /    >
       </    View>
       <Text style={styles.agentType}>{agent.type.toUpperCase()}</    Text>
       <Text style={styles.agentStatus}>{agent.status}</    Text>
@@ -158,33 +157,33 @@ key={agent.id}
           </    Text>
         ))}
         {agent.capabilities.length > 2  && <Text style={styles.moreCapabilities}>
-            +{agent.capabilities.length - 2} 更多
+
           </    Text>
         )}
       </    View>
       <Text style={styles.lastActive}>
-        最后活跃: {agent.lastActive.toLocaleTimeString()}
+
       </    Text>
     </    TouchableOpacity>
   );
-  const renderTaskCard = (task: AgentTask) => {}
+  const renderTaskCard = (task: AgentTask) => {;}
     const agent = agents.find(a => a.id === task.agentId);
     return (
   <View key={task.id} style={styles.taskCard}>
         <View style={styles.taskHeader}>;
           <Text style={styles.taskType}>{task.type}</    Text>;
           <View style={styles.taskBadges}>;
-            <View style={[styles.priorityBadge, { backgroundColor: getPriorityColor(task.priority) }}]}>;
+            <View style={[styles.priorityBadge, { backgroundColor: getPriorityColor(task.priority) ;}}]}>;
               <Text style={styles.badgeText}>{task.priority}</    Text>;
             </    View>;
-            <View style={[styles.statusBadge, { backgroundColor: getTaskStatusColor(task.status) }}]}>;
+            <View style={[styles.statusBadge, { backgroundColor: getTaskStatusColor(task.status) ;}}]}>;
               <Text style={styles.badgeText}>{task.status}</    Text>;
             </    View>;
           </    View>;
         </    View>;
         <Text style={styles.taskAgent}>执行者: {agent?.name || "未知"}</    Text>;
         <Text style={styles.taskTime}>;
-          创建时间: {task.createdAt.toLocaleString()};
+
         </    Text>;
       </    View>;
     );
@@ -235,150 +234,150 @@ key={agent.id}
   );
 };
 const styles = StyleSheet.create({container: {),
-  flex: 1,
-    backgroundColor: #f5f5f5",
-    padding: 16},
+  flex: 1;
+    backgroundColor: #f5f5f5";
+    padding: 16;},
   loadingContainer: {,
-  flex: 1,
+  flex: 1;
     justifyContent: "center,",
-    alignItems: "center"},
+    alignItems: "center";},
   loadingText: {,
-  fontSize: 16,
-    color: #666"},"
+  fontSize: 16;
+    color: #666";},"
   sectionTitle: {,
-  fontSize: 20,
+  fontSize: 20;
     fontWeight: "bold,",
-    color: "#333",
-    marginBottom: 16,
-    marginTop: 16},
+    color: "#333";
+    marginBottom: 16;
+    marginTop: 16;},
   overviewContainer: {,
-  marginBottom: 16},
+  marginBottom: 16;},
   overviewGrid: {,
-  flexDirection: row",
-    justifyContent: "space-between},",
+  flexDirection: row";
+    justifyContent: "space-between;},",
   overviewCard: {,
-  backgroundColor: "#fff",
-    borderRadius: 12,
-    padding: 16,
-    alignItems: center",
-    flex: 1,
-    marginHorizontal: 4,
+  backgroundColor: "#fff";
+    borderRadius: 12;
+    padding: 16;
+    alignItems: center";
+    flex: 1;
+    marginHorizontal: 4;
     shadowColor: "#000,",
     shadowOffset: {,
-  width: 0,
-      height: 2},
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5},
+  width: 0;
+      height: 2;},
+    shadowOpacity: 0.1;
+    shadowRadius: 3.84;
+    elevation: 5;},
   overviewValue: {,
-  fontSize: 24,
-    fontWeight: "bold",
-    color: #4CAF50",
-    marginBottom: 4},
+  fontSize: 24;
+    fontWeight: "bold";
+    color: #4CAF50";
+    marginBottom: 4;},
   overviewLabel: {,
-  fontSize: 12,
+  fontSize: 12;
     color: "#666,",
-    textAlign: "center"},
+    textAlign: "center";},
   agentsContainer: {,
-  flexDirection: row",
+  flexDirection: row";
     flexWrap: "wrap,",
-    justifyContent: "space-between"},
+    justifyContent: "space-between";},
   agentCard: {,
-  backgroundColor: #fff",
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
+  backgroundColor: #fff";
+    borderRadius: 12;
+    padding: 16;
+    marginBottom: 16;
     width: "48%,",
-    shadowColor: "#000",
+    shadowColor: "#000";
     shadowOffset: {,
-  width: 0,
-      height: 2},
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5},
+  width: 0;
+      height: 2;},
+    shadowOpacity: 0.1;
+    shadowRadius: 3.84;
+    elevation: 5;},
   agentHeader: {,
-  flexDirection: row",
+  flexDirection: row";
     justifyContent: "space-between,",
-    alignItems: "center",
-    marginBottom: 8},
+    alignItems: "center";
+    marginBottom: 8;},
   agentName: {,
-  fontSize: 18,
-    fontWeight: bold",
-    color: "#333},",
+  fontSize: 18;
+    fontWeight: bold";
+    color: "#333;},",
   statusDot: {,
-  width: 12,
-    height: 12,
-    borderRadius: 6},
+  width: 12;
+    height: 12;
+    borderRadius: 6;},
   agentType: {,
-  fontSize: 12,
-    color: "#666",
-    marginBottom: 4},
+  fontSize: 12;
+    color: "#666";
+    marginBottom: 4;},
   agentStatus: {,
-  fontSize: 14,
-    color: #4CAF50",
-    marginBottom: 12},
+  fontSize: 14;
+    color: #4CAF50";
+    marginBottom: 12;},
   capabilitiesContainer: {,
-  marginBottom: 12},
+  marginBottom: 12;},
   capabilitiesTitle: {,
-  fontSize: 12,
+  fontSize: 12;
     fontWeight: "bold,",
-    color: "#666",
-    marginBottom: 4},
+    color: "#666";
+    marginBottom: 4;},
   capability: {,
-  fontSize: 11,
-    color: #666",
-    marginBottom: 2},
+  fontSize: 11;
+    color: #666";
+    marginBottom: 2;},
   moreCapabilities: {,
-  fontSize: 11,
+  fontSize: 11;
     color: "#999,",
-    fontStyle: "italic"},
+    fontStyle: "italic";},
   lastActive: {,
-  fontSize: 10,
-    color: #999"},"
+  fontSize: 10;
+    color: #999";},"
   tasksContainer: {,
-  marginBottom: 16},
+  marginBottom: 16;},
   taskCard: {,
   backgroundColor: "#fff,",
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    shadowColor: "#000",
+    borderRadius: 12;
+    padding: 16;
+    marginBottom: 12;
+    shadowColor: "#000";
     shadowOffset: {,
-  width: 0,
-      height: 2},
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5},
+  width: 0;
+      height: 2;},
+    shadowOpacity: 0.1;
+    shadowRadius: 3.84;
+    elevation: 5;},
   taskHeader: {,
-  flexDirection: row",
+  flexDirection: row";
     justifyContent: "space-between,",
-    alignItems: "center",
-    marginBottom: 8},
+    alignItems: "center";
+    marginBottom: 8;},
   taskType: {,
-  fontSize: 16,
-    fontWeight: bold",
+  fontSize: 16;
+    fontWeight: bold";
     color: "#333,",
-    flex: 1},
+    flex: 1;},
   taskBadges: {,
-  flexDirection: "row"},
+  flexDirection: "row";},
   priorityBadge: {,
-  paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-    marginRight: 8},
+  paddingHorizontal: 8;
+    paddingVertical: 4;
+    borderRadius: 12;
+    marginRight: 8;},
   statusBadge: {,
-  paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12},
+  paddingHorizontal: 8;
+    paddingVertical: 4;
+    borderRadius: 12;},
   badgeText: {,
-  fontSize: 10,
-    color: #fff",
-    fontWeight: "600},",
+  fontSize: 10;
+    color: #fff";
+    fontWeight: "600;},",
   taskAgent: {,
-  fontSize: 14,
-    color: "#666",
-    marginBottom: 4},
+  fontSize: 14;
+    color: "#666";
+    marginBottom: 4;},
   taskTime: {,
-  fontSize: 12,color: #999"}});"
+  fontSize: 12,color: #999";}});"
 export default AgentIntegrationHub;
   */

@@ -8,25 +8,25 @@ interface AgentAvatarProps {
 }
 const AGENT_META = {
   xiaoai: {,
-  name: '小艾',
-    color: '#4FC3F7',
-    avatar: '🤖'},
+
+    color: '#4FC3F7';
+    avatar: '🤖';},
   xiaoke: {,
-  name: '小克',
-    color: '#81C784',
-    avatar: '📊'},
+
+    color: '#81C784';
+    avatar: '📊';},
   laoke: {,
-  name: '老克',
-    color: '#FFD54F',
-    avatar: '👨‍⚕️'},
+
+    color: '#FFD54F';
+    avatar: '👨‍⚕️';},
   soer: {,
-  name: '索儿',
-    color: '#BA68C8',
-    avatar: '🌟'}};
+
+    color: '#BA68C8';
+    avatar: '🌟';}};
 export const AgentAvatar: React.FC<AgentAvatarProps> = ({
   agentType,
   emotion = 'neutral',
-  size = 64}) => {
+  size = 64;}) => {
   const meta = AGENT_META[agentType];
   const getEmotionIcon = (emotion: string) => {
     switch (emotion) {
@@ -45,13 +45,13 @@ export const AgentAvatar: React.FC<AgentAvatarProps> = ({
       style={[
         styles.container,
         {
-          backgroundColor: meta.color,
-          width: size + 16,
-          height: size + 16}}]}
+          backgroundColor: meta.color;
+          width: size + 16;
+          height: size + 16;}}]}
     >
       <Text;
-        style={[styles.avatar, { fontSize: size * 0.6 }}]}
-        accessibilityLabel={`${meta.name}的头像`}
+        style={[styles.avatar, { fontSize: size * 0.6 ;}}]}
+
       >
         {meta.avatar}
       </Text>
@@ -65,22 +65,22 @@ export const AgentAvatar: React.FC<AgentAvatarProps> = ({
 };
 const styles = StyleSheet.create({
   container: {,
-  alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 48,
-    margin: 8,
-    padding: 8},
+  alignItems: 'center';
+    justifyContent: 'center';
+    borderRadius: 48;
+    margin: 8;
+    padding: 8;},
   avatar: {,
-  textAlign: 'center'},
+  textAlign: 'center';},
   name: {,
-  fontSize: 12,
-    fontWeight: 'bold',
-    color: '#333',
-    marginTop: 4,
-    textAlign: 'center'},
+  fontSize: 12;
+    fontWeight: 'bold';
+    color: '#333';
+    marginTop: 4;
+    textAlign: 'center';},
   emotion: {,
-  fontSize: 16,
-    marginTop: 2,
-    position: 'absolute',
-    top: -4,
-    right: -4}});
+  fontSize: 16;
+    marginTop: 2;
+    position: 'absolute';
+    top: -4;
+    right: -4;}});

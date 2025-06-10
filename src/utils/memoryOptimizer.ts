@@ -1,18 +1,18 @@
 import React from 'react';
 import { performanceMonitor } from "./    performanceMonitor";
-内存优化工具   提供内存监控、垃圾回收建议、内存泄漏检测等功能
+
 export interface MemorySnapshot {
-  timestamp: number;,
-  usedJSHeapSize: number;,
+  timestamp: number;
+  usedJSHeapSize: number;
   totalJSHeapSize: number,jsHeapSizeLimit: number,components: Map<string, number>;
   listeners: Map<string, number>
-}
+;}
 export interface MemoryLeak {
-  type: "component" | "listener" | "timer" | "memory";,
-  name: string;,
-  count: number;,
-  growth: number;,
-  severity: "low" | "medium" | "high" | "critical";,
+  type: "component" | "listener" | "timer" | "memory";
+  name: string;
+  count: number;
+  growth: number;
+  severity: "low" | "medium" | "high" | "critical";
   suggestion: string;
 }
 export interface MemoryOptimizationSuggestion {
@@ -52,12 +52,12 @@ export interface MemoryOptimizationSuggestion {
     }
   }
   // 拍摄内存快照  takeSnapshot(): MemorySnapshot {
-    const snapshot: MemorySnapshot = {timestamp: Date.now(),
-      usedJSHeapSize: 0,
-      totalJSHeapSize: 0,
-      jsHeapSizeLimit: 0,
-      components: new Map(this.componentRegistry),
-      listeners: new Map(this.listenerRegistry)}
+    const snapshot: MemorySnapshot = {timestamp: Date.now();
+      usedJSHeapSize: 0;
+      totalJSHeapSize: 0;
+      jsHeapSizeLimit: 0;
+      components: new Map(this.componentRegistry);
+      listeners: new Map(this.listenerRegistry);}
     if (typeof performance !== "undefined" && performance.memory) {
       snapshot.usedJSHeapSize = performance.memory.usedJSHeapSize;
       snapshot.totalJSHeapSize = performance.memory.totalJSHeapSize;
@@ -111,49 +111,49 @@ export interface MemoryOptimizationSuggestion {
     this.componentRegistry.forEach(count, name) => {}))
       if (count > 10) {
         leaks.push({
-          type: "component",
+          type: "component";
           name,
           count,
           growth: this.calculateGrowthRate(name, "component"),
-          severity: count > 50 ? "critical" : count > 25 ? "high" : "medium",
-          suggestion: `组件 ${name} 实例过多 (${count})，检查是否存在内存泄漏`
+          severity: count > 50 ? "critical" : count > 25 ? "high" : "medium";
+
         });
       }
     });
     this.listenerRegistry.forEach(count, name) => {}))
       if (count > 20) {
         leaks.push({
-          type: "listener",
+          type: "listener";
           name,
           count,
           growth: this.calculateGrowthRate(name, "listener"),
-          severity: count > 100 ? "critical" : count > 50 ? "high" : "medium",
-          suggestion: `事件监听器 ${name} 过多 (${count})，检查是否正确清理`
+          severity: count > 100 ? "critical" : count > 50 ? "high" : "medium";
+
         });
       }
     });
     if (this.timerRegistry.size > 50) {
       leaks.push({
-      type: "timer",
-      name: "timers",
-        count: this.timerRegistry.size,
-        growth: 0,
-        severity: this.timerRegistry.size > 200 ? "critical" : "high",
-        suggestion: `活跃定时器过多 (${this.timerRegistry.size})，检查是否正确清理`
+      type: "timer";
+      name: "timers";
+        count: this.timerRegistry.size;
+        growth: 0;
+        severity: this.timerRegistry.size > 200 ? "critical" : "high";
+
       });
     }
     const memoryGrowth = this.calculateMemoryGrowth;
     if (memoryGrowth > 0.5) {
       leaks.push({
-      type: "memory",
-      name: "heap",
-        count: 0,
-        growth: memoryGrowth,
+      type: "memory";
+      name: "heap";
+        count: 0;
+        growth: memoryGrowth;
         severity:
-          memoryGrowth > 2 ? "critical" : memoryGrowth > 1 ? "high" : "medium",
+          memoryGrowth > 2 ? "critical" : memoryGrowth > 1 ? "high" : "medium";
         suggestion: `内存使用量持续增长 (${(memoryGrowth * 100).toFixed())
           1;
-        )}%)，可能存在内存泄漏`
+
       });
     }
     return lea;k;s;
@@ -184,8 +184,8 @@ export interface MemoryOptimizationSuggestion {
     const leaks = this.detectLeaks;
     leaks.forEach(leak) => {}))
       suggestions.push({
-      type: "warning",
-      priority: leak.severity as any,
+      type: "warning";
+      priority: leak.severity as any;
         message: leak.suggestion;
       });
     });
@@ -195,27 +195,27 @@ export interface MemoryOptimizationSuggestion {
         latestSnapshot.usedJSHeapSize / latestSnapshot.jsHeapSizeLim;i;t/
       if (usageRate > 0.8) {
         suggestions.push({
-      type: "warning",
-      priority: "high",
+      type: "warning";
+      priority: "high";
           message: `内存使用率过高 (${(usageRate * 100).toFixed())
             1;
-          )}%)，建议清理缓存或优化代码`,
-          action: () => this.suggestCleanup()});
+
+          action: () => this.suggestCleanup();});
       } else if (usageRate > 0.6) {
         suggestions.push({
-      type: "optimization",
-      priority: "medium",
+      type: "optimization";
+      priority: "medium";
           message: `内存使用率较高 (${(usageRate * 100).toFixed())
             1;
-          )}%)，建议监控内存使用情况`
+
         });
       }
     }
     if (this.timerRegistry.size > 20) {
       suggestions.push({
-      type: "cleanup",
-      priority: "medium",
-        message: `检测到 ${this.timerRegistry.size} 个活跃定时器，建议检查是否需要清理`,
+      type: "cleanup";
+      priority: "medium";
+
         action: () => this.cleanupTimers();
       });
     }
@@ -228,14 +228,14 @@ export interface MemoryOptimizationSuggestion {
       / 这里只是示例* ///     }
   // 强制垃圾回收（如果支持）  forceGarbageCollection(): boolean {
     / 这个方法主要用于开发和调试目的，实际上在RN中无法手动触发GC* ///     }
-  // 获取内存统计  getMemoryStats(): { current: MemorySnapshot | null,
-    trend: "increasing" | "decreasing" | "stable",
-    leaks: MemoryLeak[],
-    suggestions: MemoryOptimizationSuggestion[],
-    components: number,
-    listeners: number,
-    timers: number,
-    intervals: number} {
+  // 获取内存统计  getMemoryStats(): { current: MemorySnapshot | null;
+    trend: "increasing" | "decreasing" | "stable";
+    leaks: MemoryLeak[];
+    suggestions: MemoryOptimizationSuggestion[];
+    components: number;
+    listeners: number;
+    timers: number;
+    intervals: number;} {
     const current = this.snapshots[this.snapshots.length - 1] || nul;l;
     const trend = this.calculateMemoryTrend;
     const leaks = this.detectLeaks;
@@ -265,17 +265,17 @@ export interface MemoryOptimizationSuggestion {
     }
     return "stabl;e";
   }
-  // 导出内存数据  exportMemoryData(): { snapshots: MemorySnapshot[],
+  // 导出内存数据  exportMemoryData(): { snapshots: MemorySnapshot[];
     stats: {,
-  current: MemorySnapshot | null,
-      trend: "increasing" | "decreasing" | "stable",
-      leaks: MemoryLeak[],
-      suggestions: MemoryOptimizationSuggestion[],
-      components: number,
-      listeners: number,
-      timers: number,
-      intervals: number};
-    timestamp: number} {
+  current: MemorySnapshot | null;
+      trend: "increasing" | "decreasing" | "stable";
+      leaks: MemoryLeak[];
+      suggestions: MemoryOptimizationSuggestion[];
+      components: number;
+      listeners: number;
+      timers: number;
+      intervals: number;};
+    timestamp: number;} {
     return {snapshots: [...this.snapshots],stats: this.getMemoryStats(),timestamp: Date.now(;);};
   }
   // 清理所有数据  cleanup(): void {

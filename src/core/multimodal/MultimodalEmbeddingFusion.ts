@@ -13,28 +13,28 @@ export enum ModalityType {
 * 嵌入向量接口
 */
 export interface Embedding {
-  id: string;,
-  vector: number[];,
-  modality: ModalityType;,
+  id: string;
+  vector: number[];
+  modality: ModalityType;
   metadata: Record<string, any>;
 }
 /**
 * 融合策略接口
 */
 export interface FusionStrategy {
-  name: string;,
+  name: string;
   weights: Record<ModalityType, number>;
   method: 'concatenation' | 'attention' | 'weighted_sum' | 'cross_modal_attention';
-  parameters?: Record<string, any>;
+  parameters?: Record<string; any>;
 }
 /**
 * 融合结果接口
 */
 export interface FusionResult {
-  fusedEmbedding: number[];,
+  fusedEmbedding: number[];
   modalityWeights: Record<ModalityType, number>;
-  confidence: number;,
-  strategy: string;,
+  confidence: number;
+  strategy: string;
   metadata: Record<string, any>;
 }
 /**
@@ -53,10 +53,10 @@ class CrossModalAttention {
   * 计算注意力权重
   */
   computeAttention()
-    query: number[],
-    keys: number[][],
+    query: number[];
+    keys: number[][];
     values: number[][]
-  ): { weights: number[]; output: number[] } {
+  ): { weights: number[]; output: number[] ;} {
     // 计算注意力分数
     const scores = keys.map(key => this.dotProduct(query, key));
     // Softmax归一化
@@ -107,7 +107,7 @@ export class MultimodalEmbeddingFusion extends EventEmitter {
   private initializeDefaultStrategies(): void {
     // 中医诊断策略：重视舌象和脉象
     this.addStrategy({
-      name: "tcm_diagnosis",
+      name: "tcm_diagnosis";
       weights: {
         [ModalityType.TEXT]: 0.3,
         [ModalityType.TONGUE_IMAGE]: 0.35,
@@ -115,15 +115,15 @@ export class MultimodalEmbeddingFusion extends EventEmitter {
         [ModalityType.AUDIO]: 0.0,
         [ModalityType.IMAGE]: 0.0;
       },
-      method: 'cross_modal_attention',
+      method: 'cross_modal_attention';
       parameters: {,
-  temperature: 0.1,
+  temperature: 0.1;
         dropout: 0.1;
       }
     });
     // 综合诊断策略：平衡各模态
     this.addStrategy({
-      name: "comprehensive_diagnosis",
+      name: "comprehensive_diagnosis";
       weights: {
         [ModalityType.TEXT]: 0.4,
         [ModalityType.TONGUE_IMAGE]: 0.2,
@@ -132,10 +132,10 @@ export class MultimodalEmbeddingFusion extends EventEmitter {
         [ModalityType.IMAGE]: 0.1;
       },
       method: 'weighted_sum'
-    });
+    ;});
     // 文本主导策略：主要基于文本描述
     this.addStrategy({
-      name: "text_dominant",
+      name: "text_dominant";
       weights: {
         [ModalityType.TEXT]: 0.7,
         [ModalityType.TONGUE_IMAGE]: 0.15,
@@ -144,7 +144,7 @@ export class MultimodalEmbeddingFusion extends EventEmitter {
         [ModalityType.IMAGE]: 0.0;
       },
       method: 'concatenation'
-    });
+    ;});
   }
   /**
   * 添加融合策略
@@ -157,7 +157,7 @@ export class MultimodalEmbeddingFusion extends EventEmitter {
   * 融合多模态嵌入向量
   */
   async fuseEmbeddings()
-    embeddings: Embedding[],
+    embeddings: Embedding[];
     strategyName: string = 'tcm_diagnosis'
   ): Promise<FusionResult> {
     const cacheKey = this.generateCacheKey(embeddings, strategyName);
@@ -167,7 +167,7 @@ export class MultimodalEmbeddingFusion extends EventEmitter {
     }
     const strategy = this.strategies.get(strategyName);
     if (!strategy) {
-      throw new Error(`Unknown fusion strategy: ${strategyName}`);
+      throw new Error(`Unknown fusion strategy: ${strategyName;}`);
     }
     let fusedEmbedding: number[];
     let modalityWeights: Record<ModalityType, number> = {
@@ -198,7 +198,7 @@ export class MultimodalEmbeddingFusion extends EventEmitter {
         modalityWeights = crossModalResult.weights;
         break;
       default:
-        throw new Error(`Unsupported fusion method: ${strategy.method}`);
+        throw new Error(`Unsupported fusion method: ${strategy.method;}`);
     }
     // 计算融合置信度
     const confidence = this.calculateFusionConfidence(embeddings, modalityWeights);
@@ -206,10 +206,10 @@ export class MultimodalEmbeddingFusion extends EventEmitter {
       fusedEmbedding,
       modalityWeights,
       confidence,
-      strategy: strategyName,
+      strategy: strategyName;
       metadata: {,
-  inputModalities: embeddings.map(e => e.modality),
-        fusionMethod: strategy.method,
+  inputModalities: embeddings.map(e => e.modality);
+        fusionMethod: strategy.method;
         timestamp: Date.now();
       }
     };
@@ -245,9 +245,9 @@ export class MultimodalEmbeddingFusion extends EventEmitter {
   * 注意力融合
   */
   private attentionFusion()
-    embeddings: Embedding[],
+    embeddings: Embedding[];
     strategy: FusionStrategy;
-  ): { embedding: number[]; weights: Record<ModalityType, number> } {
+  ): { embedding: number[]; weights: Record<ModalityType, number> ;} {
     if (embeddings.length === 0) {
       return {embedding: [],weights: {[ModalityType.TEXT]: 0,[ModalityType.TONGUE_IMAGE]: 0,[ModalityType.PULSE_SIGNAL]: 0,[ModalityType.AUDIO]: 0,[ModalityType.IMAGE]: 0;
         };
@@ -258,19 +258,19 @@ export class MultimodalEmbeddingFusion extends EventEmitter {
     const keys = embeddings.map(e => e.vector);
     const values = embeddings.map(e => e.vector);
     const { weights, output } = this.crossModalAttention.computeAttention(query, keys, values);
-    const modalityWeights: Record<ModalityType, number> = {};
+    const modalityWeights: Record<ModalityType, number> = {;};
     embeddings.forEach(embedding, index) => {
       modalityWeights[embedding.modality] = weights[index];
     });
-    return { embedding: output, weights: modalityWeights };
+    return { embedding: output, weights: modalityWeights ;};
   }
   /**
   * 跨模态注意力融合
   */
   private crossModalAttentionFusion()
-    embeddings: Embedding[],
+    embeddings: Embedding[];
     strategy: FusionStrategy;
-  ): { embedding: number[]; weights: Record<ModalityType, number> } {
+  ): { embedding: number[]; weights: Record<ModalityType, number> ;} {
     // 简化实现，实际应该使用更复杂的跨模态注意力机制
     return this.attentionFusion(embeddings, strategy);
   }
@@ -278,7 +278,7 @@ export class MultimodalEmbeddingFusion extends EventEmitter {
   * 计算融合置信度
   */
   private calculateFusionConfidence()
-    embeddings: Embedding[],
+    embeddings: Embedding[];
     modalityWeights: Record<ModalityType, number>
   ): number {
     if (embeddings.length === 0) {

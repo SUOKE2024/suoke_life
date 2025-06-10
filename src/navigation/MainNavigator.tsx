@@ -19,32 +19,32 @@ const ProfileStack = () => (
     <Stack.Screen;
       name="ProfileMain"
       component={SettingsScreen}
-      options={ headerShown: false }}
+      options={ headerShown: false ;}}
     />
     <Stack.Screen;
       name="ServiceManagement"
       component={ServiceManagementScreen}
-      options={ title: '服务管理' }}
+
     />
     <Stack.Screen;
       name="ServiceStatus"
       component={ServiceStatusScreen}
-      options={ title: '服务状态' }}
+
     />
     <Stack.Screen;
       name="DeveloperPanel"
       component={DeveloperPanelScreen}
-      options={ title: '开发者面板' }}
+
     />
     <Stack.Screen;
       name="ApiIntegrationDemo"
       component={ApiIntegrationDemo}
-      options={ title: 'API集成测试' }}
+
     />
     <Stack.Screen;
       name="Benchmark"
       component={BenchmarkScreen}
-      options={ title: '性能测试' }}
+
     />
   </Stack.Navigator>
 );
@@ -53,7 +53,7 @@ export const MainNavigator: React.FC = () => {
   return (
     <Tab.Navigator;
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
+        tabBarIcon: ({ focused, color, size ;}) => {
           let iconName: string;
 
           switch (route.name) {
@@ -81,40 +81,40 @@ export const MainNavigator: React.FC = () => {
 
           return <Icon name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: '#3498DB',
-        tabBarInactiveTintColor: '#95A5A6',
+        tabBarActiveTintColor: '#3498DB';
+        tabBarInactiveTintColor: '#95A5A6';
         headerShown: false
-      })}
+      ;})}
     >
       <Tab.Screen;
         name="Home"
         component={HomeScreen}
-        options={ title: '首页' }}
+
       />
       <Tab.Screen;
         name="Explore"
         component={HomeScreen}
-        options={ title: '探索' }}
+
       />
       <Tab.Screen;
         name="Health"
         component={HomeScreen}
-        options={ title: '健康' }}
+
       />
       <Tab.Screen;
         name="Community"
         component={HomeScreen}
-        options={ title: '社区' }}
+
       />
       <Tab.Screen;
         name="Maze"
         component={MazeNavigator}
-        options={ title: '迷宫' }}
+
       />
       <Tab.Screen;
         name="Profile"
         component={ProfileStack}
-        options={ title: '我的' }}
+
       />
     </Tab.Navigator>
   );

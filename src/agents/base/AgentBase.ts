@@ -33,7 +33,7 @@ export abstract class AgentBase {
    * 处理用户消息
    */
   abstract processMessage(
-    message: string,
+    message: string;
     context: AgentContext
   ): Promise<AgentResponse>;
 
@@ -114,8 +114,8 @@ export abstract class AgentBase {
    * 记录日志
    */
   protected log(
-    level: 'info' | 'warn' | 'error',
-    message: string,
+    level: 'info' | 'warn' | 'error';
+    message: string;
     data?: any
   ): void {
     const timestamp = new Date().toISOString();
@@ -138,16 +138,16 @@ export abstract class AgentBase {
    * 创建标准错误响应
    */
   protected createErrorResponse(
-    message: string,
-    error?: any,
+    message: string;
+    error?: any;
     context?: AgentContext
   ): AgentResponse {
     return {
-      success: false,
-      response: message,
-      error: error?.message || error,
-      timestamp: new Date(),
-      agentId: this.agentType,
+      success: false;
+      response: message;
+      error: error?.message || error;
+      timestamp: new Date();
+      agentId: this.agentType;
     };
   }
 
@@ -155,17 +155,17 @@ export abstract class AgentBase {
    * 创建标准成功响应
    */
   protected createSuccessResponse(
-    message: string,
-    data?: any,
-    context?: AgentContext,
+    message: string;
+    data?: any;
+    context?: AgentContext;
     metadata?: any
   ): AgentResponse {
     return {
-      success: true,
-      response: message,
+      success: true;
+      response: message;
       data,
-      timestamp: new Date(),
-      agentId: this.agentType,
+      timestamp: new Date();
+      agentId: this.agentType;
     };
   }
 }

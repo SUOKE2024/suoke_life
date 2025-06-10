@@ -5,26 +5,26 @@ interface AgentAnalyticsProps {
   refreshInterval?: number;
 }
 interface AnalyticsData {
-  agentType: AgentType;,
-  metrics: AgentMetrics;,
-  trends: {;,
-  responseTimeChange: number;,
-  successRateChange: number;,
+  agentType: AgentType;
+  metrics: AgentMetrics;
+  trends: {
+  responseTimeChange: number;
+  successRateChange: number;
   throughputChange: number;
 };
   alerts: Array<{,
-  type: 'warning' | 'error' | 'info';,
-  message: string,
+  type: 'warning' | 'error' | 'info';
+  message: string;
   timestamp: Date;
   }>;
 }
 const { width } = Dimensions.get('window');
-const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000 }) => {
+const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000 ;}) => {
   const [analyticsData, setAnalyticsData] = useState<AnalyticsData[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedAgent, setSelectedAgent] = useState<AgentType | null>(null);
   const [timeRange, setTimeRange] = useState<'1h' | '6h' | '24h' | '7d'>('1h');
-  const agentNames = {[AgentType.XIAOAI]: '小艾',[AgentType.XIAOKE]: '小克',[AgentType.LAOKE]: '老克',[AgentType.SOER]: '索儿';
+
   };
   const fetchAnalyticsData = useCallback(async () => {try {setLoading(true);)
       const agents = Object.values(AgentType);
@@ -32,7 +32,7 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
         // 模拟获取分析数据
         const mockMetrics: AgentMetrics = {
           agentType,
-          timestamp: new Date(),
+          timestamp: new Date();
           performance: {responseTime: Math.random() * 500 + 100,throughput: Math.random() * 100 + 50,errorRate: Math.random() * 0.05,successRate: 0.95 + Math.random() * 0.05;
           },resources: {cpuUsage: Math.random() * 80 + 10,memoryUsage: Math.random() * 70 + 20,networkUsage: Math.random() * 60 + 15;
           },sessions: {active: Math.floor(Math.random() * 50 + 10),total: Math.floor(Math.random() * 1000 + 500),averageDuration: Math.random() * 300 + 120;
@@ -43,15 +43,15 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
         const alerts = [];
         if (mockMetrics.performance.errorRate > 0.03) {
           alerts.push({
-            type: 'warning' as const,
-            message: '错误率偏高',
+            type: 'warning' as const;
+
             timestamp: new Date();
           });
         }
         if (mockMetrics.resources.cpuUsage > 80) {
           alerts.push({
-            type: 'error' as const,
-            message: 'CPU使用率过高',
+            type: 'error' as const;
+
             timestamp: new Date();
           });
         }
@@ -61,7 +61,7 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
       const results = await Promise.all(analyticsPromises);
       setAnalyticsData(results);
     } catch (error) {
-      console.error('获取分析数据失败:', error);
+
     } finally {
       setLoading(false);
     }
@@ -72,9 +72,9 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
     return () => clearInterval(interval);
   }, [fetchAnalyticsData, refreshInterval]);
   const renderMetricCard = ()
-    title: string,
-    value: string | number,
-    change?: number,
+    title: string;
+    value: string | number;
+    change?: number;
     unit?: string;
   ) => (
     <View style={styles.metricCard}>
@@ -110,7 +110,7 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
             <Text style={styles.agentName}>{agentNames[data.agentType]}</Text>
             <View style={styles.agentMetrics}>
               <Text style={styles.agentMetricText}>
-                响应时间: {data.metrics.performance.responseTime.toFixed(0)}ms;
+
               </Text>;
               <Text style={styles.agentMetricText}>;
                 成功率: {(data.metrics.performance.successRate * 100).toFixed(1)}%;
@@ -135,19 +135,19 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
         <Text style={styles.sectionTitle}>{agentNames[selectedAgent]} 详细指标</Text>
         <View style={styles.metricsGrid}>
           {renderMetricCard()
-            '响应时间',
+
             data.metrics.performance.responseTime,
             data.trends.responseTimeChange,
             'ms'
           )}
           {renderMetricCard()
-            '成功率',
+
             data.metrics.performance.successRate * 100,
             data.trends.successRateChange * 100,
             '%'
           )}
           {renderMetricCard()
-            '吞吐量',
+
             data.metrics.performance.throughput,
             data.trends.throughputChange,
             'req/s'
@@ -157,17 +157,17 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
         <View style={styles.resourcesSection}>
           <Text style={styles.subsectionTitle}>资源使用情况</Text>
           <View style={styles.metricsGrid}>
-            {renderMetricCard('CPU使用率', data.metrics.resources.cpuUsage, undefined, '%')}
-            {renderMetricCard('内存使用率', data.metrics.resources.memoryUsage, undefined, '%')}
-            {renderMetricCard('网络使用率', data.metrics.resources.networkUsage, undefined, '%')}
+
+
+
           </View>
         </View>
         <View style={styles.sessionsSection}>
           <Text style={styles.subsectionTitle}>会话统计</Text>
           <View style={styles.metricsGrid}>
-            {renderMetricCard('活跃会话', data.metrics.sessions.active)}
-            {renderMetricCard('总会话数', data.metrics.sessions.total)}
-            {renderMetricCard('平均时长', data.metrics.sessions.averageDuration, undefined, 's')}
+
+
+
           </View>
         </View>
         {data.alerts.length > 0  && <View style={styles.alertsSection}>
@@ -231,163 +231,163 @@ const AgentAnalytics: React.FC<AgentAnalyticsProps> = ({ refreshInterval = 30000
 };
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
+  flex: 1;
     backgroundColor: '#f5f5f5'
-  },
+  ;},
   header: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 16,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
+    padding: 16;
+    backgroundColor: '#fff';
+    borderBottomWidth: 1;
     borderBottomColor: '#e0e0e0'
-  },
+  ;},
   title: {,
-  fontSize: 24,
-    fontWeight: 'bold',
+  fontSize: 24;
+    fontWeight: 'bold';
     color: '#333'
-  },
+  ;},
   refreshButton: {,
-  backgroundColor: '#007AFF',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
+  backgroundColor: '#007AFF';
+    paddingHorizontal: 16;
+    paddingVertical: 8;
     borderRadius: 8;
   },
   refreshButtonText: {,
-  color: '#fff',
+  color: '#fff';
     fontWeight: '600'
-  },
+  ;},
   timeRangeContainer: {,
-  flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
-    backgroundColor: '#fff',
+  flexDirection: 'row';
+    alignItems: 'center';
+    padding: 16;
+    backgroundColor: '#fff';
     marginBottom: 8;
   },
   timeRangeLabel: {,
-  fontSize: 16,
-    fontWeight: '600',
-    marginRight: 12,
+  fontSize: 16;
+    fontWeight: '600';
+    marginRight: 12;
     color: '#333'
-  },
+  ;},
   timeRangeButton: {,
-  paddingHorizontal: 12,
-    paddingVertical: 6,
-    marginRight: 8,
-    borderRadius: 16,
+  paddingHorizontal: 12;
+    paddingVertical: 6;
+    marginRight: 8;
+    borderRadius: 16;
     backgroundColor: '#f0f0f0'
-  },
+  ;},
   selectedTimeRange: {,
   backgroundColor: '#007AFF'
-  },
+  ;},
   timeRangeText: {,
-  fontSize: 14,
+  fontSize: 14;
     color: '#666'
-  },
+  ;},
   selectedTimeRangeText: {,
   color: '#fff'
-  },
+  ;},
   overviewContainer: {,
-  backgroundColor: '#fff',
-    marginBottom: 8,
+  backgroundColor: '#fff';
+    marginBottom: 8;
     padding: 16;
   },
   sectionTitle: {,
-  fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 16,
+  fontSize: 20;
+    fontWeight: 'bold';
+    marginBottom: 16;
     color: '#333'
-  },
+  ;},
   agentCard: {,
-  width: width * 0.7,
-    marginRight: 12,
-    padding: 16,
-    backgroundColor: '#f8f9fa',
-    borderRadius: 12,
-    borderWidth: 2,
+  width: width * 0.7;
+    marginRight: 12;
+    padding: 16;
+    backgroundColor: '#f8f9fa';
+    borderRadius: 12;
+    borderWidth: 2;
     borderColor: 'transparent'
-  },
+  ;},
   selectedAgentCard: {,
-  borderColor: '#007AFF',
+  borderColor: '#007AFF';
     backgroundColor: '#f0f8ff'
-  },
+  ;},
   agentName: {,
-  fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 8,
+  fontSize: 18;
+    fontWeight: 'bold';
+    marginBottom: 8;
     color: '#333'
-  },
+  ;},
   agentMetrics: {,
   marginBottom: 8;
   },
   agentMetricText: {,
-  fontSize: 14,
-    color: '#666',
+  fontSize: 14;
+    color: '#666';
     marginBottom: 4;
   },
   alertBadge: {,
-  position: 'absolute',
-    top: 8,
-    right: 8,
-    backgroundColor: '#FF3B30',
-    borderRadius: 10,
-    width: 20,
-    height: 20,
-    justifyContent: 'center',
+  position: 'absolute';
+    top: 8;
+    right: 8;
+    backgroundColor: '#FF3B30';
+    borderRadius: 10;
+    width: 20;
+    height: 20;
+    justifyContent: 'center';
     alignItems: 'center'
-  },
+  ;},
   alertBadgeText: {,
-  color: '#fff',
-    fontSize: 12,
+  color: '#fff';
+    fontSize: 12;
     fontWeight: 'bold'
-  },
+  ;},
   detailsContainer: {,
-  backgroundColor: '#fff',
+  backgroundColor: '#fff';
     padding: 16;
   },
   metricsGrid: {,
-  flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
+  flexDirection: 'row';
+    flexWrap: 'wrap';
+    justifyContent: 'space-between';
     marginBottom: 16;
   },
   metricCard: {,
-  width: '48%',
-    backgroundColor: '#f8f9fa',
-    padding: 12,
-    borderRadius: 8,
+  width: '48%';
+    backgroundColor: '#f8f9fa';
+    padding: 12;
+    borderRadius: 8;
     marginBottom: 8;
   },
   metricTitle: {,
-  fontSize: 14,
-    color: '#666',
+  fontSize: 14;
+    color: '#666';
     marginBottom: 4;
   },
   metricValueContainer: {,
-  flexDirection: 'row',
-    alignItems: 'baseline',
+  flexDirection: 'row';
+    alignItems: 'baseline';
     justifyContent: 'space-between'
-  },
+  ;},
   metricValue: {,
-  fontSize: 18,
-    fontWeight: 'bold',
+  fontSize: 18;
+    fontWeight: 'bold';
     color: '#333'
-  },
+  ;},
   metricUnit: {,
-  fontSize: 12,
+  fontSize: 12;
     color: '#666'
-  },
+  ;},
   metricChange: {,
-  fontSize: 12,
+  fontSize: 12;
     fontWeight: '600'
-  },
+  ;},
   metricIncrease: {,
   color: '#34C759'
-  },
+  ;},
   metricDecrease: {,
   color: '#FF3B30'
-  },
+  ;},
   resourcesSection: {,
   marginBottom: 16;
   },
@@ -395,40 +395,40 @@ const styles = StyleSheet.create({
   marginBottom: 16;
   },
   subsectionTitle: {,
-  fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 12,
+  fontSize: 16;
+    fontWeight: '600';
+    marginBottom: 12;
     color: '#333'
-  },
+  ;},
   alertsSection: {,
   marginBottom: 16;
   },
   alertItem: {,
-  padding: 12,
-    borderRadius: 8,
-    marginBottom: 8,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  padding: 12;
+    borderRadius: 8;
+    marginBottom: 8;
+    flexDirection: 'row';
+    justifyContent: 'space-between';
     alignItems: 'center'
-  },
+  ;},
   errorAlert: {,
-  backgroundColor: '#FFEBEE',
-    borderLeftWidth: 4,
+  backgroundColor: '#FFEBEE';
+    borderLeftWidth: 4;
     borderLeftColor: '#FF3B30'
-  },
+  ;},
   warningAlert: {,
-  backgroundColor: '#FFF8E1',
-    borderLeftWidth: 4,
+  backgroundColor: '#FFF8E1';
+    borderLeftWidth: 4;
     borderLeftColor: '#FF9500'
-  },
+  ;},
   infoAlert: {,
-  backgroundColor: '#E3F2FD',
-    borderLeftWidth: 4,
+  backgroundColor: '#E3F2FD';
+    borderLeftWidth: 4;
     borderLeftColor: '#007AFF'
-  },
+  ;},
   alertMessage: {,
-  fontSize: 14,
-    color: '#333',
+  fontSize: 14;
+    color: '#333';
     flex: 1;
   },alertTime: {fontSize: 12,color: '#666';
   },loadingContainer: {flex: 1,justifyContent: 'center',alignItems: 'center',backgroundColor: '#f5f5f5';

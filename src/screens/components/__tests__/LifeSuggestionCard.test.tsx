@@ -4,17 +4,17 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import LifeSuggestionCard from '../LifeSuggestionCard.tsx';
 const mockStore = configureStore({
-  reducer: { root: (state = {}) => state }
+  reducer: { root: (state = {;}) => state }
 });
 const renderWithProvider = (component: React.ReactElement) => {
-  return render(<Provider store={mockStore}>{component}</Provider>);
+  return render(<Provider store={mockStore;}>{component}</Provider>);
 };
 describe('LifeSuggestionCard', () => {
-  it('应该正确渲染', () => {
+
     const { getByTestId } = renderWithProvider(<LifeSuggestionCard />);
     expect(getByTestId('lifesuggestioncard')).toBeTruthy();
   });
-  it('应该处理用户交互', () => {
+
     const mockOnPress = jest.fn();
     const { getByTestId } = renderWithProvider()
       <LifeSuggestionCard onPress={mockOnPress} />
@@ -22,22 +22,22 @@ describe('LifeSuggestionCard', () => {
         fireEvent.press(getByTestId('lifesuggestioncard'));
     expect(mockOnPress).toHaveBeenCalled();
   });
-  it('应该正确显示属性', () => {
+
     const testProps = {
-      title: "测试标题", "
-      description: '测试描述'
+
+
     };
         const { getByText } = renderWithProvider(<LifeSuggestionCard {...testProps} />);
     expect(getByText(testProps.title)).toBeTruthy();
     expect(getByText(testProps.description)).toBeTruthy();
   });
-  it('应该处理错误状态', () => {
+
     const { getByTestId } = renderWithProvider()
       <LifeSuggestionCard error="测试错误" />
     );
         expect(getByTestId('error-message')).toBeTruthy();
   });
-  it('应该处理加载状态', () => {
+
     const { getByTestId } = renderWithProvider()
       <LifeSuggestionCard loading={true} />
     );

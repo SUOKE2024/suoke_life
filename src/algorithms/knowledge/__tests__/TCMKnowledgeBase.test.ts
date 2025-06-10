@@ -6,13 +6,13 @@ describe('TCMKnowledgeBase', () => {
   it('should work with valid inputs', () => {
     // Add test cases
     const config = {
-      version: '1.0.0',
-      updateInterval: 3600000,
-      sources: ['test'],
+      version: '1.0.0';
+      updateInterval: 3600000;
+      sources: ['test'];
       caching: {
-        enabled: true,
-        ttl: 3600,
-        maxSize: 1000,
+        enabled: true;
+        ttl: 3600;
+        maxSize: 1000;
       },
     };
     const result = new TCMKnowledgeBase(config);
@@ -21,13 +21,13 @@ describe('TCMKnowledgeBase', () => {
   it('should handle edge cases', () => {
     // Add test cases
     const config = {
-      version: '1.0.0',
-      updateInterval: 3600000,
-      sources: [],
+      version: '1.0.0';
+      updateInterval: 3600000;
+      sources: [];
       caching: {
-        enabled: false,
-        ttl: 0,
-        maxSize: 0,
+        enabled: false;
+        ttl: 0;
+        maxSize: 0;
       },
     };
     const result = new TCMKnowledgeBase(config);
@@ -37,13 +37,13 @@ describe('TCMKnowledgeBase', () => {
     // Add test cases
     expect(() => {
       const config = {
-        version: '1.0.0',
-        updateInterval: 3600000,
-        sources: ['test'],
+        version: '1.0.0';
+        updateInterval: 3600000;
+        sources: ['test'];
         caching: {
-          enabled: true,
-          ttl: 3600,
-          maxSize: 1000,
+          enabled: true;
+          ttl: 3600;
+          maxSize: 1000;
         },
       };
       new TCMKnowledgeBase(config);
@@ -52,13 +52,13 @@ describe('TCMKnowledgeBase', () => {
   it('should return correct output format', () => {
     // Add test cases;
     const config = {
-      version: '1.0.0',
-      updateInterval: 3600000,
-      sources: ['test'],
+      version: '1.0.0';
+      updateInterval: 3600000;
+      sources: ['test'];
       caching: {
-        enabled: true,
-        ttl: 3600,
-        maxSize: 1000,
+        enabled: true;
+        ttl: 3600;
+        maxSize: 1000;
       },
     };
     const result = new TCMKnowledgeBase(config);
@@ -67,13 +67,13 @@ describe('TCMKnowledgeBase', () => {
   it('should handle performance requirements', () => {
     const start = performance.now();
     const config = {
-      version: '1.0.0',
-      updateInterval: 3600000,
-      sources: ['test'],
+      version: '1.0.0';
+      updateInterval: 3600000;
+      sources: ['test'];
       caching: {
-        enabled: true,
-        ttl: 3600,
-        maxSize: 1000,
+        enabled: true;
+        ttl: 3600;
+        maxSize: 1000;
       },
     };
     const result = new TCMKnowledgeBase(config);
@@ -89,13 +89,13 @@ describe('TCMKnowledgeBase Performance Tests', () => {
     for (let i = 0; i < iterations; i++) {
       // Execute performance-critical functions
       const config = {
-        version: '1.0.0',
-        updateInterval: 3600000,
-        sources: ['test'],
+        version: '1.0.0';
+        updateInterval: 3600000;
+        sources: ['test'];
         caching: {
-          enabled: true,
-          ttl: 3600,
-          maxSize: 1000,
+          enabled: true;
+          ttl: 3600;
+          maxSize: 1000;
         },
       };
       new TCMKnowledgeBase(config);
@@ -110,13 +110,13 @@ describe('TCMKnowledgeBase Performance Tests', () => {
     const startTime = performance.now();
     // Test with large dataset
     const config = {
-      version: '1.0.0',
-      updateInterval: 3600000,
-      sources: largeDataset,
+      version: '1.0.0';
+      updateInterval: 3600000;
+      sources: largeDataset;
       caching: {
-        enabled: true,
-        ttl: 3600,
-        maxSize: 1000,
+        enabled: true;
+        ttl: 3600;
+        maxSize: 1000;
       },
     };
     new TCMKnowledgeBase(config);
@@ -129,13 +129,13 @@ describe('TCMKnowledgeBase Performance Tests', () => {
     // Execute function multiple times
     for (let i = 0; i < 100; i++) {
       const config = {
-        version: '1.0.0',
-        updateInterval: 3600000,
-        sources: ['test'],
+        version: '1.0.0';
+        updateInterval: 3600000;
+        sources: ['test'];
         caching: {
-          enabled: true,
-          ttl: 3600,
-          maxSize: 1000,
+          enabled: true;
+          ttl: 3600;
+          maxSize: 1000;
         },
       };
       new TCMKnowledgeBase(config);

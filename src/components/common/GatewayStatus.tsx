@@ -16,7 +16,7 @@ import { securityService } from '../../services/securityService';
 import { configService } from '../../services/configService';
 import { gatewayApiClient } from '../../services/apiClient';
 interface ServiceHealth {
-  name: string;,
+  name: string;
   status: 'healthy' | 'unhealthy' | 'unknown';
   responseTime?: number;
   lastCheck?: string;
@@ -28,7 +28,7 @@ interface GatewayStatusProps {
 }
 export const GatewayStatus: React.FC<GatewayStatusProps> = ({
   onServiceSelect,
-  showDetailedMetrics = true}) => {
+  showDetailedMetrics = true;}) => {
   const [metrics, setMetrics] = useState<PerformanceMetrics | null>(null);
   const [services, setServices] = useState<ServiceHealth[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -51,7 +51,7 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
       evaluateGatewayHealth(currentMetrics);
       setLastUpdate(new Date());
     } catch (error) {
-      console.error('加载网关状态失败:', error);
+
     }
   };
   const loadServicesStatus = async () => {
@@ -61,21 +61,21 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
         setServices(response.data);
       }
     } catch (error) {
-      console.error('获取服务状态失败:', error);
+
       // 设置默认服务列表
       setServices([)
         {
-      name: "xiaoai-service",
-      status: 'unknown' },
+      name: "xiaoai-service";
+      status: 'unknown' ;},
         {
-      name: "xiaoke-service",
-      status: 'unknown' },
+      name: "xiaoke-service";
+      status: 'unknown' ;},
         {
-      name: "laoke-service",
-      status: 'unknown' },
+      name: "laoke-service";
+      status: 'unknown' ;},
         {
-      name: "soer-service",
-      status: 'unknown' }]);
+      name: "soer-service";
+      status: 'unknown' ;}]);
     }
   };
   const evaluateGatewayHealth = (metrics: PerformanceMetrics) => {
@@ -113,9 +113,9 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
     if (onServiceSelect) {
       onServiceSelect(service.name);
     } else {
-      Alert.alert('服务详情',
+
         `服务名称: ${service.name}\n状态: ${getStatusText(service.status)}\n响应时间: ${service.responseTime || 'N/A'}ms\n实例数: ${service.instances || 'N/A'}`,
-        [{ text: '确定' }],
+
       );
     }
   };
@@ -129,22 +129,22 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
   };
   const getStatusText = (status: string): string => {
     switch (status) {
-      case 'healthy': return '健康';
-      case 'degraded': return '降级';
-      case 'unhealthy': return '不健康';
-      case 'unknown': return '未知';
+
+
+
+
       default: return status;
     }
   };
   const formatResponseTime = (time: number): string => {
     if (time < 1000) {
-      return `${Math.round(time)}ms`;
+      return `${Math.round(time);}ms`;
     } else {
       return `${(time / 1000).toFixed(1)}s`;
     }
   };
   const formatPercentage = (value: number): string => {
-    return `${value.toFixed(1)}%`;
+    return `${value.toFixed(1);}%`;
   };
   if (!metrics) {
     return (
@@ -163,15 +163,15 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
       {}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>网关状态</Text>
-        <View style={[styles.statusCard, { borderLeftColor: getStatusColor(gatewayHealth) }}]}>
+        <View style={[styles.statusCard, { borderLeftColor: getStatusColor(gatewayHealth) ;}}]}>
           <View style={styles.statusHeader}>
             <Text style={styles.statusTitle}>整体健康状态</Text>
-            <View style={[styles.statusBadge, { backgroundColor: getStatusColor(gatewayHealth) }}]}>
+            <View style={[styles.statusBadge, { backgroundColor: getStatusColor(gatewayHealth) ;}}]}>
               <Text style={styles.statusBadgeText}>{getStatusText(gatewayHealth)}</Text>
             </View>
           </View>
           <Text style={styles.lastUpdateText}>
-            最后更新: {lastUpdate.toLocaleTimeString()}
+
           </Text>
         </View>
       </View>
@@ -187,13 +187,13 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
             </View>
             <View style={styles.metricCard}>
               <Text style={styles.metricLabel}>成功率</Text>
-              <Text style={[styles.metricValue, { color: metrics.apiSuccessRate >= 95 ? '#4CAF50' : '#F44336' }}]}>
+              <Text style={[styles.metricValue, { color: metrics.apiSuccessRate >= 95 ? '#4CAF50' : '#F44336' ;}}]}>
                 {formatPercentage(metrics.apiSuccessRate)}
               </Text>
             </View>
             <View style={styles.metricCard}>
               <Text style={styles.metricLabel}>错误率</Text>
-              <Text style={[styles.metricValue, { color: metrics.apiErrorRate <= 5 ? '#4CAF50' : '#F44336' }}]}>
+              <Text style={[styles.metricValue, { color: metrics.apiErrorRate <= 5 ? '#4CAF50' : '#F44336' ;}}]}>
                 {formatPercentage(metrics.apiErrorRate)}
               </Text>
             </View>
@@ -208,11 +208,11 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
               <Text style={[styles.metricValue, { color: getStatusColor()
                 metrics.connectionQuality === 'excellent' ? 'healthy' :
                 metrics.connectionQuality === 'good' ? 'healthy' :
-                metrics.connectionQuality === 'fair' ? 'degraded' : 'unhealthy',
+                metrics.connectionQuality === 'fair' ? 'degraded' : 'unhealthy';
               ) }}]}>
-                {metrics.connectionQuality === 'excellent' ? '优秀' :
-                metrics.connectionQuality === 'good' ? '良好' :
-                metrics.connectionQuality === 'fair' ? '一般' : '较差'}
+
+
+
               </Text>
             </View>
             <View style={styles.metricCard}>
@@ -230,26 +230,26 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
         {services.map(service, index) => ())
           <TouchableOpacity;
             key={index}
-            style={[styles.serviceCard, { borderLeftColor: getStatusColor(service.status) }}]}
+            style={[styles.serviceCard, { borderLeftColor: getStatusColor(service.status) ;}}]}
             onPress={() => handleServicePress(service)}
           >
             <View style={styles.serviceHeader}>
               <Text style={styles.serviceName}>{service.name}</Text>
-              <View style={[styles.statusBadge, { backgroundColor: getStatusColor(service.status) }}]}>
+              <View style={[styles.statusBadge, { backgroundColor: getStatusColor(service.status) ;}}]}>
                 <Text style={styles.statusBadgeText}>{getStatusText(service.status)}</Text>
               </View>
             </View>
             <View style={styles.serviceDetails}>
               {service.responseTime  && <Text style={styles.serviceDetailText}>
-                  响应时间: {formatResponseTime(service.responseTime)}
+
                 </Text>
               )}
               {service.instances  && <Text style={styles.serviceDetailText}>
-                  实例数: {service.instances}
+
                 </Text>
               )}
               {service.lastCheck  && <Text style={styles.serviceDetailText}>
-                  最后检查: {new Date(service.lastCheck).toLocaleTimeString()}
+
                 </Text>
               )}
             </View>
@@ -267,8 +267,8 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
                   style={[
                     styles.progressFill,
                     {
-                      width: `${metrics.memoryUsage}}%`,
-                      backgroundColor: metrics.memoryUsage > 80 ? '#F44336' : '#4CAF50'}]}
+                      width: `${metrics.memoryUsage;}}%`,
+                      backgroundColor: metrics.memoryUsage > 80 ? '#F44336' : '#4CAF50';}]}
                 />
               </View>
               <Text style={styles.resourceValue}>{formatPercentage(metrics.memoryUsage)}</Text>
@@ -280,8 +280,8 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
                   style={[
                     styles.progressFill,
                     {
-                      width: `${metrics.cpuUsage}}%`,
-                      backgroundColor: metrics.cpuUsage > 70 ? '#F44336' : '#4CAF50'}]}
+                      width: `${metrics.cpuUsage;}}%`,
+                      backgroundColor: metrics.cpuUsage > 70 ? '#F44336' : '#4CAF50';}]}
                 />
               </View>
               <Text style={styles.resourceValue}>{formatPercentage(metrics.cpuUsage)}</Text>
@@ -293,8 +293,8 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
                   style={[
                     styles.progressFill,
                     {
-                      width: `${metrics.storageUsage}}%`,
-                      backgroundColor: metrics.storageUsage > 85 ? '#F44336' : '#4CAF50'}]}
+                      width: `${metrics.storageUsage;}}%`,
+                      backgroundColor: metrics.storageUsage > 85 ? '#F44336' : '#4CAF50';}]}
                 />
               </View>
               <Text style={styles.resourceValue}>{formatPercentage(metrics.storageUsage)}</Text>
@@ -306,8 +306,8 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
                   style={[
                     styles.progressFill,
                     {
-                      width: `${metrics.batteryLevel}}%`,
-                      backgroundColor: metrics.batteryLevel < 20 ? '#F44336' : '#4CAF50'}]}
+                      width: `${metrics.batteryLevel;}}%`,
+                      backgroundColor: metrics.batteryLevel < 20 ? '#F44336' : '#4CAF50';}]}
                 />
               </View>
               <Text style={styles.resourceValue}>{formatPercentage(metrics.batteryLevel)}</Text>
@@ -320,132 +320,132 @@ export const GatewayStatus: React.FC<GatewayStatusProps> = ({
 };
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
-    backgroundColor: '#f5f5f5'},
+  flex: 1;
+    backgroundColor: '#f5f5f5';},
   loadingText: {,
-  textAlign: 'center',
-    marginTop: 50,
-    fontSize: 16,
-    color: '#666'},
+  textAlign: 'center';
+    marginTop: 50;
+    fontSize: 16;
+    color: '#666';},
   section: {,
-  margin: 16},
+  margin: 16;},
   sectionTitle: {,
-  fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 12,
-    color: '#333'},
+  fontSize: 18;
+    fontWeight: 'bold';
+    marginBottom: 12;
+    color: '#333';},
   statusCard: {,
-  backgroundColor: '#fff',
-    borderRadius: 8,
-    padding: 16,
-    borderLeftWidth: 4,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4},
+  backgroundColor: '#fff';
+    borderRadius: 8;
+    padding: 16;
+    borderLeftWidth: 4;
+    elevation: 2;
+    shadowColor: '#000';
+    shadowOffset: { width: 0, height: 2 ;},
+    shadowOpacity: 0.1;
+    shadowRadius: 4;},
   statusHeader: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8},
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
+    marginBottom: 8;},
   statusTitle: {,
-  fontSize: 16,
-    fontWeight: '600',
-    color: '#333'},
+  fontSize: 16;
+    fontWeight: '600';
+    color: '#333';},
   statusBadge: {,
-  paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12},
+  paddingHorizontal: 8;
+    paddingVertical: 4;
+    borderRadius: 12;},
   statusBadgeText: {,
-  color: '#fff',
-    fontSize: 12,
-    fontWeight: '600'},
+  color: '#fff';
+    fontSize: 12;
+    fontWeight: '600';},
   lastUpdateText: {,
-  fontSize: 12,
-    color: '#666'},
+  fontSize: 12;
+    color: '#666';},
   metricsGrid: {,
-  flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between'},
+  flexDirection: 'row';
+    flexWrap: 'wrap';
+    justifyContent: 'space-between';},
   metricCard: {,
-  backgroundColor: '#fff',
-    borderRadius: 8,
-    padding: 16,
-    width: '48%',
-    marginBottom: 12,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4},
+  backgroundColor: '#fff';
+    borderRadius: 8;
+    padding: 16;
+    width: '48%';
+    marginBottom: 12;
+    elevation: 2;
+    shadowColor: '#000';
+    shadowOffset: { width: 0, height: 2 ;},
+    shadowOpacity: 0.1;
+    shadowRadius: 4;},
   metricLabel: {,
-  fontSize: 12,
-    color: '#666',
-    marginBottom: 4},
+  fontSize: 12;
+    color: '#666';
+    marginBottom: 4;},
   metricValue: {,
-  fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333'},
+  fontSize: 18;
+    fontWeight: 'bold';
+    color: '#333';},
   serviceCard: {,
-  backgroundColor: '#fff',
-    borderRadius: 8,
-    padding: 16,
-    marginBottom: 8,
-    borderLeftWidth: 4,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4},
+  backgroundColor: '#fff';
+    borderRadius: 8;
+    padding: 16;
+    marginBottom: 8;
+    borderLeftWidth: 4;
+    elevation: 2;
+    shadowColor: '#000';
+    shadowOffset: { width: 0, height: 2 ;},
+    shadowOpacity: 0.1;
+    shadowRadius: 4;},
   serviceHeader: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8},
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
+    marginBottom: 8;},
   serviceName: {,
-  fontSize: 16,
-    fontWeight: '600',
-    color: '#333'},
+  fontSize: 16;
+    fontWeight: '600';
+    color: '#333';},
   serviceDetails: {,
-  flexDirection: 'row',
-    flexWrap: 'wrap'},
+  flexDirection: 'row';
+    flexWrap: 'wrap';},
   serviceDetailText: {,
-  fontSize: 12,
-    color: '#666',
-    marginRight: 16,
-    marginBottom: 4},
+  fontSize: 12;
+    color: '#666';
+    marginRight: 16;
+    marginBottom: 4;},
   resourceCard: {,
-  backgroundColor: '#fff',
-    borderRadius: 8,
-    padding: 16,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4},
+  backgroundColor: '#fff';
+    borderRadius: 8;
+    padding: 16;
+    elevation: 2;
+    shadowColor: '#000';
+    shadowOffset: { width: 0, height: 2 ;},
+    shadowOpacity: 0.1;
+    shadowRadius: 4;},
   resourceItem: {,
-  flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 16},
+  flexDirection: 'row';
+    alignItems: 'center';
+    marginBottom: 16;},
   resourceLabel: {,
-  flex: 1,
-    fontSize: 14,
-    color: '#333'},
+  flex: 1;
+    fontSize: 14;
+    color: '#333';},
   progressBar: {,
-  flex: 2,
-    height: 8,
-    backgroundColor: '#e0e0e0',
-    borderRadius: 4,
-    marginHorizontal: 12,
-    overflow: 'hidden'},
+  flex: 2;
+    height: 8;
+    backgroundColor: '#e0e0e0';
+    borderRadius: 4;
+    marginHorizontal: 12;
+    overflow: 'hidden';},
   progressFill: {,
-  height: '100%',
-    borderRadius: 4},
+  height: '100%';
+    borderRadius: 4;},
   resourceValue: {,
-  width: 50,
-    textAlign: 'right',
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#333'}});
+  width: 50;
+    textAlign: 'right';
+    fontSize: 12;
+    fontWeight: '600';
+    color: '#333';}});
 export default GatewayStatus;

@@ -1,6 +1,5 @@
-import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/      View,";
-import React from "react";
-import { colors, spacing } from "../../constants/theme";/import { useHealthData } from "../../hooks";/import { TabItem } from "../components/TabSelector";/import { ScreenHeader, HealthCard, TabSelector } from "../components";/    import React,{ useState, useMemo } from "react";
+
+../../hooks";/../components";/    import React,{ useState, useMemo } from "react";
   StyleSheet,
   ScrollView,
   RefreshControl,
@@ -15,34 +14,34 @@ const cardWidth = useMemo(); => useMemo(); => useMemo(); => useMemo(;)
     ),
   []
 ), []);
-export const HealthDashboard: React.FC  = () => {}
+export const HealthDashboard: React.FC  = () => {;}
   const performanceMonitor = usePerformanceMonitor("HealthDashboard', { "';)
-    trackRender: true,trackMemory: true,warnThreshold: 50};);
+    trackRender: true,trackMemory: true,warnThreshold: 50;};);
   const { healthData, loading, refreshData   } = useHealthData;(;);
   const [selectedTab, setSelectedTab] = useState<string>("all;";);
   const tabs: TabItem[] = [{,
-  id: "all",
-      label: "全部"},
+  id: "all";
+
     {
-      id: "vital",
-      label: "生命体征"},
+      id: "vital";
+
     {
-      id: "activity",
-      label: "运动"},
+      id: "activity";
+
     {
-      id: "sleep",
-      label: "睡眠"}
+      id: "sleep";
+
   ]
   const getFilteredData = useMemo() => useMemo(); => useMemo(); => useCallback(); => {[]), [])))}
     switch (selectedTab) {
       case "vital":
-        return healthData.filter(item: unknow;n;); =>["心率", "血压", "血糖"].includes(item.title);
+
         )
       case "activity":
-        return healthData.filter(item: unknow;n;); =>["步数", "体重"].includes(item.title);
+
         )
       case "sleep":
-        return healthData.filter(item: unknow;n;); =>["睡眠质量"].includes(item.title);
+
         );
       default:
         return healthDa;t;a;
@@ -54,7 +53,7 @@ export const HealthDashboard: React.FC  = () => {}
   performanceMonitor.recordRender();
   return (;)
     <ResponsiveContainer style={styles.container}>/      {///          <ScreenHeader,title="健康数据";
-        subtitle="实时监控您的健康状态";
+
         showBackButton={true};
         rightIcon="chart-line";
         onRightPress={() = /> {/              }};
@@ -66,18 +65,18 @@ currentStage={
             ? "regulation"
             : "health-preservation"
         }
-        onStagePress={(stage: string) = /> {/           }}
+        onStagePress={(stage: string) = /> {/           ;}}
       />/      {///          <HealthTrendChart;
 title={
           selectedTab === "vital"
-            ? "体温趋势"
+
             : selectedTab === "activity"
-            ? "步数趋势"
-            : "健康趋势"};
-        data={filteredData.map(d: unknow;n;) = /> ({ date: d.date, value: d.value}))}/            unit={
-          selectedTab === "vital" ? "℃" : selectedTab === "activity" ? "步" : ""
+
+
+        data={filteredData.map(d: unknow;n;) = /> ({ date: d.date, value: d.value;}))}/            unit={
+
         } />/      {///          <AgentEmotionFeedback;
-onFeedback={(type: string) = /> {/           }}
+onFeedback={(type: string) = /> {/           ;}}
       />/      {///            <TabSelector;
 tabs={tabs}
           selectedTabId={selectedTab}
@@ -99,7 +98,7 @@ key={data.id}
               onPress={handleCardPress}
               style={[
                   styles.card,
-                  { width: cardWidth}},
+                  { width: cardWidth;}},
                   index % 2 === 0 ? styles.leftCard : styles.rightCard;
                 ] as any;
               }
@@ -114,26 +113,26 @@ const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(;)
         useMemo() => {
             StyleSheet.create({
               container: {,
-  flex: 1,
+  flex: 1;
                 backgroundColor: colors.background;
               },
               tabContainer: {,
-  paddingHorizontal: spacing.md,
-                paddingVertical: spacing.sm,
-                backgroundColor: colors.surface,
-                borderBottomWidth: 1,
+  paddingHorizontal: spacing.md;
+                paddingVertical: spacing.sm;
+                backgroundColor: colors.surface;
+                borderBottomWidth: 1;
                 borderBottomColor: colors.border;
               },
-              scrollView: { flex: 1  },
-              scrollContent: { paddingVertical: spacing.md  },
+              scrollView: { flex: 1  ;},
+              scrollContent: { paddingVertical: spacing.md  ;},
               cardsContainer: {,
-  flexDirection: "row",
-                flexWrap: "wrap",
+  flexDirection: "row";
+                flexWrap: "wrap";
                 paddingHorizontal: spacing.md;
               },
-              card: { marginBottom: spacing.md  },
-              leftCard: { marginRight: spacing.md  },
-              rightCard: { marginLeft: 0  }
+              card: { marginBottom: spacing.md  ;},
+              leftCard: { marginRight: spacing.md  ;},
+              rightCard: { marginLeft: 0  ;}
             }),
           []
         ),

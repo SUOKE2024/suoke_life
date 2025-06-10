@@ -12,28 +12,28 @@ import { createDynamicConfig } from '../../core/onnx-runtime/constants';
 
 // Mock React Native modules
 jest.mock('react-native', () => ({
-  Platform: { OS: 'ios' },
+  Platform: { OS: 'ios' ;},
   Dimensions: {
-    get: () => ({ width: 375, height: 812 }),
+    get: () => ({ width: 375, height: 812 ;}),
   },
   Alert: {
-    alert: jest.fn(),
+    alert: jest.fn();
   },
 }));
 
 jest.mock('react-native-device-info', () => ({
   getTotalMemory: jest.fn(() => Promise.resolve(4 * 1024 * 1024 * 1024)), // 4GB
   getFreeDiskStorage: jest.fn(() => Promise.resolve(2 * 1024 * 1024 * 1024)), // 2GB
-}));
+;}));
 
 jest.mock('react-native-fs', () => ({
-  DocumentDirectoryPath: '/mock/path',
-  exists: jest.fn(() => Promise.resolve(true)),
-  mkdir: jest.fn(),
-  readDir: jest.fn(() => Promise.resolve([])),
+  DocumentDirectoryPath: '/mock/path';
+  exists: jest.fn(() => Promise.resolve(true));
+  mkdir: jest.fn();
+  readDir: jest.fn(() => Promise.resolve([]));
 }));
 
-describe('内存优化集成测试', () => {
+
   beforeEach(() => {
     jest.clearAllMocks();
     jest.clearAllTimers();
@@ -44,8 +44,8 @@ describe('内存优化集成测试', () => {
     jest.useRealTimers();
   });
 
-  describe('完整的内存管理流程', () => {
-    test('应该能够完成完整的内存优化流程', async () => {
+
+
       // 1. 初始化系统
       await localModelManager.initialize();
 
@@ -59,10 +59,10 @@ describe('内存优化集成测试', () => {
       // 3. 加载一些模型和缓存数据
       await localModelManager.loadModel('health_basic_assessment');
       await optimizedCacheService.set('test_data_1', {
-        data: 'x'.repeat(1000),
+        data: 'x'.repeat(1000);
       });
       await optimizedCacheService.set('test_data_2', {
-        data: 'y'.repeat(2000),
+        data: 'y'.repeat(2000);
       });
 
       // 4. 验证内存使用增加
@@ -89,7 +89,7 @@ describe('内存优化集成测试', () => {
       await localModelManager.dispose();
     });
 
-    test('应该能够处理内存压力情况', async () => {
+
       await localModelManager.initialize();
 
       // 模拟高内存使用场景
@@ -101,8 +101,8 @@ describe('内存优化集成测试', () => {
       await Promise.allSettled(loadPromises);
 
       // 添加大量缓存数据
-      const cachePromises = Array.from({ length: 50 }, (_, i) =>
-        optimizedCacheService.set(`stress_test_${i}`, { data: 'x'.repeat(500) })
+      const cachePromises = Array.from({ length: 50 ;}, (_, i) =>
+        optimizedCacheService.set(`stress_test_${i}`, { data: 'x'.repeat(500) ;})
       );
 
       await Promise.all(cachePromises);
@@ -120,7 +120,7 @@ describe('内存优化集成测试', () => {
       await localModelManager.dispose();
     });
 
-    test('应该能够在不同设备配置下正常工作', async () => {
+
       // 测试低内存设备配置
       jest
         .spyOn(require('react-native-device-info'), 'getTotalMemory')
@@ -151,15 +151,15 @@ describe('内存优化集成测试', () => {
     });
   });
 
-  describe('MemoryMonitor组件集成测试', () => {
-    test('应该正确显示内存监控界面', async () => {
+
+
       const { getByText, getByTestId } = render(
         React.createElement(MemoryMonitor)
       );
 
       // 等待组件加载
       await waitFor(() => {
-        expect(getByText('内存监控')).toBeTruthy();
+
       });
 
       // 验证内存统计显示
@@ -173,13 +173,13 @@ describe('内存优化集成测试', () => {
       expect(pressureIndicator).toBeTruthy();
     });
 
-    test('应该能够执行内存优化操作', async () => {
+
       const { getByText, getByTestId } = render(
         React.createElement(MemoryMonitor)
       );
 
       await waitFor(() => {
-        expect(getByText('内存监控')).toBeTruthy();
+
       });
 
       // 点击优化按钮
@@ -194,7 +194,7 @@ describe('内存优化集成测试', () => {
       });
     });
 
-    test('应该能够切换自动优化模式', async () => {
+
       const { getByTestId } = render(React.createElement(MemoryMonitor));
 
       await waitFor(() => {
@@ -209,14 +209,14 @@ describe('内存优化集成测试', () => {
       // 这里可以添加更多的验证逻辑
     });
 
-    test('应该正确显示内存压力警告', async () => {
+
       // Mock高内存使用情况
       jest.spyOn(localModelManager, 'getMemoryStats').mockReturnValue({
         totalMemory: 1024 * 1024 * 1024, // 1GB
         usedMemory: 900 * 1024 * 1024, // 900MB (87.5%)
-        availableMemory: 124 * 1024 * 1024,
-        loadedModels: 3,
-        cacheSize: 100 * 1024 * 1024,
+        availableMemory: 124 * 1024 * 1024;
+        loadedModels: 3;
+        cacheSize: 100 * 1024 * 1024;
       });
 
       const { getByText, getByTestId } = render(
@@ -234,8 +234,8 @@ describe('内存优化集成测试', () => {
     });
   });
 
-  describe('端到端性能测试', () => {
-    test('应该在合理时间内完成内存优化', async () => {
+
+
       const startTime = Date.now();
 
       // 初始化系统
@@ -243,7 +243,7 @@ describe('内存优化集成测试', () => {
 
       // 加载数据
       await localModelManager.loadModel('health_basic_assessment');
-      await optimizedCacheService.set('perf_test', { data: 'x'.repeat(5000) });
+      await optimizedCacheService.set('perf_test', { data: 'x'.repeat(5000) ;});
 
       // 执行优化
       await optimizedCacheService.cleanup();
@@ -257,14 +257,14 @@ describe('内存优化集成测试', () => {
       expect(totalTime).toBeLessThan(3000);
     });
 
-    test('应该能够处理并发操作', async () => {
+
       await localModelManager.initialize();
 
       // 并发执行多个操作
       const operations = [
         localModelManager.loadModel('health_basic_assessment'),
-        optimizedCacheService.set('concurrent_1', { data: 'test1' }),
-        optimizedCacheService.set('concurrent_2', { data: 'test2' }),
+        optimizedCacheService.set('concurrent_1', { data: 'test1' ;}),
+        optimizedCacheService.set('concurrent_2', { data: 'test2' ;}),
         optimizedCacheService.get('concurrent_1'),
       ];
 
@@ -279,7 +279,7 @@ describe('内存优化集成测试', () => {
       await localModelManager.dispose();
     });
 
-    test('应该能够从错误中恢复', async () => {
+
       await localModelManager.initialize();
 
       // 尝试加载不存在的模型（应该失败）
@@ -296,16 +296,16 @@ describe('内存优化集成测试', () => {
       expect(validModel).toBeDefined();
 
       // 缓存操作应该仍然正常
-      await optimizedCacheService.set('recovery_test', { data: 'test' });
+      await optimizedCacheService.set('recovery_test', { data: 'test' ;});
       const retrieved = await optimizedCacheService.get('recovery_test');
-      expect(retrieved).toEqual({ data: 'test' });
+      expect(retrieved).toEqual({ data: 'test' ;});
 
       await localModelManager.dispose();
     });
   });
 
-  describe('内存泄漏检测', () => {
-    test('应该正确清理资源', async () => {
+
+
       // 记录初始状态
       const initialModelStats = localModelManager.getMemoryStats();
       const initialCacheStats = optimizedCacheService.getMemoryUsage();
@@ -313,7 +313,7 @@ describe('内存优化集成测试', () => {
       // 执行一系列操作
       await localModelManager.initialize();
       await localModelManager.loadModel('health_basic_assessment');
-      await optimizedCacheService.set('leak_test', { data: 'test' });
+      await optimizedCacheService.set('leak_test', { data: 'test' ;});
 
       // 清理资源
       await localModelManager.dispose();
@@ -327,16 +327,16 @@ describe('内存优化集成测试', () => {
       expect(finalCacheStats.itemCount).toBe(0);
     });
 
-    test('应该能够检测和处理内存泄漏', async () => {
+
       await localModelManager.initialize();
 
       // 创建大量对象但不清理
       const largeObjects = [];
       for (let i = 0; i < 100; i++) {
         largeObjects.push({
-          id: i,
-          data: 'x'.repeat(1000),
-          timestamp: Date.now(),
+          id: i;
+          data: 'x'.repeat(1000);
+          timestamp: Date.now();
         });
 
         await optimizedCacheService.set(`leak_test_${i}`, largeObjects[i]);
@@ -357,8 +357,8 @@ describe('内存优化集成测试', () => {
     });
   });
 
-  describe('边界条件测试', () => {
-    test('应该能够处理极低内存情况', async () => {
+
+
       // Mock极低内存设备
       jest
         .spyOn(require('react-native-device-info'), 'getTotalMemory')
@@ -371,7 +371,7 @@ describe('内存优化集成测试', () => {
       expect(config.EDGE_COMPUTE.enableGPU).toBe(false);
     });
 
-    test('应该能够处理内存分配失败', async () => {
+
       // Mock内存分配失败
       const originalSet = optimizedCacheService.set;
       jest
@@ -385,27 +385,27 @@ describe('内存优化集成测试', () => {
 
       // 尝试设置会失败的缓存项
       await expect(
-        optimizedCacheService.set('fail_test', { data: 'test' })
+        optimizedCacheService.set('fail_test', { data: 'test' ;})
       ).rejects.toThrow('Memory allocation failed');
 
       // 验证其他操作仍然正常
       await expect(
-        optimizedCacheService.set('success_test', { data: 'test' })
+        optimizedCacheService.set('success_test', { data: 'test' ;})
       ).resolves.not.toThrow();
 
       const retrieved = await optimizedCacheService.get('success_test');
-      expect(retrieved).toEqual({ data: 'test' });
+      expect(retrieved).toEqual({ data: 'test' ;});
     });
 
-    test('应该能够处理大量并发请求', async () => {
+
       await localModelManager.initialize();
 
       // 创建大量并发请求
-      const concurrentRequests = Array.from({ length: 50 }, (_, i) =>
+      const concurrentRequests = Array.from({ length: 50 ;}, (_, i) =>
         optimizedCacheService.set(`concurrent_${i}`, {
-          id: i,
-          data: `data_${i}`,
-          timestamp: Date.now(),
+          id: i;
+          data: `data_${i;}`,
+          timestamp: Date.now();
         })
       );
 
@@ -424,14 +424,14 @@ describe('内存优化集成测试', () => {
 
 // 性能基准测试辅助函数
 export const runIntegrationPerformanceTest = async () => {
-  console.log('🚀 开始集成性能测试...');
+
 
   const results = {
-    initialization: 0,
-    modelLoading: 0,
-    cacheOperations: 0,
-    memoryOptimization: 0,
-    cleanup: 0,
+    initialization: 0;
+    modelLoading: 0;
+    cacheOperations: 0;
+    memoryOptimization: 0;
+    cleanup: 0;
   };
 
   // 测试初始化性能
@@ -447,7 +447,7 @@ export const runIntegrationPerformanceTest = async () => {
   // 测试缓存操作性能
   start = Date.now();
   for (let i = 0; i < 10; i++) {
-    await optimizedCacheService.set(`perf_test_${i}`, { data: `test_${i}` });
+    await optimizedCacheService.set(`perf_test_${i}`, { data: `test_${i;}` });
   }
   for (let i = 0; i < 10; i++) {
     await optimizedCacheService.get(`perf_test_${i}`);
@@ -465,12 +465,12 @@ export const runIntegrationPerformanceTest = async () => {
   optimizedCacheService.clear();
   results.cleanup = Date.now() - start;
 
-  console.log('📊 集成性能测试结果:');
-  console.log(`  初始化: ${results.initialization}ms`);
-  console.log(`  模型加载: ${results.modelLoading}ms`);
-  console.log(`  缓存操作: ${results.cacheOperations}ms`);
-  console.log(`  内存优化: ${results.memoryOptimization}ms`);
-  console.log(`  清理: ${results.cleanup}ms`);
+
+
+
+
+
+
 
   return results;
 };

@@ -22,26 +22,26 @@ import {import { getBlockchainServiceClient } from '../services/blockchain/Block
   HealthDataRecord;
 } from '../types/blockchain';
 interface UseBlockchainServiceState {
-  isLoading: boolean;,
-  error: BlockchainError | null;,
-  blockchainStatus: BlockchainStatus | null;,
-  healthDataRecords: HealthDataRecord[];,
-  accessGrants: AccessGrant[];,
+  isLoading: boolean;
+  error: BlockchainError | null;
+  blockchainStatus: BlockchainStatus | null;
+  healthDataRecords: HealthDataRecord[];
+  accessGrants: AccessGrant[];
   lastOperation: string | null;
 }
 interface UseBlockchainServiceActions {
-  storeHealthData: (request: StoreHealthDataRequest) => Promise<StoreHealthDataResponse>;,
-  verifyHealthData: (request: VerifyHealthDataRequest) => Promise<VerifyHealthDataResponse>;,
-  verifyWithZKP: (request: VerifyWithZKPRequest) => Promise<VerifyWithZKPResponse>;,
-  getHealthDataRecords: (request: GetHealthDataRecordsRequest) => Promise<GetHealthDataRecordsResponse>;,
-  authorizeAccess: (request: AuthorizeAccessRequest) => Promise<AuthorizeAccessResponse>;,
-  revokeAccess: (request: RevokeAccessRequest) => Promise<RevokeAccessResponse>;,
-  getBlockchainStatus: (request: GetBlockchainStatusRequest) => Promise<GetBlockchainStatusResponse>;,
-  generateZKProof: (userId: string, dataType: string, privateInputs: Record<string, any>, circuitType: string) => Promise<ZKProof>;,
-  refreshBlockchainStatus: () => Promise<void>;,
-  refreshHealthDataRecords: (userId: string) => Promise<void>;,
-  refreshAccessGrants: (userId: string) => Promise<void>;,
-  clearError: () => void;,
+  storeHealthData: (request: StoreHealthDataRequest) => Promise<StoreHealthDataResponse>;
+  verifyHealthData: (request: VerifyHealthDataRequest) => Promise<VerifyHealthDataResponse>;
+  verifyWithZKP: (request: VerifyWithZKPRequest) => Promise<VerifyWithZKPResponse>;
+  getHealthDataRecords: (request: GetHealthDataRecordsRequest) => Promise<GetHealthDataRecordsResponse>;
+  authorizeAccess: (request: AuthorizeAccessRequest) => Promise<AuthorizeAccessResponse>;
+  revokeAccess: (request: RevokeAccessRequest) => Promise<RevokeAccessResponse>;
+  getBlockchainStatus: (request: GetBlockchainStatusRequest) => Promise<GetBlockchainStatusResponse>;
+  generateZKProof: (userId: string, dataType: string, privateInputs: Record<string, any>, circuitType: string) => Promise<ZKProof>;
+  refreshBlockchainStatus: () => Promise<void>;
+  refreshHealthDataRecords: (userId: string) => Promise<void>;
+  refreshAccessGrants: (userId: string) => Promise<void>;
+  clearError: () => void;
   batchStoreHealthData: (requests: StoreHealthDataRequest[]) => Promise<StoreHealthDataResponse[]>;
 }
 export function useBlockchainService(): UseBlockchainServiceState & UseBlockchainServiceActions {
@@ -64,15 +64,15 @@ export function useBlockchainService(): UseBlockchainServiceState & UseBlockchai
     abortControllerRef.current = new AbortController();
     setState(prev => ({
       ...prev,
-      isLoading: true,
-      error: null,
+      isLoading: true;
+      error: null;
       lastOperation: operationName;
     }));
     try {
       const result = await operation();
       setState(prev => ({
         ...prev,
-        isLoading: false,
+        isLoading: false;
         lastOperation: null;
       }));
       return result;
@@ -80,12 +80,12 @@ export function useBlockchainService(): UseBlockchainServiceState & UseBlockchai
       const blockchainError = error instanceof BlockchainError ;
         ? error ;
         : new BlockchainError(;)
-            `${operationName}失败: ${error instanceof Error ? error.message : '未知错误'}`,BlockchainErrorCode.UNKNOWN,error;
+
           );
       setState(prev => ({
         ...prev,
-        isLoading: false,
-        error: blockchainError,
+        isLoading: false;
+        error: blockchainError;
         lastOperation: null;
       }));
       throw blockchainError;
@@ -93,22 +93,22 @@ export function useBlockchainService(): UseBlockchainServiceState & UseBlockchai
   }, []);
   // 存储健康数据
   const storeHealthData = useCallback(async (request: StoreHealthDataRequest): Promise<StoreHealthDataResponse> => {return withAsyncOperation(;))
-      () => clientRef.current.storeHealthData(request),'存储健康数据';
+
     );
   }, [withAsyncOperation]);
   // 验证健康数据
   const verifyHealthData = useCallback(async (request: VerifyHealthDataRequest): Promise<VerifyHealthDataResponse> => {return withAsyncOperation(;))
-      () => clientRef.current.verifyHealthData(request),'验证健康数据';
+
     );
   }, [withAsyncOperation]);
   // 零知识证明验证
   const verifyWithZKP = useCallback(async (request: VerifyWithZKPRequest): Promise<VerifyWithZKPResponse> => {return withAsyncOperation(;))
-      () => clientRef.current.verifyWithZKP(request),'零知识证明验证';
+
     );
   }, [withAsyncOperation]);
   // 获取健康数据记录
   const getHealthDataRecords = useCallback(async (request: GetHealthDataRecordsRequest): Promise<GetHealthDataRecordsResponse> => {const response = await withAsyncOperation(;))
-      () => clientRef.current.getHealthDataRecords(request),'获取健康数据记录';
+
     );
     setState(prev => ({
       ...prev,
@@ -118,28 +118,28 @@ export function useBlockchainService(): UseBlockchainServiceState & UseBlockchai
   }, [withAsyncOperation]);
   // 授权访问
   const authorizeAccess = useCallback(async (request: AuthorizeAccessRequest): Promise<AuthorizeAccessResponse> => {return withAsyncOperation(;))
-      () => clientRef.current.authorizeAccess(request),'授权访问';
+
     );
   }, [withAsyncOperation]);
   // 撤销访问
   const revokeAccess = useCallback(async (request: RevokeAccessRequest): Promise<RevokeAccessResponse> => {return withAsyncOperation(;))
-      () => clientRef.current.revokeAccess(request),'撤销访问';
+
     );
   }, [withAsyncOperation]);
   // 获取区块链状态
   const getBlockchainStatus = useCallback(async (request: GetBlockchainStatusRequest): Promise<GetBlockchainStatusResponse> => {const response = await withAsyncOperation(;))
-      () => clientRef.current.getBlockchainStatus(request),'获取区块链状态';
+
     );
     setState(prev => ({
       ...prev,
       blockchainStatus: {,
-  isConnected: true,
-        currentBlockHeight: response.currentBlockHeight,
-        networkId: 'suoke-network',
-        consensusStatus: response.consensusStatus as any,
-        syncPercentage: response.syncPercentage,
-        lastBlockTimestamp: response.lastBlockTimestamp,
-        nodeCount: response.connectedNodes,
+  isConnected: true;
+        currentBlockHeight: response.currentBlockHeight;
+        networkId: 'suoke-network';
+        consensusStatus: response.consensusStatus as any;
+        syncPercentage: response.syncPercentage;
+        lastBlockTimestamp: response.lastBlockTimestamp;
+        nodeCount: response.connectedNodes;
         transactionPoolSize: 0;
       }
     }));
@@ -149,12 +149,12 @@ export function useBlockchainService(): UseBlockchainServiceState & UseBlockchai
   const generateZKProof = useCallback(async (;))
     userId: string,dataType: string,privateInputs: Record<string, any>,circuitType: string;
   ): Promise<ZKProof> => {return withAsyncOperation(;
-      () => clientRef.current.generateZKProof(userId, dataType, privateInputs, circuitType),'生成零知识证明';
+
     );
   }, [withAsyncOperation]);
   // 批量存储健康数据
   const batchStoreHealthData = useCallback(async (requests: StoreHealthDataRequest[]): Promise<StoreHealthDataResponse[]> => {return withAsyncOperation(;))
-      () => clientRef.current.batchStoreHealthData(requests),'批量存储健康数据';
+
     );
   }, [withAsyncOperation]);
   // 刷新区块链状态
@@ -164,7 +164,7 @@ export function useBlockchainService(): UseBlockchainServiceState & UseBlockchai
         blockchainStatus: status;
       }));
     } catch (error) {
-      console.warn('刷新区块链状态失败:', error);
+
     }
   }, []);
   // 刷新健康数据记录
@@ -175,7 +175,7 @@ export function useBlockchainService(): UseBlockchainServiceState & UseBlockchai
         healthDataRecords: response.records;
       }));
     } catch (error) {
-      console.warn('刷新健康数据记录失败:', error);
+
     }
   }, []);
   // 刷新访问授权列表
@@ -185,7 +185,7 @@ export function useBlockchainService(): UseBlockchainServiceState & UseBlockchai
         accessGrants: grants;
       }));
     } catch (error) {
-      console.warn('刷新访问授权列表失败:', error);
+
     }
   }, []);
   // 清除错误
@@ -219,7 +219,7 @@ export function useBlockchainStatusMonitor() {
       setLastUpdate(new Date());
     } catch (error) {
       setIsConnected(false);
-      console.warn('区块链状态检查失败:', error);
+
     }
   }, []);
   useEffect() => {
@@ -246,7 +246,7 @@ export function useHealthDataOperations(userId: string) {
   const [localRecords, setLocalRecords] = useState<HealthDataRecord[]>([]);
   // 存储单个健康数据
   const storeData = useCallback(async (;))
-    dataType: string,data: any,metadata?: Record<string, string>;
+    dataType: string,data: any,metadata?: Record<string; string>;
   ) => {const dataString = JSON.stringify(data);
     const encoder = new TextEncoder();
     const dataBytes = encoder.encode(dataString);
@@ -260,17 +260,17 @@ export function useHealthDataOperations(userId: string) {
       dataType,
       dataHash,
       encryptedData,
-      metadata: metadata || {},
+      metadata: metadata || {;},
       timestamp: Date.now();
     };
     const response = await storeHealthData(request);
     // 更新本地记录
     const newRecord: HealthDataRecord = {,
-  transactionId: response.transactionId,
+  transactionId: response.transactionId;
       dataType,
       dataHash,
-      metadata: request.metadata,
-      timestamp: request.timestamp,
+      metadata: request.metadata;
+      timestamp: request.timestamp;
       blockHash: response.blockHash;
     };
     setLocalRecords(prev => [newRecord, ...prev]);
@@ -278,9 +278,9 @@ export function useHealthDataOperations(userId: string) {
   }, [userId, storeHealthData]);
   // 批量存储健康数据
   const storeBatchData = useCallback(async (;))
-    dataItems: Array<{dataType: string,
+    dataItems: Array<{dataType: string;
   data: any;
-      metadata?: Record<string, string>;
+      metadata?: Record<string; string>;
     }>
   ) => {
     const requests: StoreHealthDataRequest[] = [];
@@ -293,21 +293,21 @@ export function useHealthDataOperations(userId: string) {
       const encryptedData = dataBytes;
       requests.push({
         userId,
-        dataType: item.dataType,
+        dataType: item.dataType;
         dataHash,
         encryptedData,
-        metadata: item.metadata || {},
+        metadata: item.metadata || {;},
         timestamp: Date.now();
       });
     }
     const responses = await batchStoreHealthData(requests);
     // 更新本地记录
     const newRecords: HealthDataRecord[] = responses.map(response, index) => ({
-      transactionId: response.transactionId,
-      dataType: requests[index].dataType,
-      dataHash: requests[index].dataHash,
-      metadata: requests[index].metadata,
-      timestamp: requests[index].timestamp,
+      transactionId: response.transactionId;
+      dataType: requests[index].dataType;
+      dataHash: requests[index].dataHash;
+      metadata: requests[index].metadata;
+      timestamp: requests[index].timestamp;
       blockHash: response.blockHash;
     }));
     setLocalRecords(prev => [...newRecords, ...prev]);

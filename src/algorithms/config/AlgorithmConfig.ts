@@ -268,7 +268,7 @@ export class AlgorithmConfig {
   public readonly monitoring: MonitoringConfig;
   public readonly performance: PerformanceConfig;
 
-  constructor(options: Partial<AlgorithmConfigOptions> = {}) {
+  constructor(options: Partial<AlgorithmConfigOptions> = {;}) {
     this.version = options.version || '1.0.0';
     this.startTime = options.startTime || Date.now();
     this.looking = this.initializeLookingConfig(options.looking);
@@ -294,27 +294,27 @@ export class AlgorithmConfig {
     config?: Partial<LookingConfig>
   ): LookingConfig {
     return {
-      enabled: config?.enabled ?? true,
+      enabled: config?.enabled ?? true;
       models: {
         tongueAnalysis:
           config?.models?.tongueAnalysis ||
-          this.createDefaultModelConfig('tongue-analysis'),
+          this.createDefaultModelConfig('tongue-analysis');
         faceAnalysis:
           config?.models?.faceAnalysis ||
-          this.createDefaultModelConfig('face-analysis'),
+          this.createDefaultModelConfig('face-analysis');
         bodyAnalysis:
           config?.models?.bodyAnalysis ||
-          this.createDefaultModelConfig('body-analysis'),
+          this.createDefaultModelConfig('body-analysis');
       },
       imageProcessing: {
-        maxWidth: config?.imageProcessing?.maxWidth || 1920,
-        maxHeight: config?.imageProcessing?.maxHeight || 1080,
-        quality: config?.imageProcessing?.quality || 0.8,
+        maxWidth: config?.imageProcessing?.maxWidth || 1920;
+        maxHeight: config?.imageProcessing?.maxHeight || 1080;
+        quality: config?.imageProcessing?.quality || 0.8;
         formats: config?.imageProcessing?.formats || ['jpg', 'png', 'webp'],
-      },
+      ;},
       confidence: {
-        threshold: config?.confidence?.threshold || 0.7,
-        minSamples: config?.confidence?.minSamples || 3,
+        threshold: config?.confidence?.threshold || 0.7;
+        minSamples: config?.confidence?.minSamples || 3;
       },
     };
   }
@@ -323,27 +323,27 @@ export class AlgorithmConfig {
     config?: Partial<ListeningConfig>
   ): ListeningConfig {
     return {
-      enabled: config?.enabled ?? true,
+      enabled: config?.enabled ?? true;
       models: {
         voiceAnalysis:
           config?.models?.voiceAnalysis ||
-          this.createDefaultModelConfig('voice-analysis'),
+          this.createDefaultModelConfig('voice-analysis');
         breathingAnalysis:
           config?.models?.breathingAnalysis ||
-          this.createDefaultModelConfig('breathing-analysis'),
+          this.createDefaultModelConfig('breathing-analysis');
         coughAnalysis:
           config?.models?.coughAnalysis ||
-          this.createDefaultModelConfig('cough-analysis'),
+          this.createDefaultModelConfig('cough-analysis');
       },
       audioProcessing: {
-        sampleRate: config?.audioProcessing?.sampleRate || 44100,
-        channels: config?.audioProcessing?.channels || 1,
-        bitDepth: config?.audioProcessing?.bitDepth || 16,
-        maxDuration: config?.audioProcessing?.maxDuration || 60,
+        sampleRate: config?.audioProcessing?.sampleRate || 44100;
+        channels: config?.audioProcessing?.channels || 1;
+        bitDepth: config?.audioProcessing?.bitDepth || 16;
+        maxDuration: config?.audioProcessing?.maxDuration || 60;
       },
       confidence: {
-        threshold: config?.confidence?.threshold || 0.7,
-        minSamples: config?.confidence?.minSamples || 3,
+        threshold: config?.confidence?.threshold || 0.7;
+        minSamples: config?.confidence?.minSamples || 3;
       },
     };
   }
@@ -352,26 +352,26 @@ export class AlgorithmConfig {
     config?: Partial<InquiryConfig>
   ): InquiryConfig {
     return {
-      enabled: config?.enabled ?? true,
+      enabled: config?.enabled ?? true;
       models: {
         symptomAnalysis:
           config?.models?.symptomAnalysis ||
-          this.createDefaultModelConfig('symptom-analysis'),
+          this.createDefaultModelConfig('symptom-analysis');
         nlpProcessing:
           config?.models?.nlpProcessing ||
-          this.createDefaultModelConfig('nlp-processing'),
+          this.createDefaultModelConfig('nlp-processing');
         semanticAnalysis:
           config?.models?.semanticAnalysis ||
-          this.createDefaultModelConfig('semantic-analysis'),
+          this.createDefaultModelConfig('semantic-analysis');
       },
       textProcessing: {
-        maxLength: config?.textProcessing?.maxLength || 5000,
+        maxLength: config?.textProcessing?.maxLength || 5000;
         languages: config?.textProcessing?.languages || ['zh-CN', 'en'],
-        encoding: config?.textProcessing?.encoding || 'utf-8',
+        encoding: config?.textProcessing?.encoding || 'utf-8';
       },
       confidence: {
-        threshold: config?.confidence?.threshold || 0.7,
-        minKeywords: config?.confidence?.minKeywords || 3,
+        threshold: config?.confidence?.threshold || 0.7;
+        minKeywords: config?.confidence?.minKeywords || 3;
       },
     };
   }
@@ -380,26 +380,26 @@ export class AlgorithmConfig {
     config?: Partial<PalpationConfig>
   ): PalpationConfig {
     return {
-      enabled: config?.enabled ?? true,
+      enabled: config?.enabled ?? true;
       models: {
         pulseAnalysis:
           config?.models?.pulseAnalysis ||
-          this.createDefaultModelConfig('pulse-analysis'),
+          this.createDefaultModelConfig('pulse-analysis');
         pressureAnalysis:
           config?.models?.pressureAnalysis ||
-          this.createDefaultModelConfig('pressure-analysis'),
+          this.createDefaultModelConfig('pressure-analysis');
         temperatureAnalysis:
           config?.models?.temperatureAnalysis ||
-          this.createDefaultModelConfig('temperature-analysis'),
+          this.createDefaultModelConfig('temperature-analysis');
       },
       sensorProcessing: {
-        samplingRate: config?.sensorProcessing?.samplingRate || 1000,
-        filterFrequency: config?.sensorProcessing?.filterFrequency || 50,
-        calibration: config?.sensorProcessing?.calibration ?? true,
+        samplingRate: config?.sensorProcessing?.samplingRate || 1000;
+        filterFrequency: config?.sensorProcessing?.filterFrequency || 50;
+        calibration: config?.sensorProcessing?.calibration ?? true;
       },
       confidence: {
-        threshold: config?.confidence?.threshold || 0.7,
-        minDuration: config?.confidence?.minDuration || 30,
+        threshold: config?.confidence?.threshold || 0.7;
+        minDuration: config?.confidence?.minDuration || 30;
       },
     };
   }
@@ -408,43 +408,43 @@ export class AlgorithmConfig {
     config?: Partial<CalculationConfig>
   ): CalculationConfig {
     return {
-      enabled: config?.enabled ?? true,
+      enabled: config?.enabled ?? true;
       models: {
         lunarCalculation:
           config?.models?.lunarCalculation ||
-          this.createDefaultModelConfig('lunar-calculation'),
+          this.createDefaultModelConfig('lunar-calculation');
         fiveElementsAnalysis:
           config?.models?.fiveElementsAnalysis ||
-          this.createDefaultModelConfig('five-elements'),
+          this.createDefaultModelConfig('five-elements');
         yinYangAnalysis:
           config?.models?.yinYangAnalysis ||
-          this.createDefaultModelConfig('yin-yang'),
+          this.createDefaultModelConfig('yin-yang');
       },
       calendar: {
-        type: config?.calendar?.type || 'both',
+        type: config?.calendar?.type || 'both';
       },
       confidence: {
-        threshold: config?.confidence?.threshold || 0.7,
-        historicalDepth: config?.confidence?.historicalDepth || 365,
+        threshold: config?.confidence?.threshold || 0.7;
+        historicalDepth: config?.confidence?.historicalDepth || 365;
       },
     };
   }
 
   private initializeFusionConfig(config?: Partial<FusionConfig>): FusionConfig {
     return {
-      enabled: config?.enabled ?? true,
-      algorithm: config?.algorithm || 'weighted_average',
+      enabled: config?.enabled ?? true;
+      algorithm: config?.algorithm || 'weighted_average';
       weights: {
-        looking: config?.weights?.looking || 0.25,
-        listening: config?.weights?.listening || 0.2,
-        inquiry: config?.weights?.inquiry || 0.3,
-        palpation: config?.weights?.palpation || 0.15,
-        calculation: config?.weights?.calculation || 0.1,
+        looking: config?.weights?.looking || 0.25;
+        listening: config?.weights?.listening || 0.2;
+        inquiry: config?.weights?.inquiry || 0.3;
+        palpation: config?.weights?.palpation || 0.15;
+        calculation: config?.weights?.calculation || 0.1;
       },
       fusion: {
-        minDiagnoses: config?.fusion?.minDiagnoses || 2,
-        confidenceBoost: config?.fusion?.confidenceBoost || 0.1,
-        conflictResolution: config?.fusion?.conflictResolution || 'confidence',
+        minDiagnoses: config?.fusion?.minDiagnoses || 2;
+        confidenceBoost: config?.fusion?.confidenceBoost || 0.1;
+        conflictResolution: config?.fusion?.conflictResolution || 'confidence';
       },
     };
   }
@@ -453,19 +453,19 @@ export class AlgorithmConfig {
     config?: Partial<SyndromeConfig>
   ): SyndromeConfig {
     return {
-      enabled: config?.enabled ?? true,
+      enabled: config?.enabled ?? true;
       models: {
         patternRecognition:
           config?.models?.patternRecognition ||
-          this.createDefaultModelConfig('pattern-recognition'),
+          this.createDefaultModelConfig('pattern-recognition');
         syndromeClassification:
           config?.models?.syndromeClassification ||
-          this.createDefaultModelConfig('syndrome-classification'),
+          this.createDefaultModelConfig('syndrome-classification');
       },
       analysis: {
-        maxSyndromes: config?.analysis?.maxSyndromes || 5,
-        minConfidence: config?.analysis?.minConfidence || 0.6,
-        includeSubSyndromes: config?.analysis?.includeSubSyndromes ?? true,
+        maxSyndromes: config?.analysis?.maxSyndromes || 5;
+        minConfidence: config?.analysis?.minConfidence || 0.6;
+        includeSubSyndromes: config?.analysis?.includeSubSyndromes ?? true;
       },
     };
   }
@@ -474,29 +474,29 @@ export class AlgorithmConfig {
     config?: Partial<ConstitutionConfig>
   ): ConstitutionConfig {
     return {
-      enabled: config?.enabled ?? true,
+      enabled: config?.enabled ?? true;
       models: {
         constitutionClassification:
           config?.models?.constitutionClassification ||
-          this.createDefaultModelConfig('constitution-classification'),
+          this.createDefaultModelConfig('constitution-classification');
         bodyTypeAnalysis:
           config?.models?.bodyTypeAnalysis ||
-          this.createDefaultModelConfig('body-type-analysis'),
+          this.createDefaultModelConfig('body-type-analysis');
       },
       analysis: {
         constitutionTypes: config?.analysis?.constitutionTypes || [
-          '平和质',
-          '气虚质',
-          '阳虚质',
-          '阴虚质',
-          '痰湿质',
-          '湿热质',
-          '血瘀质',
-          '气郁质',
-          '特禀质',
+
+
+
+
+
+
+
+
+
         ],
-        adaptiveWeighting: config?.analysis?.adaptiveWeighting ?? true,
-        ageFactors: config?.analysis?.ageFactors ?? true,
+        adaptiveWeighting: config?.analysis?.adaptiveWeighting ?? true;
+        ageFactors: config?.analysis?.ageFactors ?? true;
       },
     };
   }
@@ -505,22 +505,22 @@ export class AlgorithmConfig {
     config?: Partial<TreatmentConfig>
   ): TreatmentConfig {
     return {
-      enabled: config?.enabled ?? true,
+      enabled: config?.enabled ?? true;
       models: {
         recommendationEngine:
           config?.models?.recommendationEngine ||
-          this.createDefaultModelConfig('recommendation-engine'),
+          this.createDefaultModelConfig('recommendation-engine');
         herbFormulation:
           config?.models?.herbFormulation ||
-          this.createDefaultModelConfig('herb-formulation'),
+          this.createDefaultModelConfig('herb-formulation');
         lifestyleAdvice:
           config?.models?.lifestyleAdvice ||
-          this.createDefaultModelConfig('lifestyle-advice'),
+          this.createDefaultModelConfig('lifestyle-advice');
       },
       recommendation: {
-        maxRecommendations: config?.recommendation?.maxRecommendations || 10,
-        personalization: config?.recommendation?.personalization ?? true,
-        safetyChecks: config?.recommendation?.safetyChecks ?? true,
+        maxRecommendations: config?.recommendation?.maxRecommendations || 10;
+        personalization: config?.recommendation?.personalization ?? true;
+        safetyChecks: config?.recommendation?.safetyChecks ?? true;
       },
     };
   }
@@ -529,17 +529,17 @@ export class AlgorithmConfig {
     config?: Partial<KnowledgeBaseConfig>
   ): KnowledgeBaseConfig {
     return {
-      version: config?.version || '1.0.0',
+      version: config?.version || '1.0.0';
       updateInterval: config?.updateInterval || 86400000, // 24 hours
       sources: config?.sources || [
-        'tcm_classics',
+        'tcm_classics';
         'modern_research',
         'clinical_data',
       ],
       caching: {
-        enabled: config?.caching?.enabled ?? true,
+        enabled: config?.caching?.enabled ?? true;
         ttl: config?.caching?.ttl || 3600000, // 1 hour
-        maxSize: config?.caching?.maxSize || 1000,
+        maxSize: config?.caching?.maxSize || 1000;
       },
     };
   }
@@ -548,17 +548,17 @@ export class AlgorithmConfig {
     config?: Partial<QualityControlConfig>
   ): QualityControlConfig {
     return {
-      enabled: config?.enabled ?? true,
+      enabled: config?.enabled ?? true;
       checks: {
-        dataValidation: config?.checks?.dataValidation ?? true,
-        resultValidation: config?.checks?.resultValidation ?? true,
-        crossValidation: config?.checks?.crossValidation ?? true,
-        expertReview: config?.checks?.expertReview ?? false,
+        dataValidation: config?.checks?.dataValidation ?? true;
+        resultValidation: config?.checks?.resultValidation ?? true;
+        crossValidation: config?.checks?.crossValidation ?? true;
+        expertReview: config?.checks?.expertReview ?? false;
       },
       thresholds: {
-        minConfidence: config?.thresholds?.minConfidence || 0.6,
-        maxUncertainty: config?.thresholds?.maxUncertainty || 0.4,
-        consistencyCheck: config?.thresholds?.consistencyCheck || 0.8,
+        minConfidence: config?.thresholds?.minConfidence || 0.6;
+        maxUncertainty: config?.thresholds?.maxUncertainty || 0.4;
+        consistencyCheck: config?.thresholds?.consistencyCheck || 0.8;
       },
     };
   }
@@ -567,17 +567,17 @@ export class AlgorithmConfig {
     config?: Partial<MonitoringConfig>
   ): MonitoringConfig {
     return {
-      enabled: config?.enabled ?? true,
+      enabled: config?.enabled ?? true;
       metrics: {
-        performance: config?.metrics?.performance ?? true,
-        accuracy: config?.metrics?.accuracy ?? true,
-        usage: config?.metrics?.usage ?? true,
-        errors: config?.metrics?.errors ?? true,
+        performance: config?.metrics?.performance ?? true;
+        accuracy: config?.metrics?.accuracy ?? true;
+        usage: config?.metrics?.usage ?? true;
+        errors: config?.metrics?.errors ?? true;
       },
       reporting: {
         interval: config?.reporting?.interval || 300000, // 5 minutes
-        destination: config?.reporting?.destination || 'console',
-        format: config?.reporting?.format || 'json',
+        destination: config?.reporting?.destination || 'console';
+        format: config?.reporting?.format || 'json';
       },
     };
   }
@@ -586,18 +586,18 @@ export class AlgorithmConfig {
     config?: Partial<PerformanceConfig>
   ): PerformanceConfig {
     return {
-      maxConcurrentSessions: config?.maxConcurrentSessions || 100,
-      timeoutMs: config?.timeoutMs || 30000,
-      retryAttempts: config?.retryAttempts || 3,
+      maxConcurrentSessions: config?.maxConcurrentSessions || 100;
+      timeoutMs: config?.timeoutMs || 30000;
+      retryAttempts: config?.retryAttempts || 3;
       caching: {
-        enabled: config?.caching?.enabled ?? true,
-        strategy: config?.caching?.strategy || 'lru',
-        maxSize: config?.caching?.maxSize || 1000,
+        enabled: config?.caching?.enabled ?? true;
+        strategy: config?.caching?.strategy || 'lru';
+        maxSize: config?.caching?.maxSize || 1000;
       },
       optimization: {
-        parallelProcessing: config?.optimization?.parallelProcessing ?? true,
-        gpuAcceleration: config?.optimization?.gpuAcceleration ?? false,
-        modelQuantization: config?.optimization?.modelQuantization ?? false,
+        parallelProcessing: config?.optimization?.parallelProcessing ?? true;
+        gpuAcceleration: config?.optimization?.gpuAcceleration ?? false;
+        modelQuantization: config?.optimization?.modelQuantization ?? false;
       },
     };
   }
@@ -605,41 +605,41 @@ export class AlgorithmConfig {
   private createDefaultModelConfig(name: string): ModelConfig {
     return {
       name,
-      version: '1.0.0',
-      path: `/models/${name}`,
-      type: 'tensorflow',
-      device: 'auto',
-      batchSize: 32,
-      timeout: 10000,
+      version: '1.0.0';
+      path: `/models/${name;}`,
+      type: 'tensorflow';
+      device: 'auto';
+      batchSize: 32;
+      timeout: 10000;
     };
   }
 
   // 获取配置摘要
   getConfigSummary(): Record<string, any> {
     return {
-      version: this.version,
-      startTime: this.startTime,
+      version: this.version;
+      startTime: this.startTime;
       enabledModules: {
-        looking: this.looking.enabled,
-        listening: this.listening.enabled,
-        inquiry: this.inquiry.enabled,
-        palpation: this.palpation.enabled,
-        calculation: this.calculation.enabled,
-        fusion: this.fusion.enabled,
-        syndrome: this.syndrome.enabled,
-        constitution: this.constitution.enabled,
-        treatment: this.treatment.enabled,
+        looking: this.looking.enabled;
+        listening: this.listening.enabled;
+        inquiry: this.inquiry.enabled;
+        palpation: this.palpation.enabled;
+        calculation: this.calculation.enabled;
+        fusion: this.fusion.enabled;
+        syndrome: this.syndrome.enabled;
+        constitution: this.constitution.enabled;
+        treatment: this.treatment.enabled;
       },
       performance: {
-        maxConcurrentSessions: this.performance.maxConcurrentSessions,
-        timeoutMs: this.performance.timeoutMs,
-        cachingEnabled: this.performance.caching.enabled,
+        maxConcurrentSessions: this.performance.maxConcurrentSessions;
+        timeoutMs: this.performance.timeoutMs;
+        cachingEnabled: this.performance.caching.enabled;
       },
     };
   }
 
   // 验证配置
-  validateConfig(): { valid: boolean; errors: string[] } {
+  validateConfig(): { valid: boolean; errors: string[] ;} {
     const errors: string[] = [];
 
     // 验证权重总和
@@ -648,7 +648,7 @@ export class AlgorithmConfig {
       0
     );
     if (Math.abs(totalWeight - 1.0) > 0.01) {
-      errors.push(`融合权重总和应为1.0，当前为${totalWeight}`);
+
     }
 
     // 验证置信度阈值
@@ -662,12 +662,12 @@ export class AlgorithmConfig {
 
     for (const threshold of confidenceThresholds) {
       if (threshold < 0 || threshold > 1) {
-        errors.push(`置信度阈值应在0-1之间，当前为${threshold}`);
+
       }
     }
 
     return {
-      valid: errors.length === 0,
+      valid: errors.length === 0;
       errors,
     };
   }

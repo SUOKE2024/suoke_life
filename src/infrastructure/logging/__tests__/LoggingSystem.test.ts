@@ -1,5 +1,4 @@
 import { LoggingSystem } from "../LoggingSystem";
-import { LoggingSystem } from "../LoggingSystem";
 describe("LoggingSystem", () => {
   beforeEach(() => {
     jest.clearAllMocks();

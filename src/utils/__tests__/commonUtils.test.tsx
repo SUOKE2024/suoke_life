@@ -1,6 +1,4 @@
-import { debounce, throttle, deepClone, generateId, sleep, unique, uniqueBy, groupBy, formatNumber, formatFileSize, generateRandomColor, getDeviceInfo, isEmpty, safeJsonParse } from "../commonUtils";
-import { debounce, throttle, deepClone, generateId, sleep, unique, uniqueBy, groupBy, formatNumber, formatFileSize, generateRandomColor, getDeviceInfo, isEmpty, safeJsonParse } from "../commonUtils";
-import React from "react";
+
 describe("commonUtils", () => {
   beforeEach(() => {
     jest.clearAllMocks();

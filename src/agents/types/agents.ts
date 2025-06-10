@@ -91,8 +91,8 @@ export interface AgentMetrics {
 }
 // 智能体事件类型
 export type AgentEvent =
-  | { type: 'agent_started'; agentType: AgentType; timestamp: Date }
-  | { type: 'agent_stopped'; agentType: AgentType; timestamp: Date }
+  | { type: 'agent_started'; agentType: AgentType; timestamp: Date ;}
+  | { type: 'agent_stopped'; agentType: AgentType; timestamp: Date ;}
   | {
       type: 'task_assigned';
       taskId: string;
@@ -119,7 +119,7 @@ export type AgentEvent =
       participants: AgentType[];
       timestamp: Date;
     }
-  | { type: 'collaboration_ended'; sessionId: string; timestamp: Date }
+  | { type: 'collaboration_ended'; sessionId: string; timestamp: Date ;}
   | {
       type: 'health_check';
       agentType: AgentType;

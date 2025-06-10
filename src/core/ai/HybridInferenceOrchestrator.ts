@@ -8,36 +8,36 @@ import { localModelManager } from './LocalModelManager';
 import { offlineCacheManager } from './OfflineCacheManager';
 
 export interface OrchestrationConfig {
-  enableLocalInference: boolean;,
-  enableCloudInference: boolean;,
-  enableCaching: boolean;,
-  enableFallback: boolean;,
-  maxConcurrentRequests: number;,
-  defaultTimeout: number;,
+  enableLocalInference: boolean;
+  enableCloudInference: boolean;
+  enableCaching: boolean;
+  enableFallback: boolean;
+  maxConcurrentRequests: number;
+  defaultTimeout: number;
   performanceThresholds: {,
-  localMaxLatency: number;,
-  cloudMaxLatency: number;,
+  localMaxLatency: number;
+  cloudMaxLatency: number;
   minConfidence: number;
   };
 }
 
 export interface HealthMetrics {
-  localModelsLoaded: number;,
-  cloudModelsAvailable: number;,
-  cacheHitRate: number;,
-  averageLatency: number;,
-  successRate: number;,
+  localModelsLoaded: number;
+  cloudModelsAvailable: number;
+  cacheHitRate: number;
+  averageLatency: number;
+  successRate: number;
   activeRequests: number;
 }
 
 export interface InferenceMetrics {
-  totalRequests: number;,
-  localRequests: number;,
-  cloudRequests: number;,
-  hybridRequests: number;,
-  cacheHits: number;,
-  failures: number;,
-  averageLatency: number;,
+  totalRequests: number;
+  localRequests: number;
+  cloudRequests: number;
+  hybridRequests: number;
+  cacheHits: number;
+  failures: number;
+  averageLatency: number;
   throughput: number;
 }
 
@@ -50,30 +50,30 @@ export class HybridInferenceOrchestrator {
 
   constructor(config?: Partial<OrchestrationConfig>) {
     this.config = {
-      enableLocalInference: true,
-      enableCloudInference: true,
-      enableCaching: true,
-      enableFallback: true,
-      maxConcurrentRequests: 10,
-      defaultTimeout: 30000,
+      enableLocalInference: true;
+      enableCloudInference: true;
+      enableCaching: true;
+      enableFallback: true;
+      maxConcurrentRequests: 10;
+      defaultTimeout: 30000;
       performanceThresholds: {,
-  localMaxLatency: 200,
-        cloudMaxLatency: 2000,
+  localMaxLatency: 200;
+        cloudMaxLatency: 2000;
         minConfidence: 0.7
-      },
+      ;},
       ...config
     };
 
     this.metrics = {
-      totalRequests: 0,
-      localRequests: 0,
-      cloudRequests: 0,
-      hybridRequests: 0,
-      cacheHits: 0,
-      failures: 0,
-      averageLatency: 0,
+      totalRequests: 0;
+      localRequests: 0;
+      cloudRequests: 0;
+      hybridRequests: 0;
+      cacheHits: 0;
+      failures: 0;
+      averageLatency: 0;
       throughput: 0
-    };
+    ;};
   }
 
   /**
@@ -83,17 +83,17 @@ export class HybridInferenceOrchestrator {
     if (this.isInitialized) return;
 
     try {
-      console.log('正在初始化混合推理编排器...');
+
 
       // 初始化各个组件
       if (this.config.enableLocalInference) {
         await localModelManager.initialize();
-        console.log('✓ 本地模型管理器已初始化');
+
       }
 
       if (this.config.enableCaching) {
         await offlineCacheManager.initialize();
-        console.log('✓ 离线缓存管理器已初始化');
+
       }
 
       // 启动性能监控
@@ -103,9 +103,9 @@ export class HybridInferenceOrchestrator {
       this.startHealthCheck();
 
       this.isInitialized = true;
-      console.log('✅ 混合推理编排器初始化完成');
+
     } catch (error) {
-      console.error('❌ 混合推理编排器初始化失败:', error);
+
       throw error;
     }
   }
@@ -114,7 +114,7 @@ export class HybridInferenceOrchestrator {
    * 执行智能推理
    */
   async inference(request: {,
-  modelId: string;,
+  modelId: string;
   inputData: any;
     options?: {
       priority?: 'low' | 'normal' | 'high' | 'critical';
@@ -124,18 +124,18 @@ export class HybridInferenceOrchestrator {
       strategy?: 'auto' | 'local_only' | 'cloud_only' | 'hybrid';
     };
   }): Promise<{
-    result: any;,
-  confidence: number;,
-  processingTime: number;,
-  source: 'local' | 'cloud' | 'hybrid' | 'cache';,
-  modelUsed: string;,
+    result: any;
+  confidence: number;
+  processingTime: number;
+  source: 'local' | 'cloud' | 'hybrid' | 'cache';
+  modelUsed: string;
   metadata: Record<string, any>;
   }> {
     const startTime = Date.now();
     const requestId = `req_${++this.requestCounter}_${Date.now()}`;
 
     try {
-      console.log(`🚀 开始处理推理请求: ${requestId}`);
+
 
       // 检查系统状态
       await this.checkSystemHealth();
@@ -145,14 +145,14 @@ export class HybridInferenceOrchestrator {
         const cachedResult = await this.checkCache(request);
         if (cachedResult) {
           this.updateMetrics('cache', Date.now() - startTime);
-          console.log(`💾 使用缓存结果: ${requestId}`);
+
           return cachedResult;
         }
       }
 
       // 智能路由决策
       const strategy = await this.determineStrategy(request);
-      console.log(`🎯 选择策略: ${strategy} for ${requestId}`);
+
 
       let result;
       switch (strategy) {
@@ -178,12 +178,12 @@ export class HybridInferenceOrchestrator {
       this.updateMetrics(result.source, result.processingTime);
 
       console.log(
-        `✅ 推理完成: ${requestId}, 耗时: ${result.processingTime}ms`
+
       );
       return result;
     } catch (error) {
       this.metrics.failures++;
-      console.error(`❌ 推理失败: ${requestId}`, error);
+
 
       // 尝试降级处理
       if (this.config.enableFallback) {
@@ -204,16 +204,16 @@ export class HybridInferenceOrchestrator {
 
     const cacheStats = this.config.enableCaching;
       ? offlineCacheManager.getCacheStats()
-      : { totalEntries: 0 };
+      : { totalEntries: 0 ;};
 
     const activeRequests = hybridInferenceScheduler.getActiveRequestCount();
 
     return {
-      localModelsLoaded: localModels,
+      localModelsLoaded: localModels;
       cloudModelsAvailable: 5, // 模拟云端模型数量
-      cacheHitRate: this.calculateCacheHitRate(),
-      averageLatency: this.metrics.averageLatency,
-      successRate: this.calculateSuccessRate(),
+      cacheHitRate: this.calculateCacheHitRate();
+      averageLatency: this.metrics.averageLatency;
+      successRate: this.calculateSuccessRate();
       activeRequests
     };
   }
@@ -231,7 +231,7 @@ export class HybridInferenceOrchestrator {
    * 优化系统性能
    */
   async optimizePerformance(): Promise<{
-    optimizations: string[];,
+    optimizations: string[];
   expectedImprovement: number;
   }> {
     const optimizations: string[] = [];
@@ -243,17 +243,17 @@ export class HybridInferenceOrchestrator {
     if (
       metrics.averageLatency > this.config.performanceThresholds.localMaxLatency;
     ) {
-      optimizations.push('预加载常用模型');
+
       expectedImprovement += 0.2;
     }
 
     if (metrics.cacheHitRate < 0.6) {
-      optimizations.push('优化缓存策略');
+
       expectedImprovement += 0.15;
     }
 
     if (metrics.successRate < 0.95) {
-      optimizations.push('增强错误处理');
+
       expectedImprovement += 0.1;
     }
 
@@ -265,19 +265,19 @@ export class HybridInferenceOrchestrator {
     return {
       optimizations,
       expectedImprovement: Math.min(expectedImprovement, 0.5), // 最大50%改进
-    };
+    ;};
   }
 
   // 私有方法
 
   private async checkSystemHealth(): Promise<void> {
     if (!this.isInitialized) {
-      throw new Error('系统未初始化');
+
     }
 
     const activeRequests = hybridInferenceScheduler.getActiveRequestCount();
     if (activeRequests >= this.config.maxConcurrentRequests) {
-      throw new Error('系统负载过高，请稍后重试');
+
     }
   }
 
@@ -291,9 +291,9 @@ export class HybridInferenceOrchestrator {
       this.metrics.cacheHits++;
       return {
         ...cachedResult,
-        source: 'cache' as const,
+        source: 'cache' as const;
         processingTime: 5, // 缓存访问时间
-      };
+      ;};
     }
 
     return null;
@@ -328,33 +328,33 @@ export class HybridInferenceOrchestrator {
   }
 
   private async executeLocalInference(
-    request: any,
+    request: any;
     requestId: string;
   ): Promise<any> {
     if (!this.config.enableLocalInference) {
-      throw new Error('本地推理已禁用');
+
     }
 
     const result = await localModelManager.inference({
-      modelId: request.modelId,
-      inputData: request.inputData,
+      modelId: request.modelId;
+      inputData: request.inputData;
       options: request.options
-    });
+    ;});
 
     this.metrics.localRequests++;
 
     return {
       ...result,
       source: 'local' as const
-    };
+    ;};
   }
 
   private async executeCloudInference(
-    request: any,
+    request: any;
     requestId: string;
   ): Promise<any> {
     if (!this.config.enableCloudInference) {
-      throw new Error('云端推理已禁用');
+
     }
 
     // 模拟云端推理
@@ -367,22 +367,22 @@ export class HybridInferenceOrchestrator {
 
     return {
       result: {,
-  prediction: `cloud_result_${request.modelId}`,
+  prediction: `cloud_result_${request.modelId;}`,
         analysis: 'detailed_cloud_analysis'
-      },
-      confidence: 0.92,
-      processingTime: Date.now() - startTime,
-      source: 'cloud' as const,
-      modelUsed: request.modelId,
+      ;},
+      confidence: 0.92;
+      processingTime: Date.now() - startTime;
+      source: 'cloud' as const;
+      modelUsed: request.modelId;
       metadata: {,
-  provider: 'cloud',
+  provider: 'cloud';
         requestId
       }
     };
   }
 
   private async executeHybridInference(
-    request: any,
+    request: any;
     requestId: string;
   ): Promise<any> {
     const startTime = Date.now();
@@ -401,7 +401,7 @@ export class HybridInferenceOrchestrator {
     if (cloudResult.status === 'fulfilled') results.push(cloudResult.value);
 
     if (results.length === 0) {
-      throw new Error('本地和云端推理都失败了');
+
     }
 
     // 选择最佳结果
@@ -411,18 +411,18 @@ export class HybridInferenceOrchestrator {
 
     return {
       ...bestResult,
-      source: 'hybrid' as const,
-      processingTime: Date.now() - startTime,
+      source: 'hybrid' as const;
+      processingTime: Date.now() - startTime;
       metadata: {
         ...bestResult.metadata,
-        hybridResults: results.length,
+        hybridResults: results.length;
         strategy: 'ensemble'
-      }
+      ;}
     };
   }
 
   private async executeAdaptiveInference(
-    request: any,
+    request: any;
     requestId: string;
   ): Promise<any> {
     // 自适应策略：根据实时性能选择最优方案
@@ -442,33 +442,33 @@ export class HybridInferenceOrchestrator {
   }
 
   private async executeFallbackInference(
-    request: any,
+    request: any;
     requestId: string;
   ): Promise<any> {
-    console.log(`🔄 执行降级推理: ${requestId}`);
+
 
     // 尝试使用最基础的本地模型
     try {
       return await localModelManager.inference({
         modelId: 'health_basic_assessment', // 最基础的模型
-        inputData: request.inputData,
-        options: { ...request.options, useCache: false }
+        inputData: request.inputData;
+        options: { ...request.options, useCache: false ;}
       });
     } catch (error) {
       // 返回默认结果
       return {
         result: {,
-  prediction: 'fallback_result',
-          message: '系统繁忙，请稍后重试'
+  prediction: 'fallback_result';
+
         },
-        confidence: 0.5,
-        processingTime: 10,
-        source: 'fallback' as const,
-        modelUsed: 'fallback',
+        confidence: 0.5;
+        processingTime: 10;
+        source: 'fallback' as const;
+        modelUsed: 'fallback';
         metadata: {,
-  isFallback: true,
+  isFallback: true;
           originalError: error.message
-        }
+        ;}
       };
     }
   }
@@ -476,17 +476,17 @@ export class HybridInferenceOrchestrator {
   private async cacheResult(request: any, result: any): Promise<void> {
     const cacheKey = this.generateCacheKey(request);
     await offlineCacheManager.set(cacheKey, result, {
-      type: 'inference_result',
+      type: 'inference_result';
       ttl: 60 * 60 * 1000, // 1小时
       priority: 'normal'
-    });
+    ;});
   }
 
   private generateCacheKey(request: any): string {
     const keyData = {
-      modelId: request.modelId,
+      modelId: request.modelId;
       inputHash: JSON.stringify(request.inputData).slice(0, 100)
-    };
+    ;};
     return `inference_${JSON.stringify(keyData)}`;
   }
 
@@ -541,28 +541,28 @@ export class HybridInferenceOrchestrator {
       try {
         const health = await this.getHealthMetrics();
         if (health.successRate < 0.9) {
-          console.warn('⚠️ 系统成功率低于90%，建议检查');
+
         }
         if (health.averageLatency > 1000) {
-          console.warn('⚠️ 平均延迟超过1秒，建议优化');
+
         }
       } catch (error) {
-        console.error('健康检查失败:', error);
+
       }
     }, 30000); // 每30秒检查一次
   }
 
   private async executeOptimization(optimization: string): Promise<void> {
-    console.log(`🔧 执行优化: ${optimization}`);
+
 
     switch (optimization) {
-      case '预加载常用模型':
+
         // 预加载逻辑
         break;
-      case '优化缓存策略':
+
         // 缓存优化逻辑
         break;
-      case '增强错误处理':
+
         // 错误处理优化逻辑
         break;
     }

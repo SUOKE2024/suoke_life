@@ -1,6 +1,6 @@
-import { FusionConfig } from "../../placeholder";../config/AlgorithmConfig";/import { TCMKnowledgeBase } from "../knowledge/    TCMKnowledgeBase;
+;/import { TCMKnowledgeBase } from "../knowledge/    TCMKnowledgeBase;
 import React from "react";
-诊断融合算法模块     整合五诊（望、闻、问、切、算）的分析结果   基于中医理论进行综合诊断     @author 索克生活技术团队   @version 1.0.0;
+
 export interface FusionInput {
   lookingResult?: unknown;
   listeningResult?: unknown;
@@ -11,73 +11,73 @@ export interface FusionInput {
 sessionContext?: SessionContext;
 }
 export interface UserProfile {
-  age: number;,
-  gender: "male" | "female" | "other";,
-  height: number;,
-  weight: number;,
-  occupation: string;,
+  age: number;
+  gender: "male" | "female" | "other";
+  height: number;
+  weight: number;
+  occupation: string;
   medicalHistory: string[],allergies: string[],medications: string[];
   constitution?: string;
 }
 export interface SessionContext {
-  sessionId: string;,
-  timestamp: number;,
-  environment: {temperature: number;,
+  sessionId: string;
+  timestamp: number;
+  environment: {temperature: number;
   humidity: number,season: string,timeOfDay: string;
 };
   previousSessions?: string[]
 }
 export interface FusionResult {
-  confidence: number;,
-  overallAssessment: string;,
-  primarySyndromes: SyndromeResult[];,
-  secondarySyndromes: SyndromeResult[];,
-  constitutionAnalysis: ConstitutionResult;,
-  riskFactors: RiskFactor[];,
-  recommendations: Recommendation[];,
-  followUpAdvice: string[];,
+  confidence: number;
+  overallAssessment: string;
+  primarySyndromes: SyndromeResult[];
+  secondarySyndromes: SyndromeResult[];
+  constitutionAnalysis: ConstitutionResult;
+  riskFactors: RiskFactor[];
+  recommendations: Recommendation[];
+  followUpAdvice: string[];
   dataQuality: DataQualityReport;
 }
 export interface SyndromeResult {
-  id: string;,
-  name: string;,
-  confidence: number;,
-  evidence: Evidence[];,
-  severity: "mild" | "moderate" | "severe";,
-  urgency: "low" | "medium" | "high";,
+  id: string;
+  name: string;
+  confidence: number;
+  evidence: Evidence[];
+  severity: "mild" | "moderate" | "severe";
+  urgency: "low" | "medium" | "high";
   description: string;
 }
 export interface Evidence {
-  source: "looking" | "listening" | "inquiry" | "palpation" | "calculation";,
-  type: string;,
-  value: unknown;,
-  weight: number;,
-  confidence: number;,
+  source: "looking" | "listening" | "inquiry" | "palpation" | "calculation";
+  type: string;
+  value: unknown;
+  weight: number;
+  confidence: number;
   description: string;
 }
 export interface ConstitutionResult {
-  primaryType: string;,
-  secondaryTypes: string[];,
-  confidence: number;,
-  characteristics: string[];,
-  tendencies: string[];,
+  primaryType: string;
+  secondaryTypes: string[];
+  confidence: number;
+  characteristics: string[];
+  tendencies: string[];
   recommendations: string[];
 }
 export interface RiskFactor {
-  type: string;,
-  level: "low" | "medium" | "high";,
-  description: string;,
+  type: string;
+  level: "low" | "medium" | "high";
+  description: string;
   prevention: string[];
 }
 export interface Recommendation {
-  category: "treatment" | "lifestyle" | "diet" | "exercise" | "prevention";,
+  category: "treatment" | "lifestyle" | "diet" | "exercise" | "prevention";
   priority: "high" | "medium" | "low",title: string,description: string;
   duration?: string;
   contraindications?: string[];
 }
 export interface DataQualityReport {
-  completeness: number;,
-  consistency: number;,
+  completeness: number;
+  consistency: number;
   reliability: number,issues: string[],suggestions: string[];
 }
 // 诊断融合算法类export class DiagnosisFusionAlgorithm  {private config: FusionConfig;
@@ -112,16 +112,16 @@ export interface DataQualityReport {
     this.syndromePatterns.set("blood_stasis", {
       requiredEvidence: ["fixed_pain",dark_complexion"],
       supportingEvidence: ["purple_tongue",choppy_pulse"],
-      excludingEvidence: ["floating_pulse"],
+      excludingEvidence: ["floating_pulse"];
       minConfidence: 0.7;
     });
   }
   ///    >  {
     if (!this.config.enabled) {
-      throw new Error("诊断融合功能未启用";);
+
     }
     try {
-      this.emit("fusion:started", { sessionId: input.sessionContext?.sessionId});
+      this.emit("fusion:started", { sessionId: input.sessionContext?.sessionId;});
       const dataQuality = await this.assessDataQuality(inp;u;t;);
       const evidence = await this.extractEvidence(inp;u;t;);
       const syndromes = await this.identifySyndromes(;)
@@ -143,16 +143,16 @@ export interface DataQualityReport {
         primarySyndromes: syndromes.filter(s); => s.confidence > 0.7),
         secondarySyndromes: syndromes.filter(s); => s.confidence <= 0.7 && s.confidence > 0.4;
         ),
-        constitutionAnalysis: constitution,
+        constitutionAnalysis: constitution;
         riskFactors,
         recommendations,
         followUpAdvice,
         dataQuality;
       }
-      this.emit("fusion:completed", { result });
+      this.emit("fusion:completed", { result ;});
       return resu;l;t;
     } catch (error) {
-      this.emit("fusion:error", { error });
+      this.emit("fusion:error", { error ;});
       throw error;
     }
   }
@@ -163,27 +163,27 @@ export interface DataQualityReport {
     if (input.lookingResult) {
       availableData.push("looking");
     } else {
-      suggestions.push("建议补充望诊数据（舌象、面色等）");
+
     }
     if (input.listeningResult) {
       availableData.push("listening");
     } else {
-      suggestions.push("建议补充闻诊数据（声音、气味等）");
+
     }
     if (input.inquiryResult) {
       availableData.push("inquiry");
     } else {
-      suggestions.push("建议补充问诊数据（症状、病史等）");
+
     }
     if (input.palpationResult) {
       availableData.push("palpation");
     } else {
-      suggestions.push("建议补充切诊数据（脉象、触诊等）");
+
     }
     if (input.calculationResult) {
       availableData.push("calculation");
     } else {
-      suggestions.push("建议补充算诊数据（出生时间、节气等）");
+
     }
     const completeness = availableData.length ;/ ;5; 检查数据一致性 // let consistency = 1.;0;
     if (availableData.length >= 2) {
@@ -191,13 +191,13 @@ export interface DataQualityReport {
     }
     const reliability = await this.checkDataReliability(inp;u;t;);
     if (completeness < 0.6) {
-      issues.push("诊断数据不够完整，可能影响结果准确性");
+
     }
     if (consistency < 0.7) {
-      issues.push("各诊法结果存在不一致，需要重新检查");
+
     }
     if (reliability < 0.8) {
-      issues.push("部分数据质量较低，建议重新采集");
+
     }
     return {completeness,consistency,reliability,issues,suggestion;s;};
   }
@@ -234,8 +234,8 @@ export interface DataQualityReport {
         const syndrome = await this.knowledgeBase.getSyndrome(syndrom;e;I;d;);
         if (syndrome) {
           syndromes.push({
-            id: syndromeId,
-            name: syndrome.name,
+            id: syndromeId;
+            name: syndrome.name;
             confidence,
             evidence: this.getRelevantEvidence(evidence, pattern),
             severity: this.assessSeverity(evidence, pattern),
@@ -269,40 +269,40 @@ export interface DataQualityReport {
     ;};
   }
   // 评估风险因素  private async assessRiskFactors(syndromes: SyndromeResult[],)
-    constitution: ConstitutionResult,
+    constitution: ConstitutionResult;
     userProfile?: UserProfile;
   ): Promise<RiskFactor[] /    >  {
     const riskFactors: RiskFactor[] = [];
     for (const syndrome of syndromes) {
       if (syndrome.confidence > 0.8 && syndrome.severity === "severe") {
         riskFactors.push({
-      type: "syndrome_risk",
-      level: "high",
-          description: `${syndrome.name}证候较重，需要及时调理`,
-          prevention: ["定期复查", "遵医嘱用药", "调整生活方式"]
+      type: "syndrome_risk";
+      level: "high";
+
+
         });
       }
     }
     if (constitution.primaryType !== "balanced") {
       riskFactors.push({
-      type: "constitution_risk",
-      level: "medium",
-        description: `${constitution.primaryType}体质容易出现相关健康问题`,
+      type: "constitution_risk";
+      level: "medium";
+
         prevention: constitution.recommendations;
       });
     }
     if (userProfile && userProfile.age > 60) {
       riskFactors.push({
-      type: "age_risk",
-      level: "medium",
-        description: "年龄较大，需要重点关注肾气不足等问题",
-        prevention: ["适度运动", "合理饮食", "规律作息"]
+      type: "age_risk";
+      level: "medium";
+
+
       });
     }
     return riskFacto;r;s;
   }
   // 生成建议  private async generateRecommendations(syndromes: SyndromeResult[],)
-    constitution: ConstitutionResult,
+    constitution: ConstitutionResult;
     riskFactors: RiskFactor[]);: Promise<Recommendation[] /    >  {
     const recommendations: Recommendation[] = [];
     for (const syndrome of syndromes.slice(0, 2)) {
@@ -312,31 +312,31 @@ export interface DataQualityReport {
         ;);
         for (const treatment of treatments) {
           recommendations.push({
-      category: "treatment",
-      priority: syndrome.urgency === "high" ? "high" : "medium",
-            title: treatment.name,
-            description: treatment.description,
-            duration: treatment.duration,
+      category: "treatment";
+      priority: syndrome.urgency === "high" ? "high" : "medium";
+            title: treatment.name;
+            description: treatment.description;
+            duration: treatment.duration;
             contraindications: treatment.contraindications;
           });
         }
       }
     }
     recommendations.push({
-      category: "lifestyle",
-      priority: "medium",
-      title: "体质调理建议", "
-      description: `针对${constitution.primaryType}体质的调理方案`,
-      duration: "长期坚持"
+      category: "lifestyle";
+      priority: "medium";
+
+
+
     });
     for (const risk of riskFactors) {
       if (risk.level === "high") {
         recommendations.push({
-      category: "prevention",
-      priority: "high",
-          title: "风险预防",
-          description: risk.description,
-          duration: "持续关注"
+      category: "prevention";
+      priority: "high";
+
+          description: risk.description;
+
         });
       }
     }
@@ -382,7 +382,7 @@ export interface DataQualityReport {
     return "medium";
   }
   private calculateConstitutionScore(evidence: Evidence[],)
-    type: string,
+    type: string;
     userProfile?: UserProfile;
   );: number  {
     return Math.random * 0.5 + 0.5 ;
@@ -409,44 +409,44 @@ performanceMonitor.recordRender();
       qualityScore * qualityWeigh;t;);
   }
   private async generateOverallAssessment(syndromes: SyndromeResult[],)
-    constitution: ConstitutionResult,
+    constitution: ConstitutionResult;
     evidence: Evidence[];);: Promise<string>  {
     const assessmentParts: string[] = [];
     if (syndromes.length > 0) {
       const primarySyndrome = syndromes[0];
       assessmentParts.push()
-        `主要证候为${primarySyndrome.name}，置信度${()
+
           primarySyndrome.confidence * 100;
         ).toFixed(1)}%`
       )
     }
-    assessmentParts.push(`体质类型倾向于${constitution.primaryType}`);
+
     if (evidence.length > 0) {
-      assessmentParts.push(`基于${evidence.length}项诊断证据进行综合分析`);
+
     }
     return (;)
-      assessmentParts.join("。;";) + "。建议结合专业医师意见进行进一步诊疗。"
+
     );
   }
   private async generateFollowUpAdvice(syndromes: SyndromeResult[],)
-    constitution: ConstitutionResult,
+    constitution: ConstitutionResult;
     dataQuality: DataQualityReport;);: Promise<string[]>  {
     const advice: string[] = [];
     if (dataQuality.completeness < 0.8) {
-      advice.push("建议补充完整的诊断信息以提高准确性");
+
     }
     if (syndromes.some(s) => s.urgency === "high")) {
-      advice.push("建议尽快寻求专业中医师诊疗");
+
     } else {
-      advice.push("建议1-2周后重新评估症状变化");
+
     }
-    advice.push("建议保持良好的生活习惯，注意饮食调理");
+
     return advi;c;e;
   }
   // 模拟事件发射  public on(event: string, callback: (data: unknown) => void): void {
-    }
+    ;}
   public emit(event: string, data?: unknown): void  {
-    }
+    ;}
   // 清理资源  public async cleanup(): Promise<void> {
     this.weightMatrix.clear();
     this.syndromePatterns.clear();

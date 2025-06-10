@@ -8,22 +8,22 @@ interface ErrorBoundaryState {
   errorInfo?: any;
 }
 class ErrorBoundary extends React.Component<
-  { children: React.ReactNode; fallback?: ComponentType<{ error: Error; retry: () => void }> },
+  { children: React.ReactNode; fallback?: ComponentType<{ error: Error; retry: () => void ;}> },
   ErrorBoundaryState;
 > {
   constructor(props: any) {
     super(props);
-    this.state = { hasError: false };
+    this.state = { hasError: false ;};
   }
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
-    return { hasError: true, error };
+    return { hasError: true, error ;};
   }
   componentDidCatch(error: Error, errorInfo: any) {
     console.error('LazyComponent Error:', error, errorInfo);
     this.setState({ error, errorInfo });
   }
   retry = () => {
-    this.setState({ hasError: false, error: undefined, errorInfo: undefined });
+    this.setState({ hasError: false, error: undefined, errorInfo: undefined ;});
   };
   render() {
     if (this.state.hasError) {
@@ -34,7 +34,7 @@ class ErrorBoundary extends React.Component<
   }
 }
 // 默认错误回退组件
-const DefaultErrorFallback: React.FC<{ error: Error; retry: () => void }> = ({ error, retry }) => ()
+const DefaultErrorFallback: React.FC<{ error: Error; retry: () => void ;}> = ({ error, retry }) => ()
   <View style={styles.errorContainer}>
     <Text style={styles.errorTitle}>加载失败</Text>
     <Text style={styles.errorMessage}>{error.message}</Text>
@@ -52,8 +52,8 @@ interface LoadingIndicatorProps {
 const LoadingIndicator: React.FC<LoadingIndicatorProps> = ({
   type = 'skeleton',
   skeletonType = 'list',
-  message = '加载中...'
-}) => {
+
+;}) => {
   if (type === 'spinner') {
     return (
   <View style={styles.loadingContainer}>
@@ -116,8 +116,8 @@ class PreloadManager {
 }
 // 创建增强的懒加载组件
 export const createEnhancedLazyComponent = <T extends ComponentType<any>>();
-  importFunc: () => Promise<{ default: T }>,
-  config: LazyComponentConfig = {}
+  importFunc: () => Promise<{ default: T ;}>,
+  config: LazyComponentConfig = {;}
 ): LazyExoticComponent<T> => {
   const {
     fallback,
@@ -135,7 +135,7 @@ export const createEnhancedLazyComponent = <T extends ComponentType<any>>();
     preloadManager.preload(componentKey, importFunc);
   }
   // 创建带重试机制的导入函数
-  const importWithRetry = async (attempt = 1): Promise<{ default: T }> => {
+  const importWithRetry = async (attempt = 1): Promise<{ default: T ;}> => {
     try {
       // 检查是否有预加载的组件
       const preloaded = preloadManager.getPreloaded(componentKey);
@@ -162,7 +162,7 @@ export const createEnhancedLazyComponent = <T extends ComponentType<any>>();
   const LazyComponent = React.lazy(importWithRetry);
   // 返回包装后的组件
   const WrappedComponent = (props: any) => ()
-    <ErrorBoundary fallback={errorFallback}>
+    <ErrorBoundary fallback={errorFallback;}>
       <Suspense;
         fallback={
           fallback ? ()
@@ -180,7 +180,7 @@ export const createEnhancedLazyComponent = <T extends ComponentType<any>>();
 };
 // 预加载Hook;
 export const usePreloadComponent = ();
-  importFunc: () => Promise<any>,
+  importFunc: () => Promise<any>;
   condition: boolean = true;
 ) => {
   const [isPreloaded, setIsPreloaded] = useState(false);
@@ -197,7 +197,7 @@ export const usePreloadComponent = ();
 // 批量预加载Hook;
 export const useBatchPreload = ();
   components: Array<{,
-  key: string;,
+  key: string;
   importFunc: () => Promise<any>;
     condition?: boolean;
   }>
@@ -216,8 +216,8 @@ export const useBatchPreload = ();
   }, [components, preloadManager]);
   return {
     preloadedCount,
-    totalCount: components.length,
-    isComplete: preloadedCount === components.filter(c => c.condition !== false).length};
+    totalCount: components.length;
+    isComplete: preloadedCount === components.filter(c => c.condition !== false).length;};
 };
 // 路由预加载Hook;
 export const useRoutePreload = (routeName: string, isActive: boolean) => {
@@ -228,7 +228,7 @@ export const useRoutePreload = (routeName: string, isActive: boolean) => {
       const routePreloadMap: Record<string, () => Promise<any>> = {
         'Home': () => import('../../screens/main/HomeScreen'),
         // 其他路由组件可以根据实际存在的文件进行配置
-      };
+      ;};
       const importFunc = routePreloadMap[routeName];
       if (importFunc) {
         preloadManager.preload(routeName, importFunc);
@@ -238,36 +238,36 @@ export const useRoutePreload = (routeName: string, isActive: boolean) => {
 };
 const styles = StyleSheet.create({
   errorContainer: {,
-  flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20},
+  flex: 1;
+    justifyContent: 'center';
+    alignItems: 'center';
+    padding: 20;},
   errorTitle: {,
-  fontSize: 18,
-    fontWeight: 'bold',
-    color: '#FF3B30',
-    marginBottom: 8},
+  fontSize: 18;
+    fontWeight: 'bold';
+    color: '#FF3B30';
+    marginBottom: 8;},
   errorMessage: {,
-  fontSize: 14,
-    color: '#666',
-    textAlign: 'center',
-    marginBottom: 20},
+  fontSize: 14;
+    color: '#666';
+    textAlign: 'center';
+    marginBottom: 20;},
   retryButton: {,
-  backgroundColor: '#007AFF',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 8},
+  backgroundColor: '#007AFF';
+    paddingHorizontal: 20;
+    paddingVertical: 10;
+    borderRadius: 8;},
   retryButtonText: {,
-  color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '600'},
+  color: '#FFFFFF';
+    fontSize: 16;
+    fontWeight: '600';},
   loadingContainer: {,
-  flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20},
+  flex: 1;
+    justifyContent: 'center';
+    alignItems: 'center';
+    padding: 20;},
   loadingText: {,
-  marginTop: 12,
-    fontSize: 16,
-    color: '#666'}});
+  marginTop: 12;
+    fontSize: 16;
+    color: '#666';}});
 export { PreloadManager, LoadingIndicator, ErrorBoundary };

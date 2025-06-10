@@ -1,5 +1,4 @@
 import { Environment, currentEnv, API_CONFIG, CACHE_CONFIG, STORAGE_CONFIG, APP_CONFIG, AGENT_INFO, CONSTITUTION_INFO, ERROR_CODES, EVENTS } from "../config";
-import { Environment, currentEnv, API_CONFIG, CACHE_CONFIG, STORAGE_CONFIG, APP_CONFIG, AGENT_INFO, CONSTITUTION_INFO, ERROR_CODES, EVENTS } from "../config";
 describe("config", () => {
   beforeEach(() => {
     jest.clearAllMocks();

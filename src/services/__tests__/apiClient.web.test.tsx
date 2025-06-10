@@ -1,6 +1,4 @@
-import { apiClient, setApiAuthToken, removeApiAuthToken } from "../apiClient.web";
-import { apiClient, setApiAuthToken, removeApiAuthToken } from "../apiClient.web";
-import React from "react";
+
 describe("apiClient.web", () => {
   beforeEach(() => {
     jest.clearAllMocks();

@@ -1,54 +1,53 @@
-import { securityManager } from "../../placeholder";./    securityManager;
-import React from "react";
+react";
 智能体类型定义 * export type AgentType = "xiaoai" | "xiaoke" | "laoke" | "soe;";
 r"; /    "
 // 智能体角色定义 * export interface AgentRole {
-  id: AgentType,
-  name: string;,
-  description: string;,
-  capabilities: string[];,
-  specialties: string[];,
+  id: AgentType;
+  name: string;
+  description: string;
+  capabilities: string[];
+  specialties: string[];
   personality: {communication_style: string,empathy_level: number,expertise_confidence: number;
 };
 }
 // 协作任务类型 * export interface CollaborationTask {
-  id: string,
+  id: string;
   type: | "health_diagnosis"| "treatment_plan"| "lifestyle_advice";
     | "emergency_response";
   priority: "low" | "medium" | "high" | "critical",requiredAgents: AgentType[];
   currentAgent?: AgentType;
-  status: "pending" | "in_progress" | "completed" | "failed";,
-  data: unknown;,
+  status: "pending" | "in_progress" | "completed" | "failed";
+  data: unknown;
   timeline: TaskTimeline[];
   result?: CollaborationResult;
 }
 export interface TaskTimeline {
-  timestamp: number;,
-  agent: AgentType;,
-  action: string;,
+  timestamp: number;
+  agent: AgentType;
+  action: string;
   data: unknown;
 }
 export interface CollaborationResult {
-  consensus: boolean;,
-  recommendations: AgentRecommendation[];,
-  confidence: number;,
+  consensus: boolean;
+  recommendations: AgentRecommendation[];
+  confidence: number;
   reasoning: string;
 }
 export interface AgentRecommendation {
-  agent: AgentType;,
-  recommendation: string;,
-  confidence: number;,
-  reasoning: string;,
+  agent: AgentType;
+  recommendation: string;
+  confidence: number;
+  reasoning: string;
   supporting_data: unknown;
 }
 // 智能体状态 * export interface AgentStatus {
-  agent: AgentType,
-  online: boolean;,
-  busy: boolean;,
-  currentTasks: string[];,
+  agent: AgentType;
+  online: boolean;
+  busy: boolean;
+  currentTasks: string[];
   performance: {response_time: number,accuracy: number,user_satisfaction: number;
 };
-  lastUpdate: number}
+  lastUpdate: number;}
 //
   private static instance: CollaborationDecisionEngine;
   static getInstance(): CollaborationDecisionEngine {
@@ -122,19 +121,19 @@ export interface AgentRecommendation {
       .map(r); => this.getAgentName(r.agent))
       .join("、");
     if (consensus > 0.8) {
-      return `${agentNames}达成高度共识，推荐方案具有很高的可信度;。;`
+
     } else if (consensus > 0.6) {
-      return `${agentNames}基本达成共识，推荐方案经过充分讨论;。;`
+
     } else {
-      return `${agentNames}存在不同观点，建议综合考虑各方意见;。;`;
+
     }
   }
   private getAgentName(agent: AgentType): string  {
     const names = {
-      xiaoai: "小艾",
-      xiaoke: "小克",
-      laoke: "老克",
-      soer: "索儿"};
+
+
+
+
     return names[agen;t;];
   }
 }
@@ -156,98 +155,98 @@ export interface AgentRecommendation {
   }
   private initializeAgents(): void {
     this.agents.set("xiaoai", {
-      id: "xiaoai",
-      name: "小艾",
-      description: "AI健康诊断助手，专注于症状分析和初步诊断",
-      capabilities: ["症状分析", "健康数据解读",
-        "风险评估", "预防建议",
-        "多模态数据融合"
+      id: "xiaoai";
+
+
+
+
+
       ],
-      specialties: ["中医四诊", "现代医学诊断", "健康监测", "疾病预测"],
+
       personality: {,
-  communication_style: "专业、温和、详细",
-        empathy_level: 0.8,
-        expertise_confidence: 0.9}
+
+        empathy_level: 0.8;
+        expertise_confidence: 0.9;}
     });
     this.agents.set("xiaoke", {
-      id: "xiaoke",
-      name: "小克",
-      description: "医疗服务管理助手，负责医疗资源协调和服务管理",
-      capabilities: ["医疗服务预约", "资源调度",
-        "治疗方案制定", "康复指导",
-        "紧急响应"
+      id: "xiaoke";
+
+
+
+
+
       ],
-      specialties: ["医疗服务管理", "治疗计划", "康复医学", "急救处理"],
+
       personality: {,
-  communication_style: "高效、准确、负责",
-        empathy_level: 0.7,
-        expertise_confidence: 0.85}
+
+        empathy_level: 0.7;
+        expertise_confidence: 0.85;}
     });
     this.agents.set("laoke", {
-      id: "laoke",
-      name: "老克",
-      description: "慢性病和老年健康专家，专注于长期健康管理",
-      capabilities: ["慢性病管理", "老年健康评估",
-        "长期护理规划", "并发症预防",
-        "家庭护理指导"
+      id: "laoke";
+
+
+
+
+
       ],
-      specialties: ["慢性病", "老年医学", "长期护理", "并发症管理"],
+
       personality: {,
-  communication_style: "耐心、细致、经验丰富",
-        empathy_level: 0.9,
-        expertise_confidence: 0.95}
+
+        empathy_level: 0.9;
+        expertise_confidence: 0.95;}
     });
     this.agents.set("soer", {
-      id: "soer",
-      name: "索儿",
-      description: "生活方式和养生顾问，专注于健康生活指导",
-      capabilities: ["营养指导", "运动规划",
-        "心理健康", "生活习惯优化",
-        "环境健康评估"
+      id: "soer";
+
+
+
+
+
       ],
-      specialties: ["营养学", "运动医学", "心理健康", "环境医学"],
+
       personality: {,
-  communication_style: "亲切、鼓励、实用",
-        empathy_level: 0.85,
-        expertise_confidence: 0.8}
+
+        empathy_level: 0.85;
+        expertise_confidence: 0.8;}
     });
     this.agents.forEach(agent, agentType) => {}))
       this.agentStatuses.set(agentType, {
-        agent: agentType,
-        online: true,
-        busy: false,
-        currentTasks:  [],
+        agent: agentType;
+        online: true;
+        busy: false;
+        currentTasks:  [];
         performance: {,
   response_time: 1000 + Math.random(); * 2000,
           accuracy: 0.85 + Math.random(); * 0.1,
           user_satisfaction: 0.8 + Math.random(); * 0.15;
         },
-        lastUpdate: Date.now()});
+        lastUpdate: Date.now();});
     });
   }
   async createCollaborationTask(type: CollaborationTask["type"],)
-    data: unknown,
+    data: unknown;
     priority: CollaborationTask["priority"] = "medium");: Promise<string>  {
     const taskId = this.generateTaskId;
     const requiredAgents = this.decisionEngine.analyzeTaskAndAssignAgents({type,...data;};);
-    const task: CollaborationTask = {id: taskId,
+    const task: CollaborationTask = {id: taskId;
       type,
       priority,
       requiredAgents,
-      status: "pending",
+      status: "pending";
       data,
       timeline: [{,
-  timestamp: Date.now(),
-          agent: "xiaoai",  action: "task_created",
-          data: { type, priority }
+  timestamp: Date.now();
+          agent: "xiaoai",  action: "task_created";
+          data: { type, priority ;}
         }
       ]
     }
     this.activeTasks.set(taskId, task);
     securityManager.logSecurityEvent({
-      type: "data_access",
-      details: { action: "collaboration_task_created", taskId, type },
-      severity: "low"});
+      type: "data_access";
+      details: { action: "collaboration_task_created", taskId, type ;},
+      severity: "low";});
     await this.executeTask(taskId;);
     return task;I;d;
   }
@@ -272,20 +271,20 @@ export interface AgentRecommendation {
       task.result = result;
 task.status = "completed"
       task.timeline.push({
-        timestamp: Date.now(),
-        agent: "xiaoai",
-        action: "task_completed",
-        data: { consensus: result.consensus, confidence: result.confidence}
+        timestamp: Date.now();
+        agent: "xiaoai";
+        action: "task_completed";
+        data: { consensus: result.consensus, confidence: result.confidence;}
       });
       this.collaborationHistory.push({ ...task });
       this.activeTasks.delete(taskId);
     } catch (error) {
       task.status = "failed"
       task.timeline.push({
-        timestamp: Date.now(),
-        agent: "xiaoai",
-        action: "task_failed",
-        data: { error: error instanceof Error ? error.message : "Unknown error"  }
+        timestamp: Date.now();
+        agent: "xiaoai";
+        action: "task_failed";
+        data: { error: error instanceof Error ? error.message : "Unknown error"  ;}
       });
     }
   }
@@ -298,10 +297,10 @@ task.status = "completed"
     await this.simulateProcessingTime(agentType;);
     const recommendation = this.generateMockRecommendation(agent, tas;k;);
     task.timeline.push({
-      timestamp: Date.now(),
-      agent: agentType,
-      action: "recommendation_generated",
-      data: { confidence: recommendation.confidence   }
+      timestamp: Date.now();
+      agent: agentType;
+      action: "recommendation_generated";
+      data: { confidence: recommendation.confidence   ;}
     });
     return recommendati;o;n;
   }
@@ -313,23 +312,23 @@ task.status = "completed"
     let reasoning = ;
     switch (agent.id) {
       case "xiaoai":
-        recommendation = "基于症状分析，建议进行进一步检查并关注生活方式调整"
-        reasoning = "通过多模态数据分析，发现潜在健康风险指标";
+
+
         break;
 case "xiaoke":
-        recommendation = "建议预约专科医生进行详细检查，制定个性化治疗方案"
-        reasoning = "基于医疗服务管理经验，推荐最适合的医疗资源";
+
+
         break;
 case "laoke":
-        recommendation = "重点关注慢性病预防，建立长期健康监测计划"
-        reasoning = "结合年龄和健康历史，制定预防性健康管理策略";
+
+
         break;
 case "soer":
-        recommendation = "调整饮食结构，增加适量运动，改善睡眠质量"
-        reasoning = "从生活方式角度提供全面的健康改善建议";
+
+
         break;
     }
-    return {agent: agent.id,recommendation,confidence,reasoning,supporting_data: {agent_specialties: agent.specialties,analysis_time: Date.now()};};
+    return {agent: agent.id,recommendation,confidence,reasoning,supporting_data: {agent_specialties: agent.specialties,analysis_time: Date.now();};};
   }
   private async simulateProcessingTime(agentType: AgentType): Promise<void>  {
     const status = this.agentStatuses.get(agentTyp;e;);
@@ -361,10 +360,10 @@ performanceMonitor.recordRender();
       )
       .slice(0, limit);
   }
-  getCollaborationStats(): { totalTasks: number,
-    completedTasks: number,
-    averageConfidence: number,
-    consensusRate: number} {
+  getCollaborationStats(): { totalTasks: number;
+    completedTasks: number;
+    averageConfidence: number;
+    consensusRate: number;} {
     const completedTasks = this.collaborationHistory.filter(;)
       (tas;k;) => task.status === "completed"
     );

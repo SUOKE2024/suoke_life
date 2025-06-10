@@ -1,6 +1,4 @@
-import { SecurityManager, securityManager } from "../securityManager";
-import { SecurityManager, securityManager } from "../securityManager";
-import React from "react";
+
 describe("securityManager", () => {
   beforeEach(() => {
     jest.clearAllMocks();

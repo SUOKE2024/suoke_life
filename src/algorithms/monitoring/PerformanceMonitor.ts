@@ -6,55 +6,55 @@
 * @version 1.0.0;
 */
 export interface MonitoringConfig {
-  enabled: boolean;,
-  metrics: {;,
-  performance: boolean;,
-  accuracy: boolean;,
-  usage: boolean;,
+  enabled: boolean;
+  metrics: {
+  performance: boolean;
+  accuracy: boolean;
+  usage: boolean;
   errors: boolean;
 };
   reporting: {,
-  interval: number;,
-  destination: string,
+  interval: number;
+  destination: string;
   format: 'json' | 'csv' | 'prometheus';
   };
 }
 export interface PerformanceMetrics {
-  responseTime: {;,
-  average: number;,
-  p50: number;,
-  p95: number;,
+  responseTime: {
+  average: number;
+  p50: number;
+  p95: number;
   p99: number;
 };
   throughput: {,
-  requestsPerSecond: number;,
+  requestsPerSecond: number;
   requestsPerMinute: number;
   };
   accuracy: {,
-  overallAccuracy: number;,
+  overallAccuracy: number;
   diagnosisAccuracy: {,
-  looking: number;,
-  listening: number,
-  inquiry: number;,
-  palpation: number,
+  looking: number;
+  listening: number;
+  inquiry: number;
+  palpation: number;
   calculation: number;
     };
   };
   resourceUsage: {,
-  cpuUsage: number;,
-  memoryUsage: number,
+  cpuUsage: number;
+  memoryUsage: number;
   diskUsage: number;
   };
   errorRate: {,
-  total: number;,
+  total: number;
   byType: Record<string, number>;
   };
 }
 export interface MetricEvent {
-  timestamp: number;,
-  type: string;,
+  timestamp: number;
+  type: string;
   value: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string; any>;
 }
 // 性能监控器类
 export class PerformanceMonitor {
@@ -70,22 +70,22 @@ export class PerformanceMonitor {
   private initializeMetrics(): PerformanceMetrics {
     return {
       responseTime: {,
-  average: 0,
-        p50: 0,
-        p95: 0,
+  average: 0;
+        p50: 0;
+        p95: 0;
         p99: 0;
       },
       throughput: {,
-  requestsPerSecond: 0,
+  requestsPerSecond: 0;
         requestsPerMinute: 0;
       },
       accuracy: {,
-  overallAccuracy: 0,
+  overallAccuracy: 0;
         diagnosisAccuracy: {,
   looking: 0,listening: 0,inquiry: 0,palpation: 0,calculation: 0;
         };
       },resourceUsage: {cpuUsage: 0,memoryUsage: 0,diskUsage: 0;
-      },errorRate: {total: 0,byType: {};
+      },errorRate: {total: 0,byType: {;};
       };
     };
   }
@@ -95,10 +95,10 @@ export class PerformanceMonitor {
       return;
     }
     this.events.push({
-      timestamp: Date.now(),
-      type: 'response_time',
-      value: duration,
-      metadata: { operation }
+      timestamp: Date.now();
+      type: 'response_time';
+      value: duration;
+      metadata: { operation ;}
     });
     this.updateResponseTimeMetrics();
   }
@@ -108,10 +108,10 @@ export class PerformanceMonitor {
       return;
     }
     this.events.push({
-      timestamp: Date.now(),
-      type: 'accuracy',
-      value: accuracy,
-      metadata: { diagnosisType }
+      timestamp: Date.now();
+      type: 'accuracy';
+      value: accuracy;
+      metadata: { diagnosisType ;}
     });
     this.updateAccuracyMetrics();
   }
@@ -121,10 +121,10 @@ export class PerformanceMonitor {
       return;
     }
     this.events.push({
-      timestamp: Date.now(),
-      type: 'error',
-      value: 1,
-      metadata: { errorType, details }
+      timestamp: Date.now();
+      type: 'error';
+      value: 1;
+      metadata: { errorType, details ;}
     });
     this.updateErrorMetrics();
   }
@@ -134,8 +134,8 @@ export class PerformanceMonitor {
       return;
     }
     this.metrics.resourceUsage = {
-      cpuUsage: cpu,
-      memoryUsage: memory,
+      cpuUsage: cpu;
+      memoryUsage: memory;
       diskUsage: disk;
     };
   }
@@ -206,7 +206,7 @@ export class PerformanceMonitor {
     const errorEvents = this.events.filter(e => e.type === 'error');
     this.metrics.errorRate.total = errorEvents.length;
     // 按错误类型统计
-    const errorByType: Record<string, number> = {};
+    const errorByType: Record<string, number> = {;};
     for (const event of errorEvents) {
       const errorType = event.metadata?.errorType || 'unknown';
       errorByType[errorType] = (errorByType[errorType] || 0) + 1;

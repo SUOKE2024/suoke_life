@@ -97,26 +97,26 @@ export const useMedicalResource = () => {const dispatch = useDispatch<AppDispatc
   const reset = useCallback() => {dispatch(resetState());
   }, [dispatch]);
   // 便捷方法
-  const searchByKeyword = useCallback(keyword: string, additionalFilters?: Partial<ResourceFilters>) => {const query: SearchQuery = {keyword,filters: { ...filters, ...additionalFilters },page: 1,limit: 20;
+  const searchByKeyword = useCallback(keyword: string, additionalFilters?: Partial<ResourceFilters>) => {const query: SearchQuery = {keyword;filters: { ...filters, ...additionalFilters ;},page: 1,limit: 20;
     };
     return search(query);
   }, [search, filters]);
   const searchByLocation = useCallback(location: { lat: number; lng: number; radius?: number }, resourceType?: string[]) => {
-    const query: SearchQuery = {,
+    const query: SearchQuery = {;
   filters: {,
   location: {,
-  lat: location.lat,
-          lng: location.lng,
+  lat: location.lat;
+          lng: location.lng;
           radius: location.radius || 5000, // 默认5km;
         },
         type: resourceType;
       },
-      page: 1,
+      page: 1;
       limit: 20;
     };
     return search(query);
   }, [search]);
-  const searchByType = useCallback(type: string[], additionalFilters?: Partial<ResourceFilters>) => {const query: SearchQuery = {filters: { ...filters, type, ...additionalFilters },page: 1,limit: 20;
+  const searchByType = useCallback(type: string[], additionalFilters?: Partial<ResourceFilters>) => {const query: SearchQuery = {filters: { ...filters; type, ...additionalFilters },page: 1,limit: 20;
     };
     return search(query);
   }, [search, filters]);
@@ -135,10 +135,10 @@ export const useMedicalResource = () => {const dispatch = useDispatch<AppDispatc
     };
     return createAppointment(appointmentData);
   }, [createAppointment]);
-  const cancelAppointment = useCallback(async (appointmentId: string) => {try {const response = await fetch(`/api/v1/medical-resources/appointments/${appointmentId}`, {method: 'DELETE';))
+  const cancelAppointment = useCallback(async (appointmentId: string) => {try {const response = await fetch(`/api/v1/medical-resources/appointments/${appointmentId;}`, {method: 'DELETE';))
       });
       if (!response.ok) {
-        throw new Error('取消预约失败');
+
       }
       // 重新获取预约列表
       const currentUser = ''; // 这里需要从用户状态获取
@@ -147,18 +147,18 @@ export const useMedicalResource = () => {const dispatch = useDispatch<AppDispatc
       }
       return true;
     } catch (error) {
-      console.error('取消预约失败:', error);
+
       return false;
     }
   }, [getAppointments]);
   // 筛选相关便捷方法
-  const filterByRating = useCallback(minRating: number) => {updateResourceFilters({ rating: minRating });
+  const filterByRating = useCallback(minRating: number) => {updateResourceFilters({ rating: minRating ;});
   }, [updateResourceFilters]);
-  const filterByPriceRange = useCallback(min: number, max: number) => {updateResourceFilters({ priceRange: { min, max } });
+  const filterByPriceRange = useCallback(min: number, max: number) => {updateResourceFilters({ priceRange: { min, max ;} });
   }, [updateResourceFilters]);
-  const filterByAvailability = useCallback(availability: 'now' | 'today' | 'week') => {updateResourceFilters({ availability });
+  const filterByAvailability = useCallback(availability: 'now' | 'today' | 'week') => {updateResourceFilters({ availability ;});
   }, [updateResourceFilters]);
-  const sortResults = useCallback(sortBy: 'distance' | 'rating' | 'price' | 'availability') => {updateResourceFilters({ sortBy });
+  const sortResults = useCallback(sortBy: 'distance' | 'rating' | 'price' | 'availability') => {updateResourceFilters({ sortBy ;});
   }, [updateResourceFilters]);
   const clearFilters = useCallback() => {updateResourceFilters({});
   }, [updateResourceFilters]);

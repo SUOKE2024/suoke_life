@@ -45,24 +45,24 @@ export class OptimizedCacheService {
   private totalMisses = 0;
   private evictionCount = 0;
 
-  constructor(config: Partial<CacheConfig> = {}) {
+  constructor(config: Partial<CacheConfig> = {;}) {
     this.config = {
       maxMemorySize: 64 * 1024 * 1024, // 64MB（减少默认值）
       maxItems: 1000, // 减少最大项数
       defaultTTL: 30 * 60 * 1000, // 30分钟
       cleanupInterval: 5 * 60 * 1000, // 5分钟清理一次
       compressionThreshold: 1024, // 1KB以上压缩
-      persistentKeys: [],
+      persistentKeys: [];
       ...config,
     };
 
     this.stats = {
-      totalItems: 0,
-      memoryUsage: 0,
-      hitRate: 0,
-      missRate: 0,
-      evictionCount: 0,
-      compressionRatio: 0,
+      totalItems: 0;
+      memoryUsage: 0;
+      hitRate: 0;
+      missRate: 0;
+      evictionCount: 0;
+      compressionRatio: 0;
     };
 
     this.startCleanupTimer();
@@ -73,8 +73,8 @@ export class OptimizedCacheService {
    * 设置缓存项
    */
   async set<T>(
-    key: string,
-    value: T,
+    key: string;
+    value: T;
     options: {
       ttl?: number;
       priority?: 'high' | 'medium' | 'low';
@@ -98,13 +98,13 @@ export class OptimizedCacheService {
 
     const item: CacheItem<T> = {
       key,
-      value: finalValue,
-      timestamp: Date.now(),
+      value: finalValue;
+      timestamp: Date.now();
       ttl,
-      size: this.calculateSize(finalValue),
+      size: this.calculateSize(finalValue);
       priority,
-      accessCount: 0,
-      lastAccessed: Date.now(),
+      accessCount: 0;
+      lastAccessed: Date.now();
     };
 
     // 检查内存限制
@@ -263,10 +263,10 @@ export class OptimizedCacheService {
     itemCount: number;
   } {
     return {
-      current: this.currentMemoryUsage,
-      max: this.config.maxMemorySize,
-      percentage: (this.currentMemoryUsage / this.config.maxMemorySize) * 100,
-      itemCount: this.memoryCache.size + this.persistentCache.size,
+      current: this.currentMemoryUsage;
+      max: this.config.maxMemorySize;
+      percentage: (this.currentMemoryUsage / this.config.maxMemorySize) * 100;
+      itemCount: this.memoryCache.size + this.persistentCache.size;
     };
   }
 
@@ -274,7 +274,7 @@ export class OptimizedCacheService {
    * 设置缓存配置
    */
   updateConfig(newConfig: Partial<CacheConfig>): void {
-    this.config = { ...this.config, ...newConfig };
+    this.config = { ...this.config, ...newConfig ;};
 
     // 重启清理定时器
     if (this.cleanupTimer) {
@@ -321,7 +321,7 @@ export class OptimizedCacheService {
     key: string
   ): Promise<CacheItem | null> {
     try {
-      const data = await AsyncStorage.getItem(`cache_${key}`);
+      const data = await AsyncStorage.getItem(`cache_${key;}`);
       if (data) {
         const item: CacheItem = JSON.parse(data);
         if (!this.isExpired(item)) {
@@ -338,11 +338,11 @@ export class OptimizedCacheService {
   }
 
   private async saveToPersistentStorage(
-    key: string,
+    key: string;
     item: CacheItem
   ): Promise<void> {
     try {
-      await AsyncStorage.setItem(`cache_${key}`, JSON.stringify(item));
+      await AsyncStorage.setItem(`cache_${key;}`, JSON.stringify(item));
     } catch (error) {
       console.warn(`Failed to save cache item ${key}:`, error);
     }
@@ -350,7 +350,7 @@ export class OptimizedCacheService {
 
   private async removeFromPersistentStorage(key: string): Promise<void> {
     try {
-      await AsyncStorage.removeItem(`cache_${key}`);
+      await AsyncStorage.removeItem(`cache_${key;}`);
     } catch (error) {
       console.warn(`Failed to remove cache item ${key}:`, error);
     }
@@ -389,11 +389,11 @@ export class OptimizedCacheService {
 
   private async evictItems(requiredSpace: number): Promise<void> {
     const items = Array.from(this.memoryCache.entries())
-      .map(([key, item]) => ({ key, ...item }))
+      .map(([key, item]) => ({ key, ...item ;}))
       .sort((a, b) => {
         // 优先级排序：低优先级 > 访问次数少 > 最久未访问
         if (a.priority !== b.priority) {
-          const priorityOrder = { low: 0, medium: 1, high: 2 };
+          const priorityOrder = { low: 0, medium: 1, high: 2 ;};
           return priorityOrder[a.priority] - priorityOrder[b.priority];
         }
         if (a.accessCount !== b.accessCount) {
@@ -414,7 +414,7 @@ export class OptimizedCacheService {
 
   private async evictLRUItems(count: number): Promise<void> {
     const items = Array.from(this.memoryCache.entries())
-      .map(([key, item]) => ({ key, ...item }))
+      .map(([key, item]) => ({ key, ...item ;}))
       .sort((a, b) => a.lastAccessed - b.lastAccessed);
 
     for (let i = 0; i < Math.min(count, items.length); i++) {
@@ -456,22 +456,22 @@ export class OptimizedCacheService {
 
   private updateStats(): void {
     this.stats = {
-      totalItems: this.memoryCache.size + this.persistentCache.size,
-      memoryUsage: this.currentMemoryUsage,
-      hitRate: this.totalHits / (this.totalHits + this.totalMisses) || 0,
-      missRate: this.totalMisses / (this.totalHits + this.totalMisses) || 0,
-      evictionCount: this.evictionCount,
+      totalItems: this.memoryCache.size + this.persistentCache.size;
+      memoryUsage: this.currentMemoryUsage;
+      hitRate: this.totalHits / (this.totalHits + this.totalMisses) || 0;
+      missRate: this.totalMisses / (this.totalHits + this.totalMisses) || 0;
+      evictionCount: this.evictionCount;
       compressionRatio: 0, // 可以根据实际压缩情况计算
-    };
+    ;};
   }
 }
 
 // 单例实例
 export const optimizedCacheService = new OptimizedCacheService({
   maxMemorySize: 32 * 1024 * 1024, // 32MB
-  maxItems: 500,
+  maxItems: 500;
   defaultTTL: 15 * 60 * 1000, // 15分钟
   cleanupInterval: 3 * 60 * 1000, // 3分钟清理
   compressionThreshold: 512, // 512字节以上压缩
   persistentKeys: ['user_profile', 'app_settings', 'model_configs'],
-});
+;});

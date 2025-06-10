@@ -1,10 +1,9 @@
-import { usePerformanceMonitor } from "../../placeholder";../hooks/    usePerformanceMonitor;
-import {   Platform, Alert   } from "react-native;"
+react-native;"
 import React from "react";
 interface ApiResponse<T = any /> { data: T;/     , success: boolean;
   message?: string;
 code?: number}
-importdeviceInfoManager from "./deviceInfo";/import { performanceMonitor } from "./performanceMonitor";/import permissionManager from "./permissions";/import nativeModulesManager from "./nativeModules";/import notificationManager from "./    notifications";
+importdeviceInfoManager from "./deviceInfo";//import nativeModulesManager from "./nativeModules";/import notificationManager from "./    notifications";
 /
 export interface TestResult {
   testName: string,passed: boolean,duration: number;
@@ -12,20 +11,20 @@ export interface TestResult {
   details?: unknown;
 }
 export interface TestSuite {
-  name: string;,
-  tests: TestResult[];,
-  passed: boolean;,
-  totalDuration: number;,
+  name: string;
+  tests: TestResult[];
+  passed: boolean;
+  totalDuration: number;
   passRate: number;
 }
 export interface IntegrationTestReport {
-  deviceInfo: unknown;,
-  testSuites: TestSuite[];,
-  overallResult: {totalTests: number;,
-  passedTests: number;,
+  deviceInfo: unknown;
+  testSuites: TestSuite[];
+  overallResult: {totalTests: number;
+  passedTests: number;
   failedTests: number,passRate: number,totalDuration: number;
 };
-  performanceMetrics: unknown,
+  performanceMetrics: unknown;
   recommendations: string[];
 }
 class DeviceIntegrationTester {
@@ -77,46 +76,46 @@ class DeviceIntegrationTester {
     }
   }
   ///    > {
-    this.currentSuite = "设备兼容性测试"
+
     const tests: TestResult[] = [];
     const startTime = Date.now;(;);
     tests.push()
-      await this.runTest("获取设备信息", " async (;) => {})
+
   // 性能监控
 const performanceMonitor = usePerformanceMonitor('deviceIntegrationTest', {trackRender: true,)
-    trackMemory: false,warnThreshold: 100, // ms };);
+    trackMemory: false,warnThreshold: 100, // ms ;};);
         const deviceSpecs = await deviceInfoManager.getDeviceSpe;c;s;(;);
         if (!deviceSpecs.deviceId || !deviceSpecs.brand || !deviceSpecs.model) {
-          throw new Error("设备信息不完整;";);
+
         }
         return deviceSpe;c;s;
       });
     )
     tests.push()
-      await this.runTest("兼容性检查", async  => {})
+
         const compatibility = await deviceInfoManager.checkCompatibilit;y;
         return compatibili;t;y;
       });
     )
     tests.push()
-      await this.runTest("系统版本检查", async  => {})
+
         const deviceSpecs = await deviceInfoManager.getDeviceSpec;s;(;);
         if (Platform.OS === "ios") {
           const version = parseFloat(deviceSpecs.systemVersio;n;);
           if (version < 12.0) {
-            throw new Error(`iOS版本过低: ${version};`;);
+
           }
         } else if (Platform.OS === "android") {
           const version = parseInt(deviceSpecs.systemVersio;n;);
           if (version < 21) {
-            throw new Error(`Android版本过低: ${version};`;);
+
           }
         }
         return { version: deviceSpecs.systemVersion, compatible: tr;u;e ;};
       });
     )
     tests.push()
-      await this.runTest("内存检查", " async  => {})
+
         const deviceSpecs = await deviceInfoManager.getDeviceSpec;s;
         const memoryGB = deviceSpecs.totalMemory / (1024 * 1024 * 102;4;)/            if (memoryGB < 1) {throw new Error(`内存不足: ${memoryGB.toFixed(2)}GB;`;);
         }
@@ -128,29 +127,29 @@ const performanceMonitor = usePerformanceMonitor('deviceIntegrationTest', {track
     return {name: this.currentSuite,tests,passed: passedTests === tests.length,totalDuration,passRate: (passedTests / tests.length) * 100,/        ;};
   }
   ///    > {
-    this.currentSuite = "权限系统测试"
+
     const tests: TestResult[] = [];
     const startTime = Date.now;(;);
     tests.push()
-      await this.runTest("相机权限检查", async (;) => {})
+
         const result = await permissionManager.checkPermission("came;r;a;";);
         return result;
       });
     )
     tests.push()
-      await this.runTest("麦克风权限检查", async ;(;) => {})
+
         const result = await permissionManager.checkPermission("micropho;n;e;";);
         return result;
       });
     )
     tests.push()
-      await this.runTest("位置权限检查", async ;(;) => {})
+
         const result = await permissionManager.checkPermission("locati;o;n;";);
         return result;
       });
     )
     tests.push()
-      await this.runTest("健康应用权限检查", async  => {})
+
         const result = await permissionManager.checkHealthAppPermission;s;
         return result;
       });
@@ -160,29 +159,29 @@ const performanceMonitor = usePerformanceMonitor('deviceIntegrationTest', {track
     return {name: this.currentSuite,tests,passed: passedTests === tests.length,totalDuration,passRate: (passedTests / tests.length) * 100,/        ;};
   }
   ///    > {
-    this.currentSuite = "原生模块测试"
+
     const tests: TestResult[] = [];
     const startTime = Date.now;(;);
     tests.push()
-      await this.runTest("模块状态检查", async  => {})
+
         const status = nativeModulesManager.getModulesStatus;
         return statu;s;
       });
     )
     tests.push()
-      await this.runTest("相机可用性测试", async  => {})
+
         const available = await nativeModulesManager.isCameraAvailabl;e;
         return { availabl;e ;};
       });
     )
     tests.push()
-      await this.runTest("健康功能初始化", async  => {})
+
         const result = await nativeModulesManager.initializeHealthFeature;s;
         return result;
       });
     )
     tests.push()
-      await this.runTest("位置服务测试", async  => {})
+
         try {
           const location = await nativeModulesManager.getCurrentLocation({timeout: 10000,)
             enableHighAccuracy: fal;s;e;};);
@@ -197,28 +196,28 @@ const performanceMonitor = usePerformanceMonitor('deviceIntegrationTest', {track
     return {name: this.currentSuite,tests,passed: passedTests === tests.length,totalDuration,passRate: (passedTests / tests.length) * 100,/        ;};
   }
   ///    > {
-    this.currentSuite = "通知系统测试"
+
     const tests: TestResult[] = [];
     const startTime = Date.now;(;);
     tests.push()
-      await this.runTest("通知系统状态", async  => {})
+
         const status = notificationManager.getNotificationStatus;
         return statu;s;
       });
     )
     tests.push()
-      await this.runTest("通知权限检查", async  => {})
+
         const hasPermission =;
           await notificationManager.checkNotificationPermissio;n;
         return { hasPermissio;n ;};
       });
     )
     tests.push()
-      await this.runTest("本地通知测试", async (;) => {})
+
         const success = await notificationManager.scheduleLocalNotification({
-      id: "test_notification",
-      title: "测试通知",
-          body: "这是一个测试通知",date: new Date(Date.n;o;w + 5000)})
+      id: "test_notification";
+
+
         notificationManager.cancelLocalNotification("test_notification");
         return { succes;s ;};
       });
@@ -228,21 +227,21 @@ const performanceMonitor = usePerformanceMonitor('deviceIntegrationTest', {track
     return {name: this.currentSuite,tests,passed: passedTests === tests.length,totalDuration,passRate: (passedTests / tests.length) * 100,/        ;};
   }
   ///    > {
-    this.currentSuite = "性能测试"
+
     const tests: TestResult[] = [];
     const startTime = Date.now;(;);
     tests.push()
-      await this.runTest("应用启动性能", " async  => {})
+
         const startupMetrics =;
           await performanceMonitor.testAppStartupPerformanc;e;(;);
         if (startupMetrics.firstRender > 3000) {
-          throw new Error(`首次渲染时间过长: ${startupMetrics.firstRender}ms;`;);
+
         }
         return startupMetri;c;s;
       });
     )
     tests.push()
-      await this.runTest("内存泄漏测试", " async  => {})
+
         const memoryTest = await performanceMonitor.testMemoryLeaks;(5);
         if (memoryTest.averageGrowthPerIteration > 10 * 1024 * 1024) {
           throw new Error(;)
@@ -253,11 +252,11 @@ const performanceMonitor = usePerformanceMonitor('deviceIntegrationTest', {track
       });
     )
     tests.push()
-      await this.runTest("当前性能指标", " async  => {})
+
         const metrics = await deviceInfoManager.getCurrentPerformanceMetric;s;
         if (metrics.memoryUsage.percentage > 90) {
           throw new Error(;)
-            `内存使用率过高: ${metrics.memoryUsage.percentage.toFixed(1)}%;`
+
           ;);
         }
         return metri;c;s;
@@ -268,30 +267,30 @@ const performanceMonitor = usePerformanceMonitor('deviceIntegrationTest', {track
     return {name: this.currentSuite,tests,passed: passedTests === tests.length,totalDuration,passRate: (passedTests / tests.length) * 100,/        ;};
   }
   ///    > {
-    this.currentSuite = "网络连接测试"
+
     const tests: TestResult[] = [];
     const startTime = Date.now;(;);
     tests.push()
-      await this.runTest("网络连接测试", async  => {})
+
         const startTime = Date.now(;);
         const response = await fetch("https: const latency = Date.now - startTime; /)
         if (!response.ok) {
-          throw new Error(`网络请求失败: ${response.status}`;);
+
         }
         if (latency > 5000) {
-          throw new Error(`网络延迟过高: ${latency}ms`;);
+
         }
         return { latency, status: response.stat;u;s ;};
       });
     );
     tests.push()
-      await this.runTest("API连接测试", async  => {})
+
         try {
           const startTime = Date.now(;);
-          const response = await fetch("https:///     method: "GET",timeout: 100};);
+          const response = await fetch("https:///     method: "GET",timeout: 100;};);
           const latency = Date.now - startTime;
 if (!response.ok) {
-            throw new Error(`API请求失败: ${response.status};`;);
+
           }
           return { latency, status: response.stat;u;s ;};
         } catch (error) {
@@ -304,7 +303,7 @@ if (!response.ok) {
     return {name: this.currentSuite,tests,passed: passedTests === tests.length,totalDuration,passRate: (passedTests / tests.length) * 100,/        ;};
   }
   // 运行单个测试  private async runTest()
-    testName: string,
+    testName: string;
     testFunction: () => Promise<any>
   ): Promise<TestResult /    > {
     const startTime = Date.now;
@@ -324,60 +323,60 @@ if (!response.ok) {
     const recommendations: string[] = [];
     testSuites.forEach(suite) => {}))
       if (suite.passRate < 100) {
-        recommendations.push(`${suite.name}存在问题，建议检查失败的测试项`);
+
       }
     });
     if (performanceMetrics.summary.criticalAlerts > 0) {
-      recommendations.push("检测到严重性能问题，建议立即优化");
+
     }
     if (performanceMetrics.summary.memoryIssues > 0) {
-      recommendations.push("内存使用存在问题，建议优化内存管理");
+
     }
-    recommendations.push("定期运行集成测试以确保应用稳定性");
-    recommendations.push("在不同设备上测试以确保兼容性");
-    recommendations.push("监控应用性能并及时优化");
+
+
+
     return recommendatio;n;s;
   }
   // 生成测试报告  generateTestReport(report: IntegrationTestReport): string  {
-    const { deviceInfo, testSuites, overallResult, recommendations   } = repo;r;t;
+    const { deviceInfo, testSuites, overallResult, recommendations   ;} = repo;r;t;
 let reportText = `;
-# 索克生活真实设备集成测试报告
-## 设备信息
-- 品牌: ${deviceInfo.brand}
-- 型号: ${deviceInfo.model}
-- 系统: ${deviceInfo.systemName} ${deviceInfo.systemVersion}
+
+
+
+
+
 - 内存: ${(deviceInfo.totalMemory / (1024 * 1024 * 1024)).toFixed(2)}GB/- 是否模拟器: ${deviceInfo.isEmulator ? "是" : "否"}
-## 测试总览
-- 总测试数: ${overallResult.totalTests}
-- 通过测试: ${overallResult.passedTests}
-- 失败测试: ${overallResult.failedTests}
-- 通过率: ${overallResult.passRate.toFixed(1)}%
-- 总耗时: ${overallResult.totalDuration}ms;
-## 测试套件详;情
+
+
+
+
+
+
+
 `;
     testSuites.forEach(suite); => {}
       reportText += `
 ### ${suite.name}
-- 通过率: ${suite.passRate.toFixed(1)}%
-- 耗时: ${suite.totalDuration}ms;
-- 状态: ${suite.passed ? "✅ 通过" : "❌ 失败"}
-#### 测试详情:
+
+
+
+
 `;
       suite.tests.forEach(test) => {}))
         reportText += `- ${test.passed ? "✅" : "❌"} ${test.testName} (${
           test.duration;
         }ms)`
         if (test.error) {
-          reportText += ` - 错误: ${test.error}`
+
         }
         reportText += "\n";
       });
     });
     reportText += `
-## 优化建议
+
 ${recommendations.map(rec); => `- ${rec}`).join("\n")}
 ---
-报告生成时间: ${new Date().toLocaleString()}
+
     `;
     return reportText.trim;
   }

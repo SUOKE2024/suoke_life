@@ -1,22 +1,21 @@
-import { performanceThresholds } from "../config/    performance";
-import React from "react";
+
 // 性能报告生成器   索克生活APP - 性能数据收集和报告
 /
 export interface PerformanceMetric {
   componentName: string,metricType:  ;
 render" | memory" | "network | "effect",
-  value: number;,
+  value: number;
   timestamp: number;
   threshold?: number;
   severity: good" | "warning | "critical";
 }
 export interface PerformanceReport {
-  sessionId: string;,
-  startTime: number;,
-  endTime: number;,
-  metrics: PerformanceMetric[];,
-  summary: {totalComponents: number;,
-  slowComponents: string[];,
+  sessionId: string;
+  startTime: number;
+  endTime: number;
+  metrics: PerformanceMetric[];
+  summary: {totalComponents: number;
+  slowComponents: string[];
   memoryLeaks: string[],criticalIssues: number,averageRenderTime: number;
 };
 }
@@ -33,7 +32,7 @@ class PerformanceReporter {
   }
   recordMetric(metric: Omit<PerformanceMetric, timestamp" | "severity  / >) { * const severity = this.calculateSeverity(metric.metricType, metric.value;);
     const fullMetric: PerformanceMetric = {...metric,
-      timestamp: Date.now(),
+      timestamp: Date.now();
       severity;
     };
     this.metrics.push(fullMetric);
@@ -87,10 +86,10 @@ class PerformanceReporter {
     }
     const renderMetrics = componentMetrics.filter(m => m.metricType === render;";);"
     const memoryMetrics = componentMetrics.filter(m => m.metricType === "memory;);"
-    return {totalRenders: renderMetrics.length,
-      averageRenderTime: renderMetrics.reduce(sum,m;); => sum + m.value, 0) / renderMetrics.length,/          maxRenderTime: Math.max(...renderMetrics.map(m => m.value)),
-      memoryUsage: memoryMetrics.length > 0 ? memoryMetrics[memoryMetrics.length - 1].value : 0,
-      criticalIssues: componentMetrics.filter(m => m.severity === "critical').length};"'
+    return {totalRenders: renderMetrics.length;
+      averageRenderTime: renderMetrics.reduce(sum,m;); => sum + m.value, 0) / renderMetrics.length,/          maxRenderTime: Math.max(...renderMetrics.map(m => m.value));
+      memoryUsage: memoryMetrics.length > 0 ? memoryMetrics[memoryMetrics.length - 1].value : 0;
+      criticalIssues: componentMetrics.filter(m => m.severity === "critical').length;};"'
   }
 }
 //   ;

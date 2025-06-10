@@ -80,136 +80,136 @@ export interface ONNXRuntimeConfig {
 
 // 默认配置
 const DEFAULT_CONFIG: ONNXRuntimeConfig = {
-  environment: 'development',
-  deviceType: 'phone',
-  performanceMode: 'balanced',
+  environment: 'development';
+  deviceType: 'phone';
+  performanceMode: 'balanced';
   inference: {
-    executionProviders: ['cpu'],
-    enableOptimization: true,
-    enableProfiling: false,
+    executionProviders: ['cpu'];
+    enableOptimization: true;
+    enableProfiling: false;
     sessionOptions: {
-      intraOpNumThreads: 2,
-      interOpNumThreads: 1,
-      graphOptimizationLevel: 'extended',
-      enableMemPattern: true,
-      enableCpuMemArena: true,
+      intraOpNumThreads: 2;
+      interOpNumThreads: 1;
+      graphOptimizationLevel: 'extended';
+      enableMemPattern: true;
+      enableCpuMemArena: true;
     },
   },
   quantization: {
-    level: 'int8',
-    outputPath: '',
-    preserveAccuracy: true,
-    targetDevice: 'cpu',
-    optimizationLevel: 'extended',
+    level: 'int8';
+    outputPath: '';
+    preserveAccuracy: true;
+    targetDevice: 'cpu';
+    optimizationLevel: 'extended';
   },
   optimization: {
-    level: 'extended',
-    enableGraphOptimization: true,
-    enableMemoryOptimization: true,
-    enableCpuOptimization: true,
-    targetDevice: 'cpu',
-    preserveAccuracy: true,
+    level: 'extended';
+    enableGraphOptimization: true;
+    enableMemoryOptimization: true;
+    enableCpuOptimization: true;
+    targetDevice: 'cpu';
+    preserveAccuracy: true;
   },
   edgeCompute: {
-    maxConcurrentTasks: 3,
-    taskTimeout: 30000,
-    memoryLimit: 512,
-    cpuThreshold: 80,
-    thermalThreshold: 'nominal',
-    enableLoadBalancing: true,
-    enableResourceMonitoring: true,
+    maxConcurrentTasks: 3;
+    taskTimeout: 30000;
+    memoryLimit: 512;
+    cpuThreshold: 80;
+    thermalThreshold: 'nominal';
+    enableLoadBalancing: true;
+    enableResourceMonitoring: true;
   },
   cache: {
-    enabled: true,
-    maxSize: 100,
+    enabled: true;
+    maxSize: 100;
     ttl: 3600000, // 1小时
-  },
+  ;},
   logging: {
-    enabled: true,
-    level: 'info',
-    maxLogFiles: 5,
+    enabled: true;
+    level: 'info';
+    maxLogFiles: 5;
   },
   models: {
-    baseUrl: 'https://models.suokelife.com',
-    downloadTimeout: 60000,
-    retryAttempts: 3,
-    preloadModels: [],
+    baseUrl: 'https://models.suokelife.com';
+    downloadTimeout: 60000;
+    retryAttempts: 3;
+    preloadModels: [];
   },
 };
 
 // 生产环境配置
 const PRODUCTION_CONFIG: Partial<ONNXRuntimeConfig> = {
-  environment: 'production',
-  performanceMode: 'performance',
+  environment: 'production';
+  performanceMode: 'performance';
   inference: {
-    executionProviders: ['cpu'],
-    enableOptimization: true,
-    enableProfiling: false,
+    executionProviders: ['cpu'];
+    enableOptimization: true;
+    enableProfiling: false;
     sessionOptions: {
-      intraOpNumThreads: 4,
-      interOpNumThreads: 2,
-      graphOptimizationLevel: 'all',
-      enableMemPattern: true,
-      enableCpuMemArena: true,
+      intraOpNumThreads: 4;
+      interOpNumThreads: 2;
+      graphOptimizationLevel: 'all';
+      enableMemPattern: true;
+      enableCpuMemArena: true;
     },
   },
   quantization: {
-    level: 'int8',
-    outputPath: '',
-    preserveAccuracy: false,
-    targetDevice: 'cpu',
-    optimizationLevel: 'all',
+    level: 'int8';
+    outputPath: '';
+    preserveAccuracy: false;
+    targetDevice: 'cpu';
+    optimizationLevel: 'all';
   },
   optimization: {
-    level: 'all',
-    enableGraphOptimization: true,
-    enableMemoryOptimization: true,
-    enableCpuOptimization: true,
-    targetDevice: 'cpu',
-    preserveAccuracy: false,
+    level: 'all';
+    enableGraphOptimization: true;
+    enableMemoryOptimization: true;
+    enableCpuOptimization: true;
+    targetDevice: 'cpu';
+    preserveAccuracy: false;
   },
   edgeCompute: {
-    maxConcurrentTasks: 5,
-    taskTimeout: 20000,
-    memoryLimit: 1024,
-    cpuThreshold: 90,
-    thermalThreshold: 'fair',
-    enableLoadBalancing: true,
-    enableResourceMonitoring: true,
+    maxConcurrentTasks: 5;
+    taskTimeout: 20000;
+    memoryLimit: 1024;
+    cpuThreshold: 90;
+    thermalThreshold: 'fair';
+    enableLoadBalancing: true;
+    enableResourceMonitoring: true;
   },
   logging: {
-    enabled: false,
-    level: 'error',
-    maxLogFiles: 3,
+    enabled: false;
+    level: 'error';
+    maxLogFiles: 3;
   },
 };
 
 // 开发环境配置
 const DEVELOPMENT_CONFIG: Partial<ONNXRuntimeConfig> = {
-  environment: 'development',
-  performanceMode: 'balanced',
+  environment: 'development';
+  performanceMode: 'balanced';
   inference: {
-    executionProviders: ['cpu'],
-    enableOptimization: false,
-    enableProfiling: true,
+    executionProviders: ['cpu'];
+    enableOptimization: false;
+    enableProfiling: true;
     sessionOptions: {
-      intraOpNumThreads: 1,
-      interOpNumThreads: 1,
-      graphOptimizationLevel: 'basic',
-      enableMemPattern: false,
-      enableCpuMemArena: false,
+      intraOpNumThreads: 1;
+      interOpNumThreads: 1;
+      graphOptimizationLevel: 'basic';
+      enableMemPattern: false;
+      enableCpuMemArena: false;
     },
   },
   logging: {
-    enabled: true,
-    level: 'debug',
-    maxLogFiles: 10,
+    enabled: true;
+    level: 'debug';
+    maxLogFiles: 10;
   },
   models: {
-    baseUrl: 'http://localhost:8000/models',
-    downloadTimeout: 120000,
-    retryAttempts: 1,
-    preloadModels: ['tcm_diagnosis_dev.onnx'],
+    baseUrl: 'http://localhost:8000/models';
+    downloadTimeout: 120000;
+    retryAttempts: 1;
+    preloadModels: ['tcm_diagnosis_dev.onnx'];
   },
 };
 
@@ -217,24 +217,24 @@ const DEVELOPMENT_CONFIG: Partial<ONNXRuntimeConfig> = {
 const IOS_CONFIG: Partial<ONNXRuntimeConfig> = {
   inference: {
     executionProviders: ['coreml', 'cpu'],
-    enableOptimization: true,
-    enableProfiling: false,
+    enableOptimization: true;
+    enableProfiling: false;
     sessionOptions: {
-      intraOpNumThreads: 2,
-      interOpNumThreads: 1,
-      graphOptimizationLevel: 'extended',
-      enableMemPattern: true,
-      enableCpuMemArena: true,
+      intraOpNumThreads: 2;
+      interOpNumThreads: 1;
+      graphOptimizationLevel: 'extended';
+      enableMemPattern: true;
+      enableCpuMemArena: true;
     },
   },
   edgeCompute: {
-    maxConcurrentTasks: 3,
-    taskTimeout: 30000,
-    memoryLimit: 512,
-    cpuThreshold: 75,
-    thermalThreshold: 'nominal',
-    enableLoadBalancing: true,
-    enableResourceMonitoring: true,
+    maxConcurrentTasks: 3;
+    taskTimeout: 30000;
+    memoryLimit: 512;
+    cpuThreshold: 75;
+    thermalThreshold: 'nominal';
+    enableLoadBalancing: true;
+    enableResourceMonitoring: true;
   },
 };
 
@@ -242,24 +242,24 @@ const IOS_CONFIG: Partial<ONNXRuntimeConfig> = {
 const ANDROID_CONFIG: Partial<ONNXRuntimeConfig> = {
   inference: {
     executionProviders: ['nnapi', 'cpu'],
-    enableOptimization: true,
-    enableProfiling: false,
+    enableOptimization: true;
+    enableProfiling: false;
     sessionOptions: {
-      intraOpNumThreads: 3,
-      interOpNumThreads: 1,
-      graphOptimizationLevel: 'extended',
-      enableMemPattern: true,
-      enableCpuMemArena: true,
+      intraOpNumThreads: 3;
+      interOpNumThreads: 1;
+      graphOptimizationLevel: 'extended';
+      enableMemPattern: true;
+      enableCpuMemArena: true;
     },
   },
   edgeCompute: {
-    maxConcurrentTasks: 4,
-    taskTimeout: 30000,
-    memoryLimit: 768,
-    cpuThreshold: 85,
-    thermalThreshold: 'nominal',
-    enableLoadBalancing: true,
-    enableResourceMonitoring: true,
+    maxConcurrentTasks: 4;
+    taskTimeout: 30000;
+    memoryLimit: 768;
+    cpuThreshold: 85;
+    thermalThreshold: 'nominal';
+    enableLoadBalancing: true;
+    enableResourceMonitoring: true;
   },
 };
 
@@ -267,48 +267,48 @@ const ANDROID_CONFIG: Partial<ONNXRuntimeConfig> = {
 export const SUOKE_LIFE_MODELS_CONFIG = {
   tcm_diagnosis: {
     quantization: {
-      level: 'int8' as const,
-      preserveAccuracy: true,
-      targetDevice: 'cpu' as const,
+      level: 'int8' as const;
+      preserveAccuracy: true;
+      targetDevice: 'cpu' as const;
     },
     optimization: {
-      level: 'extended' as const,
-      preserveAccuracy: true,
+      level: 'extended' as const;
+      preserveAccuracy: true;
     },
     cache: {
-      enabled: true,
+      enabled: true;
       ttl: 3600000, // 1小时，诊断结果需要及时更新
-    },
+    ;},
   },
   symptom_analysis: {
     quantization: {
-      level: 'int8' as const,
-      preserveAccuracy: false,
-      targetDevice: 'cpu' as const,
+      level: 'int8' as const;
+      preserveAccuracy: false;
+      targetDevice: 'cpu' as const;
     },
     optimization: {
-      level: 'all' as const,
-      preserveAccuracy: false,
+      level: 'all' as const;
+      preserveAccuracy: false;
     },
     cache: {
-      enabled: true,
+      enabled: true;
       ttl: 1800000, // 30分钟，症状分析变化较快
-    },
+    ;},
   },
   lifestyle: {
     quantization: {
-      level: 'int8' as const,
-      preserveAccuracy: false,
-      targetDevice: 'cpu' as const,
+      level: 'int8' as const;
+      preserveAccuracy: false;
+      targetDevice: 'cpu' as const;
     },
     optimization: {
-      level: 'all' as const,
-      preserveAccuracy: false,
+      level: 'all' as const;
+      preserveAccuracy: false;
     },
     cache: {
-      enabled: true,
+      enabled: true;
       ttl: 86400000, // 24小时，生活方式推荐可以缓存较久
-    },
+    ;},
   },
 };
 
@@ -341,7 +341,7 @@ export class ONNXConfigManager {
    * 更新配置
    */
   updateConfig(updates: Partial<ONNXRuntimeConfig>): void {
-    this.config = { ...this.config, ...updates };
+    this.config = { ...this.config, ...updates ;};
   }
 
   /**
@@ -355,11 +355,11 @@ export class ONNXConfigManager {
    * 根据设备性能调整配置
    */
   adjustForDevicePerformance(
-    cpuCores: number,
-    memoryGB: number,
+    cpuCores: number;
+    memoryGB: number;
     hasGPU: boolean
   ): void {
-    const updates: Partial<ONNXRuntimeConfig> = {};
+    const updates: Partial<ONNXRuntimeConfig> = {;};
 
     // 根据CPU核心数调整线程数
     if (cpuCores >= 8) {
@@ -367,26 +367,26 @@ export class ONNXConfigManager {
         ...this.config.inference,
         sessionOptions: {
           ...this.config.inference.sessionOptions,
-          intraOpNumThreads: 6,
-          interOpNumThreads: 2,
+          intraOpNumThreads: 6;
+          interOpNumThreads: 2;
         },
       };
       updates.edgeCompute = {
         ...this.config.edgeCompute,
-        maxConcurrentTasks: 6,
+        maxConcurrentTasks: 6;
       };
     } else if (cpuCores >= 4) {
       updates.inference = {
         ...this.config.inference,
         sessionOptions: {
           ...this.config.inference.sessionOptions,
-          intraOpNumThreads: 4,
-          interOpNumThreads: 2,
+          intraOpNumThreads: 4;
+          interOpNumThreads: 2;
         },
       };
       updates.edgeCompute = {
         ...this.config.edgeCompute,
-        maxConcurrentTasks: 4,
+        maxConcurrentTasks: 4;
       };
     }
 
@@ -394,20 +394,20 @@ export class ONNXConfigManager {
     if (memoryGB >= 8) {
       updates.cache = {
         ...this.config.cache,
-        maxSize: 200,
+        maxSize: 200;
       };
       updates.edgeCompute = {
         ...this.config.edgeCompute,
-        memoryLimit: 2048,
+        memoryLimit: 2048;
       };
     } else if (memoryGB >= 4) {
       updates.cache = {
         ...this.config.cache,
-        maxSize: 150,
+        maxSize: 150;
       };
       updates.edgeCompute = {
         ...this.config.edgeCompute,
-        memoryLimit: 1024,
+        memoryLimit: 1024;
       };
     }
 
@@ -421,7 +421,7 @@ export class ONNXConfigManager {
       }
       updates.inference = {
         ...this.config.inference,
-        executionProviders: providers,
+        executionProviders: providers;
       };
     }
 
@@ -432,27 +432,27 @@ export class ONNXConfigManager {
    * 根据网络状况调整配置
    */
   adjustForNetworkCondition(isOnline: boolean, isWiFi: boolean): void {
-    const updates: Partial<ONNXRuntimeConfig> = {};
+    const updates: Partial<ONNXRuntimeConfig> = {;};
 
     if (!isOnline) {
       // 离线模式：禁用模型下载，增加缓存
       updates.models = {
         ...this.config.models,
-        downloadTimeout: 0,
-        retryAttempts: 0,
+        downloadTimeout: 0;
+        retryAttempts: 0;
       };
       updates.cache = {
         ...this.config.cache,
-        enabled: true,
-        maxSize: this.config.cache.maxSize * 2,
-        ttl: this.config.cache.ttl * 2,
+        enabled: true;
+        maxSize: this.config.cache.maxSize * 2;
+        ttl: this.config.cache.ttl * 2;
       };
     } else if (!isWiFi) {
       // 移动网络：减少下载超时，减少重试
       updates.models = {
         ...this.config.models,
-        downloadTimeout: 30000,
-        retryAttempts: 1,
+        downloadTimeout: 30000;
+        retryAttempts: 1;
       };
     }
 
@@ -524,8 +524,8 @@ export function updateONNXConfig(updates: Partial<ONNXRuntimeConfig>): void {
  * 便捷函数：根据设备调整配置
  */
 export function adjustConfigForDevice(
-  cpuCores: number,
-  memoryGB: number,
+  cpuCores: number;
+  memoryGB: number;
   hasGPU: boolean
 ): void {
   ONNXConfigManager.getInstance().adjustForDevicePerformance(
@@ -539,7 +539,7 @@ export function adjustConfigForDevice(
  * 便捷函数：根据网络调整配置
  */
 export function adjustConfigForNetwork(
-  isOnline: boolean,
+  isOnline: boolean;
   isWiFi: boolean
 ): void {
   ONNXConfigManager.getInstance().adjustForNetworkCondition(isOnline, isWiFi);

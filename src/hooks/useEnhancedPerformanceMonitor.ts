@@ -2,56 +2,56 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { InteractionManager, Dimensions } from 'react-native';
 // 性能指标接口
 interface PerformanceMetrics {
-  renderTime: number;,
-  memoryUsage: number;,
-  networkLatency: number;,
-  frameDrops: number;,
-  interactionDelay: number;,
-  bundleSize: number;,
-  cacheHitRate: number;,
-  errorCount: number;,
-  warningCount: number;,
+  renderTime: number;
+  memoryUsage: number;
+  networkLatency: number;
+  frameDrops: number;
+  interactionDelay: number;
+  bundleSize: number;
+  cacheHitRate: number;
+  errorCount: number;
+  warningCount: number;
   timestamp: number;
 }
 // 性能阈值配置
 interface PerformanceThresholds {
-  renderTime: number;,
-  memoryUsage: number;,
-  networkLatency: number;,
-  frameDrops: number;,
+  renderTime: number;
+  memoryUsage: number;
+  networkLatency: number;
+  frameDrops: number;
   interactionDelay: number;
 }
 // 性能优化建议
 interface OptimizationSuggestion {
-  type: 'render' | 'memory' | 'network' | 'interaction' | 'bundle';,
-  severity: 'low' | 'medium' | 'high' | 'critical';,
-  message: string;,
-  action: string;,
+  type: 'render' | 'memory' | 'network' | 'interaction' | 'bundle';
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  message: string;
+  action: string;
   impact: string;
 }
 // 性能监控配置
 interface PerformanceMonitorConfig {
-  enabled: boolean;,
-  sampleRate: number;,
-  thresholds: PerformanceThresholds;,
-  reportInterval: number;,
-  maxSamples: number;,
+  enabled: boolean;
+  sampleRate: number;
+  thresholds: PerformanceThresholds;
+  reportInterval: number;
+  maxSamples: number;
   enableDetailedLogging: boolean;
 }
 // 默认配置
 const DEFAULT_CONFIG: PerformanceMonitorConfig = {,
-  enabled: true,
+  enabled: true;
   sampleRate: 0.1, // 10% 采样率
   thresholds: {,
   renderTime: 16, // 16ms (60fps)
     memoryUsage: 100 * 1024 * 1024, // 100MB;
     networkLatency: 1000, // 1s;
-    frameDrops: 5,
+    frameDrops: 5;
     interactionDelay: 100, // 100ms;
   },
   reportInterval: 30000, // 30秒
-  maxSamples: 100,
-  enableDetailedLogging: false};
+  maxSamples: 100;
+  enableDetailedLogging: false;};
 // 性能数据收集器
 class PerformanceCollector {
   private static instance: PerformanceCollector;
@@ -90,18 +90,18 @@ class PerformanceCollector {
     if (!this.shouldSample()) return;
     const metric: PerformanceMetrics = {
       renderTime,
-      memoryUsage: this.getMemoryUsage(),
-      networkLatency: this.getAverageNetworkLatency(),
-      frameDrops: this.frameDropCounter,
-      interactionDelay: 0,
-      bundleSize: 0,
-      cacheHitRate: 0,
-      errorCount: this.errorCount,
-      warningCount: this.warningCount,
-      timestamp: Date.now()};
+      memoryUsage: this.getMemoryUsage();
+      networkLatency: this.getAverageNetworkLatency();
+      frameDrops: this.frameDropCounter;
+      interactionDelay: 0;
+      bundleSize: 0;
+      cacheHitRate: 0;
+      errorCount: this.errorCount;
+      warningCount: this.warningCount;
+      timestamp: Date.now();};
     this.addMetric(metric);
     if (this.config.enableDetailedLogging) {
-      console.log(`[Performance] ${componentName} render time: ${renderTime}ms`);
+      console.log(`[Performance] ${componentName} render time: ${renderTime;}ms`);
     }
   }
   // 记录网络请求
@@ -109,14 +109,14 @@ class PerformanceCollector {
     const latency = endTime - startTime;
     this.networkRequests.set(url, latency);
     if (latency > this.config.thresholds.networkLatency) {
-      console.warn(`[Performance] Slow network request: ${url} (${latency}ms)`);
+      console.warn(`[Performance] Slow network request: ${url;} (${latency}ms)`);
     }
   }
   // 记录交互延迟
   recordInteractionDelay(interactionType: string, delay: number): void {
     if (!this.shouldSample()) return;
     if (delay > this.config.thresholds.interactionDelay) {
-      console.warn(`[Performance] Slow interaction: ${interactionType} (${delay}ms)`);
+      console.warn(`[Performance] Slow interaction: ${interactionType;} (${delay}ms)`);
     }
   }
   // 记录帧丢失
@@ -149,14 +149,14 @@ class PerformanceCollector {
   }
   // 获取性能报告
   getPerformanceReport(): {
-    metrics: PerformanceMetrics[],
-  averages: Partial<PerformanceMetrics>;,
+    metrics: PerformanceMetrics[];
+  averages: Partial<PerformanceMetrics>;
   suggestions: OptimizationSuggestion[];
   } {
     const averages = this.calculateAverages();
     const suggestions = this.generateOptimizationSuggestions(averages);
     return {
-      metrics: this.metrics,
+      metrics: this.metrics;
       averages,
       suggestions};
   }
@@ -164,31 +164,31 @@ class PerformanceCollector {
   private calculateAverages(): Partial<PerformanceMetrics> {
     if (this.metrics.length === 0) return {};
     const sums = this.metrics.reduce(acc, metric) => ({
-        renderTime: acc.renderTime + metric.renderTime,
-        memoryUsage: acc.memoryUsage + metric.memoryUsage,
-        networkLatency: acc.networkLatency + metric.networkLatency,
-        frameDrops: acc.frameDrops + metric.frameDrops,
-        interactionDelay: acc.interactionDelay + metric.interactionDelay,
-        errorCount: acc.errorCount + metric.errorCount,
-        warningCount: acc.warningCount + metric.warningCount}),
+        renderTime: acc.renderTime + metric.renderTime;
+        memoryUsage: acc.memoryUsage + metric.memoryUsage;
+        networkLatency: acc.networkLatency + metric.networkLatency;
+        frameDrops: acc.frameDrops + metric.frameDrops;
+        interactionDelay: acc.interactionDelay + metric.interactionDelay;
+        errorCount: acc.errorCount + metric.errorCount;
+        warningCount: acc.warningCount + metric.warningCount;}),
       {
-        renderTime: 0,
-        memoryUsage: 0,
-        networkLatency: 0,
-        frameDrops: 0,
-        interactionDelay: 0,
-        errorCount: 0,
-        warningCount: 0}
+        renderTime: 0;
+        memoryUsage: 0;
+        networkLatency: 0;
+        frameDrops: 0;
+        interactionDelay: 0;
+        errorCount: 0;
+        warningCount: 0;}
     );
     const count = this.metrics.length;
     return {
-      renderTime: sums.renderTime / count,
-      memoryUsage: sums.memoryUsage / count,
-      networkLatency: sums.networkLatency / count,
-      frameDrops: sums.frameDrops / count,
-      interactionDelay: sums.interactionDelay / count,
-      errorCount: sums.errorCount / count,
-      warningCount: sums.warningCount / count};
+      renderTime: sums.renderTime / count;
+      memoryUsage: sums.memoryUsage / count;
+      networkLatency: sums.networkLatency / count;
+      frameDrops: sums.frameDrops / count;
+      interactionDelay: sums.interactionDelay / count;
+      errorCount: sums.errorCount / count;
+      warningCount: sums.warningCount / count;};
   }
   // 生成优化建议
   private generateOptimizationSuggestions(averages: Partial<PerformanceMetrics>): OptimizationSuggestion[] {
@@ -196,38 +196,38 @@ class PerformanceCollector {
     // 渲染性能建议
     if (averages.renderTime && averages.renderTime > this.config.thresholds.renderTime) {
       suggestions.push({
-      type: "render",
-      severity: averages.renderTime > this.config.thresholds.renderTime * 2 ? 'high' : 'medium',
-        message: `平均渲染时间 ${averages.renderTime.toFixed(2)}ms 超过阈值 ${this.config.thresholds.renderTime}ms`,
-        action: '考虑使用 React.memo、useMemo 或 useCallback 优化组件渲染',
-        impact: '提升用户界面响应速度和流畅度'});
+      type: "render";
+      severity: averages.renderTime > this.config.thresholds.renderTime * 2 ? 'high' : 'medium';
+
+
+
     }
     // 内存使用建议
     if (averages.memoryUsage && averages.memoryUsage > this.config.thresholds.memoryUsage) {
       suggestions.push({
-      type: "memory",
-      severity: averages.memoryUsage > this.config.thresholds.memoryUsage * 2 ? 'critical' : 'high',
-        message: `平均内存使用 ${(averages.memoryUsage / 1024 / 1024).toFixed(2)}MB 超过阈值`,
-        action: '检查内存泄漏，优化图片加载，清理未使用的引用',
-        impact: '减少应用崩溃风险，提升稳定性'});
+      type: "memory";
+      severity: averages.memoryUsage > this.config.thresholds.memoryUsage * 2 ? 'critical' : 'high';
+        message: `平均内存使用 ${(averages.memoryUsage / 1024 / 1024).toFixed(2);}MB 超过阈值`,
+
+
     }
     // 网络延迟建议
     if (averages.networkLatency && averages.networkLatency > this.config.thresholds.networkLatency) {
       suggestions.push({
-      type: "network",
-      severity: 'medium',
-        message: `平均网络延迟 ${averages.networkLatency.toFixed(2)}ms 较高`,
-        action: '实施请求缓存、数据预加载或使用 CDN',
-        impact: '提升数据加载速度和用户体验'});
+      type: "network";
+      severity: 'medium';
+
+
+
     }
     // 交互延迟建议
     if (averages.interactionDelay && averages.interactionDelay > this.config.thresholds.interactionDelay) {
       suggestions.push({
-      type: "interaction",
-      severity: 'medium',
-        message: `平均交互延迟 ${averages.interactionDelay.toFixed(2)}ms 较高`,
-        action: '优化事件处理器，使用防抖或节流技术',
-        impact: '提升用户交互响应速度'});
+      type: "interaction";
+      severity: 'medium';
+
+
+
     }
     return suggestions;
   }
@@ -242,14 +242,14 @@ class PerformanceCollector {
 }
 // 增强的性能监控Hook;
 export const useEnhancedPerformanceMonitor = ();
-  componentName: string,
-  config: Partial<PerformanceMonitorConfig> = {}
+  componentName: string;
+  config: Partial<PerformanceMonitorConfig> = {;}
 ) => {
   const [performanceData, setPerformanceData] = useState<{
-    metrics: PerformanceMetrics[],
-  averages: Partial<PerformanceMetrics>;,
+    metrics: PerformanceMetrics[];
+  averages: Partial<PerformanceMetrics>;
   suggestions: OptimizationSuggestion[];
-  }>({ metrics: [], averages: {}, suggestions: [] });
+  }>({ metrics: [], averages: {;}, suggestions: [] ;});
   const renderStartTime = useRef<number>(0);
   const collector = useRef<PerformanceCollector>();
   const reportTimer = useRef<NodeJS.Timeout>();
@@ -281,7 +281,7 @@ export const useEnhancedPerformanceMonitor = ();
   }, []);
   // 获取性能报告
   const getPerformanceReport = useCallback() => {
-    return collector.current?.getPerformanceReport() || { metrics: [], averages: {}, suggestions: [] };
+    return collector.current?.getPerformanceReport() || { metrics: [], averages: {;}, suggestions: [] ;};
   }, []);
   // 定期更新性能数据
   useEffect() => {
@@ -316,11 +316,11 @@ export const useEnhancedPerformanceMonitor = ();
     recordNetworkRequest,
     recordInteraction,
     getPerformanceReport,
-    clearData: () => collector.current?.clear()};
+    clearData: () => collector.current?.clear();};
 };
 // 性能监控装饰器
 export const withPerformanceMonitoring = <P extends object>();
-  WrappedComponent: React.ComponentType<P>,
+  WrappedComponent: React.ComponentType<P>;
   componentName?: string;
 ) => {
   const MonitoredComponent = (props: P) => {

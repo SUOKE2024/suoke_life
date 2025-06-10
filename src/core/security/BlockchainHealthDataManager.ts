@@ -1,37 +1,5 @@
 import { EventEmitter } from "events";
-import { HealthContext, HealthAssessment } from "../../placeholder";../../types/    health;
-/**
-* * 区块链健康数据管理系统
-* 实现零知识证明、数据隐私保护和去中心化存储
-export class BlockchainHealthDataManager extends EventEmitter {private blockchain: HealthBlockchain;
-  private zkpManager: ZeroKnowledgeProofManager;
-  private encryptionManager: EncryptionManager;
-  private consensusManager: ConsensusManager;
-  private smartContracts: Map<string, SmartContract> = new Map();
-  private dataNodes: Map<string, DataNode> = new Map();
-  private isInitialized: boolean = false;
-  constructor() {
-    super();
-    this.blockchain = new HealthBlockchain();
-    this.zkpManager = new ZeroKnowledgeProofManager();
-    this.encryptionManager = new EncryptionManager();
-    this.consensusManager = new ConsensusManager();
-    this.initializeSystem();
-  }
-  /**
-* * 初始化区块链系统
-  private async initializeSystem(): Promise<void> {
-    try {
-      // 初始化区块链
-await this.blockchain.initialize();
-      // 部署智能合约
-await this.deploySmartContracts();
-      // 初始化数据节点
-await this.initializeDataNodes();
-      // 启动共识机制
-await this.consensusManager.start();
-      this.isInitialized = true;
-      this.emit(initialized");"
+);"
       } catch (error) {
       throw error;
     }
@@ -77,12 +45,12 @@ const nodes = [;
   /**
 * * 存储健康数据
   async storeHealthData()
-    userId: string,
-    healthData: HealthContext,
+    userId: string;
+    healthData: HealthContext;
     permissions: DataPermissions;
   ): Promise<DataStorageResult> {
     if (!this.isInitialized) {
-      throw new Error("区块链系统未初始化");
+
     }
     try {
       // 1. 数据加密
@@ -99,34 +67,34 @@ const blockchainResult = await this.blockchain.addBlock(dataBlock);
 await this.updateAccessControl(userId, dataBlock.hash, permissions);
       // 7. 触发审计日志
 await this.logDataOperation(store", userId, dataBlock.hash);"
-      const result: DataStorageResult = {success: true,
-        dataHash: dataBlock.hash,
-        blockHeight: blockchainResult.blockHeight,
-        storageNodes: storageResult.nodes,
-        zkProofHash: zkProof.hash,
+      const result: DataStorageResult = {success: true;
+        dataHash: dataBlock.hash;
+        blockHeight: blockchainResult.blockHeight;
+        storageNodes: storageResult.nodes;
+        zkProofHash: zkProof.hash;
         timestamp: new Date();
       };
       this.emit("dataStored, result);"
       return result;
     } catch (error) {
-      throw new BlockchainError(数据存储失败", error);"
+
     }
   }
   /**
 * * 检索健康数据
   async retrieveHealthData()
-    userId: string,
-    dataHash: string,
+    userId: string;
+    dataHash: string;
     requesterCredentials: RequesterCredentials;
   ): Promise<HealthContext | null> {
     if (!this.isInitialized) {
-      throw new Error("区块链系统未初始化);"
+
     }
     try {
       // 1. 验证访问权限
 const hasAccess = await this.verifyAccess(userId, dataHash, requesterCredentials);
       if (!hasAccess) {
-        throw new AccessDeniedError("访问权限不足");
+
       }
       // 2. 从区块链获取数据块
 const dataBlock = await this.blockchain.getBlock(dataHash);
@@ -136,7 +104,7 @@ const dataBlock = await this.blockchain.getBlock(dataHash);
       // 3. 验证零知识证明
 const isValidProof = await this.zkpManager.verifyProof(dataBlock.zkProof);
       if (!isValidProof) {
-        throw new ValidationError(零知识证明验证失败");"
+
       }
       // 4. 从分布式存储获取加密数据
 const encryptedData = await this.retrieveFromStorage(dataHash);
@@ -147,7 +115,7 @@ const healthData = await this.encryptionManager.decryptHealthData(;)
       );
       // 6. 记录访问日志
 await this.logDataOperation("retrieve, userId, dataHash, requesterCredentials.requesterId);"
-      this.emit("dataRetrieved", { userId, dataHash, requesterId: requesterCredentials.requesterId });
+      this.emit("dataRetrieved", { userId, dataHash, requesterId: requesterCredentials.requesterId ;});
       return healthData;
     } catch (error) {
       throw error;
@@ -156,17 +124,17 @@ await this.logDataOperation("retrieve, userId, dataHash, requesterCredentials.re
   /**
 * * 共享健康数据
   async shareHealthData()
-    ownerId: string,
-    dataHash: string,
-    recipientId: string,
-    sharingPermissions: SharingPermissions,
+    ownerId: string;
+    dataHash: string;
+    recipientId: string;
+    sharingPermissions: SharingPermissions;
     duration?: number;
   ): Promise<DataSharingResult> {
     try {
       // 1. 验证所有者权限
 const isOwner = await this.verifyOwnership(ownerId, dataHash);
       if (!isOwner) {
-        throw new AccessDeniedError("非数据所有者);"
+
       }
       // 2. 生成共享密钥
 const sharingKey = await this.encryptionManager.generateSharingKey(ownerId, recipientId);
@@ -184,11 +152,11 @@ const contractResult = await this.blockchain.deployContract(sharingContract);
 await this.updateSharingACL(dataHash, recipientId, sharingPermissions);
       // 6. 记录共享操作
 await this.logDataOperation("share", ownerId, dataHash, recipientId);
-      const result: DataSharingResult = {success: true,
-        sharingId: sharingContract.id,
-        contractAddress: contractResult.address,
-        sharingKey: sharingKey,
-        expiresAt: duration ? new Date(Date.now() + duration * 1000) : undefined,
+      const result: DataSharingResult = {success: true;
+        sharingId: sharingContract.id;
+        contractAddress: contractResult.address;
+        sharingKey: sharingKey;
+        expiresAt: duration ? new Date(Date.now() + duration * 1000) : undefined;
         timestamp: new Date();
       };
       this.emit(dataShared", result);"
@@ -200,14 +168,14 @@ await this.logDataOperation("share", ownerId, dataHash, recipientId);
   /**
 * * 撤销数据共享
   async revokeDataSharing()
-    ownerId: string,
+    ownerId: string;
     sharingId: string;
   ): Promise<boolean> {
     try {
       // 1. 验证所有者权限
 const sharingContract = await this.blockchain.getContract(sharingId);
       if (!sharingContract || sharingContract.ownerId !== ownerId) {
-        throw new AccessDeniedError("无权撤销此共享");
+
       }
       // 2. 终止智能合约
 await sharingContract.terminate();
@@ -228,38 +196,38 @@ await this.logDataOperation(revoke", ownerId, sharingContract.dataHash, sharingC
       // 1. 从区块链获取数据块
 const dataBlock = await this.blockchain.getBlock(dataHash);
       if (!dataBlock) {
-        return { isValid: false, reason: 数据块不存在" };"
+
       }
       // 2. 验证区块链完整性
 const blockchainValid = await this.blockchain.verifyChainIntegrity();
       if (!blockchainValid) {
-        return { isValid: false, reason: "区块链完整性验证失败 };"
+
       }
       // 3. 验证数据块哈希
 const computedHash = await this.computeDataHash(dataBlock.data);
       if (computedHash !== dataHash) {
-        return { isValid: false, reason: "数据哈希不匹配" };
+
       }
       // 4. 验证零知识证明
 const zkValid = await this.zkpManager.verifyProof(dataBlock.zkProof);
       if (!zkValid) {
-        return { isValid: false, reason: 零知识证明验证失败" };"
+
       }
       // 5. 验证分布式存储一致性
 const storageValid = await this.verifyStorageConsistency(dataHash);
       if (!storageValid) {
-        return { isValid: false, reason: "分布式存储不一致 };"
+
       }
       return {isValid: true,verificationTime: new Date(),blockHeight: dataBlock.blockHeight,confirmations: await this.blockchain.getConfirmations(dataHash);
       };
     } catch (error) {
-      return { isValid: false, reason: error.message };
+      return { isValid: false, reason: error.message ;};
     }
   }
   /**
 * * 获取数据访问历史
   async getDataAccessHistory()
-    userId: string,
+    userId: string;
     dataHash: string;
   ): Promise<DataAccessRecord[]> {
     try {
@@ -272,7 +240,7 @@ const storageValid = await this.verifyStorageConsistency(dataHash);
   /**
 * * 生成数据使用报告
   async generateDataUsageReport()
-    userId: string,
+    userId: string;
     timeRange: TimeRange;
   ): Promise<DataUsageReport> {
     try {
@@ -280,10 +248,10 @@ const storageValid = await this.verifyStorageConsistency(dataHash);
       const accessRecords = await auditContract.getAccessRecordsByTimeRange(userId, timeRange);
       const report: DataUsageReport = {userId,
         timeRange,
-        totalAccesses: accessRecords.length,
-        uniqueAccessors: new Set(accessRecords.map(r => r.accessorId)).size,
-        dataTypesAccessed: this.analyzeDataTypes(accessRecords),
-        accessPatterns: this.analyzeAccessPatterns(accessRecords),
+        totalAccesses: accessRecords.length;
+        uniqueAccessors: new Set(accessRecords.map(r => r.accessorId)).size;
+        dataTypesAccessed: this.analyzeDataTypes(accessRecords);
+        accessPatterns: this.analyzeAccessPatterns(accessRecords);
         securityEvents: await this.getSecurityEvents(userId, timeRange),
         generatedAt: new Date();
       };
@@ -295,8 +263,8 @@ const storageValid = await this.verifyStorageConsistency(dataHash);
   /**
 * * 创建数据块
   private async createDataBlock()
-    userId: string,
-    encryptedData: EncryptedData,
+    userId: string;
+    encryptedData: EncryptedData;
     zkProof: ZKProof;
   ): Promise<DataBlock> {
     const timestamp = new Date();
@@ -313,11 +281,11 @@ const storageValid = await this.verifyStorageConsistency(dataHash);
     );
     const results = await Promise.allSettled(storagePromises);
     const successfulNodes = results;
-      .map(result, index) => ({ result, node: nodes[index] }))
+      .map(result, index) => ({ result, node: nodes[index] ;}))
       .filter({ result }) => result.status === "fulfilled);"
       .map({ node }) => node.getId());
     if (successfulNodes.length < 2) {
-      throw new StorageError("分布式存储失败，成功节点数量不足");
+
     }
     return {success: true,nodes: successfulNodes,replicationFactor: successfulNodes.length;
     };
@@ -333,16 +301,16 @@ const storageValid = await this.verifyStorageConsistency(dataHash);
           return data;
         }
       } catch (error) {
-        } 检索数据失败:`, error);
+
       }
     }
-    throw new StorageError(无法从任何存储节点检索数据");"
+
   }
   /**
 * * 验证访问权限
   private async verifyAccess()
-    userId: string,
-    dataHash: string,
+    userId: string;
+    dataHash: string;
     credentials: RequesterCredentials;
   ): Promise<boolean> {
     const accessControlContract = this.smartContracts.get("access_control) as AccessControlContract;"
@@ -357,8 +325,8 @@ const storageValid = await this.verifyStorageConsistency(dataHash);
   /**
 * * 更新访问控制
   private async updateAccessControl()
-    userId: string,
-    dataHash: string,
+    userId: string;
+    dataHash: string;
     permissions: DataPermissions;
   ): Promise<void> {
     const accessControlContract = this.smartContracts.get("access_control") as AccessControlContract;
@@ -367,10 +335,10 @@ const storageValid = await this.verifyStorageConsistency(dataHash);
   /**
 * * 创建共享合约
   private async createSharingContract()
-    ownerId: string,
-    recipientId: string,
-    dataHash: string,
-    permissions: SharingPermissions,
+    ownerId: string;
+    recipientId: string;
+    dataHash: string;
+    permissions: SharingPermissions;
     duration?: number;
   ): Promise<SharingContract> {
     return new SharingContract({id: this.generateContractId(),ownerId,recipientId,dataHash,permissions,duration,createdAt: new Date();)
@@ -379,9 +347,9 @@ const storageValid = await this.verifyStorageConsistency(dataHash);
   /**
 * * 记录数据操作
   private async logDataOperation()
-    operation: string,
-    userId: string,
-    dataHash: string,
+    operation: string;
+    userId: string;
+    dataHash: string;
     accessorId?: string;
   ): Promise<void> {
     const auditContract = this.smartContracts.get(audit") as AuditContract;"
@@ -390,8 +358,8 @@ const storageValid = await this.verifyStorageConsistency(dataHash);
       userId,
       dataHash,
       accessorId,
-      timestamp: new Date(),
-      ipAddress: this.getCurrentIPAddress(),
+      timestamp: new Date();
+      ipAddress: this.getCurrentIPAddress();
       userAgent: this.getCurrentUserAgent();
     });
   }
@@ -430,9 +398,9 @@ return "SuokeLife/    1.0";
     const nodes = Array.from(this.dataNodes.values());
     const dataPromises = nodes.map(async node => {})
       try {const data = await node.retrieve(dataHash);
-        return { nodeId: node.getId(), data, hash: await this.computeDataHash(data) };
+        return { nodeId: node.getId(), data, hash: await this.computeDataHash(data) ;};
       } catch (error) {
-        return { nodeId: node.getId(), data: null, hash: null };
+        return { nodeId: node.getId(), data: null, hash: null ;};
       }
     });
     const results = await Promise.all(dataPromises);
@@ -446,7 +414,7 @@ return "SuokeLife/    1.0";
   /**
 * * 分析数据类型
   private analyzeDataTypes(records: DataAccessRecord[]): Record<string, number> {
-    const dataTypes: Record<string, number> = {};
+    const dataTypes: Record<string, number> = {;};
     records.forEach(record => {})
       const type = record.dataType || unknown;
       dataTypes[type] = (dataTypes[type] || 0) + 1;
@@ -468,8 +436,8 @@ return [];
   /**
 * * 更新共享访问控制列表
   private async updateSharingACL()
-    dataHash: string,
-    recipientId: string,
+    dataHash: string;
+    recipientId: string;
     permissions: SharingPermissions;
   ): Promise<void> {
     const accessControlContract = this.smartContracts.get("access_control) as AccessControlContract;"
@@ -504,10 +472,10 @@ return [];
 }
 // 相关接口和类型定义
 export interface DataPermissions {
-  read: boolean;,
-  write: boolean;,
-  share: boolean;,
-  delete: boolean;,
+  read: boolean;
+  write: boolean;
+  share: boolean;
+  delete: boolean;
   audit: boolean;
   timeLimit?: number;
   ipRestrictions?: string[];
@@ -518,25 +486,25 @@ export interface SharingPermissions extends DataPermissions {allowSubsharing: bo
   requiredConsent: boolean;
 }
 export interface RequesterCredentials {
-  requesterId: string;,
-  publicKey: string;,
-  signature: string;,
-  decryptionKey: string;,
-  purpose: string;,
+  requesterId: string;
+  publicKey: string;
+  signature: string;
+  decryptionKey: string;
+  purpose: string;
   timestamp: Date;
 }
 export interface DataStorageResult {
-  success: boolean;,
-  dataHash: string;,
-  blockHeight: number;,
-  storageNodes: string[];,
-  zkProofHash: string;,
+  success: boolean;
+  dataHash: string;
+  blockHeight: number;
+  storageNodes: string[];
+  zkProofHash: string;
   timestamp: Date;
 }
 export interface DataSharingResult {
-  success: boolean;,
-  sharingId: string;,
-  contractAddress: string;,
+  success: boolean;
+  sharingId: string;
+  contractAddress: string;
   sharingKey: string;
   expiresAt?: Date;
   timestamp: Date;
@@ -549,91 +517,91 @@ export interface IntegrityVerificationResult {
   confirmations?: number;
 }
 export interface DataAccessRecord {
-  id: string;,
-  userId: string;,
-  dataHash: string;,
-  accessorId: string;,
-  operation: string;,
-  timestamp: Date;,
-  ipAddress: string;,
+  id: string;
+  userId: string;
+  dataHash: string;
+  accessorId: string;
+  operation: string;
+  timestamp: Date;
+  ipAddress: string;
   userAgent: string;
   dataType?: string;
   success: boolean;
   reason?: string;
 }
 export interface TimeRange {
-  startTime: Date;,
+  startTime: Date;
   endTime: Date;
 }
 export interface DataUsageReport {
-  userId: string;,
-  timeRange: TimeRange;,
-  totalAccesses: number;,
-  uniqueAccessors: number;,
+  userId: string;
+  timeRange: TimeRange;
+  totalAccesses: number;
+  uniqueAccessors: number;
   dataTypesAccessed: Record<string, number>;
-  accessPatterns: AccessPattern[];,
-  securityEvents: SecurityEvent[];,
+  accessPatterns: AccessPattern[];
+  securityEvents: SecurityEvent[];
   generatedAt: Date;
 }
 export interface AccessPattern {
-  pattern: string;,
-  frequency: number;,
+  pattern: string;
+  frequency: number;
   timeDistribution: Record<string, number>;
   riskLevel: low" | "medium | "high";
 }
 export interface SecurityEvent {
-  id: string;,
-  type: string;,
-  severity: low" | "medium | "high" | critical;,
-  description: string;,
-  timestamp: Date;,
+  id: string;
+  type: string;
+  severity: low" | "medium | "high" | critical;
+  description: string;
+  timestamp: Date;
   userId: string;
   dataHash?: string;
   resolved: boolean;
 }
 export interface BlockchainStatus {
-  isInitialized: boolean;,
-  blockHeight: number;,
-  nodeCount: number;,
-  contractCount: number;,
-  consensusStatus: string;,
+  isInitialized: boolean;
+  blockHeight: number;
+  nodeCount: number;
+  contractCount: number;
+  consensusStatus: string;
   lastBlockTime: Date;
 }
 export interface SystemStats {
-  totalDataBlocks: number;,
-  totalUsers: number;,
-  totalSharedData: number;,
-  averageBlockTime: number;,
-  networkHashRate: number;,
+  totalDataBlocks: number;
+  totalUsers: number;
+  totalSharedData: number;
+  averageBlockTime: number;
+  networkHashRate: number;
   storageUtilization: number;
 }
 export interface DataBlock {
-  hash: string;,
-  userId: string;,
-  data: EncryptedData;,
-  zkProof: ZKProof;,
-  timestamp: Date;,
-  blockHeight: number;,
-  previousHash: string;,
+  hash: string;
+  userId: string;
+  data: EncryptedData;
+  zkProof: ZKProof;
+  timestamp: Date;
+  blockHeight: number;
+  previousHash: string;
   nonce: number;
 }
 export interface EncryptedData {
-  ciphertext: string;,
-  iv: string;,
-  authTag: string;,
-  algorithm: string;,
+  ciphertext: string;
+  iv: string;
+  authTag: string;
+  algorithm: string;
   keyId: string;
 }
 export interface ZKProof {
-  hash: string;,
-  proof: string;,
-  publicInputs: string[];,
-  verificationKey: string;,
+  hash: string;
+  proof: string;
+  publicInputs: string[];
+  verificationKey: string;
   circuit: string;
 }
 export interface DistributionResult {
-  success: boolean;,
-  nodes: string[];,
+  success: boolean;
+  nodes: string[];
   replicationFactor: number;
 }
 // 错误类定义
@@ -660,10 +628,10 @@ class HealthBlockchain {
   async initialize(): Promise<void> {
     // 初始化区块链
   }
-  async addBlock(block: DataBlock): Promise<{ blockHeight: number }> {
+  async addBlock(block: DataBlock): Promise<{ blockHeight: number ;}> {
     this.blocks.push(block);
     this.height++;
-    return { blockHeight: this.height };
+    return { blockHeight: this.height ;};
   }
   async getBlock(hash: string): Promise<DataBlock | null> {
     return this.blocks.find(block => block.hash === hash) || null;
@@ -682,8 +650,8 @@ return true;
     const block = this.blocks.find(b => b.hash === hash);
     return block ? this.height - block.blockHeight + 1 : 0;
   }
-  async deployContract(contract: any): Promise<{ address: string }> {
-    return { address: `0x${Math.random().toString(16).substr(2, 40)}` };
+  async deployContract(contract: any): Promise<{ address: string ;}> {
+    return { address: `0x${Math.random().toString(16).substr(2, 40);}` };
   }
   async getContract(id: string): Promise<any> {
     // 获取智能合约
@@ -715,7 +683,7 @@ return 1000000; ///    s;
 class ZeroKnowledgeProofManager {
   async generateProof(data: any, permissions: DataPermissions): Promise<ZKProof> {
     // 生成零知识证明
-return {hash: `zkp_${Math.random().toString(36).substr(2, 16)}`,proof: proof_data",;
+return {hash: `zkp_${Math.random().toString(36).substr(2, 16);}`,proof: proof_data";
       publicInputs: [],verificationKey: "verification_key,",circuit: "health_data_circuit";
     };
   }
@@ -727,18 +695,18 @@ return true;
 class EncryptionManager {
   async encryptHealthData(data: HealthContext): Promise<EncryptedData> {
     // 加密健康数据
-return {ciphertext: encrypted_data",;
-      iv: "initialization_vector,",authTag: "authentication_tag",algorithm: AES-256-GCM",;
+return {ciphertext: encrypted_data";
+      iv: "initialization_vector,",authTag: "authentication_tag",algorithm: AES-256-GCM";
       keyId: "key_id";
     };
   }
   async decryptHealthData(encryptedData: EncryptedData, key: string): Promise<HealthContext> {
     // 解密健康数据
-return {} as HealthContext;
+return {;} as HealthContext;
   }
   async generateSharingKey(ownerId: string, recipientId: string): Promise<string> {
     // 生成共享密钥
-return `sharing_key_${ownerId}_${recipientId}`;
+return `sharing_key_${ownerId;}_${recipientId}`;
   }
 }
 class ConsensusManager {
@@ -751,7 +719,7 @@ class ConsensusManager {
   }
 }
 class DataNode {
-  constructor(private id: string, private type: string) {}
+  constructor(private id: string, private type: string) {;}
   getId(): string {
     return this.id;
   }
@@ -806,13 +774,13 @@ return true;
   }
   async updatePermissions(userId: string, dataHash: string, permissions: DataPermissions): Promise<void> {
     // 更新权限
-  }
+  ;}
   async addSharingPermission(dataHash: string, recipientId: string, permissions: SharingPermissions): Promise<void> {
     // 添加共享权限
-  }
+  ;}
   async removeSharingPermission(dataHash: string, recipientId: string): Promise<void> {
     // 移除共享权限
-  }
+  ;}
 }
 class DataSharingContract extends SmartContract {
   constructor() {
@@ -843,18 +811,18 @@ return null;
   }
   async logOperation(record: Omit<DataAccessRecord, id" | 'success'>): Promise<void> {"
     const fullRecord: DataAccessRecord = {...record,
-      id: `record_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `record_${Date.now();}_${Math.random().toString(36).substr(2, 9)}`,
       success: true;
     };
     this.accessRecords.push(fullRecord);
   }
   async getAccessHistory(userId: string, dataHash: string): Promise<DataAccessRecord[]> {
-    return this.accessRecords.filter(record => {};)
+    return this.accessRecords.filter(record => {;};)
       record.userId === userId && record.dataHash === dataHash;
     );
   }
   async getAccessRecordsByTimeRange(userId: string, timeRange: TimeRange): Promise<DataAccessRecord[]> {
-    return this.accessRecords.filter(record => {};)
+    return this.accessRecords.filter(record => {;};)
       record.userId === userId &&;
       record.timestamp >= timeRange.startTime &&;
       record.timestamp <= timeRange.endTime;
@@ -871,10 +839,10 @@ class SharingContract {
   public createdAt: Date;
   private terminated: boolean = false;
   constructor(params: {),
-  id: string;,
-  ownerId: string,
-  recipientId: string;,
-  dataHash: string,
+  id: string;
+  ownerId: string;
+  recipientId: string;
+  dataHash: string;
   permissions: SharingPermissions;
     duration?: number;
     createdAt: Date;

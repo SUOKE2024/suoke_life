@@ -30,8 +30,8 @@ import { KnowledgeQuery, KnowledgeResult } from '../../services/medKnowledgeServ
   clearError;
 } from '../../store/slices/medKnowledgeSlice';
 interface TabItem {
-  key: string;,
-  title: string;,
+  key: string;
+  title: string;
   icon: string;
 }
 export const MedKnowledgeScreen: React.FC = () => {
@@ -45,23 +45,23 @@ export const MedKnowledgeScreen: React.FC = () => {
   const [refreshing, setRefreshing] = useState(false);
   const tabs: TabItem[] = [
     {
-      key: "constitution",
-      title: '体质', icon: '🧘' },
+      key: "constitution";
+
     {
-      key: "symptom",
-      title: '症状', icon: '🩺' },
+      key: "symptom";
+
     {
-      key: "acupoint",
-      title: '穴位', icon: '📍' },
+      key: "acupoint";
+
     {
-      key: "herb",
-      title: '中药', icon: '🌿' },
+      key: "herb";
+
     {
-      key: "syndrome",
-      title: '证型', icon: '📋' },
+      key: "syndrome";
+
     {
-      key: "search",
-      title: '搜索', icon: '🔍' }
+      key: "search";
+
   ];
   // 初始化数据加载
   useEffect() => {
@@ -101,7 +101,7 @@ export const MedKnowledgeScreen: React.FC = () => {
       // 切换到搜索结果标签
       setActiveTab('search');
     } catch (error) {
-      Alert.alert('搜索失败', error as string);
+
     }
   }, [dispatch]);
   const handleConstitutionPress = useCallback(constitution: any) => {// 导航到体质详情页面;
@@ -130,7 +130,7 @@ export const MedKnowledgeScreen: React.FC = () => {
         <View style={styles.serviceStatusContainer}>;
           <View style={styles.serviceStatusBanner}>;
             <Text style={styles.serviceStatusText}>;
-              ⚠️ 医疗知识服务暂时不可用，部分功能可能受限;
+
             </Text>;
           </View>;
         </View>;
@@ -182,7 +182,7 @@ export const MedKnowledgeScreen: React.FC = () => {
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>中医体质类型</Text>
           <Text style={styles.sectionSubtitle}>
-            了解您的体质特点，获得个性化健康建议
+
           </Text>
         </View>;
         {constitutions.map(constitution) => (;)
@@ -230,7 +230,7 @@ export const MedKnowledgeScreen: React.FC = () => {
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>搜索结果</Text>
           {searchResults.length > 0  && <Text style={styles.sectionSubtitle}>
-              找到 {searchResults.length} 条相关信息
+
             </Text>
           )}
         </View>
@@ -274,7 +274,7 @@ export const MedKnowledgeScreen: React.FC = () => {
       <KnowledgeSearchBar;
         onSearch={handleSearch}
         loading={loading.search}
-        placeholder="搜索中医知识、症状、治疗方法..."
+
       />
       {// 标签栏}
       <View style={styles.tabBar}>
@@ -312,58 +312,58 @@ export const MedKnowledgeScreen: React.FC = () => {
 };
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
+  flex: 1;
     backgroundColor: '#F8F9FA'
-  },
+  ;},
   serviceStatusContainer: {,
-  backgroundColor: '#FFF3CD',
-    paddingHorizontal: 16,
+  backgroundColor: '#FFF3CD';
+    paddingHorizontal: 16;
     paddingVertical: 8;
   },
   serviceStatusBanner: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
     alignItems: 'center'
-  },
+  ;},
   serviceStatusText: {,
-  fontSize: 14,
-    color: '#856404',
+  fontSize: 14;
+    color: '#856404';
     flex: 1;
   },
   tabBar: {,
-  backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
+  backgroundColor: '#FFFFFF';
+    borderBottomWidth: 1;
     borderBottomColor: '#E0E0E0'
-  },
+  ;},
   tabList: {,
-  flexDirection: 'row',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+  flexDirection: 'row';
+    paddingHorizontal: 16;
+    paddingVertical: 12;
     gap: 8;
   },
   tab: {,
-  flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-    backgroundColor: '#F5F5F5',
+  flexDirection: 'row';
+    alignItems: 'center';
+    paddingHorizontal: 16;
+    paddingVertical: 8;
+    borderRadius: 20;
+    backgroundColor: '#F5F5F5';
     marginRight: 8;
   },
   activeTab: {,
   backgroundColor: '#007AFF'
-  },
+  ;},
   tabIcon: {,
-  fontSize: 16,
+  fontSize: 16;
     marginRight: 6;
   },
   tabText: {,
-  fontSize: 14,
-    color: '#666666',
+  fontSize: 14;
+    color: '#666666';
     fontWeight: '500'
-  },
+  ;},
   activeTabText: {,
   color: '#FFFFFF'
-  },
+  ;},
   content: {,
   flex: 1;
   },
@@ -371,98 +371,98 @@ const styles = StyleSheet.create({
   flex: 1;
   },
   sectionHeader: {,
-  paddingHorizontal: 16,
-    paddingVertical: 16,
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
+  paddingHorizontal: 16;
+    paddingVertical: 16;
+    backgroundColor: '#FFFFFF';
+    borderBottomWidth: 1;
     borderBottomColor: '#F0F0F0'
-  },
+  ;},
   sectionTitle: {,
-  fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333333',
+  fontSize: 20;
+    fontWeight: 'bold';
+    color: '#333333';
     marginBottom: 4;
   },
   sectionSubtitle: {,
-  fontSize: 14,
+  fontSize: 14;
     color: '#666666'
-  },
+  ;},
   loadingContainer: {,
-  flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  flex: 1;
+    justifyContent: 'center';
+    alignItems: 'center';
     paddingVertical: 40;
   },
   loadingText: {,
-  fontSize: 16,
+  fontSize: 16;
     color: '#666666'
-  },
+  ;},
   errorContainer: {,
-  flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 40,
+  flex: 1;
+    justifyContent: 'center';
+    alignItems: 'center';
+    paddingVertical: 40;
     paddingHorizontal: 32;
   },
   errorText: {,
-  fontSize: 16,
-    color: '#F44336',
-    textAlign: 'center',
+  fontSize: 16;
+    color: '#F44336';
+    textAlign: 'center';
     marginBottom: 16;
   },
   retryButton: {,
-  backgroundColor: '#007AFF',
-    paddingHorizontal: 24,
-    paddingVertical: 12,
+  backgroundColor: '#007AFF';
+    paddingHorizontal: 24;
+    paddingVertical: 12;
     borderRadius: 8;
   },
   retryButtonText: {,
-  color: '#FFFFFF',
-    fontSize: 16,
+  color: '#FFFFFF';
+    fontSize: 16;
     fontWeight: '600'
-  },
+  ;},
   emptyContainer: {,
-  flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  flex: 1;
+    justifyContent: 'center';
+    alignItems: 'center';
     paddingVertical: 40;
   },
   emptyText: {,
-  fontSize: 16,
-    color: '#999999',
+  fontSize: 16;
+    color: '#999999';
     textAlign: 'center'
-  },
+  ;},
   comingSoonText: {,
-  fontSize: 16,
-    color: '#999999',
-    textAlign: 'center',
+  fontSize: 16;
+    color: '#999999';
+    textAlign: 'center';
     marginTop: 40;
   },
   searchResultCard: {,
-  backgroundColor: '#FFFFFF',
-    marginHorizontal: 16,
-    marginVertical: 8,
-    padding: 16,
-    borderRadius: 12,
-    shadowColor: '#000',
+  backgroundColor: '#FFFFFF';
+    marginHorizontal: 16;
+    marginVertical: 8;
+    padding: 16;
+    borderRadius: 12;
+    shadowColor: '#000';
     shadowOffset: {,
-  width: 0,
+  width: 0;
       height: 2;
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
+    shadowOpacity: 0.1;
+    shadowRadius: 3.84;
     elevation: 5;
   },
   searchResultTitle: {,
-  fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333333',
+  fontSize: 16;
+    fontWeight: 'bold';
+    color: '#333333';
     marginBottom: 8;
   },
   searchResultContent: {,
-  fontSize: 14,
-    color: '#666666',
-    lineHeight: 20,
+  fontSize: 14;
+    color: '#666666';
+    lineHeight: 20;
     marginBottom: 12;
   },
   searchResultMeta: {,

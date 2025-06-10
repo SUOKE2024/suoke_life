@@ -1,6 +1,4 @@
-import { CacheManager, cacheManager, setCache, getCache, deleteCache, clearCache, getCacheStats, getCacheDetailedStats } from "../cacheManager";
-import { CacheManager, cacheManager, setCache, getCache, deleteCache, clearCache, getCacheStats, getCacheDetailedStats } from "../cacheManager";
-import React from "react";
+
 describe("cacheManager", () => {
   beforeEach(() => {
     jest.clearAllMocks();

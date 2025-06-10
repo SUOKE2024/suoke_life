@@ -38,7 +38,7 @@ interface AudioData {
 // 无障碍服务配置
 const ACCESSIBILITY_API_CONFIG = {
   baseUrl: 'http://localhost:8000', // 无障碍服务地址
-  timeout: 30000,
+  timeout: 30000;
 };
 
 // 无障碍服务响应类型
@@ -138,10 +138,10 @@ export class AccessibilityServiceClient {
 
   // 处理语音输入，支持语音识别和语音辅助
   async processVoiceInput(
-    audioData: AudioData,
-    userId: string,
-    context: string = 'diagnosis',
-    language: string = 'zh-CN',
+    audioData: AudioData;
+    userId: string;
+    context: string = 'diagnosis';
+    language: string = 'zh-CN';
     dialect: string = 'standard'
   ): Promise<VoiceAssistanceResponse> {
     try {
@@ -163,41 +163,41 @@ export class AccessibilityServiceClient {
       const response = await fetch(
         `${this.baseUrl}/api/v1/accessibility/voice-assistance`,
         {
-          method: 'POST',
-          body: formData,
-          headers: { Accept: 'application/json' },
+          method: 'POST';
+          body: formData;
+          headers: { Accept: 'application/json' ;},
         }
       );
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP error! status: ${response.status;}`);
       }
 
       const result = await response.json();
       return {
-        recognized_text: result.recognized_text || '',
-        response_text: result.response_text || '',
-        response_audio: result.response_audio || '',
-        confidence: result.confidence || 0.0,
-        success: true,
+        recognized_text: result.recognized_text || '';
+        response_text: result.response_text || '';
+        response_audio: result.response_audio || '';
+        confidence: result.confidence || 0.0;
+        success: true;
       };
     } catch (error) {
       return {
-        recognized_text: '',
-        response_text: `语音处理失败: ${(error as Error).message}`,
-        response_audio: '',
-        confidence: 0.0,
-        success: false,
-        error: (error as Error).message,
+        recognized_text: '';
+
+        response_audio: '';
+        confidence: 0.0;
+        success: false;
+        error: (error as Error).message;
       };
     }
   }
 
   // 处理图像输入，支持图像识别和描述
   async processImageInput(
-    imageData: ImageData,
-    userId: string,
-    imageType: string = 'tongue',
+    imageData: ImageData;
+    userId: string;
+    imageType: string = 'tongue';
     context: string = 'looking_diagnosis'
   ): Promise<ImageAssistanceResponse> {
     try {
@@ -217,51 +217,51 @@ export class AccessibilityServiceClient {
       formData.append(
         'preferences',
         JSON.stringify({
-          language: 'zh-CN',
-          detail_level: 'high',
-          medical_context: true,
+          language: 'zh-CN';
+          detail_level: 'high';
+          medical_context: true;
         })
       );
 
       const response = await fetch(
         `${this.baseUrl}/api/v1/accessibility/image-assistance`,
         {
-          method: 'POST',
-          body: formData,
-          headers: { Accept: 'application/json' },
+          method: 'POST';
+          body: formData;
+          headers: { Accept: 'application/json' ;},
         }
       );
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP error! status: ${response.status;}`);
       }
 
       const result = await response.json();
       return {
-        scene_description: result.scene_description || '',
-        medical_features: result.medical_features || [],
-        navigation_guidance: result.navigation_guidance || '',
-        confidence: result.confidence || 0.0,
-        audio_guidance: result.audio_guidance || '',
-        success: true,
+        scene_description: result.scene_description || '';
+        medical_features: result.medical_features || [];
+        navigation_guidance: result.navigation_guidance || '';
+        confidence: result.confidence || 0.0;
+        audio_guidance: result.audio_guidance || '';
+        success: true;
       };
     } catch (error) {
       return {
-        scene_description: `图像处理失败: ${(error as Error).message}`,
-        medical_features: [],
-        navigation_guidance: '',
-        confidence: 0.0,
-        audio_guidance: '',
-        success: false,
-        error: (error as Error).message,
+
+        medical_features: [];
+        navigation_guidance: '';
+        confidence: 0.0;
+        audio_guidance: '';
+        success: false;
+        error: (error as Error).message;
       };
     }
   }
 
   // 处理手语输入，支持手语识别
   async processSignLanguageInput(
-    videoData: Blob,
-    userId: string,
+    videoData: Blob;
+    userId: string;
     language: string = 'csl'
   ): Promise<SignLanguageResponse> {
     try {
@@ -273,135 +273,135 @@ export class AccessibilityServiceClient {
       const response = await fetch(
         `${this.baseUrl}/api/v1/accessibility/sign-language`,
         {
-          method: 'POST',
-          body: formData,
-          headers: { Accept: 'application/json' },
+          method: 'POST';
+          body: formData;
+          headers: { Accept: 'application/json' ;},
         }
       );
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP error! status: ${response.status;}`);
       }
 
       const result = await response.json();
       return {
-        recognized_text: result.recognized_text || '',
-        confidence: result.confidence || 0.0,
-        segments: result.segments || [],
-        success: true,
+        recognized_text: result.recognized_text || '';
+        confidence: result.confidence || 0.0;
+        segments: result.segments || [];
+        success: true;
       };
     } catch (error) {
       return {
-        recognized_text: `手语处理失败: ${(error as Error).message}`,
-        confidence: 0.0,
-        segments: [],
-        success: false,
-        error: (error as Error).message,
+
+        confidence: 0.0;
+        segments: [];
+        success: false;
+        error: (error as Error).message;
       };
     }
   }
 
   // 生成无障碍健康内容
   async generateAccessibleHealthContent(
-    content: string,
-    userId: string,
-    contentType: string = 'diagnosis_result',
+    content: string;
+    userId: string;
+    contentType: string = 'diagnosis_result';
     targetFormat: string = 'audio'
   ): Promise<AccessibleContentResponse> {
     try {
       const response = await fetch(
-        `${this.baseUrl}/api/v1/accessibility/accessible-content`,
+        `${this.baseUrl;}/api/v1/accessibility/accessible-content`,
         {
-          method: 'POST',
+          method: 'POST';
           headers: {
             'Content-Type': 'application/json',
-            Accept: 'application/json',
+            Accept: 'application/json';
           },
           body: JSON.stringify({
             content,
-            user_id: userId,
-            content_type: contentType,
-            target_format: targetFormat,
+            user_id: userId;
+            content_type: contentType;
+            target_format: targetFormat;
             preferences: {
-              language: 'zh-CN',
-              voice_type: 'female',
-              speech_rate: 1.0,
-              high_contrast: false,
+              language: 'zh-CN';
+              voice_type: 'female';
+              speech_rate: 1.0;
+              high_contrast: false;
             },
           }),
         }
       );
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP error! status: ${response.status;}`);
       }
 
       const result = await response.json();
       return {
-        accessible_content: result.accessible_content || '',
-        content_url: result.content_url || '',
-        audio_content: result.audio_content || '',
-        tactile_content: result.tactile_content || '',
-        success: true,
+        accessible_content: result.accessible_content || '';
+        content_url: result.content_url || '';
+        audio_content: result.audio_content || '';
+        tactile_content: result.tactile_content || '';
+        success: true;
       };
     } catch (error) {
       return {
-        accessible_content: `内容生成失败: ${(error as Error).message}`,
-        content_url: '',
-        audio_content: '',
-        tactile_content: '',
-        success: false,
-        error: (error as Error).message,
+
+        content_url: '';
+        audio_content: '';
+        tactile_content: '';
+        success: false;
+        error: (error as Error).message;
       };
     }
   }
 
   // 屏幕阅读功能
   async performScreenReading(
-    screenData: string,
-    userId: string,
+    screenData: string;
+    userId: string;
     readingMode: string = 'full'
   ): Promise<ScreenReadingResponse> {
     try {
       const response = await fetch(
-        `${this.baseUrl}/api/v1/accessibility/screen-reading`,
+        `${this.baseUrl;}/api/v1/accessibility/screen-reading`,
         {
-          method: 'POST',
+          method: 'POST';
           headers: {
             'Content-Type': 'application/json',
-            Accept: 'application/json',
+            Accept: 'application/json';
           },
           body: JSON.stringify({
-            screen_data: screenData,
-            user_id: userId,
-            reading_mode: readingMode,
+            screen_data: screenData;
+            user_id: userId;
+            reading_mode: readingMode;
             preferences: {
-              language: 'zh-CN',
-              voice_type: 'female',
-              speech_rate: 1.0,
+              language: 'zh-CN';
+              voice_type: 'female';
+              speech_rate: 1.0;
             },
           }),
         }
       );
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP error! status: ${response.status;}`);
       }
 
       const result = await response.json();
       return {
-        screen_description: result.screen_description || '',
-        ui_elements: result.ui_elements || [],
-        audio_description: result.audio_description || '',
-        success: true,
+        screen_description: result.screen_description || '';
+        ui_elements: result.ui_elements || [];
+        audio_description: result.audio_description || '';
+        success: true;
       };
     } catch (error) {
       return {
-        screen_description: `屏幕阅读失败: ${(error as Error).message}`,
-        ui_elements: [],
-        audio_description: '',
-        success: false,
-        error: (error as Error).message,
+
+        ui_elements: [];
+        audio_description: '';
+        success: false;
+        error: (error as Error).message;
       };
     }
   }
@@ -412,80 +412,80 @@ export class AccessibilityServiceClient {
   ): Promise<AccessibilitySettingsResponse> {
     try {
       const response = await fetch(
-        `${this.baseUrl}/api/v1/accessibility/settings/${userId}`,
+        `${this.baseUrl;}/api/v1/accessibility/settings/${userId}`,
         {
-          method: 'GET',
-          headers: { Accept: 'application/json' },
+          method: 'GET';
+          headers: { Accept: 'application/json' ;},
         }
       );
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP error! status: ${response.status;}`);
       }
 
       const result = await response.json();
       return {
-        current_preferences: result.current_preferences || {},
-        success: true,
-        message: '设置获取成功',
+        current_preferences: result.current_preferences || {;},
+        success: true;
+
       };
     } catch (error) {
       return {
         current_preferences: {
-          language: 'zh-CN',
-          voice_type: 'female',
-          speech_rate: 1.0,
-          high_contrast: false,
-          screen_reader: false,
-          font_size: 'medium',
+          language: 'zh-CN';
+          voice_type: 'female';
+          speech_rate: 1.0;
+          high_contrast: false;
+          screen_reader: false;
+          font_size: 'medium';
         },
-        success: false,
-        message: `设置获取失败: ${(error as Error).message}`,
-        error: (error as Error).message,
+        success: false;
+
+        error: (error as Error).message;
       };
     }
   }
 
   async updateAccessibilitySettings(
-    userId: string,
+    userId: string;
     settings: Record<string, unknown>
   ): Promise<AccessibilitySettingsResponse> {
     try {
       const response = await fetch(
-        `${this.baseUrl}/api/v1/accessibility/settings/${userId}`,
+        `${this.baseUrl;}/api/v1/accessibility/settings/${userId}`,
         {
-          method: 'PUT',
+          method: 'PUT';
           headers: {
             'Content-Type': 'application/json',
-            Accept: 'application/json',
+            Accept: 'application/json';
           },
-          body: JSON.stringify({ settings }),
+          body: JSON.stringify({ settings ;}),
         }
       );
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP error! status: ${response.status;}`);
       }
 
       const result = await response.json();
       return {
-        current_preferences: result.current_preferences || settings,
-        success: true,
-        message: '设置更新成功',
+        current_preferences: result.current_preferences || settings;
+        success: true;
+
       };
     } catch (error) {
       return {
         current_preferences: {
-          language: 'zh-CN',
-          voice_type: 'female',
-          speech_rate: 1.0,
-          high_contrast: false,
-          screen_reader: false,
-          font_size: 'medium',
+          language: 'zh-CN';
+          voice_type: 'female';
+          speech_rate: 1.0;
+          high_contrast: false;
+          screen_reader: false;
+          font_size: 'medium';
         },
-        success: false,
-        message: `设置更新失败: ${(error as Error).message}`,
-        error: (error as Error).message,
+        success: false;
+
+        error: (error as Error).message;
       };
     }
   }

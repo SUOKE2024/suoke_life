@@ -1,6 +1,4 @@
-import { apiClient } from "../apiClient";
-import { apiClient } from "../apiClient";
-import React from "react";
+
 describe("apiClient", () => {
   beforeEach(() => {
     jest.clearAllMocks();

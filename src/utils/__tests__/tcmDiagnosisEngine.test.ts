@@ -1,5 +1,4 @@
 import { TCMDiagnosisEngine, tcmDiagnosisEngine } from "../tcmDiagnosisEngine";
-import { TCMDiagnosisEngine, tcmDiagnosisEngine } from "../tcmDiagnosisEngine";
 describe("tcmDiagnosisEngine", () => {
   beforeEach(() => {
     jest.clearAllMocks();

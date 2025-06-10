@@ -1,4 +1,4 @@
-import { useTheme } from "../contexts/ThemeContext/import { useAccessibility  } from ;../contexts/AccessibilityContext";/import { responsive } from ../utils/responsive"/importText from "../components/ui/Text/importButton  from ";../components/ui/Button";/import ThemeToggle from ../components/ui/ThemeToggle"/const AccessibilityPanel = React.lazy() => import('../components/ui/AccessibilityPanel/import Modal from ;../components/ui/    Modal;))
+/importText from "../components/ui/Text/importButton  from ";../components/ui/Button";/import ThemeToggle from ../components/ui/ThemeToggle"/const AccessibilityPanel = React.lazy() => import('../components/ui/AccessibilityPanel/import Modal from ;../components/ui/    Modal;))
 import { usePerformanceMonitor } from '))../hooks/usePerformanceMonitor/      View,";
 /
 // 索克生活 - UI组件演示页面   展示所有新的UI组件和功能
@@ -7,16 +7,16 @@ import React, {   useState   } from "react;"
   StyleSheet,
   SafeAreaView,
   { Alert } from ";react-native";
-export const UIDemo: React.FC  = () => {}
+export const UIDemo: React.FC  = () => {;}
   const performanceMonitor = usePerformanceMonitor(UIDemo", { ";)
-    trackRender: true,trackMemory: false,warnThreshold: 100};);
+    trackRender: true,trackMemory: false,warnThreshold: 100;};);
   const { theme, isDark   } = useTheme;
   const { announceForAccessibility   } = useAccessibility;
   const [showAccessibilityPanel, setShowAccessibilityPanel] = useState<boolean>(fals;e;);
   const handleButtonPress = useCallback() => {;
     //;
-    Alert.alert("按钮点击, `您点击了${buttonType}按钮`)";
-    announceForAccessibility(`${buttonType}按钮已被点击`);
+
+
   };
   performanceMonitor.recordRender();
   return (;)
@@ -30,7 +30,7 @@ export const UIDemo: React.FC  = () => {}
           </Text>/          <Text variant="body2" color="onSurfaceVariant" style={styles.sectionDescription}>/                支持浅色和暗黑模式，融入中医特色色彩
           </Text>/
           <View style={styles.themeDemo}>/            <ThemeToggle size="large" />/
-            <View style={styles.colorPalette}>/              <Text variant="h6" style={styles.paletteTitle}>中医五行色彩</Text>/              <View style={styles.colorRow}>/                <View style={[styles.colorSwatch, { backgroundColor: theme.colors.tcm.wood}}]} />/                  <Text variant="caption" color="onPrimary" />木</Text>/                </View>/                <View style={[styles.colorSwatch, { backgroundColor: theme.colors.tcm.fire}}]} />/                  <Text variant="caption" color="onPrimary" />火</Text>/                </View>/                <View style={[styles.colorSwatch, { backgroundColor: theme.colors.tcm.earth}}]} />/                  <Text variant="caption" color="onPrimary" />土</Text>/                </View>/                <View style={[styles.colorSwatch, { backgroundColor: theme.colors.tcm.metal}}]} />/                  <Text variant="caption" color="onPrimary" />金</Text>/                </View>/                <View style={[styles.colorSwatch, { backgroundColor: theme.colors.tcm.water}}]} />/                  <Text variant="caption" color="onPrimary" />水</Text>/                </View>/              </View>/            </View>/          </View>/        </View>/
+            <View style={styles.colorPalette}>/              <Text variant="h6" style={styles.paletteTitle}>中医五行色彩</Text>/              <View style={styles.colorRow}>/                <View style={[styles.colorSwatch, { backgroundColor: theme.colors.tcm.wood;}}]} />/                  <Text variant="caption" color="onPrimary" />木</Text>/                </View>/                <View style={[styles.colorSwatch, { backgroundColor: theme.colors.tcm.fire;}}]} />/                  <Text variant="caption" color="onPrimary" />火</Text>/                </View>/                <View style={[styles.colorSwatch, { backgroundColor: theme.colors.tcm.earth;}}]} />/                  <Text variant="caption" color="onPrimary" />土</Text>/                </View>/                <View style={[styles.colorSwatch, { backgroundColor: theme.colors.tcm.metal;}}]} />/                  <Text variant="caption" color="onPrimary" />金</Text>/                </View>/                <View style={[styles.colorSwatch, { backgroundColor: theme.colors.tcm.water;}}]} />/                  <Text variant="caption" color="onPrimary" />水</Text>/                </View>/              </View>/            </View>/          </View>/        </View>/
         {///                文本组件
           </Text>/          <Text variant="body2" color="onSurfaceVariant" style={styles.sectionDescription}>/                支持多种变体、响应式字体和无障碍功能
           </Text>/
@@ -41,58 +41,58 @@ export const UIDemo: React.FC  = () => {}
           </Text>/          <Text variant="body2" color="onSurfaceVariant" style={styles.sectionDescription}>/                支持多种变体、尺寸、动画效果和无障碍功能
           </Text>/
           <View style={styles.buttonDemo}>/            {///                  <Button;
-title="主要按钮"
+
                 variant="primary"
                 onPress={() = accessibilityLabel="操作按钮" /> handleButtonPress("主要)}/              />/                  <Button"
-title="次要按钮"
+
                 variant="secondary"
                 onPress={() = accessibilityLabel="操作按钮" /> handleButtonPress("次要")}/              />/            </View>/
             <View style={styles.buttonRow}>/                  <Button;
-title="轮廓按钮"
+
                 variant="outline"
                 onPress={() = accessibilityLabel="操作按钮" /> handleButtonPress(轮廓")}/              />/                  <Button"
-title="幽灵按钮"
+
                 variant="ghost"
                 onPress={() = accessibilityLabel="操作按钮" /> handleButtonPress("幽灵)}/              />/            </View>/    "
             <View style={styles.buttonRow}>/                  <Button;
-title="危险按钮"
+
                 variant="danger"
                 onPress={() = accessibilityLabel="操作按钮" /> handleButtonPress("危险")}/              />/                  <Button;
-title="成功按钮"
+
                 variant="success"
                 onPress={() = accessibilityLabel="操作按钮" /> handleButtonPress(成功")}/              />/            </View>/    "
             {///                  <Button;
-title="小按钮"
+
                 size="small"
                 onPress={() = accessibilityLabel="操作按钮" /> handleButtonPress("小)}/              />/                  <Button"
-title="中等按钮"
+
                 size="medium"
                 onPress={() = accessibilityLabel="操作按钮" /> handleButtonPress("中等")}/              />/                  <Button;
-title="大按钮"
+
                 size="large"
                 onPress={() = accessibilityLabel="操作按钮" /> handleButtonPress(大")}/              />/                  <Button"
-title="超大按钮"
+
                 size="xlarge"
                 onPress={() = accessibilityLabel="操作按钮" /> handleButtonPress("超大)}/              />/            </View>/    "
             {///                  <Button;
-title="加载中"
+
                 loading={true}
                 onPress={() = accessibilityLabel="操作按钮" /> handleButtonPress("加载")}/              />/                  <Button;
-title="禁用按钮"
+
                 disabled={true}
                 onPress={() = accessibilityLabel="操作按钮" /> handleButtonPress(禁用")}/              />/            </View>/    "
             {///                  <Button;
-title="缩放动画"
+
                 animationType="scale"
                 onPress={() = accessibilityLabel="操作按钮" /> handleButtonPress("缩放)}/              />/                  <Button"
-title="弹跳动画"
+
                 animationType="bounce"
                 onPress={() = accessibilityLabel="操作按钮" /> handleButtonPress("弹跳")}/              />/            </View>/          </View>/        </View>/
         {///                无障碍功能
           </Text>/          <Text variant="body2" color="onSurfaceVariant" style={styles.sectionDescription}>/                完整的无障碍支持，包括屏幕阅读器、高对比度、大字体等
           </Text>/
           <Button;
-title="打开无障碍设置"
+
             variant="outline"
             onPress={() = accessibilityLabel="操作按钮" /> setShowAccessibilityPanel(true)}/                accessibilityHint="打开无障碍功能配置面板"
           />/        </View>/
@@ -116,54 +116,54 @@ visible={showAccessibilityPanel}
 onClose={() = /> setShowAccessibilityPanel(false)}/        />/      </Modal>/    </SafeAreaView>/      );
 };
 const styles = StyleSheet.create({ container: {flex;: ;1  },)
-  scrollView: { flex: 1  },
+  scrollView: { flex: 1  ;},
   content: {,
-  padding: responsive.width(16),
-    gap: responsive.height(24)},
+  padding: responsive.width(16);
+    gap: responsive.height(24);},
   section: {,
-  padding: responsive.width(20),
-    borderRadius: responsive.width(12),
+  padding: responsive.width(20);
+    borderRadius: responsive.width(12);
     ...{
-      shadowOffset: { width: 0, height: 2},
-      shadowOpacity: 0.1,
-      shadowRadius: 4,
+      shadowOffset: { width: 0, height: 2;},
+      shadowOpacity: 0.1;
+      shadowRadius: 4;
       elevation: 3;
     }
   },
-  title: { marginBottom: responsive.height(8)  },
-  sectionTitle: { marginBottom: responsive.height(8)  },
-  sectionDescription: { marginBottom: responsive.height(16)  },
-  themeDemo: { gap: responsive.height(16)  },
-  colorPalette: { alignItems: center"  },"
-  paletteTitle: { marginBottom: responsive.height(12)  },
+  title: { marginBottom: responsive.height(8)  ;},
+  sectionTitle: { marginBottom: responsive.height(8)  ;},
+  sectionDescription: { marginBottom: responsive.height(16)  ;},
+  themeDemo: { gap: responsive.height(16)  ;},
+  colorPalette: { alignItems: center"  ;},"
+  paletteTitle: { marginBottom: responsive.height(12)  ;},
   colorRow: {,
   flexDirection: "row,",
-    gap: responsive.width(12)},
+    gap: responsive.width(12);},
   colorSwatch: {,
-  width: responsive.width(50),
-    height: responsive.height(50),
-    borderRadius: responsive.width(8),
-    justifyContent: "center",
+  width: responsive.width(50);
+    height: responsive.height(50);
+    borderRadius: responsive.width(8);
+    justifyContent: "center";
     alignItems: center""
-  },
-  textDemo: { gap: responsive.height(12)  },
-  buttonDemo: { gap: responsive.height(20)  },
-  demoSubtitle: { marginBottom: responsive.height(12)  },
+  ;},
+  textDemo: { gap: responsive.height(12)  ;},
+  buttonDemo: { gap: responsive.height(20)  ;},
+  demoSubtitle: { marginBottom: responsive.height(12)  ;},
   buttonRow: {,
   flexDirection: "row,",
-    gap: responsive.width(12),
+    gap: responsive.width(12);
     flexWrap: "wrap"
-  },
-  buttonColumn: { gap: responsive.height(12)  },
-  responsiveDemo: { gap: responsive.height(8)  },
-  tcmDemo: { gap: responsive.height(16)  },
-  tcmText: { lineHeight: responsive.fontSize(24)  },
+  ;},
+  buttonColumn: { gap: responsive.height(12)  ;},
+  responsiveDemo: { gap: responsive.height(8)  ;},
+  tcmDemo: { gap: responsive.height(16)  ;},
+  tcmText: { lineHeight: responsive.fontSize(24)  ;},
   tcmFeatures: {,
-  flexDirection: row",
+  flexDirection: row";
     justifyContent: "space-around,",
-    marginTop: responsive.height(16)},
+    marginTop: responsive.height(16);},
   tcmFeature: {,
   alignItems: "center",'
-    gap: responsive.height(4)}
+    gap: responsive.height(4);}
 });
 export default React.memo(UIDemo);

@@ -1,9 +1,8 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react-native";
-import { configureStore } from "@reduxjs/toolkit";
+
 import React from "react";
 // Mock store for testing
 const mockStore = configureStore({ reducer: {// Add your reducers here)
-    });};);
+    ;});};);
 const renderWithProvider = (component: React.ReactElement) => {return render(;)
     <Provider store={mockStore} />;
       {component});

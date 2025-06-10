@@ -22,9 +22,9 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
   refreshing = false,
   onRefresh,
   style,
-  refreshingText = '刷新中...',
+
   enabled = true
-}) => {
+;}) => {
   const { currentTheme } = useTheme();
   const styles = createStyles(currentTheme);
 
@@ -52,27 +52,27 @@ const createStyles = (theme: any) => {
   return StyleSheet.create({
     container: {,
   flex: 1
-    },
+    ;},
     refreshIndicator: {,
-  height: 60,
-      justifyContent: 'center',
-      alignItems: 'center',
+  height: 60;
+      justifyContent: 'center';
+      alignItems: 'center';
       backgroundColor: theme.colors.surface
-    },
+    ;},
     content: {,
-  flex: 1,
+  flex: 1;
       backgroundColor: theme.colors.background
-    },
+    ;},
     indicatorContainer: {,
-  alignItems: 'center',
+  alignItems: 'center';
       justifyContent: 'center'
-    },
+    ;},
     indicatorText: {,
-  fontSize: 14,
-      color: '#666',
-      textAlign: 'center',
+  fontSize: 14;
+      color: '#666';
+      textAlign: 'center';
       marginTop: 8
-    }
+    ;}
   });
 };
 

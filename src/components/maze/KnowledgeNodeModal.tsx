@@ -16,11 +16,11 @@ import { KnowledgeNode } from '../../types/maze';
   Alert;
 } from 'react-native';
 interface KnowledgeNodeModalProps {
-  knowledgeNode: KnowledgeNode;,
-  visible: boolean;,
+  knowledgeNode: KnowledgeNode;
+  visible: boolean;
   onClose: () => void;
 }
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+const { width: screenWidth, height: screenHeight ;} = Dimensions.get('window');
 const KnowledgeNodeModal: React.FC<KnowledgeNodeModalProps> = ({
   knowledgeNode,
   visible,
@@ -51,7 +51,7 @@ const KnowledgeNodeModal: React.FC<KnowledgeNodeModalProps> = ({
                   style={styles.imageContainer}
                   onPress={() => handleImagePress(index)}
                 >
-                  <Image source={ uri: imageUrl }}
+                  <Image source={ uri: imageUrl ;}}
                     style={styles.thumbnailImage}
                     resizeMode="cover"
                   / loading="lazy" decoding="async" />
@@ -67,7 +67,7 @@ const KnowledgeNodeModal: React.FC<KnowledgeNodeModalProps> = ({
               <TouchableOpacity;
                 key={index}
                 style={styles.videoItem}
-                onPress={() => Alert.alert("提示", "视频播放功能开发中...')}
+
               >
                 <Icon name="play-circle-filled" size={24} color="#4CAF50" />
                 <Text style={styles.videoTitle}>健康知识视频 {index + 1}</Text>
@@ -83,7 +83,7 @@ const KnowledgeNodeModal: React.FC<KnowledgeNodeModalProps> = ({
               <TouchableOpacity;
                 key={index};
                 style={styles.audioItem};
-                onPress={() => Alert.alert("提示", "音频播放功能开发中...')};
+
               >;
                 <Icon name="volume-up" size={24} color="#FF9800" />;
                 <Text style={styles.audioTitle}>健康知识音频 {index + 1}</Text>;
@@ -166,7 +166,7 @@ const KnowledgeNodeModal: React.FC<KnowledgeNodeModalProps> = ({
                 <Text style={styles.sectionTitle}>互动内容</Text>
                 <TouchableOpacity;
                   style={styles.interactiveButton}
-                  onPress={() => Alert.alert("提示", "互动功能开发中...')}
+
                 >
                   <Icon name="touch-app" size={20} color="#FFFFFF" />
                   <Text style={styles.interactiveButtonText}>开始互动学习</Text>
@@ -180,14 +180,14 @@ const KnowledgeNodeModal: React.FC<KnowledgeNodeModalProps> = ({
           <View style={styles.footer}>
             <TouchableOpacity;
               style={styles.actionButton}
-              onPress={() => Alert.alert("提示", "收藏功能开发中...')}
+
             >
               <Icon name="bookmark-border" size={20} color="#4CAF50" />
               <Text style={styles.actionButtonText}>收藏</Text>
             </TouchableOpacity>
             <TouchableOpacity;
               style={styles.actionButton}
-              onPress={() => Alert.alert("提示", "分享功能开发中...')}
+
             >
               <Icon name="share" size={20} color="#4CAF50" />
               <Text style={styles.actionButtonText}>分享</Text>
@@ -198,7 +198,7 @@ const KnowledgeNodeModal: React.FC<KnowledgeNodeModalProps> = ({
             >
               <Icon name="check" size={20} color="#FFFFFF" />
               <Text style={[styles.actionButtonText, styles.primaryButtonText]}>
-                已学习
+
               </Text>
             </TouchableOpacity>
           </View>
@@ -219,7 +219,7 @@ const KnowledgeNodeModal: React.FC<KnowledgeNodeModalProps> = ({
               <Icon name="close" size={30} color="#FFFFFF" />;
             </TouchableOpacity>;
             <Image;
-              source={ uri: knowledgeNode.multimedia.images[currentImageIndex] }};
+              source={ uri: knowledgeNode.multimedia.images[currentImageIndex] ;}};
               style={styles.fullImage};
               resizeMode="contain";
             />;
@@ -231,79 +231,79 @@ const KnowledgeNodeModal: React.FC<KnowledgeNodeModalProps> = ({
 };
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
+  flex: 1;
     backgroundColor: '#FFFFFF'
-  },
+  ;},
   header: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
+    paddingHorizontal: 16;
+    paddingVertical: 12;
+    borderBottomWidth: 1;
+    borderBottomColor: '#E0E0E0';
     backgroundColor: '#F8F9FA'
-  },
+  ;},
   headerLeft: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
     alignItems: 'center'
-  },
+  ;},
   headerTitle: {,
-  fontSize: 18,
-    fontWeight: 'bold',
-    color: '#2E7D32',
+  fontSize: 18;
+    fontWeight: 'bold';
+    color: '#2E7D32';
     marginLeft: 8;
   },
   closeButton: {,
   padding: 8;
   },
   content: {,
-  flex: 1,
+  flex: 1;
     paddingHorizontal: 16;
   },
   titleSection: {,
-  paddingVertical: 16,
-    borderBottomWidth: 1,
+  paddingVertical: 16;
+    borderBottomWidth: 1;
     borderBottomColor: '#F0F0F0'
-  },
+  ;},
   knowledgeTitle: {,
-  fontSize: 20,
-    fontWeight: 'bold',
-    color: '#1B5E20',
-    marginBottom: 8,
+  fontSize: 20;
+    fontWeight: 'bold';
+    color: '#1B5E20';
+    marginBottom: 8;
     lineHeight: 28;
   },
   metaInfo: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
     flexWrap: 'wrap'
-  },
+  ;},
   metaItem: {,
-  flexDirection: 'row',
-    alignItems: 'center',
-    marginRight: 16,
+  flexDirection: 'row';
+    alignItems: 'center';
+    marginRight: 16;
     marginBottom: 4;
   },
   metaText: {,
-  fontSize: 14,
-    color: '#666',
+  fontSize: 14;
+    color: '#666';
     marginLeft: 4;
   },
   contentSection: {,
   paddingVertical: 16;
   },
   knowledgeContent: {,
-  fontSize: 16,
-    lineHeight: 24,
-    color: '#333',
+  fontSize: 16;
+    lineHeight: 24;
+    color: '#333';
     textAlign: 'justify'
-  },
+  ;},
   multimediaContainer: {,
   marginVertical: 16;
   },
   sectionTitle: {,
-  fontSize: 16,
-    fontWeight: 'bold',
-    color: '#2E7D32',
+  fontSize: 16;
+    fontWeight: 'bold';
+    color: '#2E7D32';
     marginBottom: 12;
   },
   imageSection: {,
@@ -313,126 +313,126 @@ const styles = StyleSheet.create({
   marginRight: 12;
   },
   thumbnailImage: {,
-  width: 120,
-    height: 80,
+  width: 120;
+    height: 80;
     borderRadius: 8;
   },
   videoSection: {,
   marginBottom: 16;
   },
   videoItem: {,
-  flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    backgroundColor: '#F1F8E9',
-    borderRadius: 8,
+  flexDirection: 'row';
+    alignItems: 'center';
+    paddingVertical: 12;
+    paddingHorizontal: 16;
+    backgroundColor: '#F1F8E9';
+    borderRadius: 8;
     marginBottom: 8;
   },
   videoTitle: {,
-  fontSize: 14,
-    color: '#2E7D32',
+  fontSize: 14;
+    color: '#2E7D32';
     marginLeft: 8;
   },
   audioSection: {,
   marginBottom: 16;
   },
   audioItem: {,
-  flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    backgroundColor: '#FFF3E0',
-    borderRadius: 8,
+  flexDirection: 'row';
+    alignItems: 'center';
+    paddingVertical: 12;
+    paddingHorizontal: 16;
+    backgroundColor: '#FFF3E0';
+    borderRadius: 8;
     marginBottom: 8;
   },
   audioTitle: {,
-  fontSize: 14,
-    color: '#E65100',
+  fontSize: 14;
+    color: '#E65100';
     marginLeft: 8;
   },
   tagsContainer: {,
   marginVertical: 16;
   },
   tagsTitle: {,
-  fontSize: 16,
-    fontWeight: 'bold',
-    color: '#2E7D32',
+  fontSize: 16;
+    fontWeight: 'bold';
+    color: '#2E7D32';
     marginBottom: 8;
   },
   tagsWrapper: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
     flexWrap: 'wrap'
-  },
+  ;},
   tag: {,
-  backgroundColor: '#E8F5E8',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
-    marginRight: 8,
+  backgroundColor: '#E8F5E8';
+    paddingHorizontal: 12;
+    paddingVertical: 6;
+    borderRadius: 16;
+    marginRight: 8;
     marginBottom: 8;
   },
   tagText: {,
-  fontSize: 12,
-    color: '#2E7D32',
+  fontSize: 12;
+    color: '#2E7D32';
     fontWeight: '500'
-  },
+  ;},
   interactiveSection: {,
   marginVertical: 16;
   },
   interactiveButton: {,
-  flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#4CAF50',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
+  flexDirection: 'row';
+    alignItems: 'center';
+    justifyContent: 'center';
+    backgroundColor: '#4CAF50';
+    paddingVertical: 12;
+    paddingHorizontal: 24;
     borderRadius: 8;
   },
   interactiveButtonText: {,
-  color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: 'bold',
+  color: '#FFFFFF';
+    fontSize: 16;
+    fontWeight: 'bold';
     marginLeft: 8;
   },
   bottomSpacing: {,
   height: 20;
   },
   footer: {,
-  flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderTopWidth: 1,
-    borderTopColor: '#E0E0E0',
+  flexDirection: 'row';
+    justifyContent: 'space-around';
+    alignItems: 'center';
+    paddingHorizontal: 16;
+    paddingVertical: 12;
+    borderTopWidth: 1;
+    borderTopColor: '#E0E0E0';
     backgroundColor: '#F8F9FA'
-  },
+  ;},
   actionButton: {,
-  flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 20,
-    borderWidth: 1,
+  flexDirection: 'row';
+    alignItems: 'center';
+    paddingVertical: 8;
+    paddingHorizontal: 16;
+    borderRadius: 20;
+    borderWidth: 1;
     borderColor: '#4CAF50'
-  },
+  ;},
   actionButtonText: {,
-  fontSize: 14,
-    color: '#4CAF50',
-    marginLeft: 4,
+  fontSize: 14;
+    color: '#4CAF50';
+    marginLeft: 4;
     fontWeight: '500'
-  },
+  ;},
   primaryButton: {,
   backgroundColor: '#4CAF50'
-  },
+  ;},
   primaryButtonText: {,
   color: '#FFFFFF'
-  },
+  ;},
   fullImageContainer: {,
   flex: 1,backgroundColor: 'rgba(0, 0, 0, 0.9)',justifyContent: 'center',alignItems: 'center';
   },fullImageCloseButton: {,
-  position: "absolute",
+  position: "absolute";
       top: 50,right: 20,zIndex: 1,padding: 10;
   },fullImage: {width: screenWidth,height: screenHeight * 0.8;
   };

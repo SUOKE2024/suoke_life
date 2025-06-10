@@ -1,6 +1,4 @@
-import { LoggingSystem } from "../LoggingSystem";
-import { LoggingSystem } from "../LoggingSystem";
-import React from "react";
+
 describe("LoggingSystem", () => {
   beforeEach(() => {
     jest.clearAllMocks();

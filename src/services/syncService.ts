@@ -13,39 +13,39 @@ export enum SyncStatus {
 }
 // 数据实体接口
 export interface DataEntity {
-  id: string;,
-  type: string;,
-  data: any;,
-  version: number;,
+  id: string;
+  type: string;
+  data: any;
+  version: number;
   lastModified: number;
   checksum?: string;
 }
 // 同步冲突接口
 export interface SyncConflict {
-  id: string;,
-  type: string;,
-  localData: DataEntity;,
-  remoteData: DataEntity;,
-  conflictType: 'version' | 'content' | 'deleted';,
+  id: string;
+  type: string;
+  localData: DataEntity;
+  remoteData: DataEntity;
+  conflictType: 'version' | 'content' | 'deleted';
   timestamp: number;
 }
 // 同步结果接口
 export interface SyncResult {
-  status: SyncStatus;,
-  synced: number;,
-  conflicts: SyncConflict[];,
-  errors: string[];,
-  duration: number;,
+  status: SyncStatus;
+  synced: number;
+  conflicts: SyncConflict[];
+  errors: string[];
+  duration: number;
   timestamp: number;
 }
 // 同步配置接口
 interface SyncConfig {
-  enabled: boolean;,
-  autoSync: boolean;,
-  syncInterval: number;,
-  batchSize: number;,
-  conflictResolution: 'local' | 'remote' | 'manual' | 'merge';,
-  retryAttempts: number;,
+  enabled: boolean;
+  autoSync: boolean;
+  syncInterval: number;
+  batchSize: number;
+  conflictResolution: 'local' | 'remote' | 'manual' | 'merge';
+  retryAttempts: number;
   retryDelay: number;
 }
 // 同步事件接口
@@ -63,12 +63,12 @@ class SyncService {
   private listeners: (event: SyncEvent) => void)[] = [];
   constructor() {
     this.config = {
-      enabled: true,
-      autoSync: true,
+      enabled: true;
+      autoSync: true;
       syncInterval: 300000, // 5分钟
-      batchSize: 50,
-      conflictResolution: 'manual',
-      retryAttempts: 3,
+      batchSize: 50;
+      conflictResolution: 'manual';
+      retryAttempts: 3;
       retryDelay: 5000;
     };
     this.initializeAutoSync();
@@ -85,8 +85,8 @@ class SyncService {
     if (typeof window !== 'undefined' && 'navigator' in window) {
       window.addEventListener('online', () => {
         this.emitEvent({
-      type: "start",
-      timestamp: Date.now() });
+      type: "start";
+      timestamp: Date.now() ;});
         this.sync();
       });
     }
@@ -141,40 +141,40 @@ class SyncService {
     this.isSyncing = true;
     const startTime = Date.now();
         this.emitEvent({
-      type: "start",
-      timestamp: startTime });
+      type: "start";
+      timestamp: startTime ;});
     try {
       const result = await this.performSync();
             this.lastSyncTime = Date.now();
       this.emitEvent({
-      type: "complete",
-      data: result,
+      type: "complete";
+      data: result;
         timestamp: Date.now()
-      });
+      ;});
       analyticsService.trackEvent('system', {
-      action: "sync_complete",
-      duration: result.duration,
-        synced: result.synced,
+      action: "sync_complete";
+      duration: result.duration;
+        synced: result.synced;
         conflicts: result.conflicts.length;
       });
       return result;
     } catch (error) {
       const errorResult: SyncResult = {,
-  status: SyncStatus.ERROR,
-        synced: 0,
-        conflicts: [],
-        errors: [error instanceof Error ? error.message : String(error)],
-        duration: Date.now() - startTime,
+  status: SyncStatus.ERROR;
+        synced: 0;
+        conflicts: [];
+        errors: [error instanceof Error ? error.message : String(error)];
+        duration: Date.now() - startTime;
         timestamp: Date.now()
-      };
+      ;};
       this.emitEvent({
-      type: "error",
-      data: error,
+      type: "error";
+      data: error;
         timestamp: Date.now()
-      });
+      ;});
       analyticsService.trackError(error instanceof Error ? error : new Error(String(error)), {
         context: 'sync_service'
-      });
+      ;});
       return errorResult;
     } finally {
       this.isSyncing = false;
@@ -209,12 +209,12 @@ class SyncService {
                     errors.length > 0 ? SyncStatus.ERROR : SyncStatus.SUCCESS;
       return {
         status,
-        synced: syncedCount,
+        synced: syncedCount;
         conflicts,
         errors,
-        duration: Date.now() - startTime,
+        duration: Date.now() - startTime;
         timestamp: Date.now()
-      };
+      ;};
     } catch (error) {
       throw error;
     }
@@ -234,13 +234,13 @@ class SyncService {
                 for (const operation of operations) {
           try {
             const entity: DataEntity = {,
-  id: operation.id,
-              type: operation.type,
-              data: operation.data,
-              version: 1,
-              lastModified: new Date(operation.timestamp).getTime(),
+  id: operation.id;
+              type: operation.type;
+              data: operation.data;
+              version: 1;
+              lastModified: new Date(operation.timestamp).getTime();
               checksum: this.calculateChecksum(operation.data)
-            };
+            ;};
             entities.push(entity);
           } catch (error) {
             console.error('Error processing local operation:', error);
@@ -258,7 +258,7 @@ class SyncService {
       const response = await gatewayApiClient.get("sync",/changes', {
         headers: {
           'Last-Sync-Time': this.lastSyncTime.toString()
-        }
+        ;}
       });
       return response.data.changes || [];
     } catch (error) {
@@ -268,8 +268,8 @@ class SyncService {
   }
   // 上传本地数据
   private async uploadLocalData(entities: DataEntity[]): Promise<{,
-  synced: number;,
-  conflicts: SyncConflict[],
+  synced: number;
+  conflicts: SyncConflict[];
   errors: string[];
   }> {
     let synced = 0;
@@ -306,13 +306,13 @@ class SyncService {
           }
         }
         this.emitEvent({
-      type: "progress",
-      data: { uploaded: synced, total: entities.length },
+      type: "progress";
+      data: { uploaded: synced, total: entities.length ;},
           timestamp: Date.now()
-        });
+        ;});
       } catch (error) {
         const errorMsg = error instanceof Error ? error.message : String(error);
-        errors.push(`Upload batch error: ${errorMsg}`);
+        errors.push(`Upload batch error: ${errorMsg;}`);
         console.error('Upload batch error:', error);
       }
     }
@@ -320,8 +320,8 @@ class SyncService {
   }
   // 下载远程数据
   private async downloadRemoteData(entities: DataEntity[]): Promise<{,
-  synced: number;,
-  conflicts: SyncConflict[],
+  synced: number;
+  conflicts: SyncConflict[];
   errors: string[];
   }> {
     let synced = 0;
@@ -343,13 +343,13 @@ class SyncService {
         await this.saveLocalEntity(entity);
         synced++;
         this.emitEvent({
-      type: "progress",
-      data: { downloaded: synced, total: entities.length },
+      type: "progress";
+      data: { downloaded: synced, total: entities.length ;},
           timestamp: Date.now()
-        });
+        ;});
       } catch (error) {
         const errorMsg = error instanceof Error ? error.message : String(error);
-        errors.push(`Download entity error: ${errorMsg}`);
+        errors.push(`Download entity error: ${errorMsg;}`);
         console.error('Download entity error:', error);
       }
     }
@@ -360,24 +360,24 @@ class SyncService {
     // 版本冲突
     if (local.version !== remote.version) {
       return {
-        id: local.id,
-        type: local.type,
-        localData: local,
-        remoteData: remote,
-        conflictType: 'version',
+        id: local.id;
+        type: local.type;
+        localData: local;
+        remoteData: remote;
+        conflictType: 'version';
         timestamp: Date.now()
-      };
+      ;};
     }
     // 内容冲突
     if (local.checksum !== remote.checksum) {
       return {
-        id: local.id,
-        type: local.type,
-        localData: local,
-        remoteData: remote,
-        conflictType: 'content',
+        id: local.id;
+        type: local.type;
+        localData: local;
+        remoteData: remote;
+        conflictType: 'content';
         timestamp: Date.now()
-      };
+      ;};
     }
     return null;
   }
@@ -386,10 +386,10 @@ class SyncService {
     this.conflicts.push(...conflicts);
     for (const conflict of conflicts) {
       this.emitEvent({
-      type: "conflict",
-      data: conflict,
+      type: "conflict";
+      data: conflict;
         timestamp: Date.now()
-      });
+      ;});
       // 根据配置自动解决冲突
       if (this.config.conflictResolution !== 'manual') {
         await this.resolveConflict(conflict, this.config.conflictResolution);
@@ -411,13 +411,13 @@ class SyncService {
           resolvedEntity = await this.mergeEntities(conflict.localData, conflict.remoteData);
           break;
         default:
-          throw new Error(`Unknown resolution strategy: ${resolution}`);
+          throw new Error(`Unknown resolution strategy: ${resolution;}`);
       }
       // 保存解决后的数据
       await this.saveLocalEntity(resolvedEntity);
             // 上传到服务器
       await gatewayApiClient.post("sync",/resolve', {
-        conflictId: conflict.id,
+        conflictId: conflict.id;
         resolution: resolvedEntity;
       });
       // 从冲突列表中移除
@@ -426,8 +426,8 @@ class SyncService {
         this.conflicts.splice(index, 1);
       }
       analyticsService.trackEvent('system', {
-      action: "conflict_resolved",
-      conflictType: conflict.conflictType,
+      action: "conflict_resolved";
+      conflictType: conflict.conflictType;
         resolution;
       });
     } catch (error) {
@@ -442,7 +442,7 @@ class SyncService {
       ...local,
       version: Math.max(local.version, remote.version) + 1,
       lastModified: Date.now()
-    };
+    ;};
     // 合并数据字段
     if (typeof local.data === 'object' && typeof remote.data === 'object') {
       merged.data = { ...local.data, ...remote.data };
@@ -456,7 +456,7 @@ class SyncService {
   // 获取本地实体
   private async getLocalEntity(id: string, type: string): Promise<DataEntity | null> {
     try {
-      const key = `entity_${type}_${id}`;
+      const key = `entity_${type;}_${id}`;
       const cached = localStorage.getItem(key);
       return cached ? JSON.parse(cached) : null;
     } catch (error) {
@@ -467,7 +467,7 @@ class SyncService {
   // 保存本地实体
   private async saveLocalEntity(entity: DataEntity) {
     try {
-      const key = `entity_${entity.type}_${entity.id}`;
+      const key = `entity_${entity.type;}_${entity.id}`;
       localStorage.setItem(key, JSON.stringify(entity));
     } catch (error) {
       console.error('Error saving local entity:', error);
@@ -487,15 +487,15 @@ class SyncService {
   }
   // 获取同步状态
   getSyncStatus(): {
-    isSyncing: boolean,
-  lastSyncTime: number;,
-  conflicts: number,
+    isSyncing: boolean;
+  lastSyncTime: number;
+  conflicts: number;
   autoSync: boolean;
   } {
     return {
-      isSyncing: this.isSyncing,
-      lastSyncTime: this.lastSyncTime,
-      conflicts: this.conflicts.length,
+      isSyncing: this.isSyncing;
+      lastSyncTime: this.lastSyncTime;
+      conflicts: this.conflicts.length;
       autoSync: this.config.autoSync;
     };
   }
@@ -510,7 +510,7 @@ class SyncService {
   }
   // 更新配置
   updateConfig(newConfig: Partial<SyncConfig>) {
-    this.config = { ...this.config, ...newConfig };
+    this.config = { ...this.config, ...newConfig ;};
         if (newConfig.autoSync !== undefined) {
       if (newConfig.autoSync) {
         this.startAutoSync();

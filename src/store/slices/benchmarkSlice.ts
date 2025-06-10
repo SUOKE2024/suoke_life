@@ -9,70 +9,70 @@ import { benchmarkService } from '../../services';
 // 状态接口
 interface BenchmarkState {
   // 任务相关
-  tasks: BenchmarkTask[];,
-  currentTask: BenchmarkTask | null;,
+  tasks: BenchmarkTask[];
+  currentTask: BenchmarkTask | null;
   currentResult: BenchmarkResult | null;
   // 服务状态
-  healthStatus: HealthStatus | null;,
+  healthStatus: HealthStatus | null;
   plugins: Plugin[];
   // UI状态
-  loading: {;,
-  tasks: boolean;,
-  result: boolean;,
-  health: boolean;,
-  plugins: boolean;,
+  loading: {
+  tasks: boolean;
+  result: boolean;
+  health: boolean;
+  plugins: boolean;
   submit: boolean;
 };
   // 错误状态
   error: {,
-  tasks: string | null;,
-  result: string | null,
-  health: string | null;,
-  plugins: string | null,
+  tasks: string | null;
+  result: string | null;
+  health: string | null;
+  plugins: string | null;
   submit: string | null;
   };
   // 过滤和排序
   filters: {,
-  status: string | null;,
-  modelId: string | null,
+  status: string | null;
+  modelId: string | null;
   benchmarkId: string | null;
   };
   // 实时状态
   streaming: {,
-  isConnected: boolean;,
-  connectionState: string,
+  isConnected: boolean;
+  connectionState: string;
   lastEvent: any | null;
   };
 }
 // 初始状态
 const initialState: BenchmarkState = {,
-  tasks: [],
-  currentTask: null,
-  currentResult: null,
-  healthStatus: null,
-  plugins: [],
+  tasks: [];
+  currentTask: null;
+  currentResult: null;
+  healthStatus: null;
+  plugins: [];
   loading: {,
-  tasks: false,
-    result: false,
-    health: false,
-    plugins: false,
+  tasks: false;
+    result: false;
+    health: false;
+    plugins: false;
     submit: false;
   },
   error: {,
-  tasks: null,
-    result: null,
-    health: null,
-    plugins: null,
+  tasks: null;
+    result: null;
+    health: null;
+    plugins: null;
     submit: null;
   },
   filters: {,
-  status: null,
-    modelId: null,
+  status: null;
+    modelId: null;
     benchmarkId: null;
   },
   streaming: {,
-  isConnected: false,
-    connectionState: 'CLOSED',
+  isConnected: false;
+    connectionState: 'CLOSED';
     lastEvent: null;
   }
 };
@@ -114,7 +114,7 @@ export const submitBenchmark = createAsyncThunk(;);
 );
 export const submitPluginBenchmark = createAsyncThunk(;);
   'benchmark/submitPlugin',
-  async ({ pluginName, config }: { pluginName: string; config: any }) => {
+  async ({ pluginName, config }: { pluginName: string; config: any ;}) => {
     const taskId = await benchmarkService.runPluginBenchmark(pluginName, config);
     return taskId;
   }
@@ -128,7 +128,7 @@ export const cancelBenchmark = createAsyncThunk(;);
 );
 export const generateReport = createAsyncThunk(;);
   'benchmark/generateReport',
-  async ({ taskId, format }: { taskId: string; format: 'html' | 'json' }) => {
+  async ({ taskId, format }: { taskId: string; format: 'html' | 'json' ;}) => {
     const reportUrl = await benchmarkService.generateReport(taskId, format);
     return { taskId, reportUrl };
   }
@@ -172,13 +172,13 @@ const benchmarkSlice = createSlice({name: 'benchmark',initialState,reducers: {//
     },
     // 设置过滤器
     setFilters: (state, action: PayloadAction<Partial<BenchmarkState['filters']>>) => {
-      state.filters = { ...state.filters, ...action.payload };
+      state.filters = { ...state.filters, ...action.payload ;};
     },
     // 清除过滤器
     clearFilters: (state) => {
       state.filters = {
-        status: null,
-        modelId: null,
+        status: null;
+        modelId: null;
         benchmarkId: null;
       };
     },
@@ -216,7 +216,7 @@ const benchmarkSlice = createSlice({name: 'benchmark',initialState,reducers: {//
       })
       .addCase(fetchBenchmarkTasks.rejected, (state, action) => {
         state.loading.tasks = false;
-        state.error.tasks = action.error.message || '获取任务列表失败';
+
       });
     // 获取结果详情
     builder;
@@ -230,7 +230,7 @@ const benchmarkSlice = createSlice({name: 'benchmark',initialState,reducers: {//
       })
       .addCase(fetchBenchmarkResult.rejected, (state, action) => {
         state.loading.result = false;
-        state.error.result = action.error.message || '获取结果失败';
+
       });
     // 获取健康状态
     builder;
@@ -244,7 +244,7 @@ const benchmarkSlice = createSlice({name: 'benchmark',initialState,reducers: {//
       })
       .addCase(fetchHealthStatus.rejected, (state, action) => {
         state.loading.health = false;
-        state.error.health = action.error.message || '获取健康状态失败';
+
       });
     // 获取插件列表
     builder;
@@ -258,7 +258,7 @@ const benchmarkSlice = createSlice({name: 'benchmark',initialState,reducers: {//
       })
       .addCase(fetchPlugins.rejected, (state, action) => {
         state.loading.plugins = false;
-        state.error.plugins = action.error.message || '获取插件列表失败';
+
       });
     // 提交基准测试
     builder;
@@ -272,7 +272,7 @@ const benchmarkSlice = createSlice({name: 'benchmark',initialState,reducers: {//
       })
       .addCase(submitBenchmark.rejected, (state, action) => {
         state.loading.submit = false;
-        state.error.submit = action.error.message || '提交基准测试失败';
+
       });
     // 提交插件基准测试
     builder;
@@ -285,7 +285,7 @@ const benchmarkSlice = createSlice({name: 'benchmark',initialState,reducers: {//
       })
       .addCase(submitPluginBenchmark.rejected, (state, action) => {
         state.loading.submit = false;
-        state.error.submit = action.error.message || '提交插件基准测试失败';
+
       });
     // 取消基准测试
     builder;
@@ -313,17 +313,17 @@ export const {
   resetState;
 } = benchmarkSlice.actions;
 // 选择器
-export const selectBenchmarkTasks = (state: { benchmark: BenchmarkState }) => state.benchmark.tasks;
-export const selectCurrentTask = (state: { benchmark: BenchmarkState }) => state.benchmark.currentTask;
-export const selectCurrentResult = (state: { benchmark: BenchmarkState }) => state.benchmark.currentResult;
-export const selectHealthStatus = (state: { benchmark: BenchmarkState }) => state.benchmark.healthStatus;
-export const selectPlugins = (state: { benchmark: BenchmarkState }) => state.benchmark.plugins;
-export const selectBenchmarkLoading = (state: { benchmark: BenchmarkState }) => state.benchmark.loading;
-export const selectBenchmarkError = (state: { benchmark: BenchmarkState }) => state.benchmark.error;
-export const selectBenchmarkFilters = (state: { benchmark: BenchmarkState }) => state.benchmark.filters;
-export const selectStreamingStatus = (state: { benchmark: BenchmarkState }) => state.benchmark.streaming;
+export const selectBenchmarkTasks = (state: { benchmark: BenchmarkState ;}) => state.benchmark.tasks;
+export const selectCurrentTask = (state: { benchmark: BenchmarkState ;}) => state.benchmark.currentTask;
+export const selectCurrentResult = (state: { benchmark: BenchmarkState ;}) => state.benchmark.currentResult;
+export const selectHealthStatus = (state: { benchmark: BenchmarkState ;}) => state.benchmark.healthStatus;
+export const selectPlugins = (state: { benchmark: BenchmarkState ;}) => state.benchmark.plugins;
+export const selectBenchmarkLoading = (state: { benchmark: BenchmarkState ;}) => state.benchmark.loading;
+export const selectBenchmarkError = (state: { benchmark: BenchmarkState ;}) => state.benchmark.error;
+export const selectBenchmarkFilters = (state: { benchmark: BenchmarkState ;}) => state.benchmark.filters;
+export const selectStreamingStatus = (state: { benchmark: BenchmarkState ;}) => state.benchmark.streaming;
 // 过滤后的任务列表
-export const selectFilteredTasks = (state: { benchmark: BenchmarkState }) => {const { tasks, filters } = state.benchmark;
+export const selectFilteredTasks = (state: { benchmark: BenchmarkState ;}) => {const { tasks, filters } = state.benchmark;
   return tasks.filter(task => {if (filters.status && task.status !== filters.status) return false;)
     if (filters.modelId && task.model_id !== filters.modelId) return false;
     if (filters.benchmarkId && task.benchmark_id !== filters.benchmarkId) return false;
@@ -331,7 +331,7 @@ export const selectFilteredTasks = (state: { benchmark: BenchmarkState }) => {co
   });
 };
 // 任务统计
-export const selectTaskStats = (state: { benchmark: BenchmarkState }) => {const tasks = state.benchmark.tasks;
+export const selectTaskStats = (state: { benchmark: BenchmarkState ;}) => {const tasks = state.benchmark.tasks;
   return {total: tasks.length,pending: tasks.filter(t => t.status === 'pending').length,running: tasks.filter(t => t.status === 'running').length,completed: tasks.filter(t => t.status === 'completed').length,failed: tasks.filter(t => t.status === 'failed').length;
   };
 };

@@ -9,7 +9,7 @@ import React from "react";
     return importPromi;s;e;
   }
   // 预加载模块  preload(modulePaths: string[]) {
-    modulePaths.forEach(path) => {}))
+    modulePaths.forEach(path) => {;}))
       if (!this.cache.has(path);) {
 this.import(path).catch(error) => {}
           });
@@ -21,12 +21,12 @@ this.import(path).catch(error) => {}
   }
 }
 // 路由级别的代码分割export function createLazyRoute(;)
-importFunc: (); => Promise< { default: React.ComponentType<any>   }>;
+importFunc: (); => Promise< { default: React.ComponentType<any>   ;}>;
 ) {
   return React.lazy(importFun;c;);
 }
 // 功能级别的代码分割export function createLazyFeature<T>(;)
-importFunc: () => Promise< { default: T   }>,fallback?: T;
+importFunc: () => Promise< { default: T   ;}>,fallback?: T;
 ): () => Promise<T> {
   let cached: T | null = null;
   return async() => {}

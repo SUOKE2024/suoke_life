@@ -204,7 +204,7 @@ export interface Rating {
   score: number;
   maxScore: number;
   reviewCount: number;
-  distribution?: { [score: number]: number };
+  distribution?: { [score: number]: number ;};
 }
 
 export interface Feedback {
@@ -474,7 +474,7 @@ export interface NutritionData {
     protein: number;
     fat: number;
   };
-  micronutrients?: { [key: string]: number };
+  micronutrients?: { [key: string]: number ;};
   hydration?: number; // 毫升
 }
 
@@ -492,7 +492,7 @@ export interface Food {
   quantity: number;
   unit: string;
   calories: number;
-  nutrients?: { [key: string]: number };
+  nutrients?: { [key: string]: number ;};
 }
 
 // 情绪数据

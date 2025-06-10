@@ -1,12 +1,11 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { UserState, UserProfile, HealthData, ApiResponse } from "../../types";
+
 import { apiClient } from "../../services/apiClient";
 
 // 初始状态
 const initialState: UserState = {,
-  profile: undefined,
-  healthData: [],
-  loading: false,
+  profile: undefined;
+  healthData: [];
+  loading: false;
   error: undefined;
 };
 
@@ -14,18 +13,18 @@ const initialState: UserState = {,
 export const fetchUserProfile = createAsyncThunk<;
   UserProfile,
   void,
-  { rejectValue: string }
+  { rejectValue: string ;}
 >("user/fetchProfile", async (_, { rejectWithValue }) => {
   try {
     const response: ApiResponse<UserProfile> = await apiClient.get()
       "/user/profile"
     );
     if (!response.success) {
-      throw new Error(response.error?.message || "获取用户资料失败");
+
     }
     return response.data;
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : "获取用户资料失败";
+
     return rejectWithValue(errorMessage);
   }
 });
@@ -34,19 +33,19 @@ export const fetchUserProfile = createAsyncThunk<;
 export const updateUserProfile = createAsyncThunk<;
   UserProfile,
   Partial<UserProfile>,
-  { rejectValue: string }
+  { rejectValue: string ;}
 >("user/updateProfile", async (profileData, { rejectWithValue }) => {
   try {
     const response: ApiResponse<UserProfile> = await apiClient.put()
-      "/user/profile",
+      "/user/profile";
       profileData;
     );
     if (!response.success) {
-      throw new Error(response.error?.message || "更新用户资料失败");
+
     }
     return response.data;
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : "更新用户资料失败";
+
     return rejectWithValue(errorMessage);
   }
 });
@@ -55,7 +54,7 @@ export const updateUserProfile = createAsyncThunk<;
 export const fetchHealthData = createAsyncThunk<;
   HealthData[],
   { limit?: number; offset?: number },
-  { rejectValue: string }
+  { rejectValue: string ;}
 >("user/fetchHealthData", async (params = {}, { rejectWithValue }) => {
   try {
     const queryParams = new URLSearchParams();
@@ -70,11 +69,11 @@ export const fetchHealthData = createAsyncThunk<;
     }`;
     const response: ApiResponse<HealthData[]> = await apiClient.get(url);
     if (!response.success) {
-      throw new Error(response.error?.message || "获取健康数据失败");
+
     }
     return response.data;
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : "获取健康数据失败";
+
     return rejectWithValue(errorMessage);
   }
 });
@@ -83,26 +82,26 @@ export const fetchHealthData = createAsyncThunk<;
 export const addHealthData = createAsyncThunk<;
   HealthData,
   Omit<HealthData, "id" | "userId" | "timestamp">,
-  { rejectValue: string }
+  { rejectValue: string ;}
 >("user/addHealthData", async (healthData, { rejectWithValue }) => {
   try {
     const response: ApiResponse<HealthData> = await apiClient.post()
-      "/user/health-data",
+      "/user/health-data";
       healthData;
     );
     if (!response.success) {
-      throw new Error(response.error?.message || "添加健康数据失败");
+
     }
     return response.data;
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : "添加健康数据失败";
+
     return rejectWithValue(errorMessage);
   }
 });
 
 // 创建slice;
 const userSlice = createSlice({
-  name: "user",
+  name: "user";
   initialState,
   reducers: {,
   clearError: (state) => {
@@ -194,11 +193,11 @@ export const { clearError, updateHealthData, removeHealthData } = userSlice.acti
 export default userSlice.reducer;
 
 // 选择器
-export const selectUserProfile = (state: { user: UserState }) =>
+export const selectUserProfile = (state: { user: UserState ;}) =>
   state.user.profile;
-export const selectHealthData = (state: { user: UserState }) =>
+export const selectHealthData = (state: { user: UserState ;}) =>
   state.user.healthData;
-export const selectUserLoading = (state: { user: UserState }) =>
+export const selectUserLoading = (state: { user: UserState ;}) =>
   state.user.loading;
-export const selectUserError = (state: { user: UserState }) => 
+export const selectUserError = (state: { user: UserState ;}) => 
   state.user.error;

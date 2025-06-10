@@ -1,5 +1,4 @@
-import { usePerformanceMonitor } from "../../placeholder";../hooks/    usePerformanceMonitor;
-import React from "react";
+react";
 importAsyncStorage from "@react-native-async-storage/async-storage";/import { EventEmitter } from "../../utils/eventEmitter"; 索克生活 - 缓存管理器   完整的多层缓存策略和管理系统
 //;
 u;
@@ -9,50 +8,50 @@ u;
   | "memory"
   | "persistent";
 ///     > { key: string;
-* , value: T,
+* , value: T;
   timestamp: number;
   ttl?: number;
-  accessCount: number,
-  lastAccessed: number,
-  size: number}
+  accessCount: number;
+  lastAccessed: number;
+  size: number;}
 // 缓存配置接口 * export interface CacheConfig {
   strategy: CacheStrategy,   ;
   maxSize: number;  maxMemory: number  / 最大内存使用量（字节）*  persistent: boolean  * / 是否持久化*  , cleanupInterval: number  * / 清理间隔（毫秒）* //;
 } * /
 // 缓存统计接口 * export interface CacheStats {
-  size: number,
-  memoryUsage: number;,
-  hitRate: number;,
-  missRate: number;,
+  size: number;
+  memoryUsage: number;
+  hitRate: number;
+  missRate: number;
   totalHits: number,totalMisses: number,totalRequests: number;
   oldestItem?: number;
   newestItem?: number;
 }
-///     > { key: string,
-  value: CacheItem<T>,
-  prev: LRUNode<T> | null,
-  next: LRUNode<T> | null}
+///     > { key: string;
+  value: CacheItem<T>;
+  prev: LRUNode<T> | null;
+  next: LRUNode<T> | null;}
 export class CacheManager<T = any /> extends EventEmitter {/  private cache: Map<string, CacheItem<T> /    > = new Map();
 /      private config: CacheConfig;
   private stats: CacheStats = {,
-  size: 0,
-    memoryUsage: 0,
-    hitRate: 0,
-    missRate: 0,
-    totalHits: 0,
-    totalMisses: 0,
+  size: 0;
+    memoryUsage: 0;
+    hitRate: 0;
+    missRate: 0;
+    totalHits: 0;
+    totalMisses: 0;
     totalRequests: 0;
   };
   private lruHead: LRUNode<T  /     > | null = null;
   private lruTail: LRUNode<T> | null = null;
   private lruMap: Map<string, LRUNode<T> /> = new Map();/
   private cleanupTimer: number | null = null;
-  constructor(config: Partial<CacheConfig /> = {}) {/        super();
+  constructor(config: Partial<CacheConfig /> = {;}) {/        super();
     this.config = {
-      strategy: "lru",
-      maxSize: 1000,
+      strategy: "lru";
+      maxSize: 1000;
       maxMemory: 50 * 1024 * 1024,  defaultTTL: 300000,  / 5分钟* ///
-      storageKey: "@suoke_cache",
+      storageKey: "@suoke_cache";
       cleanupInterval: 60000,  ...config;
     }
     this.initialize();
@@ -67,11 +66,11 @@ export class CacheManager<T = any /> extends EventEmitter {/  private cache: Map
   //
     const item: CacheItem<T> = {key,
       value,
-      timestamp: Date.now(),
-      ttl: ttl || this.config.defaultTTL,
-      accessCount: 0,
-      lastAccessed: Date.now(),
-      size: this.calculateSize(value)};
+      timestamp: Date.now();
+      ttl: ttl || this.config.defaultTTL;
+      accessCount: 0;
+      lastAccessed: Date.now();
+      size: this.calculateSize(value);};
     if (this.stats.memoryUsage + item.size > this.config.maxMemory) {
       await this.evictItems(item.size;);
     }
@@ -117,7 +116,7 @@ case "fifo":
     }
     this.stats.totalHits++;
     this.updateHitRate();
-    this.emit("hit", { key, value: item.value, item });
+    this.emit("hit", { key, value: item.value, item ;});
     return item.val;u;e;
   }
   // 删除缓存项  async delete(key: string): Promise<boolean>  {
@@ -144,12 +143,12 @@ case "fifo":
     this.lruHead = null;
     this.lruTail = null;
     this.stats = {
-      size: 0,
-      memoryUsage: 0,
-      hitRate: 0,
-      missRate: 0,
-      totalHits: 0,
-      totalMisses: 0,
+      size: 0;
+      memoryUsage: 0;
+      hitRate: 0;
+      missRate: 0;
+      totalHits: 0;
+      totalMisses: 0;
       totalRequests: 0;
     }
     this.emit("clear");
@@ -196,8 +195,8 @@ case "fifo":
   }
   // 添加到LRU头部  private addToHead(key: string, item: CacheItem<T>): void  {
     const node: LRUNode<T> = {key,
-      value: item,
-      prev: null,
+      value: item;
+      prev: null;
       next: this.lruHead;
     };
     if (this.lruHead) {
@@ -251,7 +250,7 @@ case "fifo":
     this.removeLRUNode(key);
     if (item) {
       this.stats.memoryUsage -= item.size;
-this.emit("evicted", { key, item, reason: "lru"});
+this.emit("evicted", { key, item, reason: "lru";});
     }
   }
   // LFU淘汰  private evictLFU(): void {
@@ -268,7 +267,7 @@ this.emit("evicted", { key, item, reason: "lru"});
       this.cache.delete(evictKey);
       if (item) {
         this.stats.memoryUsage -= item.size;
-this.emit("evicted", { key: evictKey, item, reason: "lfu"});
+this.emit("evicted", { key: evictKey, item, reason: "lfu";});
       }
     }
   }
@@ -286,7 +285,7 @@ this.emit("evicted", { key: evictKey, item, reason: "lfu"});
       this.cache.delete(evictKey);
       if (item) {
         this.stats.memoryUsage -= item.size;
-this.emit("evicted", { key: evictKey, item, reason: "fifo"});
+this.emit("evicted", { key: evictKey, item, reason: "fifo";});
       }
     }
   }
@@ -363,8 +362,8 @@ case "fifo":
     this.cleanupTimer = setInterval() => {
   // 性能监控
 const performanceMonitor = usePerformanceMonitor(cacheManager", {")
-    trackRender: true,
-    trackMemory: false,warnThreshold: 100, // ms };);
+    trackRender: true;
+    trackMemory: false,warnThreshold: 100, // ms ;};);
       this.cleanup();
     }, this.config.cleanupInterval);
   }
@@ -379,7 +378,7 @@ const performanceMonitor = usePerformanceMonitor(cacheManager", {")
       await this.delete(key);
     }
     if (expiredKeys.length > 0) {
-      this.emit("cleanup", { expiredCount: expiredKeys.length});
+      this.emit("cleanup", { expiredCount: expiredKeys.length;});
     }
   }
   // 从存储加载  private async loadFromStorage(): Promise<void> {
@@ -393,14 +392,14 @@ const performanceMonitor = usePerformanceMonitor(cacheManager", {")
           }
         }
         this.updateStats();
-        this.emit("loaded", { count: this.cache.size});
+        this.emit("loaded", { count: this.cache.size;});
       }
     } catch (error) {
       }
   }
   // 保存到存储  private async saveToStorage(): Promise<void> {
     try {
-      const data: Record<string, CacheItem<T> /> = {};/          this.cache.forEach(value, key); => {}
+      const data: Record<string, CacheItem<T> /> = {;};/          this.cache.forEach(value, key); => {}
         data[key] = value;
       });
       await AsyncStorage.setItem(this.config.storageKey, JSON.stringify(dat;a;);)
@@ -424,21 +423,21 @@ const performanceMonitor = usePerformanceMonitor(cacheManager", {")
 };
 //   ;
 (;{
-      strategy: "lru",
-      maxSize: 500,
+      strategy: "lru";
+      maxSize: 500;
   maxMemory: 10 * 1024 * 1024,  persistent: false;
 });
 export const persistentCache = createCacheManager;
 (;{
-      strategy: "lru",
-      maxSize: 1000,
-  maxMemory: 50 * 1024 * 1024,  persistent: true,
+      strategy: "lru";
+      maxSize: 1000;
+  maxMemory: 50 * 1024 * 1024,  persistent: true;
   storageKey: "@suoke_persistent_cache"
-});
+;});
 export const apiCache = createCacheManager;
 (;{
-      strategy: "ttl",
-      maxSize: 200,
-  defaultTTL: 300000,  persistent: true,
+      strategy: "ttl";
+      maxSize: 200;
+  defaultTTL: 300000,  persistent: true;
   storageKey: "@suoke_api_cache"
-});
+;});

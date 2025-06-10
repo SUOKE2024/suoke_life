@@ -17,12 +17,12 @@ import { Challenge, ChallengeQuestion } from '../../types/maze';
   Image;
 } from 'react-native';
 interface ChallengeModalProps {
-  challenge: Challenge;,
-  visible: boolean;,
-  onClose: () => void;,
+  challenge: Challenge;
+  visible: boolean;
+  onClose: () => void;
   onComplete: (score: number) => void;
 }
-const { width: screenWidth } = Dimensions.get('window');
+const { width: screenWidth ;} = Dimensions.get('window');
 const ChallengeModal: React.FC<ChallengeModalProps> = ({
   challenge,
   visible,
@@ -30,7 +30,7 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
   onComplete;
 }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: number }>({});
+  const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: number ;}>({});
   const [showResults, setShowResults] = useState(false);
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(0);
@@ -80,10 +80,10 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
   /**
   * 时间到处理
   */
-  const handleTimeUp = () => {Alert.alert("时间到", "挑战时间已结束，将自动提交答案。', [;)
+
       {
-      text: "确定", "
-      onPress: handleSubmit };
+
+      onPress: handleSubmit ;};
     ]);
   };
   /**
@@ -98,8 +98,8 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
   const handleNextQuestion = () => {if (currentQuestionIndex < totalQuestions - 1) {setCurrentQuestionIndex(prev => prev + 1);
       // 更新进度动画
       Animated.timing(progressAnim, {
-        toValue: (currentQuestionIndex + 1) / totalQuestions,
-        duration: 300,
+        toValue: (currentQuestionIndex + 1) / totalQuestions;
+        duration: 300;
         useNativeDriver: false;
       }).start();
     } else {
@@ -112,8 +112,8 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
   const handlePreviousQuestion = () => {if (currentQuestionIndex > 0) {setCurrentQuestionIndex(prev => prev - 1);
       // 更新进度动画
       Animated.timing(progressAnim, {
-        toValue: (currentQuestionIndex - 1) / totalQuestions,
-        duration: 300,
+        toValue: (currentQuestionIndex - 1) / totalQuestions;
+        duration: 300;
         useNativeDriver: false;
       }).start();
     }
@@ -135,8 +135,8 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
     setShowResults(true);
     // 分数动画
     Animated.timing(scoreAnim, {
-      toValue: finalScore,
-      duration: 1000,
+      toValue: finalScore;
+      duration: 1000;
       useNativeDriver: false;
     }).start();
   };
@@ -219,7 +219,7 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
           <Animated.Text style={[styles.scoreText, {opacity: scoreAnim.interpolate({inputRange: [0, 100],outputRange: [0, 1];)
             }});
           }]}>
-            {score}分
+
           </Animated.Text>
           <Text style={styles.accuracyText}>
             正确率: {accuracy}% ({correctCount}/{totalQuestions})
@@ -237,7 +237,7 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
             <Icon name="star" size={20} color="#FFB74D" />
             <Text style={styles.resultLabel}>评级</Text>
             <Text style={styles.resultValue}>
-              {score >= 90 ? '优秀' : score >= 70 ? '良好' : score >= 60 ? '及格' : '需要加强'}
+
             </Text>
           </View>
         </View>
@@ -280,7 +280,7 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
               <Icon name="access-time" size={16} color={timeLeft < 60 ? "#F44336" : "#4CAF50"} />
               <Text style={[
                 styles.timerText,
-                { color: timeLeft < 60 ? "#F44336" : "#4CAF50" }}
+                { color: timeLeft < 60 ? "#F44336" : "#4CAF50" ;}}
               ]}>
                 {formatTime(timeLeft)}
               </Text>
@@ -321,7 +321,7 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
                   <Text style={styles.questionText}>{currentQuestion.question}</Text>
                   {// 问题图片 - 暂时注释掉，因为类型定义中没有imageUrl属性}
                   {/* {currentQuestion.imageUrl  && <View style={styles.questionImageContainer}>
-                      <Image source={ uri: currentQuestion.imageUrl }}
+                      <Image source={ uri: currentQuestion.imageUrl ;}}
                         style={styles.questionImage}
                         resizeMode="contain"
                       / loading="lazy" decoding="async" />
@@ -353,7 +353,7 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
             >
               <Icon name="chevron-left" size={24} color={currentQuestionIndex === 0 ? "#CCC" : "#4CAF50"} />
               <Text style={[styles.navButtonText, currentQuestionIndex === 0 && styles.disabledText]}>
-                上一题
+
               </Text>
             </TouchableOpacity>
             <TouchableOpacity;
@@ -370,7 +370,7 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
                 styles.primaryButtonText,
                 selectedAnswers[currentQuestionIndex] === undefined && styles.disabledText;
               ]}}>
-                {currentQuestionIndex === totalQuestions - 1 ? '提交答案' : '下一题'}
+
               </Text>
               <Icon;
                 name={currentQuestionIndex === totalQuestions - 1 ? "send" : "chevron-right"}
@@ -386,307 +386,307 @@ const ChallengeModal: React.FC<ChallengeModalProps> = ({
 };
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
+  flex: 1;
     backgroundColor: '#FFFFFF'
-  },
+  ;},
   header: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
+    paddingHorizontal: 16;
+    paddingVertical: 12;
+    borderBottomWidth: 1;
+    borderBottomColor: '#E0E0E0';
     backgroundColor: '#F8F9FA'
-  },
+  ;},
   headerLeft: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
     alignItems: 'center'
-  },
+  ;},
   headerTitle: {,
-  fontSize: 18,
-    fontWeight: 'bold',
-    color: '#FF5722',
+  fontSize: 18;
+    fontWeight: 'bold';
+    color: '#FF5722';
     marginLeft: 8;
   },
   headerRight: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
     alignItems: 'center'
-  },
+  ;},
   timerContainer: {,
-  flexDirection: 'row',
-    alignItems: 'center',
+  flexDirection: 'row';
+    alignItems: 'center';
     backgroundColor: 'rgba(76, 175, 80, 0.1)',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
+    paddingHorizontal: 8;
+    paddingVertical: 4;
+    borderRadius: 12;
     marginRight: 12;
   },
   timerText: {,
-  fontSize: 14,
-    fontWeight: 'bold',
-    marginLeft: 4,
+  fontSize: 14;
+    fontWeight: 'bold';
+    marginLeft: 4;
     fontFamily: 'monospace'
-  },
+  ;},
   closeButton: {,
   padding: 8;
   },
   progressContainer: {,
-  paddingHorizontal: 16,
-    paddingVertical: 12,
+  paddingHorizontal: 16;
+    paddingVertical: 12;
     backgroundColor: '#F8F9FA'
-  },
+  ;},
   progressBar: {,
-  height: 6,
-    backgroundColor: '#E0E0E0',
-    borderRadius: 3,
-    overflow: 'hidden',
+  height: 6;
+    backgroundColor: '#E0E0E0';
+    borderRadius: 3;
+    overflow: 'hidden';
     marginBottom: 8;
   },
   progressFill: {,
-  height: '100%',
-    backgroundColor: '#4CAF50',
+  height: '100%';
+    backgroundColor: '#4CAF50';
     borderRadius: 3;
   },
   progressText: {,
-  fontSize: 12,
-    color: '#666',
+  fontSize: 12;
+    color: '#666';
     textAlign: 'center'
-  },
+  ;},
   content: {,
-  flex: 1,
+  flex: 1;
     paddingHorizontal: 16;
   },
   challengeInfo: {,
-  paddingVertical: 16,
-    borderBottomWidth: 1,
+  paddingVertical: 16;
+    borderBottomWidth: 1;
     borderBottomColor: '#F0F0F0'
-  },
+  ;},
   challengeTitle: {,
-  fontSize: 20,
-    fontWeight: 'bold',
-    color: '#FF5722',
+  fontSize: 20;
+    fontWeight: 'bold';
+    color: '#FF5722';
     marginBottom: 8;
   },
   challengeDescription: {,
-  fontSize: 14,
-    color: '#666',
+  fontSize: 14;
+    color: '#666';
     lineHeight: 20;
   },
   questionContainer: {,
   paddingVertical: 16;
   },
   questionText: {,
-  fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-    lineHeight: 26,
+  fontSize: 18;
+    fontWeight: 'bold';
+    color: '#333';
+    lineHeight: 26;
     marginBottom: 16;
   },
   questionImageContainer: {,
-  alignItems: 'center',
+  alignItems: 'center';
     marginBottom: 16;
   },
   questionImage: {,
-  width: screenWidth - 32,
-    height: 200,
+  width: screenWidth - 32;
+    height: 200;
     borderRadius: 8;
   },
   answersContainer: {,
   marginTop: 8;
   },
   answerOption: {,
-  borderWidth: 2,
-    borderColor: '#E0E0E0',
-    borderRadius: 12,
-    marginBottom: 12,
+  borderWidth: 2;
+    borderColor: '#E0E0E0';
+    borderRadius: 12;
+    marginBottom: 12;
     backgroundColor: '#FFFFFF'
-  },
+  ;},
   selectedOption: {,
-  borderColor: '#2196F3',
+  borderColor: '#2196F3';
     backgroundColor: '#E3F2FD'
-  },
+  ;},
   correctOption: {,
-  borderColor: '#4CAF50',
+  borderColor: '#4CAF50';
     backgroundColor: '#E8F5E9'
-  },
+  ;},
   wrongOption: {,
-  borderColor: '#F44336',
+  borderColor: '#F44336';
     backgroundColor: '#FFEBEE'
-  },
+  ;},
   optionContent: {,
-  flexDirection: 'row',
-    alignItems: 'center',
+  flexDirection: 'row';
+    alignItems: 'center';
     padding: 16;
   },
   optionIndicator: {,
-  width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: '#F5F5F5',
-    justifyContent: 'center',
-    alignItems: 'center',
+  width: 32;
+    height: 32;
+    borderRadius: 16;
+    backgroundColor: '#F5F5F5';
+    justifyContent: 'center';
+    alignItems: 'center';
     marginRight: 12;
   },
   selectedIndicator: {,
   backgroundColor: '#2196F3'
-  },
+  ;},
   correctIndicator: {,
   backgroundColor: '#4CAF50'
-  },
+  ;},
   wrongIndicator: {,
   backgroundColor: '#F44336'
-  },
+  ;},
   optionLetter: {,
-  fontSize: 16,
-    fontWeight: 'bold',
+  fontSize: 16;
+    fontWeight: 'bold';
     color: '#666'
-  },
+  ;},
   selectedLetter: {,
   color: '#FFFFFF'
-  },
+  ;},
   correctLetter: {,
   color: '#FFFFFF'
-  },
+  ;},
   wrongLetter: {,
   color: '#FFFFFF'
-  },
+  ;},
   optionText: {,
-  flex: 1,
-    fontSize: 16,
-    color: '#333',
+  flex: 1;
+    fontSize: 16;
+    color: '#333';
     lineHeight: 22;
   },
   selectedText: {,
-  color: '#1976D2',
+  color: '#1976D2';
     fontWeight: '500'
-  },
+  ;},
   correctText: {,
-  color: '#2E7D32',
+  color: '#2E7D32';
     fontWeight: '500'
-  },
+  ;},
   wrongText: {,
-  color: '#C62828',
+  color: '#C62828';
     fontWeight: '500'
-  },
+  ;},
   explanationContainer: {,
-  marginTop: 16,
-    padding: 16,
-    backgroundColor: '#F1F8E9',
+  marginTop: 16;
+    padding: 16;
+    backgroundColor: '#F1F8E9';
     borderRadius: 8;
   },
   explanationTitle: {,
-  fontSize: 16,
-    fontWeight: 'bold',
-    color: '#2E7D32',
+  fontSize: 16;
+    fontWeight: 'bold';
+    color: '#2E7D32';
     marginBottom: 8;
   },
   explanationText: {,
-  fontSize: 14,
-    color: '#388E3C',
+  fontSize: 14;
+    color: '#388E3C';
     lineHeight: 20;
   },
   footer: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderTopWidth: 1,
-    borderTopColor: '#E0E0E0',
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
+    paddingHorizontal: 16;
+    paddingVertical: 12;
+    borderTopWidth: 1;
+    borderTopColor: '#E0E0E0';
     backgroundColor: '#F8F9FA'
-  },
+  ;},
   navButton: {,
-  flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-    borderWidth: 1,
+  flexDirection: 'row';
+    alignItems: 'center';
+    paddingVertical: 12;
+    paddingHorizontal: 20;
+    borderRadius: 8;
+    borderWidth: 1;
     borderColor: '#4CAF50'
-  },
+  ;},
   primaryButton: {,
   backgroundColor: '#4CAF50'
-  },
+  ;},
   disabledButton: {,
-  borderColor: '#E0E0E0',
+  borderColor: '#E0E0E0';
     backgroundColor: '#F5F5F5'
-  },
+  ;},
   navButtonText: {,
-  fontSize: 16,
-    color: '#4CAF50',
-    fontWeight: '500',
+  fontSize: 16;
+    color: '#4CAF50';
+    fontWeight: '500';
     marginHorizontal: 4;
   },
   primaryButtonText: {,
   color: '#FFFFFF'
-  },
+  ;},
   disabledText: {,
   color: '#CCC'
-  },
+  ;},
   resultsContainer: {,
-  paddingVertical: 32,
+  paddingVertical: 32;
     alignItems: 'center'
-  },
+  ;},
   scoreDisplay: {,
-  alignItems: 'center',
+  alignItems: 'center';
     marginBottom: 32;
   },
   scoreText: {,
-  fontSize: 48,
-    fontWeight: 'bold',
-    color: '#4CAF50',
+  fontSize: 48;
+    fontWeight: 'bold';
+    color: '#4CAF50';
     marginVertical: 16;
   },
   accuracyText: {,
-  fontSize: 16,
+  fontSize: 16;
     color: '#666'
-  },
+  ;},
   resultDetails: {,
-  width: '100%',
+  width: '100%';
     marginBottom: 32;
   },
   resultItem: {,
-  flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    backgroundColor: '#F8F9FA',
-    borderRadius: 8,
+  flexDirection: 'row';
+    alignItems: 'center';
+    paddingVertical: 12;
+    paddingHorizontal: 16;
+    backgroundColor: '#F8F9FA';
+    borderRadius: 8;
     marginBottom: 8;
   },
   resultLabel: {,
-  fontSize: 14,
-    color: '#666',
-    marginLeft: 8,
+  fontSize: 14;
+    color: '#666';
+    marginLeft: 8;
     flex: 1;
   },
   resultValue: {,
-  fontSize: 14,
-    fontWeight: 'bold',
+  fontSize: 14;
+    fontWeight: 'bold';
     color: '#333'
-  },
+  ;},
   resultActions: {,
-  flexDirection: 'row',
-    justifyContent: 'space-around',
+  flexDirection: 'row';
+    justifyContent: 'space-around';
     width: '100%'
-  },
+  ;},
   reviewButton: {,
-  flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    borderWidth: 1,
+  flexDirection: 'row';
+    alignItems: 'center';
+    paddingVertical: 12;
+    paddingHorizontal: 24;
+    borderRadius: 8;
+    borderWidth: 1;
     borderColor: '#2196F3'
-  },
+  ;},
   reviewButtonText: {,
-  fontSize: 16,
-    color: '#2196F3',
-    marginLeft: 8,
+  fontSize: 16;
+    color: '#2196F3';
+    marginLeft: 8;
     fontWeight: '500';
   },completeButton: {,
-  flexDirection: "row",
+  flexDirection: "row";
       alignItems: 'center',paddingVertical: 12,paddingHorizontal: 24,borderRadius: 8,backgroundColor: '#4CAF50';
   },completeButtonText: {fontSize: 16,color: '#FFFFFF',marginLeft: 8,fontWeight: '500';
   };

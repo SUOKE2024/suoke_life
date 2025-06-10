@@ -1,5 +1,4 @@
 import { PalpationDiagnosisAlgorithm } from "../PalpationDiagnosisAlgorithm";
-import { PalpationDiagnosisAlgorithm } from "../PalpationDiagnosisAlgorithm";
 describe("PalpationDiagnosisAlgorithm", () => {
   beforeEach(() => {
     jest.clearAllMocks();

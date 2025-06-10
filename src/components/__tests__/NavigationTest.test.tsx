@@ -6,10 +6,10 @@ const MockNavigationTest: React.FC = () => {
 };
 // Mock store for testing
 const mockStore = configureStore({reducer: {// Add your reducers here;)
-    navigation: (state = {}, action) => state;
+    navigation: (state = {;}, action) => state;
   };
 });
-const renderWithProvider = (component: React.ReactElement) => {return render(<Provider store={mockStore}>{component}</Provider>);
+const renderWithProvider = (component: React.ReactElement) => {return render(<Provider store={mockStore;}>{component}</Provider>);
 };
 describe('NavigationTest', () => {
   beforeEach(() => {

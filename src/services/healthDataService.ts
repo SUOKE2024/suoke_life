@@ -2,13 +2,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // 健康数据类型定义
 export interface HealthData {
   id?: string;
-  userId: string;,
-  type: HealthDataType;,
-  value: number;,
-  unit: string;,
-  timestamp: Date;,
+  userId: string;
+  type: HealthDataType;
+  value: number;
+  unit: string;
+  timestamp: Date;
   source: 'manual' | 'device' | 'sync';
-  metadata?: Record<string, any>;
+  metadata?: Record<string; any>;
 }
 export type HealthDataType =;
   | 'heart_rate'
@@ -27,83 +27,83 @@ export type HealthDataType =;
   | 'blood_sugar'
   | 'blood_oxygen';
 export interface HealthMetric {
-  id: string;,
-  name: string;,
-  value: number;,
-  unit: string;,
-  trend: 'up' | 'down' | 'stable';,
-  status: 'excellent' | 'good' | 'fair' | 'poor';,
-  icon: string;,
-  color: string;,
+  id: string;
+  name: string;
+  value: number;
+  unit: string;
+  trend: 'up' | 'down' | 'stable';
+  status: 'excellent' | 'good' | 'fair' | 'poor';
+  icon: string;
+  color: string;
   lastUpdated: Date;
   normalRange?: {
-    min: number;,
+    min: number;
   max: number;
   };
 }
 export interface HealthGoal {
-  id: string;,
-  userId: string;,
-  title: string;,
-  description: string;,
-  type: HealthDataType;,
-  targetValue: number;,
-  currentValue: number;,
-  unit: string;,
-  deadline: Date;,
-  progress: number;,
-  category: string;,
-  isActive: boolean;,
-  createdAt: Date;,
+  id: string;
+  userId: string;
+  title: string;
+  description: string;
+  type: HealthDataType;
+  targetValue: number;
+  currentValue: number;
+  unit: string;
+  deadline: Date;
+  progress: number;
+  category: string;
+  isActive: boolean;
+  createdAt: Date;
   updatedAt: Date;
 }
 export interface HealthSummary {
-  overallScore: number;,
-  constitution: string;,
-  recommendations: string[];,
+  overallScore: number;
+  constitution: string;
+  recommendations: string[];
   trends: Record<string, 'up' | 'down' | 'stable'>;
-  alerts: HealthAlert[];,
+  alerts: HealthAlert[];
   lastUpdated: Date;
 }
 export interface HealthAlert {
-  id: string;,
-  type: 'warning' | 'info' | 'critical';,
-  title: string;,
-  message: string;,
-  timestamp: Date;,
-  isRead: boolean;,
+  id: string;
+  type: 'warning' | 'info' | 'critical';
+  title: string;
+  message: string;
+  timestamp: Date;
+  isRead: boolean;
   actionRequired: boolean;
 }
 export interface HealthReport {
-  id: string;,
-  userId: string;,
-  title: string;,
+  id: string;
+  userId: string;
+  title: string;
   period: {,
-  start: Date;,
+  start: Date;
   end: Date;
   };
-  summary: HealthSummary;,
-  data: HealthData[];,
-  insights: string[];,
-  recommendations: string[];,
-  generatedAt: Date;,
+  summary: HealthSummary;
+  data: HealthData[];
+  insights: string[];
+  recommendations: string[];
+  generatedAt: Date;
   format: 'pdf' | 'json' | 'html';
 }
 // 本地存储键
 const STORAGE_KEYS = {
-  HEALTH_DATA: "health_data",
-  HEALTH_GOALS: 'health_goals',
-  HEALTH_SETTINGS: 'health_settings',
+  HEALTH_DATA: "health_data";
+  HEALTH_GOALS: 'health_goals';
+  HEALTH_SETTINGS: 'health_settings';
   SYNC_STATUS: 'health_sync_status'
-};
+;};
 class HealthDataService {
   private cache: Map<string, any> = new Map();
   private syncInProgress = false;
   // 获取健康数据
   async getHealthData(
-    type?: HealthDataType,
-    startDate?: Date,
-    endDate?: Date,
+    type?: HealthDataType;
+    startDate?: Date;
+    endDate?: Date;
     limit?: number;
   ): Promise<HealthData[]> {
     try {
@@ -175,28 +175,28 @@ class HealthDataService {
       // 返回模拟数据
       return [
         {
-          id: "1",
-          name: '心率',
-          value: 72,
-          unit: 'bpm',
-          trend: 'stable',
-          status: 'good',
-          icon: 'heart-pulse',
-          color: '#E91E63',
-          lastUpdated: new Date(),
-          normalRange: { min: 60, max: 100 }
+          id: "1";
+
+          value: 72;
+          unit: 'bpm';
+          trend: 'stable';
+          status: 'good';
+          icon: 'heart-pulse';
+          color: '#E91E63';
+          lastUpdated: new Date();
+          normalRange: { min: 60, max: 100 ;}
         },
         {
-          id: "2",
-          name: '血压',
-          value: 120,
-          unit: 'mmHg',
-          trend: 'up',
-          status: 'excellent',
-          icon: 'gauge',
-          color: '#4CAF50',
-          lastUpdated: new Date(),
-          normalRange: { min: 90, max: 140 }
+          id: "2";
+
+          value: 120;
+          unit: 'mmHg';
+          trend: 'up';
+          status: 'excellent';
+          icon: 'gauge';
+          color: '#4CAF50';
+          lastUpdated: new Date();
+          normalRange: { min: 90, max: 140 ;}
         }
       ];
     }
@@ -217,9 +217,9 @@ class HealthDataService {
     try {
       const newData: HealthData = {
         ...data,
-        id: this.generateId(),
+        id: this.generateId();
         timestamp: data.timestamp || new Date()
-      };
+      ;};
       // 保存到本地存储
       await this.saveLocalHealthData(newData);
       // 同步到服务器
@@ -237,10 +237,10 @@ class HealthDataService {
     try {
       const newGoal: HealthGoal = {
         ...goal,
-        id: this.generateId(),
-        createdAt: new Date(),
+        id: this.generateId();
+        createdAt: new Date();
         updatedAt: new Date()
-      };
+      ;};
       const stored = await AsyncStorage.getItem(STORAGE_KEYS.HEALTH_GOALS);
       const goals: HealthGoal[] = stored ? JSON.parse(stored) : [];
       goals.push(newGoal);
@@ -265,7 +265,7 @@ class HealthDataService {
         ...goals[goalIndex],
         ...updates,
         updatedAt: new Date()
-      };
+      ;};
       await AsyncStorage.setItem(STORAGE_KEYS.HEALTH_GOALS, JSON.stringify(goals));
       return goals[goalIndex];
     } catch (error) {
@@ -301,20 +301,20 @@ class HealthDataService {
       console.error('Failed to get health summary:', error);
       // 返回默认摘要
       return {
-        overallScore: 75,
-        constitution: 'balanced',
-        recommendations: ['保持规律作息', '适量运动', '均衡饮食'],
-        trends: {},
-        alerts: [],
+        overallScore: 75;
+        constitution: 'balanced';
+
+        trends: {;},
+        alerts: [];
         lastUpdated: new Date()
-      };
+      ;};
     }
   }
   // 生成健康报告
   async generateHealthReport(
-    userId: string,
-    startDate: Date,
-    endDate: Date,
+    userId: string;
+    startDate: Date;
+    endDate: Date;
     format: 'pdf' | 'json' | 'html' = 'json'
   ): Promise<HealthReport> {
     try {
@@ -322,15 +322,15 @@ class HealthDataService {
       const userHealthData = healthData.filter(data => data.userId === userId);
       const summary = await this.generateHealthSummary(userHealthData);
       const report: HealthReport = {,
-  id: this.generateId(),
+  id: this.generateId();
         userId,
-        title: `健康报告 ${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`,
-        period: { start: startDate, end: endDate },
+
+        period: { start: startDate, end: endDate ;},
         summary,
-        data: userHealthData,
-        insights: this.generateInsights(userHealthData),
-        recommendations: this.generateRecommendations(summary),
-        generatedAt: new Date(),
+        data: userHealthData;
+        insights: this.generateInsights(userHealthData);
+        recommendations: this.generateRecommendations(summary);
+        generatedAt: new Date();
         format;
       };
       return report;
@@ -403,25 +403,25 @@ class HealthDataService {
     // 根据类型确定状态和显示信息
     const metricInfo = this.getMetricInfo(type, latest.value);
     return {
-      id: this.generateId(),
-      name: metricInfo.name,
-      value: latest.value,
-      unit: latest.unit,
+      id: this.generateId();
+      name: metricInfo.name;
+      value: latest.value;
+      unit: latest.unit;
       trend,
-      status: metricInfo.status,
-      icon: metricInfo.icon,
-      color: metricInfo.color,
-      lastUpdated: latest.timestamp,
+      status: metricInfo.status;
+      icon: metricInfo.icon;
+      color: metricInfo.color;
+      lastUpdated: latest.timestamp;
       normalRange: metricInfo.normalRange;
     };
   }
   private getMetricInfo(type: HealthDataType, value: number) {
     const metricInfoMap: Record<HealthDataType, any> = {
       heart_rate: {,
-  name: '心率',
-        icon: 'heart-pulse',
-        color: '#E91E63',
-        normalRange: { min: 60, max: 100 },
+
+        icon: 'heart-pulse';
+        color: '#E91E63';
+        normalRange: { min: 60, max: 100 ;},
         getStatus: (val: number) => {
           if (val >= 60 && val <= 100) return 'excellent';
           if (val >= 50 && val <= 110) return 'good';
@@ -430,10 +430,10 @@ class HealthDataService {
         }
       },
       blood_pressure: {,
-  name: '血压',
-        icon: 'gauge',
-        color: '#4CAF50',
-        normalRange: { min: 90, max: 140 },
+
+        icon: 'gauge';
+        color: '#4CAF50';
+        normalRange: { min: 90, max: 140 ;},
         getStatus: (val: number) => {
           if (val >= 90 && val <= 120) return 'excellent';
           if (val >= 80 && val <= 140) return 'good';
@@ -442,10 +442,10 @@ class HealthDataService {
         }
       },
       sleep_quality: {,
-  name: '睡眠质量',
-        icon: 'sleep',
-        color: '#2196F3',
-        normalRange: { min: 70, max: 100 },
+
+        icon: 'sleep';
+        color: '#2196F3';
+        normalRange: { min: 70, max: 100 ;},
         getStatus: (val: number) => {
           if (val >= 85) return 'excellent';
           if (val >= 70) return 'good';
@@ -454,10 +454,10 @@ class HealthDataService {
         }
       },
       steps: {,
-  name: '步数',
-        icon: 'walk',
-        color: '#FF9800',
-        normalRange: { min: 8000, max: 15000 },
+
+        icon: 'walk';
+        color: '#FF9800';
+        normalRange: { min: 8000, max: 15000 ;},
         getStatus: (val: number) => {
           if (val >= 10000) return 'excellent';
           if (val >= 8000) return 'good';
@@ -467,94 +467,94 @@ class HealthDataService {
       },
       // 默认处理其他类型
       body_temperature: {,
-  name: "体温",
-        icon: 'thermometer', 
-        color: '#FF5722', 
-        normalRange: { min: 36, max: 37.5 }, 
+
+        icon: 'thermometer'; 
+        color: '#FF5722'; 
+        normalRange: { min: 36, max: 37.5 ;}, 
         getStatus: () => 'good' 
-      },
+      ;},
       weight: {,
-  name: "体重",
-        icon: 'scale-bathroom', 
-        color: '#9C27B0', 
-        normalRange: { min: 50, max: 100 }, 
+
+        icon: 'scale-bathroom'; 
+        color: '#9C27B0'; 
+        normalRange: { min: 50, max: 100 ;}, 
         getStatus: () => 'good' 
-      },
+      ;},
       height: {,
-  name: "身高",
-        icon: 'human-male-height', 
-        color: '#607D8B', 
-        normalRange: { min: 150, max: 200 }, 
+
+        icon: 'human-male-height'; 
+        color: '#607D8B'; 
+        normalRange: { min: 150, max: 200 ;}, 
         getStatus: () => 'good' 
-      },
+      ;},
       sleep_duration: {,
-  name: "睡眠时长",
-        icon: 'sleep', 
-        color: '#3F51B5', 
-        normalRange: { min: 7, max: 9 }, 
+
+        icon: 'sleep'; 
+        color: '#3F51B5'; 
+        normalRange: { min: 7, max: 9 ;}, 
         getStatus: () => 'good' 
-      },
+      ;},
       exercise_duration: {,
-  name: "运动时长",
-        icon: 'run', 
-        color: '#FF9800', 
-        normalRange: { min: 30, max: 120 }, 
+
+        icon: 'run'; 
+        color: '#FF9800'; 
+        normalRange: { min: 30, max: 120 ;}, 
         getStatus: () => 'good' 
-      },
+      ;},
       stress_level: {,
-  name: "压力水平",
-        icon: 'brain', 
-        color: '#F44336', 
-        normalRange: { min: 0, max: 50 }, 
+
+        icon: 'brain'; 
+        color: '#F44336'; 
+        normalRange: { min: 0, max: 50 ;}, 
         getStatus: () => 'good' 
-      },
+      ;},
       mood: {,
-  name: "情绪",
-        icon: 'emoticon-happy', 
-        color: '#FFEB3B', 
-        normalRange: { min: 60, max: 100 }, 
+
+        icon: 'emoticon-happy'; 
+        color: '#FFEB3B'; 
+        normalRange: { min: 60, max: 100 ;}, 
         getStatus: () => 'good' 
-      },
+      ;},
       nutrition_score: {,
-  name: "营养评分",
-        icon: 'food-apple', 
-        color: '#8BC34A', 
-        normalRange: { min: 70, max: 100 }, 
+
+        icon: 'food-apple'; 
+        color: '#8BC34A'; 
+        normalRange: { min: 70, max: 100 ;}, 
         getStatus: () => 'good' 
-      },
+      ;},
       hydration: {,
-  name: "水分摄入",
-        icon: 'water', 
-        color: '#00BCD4', 
-        normalRange: { min: 1500, max: 3000 }, 
+
+        icon: 'water'; 
+        color: '#00BCD4'; 
+        normalRange: { min: 1500, max: 3000 ;}, 
         getStatus: () => 'good' 
-      },
+      ;},
       blood_sugar: {,
-  name: "血糖",
-        icon: 'diabetes', 
-        color: '#795548', 
-        normalRange: { min: 70, max: 140 }, 
+
+        icon: 'diabetes'; 
+        color: '#795548'; 
+        normalRange: { min: 70, max: 140 ;}, 
         getStatus: () => 'good' 
-      },
+      ;},
       blood_oxygen: {,
-  name: "血氧",
-        icon: 'lungs', 
-        color: '#009688', 
-        normalRange: { min: 95, max: 100 }, 
+
+        icon: 'lungs'; 
+        color: '#009688'; 
+        normalRange: { min: 95, max: 100 ;}, 
         getStatus: () => 'good' 
-      }
+      ;}
     };
     const info = metricInfoMap[type] || {
-      name: type,
-      icon: 'help',
-      color: '#666',
-      normalRange: { min: 0, max: 100 },
+      name: type;
+      icon: 'help';
+      color: '#666';
+      normalRange: { min: 0, max: 100 ;},
       getStatus: () => 'good'
-    };
+    ;};
     return {
       ...info,
       status: info.getStatus(value)
-    };
+    ;};
   }
   private async generateHealthSummary(healthData: HealthData[]): Promise<HealthSummary> {
     const metrics = this.calculateMetrics(healthData);
@@ -562,19 +562,19 @@ class HealthDataService {
     
     return {
       overallScore,
-      constitution: 'balanced',
-      recommendations: this.generateBasicRecommendations(metrics),
-      trends: this.calculateTrends(healthData),
-      alerts: [],
+      constitution: 'balanced';
+      recommendations: this.generateBasicRecommendations(metrics);
+      trends: this.calculateTrends(healthData);
+      alerts: [];
       lastUpdated: new Date()
-    };
+    ;};
   }
   private calculateOverallScore(metrics: HealthMetric[]): number {
     if (metrics.length === 0) return 0;
     const statusScores = {
-      excellent: 100,
-      good: 80,
-      fair: 60,
+      excellent: 100;
+      good: 80;
+      fair: 60;
       poor: 40;
     };
     const totalScore = metrics.reduce(sum, metric) => {
@@ -588,30 +588,30 @@ class HealthDataService {
     metrics.forEach(metric => {
       if (metric.status === 'poor' || metric.status === 'fair') {
         switch (metric.name) {
-          case '心率':
-            recommendations.push('建议进行有氧运动改善心率');
+
+
             break;
-          case '血压':
-            recommendations.push('注意控制血压，减少盐分摄入');
+
+
             break;
-          case '睡眠质量':
-            recommendations.push('改善睡眠环境，保持规律作息');
+
+
             break;
-          case '步数':
-            recommendations.push('增加日常活动量，多走路');
+
+
             break;
           default:
-            recommendations.push(`关注${metric.name}指标，建议咨询医生`);
-        }
+
+        ;}
       }
     });
     if (recommendations.length === 0) {
-      recommendations.push('保持良好的生活习惯', '定期监测健康指标', '均衡饮食和适量运动');
+
     }
     return recommendations;
   }
   private calculateTrends(healthData: HealthData[]): Record<string, 'up' | 'down' | 'stable'> {
-    const trends: Record<string, 'up' | 'down' | 'stable'> = {};
+    const trends: Record<string, 'up' | 'down' | 'stable'> = {;};
     
     // 按类型分组数据
     const groupedData = healthData.reduce(acc, item) => {
@@ -644,17 +644,17 @@ class HealthDataService {
     const insights: string[] = [];
     
     if (healthData.length === 0) {
-      insights.push('暂无足够数据进行分析');
+
       return insights;
     }
     const metrics = this.calculateMetrics(healthData);
     const excellentMetrics = metrics.filter(m => m.status === 'excellent');
     const poorMetrics = metrics.filter(m => m.status === 'poor');
     if (excellentMetrics.length > 0) {
-      insights.push(`您的${excellentMetrics.map(m => m.name).join('、')}表现优秀`);
+
     }
     if (poorMetrics.length > 0) {
-      insights.push(`需要关注${poorMetrics.map(m => m.name).join('、')}指标`);
+
     }
     return insights;
   }
@@ -662,11 +662,11 @@ class HealthDataService {
     const recommendations: string[] = [...summary.recommendations];
     
     if (summary.overallScore < 60) {
-      recommendations.push('建议咨询专业医生', '制定个性化健康计划');
+
     } else if (summary.overallScore < 80) {
-      recommendations.push('继续保持良好习惯', '适当增加运动量');
+
     } else {
-      recommendations.push('健康状况良好', '继续保持现有生活方式');
+
     }
     return recommendations;
   }

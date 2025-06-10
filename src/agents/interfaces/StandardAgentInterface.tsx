@@ -21,7 +21,7 @@ export interface AgentContext {
   // 会话ID
   sessionId: string;
   // 用户偏好
-  userPreferences?: Record<string, any>;
+  userPreferences?: Record<string; any>;
   // 历史记录
   history?: any[];
   // 协作上下文
@@ -39,7 +39,7 @@ export interface CollaborationContext {
   // 总步骤数
   totalSteps: number;
   // 共享数据
-  sharedData?: Record<string, any>;
+  sharedData?: Record<string; any>;
 }
 
 // 智能体响应接口
@@ -81,7 +81,7 @@ export interface AgentAction {
   // 行动描述
   description: string;
   // 行动参数
-  parameters?: Record<string, any>;
+  parameters?: Record<string; any>;
   // 优先级
   priority: number;
   // 预估执行时间
@@ -152,7 +152,7 @@ export interface IStandardAgent {
 
   // 处理协作请求
   processCollaboration(
-    request: AgentRequest,
+    request: AgentRequest;
     collaborationContext: CollaborationContext
   ): Promise<AgentResponse>;
 
@@ -190,7 +190,7 @@ export class AgentValidator {
 
     for (const field of requiredFields) {
       if (!response || !response[field]) {
-        errors.push(`缺少必需字段: ${field}`);
+
       }
     }
 
@@ -198,14 +198,14 @@ export class AgentValidator {
       response?.confidence &&
       (response.confidence < 0 || response.confidence > 1)
     ) {
-      errors.push('置信度必须在0-1之间');
+
     }
 
     if (
       response?.status &&
       !['success', 'error', 'partial'].includes(response.status)
     ) {
-      errors.push('状态值无效');
+
     }
 
     if (
@@ -214,11 +214,11 @@ export class AgentValidator {
         response.responseType
       )
     ) {
-      errors.push('响应类型无效');
+
     }
 
     return {
-      valid: errors.length === 0,
+      valid: errors.length === 0;
       errors,
     };
   }
@@ -239,7 +239,7 @@ export class AgentValidator {
 
     for (const field of requiredFields) {
       if (!request || !request[field]) {
-        errors.push(`缺少必需字段: ${field}`);
+
       }
     }
 
@@ -247,18 +247,18 @@ export class AgentValidator {
       request?.messageType &&
       !['text', 'voice', 'image', 'data'].includes(request.messageType)
     ) {
-      errors.push('消息类型无效');
+
     }
 
     if (
       request?.priority &&
       !['low', 'normal', 'high', 'urgent'].includes(request.priority)
     ) {
-      errors.push('优先级值无效');
+
     }
 
     return {
-      valid: errors.length === 0,
+      valid: errors.length === 0;
       errors,
     };
   }
@@ -275,8 +275,8 @@ export interface IAgentFactory {
 
 // 导出验证器作为默认导出的静态方法
 const StandardAgentInterface = {
-  validateResponse: AgentValidator.validateResponse,
-  validateRequest: AgentValidator.validateRequest,
+  validateResponse: AgentValidator.validateResponse;
+  validateRequest: AgentValidator.validateRequest;
 };
 
 export default StandardAgentInterface;

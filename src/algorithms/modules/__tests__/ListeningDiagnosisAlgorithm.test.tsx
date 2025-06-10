@@ -1,6 +1,4 @@
-import { ListeningDiagnosisAlgorithm } from "../ListeningDiagnosisAlgorithm";
-import { ListeningDiagnosisAlgorithm } from "../ListeningDiagnosisAlgorithm";
-import React from "react";
+
 describe("ListeningDiagnosisAlgorithm", () => {
   beforeEach(() => {
     jest.clearAllMocks();

@@ -1,5 +1,4 @@
 import { validateEmail, validatePhone, validatePassword, validateUsername, validateIdCard, validateRequired, validateNumberRange, validateAgeNumber, validateAge, validateHeight, validateWeight, validateUrl, validateField } from "../validationUtils";
-import { validateEmail, validatePhone, validatePassword, validateUsername, validateIdCard, validateRequired, validateNumberRange, validateAgeNumber, validateAge, validateHeight, validateWeight, validateUrl, validateField } from "../validationUtils";
 describe("validationUtils", () => {
   beforeEach(() => {
     jest.clearAllMocks();

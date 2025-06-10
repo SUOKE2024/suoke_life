@@ -11,7 +11,7 @@ import {;
   TouchableOpacity} from 'react-native';
 // import { LinearGradient } from 'expo-linear-gradient';
 // 注意：LinearGradient 需要安装 expo-linear-gradient 包
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const { width: SCREEN_WIDTH ;} = Dimensions.get('window');
 // 按钮属性接口
 export interface EnhancedButtonProps {
   title: string;
@@ -43,7 +43,7 @@ export const EnhancedButton: React.FC<EnhancedButtonProps> = ({
   hapticFeedback = true,
   glowEffect = false,
   style,
-  textStyle}) => {
+  textStyle;}) => {
   // 动画值
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const opacityAnim = useRef(new Animated.Value(1)).current;
@@ -52,8 +52,8 @@ export const EnhancedButton: React.FC<EnhancedButtonProps> = ({
   const loadingAnim = useRef(new Animated.Value(0)).current;
   // 状态
   const [isPressed, setIsPressed] = useState<boolean>(false);
-  const [buttonLayout, setButtonLayout] = useState<{ width: number; height: number }>({
-    width: 0,
+  const [buttonLayout, setButtonLayout] = useState<{ width: number; height: number ;}>({
+    width: 0;
     height: 0;
   });
   // 初始化动画
@@ -62,9 +62,9 @@ export const EnhancedButton: React.FC<EnhancedButtonProps> = ({
       // 加载动画
       Animated.loop()
         Animated.timing(loadingAnim, {
-          toValue: 1,
-          duration: 1000,
-          useNativeDriver: true})
+          toValue: 1;
+          duration: 1000;
+          useNativeDriver: true;})
       ).start();
     } else {
       loadingAnim.stopAnimation();
@@ -77,13 +77,13 @@ export const EnhancedButton: React.FC<EnhancedButtonProps> = ({
       Animated.loop()
         Animated.sequence([)
           Animated.timing(glowAnim, {
-            toValue: 1,
-            duration: 1500,
-            useNativeDriver: true}),
+            toValue: 1;
+            duration: 1500;
+            useNativeDriver: true;}),
           Animated.timing(glowAnim, {
-            toValue: 0,
-            duration: 1500,
-            useNativeDriver: true})])
+            toValue: 0;
+            duration: 1500;
+            useNativeDriver: true;})])
       ).start();
     } else {
       glowAnim.stopAnimation();
@@ -96,36 +96,36 @@ export const EnhancedButton: React.FC<EnhancedButtonProps> = ({
     setIsPressed(true);
     // 触觉反馈 (需要安装触觉反馈库)
     // if (hapticFeedback) {
-    可以使用 react-native-haptic-feedback 或类似库
+
     // }
     // 按下动画
     switch (animationType) {
       case 'springBounce':
         Animated.spring(scaleAnim, {
-          toValue: 0.95,
-          tension: 300,
-          friction: 10,
-          useNativeDriver: true}).start();
+          toValue: 0.95;
+          tension: 300;
+          friction: 10;
+          useNativeDriver: true;}).start();
         break;
       case 'elasticScale':
         Animated.timing(scaleAnim, {
-          toValue: 0.9,
-          duration: 100,
-          useNativeDriver: true}).start();
+          toValue: 0.9;
+          duration: 100;
+          useNativeDriver: true;}).start();
         break;
       case 'rippleEffect':
         rippleAnim.setValue(0);
         Animated.timing(rippleAnim, {
-          toValue: 1,
-          duration: 300,
-          useNativeDriver: true}).start();
+          toValue: 1;
+          duration: 300;
+          useNativeDriver: true;}).start();
         break;
     }
     // 透明度变化
     Animated.timing(opacityAnim, {
-      toValue: 0.8,
-      duration: 100,
-      useNativeDriver: true}).start();
+      toValue: 0.8;
+      duration: 100;
+      useNativeDriver: true;}).start();
   }, [
     disabled,
     loading,
@@ -142,23 +142,23 @@ export const EnhancedButton: React.FC<EnhancedButtonProps> = ({
     switch (animationType) {
       case 'springBounce':
         Animated.spring(scaleAnim, {
-          toValue: 1,
-          tension: 300,
-          friction: 10,
-          useNativeDriver: true}).start();
+          toValue: 1;
+          tension: 300;
+          friction: 10;
+          useNativeDriver: true;}).start();
         break;
       case 'elasticScale':
         Animated.timing(scaleAnim, {
-          toValue: 1,
-          duration: 200,
-          useNativeDriver: true}).start();
+          toValue: 1;
+          duration: 200;
+          useNativeDriver: true;}).start();
         break;
     }
     // 透明度恢复
     Animated.timing(opacityAnim, {
-      toValue: 1,
-      duration: 200,
-      useNativeDriver: true}).start();
+      toValue: 1;
+      duration: 200;
+      useNativeDriver: true;}).start();
   }, [disabled, loading, animationType, scaleAnim, opacityAnim]);
   // 点击处理
   const handlePress = useCallback() => {
@@ -172,7 +172,7 @@ export const EnhancedButton: React.FC<EnhancedButtonProps> = ({
     return {
       ...baseStyle,
       ...sizeStyle,
-      ...(fullWidth && { width: '100%' }),
+      ...(fullWidth && { width: '100%' ;}),
       ...(disabled && styles.disabled),
       ...style};
   }, [variant, size, fullWidth, disabled, style]);
@@ -195,17 +195,17 @@ export const EnhancedButton: React.FC<EnhancedButtonProps> = ({
         style={[
           styles.ripple,
           {
-            width: rippleSize,
-            height: rippleSize,
-            borderRadius: rippleSize / 2,
+            width: rippleSize;
+            height: rippleSize;
+            borderRadius: rippleSize / 2;
             transform: [
               {
                 scale: rippleAnim.interpolate({),
   inputRange: [0, 1],
-                  outputRange: [0, 1]}})}],
+                  outputRange: [0, 1];}})}],
             opacity: rippleAnim.interpolate({),
   inputRange: [0, 1],
-              outputRange: [0.3, 0]})}]}
+              outputRange: [0.3, 0];})}]}
       />
     );
   }, [animationType, isPressed, buttonLayout, rippleAnim]);
@@ -219,12 +219,12 @@ export const EnhancedButton: React.FC<EnhancedButtonProps> = ({
           {
             opacity: glowAnim.interpolate({),
   inputRange: [0, 1],
-              outputRange: [0, 0.6]}}),
+              outputRange: [0, 0.6];}}),
             transform: [
               {
                 scale: glowAnim.interpolate({),
   inputRange: [0, 1],
-                  outputRange: [1, 1.1]})}]}]}
+                  outputRange: [1, 1.1];})}]}]}
       />
     );
   }, [glowEffect, disabled, loading, glowAnim]);
@@ -240,7 +240,7 @@ export const EnhancedButton: React.FC<EnhancedButtonProps> = ({
               {
                 rotate: loadingAnim.interpolate({),
   inputRange: [0, 1],
-                  outputRange: ["0deg",360deg']}})}]}]}
+                  outputRange: ["0deg",360deg'];}})}]}]}
       />
     );
   }, [loading, loadingAnim]);
@@ -268,14 +268,14 @@ export const EnhancedButton: React.FC<EnhancedButtonProps> = ({
         disabled={disabled || loading}
         activeOpacity={1}
         style={styles.container}
-        accessibilityLabel="TODO: 添加无障碍标签"
+
       >
         <Animated.View;
           style={[
             getButtonStyle(),
             {
-              transform: [{ scale: scaleAnim }}],
-              opacity: opacityAnim}]}
+              transform: [{ scale: scaleAnim ;}}],
+              opacity: opacityAnim;}]}
           onLayout={(event) => {
             const { width, height } = event.nativeEvent.layout;
             setButtonLayout({ width, height });
@@ -294,108 +294,108 @@ export const EnhancedButton: React.FC<EnhancedButtonProps> = ({
 // 样式定义
 const styles = StyleSheet.create({
   container: {,
-  alignSelf: 'stretch'},
+  alignSelf: 'stretch';},
   animatedContainer: {,
-  position: 'relative',
-    overflow: 'hidden'},
+  position: 'relative';
+    overflow: 'hidden';},
   content: {,
-  flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center'},
+  flexDirection: 'row';
+    alignItems: 'center';
+    justifyContent: 'center';},
   leftIcon: {,
-  marginRight: 8},
+  marginRight: 8;},
   rightIcon: {,
-  marginLeft: 8},
+  marginLeft: 8;},
   ripple: {,
-  position: 'absolute',
+  position: 'absolute';
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    top: '50%',
-    left: '50%',
-    marginTop: -50,
-    marginLeft: -50},
+    top: '50%';
+    left: '50%';
+    marginTop: -50;
+    marginLeft: -50;},
   glow: {,
-  position: 'absolute',
-    top: -2,
-    left: -2,
-    right: -2,
-    bottom: -2,
+  position: 'absolute';
+    top: -2;
+    left: -2;
+    right: -2;
+    bottom: -2;
     backgroundColor: 'rgba(102, 126, 234, 0.3)',
-    borderRadius: 8},
+    borderRadius: 8;},
   loading: {,
-  position: 'absolute',
-    top: '50%',
-    left: '50%',
-    width: 20,
-    height: 20,
-    marginTop: -10,
-    marginLeft: -10,
-    borderWidth: 2,
-    borderColor: '#fff',
-    borderTopColor: 'transparent',
-    borderRadius: 10},
+  position: 'absolute';
+    top: '50%';
+    left: '50%';
+    width: 20;
+    height: 20;
+    marginTop: -10;
+    marginLeft: -10;
+    borderWidth: 2;
+    borderColor: '#fff';
+    borderTopColor: 'transparent';
+    borderRadius: 10;},
   // 变体样式
   primary: {,
-  backgroundColor: '#667eea',
-    borderRadius: 8,
-    paddingVertical: 12,
-    paddingHorizontal: 24},
+  backgroundColor: '#667eea';
+    borderRadius: 8;
+    paddingVertical: 12;
+    paddingHorizontal: 24;},
   secondary: {,
-  backgroundColor: '#6c757d',
-    borderRadius: 8,
-    paddingVertical: 12,
-    paddingHorizontal: 24},
+  backgroundColor: '#6c757d';
+    borderRadius: 8;
+    paddingVertical: 12;
+    paddingHorizontal: 24;},
   outline: {,
-  backgroundColor: 'transparent',
-    borderWidth: 2,
-    borderColor: '#667eea',
-    borderRadius: 8,
-    paddingVertical: 10,
-    paddingHorizontal: 22},
+  backgroundColor: 'transparent';
+    borderWidth: 2;
+    borderColor: '#667eea';
+    borderRadius: 8;
+    paddingVertical: 10;
+    paddingHorizontal: 22;},
   ghost: {,
-  backgroundColor: 'transparent',
-    borderRadius: 8,
-    paddingVertical: 12,
-    paddingHorizontal: 24},
+  backgroundColor: 'transparent';
+    borderRadius: 8;
+    paddingVertical: 12;
+    paddingHorizontal: 24;},
   gradient: {,
-  borderRadius: 8,
-    paddingVertical: 12,
-    paddingHorizontal: 24},
+  borderRadius: 8;
+    paddingVertical: 12;
+    paddingHorizontal: 24;},
   // 尺寸样式
   small: {,
-  paddingVertical: 8,
-    paddingHorizontal: 16},
+  paddingVertical: 8;
+    paddingHorizontal: 16;},
   medium: {,
-  paddingVertical: 12,
-    paddingHorizontal: 24},
+  paddingVertical: 12;
+    paddingHorizontal: 24;},
   large: {,
-  paddingVertical: 16,
-    paddingHorizontal: 32},
+  paddingVertical: 16;
+    paddingHorizontal: 32;},
   // 状态样式
   disabled: {,
-  opacity: 0.5}});
+  opacity: 0.5;}});
 // 文本样式
 const textStyles = StyleSheet.create({
   primary: {,
-  color: '#fff',
-    fontWeight: '600'},
+  color: '#fff';
+    fontWeight: '600';},
   secondary: {,
-  color: '#fff',
-    fontWeight: '600'},
+  color: '#fff';
+    fontWeight: '600';},
   outline: {,
-  color: '#667eea',
-    fontWeight: '600'},
+  color: '#667eea';
+    fontWeight: '600';},
   ghost: {,
-  color: '#667eea',
-    fontWeight: '600'},
+  color: '#667eea';
+    fontWeight: '600';},
   gradient: {,
-  color: '#fff',
-    fontWeight: '600'},
+  color: '#fff';
+    fontWeight: '600';},
   small: {,
-  fontSize: 14},
+  fontSize: 14;},
   medium: {,
-  fontSize: 16},
+  fontSize: 16;},
   large: {,
-  fontSize: 18},
+  fontSize: 18;},
   disabled: {,
-  opacity: 0.7}});
+  opacity: 0.7;}});
 export default React.memo(EnhancedButton);

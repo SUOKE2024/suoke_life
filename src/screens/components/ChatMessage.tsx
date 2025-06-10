@@ -1,5 +1,4 @@
-import { colors, spacing, borderRadius, fonts } from "../../constants/theme/import { AgentType, AGENTS } from ;./    AgentCard";
-import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/      View,";
+
 import React from "react";
 /
 import React,{ memo } from react"";
@@ -8,7 +7,7 @@ import React,{ memo } from react"";
   TouchableOpacity,
   { ViewStyle } from ";react-native";
 export interface Message {
-  id: string;,
+  id: string;
   text: string,sender: user" | AgentType,";
   timestamp: Date;
 type?: "text | "image" | voice"
@@ -22,11 +21,11 @@ interface ChatMessageProps {
   showTimestamp?: boolean;
 showAvatar?: boolean;
 }
-export const ChatMessage: React.FC<ChatMessageProps /> = memo({/   const performanceMonitor = usePerformanceMonitor(ChatMessage",;))
+export const ChatMessage: React.FC<ChatMessageProps /> = memo({/   const performanceMonitor = usePerformanceMonitor(ChatMessage";))
 {/
-    trackRender: true,
-    trackMemory: false,
-    warnThreshold: 100});
+    trackRender: true;
+    trackMemory: false;
+    warnThreshold: 100;});
   message,
   onPress,
   onLongPress,
@@ -46,8 +45,8 @@ export const ChatMessage: React.FC<ChatMessageProps /> = memo({/   const perform
   };
   const formatTimestamp = useCallback(); => {}
     //
-    return timestamp.toLocaleTimeString("zh-CN", {hour: 2-digit",;)
-      minute: "2-digit});"
+    return timestamp.toLocaleTimeString("zh-CN", {hour: 2-digit";)
+      minute: "2-digit;});"
   };
   const getStatusIcon = useCallback(); => {}
     //
@@ -62,7 +61,7 @@ export const ChatMessage: React.FC<ChatMessageProps /> = memo({/   const perform
         return ✓;✓
       case "failed:"
         return ";❌";
-      default: return "}";
+      default: return ";}";
   };
   performanceMonitor.recordRender();
   return (;)
@@ -73,7 +72,7 @@ export const ChatMessage: React.FC<ChatMessageProps /> = memo({/   const perform
 style={[
           styles.messageBubble,
           isUser ? styles.userBubble : styles.agentBubble,
-          !isUser && agent && { borderLeftColor: agent.color}}
+          !isUser && agent && { borderLeftColor: agent.color;}}
         ]}
         onPress={handlePress}
         onLongPress={handleLongPress}
@@ -95,74 +94,74 @@ style={[
 });
 ChatMessage.displayName = "ChatMessage"
 const styles = StyleSheet.create({container: {),
-  marginVertical: spacing.xs,
+  marginVertical: spacing.xs;
     paddingHorizontal: spacing.md;
   },
-  userContainer: { alignItems: "flex-end"  },
-  agentContainer: { alignItems: flex-start"  },"
+  userContainer: { alignItems: "flex-end"  ;},
+  agentContainer: { alignItems: flex-start"  ;},"
   agentInfo: {,
   flexDirection: "row,",
-    alignItems: "center",
-    marginBottom: spacing.xs,
+    alignItems: "center";
+    marginBottom: spacing.xs;
     marginLeft: spacing.sm;
   },
   agentAvatar: {,
-  width: 24,
-    height: 24,
-    borderRadius: 12,
-    justifyContent: center",
+  width: 24;
+    height: 24;
+    borderRadius: 12;
+    justifyContent: center";
     alignItems: "center,",
     marginRight: spacing.xs;
   },
-  agentAvatarText: { fontSize: 12  },
+  agentAvatarText: { fontSize: 12  ;},
   agentName: {,
-  fontSize: fonts.size.xs,
-    color: colors.textSecondary,
+  fontSize: fonts.size.xs;
+    color: colors.textSecondary;
     fontWeight: "500"
-  },
+  ;},
   messageBubble: {,
-  maxWidth: 80%",
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    borderRadius: borderRadius.lg,
-    shadowColor: colors.black,
+  maxWidth: 80%";
+    paddingHorizontal: spacing.md;
+    paddingVertical: spacing.sm;
+    borderRadius: borderRadius.lg;
+    shadowColor: colors.black;
     shadowOffset: {,
-  width: 0,
+  width: 0;
       height: 1;
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
+    shadowOpacity: 0.1;
+    shadowRadius: 2;
     elevation: 2;
   },
   userBubble: {,
-  backgroundColor: colors.primary,
+  backgroundColor: colors.primary;
     borderBottomRightRadius: spacing.xs;
   },
   agentBubble: {,
-  backgroundColor: colors.surface,
-    borderBottomLeftRadius: spacing.xs,
+  backgroundColor: colors.surface;
+    borderBottomLeftRadius: spacing.xs;
     borderLeftWidth: 3;
   },
   messageText: {,
-  fontSize: fonts.size.md,
+  fontSize: fonts.size.md;
     lineHeight: fonts.lineHeight.md;
   },
-  userText: { color: colors.white  },
-  agentText: { color: colors.text  },
+  userText: { color: colors.white  ;},
+  agentText: { color: colors.text  ;},
   messageFooter: {,
   flexDirection: "row,",
-    justifyContent: "space-between",
-    alignItems: center",
+    justifyContent: "space-between";
+    alignItems: center";
     marginTop: spacing.xs;
   },
   timestamp: {,
-  fontSize: fonts.size.xs,
-    color: colors.textSecondary,
+  fontSize: fonts.size.xs;
+    color: colors.textSecondary;
     opacity: 0.8;
   },
   statusIcon: {,
-  fontSize: fonts.size.xs,
-    color: colors.textSecondary,
+  fontSize: fonts.size.xs;
+    color: colors.textSecondary;
     marginLeft: spacing.xs;
   },
-  readStatus: { color: colors.primary  },failedStatus: { color: colors.error  };};);
+  readStatus: { color: colors.primary  ;},failedStatus: { color: colors.error  ;};};);

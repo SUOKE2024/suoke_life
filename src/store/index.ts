@@ -5,9 +5,9 @@ import medicalResourceReducer from './slices/medicalResourceSlice';
 import benchmarkReducer from './slices/benchmarkSlice';
 // Redux Store 配置
 // 暂时创建一个简单的reducer，后续完善authSlice;
-const authReducer = (state = { isAuthenticated: false }, action: any) => {switch (action.type) {case 'auth/login':return { ...state, isAuthenticated: true };
+const authReducer = (state = { isAuthenticated: false ;}, action: any) => {switch (action.type) {case 'auth/login':return { ...state, isAuthenticated: true ;};
     case 'auth/logout':
-      return { ...state, isAuthenticated: false };
+      return { ...state, isAuthenticated: false ;};
     default:
       return state;
   }

@@ -1,6 +1,4 @@
-import { ArchitectureOptimizer } from "../ArchitectureOptimizer";
-import { ArchitectureOptimizer } from "../ArchitectureOptimizer";
-import React from "react";
+
 describe("ArchitectureOptimizer", () => {
   beforeEach(() => {
     jest.clearAllMocks();

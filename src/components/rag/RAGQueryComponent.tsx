@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import {import { ragService } from '../../services/ragService';
-import type {View,;
+import type {View;
   Text,
   TextInput,
   TouchableOpacity,
@@ -35,20 +35,20 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
   useEffect() => {
     const initializeService = async () => {try {await ragService.initialize();
       } catch (error) {
-        console.error('RAG服务初始化失败:', error);
-        Alert.alert("错误", "RAG服务初始化失败');
+
+
       }
     };
     initializeService();
     // 监听RAG服务事件
-    const handleQueryComplete = (data: { request: RAGQueryRequest; result: RAGQueryResponse }) => {
+    const handleQueryComplete = (data: { request: RAGQueryRequest; result: RAGQueryResponse ;}) => {
       setResult(data.result);
       onResult?.(data.result);
     };
-    const handleQueryError = (data: { request: RAGQueryRequest; error: Error }) => {
-      console.error('RAG查询错误:', data.error);
+    const handleQueryError = (data: { request: RAGQueryRequest; error: Error ;}) => {
+
       onError?.(data.error);
-      Alert.alert('查询失败', data.error.message);
+
     };
     ragService.on('queryComplete', handleQueryComplete);
     ragService.on('queryError', handleQueryError);
@@ -57,34 +57,34 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
     };
   }, [onResult, onError]);
   // 执行基础查询
-  const handleQuery = useCallback(async () => {if (!query.trim()) {Alert.alert("提示", "请输入查询内容');)
+
       return;
     }
     setIsLoading(true);
     setResult(null);
     try {
       const request: RAGQueryRequest = {,
-  query: query.trim(),
+  query: query.trim();
         userId,
         taskType,
         context: {,
-  timestamp: Date.now(),
+  timestamp: Date.now();
           source: 'mobile_app'
-        }
+        ;}
       };
       const response = await ragService.query(request);
       setResult(response);
       onResult?.(response);
     } catch (error) {
-      console.error('查询失败:', error);
+
       onError?.(error as Error);
-      Alert.alert('查询失败', (error as Error).message);
+
     } finally {
       setIsLoading(false);
     }
   }, [query, userId, taskType, onResult, onError]);
   // 执行流式查询
-  const handleStreamQuery = useCallback(async () => {if (!query.trim()) {Alert.alert("提示", "请输入查询内容');)
+
       return;
     }
     setIsStreaming(true);
@@ -92,46 +92,46 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
     setResult(null);
     try {
       const request: RAGQueryRequest = {,
-  query: query.trim(),
+  query: query.trim();
         userId,
         taskType,
-        stream: true,
+        stream: true;
         context: {,
-  timestamp: Date.now(),
+  timestamp: Date.now();
           source: 'mobile_app'
-        }
+        ;}
       };
       await ragService.streamQuery(request, (chunk: StreamResponse) => {
         setStreamingText(prev => prev + chunk.answerFragment);
         if (chunk.isFinal && chunk.sources) {
           // 构建最终结果
           const finalResult: RAGQueryResponse = {,
-  requestId: chunk.requestId,
-            answer: streamingText + chunk.answerFragment,
+  requestId: chunk.requestId;
+            answer: streamingText + chunk.answerFragment;
             sources: chunk.sources.map(source => ({
               ...source,
               score: 0.8, // 默认分数
               url: '', // 流式响应中没有URL字段
-            })),
-            confidence: 0.85,
-            reasoningChain: [],
+            ;})),
+            confidence: 0.85;
+            reasoningChain: [];
             agentInfo: {,
-  agentName: 'RAG服务',
-              agentType: 'rag',
+
+              agentType: 'rag';
               processingTime: 0;
             },
-            processingTime: 0,
-            followUpQuestions: [],
-            metadata: {}
+            processingTime: 0;
+            followUpQuestions: [];
+            metadata: {;}
           };
           setResult(finalResult);
           onResult?.(finalResult);
         }
       });
     } catch (error) {
-      console.error('流式查询失败:', error);
+
       onError?.(error as Error);
-      Alert.alert('流式查询失败', (error as Error).message);
+
     } finally {
       setIsStreaming(false);
     }
@@ -147,12 +147,12 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
     setResult(null);
     try {
       const requests: RAGQueryRequest[] = queries.map(q => ({)),
-  query: q.trim(),
+  query: q.trim();
         userId,
         taskType,
         context: {,
-  timestamp: Date.now(),
-          source: 'mobile_app',
+  timestamp: Date.now();
+          source: 'mobile_app';
           batch: true;
         }
       }));
@@ -160,45 +160,45 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
       // 合并批量查询结果
       if (responses.length > 0) {
         const combinedResult: RAGQueryResponse = {,
-  requestId: `batch_${Date.now()}`,
-          answer: responses.map(r, i) => `${i + 1}. ${r.answer}`).join('\n\n'),
-          sources: responses.flatMap(r => r.sources),
+  requestId: `batch_${Date.now();}`,
+          answer: responses.map(r, i) => `${i + 1;}. ${r.answer}`).join('\n\n'),
+          sources: responses.flatMap(r => r.sources);
           confidence: responses.reduce(sum, r) => sum + r.confidence, 0) / responses.length,
-          reasoningChain: responses.flatMap(r => r.reasoningChain),
+          reasoningChain: responses.flatMap(r => r.reasoningChain);
           agentInfo: {,
-  agentName: '批量RAG服务',
-            agentType: 'batch_rag',
+
+            agentType: 'batch_rag';
             processingTime: responses.reduce(sum, r) => sum + r.processingTime, 0)
-          },
+          ;},
           processingTime: responses.reduce(sum, r) => sum + r.processingTime, 0),
-          followUpQuestions: responses.flatMap(r => r.followUpQuestions),
-          metadata: { batchSize: responses.length }
+          followUpQuestions: responses.flatMap(r => r.followUpQuestions);
+          metadata: { batchSize: responses.length ;}
         };
         setResult(combinedResult);
         onResult?.(combinedResult);
       }
     } catch (error) {
-      console.error('批量查询失败:', error);
+
       onError?.(error as Error);
-      Alert.alert('批量查询失败', (error as Error).message);
+
     } finally {
       setIsLoading(false);
     }
   }, [userId, taskType, isLoading, isStreaming, onResult, onError]);
   // 清除缓存
   const handleClearCache = useCallback() => {ragService.clearCache();
-    Alert.alert("成功", "缓存已清除');
+
   }, []);
   // 健康检查
   const handleHealthCheck = useCallback(async () => {try {const health = await ragService.performHealthCheck();)
-      Alert.alert('健康检查结果',
-        `服务状态: ${health.isHealthy ? '正常' : '异常'}\n` +
-        `RAG服务: ${health.services.rag ? '正常' : '异常'}\n` +
-        `TCM服务: ${health.services.tcm ? '正常' : '异常'}\n` +
-        `延迟: ${health.latency}ms`
+
+
+
+
+
       );
     } catch (err) {
-      Alert.alert("错误", "健康检查失败');
+
     }
   }, []);
   // 获取性能指标
@@ -207,8 +207,8 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
     const metricsText = Array.from(metrics.entries());
       .map([key, value]) => `${key}: ${value}ms`);
       .join('\n');
-    Alert.alert('性能指标',
-      `${metricsText}\n\n缓存大小: ${cacheStats.size}\n缓存键数: ${cacheStats.keys.length}`
+
+
     );
   }, []);
   return (
@@ -233,10 +233,10 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
                   taskType === type && styles.taskTypeButtonTextActive;
                 ]}}
               >
-                {type === 'consultation' && '咨询'}
-                {type === 'diagnosis' && '诊断'}
-                {type === 'treatment' && '治疗'}
-                {type === 'prevention' && '预防'}
+
+
+
+
               </Text>
             </TouchableOpacity>
           ))}
@@ -249,7 +249,7 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
           style={styles.textInput}
           value={query}
           onChangeText={setQuery}
-          placeholder="请输入您的健康问题或症状..."
+
           multiline;
           numberOfLines={3}
           textAlignVertical="top"
@@ -370,211 +370,211 @@ export const RAGQueryComponent: React.FC<RAGQueryComponentProps> = ({
 };
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
-    padding: 16,
+  flex: 1;
+    padding: 16;
     backgroundColor: '#f5f5f5'
-  },
+  ;},
   title: {,
-  fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 20,
+  fontSize: 24;
+    fontWeight: 'bold';
+    textAlign: 'center';
+    marginBottom: 20;
     color: '#333'
-  },
+  ;},
   taskTypeContainer: {,
   marginBottom: 16;
   },
   label: {,
-  fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 8,
+  fontSize: 16;
+    fontWeight: '600';
+    marginBottom: 8;
     color: '#333'
-  },
+  ;},
   taskTypeButtons: {,
-  flexDirection: 'row',
-    flexWrap: 'wrap',
+  flexDirection: 'row';
+    flexWrap: 'wrap';
     gap: 8;
   },
   taskTypeButton: {,
-  paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
-    backgroundColor: '#e0e0e0',
-    borderWidth: 1,
+  paddingHorizontal: 12;
+    paddingVertical: 6;
+    borderRadius: 16;
+    backgroundColor: '#e0e0e0';
+    borderWidth: 1;
     borderColor: '#ccc'
-  },
+  ;},
   taskTypeButtonActive: {,
-  backgroundColor: '#007AFF',
+  backgroundColor: '#007AFF';
     borderColor: '#007AFF'
-  },
+  ;},
   taskTypeButtonText: {,
-  fontSize: 14,
+  fontSize: 14;
     color: '#666'
-  },
+  ;},
   taskTypeButtonTextActive: {,
-  color: '#fff',
+  color: '#fff';
     fontWeight: '600'
-  },
+  ;},
   inputContainer: {,
   marginBottom: 16;
   },
   textInput: {,
-  borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    padding: 12,
-    backgroundColor: '#fff',
-    fontSize: 16,
+  borderWidth: 1;
+    borderColor: '#ddd';
+    borderRadius: 8;
+    padding: 12;
+    backgroundColor: '#fff';
+    fontSize: 16;
     minHeight: 80;
   },
   buttonContainer: {,
-  flexDirection: 'row',
-    gap: 12,
+  flexDirection: 'row';
+    gap: 12;
     marginBottom: 16;
   },
   button: {,
-  flex: 1,
-    paddingVertical: 12,
-    borderRadius: 8,
-    alignItems: 'center',
+  flex: 1;
+    paddingVertical: 12;
+    borderRadius: 8;
+    alignItems: 'center';
     justifyContent: 'center'
-  },
+  ;},
   queryButton: {,
   backgroundColor: '#007AFF'
-  },
+  ;},
   streamButton: {,
   backgroundColor: '#34C759'
-  },
+  ;},
   clearButton: {,
   backgroundColor: '#FF3B30'
-  },
+  ;},
   buttonText: {,
-  color: '#fff',
-    fontSize: 16,
+  color: '#fff';
+    fontSize: 16;
     fontWeight: '600'
-  },
+  ;},
   resultContainer: {,
   flex: 1;
   },
   streamingContainer: {,
-  backgroundColor: '#fff',
-    borderRadius: 8,
-    padding: 16,
-    marginBottom: 16,
-    borderLeftWidth: 4,
+  backgroundColor: '#fff';
+    borderRadius: 8;
+    padding: 16;
+    marginBottom: 16;
+    borderLeftWidth: 4;
     borderLeftColor: '#34C759'
-  },
+  ;},
   streamingText: {,
-  fontSize: 16,
-    lineHeight: 24,
-    color: '#333',
+  fontSize: 16;
+    lineHeight: 24;
+    color: '#333';
     marginBottom: 8;
   },
   streamingIndicator: {,
   alignSelf: 'flex-start'
-  },
+  ;},
   resultContent: {,
-  backgroundColor: '#fff',
-    borderRadius: 8,
+  backgroundColor: '#fff';
+    borderRadius: 8;
     padding: 16;
   },
   resultTitle: {,
-  fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 12,
+  fontSize: 18;
+    fontWeight: 'bold';
+    marginBottom: 12;
     color: '#333'
-  },
+  ;},
   answerContainer: {,
   marginBottom: 16;
   },
   answerTitle: {,
-  fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 8,
+  fontSize: 16;
+    fontWeight: '600';
+    marginBottom: 8;
     color: '#007AFF'
-  },
+  ;},
   answerText: {,
-  fontSize: 16,
-    lineHeight: 24,
+  fontSize: 16;
+    lineHeight: 24;
     color: '#333'
-  },
+  ;},
   confidenceContainer: {,
   marginBottom: 16;
   },
   confidenceLabel: {,
-  fontSize: 14,
-    color: '#666',
+  fontSize: 14;
+    color: '#666';
     fontWeight: '500'
-  },
+  ;},
   sourcesContainer: {,
   marginBottom: 16;
   },
   sourcesTitle: {,
-  fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 8,
+  fontSize: 16;
+    fontWeight: '600';
+    marginBottom: 8;
     color: '#333'
-  },
+  ;},
   sourceItem: {,
-  backgroundColor: '#f8f9fa',
-    borderRadius: 6,
-    padding: 12,
-    marginBottom: 8,
-    borderLeftWidth: 3,
+  backgroundColor: '#f8f9fa';
+    borderRadius: 6;
+    padding: 12;
+    marginBottom: 8;
+    borderLeftWidth: 3;
     borderLeftColor: '#007AFF'
-  },
+  ;},
   sourceTitle: {,
-  fontSize: 14,
-    fontWeight: '600',
-    marginBottom: 4,
+  fontSize: 14;
+    fontWeight: '600';
+    marginBottom: 4;
     color: '#333'
-  },
+  ;},
   sourceSnippet: {,
-  fontSize: 13,
-    lineHeight: 18,
-    color: '#666',
+  fontSize: 13;
+    lineHeight: 18;
+    color: '#666';
     marginBottom: 4;
   },
   sourceInfo: {,
-  fontSize: 12,
+  fontSize: 12;
     color: '#999'
-  },
+  ;},
   followUpContainer: {,
   marginTop: 8;
   },
   followUpTitle: {,
-  fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 8,
+  fontSize: 16;
+    fontWeight: '600';
+    marginBottom: 8;
     color: '#333'
-  },
+  ;},
   followUpItem: {,
-  backgroundColor: '#f0f8ff',
-    borderRadius: 6,
-    padding: 10,
-    marginBottom: 6,
-    borderWidth: 1,
+  backgroundColor: '#f0f8ff';
+    borderRadius: 6;
+    padding: 10;
+    marginBottom: 6;
+    borderWidth: 1;
     borderColor: '#e0e8f0'
-  },
+  ;},
   followUpText: {,
-  fontSize: 14,
+  fontSize: 14;
     color: '#007AFF'
-  },
+  ;},
   advancedButtonContainer: {,
-  flexDirection: 'row',
-    gap: 8,
-    marginBottom: 16,
+  flexDirection: 'row';
+    gap: 8;
+    marginBottom: 16;
     justifyContent: 'space-around'
-  },
+  ;},
   smallButton: {,
-  paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 6,
-    alignItems: 'center',
-    justifyContent: 'center',
+  paddingHorizontal: 12;
+    paddingVertical: 8;
+    borderRadius: 6;
+    alignItems: 'center';
+    justifyContent: 'center';
     flex: 1;
   },smallButtonText: {,
-  color: "#fff",
+  color: "#fff";
       fontSize: 12,fontWeight: '500';
   },healthButton: {backgroundColor: '#FF9500';
   },metricsButton: {backgroundColor: '#5856D6';

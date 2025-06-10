@@ -64,7 +64,7 @@ export function createSymptomAnalysisStrategy(): FusionStrategy {
     method: "weighted_sum,",
     parameters: {,
   normalization: "l2"
-    }
+    ;}
   }
 }
 /**
@@ -79,7 +79,7 @@ export function createConstitutionIdentificationStrategy(): FusionStrategy {
     },
     method: "attention,",
     parameters: {,
-  attention_type: "multi_head",
+  attention_type: "multi_head";
       heads: 4;
     }
   }
@@ -112,7 +112,7 @@ batchSize?: number;
 * @param config 配置选项
 * @returns 配置好的多模态RAG服务
 export async function createConfiguredMultimodalRAGService(;)
-  vectorDB: VectorDatabase,languageModel: LanguageModel,config: MultimodalRAGConfig = {}
+  vectorDB: VectorDatabase,languageModel: LanguageModel,config: MultimodalRAGConfig = {;}
 ): Promise<MultimodalRAGService> {
   const service = new MultimodalRAGService(vectorDB, languageModel);
   // 添加自定义策略
@@ -134,31 +134,31 @@ await service.initialize();
 export const examples = {/**
 * ;
   * 基本文本查询示例;
-  basicTextQuery: {text: 患者舌质红，苔薄黄，脉数，请分析病情",;
+
     strategy: "tcm_diagnosis_enhanced,";
     topK: 5,threshold: 0.7;
   } as MultimodalQuery,
   /**
 * * 多模态综合查询示例
   multimodalQuery: {,
-  text: "患者主诉头痛、失眠，请结合舌象和脉象进行诊断",
-    tongueImage: base64_encoded_tongue_image",
-    pulseSignal: [/* 脉象信号数组 ],
+
+    tongueImage: base64_encoded_tongue_image";
+    pulseSignal: [/* 脉象信号数组 ];
     strategy: "tcm_diagnosis_enhanced,",
-    topK: 3,
-    threshold: 0.8,
+    topK: 3;
+    threshold: 0.8;
     metadata: {,
-  patientAge: 45,
-      gender: "female",
+  patientAge: 45;
+      gender: "female";
       consultationDate: 2024-01-15""
-    } */
+    ;} */
   } as MultimodalQuery;
   /**
 * * 体质辨识查询示例
   constitutionQuery: {,
-  text: "患者平素怕冷，手足不温，大便溏薄,",
-    strategy: "constitution_identification",
-    topK: 5,
+
+    strategy: "constitution_identification";
+    topK: 5;
     threshold: 0.6;
   } as MultimodalQuery;
 };
@@ -166,8 +166,8 @@ export const examples = {/**
 export const MODALITY_TYPES = {TEXT: ModalityType.TEXT,TONGUE: ModalityType.TONGUE,PULSE: ModalityType.PULSE,AUDIO: ModalityType.AUDIO,IMAGE: ModalityType.IMAGE;
 } as const;
 // 导出预定义的融合策略名称
-export const FUSION_STRATEGIES = {TCM_DIAGNOSIS: tcm_diagnosis",;
-  TCM_DIAGNOSIS_ENHANCED: "tcm_diagnosis_enhanced,",COMPREHENSIVE_DIAGNOSIS: "comprehensive_diagnosis",TEXT_DOMINANT: text_dominant",;
+export const FUSION_STRATEGIES = {TCM_DIAGNOSIS: tcm_diagnosis";
+  TCM_DIAGNOSIS_ENHANCED: "tcm_diagnosis_enhanced,",COMPREHENSIVE_DIAGNOSIS: "comprehensive_diagnosis",TEXT_DOMINANT: text_dominant";
   SYMPTOM_ANALYSIS: "symptom_analysis,";
   CONSTITUTION_IDENTIFICATION: "constitution_identification';"'
 } as const;

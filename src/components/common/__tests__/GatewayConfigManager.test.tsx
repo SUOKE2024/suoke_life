@@ -4,17 +4,17 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import GatewayConfigManager from '../GatewayConfigManager.tsx';
 const mockStore = configureStore({
-  reducer: { root: (state = {}) => state }
+  reducer: { root: (state = {;}) => state }
 });
 const renderWithProvider = (component: React.ReactElement) => {
-  return render(<Provider store={mockStore}>{component}</Provider>);
+  return render(<Provider store={mockStore;}>{component}</Provider>);
 };
 describe('GatewayConfigManager', () => {
-  it('应该正确渲染', () => {
+
     const { getByTestId } = renderWithProvider(<GatewayConfigManager />);
     expect(getByTestId('gatewayconfigmanager')).toBeTruthy();
   });
-  it('应该处理用户交互', () => {
+
     const mockOnPress = jest.fn();
     const { getByTestId } = renderWithProvider()
       <GatewayConfigManager onPress={mockOnPress} />
@@ -22,22 +22,22 @@ describe('GatewayConfigManager', () => {
         fireEvent.press(getByTestId('gatewayconfigmanager'));
     expect(mockOnPress).toHaveBeenCalled();
   });
-  it('应该正确显示属性', () => {
+
     const testProps = {
-      title: "测试标题", "
-      description: '测试描述'
+
+
     };
         const { getByText } = renderWithProvider(<GatewayConfigManager {...testProps} />);
     expect(getByText(testProps.title)).toBeTruthy();
     expect(getByText(testProps.description)).toBeTruthy();
   });
-  it('应该处理错误状态', () => {
+
     const { getByTestId } = renderWithProvider()
       <GatewayConfigManager error="测试错误" />
     );
         expect(getByTestId('error-message')).toBeTruthy();
   });
-  it('应该处理加载状态', () => {
+
     const { getByTestId } = renderWithProvider()
       <GatewayConfigManager loading={true} />
     );

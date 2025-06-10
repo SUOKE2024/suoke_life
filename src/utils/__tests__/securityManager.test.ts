@@ -1,5 +1,4 @@
 import { SecurityManager, securityManager } from "../securityManager";
-import { SecurityManager, securityManager } from "../securityManager";
 describe("securityManager", () => {
   beforeEach(() => {
     jest.clearAllMocks();

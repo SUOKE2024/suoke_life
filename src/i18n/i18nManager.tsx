@@ -1,7 +1,7 @@
-import { EventEmitter  } from "../../placeholder";../utils/eventEmitter";/import { LocalizationService } from ./localizationService"/importzhCN from "./locales/zh.json/importenUS from ";./locales/    en.json;
+;/import { LocalizationService } from ./localizationService"/importzhCN from "./locales/zh.json/importenUS from ";./locales/    en.json;
 import React from "react";
 /    import {   I18nManager as RNI18nManager, NativeModules, Platform   } from "react-native";
-索克生活 - 国际化管理器   完整的多语言和地区化管理系统
+
 SupportedLanguage,
   LanguageConfig,
   RegionConfig,
@@ -15,11 +15,11 @@ SupportedLanguage,
   isRTLLanguage,
   getRegionFromLanguage,{ applyRTLLayout } from ./config" 导入现有语言资源 /    "
 //
-  "zh-TW": zhCN,  en-US": enUS, en-GB: enUS,  "ar-SA": enUS,  / 暂时使用英语作为回退*  暂时使用英语作为回退*  暂时使用英语作为回退*  暂时使用英语作为回退* * } * / // 事件类型 * export interface I18nEvents {
+  "zh-TW": zhCN,  en-US": enUS, en-GB: enUS,  "ar-SA": enUS,  / 暂时使用英语作为回退*  暂时使用英语作为回退*  暂时使用英语作为回退*  暂时使用英语作为回退* * ;} * / // 事件类型 * export interface I18nEvents {
   languageChanged: { language: SupportedLanguage, previousLanguage: SupportedLanguage;
 }"
 ,
-  regionChanged: { region: string, previousRegion: string},culturalPreferencesChanged: { preferences: CulturalPreferences },rtlChanged: { isRTL: boolean   };
+  regionChanged: { region: string, previousRegion: string;},culturalPreferencesChanged: { preferences: CulturalPreferences ;},rtlChanged: { isRTL: boolean   ;};
 }
 export class I18nManager extends EventEmitter   {private currentLanguage: SupportedLanguage = DEFAULT_LANGUAGE;
 private currentRegion: string = CN;
@@ -90,15 +90,15 @@ performanceMonitor.recordRender();
   // 标准化语言代码  private normalizeLocale(locale: string): string  {
     const mapping: Record<string, string> = {
       zh": "zh-CN,
-      "zh_CN": zh-CN",zh-Hans: "zh-CN",
+      "zh_CN": zh-CN",zh-Hans: "zh-CN";
       zh_TW": "zh-TW,
-      "zh-Hant": zh-TW",en: "en-US",
+      "zh-Hant": zh-TW",en: "en-US";
       en_US": "en-US,
-      "en_GB": en-GB",ar: "ar-SA",
+      "en_GB": en-GB",ar: "ar-SA";
       ar_SA": "ar-SA,
-      "he": he-IL",he_IL: "he-IL",
+      "he": he-IL",he_IL: "he-IL";
       ja": "ja-JP,
-      "ja_JP": ja-JP",ko: "ko-KR",
+      "ja_JP": ja-JP",ko: "ko-KR";
       ko_KR": "ko-KR;
     }
     return mapping[locale] || loca;l;e;
@@ -108,7 +108,7 @@ performanceMonitor.recordRender();
     if (previousLanguage === language) {return}
     try {
       if (!LANGUAGE_CONFIGS[language]) {
-        throw new Error(`不支持的语言: ${language}`;);
+
       }
       this.currentLanguage = language;
       this.currentRegion = getRegionFromLanguage(language);
@@ -131,7 +131,7 @@ performanceMonitor.recordRender();
     if (previousRegion === region) {return}
     try {
       if (!REGION_CONFIGS[region]) {
-        throw new Error(`不支持的地区: ${region};`;);
+
       }
       this.currentRegion = region;
       await AsyncStorage.setItem(STORAGE_KEYS.REGION, region;);
@@ -149,7 +149,7 @@ performanceMonitor.recordRender();
         STORAGE_KEYS.CULTURAL_PREFERENCES,
         JSON.stringify(this.culturalPreferences;);
       )
-      this.emit("culturalPreferencesChanged, { preferences: this.culturalPreferences}) "
+      this.emit("culturalPreferencesChanged, { preferences: this.culturalPreferences;}) "
       } catch (error) {
       throw error;
     }

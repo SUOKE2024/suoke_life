@@ -13,8 +13,8 @@ export type PermissionType =;
   | "photoLibrary"
   | "notifications";
 export interface PermissionResult {
-  granted: boolean;,
-  status: PermissionStatus;,
+  granted: boolean;
+  status: PermissionStatus;
   canAskAgain: boolean;
 }
 class PermissionManager {
@@ -52,22 +52,22 @@ class PermissionManager {
     const permission = this.getPermission(type);
     if (!permission) {
       return {
-        granted: false,
-        status: RESULTS.UNAVAILABLE,
+        granted: false;
+        status: RESULTS.UNAVAILABLE;
         canAskAgain: false;
       };
     }
     try {
       const status = await check(permission);
       return {
-        granted: status === RESULTS.GRANTED,
+        granted: status === RESULTS.GRANTED;
         status,
         canAskAgain: status === RESULTS.DENIED;
       };
     } catch (error) {
       return {
-        granted: false,
-        status: RESULTS.UNAVAILABLE,
+        granted: false;
+        status: RESULTS.UNAVAILABLE;
         canAskAgain: false;
       };
     }
@@ -76,22 +76,22 @@ class PermissionManager {
     const permission = this.getPermission(type);
     if (!permission) {
       return {
-        granted: false,
-        status: RESULTS.UNAVAILABLE,
+        granted: false;
+        status: RESULTS.UNAVAILABLE;
         canAskAgain: false;
       };
     }
     try {
       const status = await request(permission);
       return {
-        granted: status === RESULTS.GRANTED,
+        granted: status === RESULTS.GRANTED;
         status,
         canAskAgain: status === RESULTS.DENIED;
       };
     } catch (error) {
       return {
-        granted: false,
-        status: RESULTS.UNAVAILABLE,
+        granted: false;
+        status: RESULTS.UNAVAILABLE;
         canAskAgain: false;
       };
     }
@@ -99,28 +99,28 @@ class PermissionManager {
   getPermissionDescription(type: PermissionType): string {
     switch (type) {
       case "camera":
-        return "相机权限用于拍照和录像功能";
+
       case "microphone":
-        return "麦克风权限用于语音识别功能";
+
       case "location":
-        return "位置权限用于提供基于位置的服务";
+
       case "photoLibrary":
-        return "相册权限用于选择和保存图片";
+
       case "notifications":
-        return "通知权限用于健康提醒";
+
       default:
-        return "该权限用于应用正常功能";
-    }
+
+    ;}
   }
   showSettingsDialog(type: PermissionType): void {
-    Alert.alert("权限被拒绝", "请在设置中开启权限以使用相关功能",
+
       [
         {
-      text: "取消",
-      style: "cancel" },
+
+      style: "cancel" ;},
         {
-      text: "去设置",
-      onPress: () => Linking.openSettings() }
+
+      onPress: () => Linking.openSettings() ;}
       ]
     );
   }

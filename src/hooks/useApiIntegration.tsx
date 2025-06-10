@@ -1,13 +1,13 @@
 import React from "react";
-import { apiIntegrationService } from "../services/ApiIntegrationService";/    import { useState, useEffect, useCallback, useRef } from "react";
+react";
 useApiIntegration', {'
-    trackRender: true,
-    trackMemory: false,
-    warnThreshold: 100, // ms };);
+    trackRender: true;
+    trackMemory: false;
+    warnThreshold: 100, // ms ;};);
     setState({
-      data: null,
-      loading: false,
-      error: null,
+      data: null;
+      loading: false;
+      error: null;
       success: false;
     });
     retryCountRef.current = 0;
@@ -20,15 +20,15 @@ useApiIntegration', {'
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
   const setError = useCallback(error: string | null;); => {}
-    setState(prev); => ({ ...prev, error, loading: false, success: false}));
+    setState(prev); => ({ ...prev, error, loading: false, success: false;}));
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
   const setSuccess = useCallback(data: T;); => {}
     setState({
       data,
-      loading: false,
-      error: null,
+      loading: false;
+      error: null;
       success: true;
     });
       const effectEnd = performance.now();
@@ -47,7 +47,7 @@ useApiIntegration', {'
   const setCachedData = useCallback(key: string, data: unknow;n;); => {}
     cacheRef.current.set(key, {
       data,
-      timestamp: Date.now()});
+      timestamp: Date.now();});
       const effectEnd = performance.now();
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
@@ -79,7 +79,7 @@ useApiIntegration', {'
           }, retryDelay * retryCountRef.current);
           return nu;l;l;
         }
-        setError(error.message || "请求失败");
+
         return nu;l;l;
       }
     },
@@ -94,7 +94,7 @@ useApiIntegration', {'
     ]
   );
   const login = useCallback(;)
-    async (credentials: { username: stri;n;g, password: string}); => {}
+    async (credentials: { username: stri;n;g, password: string;}); => {}
       return executeRequest(); => apiIntegrationService.login(credentials););
     },
     [executeRequest]
@@ -116,7 +116,7 @@ useApiIntegration', {'
     performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [executeRequest]);
   const getHealthData = useCallback(;)
-    async (userId: string, timeRange?: { start: stri;n;g, end: string}) => {}
+    async (userId: string, timeRange?: { start: stri;n;g, end: string;}) => {}
       const cacheKey = `health-data-${userId}-${JSON.stringify(timeRange);};`;
       return executeRequest(); => apiIntegrationService.getHealthData(userId, timeRange),
         cacheKey;
@@ -170,7 +170,7 @@ useApiIntegration', {'
     [executeRequest]
   );
   const getAgentPerformance = useCallback(;)
-    async (agentId: string, timeRange?: { start: stri;n;g, end: string}) => {}
+    async (agentId: string, timeRange?: { start: stri;n;g, end: string;}) => {}
       const cacheKey = `agent-performance-${agentId}-${JSON.stringify(;)
         timeRange);};`;
       return executeRequest(); => apiIntegrationService.getAgentPerformance(agentId, timeRange),

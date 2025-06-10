@@ -1,45 +1,44 @@
-import { usePerformanceMonitor } from "../../placeholder";../hooks/    usePerformanceMonitor;
-import {   Platform, Alert   } from "react-native;"
+react-native;"
 import permissionManager from "./    permissions";
 import React from "react";
 VisionCamera 相关类型和功能 * export interface CameraConfig {
-  quality: "low" | "medium" | "high" | "4k",
-  enableAudio: boolean;,
-  flashMode: "off" | "on" | "auto";,
+  quality: "low" | "medium" | "high" | "4k";
+  enableAudio: boolean;
+  flashMode: "off" | "on" | "auto";
   cameraPosition: "front" | "back";
 }
 export interface PhotoResult {
-  path: string;,
-  width: number;,
-  height: number;,
-  size: number;,
+  path: string;
+  width: number;
+  height: number;
+  size: number;
   timestamp: number;
 }
 export interface VideoResult {
-  path: string;,
-  duration: number;,
-  size: number;,
+  path: string;
+  duration: number;
+  size: number;
   timestamp: number;
 }
 // Voice 相关类型和功能 * export interface VoiceConfig {
-  locale: string,
-  continuous: boolean;,
-  interimResults: boolean;,
-  maxAlternatives: number;,
+  locale: string;
+  continuous: boolean;
+  interimResults: boolean;
+  maxAlternatives: number;
   timeout: number;
 }
 export interface VoiceResult {
-  transcript: string;,
-  confidence: number;,
-  isFinal: boolean;,
-  alternatives: Array<{transcript: string;,
+  transcript: string;
+  confidence: number;
+  isFinal: boolean;
+  alternatives: Array<{transcript: string;
   confidence: number;
 }>
 }
 // 位置服务相关类型 * export interface LocationConfig {
-  accuracy: "low" | "balanced" | "high" | "highest",
-  timeout: number;,
-  maximumAge: number;,
+  accuracy: "low" | "balanced" | "high" | "highest";
+  timeout: number;
+  maximumAge: number;
   enableHighAccuracy: boolean;
 };
 export interface LocationResult {
@@ -96,7 +95,7 @@ const Geolocation = await import(;)
   }
   ///    >  {
     if (!this.cameraModule) {
-      Alert.alert("错误", "相机模块未初始化");
+
       return nu;l;l;
     }
     try {
@@ -107,25 +106,25 @@ const Geolocation = await import(;)
         return nu;l;l;
       }
       const defaultConfig: CameraConfig = {,
-  quality: "high",
-      enableAudio: false,
-        flashMode: "auto",
-        cameraPosition: "back",
+  quality: "high";
+      enableAudio: false;
+        flashMode: "auto";
+        cameraPosition: "back";
         ...config;
       }
-      const result: PhotoResult = { path: ` / tmp * photo_${Date.now()  }.jpg`, /            width: 1920,
-        height: 1080,
-        size: 2048000,
-        timestamp: Date.now()}
+      const result: PhotoResult = { path: ` / tmp * photo_${Date.now()  ;}.jpg`, /            width: 1920;
+        height: 1080;
+        size: 2048000;
+        timestamp: Date.now();}
       return resu;l;t;
     } catch (error) {
-      Alert.alert("拍照失败", "请稍后重试");
+
       return nu;l;l;
     }
   }
   ///    >  {
     if (!this.cameraModule) {
-      Alert.alert("错误", "相机模块未初始化");
+
       return nu;l;l;
     }
     try {
@@ -136,24 +135,24 @@ const Geolocation = await import(;)
         return nu;l;l;
       }
       const defaultConfig: CameraConfig = {,
-  quality: "high",
-      enableAudio: true,
-        flashMode: "off",
-        cameraPosition: "back",
+  quality: "high";
+      enableAudio: true;
+        flashMode: "off";
+        cameraPosition: "back";
         ...config;
       }
-      const result: VideoResult = { path: ` / tmp * video_${Date.now()  }.mp4`, /            duration: 30000,
-        size: 10240000,
-        timestamp: Date.now()}
+      const result: VideoResult = { path: ` / tmp * video_${Date.now()  ;}.mp4`, /            duration: 30000;
+        size: 10240000;
+        timestamp: Date.now();}
       return resu;l;t;
     } catch (error) {
-      Alert.alert("录制失败", "请稍后重试");
+
       return nu;l;l;
     }
   }
   ///    ): Promise<void>  {
     if (!this.voiceModule) {
-      Alert.alert("错误", "语音模块未初始化");
+
       return;
     }
     try {
@@ -164,29 +163,29 @@ const Geolocation = await import(;)
         return;
       }
       const defaultConfig: VoiceConfig = {,
-  locale: "zh-CN",
-      continuous: true,
-        interimResults: true,
-        maxAlternatives: 3,
-        timeout: 30000,
+  locale: "zh-CN";
+      continuous: true;
+        interimResults: true;
+        maxAlternatives: 3;
+        timeout: 30000;
         ...config;
       }
       this.voiceModule.onSpeechStart = () => {}
   // 性能监控
 const performanceMonitor = usePerformanceMonitor('nativeModules', {trackRender: true,)
-    trackMemory: false,
-    warnThreshold: 100, // ms };);
+    trackMemory: false;
+    warnThreshold: 100, // ms ;};);
         };
       this.voiceModule.onSpeechEnd = () => {}
         };
-      this.voiceModule.onSpeechResults = (event: unknown) => {}
+      this.voiceModule.onSpeechResults = (event: unknown) => {;}
         const results = event.val;u;e;
         }
-      this.voiceModule.onSpeechError = (event: unknown) => {}
+      this.voiceModule.onSpeechError = (event: unknown) => {;}
         };
       await this.voiceModule.start(defaultConfig.locale;);
       } catch (error) {
-      Alert.alert("语音识别失败", "请检查麦克风权限");
+
     }
   }
   // 停止语音识别  async stopVoiceRecognition(): Promise<void> {
@@ -200,7 +199,7 @@ const performanceMonitor = usePerformanceMonitor('nativeModules', {trackRender: 
   }
   ///    >  {
     if (!this.locationModule) {
-      Alert.alert("错误", "位置服务模块未初始化");
+
       return nu;l;l;
     }
     try {
@@ -211,31 +210,31 @@ const performanceMonitor = usePerformanceMonitor('nativeModules', {trackRender: 
         return nu;l;l;
       }
       const defaultConfig: LocationConfig = {,
-  accuracy: "high",
-      timeout: 15000,
-        maximumAge: 10000,
-        enableHighAccuracy: true,
+  accuracy: "high";
+      timeout: 15000;
+        maximumAge: 10000;
+        enableHighAccuracy: true;
         ...config;
       };
       return new Promise(resolve, rejec;t;); => {}
         this.locationModule.getCurrentPosition(position: unknown); => {}
-            const result: LocationResult = {latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-              altitude: position.coords.altitude,
-              accuracy: position.coords.accuracy,
-              speed: position.coords.speed,
-              heading: position.coords.heading,
-              timestamp: position.timestamp};
+            const result: LocationResult = {latitude: position.coords.latitude;
+              longitude: position.coords.longitude;
+              altitude: position.coords.altitude;
+              accuracy: position.coords.accuracy;
+              speed: position.coords.speed;
+              heading: position.coords.heading;
+              timestamp: position.timestamp;};
             resolve(result);
           },
-          (error: unknown) => {}
-            Alert.alert("定位失败", "请检查位置权限和GPS设置");
+          (error: unknown) => {;}
+
             resolve(null);
           },
           {
-            enableHighAccuracy: defaultConfig.enableHighAccuracy,
-            timeout: defaultConfig.timeout,
-            maximumAge: defaultConfig.maximumAge}
+            enableHighAccuracy: defaultConfig.enableHighAccuracy;
+            timeout: defaultConfig.timeout;
+            maximumAge: defaultConfig.maximumAge;}
         );
       });
     } catch (error) {
@@ -243,10 +242,10 @@ const performanceMonitor = usePerformanceMonitor('nativeModules', {trackRender: 
     }
   }
   // 监听位置变化  async watchLocation()
-    callback: (location: LocationResult) => void,
-    config: Partial<LocationConfig /> = {}/    ): Promise<number | null> {
+    callback: (location: LocationResult) => void;
+    config: Partial<LocationConfig /> = {;}/    ): Promise<number | null> {
     if (!this.locationModule) {
-      Alert.alert("错误", "位置服务模块未初始化");
+
       return nu;l;l;
     }
     try {
@@ -257,29 +256,29 @@ const performanceMonitor = usePerformanceMonitor('nativeModules', {trackRender: 
         return nu;l;l;
       }
       const defaultConfig: LocationConfig = {,
-  accuracy: "balanced",
-      timeout: 30000,
-        maximumAge: 5000,
-        enableHighAccuracy: false,
+  accuracy: "balanced";
+      timeout: 30000;
+        maximumAge: 5000;
+        enableHighAccuracy: false;
         ...config;
       };
       const watchId = this.locationModule.watchPosition(;)
         (position: unknow;n;); => {}
-          const result: LocationResult = {latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            altitude: position.coords.altitude,
-            accuracy: position.coords.accuracy,
-            speed: position.coords.speed,
-            heading: position.coords.heading,
-            timestamp: position.timestamp};
+          const result: LocationResult = {latitude: position.coords.latitude;
+            longitude: position.coords.longitude;
+            altitude: position.coords.altitude;
+            accuracy: position.coords.accuracy;
+            speed: position.coords.speed;
+            heading: position.coords.heading;
+            timestamp: position.timestamp;};
           callback(result);
         },
-        (error: unknown) => {}
+        (error: unknown) => {;}
           },
         {
-          enableHighAccuracy: defaultConfig.enableHighAccuracy,
-          timeout: defaultConfig.timeout,
-          maximumAge: defaultConfig.maximumAge}
+          enableHighAccuracy: defaultConfig.enableHighAccuracy;
+          timeout: defaultConfig.timeout;
+          maximumAge: defaultConfig.maximumAge;}
       );
       return watch;I;d;
     } catch (error) {
@@ -291,15 +290,15 @@ const performanceMonitor = usePerformanceMonitor('nativeModules', {trackRender: 
       this.locationModule.clearWatch(watchId);
       }
   }
-  // 检查所有原生模块状态  getModulesStatus(): { camera: boolean,
-    voice: boolean,
-    location: boolean} {
+  // 检查所有原生模块状态  getModulesStatus(): { camera: boolean;
+    voice: boolean;
+    location: boolean;} {
     return {camera: !!this.cameraModule,voice: !!this.voiceModule,location: !!this.locationModul;e;};
   }
-  // 健康应用专用：启动五诊相关的原生功能  async initializeHealthFeatures(): Promise<{ camera: boolean,
-    voice: boolean,
-    location: boolean,
-    permissions: unknown}> {
+  // 健康应用专用：启动五诊相关的原生功能  async initializeHealthFeatures(): Promise<{ camera: boolean;
+    voice: boolean;
+    location: boolean;
+    permissions: unknown;}> {
     const modules = this.getModulesStatus;
     const permissions = await permissionManager.checkHealthAppPermission;s;
     return {...modules,
@@ -312,14 +311,14 @@ const performanceMonitor = usePerformanceMonitor('nativeModules', {trackRender: 
         (resul;t;); => result.granted;
       )
       if (allGranted) {
-        Alert.alert("权限授权成功", "所有功能现在可以正常使用了");
+
       } else {
-        Alert.alert("权限授权不完整", "部分功能可能无法正常使用，您可以稍后在设置中开启相关权限"
+
         );
       }
       return allGrant;e;d;
     } catch (error) {
-      Alert.alert("权限请求失败", "请稍后重试");
+
       return fal;s;e;
     }
   }

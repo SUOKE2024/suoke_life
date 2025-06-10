@@ -3,8 +3,8 @@ import { View, Text, StyleSheet, ScrollView, RefreshControl, TouchableOpacity } 
 import { unifiedApiService } from '../../services/unifiedApiService';
 import { apiClient } from '../../services/apiClient';
 interface ServiceHealth {
-  name: string;,
-  status: 'healthy' | 'unhealthy' | 'unknown';,
+  name: string;
+  status: 'healthy' | 'unhealthy' | 'unknown';
   instances: number;
   responseTime?: number;
   lastCheck?: string;
@@ -13,7 +13,7 @@ interface ServiceHealth {
 interface GatewayStats {
   cacheStats: { size: number;
 };
-  circuitBreakerState: string,
+  circuitBreakerState: string;
   gatewayHealth: boolean;
 }
 export const GatewayMonitor: React.FC = () => {
@@ -35,19 +35,19 @@ export const GatewayMonitor: React.FC = () => {
           ? healthResponse.value.data;
           : Object.entries(healthResponse.value.data || {}).map([name, data]: [string, any]) => ({
               name,
-              status: data.status || 'unknown',
-              instances: data.instances || 0,
-              responseTime: data.responseTime,
-              lastCheck: data.lastCheck}));
+              status: data.status || 'unknown';
+              instances: data.instances || 0;
+              responseTime: data.responseTime;
+              lastCheck: data.lastCheck;}));
         setServices(serviceData);
       } else {
         // 如果无法获取服务状态，显示默认服务列表
         const defaultServices = [
           "AUTH",USER', "HEALTH_DATA",AGENTS', "DIAGNOSIS",RAG', "BLOCKCHAIN",MESSAGE_BUS', "MEDICAL_RESOURCE",CORN_MAZE', "ACCESSIBILITY",SUOKE_BENCH'].map(name => ({
           name,
-          status: 'unknown' as const,
-          instances: 0,
-          error: '无法连接到服务'}));
+          status: 'unknown' as const;
+          instances: 0;
+
         setServices(defaultServices);
       }
       // 处理网关统计信息
@@ -56,7 +56,7 @@ export const GatewayMonitor: React.FC = () => {
       }
     } catch (err: any) {
       console.error('Failed to load gateway status:', err);
-      setError(err.message || '加载网关状态失败');
+
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -86,11 +86,11 @@ export const GatewayMonitor: React.FC = () => {
   };
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'healthy': return '健康';
-      case 'unhealthy': return '异常';
-      case 'unknown': return '未知';
-      default: return '离线';
-    }
+
+
+
+
+    ;}
   };
   const getCircuitBreakerColor = (state: string) => {
     switch (state) {
@@ -130,15 +130,15 @@ export const GatewayMonitor: React.FC = () => {
           <View style={styles.statRow}>
             <Text style={styles.statLabel}>网关状态:</Text>
             <View style={[styles.statusDot, {
-              backgroundColor: gatewayStats.gatewayHealth ? '#4CAF50' : '#F44336'}}]} />
+              backgroundColor: gatewayStats.gatewayHealth ? '#4CAF50' : '#F44336';}}]} />
             <Text style={styles.statValue}>
-              {gatewayStats.gatewayHealth ? '在线' : '离线'}
+
             </Text>
           </View>
           <View style={styles.statRow}>
             <Text style={styles.statLabel}>熔断器状态:</Text>
             <View style={[styles.statusDot, {
-              backgroundColor: getCircuitBreakerColor(gatewayStats.circuitBreakerState)}}]} />
+              backgroundColor: getCircuitBreakerColor(gatewayStats.circuitBreakerState);}}]} />
             <Text style={styles.statValue}>{gatewayStats.circuitBreakerState}</Text>
           </View>
           <View style={styles.statRow}>
@@ -153,9 +153,9 @@ export const GatewayMonitor: React.FC = () => {
         {services.map(service, index) => ())
           <View key={index} style={styles.serviceItem}>
             <View style={styles.serviceHeader}>
-              <View style={[styles.statusDot, { backgroundColor: getStatusColor(service.status) }}]} />
+              <View style={[styles.statusDot, { backgroundColor: getStatusColor(service.status) ;}}]} />
               <Text style={styles.serviceName}>{service.name}</Text>
-              <Text style={[styles.serviceStatus, { color: getStatusColor(service.status) }}]}>
+              <Text style={[styles.serviceStatus, { color: getStatusColor(service.status) ;}}]}>
                 {getStatusText(service.status)}
               </Text>
             </View>
@@ -164,7 +164,7 @@ export const GatewayMonitor: React.FC = () => {
               {service.responseTime  && <Text style={styles.serviceDetail}>响应时间: {service.responseTime}ms</Text>
               )}
               {service.lastCheck  && <Text style={styles.serviceDetail}>
-                  最后检查: {new Date(service.lastCheck).toLocaleTimeString()}
+
                 </Text>
               )}
               {service.error  && <Text style={styles.errorDetail}>错误: {service.error}</Text>
@@ -175,10 +175,10 @@ export const GatewayMonitor: React.FC = () => {
       </View>
       <View style={styles.footer}>
         <Text style={styles.footerText}>
-          最后更新: {new Date().toLocaleTimeString()}
+
         </Text>
         <Text style={styles.footerText}>
-          自动刷新间隔: 30秒
+
         </Text>
       </View>
     </ScrollView>
@@ -186,117 +186,117 @@ export const GatewayMonitor: React.FC = () => {
 };
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
-    backgroundColor: '#f5f5f5'},
+  flex: 1;
+    backgroundColor: '#f5f5f5';},
   header: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 16,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0'},
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
+    padding: 16;
+    backgroundColor: '#fff';
+    borderBottomWidth: 1;
+    borderBottomColor: '#e0e0e0';},
   title: {,
-  fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333'},
+  fontSize: 20;
+    fontWeight: 'bold';
+    color: '#333';},
   clearButton: {,
-  backgroundColor: '#2196F3',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 4},
+  backgroundColor: '#2196F3';
+    paddingHorizontal: 12;
+    paddingVertical: 6;
+    borderRadius: 4;},
   clearButtonText: {,
-  color: '#fff',
-    fontSize: 12,
-    fontWeight: '500'},
+  color: '#fff';
+    fontSize: 12;
+    fontWeight: '500';},
   loadingText: {,
-  textAlign: 'center',
-    marginTop: 50,
-    fontSize: 16,
-    color: '#666'},
+  textAlign: 'center';
+    marginTop: 50;
+    fontSize: 16;
+    color: '#666';},
   errorContainer: {,
-  margin: 16,
-    padding: 12,
-    backgroundColor: '#ffebee',
-    borderRadius: 8,
-    borderLeftWidth: 4,
-    borderLeftColor: '#f44336'},
+  margin: 16;
+    padding: 12;
+    backgroundColor: '#ffebee';
+    borderRadius: 8;
+    borderLeftWidth: 4;
+    borderLeftColor: '#f44336';},
   errorText: {,
-  color: '#c62828',
-    fontSize: 14},
+  color: '#c62828';
+    fontSize: 14;},
   statsContainer: {,
-  margin: 16,
-    padding: 16,
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4},
+  margin: 16;
+    padding: 16;
+    backgroundColor: '#fff';
+    borderRadius: 8;
+    elevation: 2;
+    shadowColor: '#000';
+    shadowOffset: { width: 0, height: 2 ;},
+    shadowOpacity: 0.1;
+    shadowRadius: 4;},
   sectionTitle: {,
-  fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 12},
+  fontSize: 18;
+    fontWeight: 'bold';
+    color: '#333';
+    marginBottom: 12;},
   statRow: {,
-  flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8},
+  flexDirection: 'row';
+    alignItems: 'center';
+    marginBottom: 8;},
   statLabel: {,
-  fontSize: 14,
-    color: '#666',
-    minWidth: 100},
+  fontSize: 14;
+    color: '#666';
+    minWidth: 100;},
   statValue: {,
-  fontSize: 14,
-    color: '#333',
-    fontWeight: '500',
-    marginLeft: 8},
+  fontSize: 14;
+    color: '#333';
+    fontWeight: '500';
+    marginLeft: 8;},
   statusDot: {,
-  width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginRight: 8},
+  width: 8;
+    height: 8;
+    borderRadius: 4;
+    marginRight: 8;},
   servicesContainer: {,
-  margin: 16,
-    marginTop: 0},
+  margin: 16;
+    marginTop: 0;},
   serviceItem: {,
-  backgroundColor: '#fff',
-    borderRadius: 8,
-    padding: 16,
-    marginBottom: 8,
-    elevation: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2},
+  backgroundColor: '#fff';
+    borderRadius: 8;
+    padding: 16;
+    marginBottom: 8;
+    elevation: 1;
+    shadowColor: '#000';
+    shadowOffset: { width: 0, height: 1 ;},
+    shadowOpacity: 0.05;
+    shadowRadius: 2;},
   serviceHeader: {,
-  flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8},
+  flexDirection: 'row';
+    alignItems: 'center';
+    marginBottom: 8;},
   serviceName: {,
-  fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
-    flex: 1},
+  fontSize: 16;
+    fontWeight: '600';
+    color: '#333';
+    flex: 1;},
   serviceStatus: {,
-  fontSize: 14,
-    fontWeight: '500'},
+  fontSize: 14;
+    fontWeight: '500';},
   serviceDetails: {,
-  paddingLeft: 16},
+  paddingLeft: 16;},
   serviceDetail: {,
-  fontSize: 12,
-    color: '#666',
-    marginBottom: 2},
+  fontSize: 12;
+    color: '#666';
+    marginBottom: 2;},
   errorDetail: {,
-  fontSize: 12,
-    color: '#f44336',
-    marginTop: 4},
+  fontSize: 12;
+    color: '#f44336';
+    marginTop: 4;},
   footer: {,
-  padding: 16,
-    alignItems: 'center'},
+  padding: 16;
+    alignItems: 'center';},
   footerText: {,
-  fontSize: 12,
-    color: '#999',
-    marginBottom: 4}});
+  fontSize: 12;
+    color: '#999';
+    marginBottom: 4;}});
 export default GatewayMonitor;

@@ -1,5 +1,4 @@
 import { apiIntegrationTest } from "../apiIntegrationTest";
-import { apiIntegrationTest } from "../apiIntegrationTest";
 describe("apiIntegrationTest", () => {
   beforeEach(() => {
     jest.clearAllMocks();

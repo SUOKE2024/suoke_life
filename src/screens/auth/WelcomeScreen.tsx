@@ -12,9 +12,9 @@ import {;
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 type AuthStackParamList = {
-  Welcome: undefined;,
-  Login: undefined;,
-  Register: undefined;,
+  Welcome: undefined;
+  Login: undefined;
+  Register: undefined;
   ForgotPassword: undefined;
 };
 
@@ -38,21 +38,21 @@ const WelcomeScreen: React.FC = () => {
     // Logo渐入动画
     Animated.parallel([
       Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 2000,
+        toValue: 1;
+        duration: 2000;
         useNativeDriver: true
-      }),
+      ;}),
       Animated.spring(scaleAnim, {
-        toValue: 1,
-        tension: 20,
-        friction: 7,
+        toValue: 1;
+        tension: 20;
+        friction: 7;
         useNativeDriver: true
-      }),
+      ;}),
       Animated.timing(slideAnim, {
-        toValue: 0,
-        duration: 1500,
+        toValue: 0;
+        duration: 1500;
         useNativeDriver: true
-      })
+      ;})
     ]).start();
 
     // 3秒后自动跳转到登录页面
@@ -71,8 +71,8 @@ const WelcomeScreen: React.FC = () => {
           style={[
             styles.logoContainer,
             {
-              opacity: fadeAnim,
-              transform: [{ scale: scaleAnim }, { translateY: slideAnim }]
+              opacity: fadeAnim;
+              transform: [{ scale: scaleAnim ;}, { translateY: slideAnim ;}]
             }
           ]}
         >
@@ -85,8 +85,8 @@ const WelcomeScreen: React.FC = () => {
             style={[
               styles.titleContainer,
               {
-                opacity: fadeAnim,
-                transform: [{ translateY: slideAnim }]
+                opacity: fadeAnim;
+                transform: [{ translateY: slideAnim ;}]
               }
             ]}
           >
@@ -100,7 +100,7 @@ const WelcomeScreen: React.FC = () => {
             styles.loadingContainer,
             {
               opacity: fadeAnim
-            }
+            ;}
           ]}
         >
           <View style={styles.loadingDots}>
@@ -117,85 +117,85 @@ const WelcomeScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
+  flex: 1;
     backgroundColor: '#FFFFFF'
-  },
+  ;},
   content: {,
-  flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  flex: 1;
+    justifyContent: 'center';
+    alignItems: 'center';
     paddingHorizontal: 20
-  },
+  ;},
   logoContainer: {,
-  justifyContent: 'center',
-    alignItems: 'center',
+  justifyContent: 'center';
+    alignItems: 'center';
     marginBottom: 80
-  },
+  ;},
   logoPlaceholder: {,
-  width: 120,
-    height: 120,
-    borderRadius: 60,
-    backgroundColor: '#3498DB',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 30,
-    shadowColor: '#3498DB',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 20,
+  width: 120;
+    height: 120;
+    borderRadius: 60;
+    backgroundColor: '#3498DB';
+    justifyContent: 'center';
+    alignItems: 'center';
+    marginBottom: 30;
+    shadowColor: '#3498DB';
+    shadowOffset: { width: 0, height: 8 ;},
+    shadowOpacity: 0.3;
+    shadowRadius: 20;
     elevation: 10
-  },
+  ;},
   logoText: {,
-  fontSize: 36,
-    fontWeight: 'bold',
+  fontSize: 36;
+    fontWeight: 'bold';
     color: '#FFFFFF'
-  },
+  ;},
   titleContainer: {,
   alignItems: 'center'
-  },
+  ;},
   title: {,
-  fontSize: 32,
-    fontWeight: 'bold',
-    color: '#2C3E50',
-    marginBottom: 8,
+  fontSize: 32;
+    fontWeight: 'bold';
+    color: '#2C3E50';
+    marginBottom: 8;
     textAlign: 'center'
-  },
+  ;},
   subtitle: {,
-  fontSize: 16,
-    color: '#7F8C8D',
-    textAlign: 'center',
+  fontSize: 16;
+    color: '#7F8C8D';
+    textAlign: 'center';
     lineHeight: 24
-  },
+  ;},
   loadingContainer: {,
-  position: 'absolute',
-    bottom: 100,
+  position: 'absolute';
+    bottom: 100;
     alignItems: 'center'
-  },
+  ;},
   loadingDots: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
     marginBottom: 16
-  },
+  ;},
   dot: {,
-  width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#3498DB',
+  width: 8;
+    height: 8;
+    borderRadius: 4;
+    backgroundColor: '#3498DB';
     marginHorizontal: 4
-  },
+  ;},
   dot1: {
     // 第一个点的样式
-  },
+  ;},
   dot2: {
     // 第二个点的样式
-  },
+  ;},
   dot3: {
     // 第三个点的样式
-  },
+  ;},
   loadingText: {,
-  fontSize: 14,
-    color: '#7F8C8D',
+  fontSize: 14;
+    color: '#7F8C8D';
     textAlign: 'center'
-  }
+  ;}
 });
 
 export default WelcomeScreen;

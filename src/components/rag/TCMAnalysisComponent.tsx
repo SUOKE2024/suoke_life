@@ -11,8 +11,8 @@ import {;
 } from 'react-native';
 // 简化的类型定义
 interface TCMAnalysisRequest {
-  symptoms: string[];,
-  userId: string;,
+  symptoms: string[];
+  userId: string;
   constitutionType: string;
   medicalHistory?: string[];
   currentMedications?: string[];
@@ -25,37 +25,37 @@ interface TCMAnalysisRequest {
 };
 }
 interface TCMAnalysisResponse {
-  syndromeAnalysis: {;,
-  primarySyndrome: string;,
-  secondarySyndromes: string[];,
+  syndromeAnalysis: {
+  primarySyndrome: string;
+  secondarySyndromes: string[];
   confidence: number;
 };
   constitutionAssessment: {,
-  constitutionType: string;,
+  constitutionType: string;
   characteristics: string[];
   };
   recommendations: {,
-  lifestyle: string[];,
-  dietary: string[],
+  lifestyle: string[];
+  dietary: string[];
   exercise: string[];
   };
 }
 interface HerbRecommendationRequest {
-  syndromeType: string;,
-  constitutionType: string;,
-  userId: string;,
+  syndromeType: string;
+  constitutionType: string;
+  userId: string;
   currentSymptoms: string[];
 }
 interface HerbRecommendationResponse {
-  formula: {;,
-  name: string;,
+  formula: {
+  name: string;
   herbs: Array<{;,
-  name: string;,
-  dosage: string;,
+  name: string;
+  dosage: string;
   function: string;
 }>;
   };
-  instructions: string[],
+  instructions: string[];
   precautions: string[];
 }
 interface TCMAnalysisComponentProps {
@@ -75,12 +75,12 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
   const [medicalHistory, setMedicalHistory] = useState('');
   const [currentMedications, setCurrentMedications] = useState('');
   const [lifestyle, setLifestyle] = useState({
-      diet: "",
-      exercise: '',
-    sleep: '',
-    stress: '',
+      diet: "";
+      exercise: '';
+    sleep: '';
+    stress: '';
     environment: ''
-  });
+  ;});
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isRecommending, setIsRecommending] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<TCMAnalysisResponse | null>(null);
@@ -88,32 +88,32 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
   // 体质类型选项
   const constitutionTypes = [
     {
-      value: "balanced",
-      label: '平和质' },
+      value: "balanced";
+
     {
-      value: "qi_deficiency",
-      label: '气虚质' },
+      value: "qi_deficiency";
+
     {
-      value: "yang_deficiency",
-      label: '阳虚质' },
+      value: "yang_deficiency";
+
     {
-      value: "yin_deficiency",
-      label: '阴虚质' },
+      value: "yin_deficiency";
+
     {
-      value: "phlegm_dampness",
-      label: '痰湿质' },
+      value: "phlegm_dampness";
+
     {
-      value: "damp_heat",
-      label: '湿热质' },
+      value: "damp_heat";
+
     {
-      value: "blood_stasis",
-      label: '血瘀质' },
+      value: "blood_stasis";
+
     {
-      value: "qi_stagnation",
-      label: '气郁质' },
+      value: "qi_stagnation";
+
     {
-      value: "special_constitution",
-      label: '特禀质' }
+      value: "special_constitution";
+
   ];
   // 添加症状
   const addSymptom = useCallback() => {
@@ -133,7 +133,7 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
   const handleAnalysis = useCallback(async () => {
     const validSymptoms = symptoms.filter(s => s.trim());
     if (validSymptoms.length === 0) {
-      Alert.alert("提示", "请至少输入一个症状');
+
       return;
     }
     setIsAnalyzing(true);
@@ -142,26 +142,26 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
       // 模拟分析结果
       const mockResult: TCMAnalysisResponse = {,
   syndromeAnalysis: {,
-  primarySyndrome: "气虚血瘀",
-      secondarySyndromes: ["脾胃虚弱", "肝气郁结'],
+
+
           confidence: 0.85;
         },
         constitutionAssessment: {,
-  constitutionType: constitutionType,
-          characteristics: ["气虚", "血瘀', '脾胃虚弱']
+  constitutionType: constitutionType;
+
         },
         recommendations: {,
-  lifestyle: ["规律作息", "适量运动', '保持心情愉悦'],
-          dietary: ["温补脾胃", "活血化瘀', '避免生冷'],
-          exercise: ["太极拳", "八段锦', '散步']
-        }
+
+
+
+        ;}
       };
       setAnalysisResult(mockResult);
       onAnalysisResult?.(mockResult);
     } catch (error) {
-      console.error('中医分析失败:', error);
+
       onError?.(error as Error);
-      Alert.alert('分析失败', (error as Error).message);
+
     } finally {
       setIsAnalyzing(false);
     }
@@ -169,7 +169,7 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
   // 获取中药推荐
   const handleHerbRecommendation = useCallback(async () => {
     if (!analysisResult) {
-      Alert.alert("提示", "请先进行中医分析');
+
       return;
     }
     setIsRecommending(true);
@@ -178,31 +178,31 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
       // 模拟中药推荐结果
       const mockHerbResult: HerbRecommendationResponse = {,
   formula: {,
-  name: "补中益气汤加减",
+
       herbs: [
             {
-      name: "黄芪", "
-      dosage: '30g', function: '补气升阳' },
+
+
             {
-      name: "党参", "
-      dosage: '15g', function: '补中益气' },
+
+
             {
-      name: "白术", "
-      dosage: '12g', function: '健脾燥湿' },
+
+
             {
-      name: "当归", "
-      dosage: '10g', function: '补血活血' }
+
+
           ]
-        },
-        instructions: ["水煎服，每日一剂", "饭后30分钟服用', '连服7-14天'],
-        precautions: ["孕妇慎用", "感冒发热时停服', '服药期间忌食生冷']
+        ;},
+
+
       };
       setHerbResult(mockHerbResult);
       onHerbResult?.(mockHerbResult);
     } catch (error) {
-      console.error('中药推荐失败:', error);
+
       onError?.(error as Error);
-      Alert.alert('推荐失败', (error as Error).message);
+
     } finally {
       setIsRecommending(false);
     }
@@ -214,12 +214,12 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
     setMedicalHistory('');
     setCurrentMedications('');
     setLifestyle({
-      diet: "",
-      exercise: '',
-      sleep: '',
-      stress: '',
+      diet: "";
+      exercise: '';
+      sleep: '';
+      stress: '';
       environment: ''
-    });
+    ;});
     setAnalysisResult(null);
     setHerbResult(null);
   }, []);
@@ -235,7 +235,7 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
               style={styles.symptomInput}
               value={symptom}
               onChangeText={(value) => updateSymptom(index, value)}
-              placeholder={`症状 ${index + 1}`}
+
             />
             {symptoms.length > 1  && <TouchableOpacity;
                 style={styles.removeButton}
@@ -346,129 +346,129 @@ export const TCMAnalysisComponent: React.FC<TCMAnalysisComponentProps> = ({
 };
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
-    backgroundColor: '#f5f5f5',
-    padding: 16},
+  flex: 1;
+    backgroundColor: '#f5f5f5';
+    padding: 16;},
   title: {,
-  fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
-    textAlign: 'center',
-    marginBottom: 24},
+  fontSize: 24;
+    fontWeight: 'bold';
+    color: '#333';
+    textAlign: 'center';
+    marginBottom: 24;},
   section: {,
-  backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16},
+  backgroundColor: '#fff';
+    borderRadius: 12;
+    padding: 16;
+    marginBottom: 16;},
   sectionTitle: {,
-  fontSize: 18,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 12},
+  fontSize: 18;
+    fontWeight: '600';
+    color: '#333';
+    marginBottom: 12;},
   symptomRow: {,
-  flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8},
+  flexDirection: 'row';
+    alignItems: 'center';
+    marginBottom: 8;},
   symptomInput: {,
-  flex: 1,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 16},
+  flex: 1;
+    borderWidth: 1;
+    borderColor: '#ddd';
+    borderRadius: 8;
+    padding: 12;
+    fontSize: 16;},
   removeButton: {,
-  marginLeft: 8,
-    backgroundColor: '#FF3B30',
-    borderRadius: 6,
-    paddingHorizontal: 12,
-    paddingVertical: 8},
+  marginLeft: 8;
+    backgroundColor: '#FF3B30';
+    borderRadius: 6;
+    paddingHorizontal: 12;
+    paddingVertical: 8;},
   removeButtonText: {,
-  color: '#fff',
-    fontSize: 14},
+  color: '#fff';
+    fontSize: 14;},
   addButton: {,
-  backgroundColor: '#007AFF',
-    borderRadius: 8,
-    padding: 12,
-    alignItems: 'center',
-    marginTop: 8},
+  backgroundColor: '#007AFF';
+    borderRadius: 8;
+    padding: 12;
+    alignItems: 'center';
+    marginTop: 8;},
   addButtonText: {,
-  color: '#fff',
-    fontSize: 16,
-    fontWeight: '600'},
+  color: '#fff';
+    fontSize: 16;
+    fontWeight: '600';},
   constitutionGrid: {,
-  flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8},
+  flexDirection: 'row';
+    flexWrap: 'wrap';
+    gap: 8;},
   constitutionButton: {,
-  backgroundColor: '#f0f0f0',
-    borderRadius: 20,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    marginBottom: 8},
+  backgroundColor: '#f0f0f0';
+    borderRadius: 20;
+    paddingHorizontal: 16;
+    paddingVertical: 8;
+    marginBottom: 8;},
   constitutionButtonActive: {,
-  backgroundColor: '#007AFF'},
+  backgroundColor: '#007AFF';},
   constitutionButtonText: {,
-  fontSize: 14,
-    color: '#666'},
+  fontSize: 14;
+    color: '#666';},
   constitutionButtonTextActive: {,
-  color: '#fff'},
+  color: '#fff';},
   buttonContainer: {,
-  gap: 12,
-    marginBottom: 24},
+  gap: 12;
+    marginBottom: 24;},
   button: {,
-  borderRadius: 12,
-    padding: 16,
-    alignItems: 'center'},
+  borderRadius: 12;
+    padding: 16;
+    alignItems: 'center';},
   primaryButton: {,
-  backgroundColor: '#007AFF'},
+  backgroundColor: '#007AFF';},
   secondaryButton: {,
-  backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#007AFF'},
+  backgroundColor: '#fff';
+    borderWidth: 1;
+    borderColor: '#007AFF';},
   clearButton: {,
-  backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#FF3B30'},
+  backgroundColor: '#fff';
+    borderWidth: 1;
+    borderColor: '#FF3B30';},
   buttonText: {,
-  fontSize: 16,
-    fontWeight: '600',
-    color: '#fff'},
+  fontSize: 16;
+    fontWeight: '600';
+    color: '#fff';},
   secondaryButtonText: {,
-  color: '#007AFF'},
+  color: '#007AFF';},
   clearButtonText: {,
-  color: '#FF3B30'},
+  color: '#FF3B30';},
   resultSection: {,
-  marginBottom: 24},
+  marginBottom: 24;},
   resultTitle: {,
-  fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 12},
+  fontSize: 20;
+    fontWeight: 'bold';
+    color: '#333';
+    marginBottom: 12;},
   resultCard: {,
-  backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 16},
+  backgroundColor: '#fff';
+    borderRadius: 12;
+    padding: 16;},
   resultLabel: {,
-  fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
-    marginTop: 12,
-    marginBottom: 4},
+  fontSize: 16;
+    fontWeight: '600';
+    color: '#333';
+    marginTop: 12;
+    marginBottom: 4;},
   resultValue: {,
-  fontSize: 16,
-    color: '#666',
-    marginBottom: 8},
+  fontSize: 16;
+    color: '#666';
+    marginBottom: 8;},
   recommendationItem: {,
-  fontSize: 14,
-    color: '#666',
-    marginBottom: 4},
+  fontSize: 14;
+    color: '#666';
+    marginBottom: 4;},
   herbItem: {,
-  fontSize: 14,
-    color: '#666',
-    marginBottom: 4,
-    paddingLeft: 8},
+  fontSize: 14;
+    color: '#666';
+    marginBottom: 4;
+    paddingLeft: 8;},
   instructionItem: {,
-  fontSize: 14,
-    color: '#666',
-    marginBottom: 4}});
+  fontSize: 14;
+    color: '#666';
+    marginBottom: 4;}});
 export default TCMAnalysisComponent;

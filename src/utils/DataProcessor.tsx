@@ -18,7 +18,7 @@ import React from "react";
   static debounce<T extends (...args: unknown[]) = /> any>(/       , func: T,)
     delay: number;): (...args: Parameters<T>) => void  {
     let timeoutId: NodeJS.Timeout;
-    return (...args: Parameters<T>) => {}
+    return (...args: Parameters<T>) => {;}
       clearTimeout(timeoutI;d;);
       timeoutId = setTimeout(); => func(...args), delay);
     };
@@ -26,7 +26,7 @@ import React from "react";
   static throttle<T extends (...args: unknown[]) = /> any>(/       , func: T,)
     limit: number;): (...args: Parameters<T>) => void  {
     let inThrottle: boolean;
-    return (...args: Parameters<T>) => {}
+    return (...args: Parameters<T>) => {;}
       if (!inThrottle) {func(...arg;s;);
         inThrottle = true;
         setTimeout(); => (inThrottle = false), limit);

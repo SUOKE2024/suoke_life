@@ -12,7 +12,7 @@ import {;
 import { useTheme } from '../../contexts/ThemeContext';
 
 export interface TooltipProps {
-  children: React.ReactNode;,
+  children: React.ReactNode;
   content: string;
   placement?: 'top' | 'bottom' | 'left' | 'right';
   visible?: boolean;
@@ -33,7 +33,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
   children,
   content,
   placement = 'top',
-  visible: controlledVisible,
+  visible: controlledVisible;
   onVisibilityChange,
   backgroundColor,
   textColor,
@@ -48,13 +48,13 @@ export const Tooltip: React.FC<TooltipProps> = ({
 }) => {
   const { currentTheme } = useTheme();
   const [internalVisible, setInternalVisible] = useState(false);
-  const [tooltipLayout, setTooltipLayout] = useState({ width: 0, height: 0 });
+  const [tooltipLayout, setTooltipLayout] = useState({ width: 0, height: 0 ;});
   const [childLayout, setChildLayout] = useState({
-    x: 0,
-    y: 0,
-    width: 0,
+    x: 0;
+    y: 0;
+    width: 0;
     height: 0
-  });
+  ;});
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.8)).current;
@@ -77,16 +77,16 @@ export const Tooltip: React.FC<TooltipProps> = ({
 
       Animated.parallel([
         Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 200,
+          toValue: 1;
+          duration: 200;
           useNativeDriver: true
-        }),
+        ;}),
         Animated.spring(scaleAnim, {
-          toValue: 1,
-          tension: 100,
-          friction: 8,
+          toValue: 1;
+          tension: 100;
+          friction: 8;
           useNativeDriver: true
-        })
+        ;})
       ]).start();
     }, delay);
   };
@@ -98,15 +98,15 @@ export const Tooltip: React.FC<TooltipProps> = ({
 
     Animated.parallel([
       Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: 150,
+        toValue: 0;
+        duration: 150;
         useNativeDriver: true
-      }),
+      ;}),
       Animated.timing(scaleAnim, {
-        toValue: 0.8,
-        duration: 150,
+        toValue: 0.8;
+        duration: 150;
         useNativeDriver: true
-      })
+      ;})
     ]).start() => {
       if (controlledVisible === undefined) {
         setInternalVisible(false);
@@ -118,7 +118,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
   const measureChild = () => {
     if (childRef.current) {
       childRef.current.measure(x, y, width, height, pageX, pageY) => {
-        setChildLayout({ x: pageX, y: pageY, width, height });
+        setChildLayout({ x: pageX, y: pageY, width, height ;});
       });
     }
   };
@@ -166,62 +166,62 @@ export const Tooltip: React.FC<TooltipProps> = ({
   const getArrowStyle = () => {
     const arrowSize = 6;
     const arrowStyle: ViewStyle = {,
-  position: 'absolute',
-      width: 0,
-      height: 0,
-      backgroundColor: 'transparent',
+  position: 'absolute';
+      width: 0;
+      height: 0;
+      backgroundColor: 'transparent';
       borderStyle: 'solid'
-    };
+    ;};
 
     switch (placement) {
       case 'top':
         return {
           ...arrowStyle,
-          top: tooltipLayout.height - 1,
-          left: tooltipLayout.width / 2 - arrowSize,
-          borderLeftWidth: arrowSize,
-          borderRightWidth: arrowSize,
-          borderTopWidth: arrowSize,
-          borderLeftColor: 'transparent',
-          borderRightColor: 'transparent',
+          top: tooltipLayout.height - 1;
+          left: tooltipLayout.width / 2 - arrowSize;
+          borderLeftWidth: arrowSize;
+          borderRightWidth: arrowSize;
+          borderTopWidth: arrowSize;
+          borderLeftColor: 'transparent';
+          borderRightColor: 'transparent';
           borderTopColor: backgroundColor || currentTheme.colors.surface
-        };
+        ;};
       case 'bottom':
         return {
           ...arrowStyle,
-          bottom: tooltipLayout.height - 1,
-          left: tooltipLayout.width / 2 - arrowSize,
-          borderLeftWidth: arrowSize,
-          borderRightWidth: arrowSize,
-          borderBottomWidth: arrowSize,
-          borderLeftColor: 'transparent',
-          borderRightColor: 'transparent',
+          bottom: tooltipLayout.height - 1;
+          left: tooltipLayout.width / 2 - arrowSize;
+          borderLeftWidth: arrowSize;
+          borderRightWidth: arrowSize;
+          borderBottomWidth: arrowSize;
+          borderLeftColor: 'transparent';
+          borderRightColor: 'transparent';
           borderBottomColor: backgroundColor || currentTheme.colors.surface
-        };
+        ;};
       case 'left':
         return {
           ...arrowStyle,
-          left: tooltipLayout.width - 1,
-          top: tooltipLayout.height / 2 - arrowSize,
-          borderTopWidth: arrowSize,
-          borderBottomWidth: arrowSize,
-          borderLeftWidth: arrowSize,
-          borderTopColor: 'transparent',
-          borderBottomColor: 'transparent',
+          left: tooltipLayout.width - 1;
+          top: tooltipLayout.height / 2 - arrowSize;
+          borderTopWidth: arrowSize;
+          borderBottomWidth: arrowSize;
+          borderLeftWidth: arrowSize;
+          borderTopColor: 'transparent';
+          borderBottomColor: 'transparent';
           borderLeftColor: backgroundColor || currentTheme.colors.surface
-        };
+        ;};
       case 'right':
         return {
           ...arrowStyle,
-          right: tooltipLayout.width - 1,
-          top: tooltipLayout.height / 2 - arrowSize,
-          borderTopWidth: arrowSize,
-          borderBottomWidth: arrowSize,
-          borderRightWidth: arrowSize,
-          borderTopColor: 'transparent',
-          borderBottomColor: 'transparent',
+          right: tooltipLayout.width - 1;
+          top: tooltipLayout.height / 2 - arrowSize;
+          borderTopWidth: arrowSize;
+          borderBottomWidth: arrowSize;
+          borderRightWidth: arrowSize;
+          borderTopColor: 'transparent';
+          borderBottomColor: 'transparent';
           borderRightColor: backgroundColor || currentTheme.colors.surface
-        };
+        ;};
     }
   };
 
@@ -238,31 +238,31 @@ export const Tooltip: React.FC<TooltipProps> = ({
   const styles = StyleSheet.create({
     container: {,
   position: 'relative'
-    },
+    ;},
     tooltip: {,
-  position: 'absolute',
-      backgroundColor: backgroundColor || currentTheme.colors.surface,
+  position: 'absolute';
+      backgroundColor: backgroundColor || currentTheme.colors.surface;
       borderRadius,
-      paddingHorizontal: 12,
-      paddingVertical: 8,
+      paddingHorizontal: 12;
+      paddingVertical: 8;
       maxWidth,
-      shadowColor: currentTheme.colors.shadow,
+      shadowColor: currentTheme.colors.shadow;
       shadowOffset: {,
-  width: 0,
+  width: 0;
         height: 2
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 3.84,
-      elevation: 5,
-      zIndex: 1000,
-      left: tooltipPosition.x,
+      ;},
+      shadowOpacity: 0.25;
+      shadowRadius: 3.84;
+      elevation: 5;
+      zIndex: 1000;
+      left: tooltipPosition.x;
       top: tooltipPosition.y
-    },
+    ;},
     tooltipText: {,
-  color: textColor || currentTheme.colors.onSurface,
-      fontSize: 14,
-      lineHeight: 20,
-      textAlign: 'center',
+  color: textColor || currentTheme.colors.onSurface;
+      fontSize: 14;
+      lineHeight: 20;
+      textAlign: 'center';
       ...textStyle
     }
   });
@@ -280,7 +280,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
         accessible={accessible}
         accessibilityLabel={accessibilityLabel || content}
         accessibilityRole="button"
-        accessibilityHint="长按显示提示信息"
+
         testID={testID}
         activeOpacity={1}
       >
@@ -292,8 +292,8 @@ export const Tooltip: React.FC<TooltipProps> = ({
           style={[
             styles.tooltip,
             {
-              opacity: fadeAnim,
-              transform: [{ scale: scaleAnim }]
+              opacity: fadeAnim;
+              transform: [{ scale: scaleAnim ;}]
             }
           ]}
           onLayout={(event) => {

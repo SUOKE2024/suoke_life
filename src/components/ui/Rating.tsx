@@ -39,7 +39,7 @@ export const Rating: React.FC<RatingProps> = ({
   accessible = true,
   accessibilityLabel,
   testID
-}) => {
+;}) => {
   const { currentTheme } = useTheme();
   const [hoverValue, setHoverValue] = useState<number | null>(null);
 
@@ -49,11 +49,11 @@ export const Rating: React.FC<RatingProps> = ({
   const getSizeStyles = () => {
     switch (size) {
       case 'sm':
-        return { width: 16, height: 16, fontSize: 14 };
+        return { width: 16, height: 16, fontSize: 14 ;};
       case 'lg':
-        return { width: 32, height: 32, fontSize: 28 };
+        return { width: 32, height: 32, fontSize: 28 ;};
       default:
-        return { width: 24, height: 24, fontSize: 20 };
+        return { width: 24, height: 24, fontSize: 20 ;};
     }
   };
 
@@ -103,35 +103,35 @@ export const Rating: React.FC<RatingProps> = ({
 
     const styles = StyleSheet.create({
       starContainer: {,
-  position: 'relative',
+  position: 'relative';
         marginRight: index < max - 1 ? 2 : 0
-      },
+      ;},
       star: {,
-  width: sizeStyles.width,
-        height: sizeStyles.height,
-        justifyContent: 'center',
+  width: sizeStyles.width;
+        height: sizeStyles.height;
+        justifyContent: 'center';
         alignItems: 'center'
-      },
+      ;},
       starText: {,
-  fontSize: sizeStyles.fontSize,
-        color: inactiveColor,
+  fontSize: sizeStyles.fontSize;
+        color: inactiveColor;
         textAlign: 'center'
-      },
+      ;},
       starFilled: {,
-  position: 'absolute',
-        top: 0,
-        left: 0,
-        width: sizeStyles.width,
-        height: sizeStyles.height,
-        justifyContent: 'center',
-        alignItems: 'center',
+  position: 'absolute';
+        top: 0;
+        left: 0;
+        width: sizeStyles.width;
+        height: sizeStyles.height;
+        justifyContent: 'center';
+        alignItems: 'center';
         overflow: 'hidden'
-      },
+      ;},
       starFilledText: {,
-  fontSize: sizeStyles.fontSize,
-        color: activeColor,
+  fontSize: sizeStyles.fontSize;
+        color: activeColor;
         textAlign: 'center'
-      }
+      ;}
     });
 
     return (
@@ -142,8 +142,8 @@ export const Rating: React.FC<RatingProps> = ({
         disabled={readonly}
         accessible={accessible}
         accessibilityRole="button"
-        accessibilityLabel={`${index + 1} 星`}
-        accessibilityState={ selected: ratingValue > 0 }}
+
+        accessibilityState={ selected: ratingValue > 0 ;}}
       >
         <View style={styles.star}>
           <Text style={styles.starText}>{iconSymbol}</Text>
@@ -155,7 +155,7 @@ export const Rating: React.FC<RatingProps> = ({
               {
                 width:
                   ratingValue === 0.5 ? sizeStyles.width / 2 : sizeStyles.width
-              }
+              ;}
             ]}
           >
             <Text style={styles.starFilledText}>{iconSymbol}</Text>
@@ -167,9 +167,9 @@ export const Rating: React.FC<RatingProps> = ({
 
   const containerStyles = StyleSheet.create({
     container: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
       alignItems: 'center'
-    }
+    ;}
   });
 
   return (
@@ -179,15 +179,15 @@ export const Rating: React.FC<RatingProps> = ({
       accessible={accessible}
       accessibilityRole="adjustable"
       accessibilityLabel={
-        accessibilityLabel || `评分 ${value} 分，满分 ${max} 分`
+
       }
       accessibilityValue={
-        min: 0,
+        min: 0;
         max,
         now: value
-      }}
+      ;}}
     >
-      {Array.from({ length: max }, (_, index) => renderStar(index))}
+      {Array.from({ length: max ;}, (_, index) => renderStar(index))}
     </View>
   );
 };

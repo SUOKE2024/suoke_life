@@ -1,14 +1,14 @@
 import React, { createContext, useContext, useRef, useCallback } from 'react';
 import { View, Animated, Dimensions, Vibration, PanResponder } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+const { width: screenWidth, height: screenHeight ;} = Dimensions.get('window');
 // 手势配置接口
 interface GestureConfig {
-  swipeThreshold: number;,
-  velocityThreshold: number;,
-  enableBackGesture: boolean;,
-  enableQuickActions: boolean;,
-  enableHapticFeedback: boolean;,
+  swipeThreshold: number;
+  velocityThreshold: number;
+  enableBackGesture: boolean;
+  enableQuickActions: boolean;
+  enableHapticFeedback: boolean;
   edgeSwipeWidth: number;
 }
 // 手势动作类型
@@ -23,26 +23,26 @@ type GestureAction =
 type GestureDirection = 'left' | 'right' | 'up' | 'down';
 // 手势上下文
 interface GestureContextType {
-  config: GestureConfig;,
-  registerGestureAction: (direction: GestureDirection, action: GestureAction) => void;,
-  unregisterGestureAction: (direction: GestureDirection) => void;,
+  config: GestureConfig;
+  registerGestureAction: (direction: GestureDirection, action: GestureAction) => void;
+  unregisterGestureAction: (direction: GestureDirection) => void;
   triggerHapticFeedback: (type?: 'light' | 'medium' | 'heavy') => void;
 }
 // 默认配置
 const DEFAULT_CONFIG: GestureConfig = {,
-  swipeThreshold: 50,
-  velocityThreshold: 500,
-  enableBackGesture: true,
-  enableQuickActions: true,
-  enableHapticFeedback: true,
-  edgeSwipeWidth: 20};
+  swipeThreshold: 50;
+  velocityThreshold: 500;
+  enableBackGesture: true;
+  enableQuickActions: true;
+  enableHapticFeedback: true;
+  edgeSwipeWidth: 20;};
 // 创建上下文
 const GestureContext = createContext<GestureContextType | null>(null);
 // 手势导航提供者
 export const GestureNavigationProvider: React.FC<{,
   children: React.ReactNode;
   config?: Partial<GestureConfig>;
-}> = ({ children, config: userConfig = {} }) => {
+}> = ({ children, config: userConfig = {;} }) => {
   const navigation = useNavigation();
   const config = { ...DEFAULT_CONFIG, ...userConfig };
     // 手势动作映射
@@ -123,14 +123,14 @@ export const GestureNavigationProvider: React.FC<{,
   const panResponder = useRef()
     PanResponder.create({
       onMoveShouldSetPanResponder: (evt, gestureState) => {
-        const { dx, dy } = gestureState;
+        const { dx, dy ;} = gestureState;
         return Math.abs(dx) > 10 || Math.abs(dy) > 10;
       },
       onPanResponderGrant: () => {
         // 手势开始
-      },
+      ;},
       onPanResponderMove: (evt, gestureState) => {
-        const { dx, dy } = gestureState;
+        const { dx, dy ;} = gestureState;
                 // 更新动画值
         translateX.setValue(dx);
         translateY.setValue(dy);
@@ -141,7 +141,7 @@ export const GestureNavigationProvider: React.FC<{,
         opacity.setValue(newOpacity);
       },
       onPanResponderRelease: (evt, gestureState) => {
-        const { dx, dy, vx, vy } = gestureState;
+        const { dx, dy, vx, vy ;} = gestureState;
         const direction = getGestureDirection(dx, dy);
                 if (direction) {
           const velocity = direction === 'left' || direction === 'right' ? Math.abs(vx) : Math.abs(vy);
@@ -156,27 +156,27 @@ export const GestureNavigationProvider: React.FC<{,
         // 重置动画值
         Animated.parallel([)
           Animated.spring(translateX, {
-            toValue: 0,
-            useNativeDriver: true}),
+            toValue: 0;
+            useNativeDriver: true;}),
           Animated.spring(translateY, {
-            toValue: 0,
-            useNativeDriver: true}),
+            toValue: 0;
+            useNativeDriver: true;}),
           Animated.spring(opacity, {
-            toValue: 1,
-            useNativeDriver: true})]).start();
+            toValue: 1;
+            useNativeDriver: true;})]).start();
       }})
   ).current;
   const contextValue: GestureContextType = {
     config,
     registerGestureAction,
     unregisterGestureAction,
-    triggerHapticFeedback};
+    triggerHapticFeedback;};
   return (
   <GestureContext.Provider value={contextValue}>
       <Animated.View;
-        style={flex: 1,
+        style={flex: 1;
           transform: [
-            { translateX }},
+            { translateX ;}},
             { translateY }],
           opacity}}
         {...panResponder.panHandlers}
@@ -193,9 +193,9 @@ export const useGestureNavigation = () => {
     throw new Error('useGestureNavigation must be used within GestureNavigationProvider');
   }
   return {
-    config: context.config,
-    registerGestureAction: context.registerGestureAction,
-    unregisterGestureAction: context.unregisterGestureAction,
-    triggerHapticFeedback: context.triggerHapticFeedback};
+    config: context.config;
+    registerGestureAction: context.registerGestureAction;
+    unregisterGestureAction: context.unregisterGestureAction;
+    triggerHapticFeedback: context.triggerHapticFeedback;};
 };
 export default GestureNavigationProvider;

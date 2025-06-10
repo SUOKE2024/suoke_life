@@ -1,5 +1,4 @@
 import { MemoryOptimizer, memoryOptimizer, registerComponent, unregisterComponent, registerListener, unregisterListener, getMemoryStats, takeMemorySnapshot, detectMemoryLeaks } from "../memoryOptimizer";
-import { MemoryOptimizer, memoryOptimizer, registerComponent, unregisterComponent, registerListener, unregisterListener, getMemoryStats, takeMemorySnapshot, detectMemoryLeaks } from "../memoryOptimizer";
 describe("memoryOptimizer", () => {
   beforeEach(() => {
     jest.clearAllMocks();

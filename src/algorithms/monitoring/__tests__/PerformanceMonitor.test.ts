@@ -1,5 +1,4 @@
 import { PerformanceMonitor } from "../PerformanceMonitor";
-import { PerformanceMonitor } from "../PerformanceMonitor";
 describe("PerformanceMonitor", () => {
   beforeEach(() => {
     jest.clearAllMocks();

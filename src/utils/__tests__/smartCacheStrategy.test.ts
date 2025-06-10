@@ -1,5 +1,4 @@
 import { SmartCacheStrategy, smartCache, smartCacheUtils } from "../smartCacheStrategy";
-import { SmartCacheStrategy, smartCache, smartCacheUtils } from "../smartCacheStrategy";
 describe("smartCacheStrategy", () => {
   beforeEach(() => {
     jest.clearAllMocks();

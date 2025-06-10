@@ -15,22 +15,22 @@ interface PerformanceOptimizerConfig {
 }
 
 const DEFAULT_CONFIG: PerformanceOptimizerConfig = {
-  enableRenderOptimization: true,
-  enableMemoryOptimization: true,
-  enableNetworkOptimization: true,
-  frameRateTarget: 60,
+  enableRenderOptimization: true;
+  enableMemoryOptimization: true;
+  enableNetworkOptimization: true;
+  frameRateTarget: 60;
   memoryThreshold: 100 * 1024 * 1024, // 100MB
   cacheHitRateTarget: 0.8, // 80%
-};
+;};
 
 export class PerformanceOptimizer {
   private static instance: PerformanceOptimizer;
   private config: PerformanceOptimizerConfig;
   private renderCache = new Map<string, any>();
   private memoryMonitor: NodeJS.Timeout | null = null;
-  private networkCache = new Map<string, { data: any; timestamp: number; ttl: number }>();
+  private networkCache = new Map<string, { data: any; timestamp: number; ttl: number ;}>();
 
-  private constructor(config: Partial<PerformanceOptimizerConfig> = {}) {
+  private constructor(config: Partial<PerformanceOptimizerConfig> = {;}) {
     this.config = { ...DEFAULT_CONFIG, ...config };
     this.startMemoryMonitoring();
   }
@@ -46,8 +46,8 @@ export class PerformanceOptimizer {
    * 渲染优化 - 使用React.memo和缓存
    */
   public optimizeRender<T extends React.ComponentType<any>>(
-    Component: T,
-    propsAreEqual?: (prevProps: any, nextProps: any) => boolean
+    Component: T;
+    propsAreEqual?: (prevProps: any; nextProps: any) => boolean
   ): T {
     if (!this.config.enableRenderOptimization) {
       return Component;
@@ -61,9 +61,9 @@ export class PerformanceOptimizer {
    * 列表渲染优化
    */
   public optimizeListRender = <T>(
-    data: T[],
-    renderItem: (item: T, index: number) => React.ReactElement,
-    keyExtractor: (item: T, index: number) => string,
+    data: T[];
+    renderItem: (item: T, index: number) => React.ReactElement;
+    keyExtractor: (item: T, index: number) => string;
     windowSize: number = 10
   ) => {
     return useMemo(() => {
@@ -124,15 +124,15 @@ export class PerformanceOptimizer {
       global.gc();
     }
 
-    console.log('🧹 内存清理完成');
+
   }
 
   /**
    * 网络请求优化
    */
   public optimizeNetworkRequest = async <T>(
-    key: string,
-    requestFn: () => Promise<T>,
+    key: string;
+    requestFn: () => Promise<T>;
     ttl: number = 300000 // 5分钟默认TTL
   ): Promise<T> => {
     if (!this.config.enableNetworkOptimization) {
@@ -142,7 +142,7 @@ export class PerformanceOptimizer {
     // 检查缓存
     const cached = this.networkCache.get(key);
     if (cached && Date.now() - cached.timestamp < cached.ttl) {
-      console.log(`📦 网络缓存命中: ${key}`);
+
       return cached.data;
     }
 
@@ -153,14 +153,14 @@ export class PerformanceOptimizer {
       // 缓存结果
       this.networkCache.set(key, {
         data,
-        timestamp: Date.now(),
+        timestamp: Date.now();
         ttl
       });
 
-      console.log(`🌐 网络请求完成并缓存: ${key}`);
+
       return data;
     } catch (error) {
-      console.error(`❌ 网络请求失败: ${key}`, error);
+
       throw error;
     }
   };
@@ -215,11 +215,11 @@ export class PerformanceOptimizer {
    */
   public getPerformanceStats() {
     return {
-      renderCacheSize: this.renderCache.size,
-      networkCacheSize: this.networkCache.size,
-      memoryUsage: 'memory' in performance ? (performance as any).memory : null,
+      renderCacheSize: this.renderCache.size;
+      networkCacheSize: this.networkCache.size;
+      memoryUsage: 'memory' in performance ? (performance as any).memory : null;
       config: this.config
-    };
+    ;};
   }
 
   /**
@@ -237,7 +237,7 @@ export class PerformanceOptimizer {
 
 // React Hook for using performance optimizer
 export const usePerformanceOptimizer = (config?: Partial<PerformanceOptimizerConfig>) => {
-  const optimizer = useMemo(() => PerformanceOptimizer.getInstance(config), [config]);
+  const optimizer = useMemo(() => PerformanceOptimizer.getInstance(config); [config]);
   
   useEffect(() => {
     return () => {
@@ -246,12 +246,12 @@ export const usePerformanceOptimizer = (config?: Partial<PerformanceOptimizerCon
   }, []);
 
   return {
-    optimizeRender: optimizer.optimizeRender.bind(optimizer),
-    optimizeListRender: optimizer.optimizeListRender,
-    optimizeNetworkRequest: optimizer.optimizeNetworkRequest,
-    optimizeAnimation: optimizer.optimizeAnimation,
+    optimizeRender: optimizer.optimizeRender.bind(optimizer);
+    optimizeListRender: optimizer.optimizeListRender;
+    optimizeNetworkRequest: optimizer.optimizeNetworkRequest;
+    optimizeAnimation: optimizer.optimizeAnimation;
     getStats: optimizer.getPerformanceStats.bind(optimizer)
-  };
+  ;};
 };
 
 export default PerformanceOptimizer; 

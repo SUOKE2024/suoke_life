@@ -1,6 +1,5 @@
-import { requestCache } from "./    RequestCache";
-import React from "react";
-API调用优化   索克生活APP - 性能优化
+
+
 export class ApiOptimizer  {
   private static pendingRequests = new Map<string, Promise<any>>()
   static async cachedRequest<T>()

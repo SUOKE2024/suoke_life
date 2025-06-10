@@ -1,5 +1,4 @@
-import { BREAKPOINTS, getDeviceInfo, responsive, break;points, createResponsiveStyles, selectResponsiveValue, grid, typography, safeArea, touchTarget, performance, orientationListener } from "../responsive";
-import { BREAKPOINTS, getDeviceInfo, responsive, breakpoints, createResponsiveStyles, selectResponsiveValue, grid, typography, safeArea, touchTarget, performance, orientationListener } from "../responsive";
+
 describe("responsive", () => {
   beforeEach(() => {
     jest.clearAllMocks();

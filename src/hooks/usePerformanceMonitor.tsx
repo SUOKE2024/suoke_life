@@ -10,18 +10,18 @@ interface PerformanceConfig {
 interface PerformanceMetrics {
   renderTime: number;
   memoryUsage?: number;
-  componentName: string;,
+  componentName: string;
   timestamp: number;
 }
 interface UsePerformanceMonitorReturn {
-  recordRender: () => void;,
-  getMetrics: () => PerformanceMetrics[];,
-  clearMetrics: () => void;,
+  recordRender: () => void;
+  getMetrics: () => PerformanceMetrics[];
+  clearMetrics: () => void;
   averageRenderTime: number;
 }
 export const usePerformanceMonitor = ();
-  componentName: string,
-  config: PerformanceConfig = {},
+  componentName: string;
+  config: PerformanceConfig = {;},
 ): UsePerformanceMonitorReturn => {
   const {
     trackRender = true,
@@ -44,7 +44,7 @@ export const usePerformanceMonitor = ();
       const metric: PerformanceMetrics = {
         renderTime,
         componentName,
-        timestamp: Date.now()};
+        timestamp: Date.now();};
       // 添加内存使用信息（如果支持）
       if (trackMemory && 'memory' in performance) {
         const memoryInfo = (performance as any).memory;
@@ -56,7 +56,7 @@ export const usePerformanceMonitor = ();
       // 性能警告
       if (renderTime > warnThreshold) {
         console.warn()
-          `🐌 Performance Warning: ${componentName} render took ${renderTime.toFixed(2)}ms (threshold: ${warnThreshold}ms)`,
+          `🐌 Performance Warning: ${componentName;} render took ${renderTime.toFixed(2)}ms (threshold: ${warnThreshold;}ms)`,
         );
       }
       // 重置计时器
@@ -70,7 +70,7 @@ export const usePerformanceMonitor = ();
       const metric: PerformanceMetrics = {,
   renderTime: Math.max(0, renderTime),
         componentName,
-        timestamp: Date.now()};
+        timestamp: Date.now();};
       if (trackMemory && 'memory' in performance) {
         const memoryInfo = (performance as any).memory;
         metric.memoryUsage = memoryInfo.usedJSHeapSize;
@@ -99,9 +99,9 @@ export const usePerformanceMonitor = ();
       const avgRenderTime = recentMetrics.reduce(sum, m) => sum + m.renderTime, 0) / 10;
       const maxRenderTime = Math.max(...recentMetrics.map(m => m.renderTime));
       console.log(`📊 Performance Report for ${componentName}:`, {
-        averageRenderTime: `${avgRenderTime.toFixed(2)}ms`,
-        maxRenderTime: `${maxRenderTime.toFixed(2)}ms`,
-        totalSamples: metrics.length,
+        averageRenderTime: `${avgRenderTime.toFixed(2);}ms`,
+        maxRenderTime: `${maxRenderTime.toFixed(2);}ms`,
+        totalSamples: metrics.length;
         memoryUsage: trackMemory && 'memory' in performance;
           ? `${(performance as any).memory.usedJSHeapSize / 1024 / 1024).toFixed(2)}MB`
           : 'N/A'});
@@ -115,9 +115,9 @@ export const usePerformanceMonitor = ();
 };
 // 高阶组件版本
 export const withPerformanceMonitor = <P extends object>();
-  WrappedComponent: React.ComponentType<P>,
-  componentName: string,
-  config: PerformanceConfig = {},
+  WrappedComponent: React.ComponentType<P>;
+  componentName: string;
+  config: PerformanceConfig = {;},
 ) => {
   const WithPerformanceMonitor = (props: P) => {
     usePerformanceMonitor(componentName, config);

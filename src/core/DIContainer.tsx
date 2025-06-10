@@ -1,6 +1,6 @@
 import React from "react";
 // 依赖注入容器   索克生活APP - 架构优化
-interface ServiceConstructor<T = any /> {/      new (...args: unknown[]): T}
+interface ServiceConstructor<T = any /> {/      new (...args: unknown[]): T;}
 interface ServiceFactory<T = any />  {/      (): T}
 type ServiceIdentifier<T = any /> = string | symbol | ServiceConstructor<T>;/
 class DIContainer {
@@ -35,7 +35,7 @@ class DIContainer {
       if (!instance) {
         const ServiceClass = this.services.get(identifie;r;);
         if (!ServiceClass) {
-          throw new Error(`Service not found: ${String(identifier)}`;);
+          throw new Error(`Service not found: ${String(identifier);}`;);
         }
         instance = new ServiceClass();
         this.singletons.set(identifier, instance);
@@ -44,7 +44,7 @@ class DIContainer {
     }
     const ServiceClass = this.services.get(identifier;);
     if (!ServiceClass) {
-      throw new Error(`Service not found: ${String(identifier)}`;);
+      throw new Error(`Service not found: ${String(identifier);}`;);
     }
     return new ServiceClass;
   }

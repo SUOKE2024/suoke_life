@@ -1,88 +1,87 @@
-import { usePerformanceMonitor } from "../../placeholder";../hooks/    usePerformanceMonitor;
-import { apiCache } from "../utils/    apiCache";
+../utils/    apiCache";
 import React from "react";
 importAsyncStorage from "@react-native-async-storage/async-storage";/    importCryptoJS from "crypto-js";
 数据类型定义 * export interface FarmProduct {
-  id: string,
-  name: string;,
-  category: string;,
-  origin: string;,
-  healthBenefits: string[];,
-  season: string;,
-  price: number;,
-  unit: string;,
-  image: string;,
-  organic: boolean;,
-  stock: number;,
-  rating: number;,
-  reviews: number;,
+  id: string;
+  name: string;
+  category: string;
+  origin: string;
+  healthBenefits: string[];
+  season: string;
+  price: number;
+  unit: string;
+  image: string;
+  organic: boolean;
+  stock: number;
+  rating: number;
+  reviews: number;
   blockchain: {verified: boolean,traceability: BlockchainTrace[],certifications: string[];
 };
-  tcmProperties: { nature: string,
-    flavor: string,
-    meridian: string[],
-    functions: string[],
+  tcmProperties: { nature: string;
+    flavor: string;
+    meridian: string[];
+    functions: string[];
     constitution: string[];
     };
-  aiRecommendation?:  { score: number,
-    reason: string,
+  aiRecommendation?:  { score: number;
+    reason: string;
     personalizedBenefits: string[];
     }
 }
 export interface BlockchainTrace {
-  timestamp: string;,
-  location: string;,
-  action: string;,
-  verifier: string;,
+  timestamp: string;
+  location: string;
+  action: string;
+  verifier: string;
   hash: string;
 }
 export interface WellnessDestination {
-  id: string;,
-  name: string;,
-  location: string;,
-  type: "mountain" | "water" | "forest" | "hot_spring" | "temple" | "village";,
-  description: string;,
-  healthFeatures: string[];,
-  activities: string[];,
-  rating: number;,
-  price: number;,
-  image: string;,
-  tcmBenefits: string[];,
-  availability: {available: boolean;,
+  id: string;
+  name: string;
+  location: string;
+  type: "mountain" | "water" | "forest" | "hot_spring" | "temple" | "village";
+  description: string;
+  healthFeatures: string[];
+  activities: string[];
+  rating: number;
+  price: number;
+  image: string;
+  tcmBenefits: string[];
+  availability: {available: boolean;
   nextAvailable: string,capacity: number,booked: number;
 };
-  weatherSuitability: { currentScore: number,
-    forecast: string,
-    bestTime: string};
-  personalizedScore?:  { score: number,
-    factors: string[],
+  weatherSuitability: { currentScore: number;
+    forecast: string;
+    bestTime: string;};
+  personalizedScore?:  { score: number;
+    factors: string[];
     recommendations: string[];
     };
 }
 export interface NutritionPlan {
-  id: string;,
-  name: string;,
+  id: string;
+  name: string;
   constitution: string,season: string,meals: {break;,
-  fast: string[];,
-  lunch: string[];,
-  dinner: string[];,
+  fast: string[];
+  lunch: string[];
+  dinner: string[];
   snacks: string[];
 };
-  ingredients: FarmProduct[],
-  benefits: string[],
-  nutritionFacts: { calories: number,
-    protein: number,
-    carbs: number,
-    fat: number,
-    fiber: number};
-  aiOptimized: boolean}
+  ingredients: FarmProduct[];
+  benefits: string[];
+  nutritionFacts: { calories: number;
+    protein: number;
+    carbs: number;
+    fat: number;
+    fiber: number;};
+  aiOptimized: boolean;}
 export interface UserPreferences {
-  constitution: string;,
-  allergies: string[];,
-  dietaryRestrictions: string[];,
-  healthGoals: string[];,
-  location: string;,
-  budget: {min: number;,
+  constitution: string;
+  allergies: string[];
+  dietaryRestrictions: string[];
+  healthGoals: string[];
+  location: string;
+  budget: {min: number;
   max: number;
 }
 };
@@ -115,12 +114,12 @@ const API_BASE_URL = "https: 性能监控 * class PerformanceMonitor { /
     const records = this.metrics.get(operatio;n;);
     if (!records || records.length === 0) retur;n ;0;
     return records.reduce(sum, tim;e;); => sum + time, 0) / records.length;/      }
-  getMetrics(): Record<string, { average: number, count: number}> {
-    const result: Record<string, { average: number, count: number}> = {};
+  getMetrics(): Record<string, { average: number, count: number;}> {
+    const result: Record<string, { average: number, count: number;}> = {};
     this.metrics.forEach(times, operation); => {}
       result[operation] = {
-        average: this.getAverageTime(operation),
-        count: times.length};
+        average: this.getAverageTime(operation);
+        count: times.length;};
     });
     return result;
   }
@@ -185,13 +184,13 @@ const API_BASE_URL = "https: 性能监控 * class PerformanceMonitor { /
     return EcoServicesAPI.instan;c;e;
   }
   private async deduplicateRequest<T  /     >()
-    key: string,
+    key: string;
     requestFn: () => Promise<T>): Promise<T> {
   // 性能监控
 const performanceMonitor = usePerformanceMonitor(ecoServicesApi", {")
-    trackRender: true,
-    trackMemory: false,
-    warnThreshold: 100, // ms };);
+    trackRender: true;
+    trackMemory: false;
+    warnThreshold: 100, // ms ;};);
     if (this.requestQueue.has(key);) {
       return this.requestQueue.get(key);
     }
@@ -211,7 +210,7 @@ const performanceMonitor = usePerformanceMonitor(ecoServicesApi", {")
     constitution?: string;
     season?: string;
     organic?: boolean;
-    priceRange?:  { min: number, max: number};
+    priceRange?: { min: number; max: number;};
   }): Promise<FarmProduct[] /    >  {
     const startTime = this.performanceMonitor.startTimer("getFarmProducts;";);
     const cacheKey = `farm_products_${JSON.stringify(filters || {});};`;
@@ -236,7 +235,7 @@ const performanceMonitor = usePerformanceMonitor(ecoServicesApi", {")
   async getWellnessDestinations(filters?:  {
     type?: string;
     location?: string;
-    priceRange?:  { min: number, max: number};
+    priceRange?: { min: number; max: number;};
     constitution?: string});: Promise<WellnessDestination[] /    >  {
     const startTime = this.performanceMonitor.startTimer(;)
       "getWellnessDestinations;"
@@ -270,7 +269,7 @@ const performanceMonitor = usePerformanceMonitor(ecoServicesApi", {")
         "nutrition_analys;i;s;"
       ;);
       if (!hasConsent) {
-        throw new Error("需要用户同意才能进行营养分析;";);
+
       }
       const anonymizedPreferences =
         PrivacyManager.anonymizeData(userPreference;s;);
@@ -318,10 +317,10 @@ const performanceMonitor = usePerformanceMonitor(ecoServicesApi", {")
     }
   }
   async bookDestination(destinationId: string,)
-    bookingDetails: { dates: { start: string, end: string},
-      guests: number,
+    bookingDetails: { dates: { start: string, end: string;},
+      guests: number;
       preferences: string[]
-    });: Promise< { success: boolean bookingId?: string, message: string}> {
+    ;});: Promise< { success: boolean bookingId?: string; message: string;}> {
     const startTime = this.performanceMonitor.startTimer("bookDestination;";);
     try {
       const encryptedDetails = DataEncryption.encrypt(bookingDetails;);
@@ -329,17 +328,17 @@ const performanceMonitor = usePerformanceMonitor(ecoServicesApi", {")
       const success = Math.random > 0.2  /;
       this.performanceMonitor.endTimer("bookDestination", startTime);
       if (success) {
-        return {success: true,bookingId: `BK${Date.now()}`,message: "预订成功！我们会尽快联系您确认详细信息。"};
-      } else {return {success: false,
-          message: "预订失败，请稍后重试或联系客服。"};
+
+      } else {return {success: false;
+
       }
     } catch (error) {
       this.performanceMonitor.endTimer("bookDestination", startTime);
-      return {success: false,message: "预订过程中发生错误，请稍后重试。;"
+
       ;};
     }
   }
-  getPerformanceMetrics(): Record<string, { average: number, count: number}> {
+  getPerformanceMetrics(): Record<string, { average: number, count: number;}> {
     return this.performanceMonitor.getMetrics;
   }
   async clearCache(): Promise<void> {
@@ -348,27 +347,27 @@ const performanceMonitor = usePerformanceMonitor(ecoServicesApi", {")
   private async getMockFarmProducts(filters?: unknown): Promise<FarmProduct[]  /     >  {
     return [
       {
-      id: "product_1",
-      name: "有机枸杞",category: "中药材",origin: "宁夏中宁",healthBenefits: ["明目", "补肾", "抗氧化", "提高免疫力"],season: "秋季",price: 68,unit: "500g",image: "goji_berry.jpg",organic: true,stock: 156,rating: 4.8,reviews: 234,blockchain: {verified: true,traceability: ;[{,
-  timestamp: "2024-03-15, 08: 00",
-              location: "宁夏中宁有机农场",
-              action: "种植播种",
-              verifier: "农业部认证机构",
-              hash: "0x1a2b3c4d5e6f..."}
+      id: "product_1";
+
+  timestamp: "2024-03-15, 08: 00";
+
+
+
+              hash: "0x1a2b3c4d5e6f...";}
           ],
-          certifications: ["有机认证", "GAP认证", "地理标志保护"]
+
         },
         tcmProperties: {,
-  nature: "平",
-          flavor: "甘",
-          meridian: ["肝经", "肾经"],
-          functions: ["滋补肝肾", "明目润肺"],
-          constitution: ["气虚质", "阴虚质", "阳虚质"]
-        },
+
+
+
+
+
+        ;},
         aiRecommendation: {,
-  score: 95,
-          reason: "根据您的气虚体质，枸杞能有效补气养血",
-          personalizedBenefits: ["改善疲劳", "增强免疫", "护眼明目"]
+  score: 95;
+
+
         }
       }]
   }
@@ -376,52 +375,52 @@ const performanceMonitor = usePerformanceMonitor(ecoServicesApi", {")
   ): Promise<WellnessDestination[] /    >  {
     return [;
       {
-      id: "dest_1",
-      name: "峨眉山养生谷",location: "四川峨眉山",type: "mountain",description: "集佛教文化、中医养生、自然疗法于一体的综合养生基地",healthFeatures: ;["负氧离子丰富", "天然药材资源",
-          "清净修心环境", "海拔适宜"
+      id: "dest_1";
+
+
         ],
-        activities: ["太极晨练", "药膳体验",
-          "禅修静坐", "森林浴",
-          "中医理疗", "药材采摘"
+
+
+
         ],
-        rating: 4.8,
-        price: 1280,
-        image: "emei_mountain.jpg",
-        tcmBenefits: ["清肺润燥", "宁心安神", "强身健体", "疏肝理气"],
+        rating: 4.8;
+        price: 1280;
+        image: "emei_mountain.jpg";
+
         availability: {,
-  available: true,
-          nextAvailable: "2024-12-20",
-          capacity: 50,
-          booked: 32},
+  available: true;
+          nextAvailable: "2024-12-20";
+          capacity: 50;
+          booked: 32;},
         weatherSuitability: {,
-  currentScore: 85,
-          forecast: "晴朗，适宜养生",
-          bestTime: "春秋两季"},
+  currentScore: 85;
+
+
         personalizedScore: {,
-  score: 92,
-          factors: ["适合气虚质", "海拔适宜", "空气质量优"],
-          recommendations: ["建议停留3-5天", "参与太极和禅修", "尝试药膳调理"]
+  score: 92;
+
+
         }
       }]
   }
   private async getMockNutritionPlans(userPreferences: UserPreferences;): Promise<NutritionPlan[] /    >  {
     return [;
       {
-      id: "plan_1",
-      name: "气虚质春季调理餐",constitution: userPreferences.constitution,season: "春季",meals: {brea;kfast: ["小米粥配红枣", "蒸蛋羹", "枸杞茶", "核桃仁"],
-          lunch: ["黄芪炖鸡汤", "山药炒木耳", "五谷饭", "时令蔬菜"],
-          dinner: ["莲子银耳汤", "清蒸鲈鱼", "青菜豆腐", "薏米粥"],
-          snacks: ["红枣桂圆茶", "坚果拼盘", "蜂蜜柠檬水"]
+      id: "plan_1";
+
+
+
+
         },
-        ingredients:  [],
-        benefits: ["补气健脾", "增强体质", "改善疲劳", "提升免疫"],
+        ingredients:  [];
+
         nutritionFacts: {,
-  calories: 1850,
-          protein: 85,
-          carbs: 245,
-          fat: 65,
-          fiber: 35},
-        aiOptimized: true}];
+  calories: 1850;
+          protein: 85;
+          carbs: 245;
+          fat: 65;
+          fiber: 35;},
+        aiOptimized: true;}];
   }
 }
 //   ;

@@ -4,39 +4,39 @@
  */
 
 export interface InferenceRequest {
-  id: string;,
-  modelId: string;,
-  inputData: any;,
-  priority: 'low' | 'normal' | 'high' | 'critical';,
-  timeout: number;,
-  requiresPrivacy: boolean;,
-  complexity: 'simple' | 'medium' | 'complex';,
+  id: string;
+  modelId: string;
+  inputData: any;
+  priority: 'low' | 'normal' | 'high' | 'critical';
+  timeout: number;
+  requiresPrivacy: boolean;
+  complexity: 'simple' | 'medium' | 'complex';
   metadata: Record<string, any>;
 }
 
 export interface InferenceResult {
-  requestId: string;,
-  result: any;,
-  confidence: number;,
-  processingTime: number;,
-  source: 'local' | 'cloud' | 'hybrid';,
-  modelUsed: string;,
+  requestId: string;
+  result: any;
+  confidence: number;
+  processingTime: number;
+  source: 'local' | 'cloud' | 'hybrid';
+  modelUsed: string;
   metadata: Record<string, any>;
 }
 
 export interface NetworkStatus {
-  isOnline: boolean;,
-  connectionType: 'wifi' | 'cellular' | 'none';,
+  isOnline: boolean;
+  connectionType: 'wifi' | 'cellular' | 'none';
   bandwidth: number; // Mbps;,
   latency: number; // ms;,
   isStable: boolean;
 }
 
 export interface DeviceCapabilities {
-  cpuCores: number;,
-  memoryMB: number;,
-  gpuAvailable: boolean;,
-  batteryLevel: number;,
+  cpuCores: number;
+  memoryMB: number;
+  gpuAvailable: boolean;
+  batteryLevel: number;
   thermalState: 'normal' | 'fair' | 'serious' | 'critical';
 }
 
@@ -75,7 +75,7 @@ export class HybridInferenceScheduler {
    */
   async inference(request: InferenceRequest): Promise<InferenceResult> {
     try {
-      console.log(`开始处理推理请求: ${request.id}`);
+
 
       // 添加到活跃请求
       this.activeRequests.set(request.id, request);
@@ -102,8 +102,8 @@ export class HybridInferenceScheduler {
           result = await this.executeHybridEnsemble(request);
           break;
         default:
-          throw new Error(`未知的路由策略: ${routingDecision.strategy}`);
-      }
+
+      ;}
 
       // 记录性能数据
       this.recordPerformance(request.modelId, result.processingTime);
@@ -111,10 +111,10 @@ export class HybridInferenceScheduler {
       // 从活跃请求中移除
       this.activeRequests.delete(request.id);
 
-      console.log(`推理完成: ${request.id}, 耗时: ${result.processingTime}ms`);
+
       return result;
     } catch (error) {
-      console.error(`推理失败: ${request.id}`, error);
+
       this.activeRequests.delete(request.id);
       throw error;
     }
@@ -138,16 +138,16 @@ export class HybridInferenceScheduler {
     // 隐私要求 - 强制本地处理
     if (request.requiresPrivacy) {
       return {
-        strategy: 'local_only',
-        reasoning: '隐私要求，必须本地处理'
+        strategy: 'local_only';
+
       };
     }
 
     // 网络不可用 - 本地处理
     if (!networkStatus.isOnline) {
       return {
-        strategy: 'local_only',
-        reasoning: '网络不可用，使用本地推理'
+        strategy: 'local_only';
+
       };
     }
 
@@ -157,16 +157,16 @@ export class HybridInferenceScheduler {
       this.localModels.has(request.modelId)
     ) {
       return {
-        strategy: 'local_with_cloud_fallback',
-        reasoning: '简单任务，本地模型可用，本地优先'
+        strategy: 'local_with_cloud_fallback';
+
       };
     }
 
     // 复杂任务且网络良好 - 云端优先
     if (request.complexity === 'complex' && networkStatus.isStable) {
       return {
-        strategy: 'cloud_with_local_fallback',
-        reasoning: '复杂任务，网络稳定，云端优先'
+        strategy: 'cloud_with_local_fallback';
+
       };
     }
 
@@ -176,23 +176,23 @@ export class HybridInferenceScheduler {
       deviceCapabilities.thermalState === 'critical'
     ) {
       return {
-        strategy: 'cloud_only',
-        reasoning: '设备性能不足，使用云端处理'
+        strategy: 'cloud_only';
+
       };
     }
 
     // 高优先级任务 - 混合集成
     if (request.priority === 'critical') {
       return {
-        strategy: 'hybrid_ensemble',
-        reasoning: '关键任务，使用混合集成提高准确性'
+        strategy: 'hybrid_ensemble';
+
       };
     }
 
     // 默认策略
     return {
-      strategy: 'local_with_cloud_fallback',
-      reasoning: '默认策略：本地优先，云端备用'
+      strategy: 'local_with_cloud_fallback';
+
     };
   }
 
@@ -209,19 +209,19 @@ export class HybridInferenceScheduler {
       const result = await this.simulateLocalInference(request);
 
       return {
-        requestId: request.id,
+        requestId: request.id;
         result,
-        confidence: 0.85,
-        processingTime: Date.now() - startTime,
-        source: 'local',
-        modelUsed: request.modelId,
+        confidence: 0.85;
+        processingTime: Date.now() - startTime;
+        source: 'local';
+        modelUsed: request.modelId;
         metadata: {,
-  device: 'local',
+  device: 'local';
           strategy: 'local_only'
-        }
+        ;}
       };
     } catch (error) {
-      throw new Error(`本地推理失败: ${error}`);
+
     }
   }
 
@@ -238,19 +238,19 @@ export class HybridInferenceScheduler {
       const result = await this.simulateCloudInference(request);
 
       return {
-        requestId: request.id,
+        requestId: request.id;
         result,
-        confidence: 0.92,
-        processingTime: Date.now() - startTime,
-        source: 'cloud',
-        modelUsed: request.modelId,
+        confidence: 0.92;
+        processingTime: Date.now() - startTime;
+        source: 'cloud';
+        modelUsed: request.modelId;
         metadata: {,
-  device: 'cloud',
+  device: 'cloud';
           strategy: 'cloud_only'
-        }
+        ;}
       };
     } catch (error) {
-      throw new Error(`云端推理失败: ${error}`);
+
     }
   }
 
@@ -263,7 +263,7 @@ export class HybridInferenceScheduler {
     try {
       return await this.executeLocalInference(request);
     } catch (error) {
-      console.warn(`本地推理失败，切换到云端: ${error}`);
+
       return await this.executeCloudInference(request);
     }
   }
@@ -277,7 +277,7 @@ export class HybridInferenceScheduler {
     try {
       return await this.executeCloudInference(request);
     } catch (error) {
-      console.warn(`云端推理失败，切换到本地: ${error}`);
+
       return await this.executeLocalInference(request);
     }
   }
@@ -307,29 +307,29 @@ export class HybridInferenceScheduler {
       }
 
       if (results.length === 0) {
-        throw new Error('本地和云端推理都失败了');
+
       }
 
       // 加权平均或投票机制
       const ensembleResult = this.ensembleResults(results);
 
       return {
-        requestId: request.id,
-        result: ensembleResult.result,
-        confidence: ensembleResult.confidence,
-        processingTime: Date.now() - startTime,
-        source: 'hybrid',
-        modelUsed: request.modelId,
+        requestId: request.id;
+        result: ensembleResult.result;
+        confidence: ensembleResult.confidence;
+        processingTime: Date.now() - startTime;
+        source: 'hybrid';
+        modelUsed: request.modelId;
         metadata: {,
   localResult:
-            localResult.status === 'fulfilled' ? localResult.value : null,
+            localResult.status === 'fulfilled' ? localResult.value : null;
           cloudResult:
-            cloudResult.status === 'fulfilled' ? cloudResult.value : null,
+            cloudResult.status === 'fulfilled' ? cloudResult.value : null;
           strategy: 'hybrid_ensemble'
-        }
+        ;}
       };
     } catch (error) {
-      throw new Error(`混合推理失败: ${error}`);
+
     }
   }
 
@@ -337,14 +337,14 @@ export class HybridInferenceScheduler {
    * 集成多个推理结果
    */
   private ensembleResults(results: InferenceResult[]): {,
-  result: any;,
+  result: any;
   confidence: number;
   } {
     if (results.length === 1) {
       return {
-        result: results[0].result,
+        result: results[0].result;
         confidence: results[0].confidence
-      };
+      ;};
     }
 
     // 简单的加权平均
@@ -357,9 +357,9 @@ export class HybridInferenceScheduler {
     );
 
     return {
-      result: bestResult.result,
+      result: bestResult.result;
       confidence: Math.min(avgConfidence * 1.1, 0.95), // 集成提升置信度
-    };
+    ;};
   }
 
   /**
@@ -368,12 +368,12 @@ export class HybridInferenceScheduler {
   private async getNetworkStatus(): Promise<NetworkStatus> {
     // 模拟网络状态检测
     return {
-      isOnline: true,
-      connectionType: 'wifi',
-      bandwidth: 50,
-      latency: 20,
+      isOnline: true;
+      connectionType: 'wifi';
+      bandwidth: 50;
+      latency: 20;
       isStable: true
-    };
+    ;};
   }
 
   /**
@@ -382,12 +382,12 @@ export class HybridInferenceScheduler {
   private async getDeviceCapabilities(): Promise<DeviceCapabilities> {
     // 模拟设备能力检测
     return {
-      cpuCores: 8,
-      memoryMB: 4096,
-      gpuAvailable: true,
-      batteryLevel: 80,
+      cpuCores: 8;
+      memoryMB: 4096;
+      gpuAvailable: true;
+      batteryLevel: 80;
       thermalState: 'normal'
-    };
+    ;};
   }
 
   /**
@@ -407,10 +407,10 @@ export class HybridInferenceScheduler {
     await new Promise(resolve) => setTimeout(resolve, baseTime));
 
     return {
-      prediction: `local_result_${request.modelId}`,
-      features: request.inputData,
+      prediction: `local_result_${request.modelId;}`,
+      features: request.inputData;
       timestamp: Date.now()
-    };
+    ;};
   }
 
   /**
@@ -433,11 +433,11 @@ export class HybridInferenceScheduler {
     );
 
     return {
-      prediction: `cloud_result_${request.modelId}`,
-      features: request.inputData,
-      advanced_analysis: true,
+      prediction: `cloud_result_${request.modelId;}`,
+      features: request.inputData;
+      advanced_analysis: true;
       timestamp: Date.now()
-    };
+    ;};
   }
 
   /**
@@ -463,22 +463,22 @@ export class HybridInferenceScheduler {
   getPerformanceStats(): Record<
     string,
     {
-      avgProcessingTime: number;,
-  requestCount: number;,
+      avgProcessingTime: number;
+  requestCount: number;
   successRate: number;
     }
   > {
-    const stats: Record<string, any> = {};
+    const stats: Record<string, any> = {;};
 
     for (const [modelId, history] of this.performanceHistory.entries()) {
       const avgTime =
         history.reduce(sum, time) => sum + time, 0) / history.length;
 
       stats[modelId] = {
-        avgProcessingTime: Math.round(avgTime),
-        requestCount: history.length,
+        avgProcessingTime: Math.round(avgTime);
+        requestCount: history.length;
         successRate: 0.95, // 模拟成功率
-      };
+      ;};
     }
 
     return stats;

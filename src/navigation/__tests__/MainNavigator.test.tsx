@@ -1,6 +1,4 @@
-import { MainNavigator } from "../MainNavigator";
-import { MainNavigator } from "../MainNavigator";
-import React from "react";
+
 describe("MainNavigator", () => {
   beforeEach(() => {
     jest.clearAllMocks();

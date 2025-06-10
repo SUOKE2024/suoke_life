@@ -1,5 +1,4 @@
-import { performance } from "perf_hooks";
-import React from "react";
+
 // Mock store for testing * const mockStore = configureStore({ reducer: { */;)
     // Add your reducers here *     } */;};);
 const wrapper = ({ children }: { children: React.ReactNo;d;e  ; }) => (;)

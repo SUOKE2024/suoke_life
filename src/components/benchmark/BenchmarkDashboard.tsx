@@ -5,7 +5,7 @@ import type { BenchmarkTask, HealthStatus, StreamEvent } from '../../services';
 interface BenchmarkDashboardProps {
   onTaskSelect?: (task: BenchmarkTask) => void;
 }
-export const BenchmarkDashboard: React.FC<BenchmarkDashboardProps> = ({ onTaskSelect }) => {
+export const BenchmarkDashboard: React.FC<BenchmarkDashboardProps> = ({ onTaskSelect ;}) => {
   const [tasks, setTasks] = useState<BenchmarkTask[]>([]);
   const [healthStatus, setHealthStatus] = useState<HealthStatus | null>(null);
   const [loading, setLoading] = useState(true);
@@ -16,7 +16,7 @@ export const BenchmarkDashboard: React.FC<BenchmarkDashboardProps> = ({ onTaskSe
       setTasks(taskList);
     } catch (error) {
       console.error('Failed to load benchmark tasks:', error);
-      Alert.alert("错误", "加载基准测试任务失败');
+
     }
   }, []);
   // 加载服务健康状态
@@ -48,7 +48,7 @@ export const BenchmarkDashboard: React.FC<BenchmarkDashboardProps> = ({ onTaskSe
           setTasks(prevTasks =>;)
             prevTasks.map(task =>;)
               task.task_id === event.data.task_id;
-                ? { ...task, progress: event.data.progress, status: 'running' };
+                ? { ...task, progress: event.data.progress, status: 'running' ;};
                 : task;
             );
           );
@@ -62,7 +62,7 @@ export const BenchmarkDashboard: React.FC<BenchmarkDashboardProps> = ({ onTaskSe
           setTasks(prevTasks =>)
             prevTasks.map(task =>)
               task.task_id === event.data.task_id;
-                ? { ...task, status: 'failed', error_message: event.data.error }
+                ? { ...task, status: 'failed', error_message: event.data.error ;}
                 : task;
             );
           );
@@ -88,7 +88,7 @@ export const BenchmarkDashboard: React.FC<BenchmarkDashboardProps> = ({ onTaskSe
       // 启动心跳检测
       benchmarkStreamingService.startHeartbeat();
     } catch (error) {
-      console.error('WebSocket连接失败:', error);
+
     }
   }, [handleStreamEvent]);
   // 组件挂载时初始化
@@ -117,16 +117,16 @@ export const BenchmarkDashboard: React.FC<BenchmarkDashboardProps> = ({ onTaskSe
     }
   };
   // 获取状态文本
-  const getStatusText = (status: string) => {switch (status) {case 'completed':return '已完成';
+
       case 'running':
-        return '运行中';
+
       case 'failed':
-        return '失败';
+
       case 'pending':
-        return '等待中';
+
       default:
-        return '未知';
-    }
+
+    ;}
   };
   // 渲染健康状态
   const renderHealthStatus = () => {if (!healthStatus) return null;
@@ -139,10 +139,10 @@ export const BenchmarkDashboard: React.FC<BenchmarkDashboardProps> = ({ onTaskSe
             <Text;
               style={[
                 styles.statusValue,
-                { color: healthStatus.status === 'healthy' ? '#4CAF50' : '#F44336' }}
+                { color: healthStatus.status === 'healthy' ? '#4CAF50' : '#F44336' ;}}
               ]}
             >
-              {healthStatus.status === 'healthy' ? '健康' : '异常'}
+
             </Text>
           </View>
           <View style={styles.statusRow}>
@@ -157,10 +157,10 @@ export const BenchmarkDashboard: React.FC<BenchmarkDashboardProps> = ({ onTaskSe
             <Text style={styles.statusLabel}>WebSocket:</Text>;
             <Text;
               style={[;
-                styles.statusValue,{ color: connectionStatus === 'OPEN' ? '#4CAF50' : '#F44336' }};
+                styles.statusValue,{ color: connectionStatus === 'OPEN' ? '#4CAF50' : '#F44336' ;}};
               ]};
             >;
-              {connectionStatus === 'OPEN' ? '已连接' : '未连接'};
+
             </Text>;
           </View>;
         </View>;
@@ -181,21 +181,21 @@ export const BenchmarkDashboard: React.FC<BenchmarkDashboardProps> = ({ onTaskSe
           <View key={task.task_id} style={styles.taskCard}>
             <View style={styles.taskHeader}>
               <Text style={styles.taskTitle}>{task.benchmark_id}</Text>
-              <View style={[styles.statusBadge, { backgroundColor: getStatusColor(task.status) }}]}>
+              <View style={[styles.statusBadge, { backgroundColor: getStatusColor(task.status) ;}}]}>
                 <Text style={styles.statusBadgeText}>{getStatusText(task.status)}</Text>
               </View>
             </View>
             <Text style={styles.taskModel}>
-              模型: {task.model_id} v{task.model_version}
+
             </Text>
             <Text style={styles.taskTime}>
-              创建时间: {new Date(task.created_at).toLocaleString()};
+
             </Text>;
             {task.status === 'running' && (;)
               <View style={styles.progressContainer}>;
                 <Text style={styles.progressText}>进度: {Math.round(task.progress * 100)}%</Text>;
                 <View style={styles.progressBar}>;
-                  <View style={[styles.progressFill, { width: `${task.progress * 100}}%` }]} />;
+                  <View style={[styles.progressFill, { width: `${task.progress * 100;}}%` }]} />;
                 </View>;
               </View>;
             )};
@@ -224,117 +224,117 @@ export const BenchmarkDashboard: React.FC<BenchmarkDashboardProps> = ({ onTaskSe
 };
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
+  flex: 1;
     backgroundColor: '#f5f5f5'
-  },
+  ;},
   loadingContainer: {,
-  flex: 1,
-    justifyContent: 'center',
+  flex: 1;
+    justifyContent: 'center';
     alignItems: 'center'
-  },
+  ;},
   loadingText: {,
-  fontSize: 16,
+  fontSize: 16;
     color: '#666'
-  },
+  ;},
   sectionTitle: {,
-  fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
+  fontSize: 18;
+    fontWeight: 'bold';
+    color: '#333';
     marginBottom: 12;
   },
   healthStatusContainer: {,
   margin: 16;
   },
   healthStatusCard: {,
-  backgroundColor: '#fff',
-    borderRadius: 8,
-    padding: 16,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+  backgroundColor: '#fff';
+    borderRadius: 8;
+    padding: 16;
+    elevation: 2;
+    shadowColor: '#000';
+    shadowOffset: { width: 0, height: 2 ;},
+    shadowOpacity: 0.1;
     shadowRadius: 4;
   },
   statusRow: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
     marginBottom: 8;
   },
   statusLabel: {,
-  fontSize: 14,
+  fontSize: 14;
     color: '#666'
-  },
+  ;},
   statusValue: {,
-  fontSize: 14,
+  fontSize: 14;
     fontWeight: '500'
-  },
+  ;},
   taskListContainer: {,
-  margin: 16,
+  margin: 16;
     marginTop: 0;
   },
   taskCard: {,
-  backgroundColor: '#fff',
-    borderRadius: 8,
-    padding: 16,
-    marginBottom: 12,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+  backgroundColor: '#fff';
+    borderRadius: 8;
+    padding: 16;
+    marginBottom: 12;
+    elevation: 2;
+    shadowColor: '#000';
+    shadowOffset: { width: 0, height: 2 ;},
+    shadowOpacity: 0.1;
     shadowRadius: 4;
   },
   taskHeader: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
     marginBottom: 8;
   },
   taskTitle: {,
-  fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
+  fontSize: 16;
+    fontWeight: 'bold';
+    color: '#333';
     flex: 1;
   },
   statusBadge: {,
-  paddingHorizontal: 8,
-    paddingVertical: 4,
+  paddingHorizontal: 8;
+    paddingVertical: 4;
     borderRadius: 12;
   },
   statusBadgeText: {,
-  color: '#fff',
-    fontSize: 12,
+  color: '#fff';
+    fontSize: 12;
     fontWeight: '500'
-  },
+  ;},
   taskModel: {,
-  fontSize: 14,
-    color: '#666',
+  fontSize: 14;
+    color: '#666';
     marginBottom: 4;
   },
   taskTime: {,
-  fontSize: 12,
-    color: '#999',
+  fontSize: 12;
+    color: '#999';
     marginBottom: 8;
   },
   progressContainer: {,
   marginTop: 8;
   },
   progressText: {,
-  fontSize: 12,
-    color: '#666',
+  fontSize: 12;
+    color: '#666';
     marginBottom: 4;
   },
   progressBar: {,
-  height: 4,
-    backgroundColor: '#e0e0e0',
-    borderRadius: 2,
+  height: 4;
+    backgroundColor: '#e0e0e0';
+    borderRadius: 2;
     overflow: 'hidden'
-  },
+  ;},
   progressFill: {,
   height: '100%',backgroundColor: '#2196F3';
   },errorText: {fontSize: 12,color: '#F44336',marginTop: 8;
   },emptyContainer: {,
-  alignItems: "center",
+  alignItems: "center";
       padding: 32;
   },emptyText: {fontSize: 16,color: '#999';
   };

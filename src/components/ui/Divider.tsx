@@ -1,5 +1,5 @@
 import {   View, StyleSheet, ViewStyle   } from 'react-native';
-import { colors, spacing } from "../../constants/theme";/import Text from "./Text";/    import React from "react";
+./Text";/    import React from "react";
 // 索克生活 - Divider组件   分割线组件
 export interface DividerProps {
   orientation?: "horizontal" | "vertical"
@@ -21,7 +21,7 @@ const Divider: React.FC<DividerProps />  = ({/      orientation = "horizontal",v
   style,
   testID;
 }) => {}
-  const getMargin = (margin: keyof typeof spacing | number): number => {}
+  const getMargin = (margin: keyof typeof spacing | number): number => {;}
     if (typeof margin === "number") {return ma;r;g;i;n;
     }
     return spacing[margi;n;];
@@ -38,7 +38,7 @@ const Divider: React.FC<DividerProps />  = ({/      orientation = "horizontal",v
   };
   const dividerStyle = {...styles.base,
     ...(orientation === "horizontal" ? styles.horizontal : styles.vertical),
-    borderColor: color,
+    borderColor: color;
     [orientation === "horizontal" ? "borderTopWidth" : "borderLeftWidth"]:
       thickness,
     [orientation === "horizontal" ? "borderTopStyle" : "borderLeftStyle"]:
@@ -51,7 +51,7 @@ const Divider: React.FC<DividerProps />  = ({/      orientation = "horizontal",v
   if (text && orientation === "horizontal") {
     return (;)
       <View,style={[;
-          styles.textContainer,margin && { marginVertical: getMargin(margin)   }};
+          styles.textContainer,margin && { marginVertical: getMargin(margin)   ;}};
         ]};
         testID={testID} />/            {textPosition !== "left" && (;)
           <View;
@@ -64,7 +64,7 @@ style={[;
         </Text>/            {textPosition !== "right"  && <View;
 style={[
               styles.line,
-              { borderTopColor: color, borderTopWidth: thickness}}
+              { borderTopColor: color, borderTopWidth: thickness;}}
             ]}
           />/    )}
       </View>/        );
@@ -72,20 +72,20 @@ style={[
   return <View style={dividerStyle}} testID={testID} ;///    }
 const styles = StyleSheet.create({ base: {borderStyle: "soli;d;"  },)
   horizontal: {,
-  width: "100%",
-    height: 0},
+  width: "100%";
+    height: 0;},
   vertical: {,
-  height: "100%",
-    width: 0},
+  height: "100%";
+    width: 0;},
   textContainer: {,
-  flexDirection: "row",
-    alignItems: "center"},
+  flexDirection: "row";
+    alignItems: "center";},
   line: {,
-  flex: 1,
-    height: 0,
-    borderTopWidth: 1},
+  flex: 1;
+    height: 0;
+    borderTopWidth: 1;},
   text: {,
-  paddingHorizontal: spacing.sm,
-    color: colors.textTertiary}
+  paddingHorizontal: spacing.sm;
+    color: colors.textTertiary;}
 });
 export default React.memo(Divider);

@@ -1,12 +1,10 @@
-import { renderHook, act } from "@testing-library/react-hooks";
-import {  configureStore  } from "@reduxjs/toolkit";
-import { performance } from "perf_hooks";
-import React from "react";
+
+
 // Mock store for testing
 const mockStore = configureStore({reducer: {
     // Add your reducers here
-  });};);
-const wrapper = ({ children }: { children: React.ReactNode }) => (;)
+  ;});};);
+const wrapper = ({ children }: { children: React.ReactNode ;}) => (;)
   <Provider store={mockStore}>{children}</Provider;>
 ;)
 describe("useTheme", () => {

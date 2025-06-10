@@ -9,7 +9,7 @@ import {;
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
-const { width: screenWidth } = Dimensions.get('window');
+const { width: screenWidth ;} = Dimensions.get('window');
 
 export interface NotificationProps {
   /** 通知ID */
@@ -34,7 +34,7 @@ export interface NotificationProps {
   icon?: React.ReactNode;
   /** 自定义操作按钮 */
   actions?: Array<{
-    label: string;,
+    label: string;
   onPress: () => void;
     style?: 'primary' | 'secondary';
   }>;
@@ -73,7 +73,7 @@ export const Notification: React.FC<NotificationProps> = ({
   animationType = 'slide',
   backdrop = false,
   maxWidth = screenWidth - 32
-}) => {
+;}) => {
   const { currentTheme } = useTheme();
   const styles = createStyles(currentTheme, type, position);
 
@@ -101,32 +101,32 @@ export const Notification: React.FC<NotificationProps> = ({
     if (animationType === 'slide') {
       animations.push(
         Animated.spring(translateY, {
-          toValue: 0,
-          useNativeDriver: true,
-          tension: 100,
+          toValue: 0;
+          useNativeDriver: true;
+          tension: 100;
           friction: 8
-        })
+        ;})
       );
     }
 
     if (animationType === 'fade' || animationType === 'scale') {
       animations.push(
         Animated.timing(opacity, {
-          toValue: 1,
-          duration: 300,
+          toValue: 1;
+          duration: 300;
           useNativeDriver: true
-        })
+        ;})
       );
     }
 
     if (animationType === 'scale') {
       animations.push(
         Animated.spring(scale, {
-          toValue: 1,
-          useNativeDriver: true,
-          tension: 100,
+          toValue: 1;
+          useNativeDriver: true;
+          tension: 100;
           friction: 8
-        })
+        ;})
       );
     }
 
@@ -140,30 +140,30 @@ export const Notification: React.FC<NotificationProps> = ({
     if (animationType === 'slide') {
       animations.push(
         Animated.timing(translateY, {
-          toValue: getInitialTranslateY(),
-          duration: 250,
+          toValue: getInitialTranslateY();
+          duration: 250;
           useNativeDriver: true
-        })
+        ;})
       );
     }
 
     if (animationType === 'fade' || animationType === 'scale') {
       animations.push(
         Animated.timing(opacity, {
-          toValue: 0,
-          duration: 250,
+          toValue: 0;
+          duration: 250;
           useNativeDriver: true
-        })
+        ;})
       );
     }
 
     if (animationType === 'scale') {
       animations.push(
         Animated.timing(scale, {
-          toValue: 0.8,
-          duration: 250,
+          toValue: 0.8;
+          duration: 250;
           useNativeDriver: true
-        })
+        ;})
       );
     }
 
@@ -185,11 +185,11 @@ export const Notification: React.FC<NotificationProps> = ({
     if (icon) return icon;
 
     const iconMap = {
-      info: 'ℹ️',
-      success: '✅',
-      warning: '⚠️',
+      info: 'ℹ️';
+      success: '✅';
+      warning: '⚠️';
       error: '❌'
-    };
+    ;};
 
     return <Text style={styles.defaultIcon}>{iconMap[type]}</Text>;
   };
@@ -285,9 +285,9 @@ export const Notification: React.FC<NotificationProps> = ({
 
     const animatedStyle = {
       opacity:
-        animationType === 'fade' || animationType === 'scale' ? opacity : 1,
+        animationType === 'fade' || animationType === 'scale' ? opacity : 1;
       transform: transforms
-    };
+    ;};
 
     return (
       <Animated.View style={[styles.wrapper, animatedStyle]}>
@@ -316,31 +316,31 @@ const createStyles = (theme: any, type: string, position: string) => {
       case 'success':
         return {
           background:
-            theme.colors.successContainer || theme.colors.primaryContainer,
-          border: theme.colors.success,
+            theme.colors.successContainer || theme.colors.primaryContainer;
+          border: theme.colors.success;
           text:
             theme.colors.onSuccessContainer || theme.colors.onPrimaryContainer
-        };
+        ;};
       case 'warning':
         return {
           background:
-            theme.colors.warningContainer || theme.colors.primaryContainer,
-          border: theme.colors.warning,
+            theme.colors.warningContainer || theme.colors.primaryContainer;
+          border: theme.colors.warning;
           text:
             theme.colors.onWarningContainer || theme.colors.onPrimaryContainer
-        };
+        ;};
       case 'error':
         return {
-          background: theme.colors.errorContainer,
-          border: theme.colors.error,
+          background: theme.colors.errorContainer;
+          border: theme.colors.error;
           text: theme.colors.onErrorContainer
-        };
+        ;};
       default:
         return {,
-  background: theme.colors.surfaceVariant,
-          border: theme.colors.primary,
+  background: theme.colors.surfaceVariant;
+          border: theme.colors.primary;
           text: theme.colors.onSurfaceVariant
-        };
+        ;};
     }
   };
 
@@ -348,106 +348,106 @@ const createStyles = (theme: any, type: string, position: string) => {
 
   return StyleSheet.create({
     overlay: {,
-  position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
+  position: 'absolute';
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       justifyContent:
         position === 'top'
           ? 'flex-start'
           : position === 'bottom'
             ? 'flex-end'
-            : 'center',
-      alignItems: 'center',
-      paddingTop: position === 'top' ? 50 : 0,
-      paddingBottom: position === 'bottom' ? 50 : 0,
-      paddingHorizontal: theme.spacing.md,
-      pointerEvents: 'box-none',
+            : 'center';
+      alignItems: 'center';
+      paddingTop: position === 'top' ? 50 : 0;
+      paddingBottom: position === 'bottom' ? 50 : 0;
+      paddingHorizontal: theme.spacing.md;
+      pointerEvents: 'box-none';
       zIndex: 1000
-    },
+    ;},
     backdropOverlay: {,
   backgroundColor: 'rgba(0, 0, 0, 0.3)',
       pointerEvents: 'auto'
-    },
+    ;},
     wrapper: {,
-  width: '100%',
+  width: '100%';
       alignItems: 'center'
-    },
+    ;},
     container: {,
-  backgroundColor: colors.background,
-      borderRadius: theme.borderRadius.lg,
-      borderLeftWidth: 4,
-      borderLeftColor: colors.border,
-      shadowColor: theme.colors.shadow,
+  backgroundColor: colors.background;
+      borderRadius: theme.borderRadius.lg;
+      borderLeftWidth: 4;
+      borderLeftColor: colors.border;
+      shadowColor: theme.colors.shadow;
       shadowOffset: {,
-  width: 0,
+  width: 0;
         height: 4
-      },
-      shadowOpacity: 0.15,
-      shadowRadius: 8,
+      ;},
+      shadowOpacity: 0.15;
+      shadowRadius: 8;
       elevation: 8
-    },
+    ;},
     content: {,
-  flexDirection: 'row',
-      alignItems: 'flex-start',
+  flexDirection: 'row';
+      alignItems: 'flex-start';
       padding: theme.spacing.md
-    },
+    ;},
     iconContainer: {,
-  marginRight: theme.spacing.sm,
+  marginRight: theme.spacing.sm;
       paddingTop: theme.spacing.xs
-    },
+    ;},
     defaultIcon: {,
   fontSize: 20
-    },
+    ;},
     textContainer: {,
   flex: 1
-    },
+    ;},
     title: {,
-  fontSize: theme.typography.fontSize.base,
-      fontWeight: theme.typography.fontWeight.semibold,
-      color: colors.text,
+  fontSize: theme.typography.fontSize.base;
+      fontWeight: theme.typography.fontWeight.semibold;
+      color: colors.text;
       marginBottom: theme.spacing.xs
-    },
+    ;},
     message: {,
-  fontSize: theme.typography.fontSize.sm,
-      color: colors.text,
+  fontSize: theme.typography.fontSize.sm;
+      color: colors.text;
       lineHeight: theme.typography.fontSize.sm * 1.4
-    },
+    ;},
     closeButton: {,
-  padding: theme.spacing.xs,
+  padding: theme.spacing.xs;
       marginLeft: theme.spacing.sm
-    },
+    ;},
     closeButtonText: {,
-  fontSize: 20,
-      color: colors.text,
+  fontSize: 20;
+      color: colors.text;
       fontWeight: theme.typography.fontWeight.bold
-    },
+    ;},
     actionsContainer: {,
-  flexDirection: 'row',
-      marginTop: theme.spacing.sm,
+  flexDirection: 'row';
+      marginTop: theme.spacing.sm;
       gap: theme.spacing.sm
-    },
+    ;},
     actionButton: {,
-  paddingHorizontal: theme.spacing.md,
-      paddingVertical: theme.spacing.xs,
-      borderRadius: theme.borderRadius.md,
-      backgroundColor: theme.colors.surface,
-      borderWidth: 1,
+  paddingHorizontal: theme.spacing.md;
+      paddingVertical: theme.spacing.xs;
+      borderRadius: theme.borderRadius.md;
+      backgroundColor: theme.colors.surface;
+      borderWidth: 1;
       borderColor: colors.border
-    },
+    ;},
     primaryActionButton: {,
-  backgroundColor: colors.border,
+  backgroundColor: colors.border;
       borderColor: colors.border
-    },
+    ;},
     actionButtonText: {,
-  fontSize: theme.typography.fontSize.sm,
-      color: colors.text,
+  fontSize: theme.typography.fontSize.sm;
+      color: colors.text;
       fontWeight: theme.typography.fontWeight.medium
-    },
+    ;},
     primaryActionButtonText: {,
   color: theme.colors.onPrimary
-    }
+    ;}
   });
 };
 

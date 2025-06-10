@@ -1,34 +1,7 @@
-import { InferenceSession } from "onnxruntime-react-native";
-import AsyncStorage from "../../placeholder";@react-native-async-storage/    async-storage;
+@react-native-async-storage/    async-storage;
 import { CacheConfig, InferenceResult, ONNXError } from ./    types;
-import { CACHE_KEYS } from "./    constants;";
-/**
-* * 推理缓存 - 缓存模型和推理结果以提高性能
-* 支持LRU策略、压缩和加密
-export class InferenceCache {private config: CacheConfig;
-  private modelCache: Map<string, InferenceSession> = new Map();
-  private inferenceCache: Map<string, CachedInferenceResult> = new Map();
-  private accessTimes: Map<string, number> = new Map();
-  private currentSize: number = 0;
-  constructor(config: CacheConfig) {
-    this.config = config;
-  }
-  /**
-* * 初始化缓存
-  async initialize(): Promise<void> {
-    try {
-      if (this.config.enableModelCache) {
-        await this.loadModelCacheFromStorage();
-      }
-      if (this.config.enableInferenceCache) {
-        await this.loadInferenceCacheFromStorage()
-      }
-      // 启动清理任务
-this.startCleanupTask()
-      } catch (error) {
-      throw new ONNXError({
-      code: "CACHE_ERROR",
-      message: `缓存初始化失败: ${error.message}`,details: error,timestamp: new Date();
+
+
       });
     }
   }
@@ -77,7 +50,7 @@ try {
     if (!this.config.enableInferenceCache) return;
     try {
       const cachedResult: CachedInferenceResult = {result,
-        timestamp: Date.now(),
+        timestamp: Date.now();
         accessCount: 1;
       };
       const fullCacheKey = `${CACHE_KEYS.INFERENCE}${cacheKey}`;
@@ -129,7 +102,7 @@ if (Date.now() - cached.timestamp > this.config.ttl) {
   /**
 * * 清除特定模型的缓存
   async clearModel(modelId: string): Promise<void> {
-    const cacheKey = `${CACHE_KEYS.MODEL}${modelId}`;
+    const cacheKey = `${CACHE_KEYS.MODEL;}${modelId}`;
     this.modelCache.delete(cacheKey);
     this.accessTimes.delete(cacheKey);
     try {
@@ -251,9 +224,9 @@ let size = 0;
   private async saveModelToStorage(modelId: string, session: InferenceSession): Promise<void> {
     // 在实际应用中，模型会话无法直接序列化
     // 这里只保存模型元数据
-const cacheKey = `${CACHE_KEYS.MODEL}${modelId}`;
+const cacheKey = `${CACHE_KEYS.MODEL;}${modelId}`;
     const metadata = {modelId,
-      cachedAt: Date.now(),
+      cachedAt: Date.now();
       // 其他元数据
     };
     try {
@@ -267,7 +240,7 @@ const cacheKey = `${CACHE_KEYS.MODEL}${modelId}`;
 return null;
   }
   private async saveInferenceToStorage(cacheKey: string, cached: CachedInferenceResult): Promise<void> {
-    const fullCacheKey = `${CACHE_KEYS.INFERENCE}${cacheKey}`;
+    const fullCacheKey = `${CACHE_KEYS.INFERENCE;}${cacheKey}`;
     try {
       let data = JSON.stringify(cached);
       // 压缩（如果启用）
@@ -283,7 +256,7 @@ return null;
       }
   }
   private async loadInferenceFromStorage(cacheKey: string): Promise<CachedInferenceResult | null> {
-    const fullCacheKey = `${CACHE_KEYS.INFERENCE}${cacheKey}`;
+    const fullCacheKey = `${CACHE_KEYS.INFERENCE;}${cacheKey}`;
     try {
       let data = await AsyncStorage.getItem(fullCacheKey);
       if (!data) return null;
@@ -301,7 +274,7 @@ return null;
     }
   }
   private async removeInferenceFromStorage(cacheKey: string): Promise<void> {
-    const fullCacheKey = `${CACHE_KEYS.INFERENCE}${cacheKey}`;
+    const fullCacheKey = `${CACHE_KEYS.INFERENCE;}${cacheKey}`;
     try {
       await AsyncStorage.removeItem(fullCacheKey);
     } catch (error) {
@@ -366,15 +339,15 @@ const totalAccess = this.accessTimes.size;
 }
 // 辅助接口
 interface CachedInferenceResult {
-  result: InferenceResult;,
-  timestamp: number;,
+  result: InferenceResult;
+  timestamp: number;
   accessCount: number;
 }
 interface CacheStats {
-  modelCacheSize: number;,
-  inferenceCacheSize: number;,
-  totalSize: number;,
-  maxSize: number;,
-  hitRate: number;,
+  modelCacheSize: number;
+  inferenceCacheSize: number;
+  totalSize: number;
+  maxSize: number;
+  hitRate: number;
   memoryUsage: number;
 }  */

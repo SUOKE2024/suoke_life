@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {import {View,;
+import {import {View;
   Text,
   StyleSheet,
   ScrollView,
@@ -18,7 +18,7 @@ import {import {View,;
 interface HealthDataManagerProps {
   userId: string;
 }
-export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) => {
+export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId ;}) => {
   const [healthData, setHealthData] = useState<HealthData[]>([]);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -32,17 +32,17 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
   const loadHealthData = async () => {try {setLoading(true);
       const query: HealthDataQuery = {
         userId,
-        limit: 50,
-        sortBy: 'timestamp',
+        limit: 50;
+        sortBy: 'timestamp';
         sortOrder: 'desc'
-      };
+      ;};
       const response = await healthDataService.queryHealthData(query);
       if (response.data) {
         setHealthData(response.data.data);
       }
     } catch (error) {
-      console.error('加载健康数据失败:', error);
-      Alert.alert("错误", "加载健康数据失败');
+
+
     } finally {
       setLoading(false);
     }
@@ -53,27 +53,27 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
   };
   const handleAddData = () => {setEditingData(null);
     setFormData({
-      dataType: HealthDataType.HEART_RATE,
-      value: '',
-      unit: '',
-      source: DataSource.MANUAL,
-      tags: '',
+      dataType: HealthDataType.HEART_RATE;
+      value: '';
+      unit: '';
+      source: DataSource.MANUAL;
+      tags: '';
       notes: ''
-    });
+    ;});
     setModalVisible(true);
   };
   const handleEditData = (data: HealthData) => {setEditingData(data);
     setFormData({
-      dataType: data.dataType,
-      value: String(data.value),
-      unit: data.unit || '",
-      source: data.source,
+      dataType: data.dataType;
+      value: String(data.value);
+      unit: data.unit || '";
+      source: data.source;
       tags: data.tags?.join(",) || '',
       notes: (data.metadata?.notes as string) || ''
-    });
+    ;});
     setModalVisible(true);
   };
-  const handleSaveData = async () => {try {if (!formData.value.trim()) {Alert.alert("错误", "请输入数值");
+
         return;
       }
       const dataToSave = {userId,dataType: formData.dataType,value: isNaN(Number(formData.value)) ? formData.value : Number(formData.value),unit: formData.unit,source: formData.source,timestamp: new Date().toISOString(),tags: formData.tags ? formData.tags.split(",).map(tag => tag.trim()) : [],metadata: {notes: formData.notes;
@@ -82,31 +82,31 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
       if (editingData) {
         // 更新数据
         await healthDataService.updateHealthData(editingData.id!, dataToSave);
-        Alert.alert("成功", "健康数据已更新');
+
       } else {
         // 创建新数据
         await healthDataService.createHealthData(dataToSave);
-        Alert.alert("成功", "健康数据已添加');
+
       }
       setModalVisible(false);
       await loadHealthData();
     } catch (error) {
-      console.error('保存健康数据失败:', error);
-      Alert.alert("错误", "保存健康数据失败');
+
+
     }
   };
   const handleDeleteData = (data: HealthData) => {Alert.alert(;)
-      "确认删除", "确定要删除这条健康数据吗？',[;
+
         {
-      text: "取消",
-      style: 'cancel' },{
-      text: "删除",
+
+      style: 'cancel' ;},{
+
       style: 'destructive',onPress: async () => {try {await healthDataService.deleteHealthData(data.id!);
-              Alert.alert("成功", "健康数据已删除');
+
               await loadHealthData();
             } catch (error) {
-              console.error('删除健康数据失败:', error);
-              Alert.alert("错误", "删除健康数据失败');
+
+
             }
           }
         }
@@ -115,11 +115,11 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
   };
   const getDataTypeLabel = (type: HealthDataType): string => {
     const labels: Record<HealthDataType, string> = {
-      [HealthDataType.VITAL_SIGNS]: '生命体征',[HealthDataType.BLOOD_GLUCOSE]: '血糖',[HealthDataType.BLOOD_PRESSURE]: '血压',[HealthDataType.HEART_RATE]: '心率',[HealthDataType.TEMPERATURE]: '体温',[HealthDataType.WEIGHT]: '体重',[HealthDataType.HEIGHT]: '身高',[HealthDataType.BMI]: 'BMI',[HealthDataType.SLEEP]: '睡眠',[HealthDataType.EXERCISE]: '运动',[HealthDataType.NUTRITION]: '营养',[HealthDataType.MEDICATION]: '用药',[HealthDataType.SYMPTOMS]: '症状',[HealthDataType.TCM_DIAGNOSIS]: '中医诊断',[HealthDataType.LAB_RESULTS]: '检验结果',[HealthDataType.MENTAL_HEALTH]: '心理健康';
-    };
+
+    ;};
     return labels[type] || type;
   };
-  const getSourceLabel = (source: DataSource): string => {const labels: Record<DataSource, string> = {[DataSource.MANUAL]: '手动输入',[DataSource.DEVICE]: '设备',[DataSource.WEARABLE]: '可穿戴设备',[DataSource.MEDICAL_DEVICE]: '医疗设备',[DataSource.LABORATORY]: '实验室',[DataSource.HEALTHCARE_PROVIDER]: '医疗机构',[DataSource.AI_ANALYSIS]: 'AI分析';
+
     };
     return labels[source] || source;
   };
@@ -130,7 +130,7 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
   const formatDate = (timestamp: string): string => {return new Date(timestamp).toLocaleString('zh-CN');
   };
   const renderHealthDataItem = (item: HealthData) => ()
-    <View key={item.id} style={styles.dataItem}>
+    <View key={item.id;} style={styles.dataItem}>
       <View style={styles.dataHeader}>
         <Text style={styles.dataType}>{getDataTypeLabel(item.dataType)}</Text>
         <Text style={styles.dataDate}>{formatDate(item.timestamp)}</Text>
@@ -195,7 +195,7 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>
-              {editingData ? '编辑健康数据' : '添加健康数据'}
+
             </Text>
             <View style={styles.formGroup}>
               <Text style={styles.label}>数据类型</Text>
@@ -208,8 +208,8 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
               <TextInput;
                 style={styles.input}
                 value={formData.value}
-                onChangeText={(text) => setFormData({ ...formData, value: text })}
-                placeholder="请输入数值"
+                onChangeText={(text) => setFormData({ ...formData, value: text ;})}
+
               />
             </View>
             <View style={styles.formGroup}>
@@ -217,8 +217,8 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
               <TextInput;
                 style={styles.input}
                 value={formData.unit}
-                onChangeText={(text) => setFormData({ ...formData, unit: text })}
-                placeholder="请输入单位（可选）"
+                onChangeText={(text) => setFormData({ ...formData, unit: text ;})}
+
               />
             </View>
             <View style={styles.formGroup}>
@@ -232,8 +232,8 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
               <TextInput;
                 style={styles.input}
                 value={formData.tags}
-                onChangeText={(text) => setFormData({ ...formData, tags: text })}
-                placeholder="请输入标签"
+                onChangeText={(text) => setFormData({ ...formData, tags: text ;})}
+
               />
             </View>
             <View style={styles.formGroup}>
@@ -241,8 +241,8 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
               <TextInput;
                 style={[styles.input, styles.textArea]}
                 value={formData.notes}
-                onChangeText={(text) => setFormData({ ...formData, notes: text })}
-                placeholder="请输入备注"
+                onChangeText={(text) => setFormData({ ...formData, notes: text ;})}
+
                 multiline;
                 numberOfLines={3}
               />
@@ -269,203 +269,203 @@ export const HealthDataManager: React.FC<HealthDataManagerProps> = ({ userId }) 
 };
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
+  flex: 1;
     backgroundColor: '#f5f5f5'
-  },
+  ;},
   header: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 16,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
+    padding: 16;
+    backgroundColor: '#fff';
+    borderBottomWidth: 1;
     borderBottomColor: '#e0e0e0'
-  },
+  ;},
   title: {,
-  fontSize: 18,
-    fontWeight: 'bold',
+  fontSize: 18;
+    fontWeight: 'bold';
     color: '#333'
-  },
+  ;},
   addButton: {,
-  backgroundColor: '#007AFF',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
+  backgroundColor: '#007AFF';
+    paddingHorizontal: 16;
+    paddingVertical: 8;
     borderRadius: 8;
   },
   addButtonText: {,
-  color: '#fff',
-    fontSize: 14,
+  color: '#fff';
+    fontSize: 14;
     fontWeight: '500'
-  },
+  ;},
   scrollView: {,
-  flex: 1,
+  flex: 1;
     padding: 16;
   },
   loadingText: {,
-  textAlign: 'center',
-    color: '#666',
-    fontSize: 16,
+  textAlign: 'center';
+    color: '#666';
+    fontSize: 16;
     marginTop: 50;
   },
   emptyText: {,
-  textAlign: 'center',
-    color: '#666',
-    fontSize: 16,
+  textAlign: 'center';
+    color: '#666';
+    fontSize: 16;
     marginTop: 50;
   },
   dataItem: {,
-  backgroundColor: '#fff',
-    borderRadius: 8,
-    padding: 16,
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+  backgroundColor: '#fff';
+    borderRadius: 8;
+    padding: 16;
+    marginBottom: 12;
+    shadowColor: '#000';
+    shadowOffset: { width: 0, height: 2 ;},
+    shadowOpacity: 0.1;
+    shadowRadius: 4;
     elevation: 2;
   },
   dataHeader: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
     marginBottom: 8;
   },
   dataType: {,
-  fontSize: 16,
-    fontWeight: 'bold',
+  fontSize: 16;
+    fontWeight: 'bold';
     color: '#333'
-  },
+  ;},
   dataDate: {,
-  fontSize: 12,
+  fontSize: 12;
     color: '#666'
-  },
+  ;},
   dataContent: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
     marginBottom: 8;
   },
   dataValue: {,
-  fontSize: 18,
-    fontWeight: '600',
+  fontSize: 18;
+    fontWeight: '600';
     color: '#007AFF'
-  },
+  ;},
   dataSource: {,
-  fontSize: 12,
-    color: '#666',
-    backgroundColor: '#f0f0f0',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+  fontSize: 12;
+    color: '#666';
+    backgroundColor: '#f0f0f0';
+    paddingHorizontal: 8;
+    paddingVertical: 4;
     borderRadius: 4;
   },
   tagsContainer: {,
-  flexDirection: 'row',
-    flexWrap: 'wrap',
+  flexDirection: 'row';
+    flexWrap: 'wrap';
     marginBottom: 8;
   },
   tag: {,
-  fontSize: 12,
-    color: '#007AFF',
-    backgroundColor: '#e3f2fd',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-    marginRight: 8,
+  fontSize: 12;
+    color: '#007AFF';
+    backgroundColor: '#e3f2fd';
+    paddingHorizontal: 8;
+    paddingVertical: 4;
+    borderRadius: 12;
+    marginRight: 8;
     marginBottom: 4;
   },
   notes: {,
-  fontSize: 14,
-    color: '#666',
-    fontStyle: 'italic',
+  fontSize: 14;
+    color: '#666';
+    fontStyle: 'italic';
     marginBottom: 8;
   },
   actionButtons: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
     justifyContent: 'flex-end'
-  },
+  ;},
   actionButton: {,
-  paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 4,
+  paddingHorizontal: 12;
+    paddingVertical: 6;
+    borderRadius: 4;
     marginLeft: 8;
   },
   editButton: {,
   backgroundColor: '#4CAF50'
-  },
+  ;},
   deleteButton: {,
   backgroundColor: '#f44336'
-  },
+  ;},
   actionButtonText: {,
-  color: '#fff',
-    fontSize: 12,
+  color: '#fff';
+    fontSize: 12;
     fontWeight: '500'
-  },
+  ;},
   modalOverlay: {,
-  flex: 1,
+  flex: 1;
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
+    justifyContent: 'center';
     alignItems: 'center'
-  },
+  ;},
   modalContent: {,
-  backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 20,
-    width: '90%',
+  backgroundColor: '#fff';
+    borderRadius: 12;
+    padding: 20;
+    width: '90%';
     maxHeight: '80%'
-  },
+  ;},
   modalTitle: {,
-  fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 20,
+  fontSize: 18;
+    fontWeight: 'bold';
+    color: '#333';
+    marginBottom: 20;
     textAlign: 'center'
-  },
+  ;},
   formGroup: {,
   marginBottom: 16;
   },
   label: {,
-  fontSize: 14,
-    fontWeight: '500',
-    color: '#333',
+  fontSize: 14;
+    fontWeight: '500';
+    color: '#333';
     marginBottom: 8;
   },
   input: {,
-  borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    fontSize: 16,
+  borderWidth: 1;
+    borderColor: '#ddd';
+    borderRadius: 8;
+    paddingHorizontal: 12;
+    paddingVertical: 10;
+    fontSize: 16;
     backgroundColor: '#fff'
-  },
+  ;},
   textArea: {,
-  height: 80,
+  height: 80;
     textAlignVertical: 'top'
-  },
+  ;},
   selectButton: {,
-  borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    backgroundColor: '#fff',
-    paddingHorizontal: 12,
+  borderWidth: 1;
+    borderColor: '#ddd';
+    borderRadius: 8;
+    backgroundColor: '#fff';
+    paddingHorizontal: 12;
     paddingVertical: 10;
   },
   selectText: {,
-  fontSize: 16,
+  fontSize: 16;
     color: '#333'
-  },
+  ;},
   modalButtons: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
+  flexDirection: 'row';
+    justifyContent: 'space-between';
     marginTop: 20;
   },
   modalButton: {,
-  flex: 1,
+  flex: 1;
     paddingVertical: 12,borderRadius: 8,marginHorizontal: 8;
   },cancelButton: {backgroundColor: '#666';
   },saveButton: {backgroundColor: '#007AFF';
   },modalButtonText: {,
-  color: "#fff",
+  color: "#fff";
       fontSize: 16,fontWeight: '500',textAlign: 'center';
   };
 });

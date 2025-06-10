@@ -9,7 +9,7 @@ import {;
   RefreshControl,
   ActivityIndicator} from 'react-native';
 import SkeletonLoader from './SkeletonLoader';
-const { height: screenHeight } = Dimensions.get('window');
+const { height: screenHeight ;} = Dimensions.get('window');
 // 虚拟化列表配置
 interface VirtualizedListConfig {
   itemHeight: number;
@@ -20,7 +20,7 @@ interface VirtualizedListConfig {
   updateCellsBatchingPeriod?: number;
   removeClippedSubviews?: boolean;
   getItemLayout?: boolean;
-  keyExtractor?: (item: any, index: number) => string;
+  keyExtractor?: (item: any; index: number) => string;
 }
 // 列表项接口
 interface ListItem {
@@ -29,8 +29,8 @@ interface ListItem {
 }
 // 虚拟化列表属性
 interface VirtualizedListProps<T extends ListItem> {
-  data: T[],
-  renderItem: ({ item, index }: { item: T; index: number }) => React.ReactElement;
+  data: T[];
+  renderItem: ({ item, index ;}: { item: T; index: number ;}) => React.ReactElement;
   config?: Partial<VirtualizedListConfig>;
   loading?: boolean;
   refreshing?: boolean;
@@ -49,19 +49,19 @@ interface VirtualizedListProps<T extends ListItem> {
 }
 // 默认配置
 const DEFAULT_CONFIG: VirtualizedListConfig = {,
-  itemHeight: 60,
-  estimatedItemSize: 60,
-  windowSize: 10,
-  initialNumToRender: 10,
-  maxToRenderPerBatch: 5,
-  updateCellsBatchingPeriod: 50,
-  removeClippedSubviews: true,
-  getItemLayout: true};
+  itemHeight: 60;
+  estimatedItemSize: 60;
+  windowSize: 10;
+  initialNumToRender: 10;
+  maxToRenderPerBatch: 5;
+  updateCellsBatchingPeriod: 50;
+  removeClippedSubviews: true;
+  getItemLayout: true;};
 // 性能优化的虚拟化列表
 export const VirtualizedList = <T extends ListItem>({
   data,
   renderItem,
-  config: userConfig = {},
+  config: userConfig = {;},
   loading = false,
   refreshing = false,
   onRefresh,
@@ -87,12 +87,12 @@ export const VirtualizedList = <T extends ListItem>({
   const getItemLayout = useMemo() => {
     if (!config.getItemLayout) return undefined;
         return (data: T[] | null | undefined, index: number) => ({),
-  length: config.itemHeight,
-      offset: config.itemHeight * index,
+  length: config.itemHeight;
+      offset: config.itemHeight * index;
       index});
   }, [config.getItemLayout, config.itemHeight]);
   // 优化的renderItem;
-  const optimizedRenderItem = useCallback({ item, index }: { item: T; index: number }) => {
+  const optimizedRenderItem = useCallback({ item, index }: { item: T; index: number ;}) => {
     const MemoizedItem = React.memo() => renderItem({ item, index }));
     return <MemoizedItem />;
   }, [renderItem]);
@@ -147,7 +147,7 @@ export const VirtualizedList = <T extends ListItem>({
         onRefresh={onRefresh}
         colors={['#007AFF']}
         tintColor="#007AFF"
-        title="下拉刷新"
+
         titleColor="#666"
       />
     );
@@ -182,8 +182,8 @@ export const VirtualizedList = <T extends ListItem>({
         disableVirtualization={false}
         legacyImplementation={false}
         maintainVisibleContentPosition={
-          minIndexForVisible: 0,
-          autoscrollToTopThreshold: 10}}
+          minIndexForVisible: 0;
+          autoscrollToTopThreshold: 10;}}
       />
     );
   }
@@ -214,21 +214,21 @@ export const VirtualizedList = <T extends ListItem>({
   );
 };
 // 高性能聊天列表组件
-export const ChatVirtualizedList = <T extends ListItem & { message: string; timestamp: number }>({
+export const ChatVirtualizedList = <T extends ListItem & { message: string; timestamp: number ;}>({
   data,
   renderItem,
   ...props;
 }: Omit<VirtualizedListProps<T>, 'config' | 'skeletonType'>) => {
   const chatConfig: VirtualizedListConfig = {,
-  itemHeight: 80,
-    estimatedItemSize: 80,
-    windowSize: 15,
-    initialNumToRender: 15,
-    maxToRenderPerBatch: 8,
-    updateCellsBatchingPeriod: 30,
-    removeClippedSubviews: true,
-    getItemLayout: true,
-    keyExtractor: (item, index) => `chat-${item.id}-${item.timestamp}`};
+  itemHeight: 80;
+    estimatedItemSize: 80;
+    windowSize: 15;
+    initialNumToRender: 15;
+    maxToRenderPerBatch: 8;
+    updateCellsBatchingPeriod: 30;
+    removeClippedSubviews: true;
+    getItemLayout: true;
+    keyExtractor: (item, index) => `chat-${item.id;}-${item.timestamp}`};
   return (
   <VirtualizedList;
       data={data}
@@ -246,14 +246,14 @@ export const CardVirtualizedList = <T extends ListItem>({
   ...props;
 }: Omit<VirtualizedListProps<T>, 'config' | 'skeletonType'>) => {
   const cardConfig: VirtualizedListConfig = {,
-  itemHeight: 200,
-    estimatedItemSize: 200,
-    windowSize: 8,
-    initialNumToRender: 6,
-    maxToRenderPerBatch: 3,
-    updateCellsBatchingPeriod: 100,
-    removeClippedSubviews: true,
-    getItemLayout: true};
+  itemHeight: 200;
+    estimatedItemSize: 200;
+    windowSize: 8;
+    initialNumToRender: 6;
+    maxToRenderPerBatch: 3;
+    updateCellsBatchingPeriod: 100;
+    removeClippedSubviews: true;
+    getItemLayout: true;};
   return (
   <VirtualizedList;
       data={data}
@@ -266,7 +266,7 @@ export const CardVirtualizedList = <T extends ListItem>({
 };
 // 无限滚动Hook;
 export const useInfiniteScroll = <T extends ListItem>();
-  fetchData: (page: number) => Promise<T[]>,
+  fetchData: (page: number) => Promise<T[]>;
   pageSize: number = 20;
 ) => {
   const [data, setData] = useState<T[]>([]);
@@ -319,25 +319,25 @@ export const useInfiniteScroll = <T extends ListItem>();
 };
 const styles = StyleSheet.create({
   container: {,
-  flex: 1},
+  flex: 1;},
   emptyContainer: {,
-  flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 50},
+  flex: 1;
+    justifyContent: 'center';
+    alignItems: 'center';
+    paddingVertical: 50;},
   emptyContentContainer: {,
-  flexGrow: 1},
+  flexGrow: 1;},
   emptyText: {,
-  fontSize: 16,
-    color: '#999',
-    textAlign: 'center'},
+  fontSize: 16;
+    color: '#999';
+    textAlign: 'center';},
   loadingFooter: {,
-  flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 20},
+  flexDirection: 'row';
+    justifyContent: 'center';
+    alignItems: 'center';
+    paddingVertical: 20;},
   loadingText: {,
-  marginLeft: 10,
-    fontSize: 14,
-    color: '#666'}});
+  marginLeft: 10;
+    fontSize: 14;
+    color: '#666';}});
 export default VirtualizedList;

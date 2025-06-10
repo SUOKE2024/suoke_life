@@ -1,5 +1,4 @@
 import { SecurityManager, securityManager, encrypt, decrypt, checkAccess, grantAccess, checkRateLimit, generateSecureToken, validateToken } from "../SecurityManager";
-import { SecurityManager, securityManager, encrypt, decrypt, checkAccess, grantAccess, checkRateLimit, generateSecureToken, validateToken } from "../SecurityManager";
 describe("SecurityManager", () => {
   beforeEach(() => {
     jest.clearAllMocks();

@@ -1,7 +1,5 @@
-import {   View, Text, StyleSheet, TouchableOpacity, Image   } from "react-native";
-import { UserProfile } from "../../types/    profile";
-import { usePerformanceMonitor } from "../hooks/    usePerformanceMonitor";
-import React from "react";
+
+
 importIcon from ";../../components/common/    Icon";
 importReact from "react";
   colors,
@@ -9,15 +7,15 @@ importReact from "react";
   typography,
   { borderRadius } from "../../constants/    theme";
 interface ProfileHeaderProps {
-  userProfile: UserProfile;,
-  onEditPress: () => void;,
-  getHealthScoreColor: (score: number) => string;,
+  userProfile: UserProfile;
+  onEditPress: () => void;
+  getHealthScoreColor: (score: number) => string;
   getMemberLevelText: (level: string) => string;
 }
 const ProfileHeader: React.FC<ProfileHeaderProps /    > = ({// 性能监控)
 const performanceMonitor = usePerformanceMonitor(ProfileHeader", {")
-    trackRender: true,
-    trackMemory: false,warnThreshold: 50, // ms };);
+    trackRender: true;
+    trackMemory: false,warnThreshold: 50, // ms ;};);
   userProfile,
   onEditPress,
   getHealthScoreColor,
@@ -49,7 +47,7 @@ performanceMonitor.recordRender();
           <Text;
 style={[
               styles.statValue,
-              { color: getHealthScoreColor(userProfile.healthScore)   }}
+              { color: getHealthScoreColor(userProfile.healthScore)   ;}}
             ]} /    >
             {userProfile.healthScore}
           </    Text>
@@ -72,64 +70,64 @@ style={[
   ;);
 }
 const styles = StyleSheet.create({container: {),
-  backgroundColor: colors.white,
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.xl,
-    borderBottomWidth: 1,
+  backgroundColor: colors.white;
+    paddingHorizontal: spacing.lg;
+    paddingVertical: spacing.xl;
+    borderBottomWidth: 1;
     borderBottomColor: colors.border;
   },
   header: {,
-  flexDirection: "row",
-    alignItems: "center",
+  flexDirection: "row";
+    alignItems: "center";
     marginBottom: spacing.lg;
   },
   avatarContainer: {,
-  width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: colors.gray300,
-    justifyContent: "center",
-    alignItems: "center",
+  width: 80;
+    height: 80;
+    borderRadius: 40;
+    backgroundColor: colors.gray300;
+    justifyContent: "center";
+    alignItems: "center";
     marginRight: spacing.lg;
   },
-  avatar: { fontSize: 40  },
-  userInfo: { flex: 1  },
+  avatar: { fontSize: 40  ;},
+  userInfo: { flex: 1  ;},
   nameRow: {,
-  flexDirection: "row",
-    alignItems: "center",
+  flexDirection: "row";
+    alignItems: "center";
     marginBottom: spacing.xs;
   },
   name: {,
-  fontSize: typography.fontSize.xl,
-    fontWeight: "700" as any,
-    color: colors.textPrimary,
+  fontSize: typography.fontSize.xl;
+    fontWeight: "700" as any;
+    color: colors.textPrimary;
     marginRight: spacing.sm;
   },
-  editButton: { padding: spacing.xs  },
+  editButton: { padding: spacing.xs  ;},
   memberLevel: {,
-  fontSize: typography.fontSize.base,
-    color: colors.primary,
-    fontWeight: "500" as any,
+  fontSize: typography.fontSize.base;
+    color: colors.primary;
+    fontWeight: "500" as any;
     marginBottom: spacing.xs;
   },
   joinDate: {,
-  fontSize: typography.fontSize.sm,
+  fontSize: typography.fontSize.sm;
     color: colors.textSecondary;
   },
   statsContainer: {,
-  flexDirection: "row",
-    justifyContent: "space-around",
-    paddingTop: spacing.lg,
-    borderTopWidth: 1,
+  flexDirection: "row";
+    justifyContent: "space-around";
+    paddingTop: spacing.lg;
+    borderTopWidth: 1;
     borderTopColor: colors.border;
   },
-  statItem: { alignItems: "center"  },
+  statItem: { alignItems: "center"  ;},
   statValue: {,
-  fontSize: typography.fontSize.xl,
-    fontWeight: "700" as any,
-    color: colors.textPrimary,
+  fontSize: typography.fontSize.xl;
+    fontWeight: "700" as any;
+    color: colors.textPrimary;
     marginBottom: spacing.xs;
   },
   statLabel: {,
-  fontSize: typography.fontSize.sm,color: colors.textSecondary};};);
+  fontSize: typography.fontSize.sm,color: colors.textSecondary;};};);
 export default React.memo(ProfileHeader);

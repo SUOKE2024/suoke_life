@@ -4,7 +4,7 @@ export interface ServiceContext {
   userId: string;
   sessionId?: string;
   location?: string;
-  preferences?: Record<string, any>;
+  preferences?: Record<string; any>;
 }
 
 export interface UserProfile {
@@ -102,35 +102,35 @@ export interface AppointmentInfo {
 
 export interface XiaokeAgent {
   processMessage(
-    message: string,
-    context: ServiceContext,
-    userId?: string,
+    message: string;
+    context: ServiceContext;
+    userId?: string;
     sessionId?: string
   ): Promise<any>;
   recommendServices(
-    userProfile: UserProfile,
-    healthData?: any,
+    userProfile: UserProfile;
+    healthData?: any;
     preferences?: any
   ): Promise<ServiceRecommendation[]>;
   matchDoctors(
-    symptoms: string[],
-    specialty?: string,
-    location?: string,
+    symptoms: string[];
+    specialty?: string;
+    location?: string;
     preferences?: any
   ): Promise<DoctorMatch[]>;
   getProductInfo(productId: string): Promise<ProductInfo | null>;
   searchProducts(query: string, filters?: any): Promise<ProductInfo[]>;
   getSupplyChainInfo(productId: string): Promise<SupplyChainInfo | null>;
   createAppointment(
-    doctorId: string,
-    timeSlot: Date,
-    type: 'consultation' | 'checkup' | 'follow-up',
+    doctorId: string;
+    timeSlot: Date;
+    type: 'consultation' | 'checkup' | 'follow-up';
     notes?: string
   ): Promise<AppointmentInfo | null>;
   getUserAppointments(userId: string): Promise<AppointmentInfo[]>;
   subscribeToService(
-    serviceId: string,
-    plan: 'basic' | 'premium' | 'enterprise',
+    serviceId: string;
+    plan: 'basic' | 'premium' | 'enterprise';
     duration: number
   ): Promise<any>;
   getStatus(): Promise<any>;

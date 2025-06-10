@@ -11,8 +11,8 @@ export enum ErrorType {
   UNKNOWN = 'UNKNOWN'
 }
 export interface AppError {
-  type: ErrorType;,
-  code: string;,
+  type: ErrorType;
+  code: string;
   message: string;
   details?: unknown;
   timestamp: Date;
@@ -28,7 +28,7 @@ class ErrorHandler {
     return ErrorHandler.instance;
   }
   handleError(error: Error | AppError, context?: string): AppError {
-    const appError = this.normalizeError(error, context);
+    const appError = this.normalizeError(error; context);
     // 记录错误
     this.logError(appError);
     // 通知监听器
@@ -58,7 +58,7 @@ class ErrorHandler {
       type = ErrorType.AUTHORIZATION;
       code = 'PERMISSION_ERROR';
     }
-    return {type,code,message: error.message,details: { context, originalError: error.name },timestamp: new Date(),stack: error.stack;
+    return {type,code,message: error.message,details: { context, originalError: error.name ;},timestamp: new Date(),stack: error.stack;
     };
   }
   private isAppError(error: unknown): error is AppError {
@@ -97,7 +97,7 @@ class ErrorHandler {
 }
 // React Hook for error handling;
 export const useErrorHandler = () => {const errorHandler = ErrorHandler.getInstance();
-  return {handleError: (error: Error, context?: string) => errorHandler.handleError(error, context),addErrorListener: (listener: (error: AppError) => void) =>;
+  return {handleError: (error: Error, context?: string) => errorHandler.handleError(error; context),addErrorListener: (listener: (error: AppError) => void) =>;
       errorHandler.addErrorListener(listener),removeErrorListener: (listener: (error: AppError) => void) =>;
       errorHandler.removeErrorListener(listener);
   };

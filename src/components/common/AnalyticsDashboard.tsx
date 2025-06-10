@@ -8,26 +8,26 @@ interface AnalyticsDashboardProps {
   onClose?: () => void;
 }
 interface DashboardTab {
-  id: string;,
-  title: string;,
+  id: string;
+  title: string;
   icon: string;
 }
 const TABS: DashboardTab[] = [
   {
-      id: "performance",
-      title: '性能指标', icon: '📊' },
+      id: "performance";
+
   {
-      id: "usage",
-      title: '服务使用', icon: '🔧' },
+      id: "usage";
+
   {
-      id: "behavior",
-      title: '用户行为', icon: '👤' },
+      id: "behavior";
+
   {
-      id: "sync",
-      title: '同步状态', icon: '🔄' }];
+      id: "sync";
+
 export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
   visible = true,
-  onClose}) => {
+  onClose;}) => {
   const [activeTab, setActiveTab] = useState('performance');
   const [performanceMetrics, setPerformanceMetrics] = useState<PerformanceMetrics | null>(null);
   const [serviceUsage, setServiceUsage] = useState<ServiceUsage[]>([]);
@@ -63,7 +63,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
     }
   };
   const formatDuration = (ms: number): string => {
-    if (ms < 1000) return `${ms.toFixed(0)}ms`;
+    if (ms < 1000) return `${ms.toFixed(0);}ms`;
     if (ms < 60000) return `${(ms / 1000).toFixed(1)}s`;
     return `${(ms / 60000).toFixed(1)}m`;
   };
@@ -87,8 +87,8 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
               {formatDuration(performanceMetrics.responseTime)}
             </Text>
             <Text style={styles.metricSubtext}>
-              {performanceMetrics.responseTime < 1000 ? '优秀' :
-              performanceMetrics.responseTime < 3000 ? '良好' : '需要优化'}
+
+
             </Text>
           </View>
           <View style={styles.metricCard}>
@@ -102,36 +102,36 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
             <Text style={styles.metricTitle}>错误率</Text>
             <Text style={[
               styles.metricValue,
-              { color: performanceMetrics.errorRate > 5 ? '#ff4444' : '#00aa00' }}]}>
+              { color: performanceMetrics.errorRate > 5 ? '#ff4444' : '#00aa00' ;}}]}>
               {performanceMetrics.errorRate.toFixed(1)}%
             </Text>
             <Text style={styles.metricSubtext}>
-              {performanceMetrics.errorRate < 1 ? '优秀' :
-              performanceMetrics.errorRate < 5 ? '良好' : '需要关注'}
+
+
             </Text>
           </View>
           <View style={styles.metricCard}>
             <Text style={styles.metricTitle}>缓存命中率</Text>
             <Text style={[
               styles.metricValue,
-              { color: performanceMetrics.cacheHitRate > 80 ? '#00aa00' : '#ff8800' }}]}>
+              { color: performanceMetrics.cacheHitRate > 80 ? '#00aa00' : '#ff8800' ;}}]}>
               {performanceMetrics.cacheHitRate.toFixed(1)}%
             </Text>
             <Text style={styles.metricSubtext}>
-              {performanceMetrics.cacheHitRate > 80 ? '优秀' :
-              performanceMetrics.cacheHitRate > 60 ? '良好' : '需要优化'}
+
+
             </Text>
           </View>
           <View style={styles.metricCard}>
             <Text style={styles.metricTitle}>内存使用</Text>
             <Text style={[
               styles.metricValue,
-              { color: performanceMetrics.memoryUsage > 80 ? '#ff4444' : '#00aa00' }}]}>
+              { color: performanceMetrics.memoryUsage > 80 ? '#ff4444' : '#00aa00' ;}}]}>
               {performanceMetrics.memoryUsage.toFixed(1)}%
             </Text>
             <Text style={styles.metricSubtext}>
-              {performanceMetrics.memoryUsage < 60 ? '正常' :
-              performanceMetrics.memoryUsage < 80 ? '注意' : '警告'}
+
+
             </Text>
           </View>
           <View style={styles.metricCard}>
@@ -173,7 +173,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                 <Text style={styles.statLabel}>错误次数</Text>
                 <Text style={[
                   styles.statValue,
-                  { color: service.errors > 0 ? '#ff4444' : '#666' }}]}>
+                  { color: service.errors > 0 ? '#ff4444' : '#666' ;}}]}>
                   {service.errors}
                 </Text>
               </View>
@@ -199,8 +199,8 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                   style={[
                     styles.progressFill,
                     {
-                      width: `${(service.calls - service.errors) / service.calls * 100}}%`,
-                      backgroundColor: service.errors === 0 ? '#00aa00' : '#ff8800'}]}
+                      width: `${(service.calls - service.errors) / service.calls * 100;}}%`,
+                      backgroundColor: service.errors === 0 ? '#00aa00' : '#ff8800';}]}
                 />
               </View>
             </View>
@@ -225,7 +225,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
             <View style={styles.behaviorHeader}>
               <Text style={styles.behaviorUser}>用户 {behavior.userId}</Text>
               <Text style={styles.behaviorDuration}>
-                会话时长: {formatDuration(behavior.duration)}
+
               </Text>
             </View>
             <View style={styles.behaviorStats}>
@@ -241,7 +241,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
                 <Text style={styles.behaviorStatLabel}>错误次数</Text>
                 <Text style={[
                   styles.behaviorStatValue,
-                  { color: behavior.errors > 0 ? '#ff4444' : '#666' }}]}>
+                  { color: behavior.errors > 0 ? '#ff4444' : '#666' ;}}]}>
                   {behavior.errors}
                 </Text>
               </View>
@@ -278,9 +278,9 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
             <Text style={[
               styles.syncStatus,
               {
-                color: syncStatus.isSyncing ? '#ff8800' : '#00aa00',
-                backgroundColor: syncStatus.isSyncing ? '#fff3e0' : '#e8f5e8'}}]}>
-              {syncStatus.isSyncing ? '同步中...' : '已同步'}
+                color: syncStatus.isSyncing ? '#ff8800' : '#00aa00';
+                backgroundColor: syncStatus.isSyncing ? '#fff3e0' : '#e8f5e8';}}]}>
+
             </Text>
           </View>
           <View style={styles.syncStats}>
@@ -289,7 +289,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
               <Text style={styles.syncStatValue}>
                 {syncStatus.lastSyncTime > 0;
                   ? formatTimestamp(syncStatus.lastSyncTime)
-                  : '从未同步'
+
                 }
               </Text>
             </View>
@@ -297,7 +297,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
               <Text style={styles.syncStatLabel}>待处理冲突</Text>
               <Text style={[
                 styles.syncStatValue,
-                { color: syncStatus.conflicts > 0 ? '#ff4444' : '#666' }}]}>
+                { color: syncStatus.conflicts > 0 ? '#ff4444' : '#666' ;}}]}>
                 {syncStatus.conflicts}
               </Text>
             </View>
@@ -305,14 +305,14 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
               <Text style={styles.syncStatLabel}>自动同步</Text>
               <Text style={[
                 styles.syncStatValue,
-                { color: syncStatus.autoSync ? '#00aa00' : '#ff8800' }}]}>
-                {syncStatus.autoSync ? '已启用' : '已禁用'}
+                { color: syncStatus.autoSync ? '#00aa00' : '#ff8800' ;}}]}>
+
               </Text>
             </View>
           </View>
           {syncStatus.conflicts > 0  && <View style={styles.conflictWarning}>
               <Text style={styles.conflictText}>
-                ⚠️ 检测到 {syncStatus.conflicts} 个数据冲突，需要手动处理
+
               </Text>
             </View>
           )}
@@ -346,7 +346,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
             disabled={refreshing}
           >
             <Text style={styles.refreshText}>
-              {refreshing ? '刷新中...' : '🔄 刷新'}
+
             </Text>
           </TouchableOpacity>
           {onClose  && <TouchableOpacity style={styles.closeButton} onPress={onClose}>
@@ -380,246 +380,246 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
 };
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
-    backgroundColor: '#f5f5f5'},
+  flex: 1;
+    backgroundColor: '#f5f5f5';},
   header: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 16,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0'},
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
+    padding: 16;
+    backgroundColor: '#fff';
+    borderBottomWidth: 1;
+    borderBottomColor: '#e0e0e0';},
   title: {,
-  fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333'},
+  fontSize: 20;
+    fontWeight: 'bold';
+    color: '#333';},
   headerActions: {,
-  flexDirection: 'row',
-    alignItems: 'center'},
+  flexDirection: 'row';
+    alignItems: 'center';},
   refreshButton: {,
-  paddingHorizontal: 12,
-    paddingVertical: 6,
-    backgroundColor: '#007AFF',
-    borderRadius: 6,
-    marginRight: 8},
+  paddingHorizontal: 12;
+    paddingVertical: 6;
+    backgroundColor: '#007AFF';
+    borderRadius: 6;
+    marginRight: 8;},
   refreshText: {,
-  color: '#fff',
-    fontSize: 14,
-    fontWeight: '500'},
+  color: '#fff';
+    fontSize: 14;
+    fontWeight: '500';},
   closeButton: {,
-  padding: 8},
+  padding: 8;},
   closeText: {,
-  fontSize: 18,
-    color: '#666'},
+  fontSize: 18;
+    color: '#666';},
   tabBar: {,
-  flexDirection: 'row',
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0'},
+  flexDirection: 'row';
+    backgroundColor: '#fff';
+    borderBottomWidth: 1;
+    borderBottomColor: '#e0e0e0';},
   tab: {,
-  flex: 1,
-    alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 8},
+  flex: 1;
+    alignItems: 'center';
+    paddingVertical: 12;
+    paddingHorizontal: 8;},
   activeTab: {,
-  borderBottomWidth: 2,
-    borderBottomColor: '#007AFF'},
+  borderBottomWidth: 2;
+    borderBottomColor: '#007AFF';},
   tabIcon: {,
-  fontSize: 16,
-    marginBottom: 4},
+  fontSize: 16;
+    marginBottom: 4;},
   tabText: {,
-  fontSize: 12,
-    color: '#666'},
+  fontSize: 12;
+    color: '#666';},
   activeTabText: {,
-  color: '#007AFF',
-    fontWeight: '500'},
+  color: '#007AFF';
+    fontWeight: '500';},
   content: {,
-  flex: 1},
+  flex: 1;},
   tabContent: {,
-  flex: 1,
-    padding: 16},
+  flex: 1;
+    padding: 16;},
   emptyState: {,
-  flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'},
+  flex: 1;
+    justifyContent: 'center';
+    alignItems: 'center';},
   emptyText: {,
-  fontSize: 16,
-    color: '#999'},
+  fontSize: 16;
+    color: '#999';},
   sectionTitle: {,
-  fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 16},
+  fontSize: 18;
+    fontWeight: 'bold';
+    color: '#333';
+    marginBottom: 16;},
   metricsGrid: {,
-  flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between'},
+  flexDirection: 'row';
+    flexWrap: 'wrap';
+    justifyContent: 'space-between';},
   metricCard: {,
-  width: (width - 48) / 2,
-    backgroundColor: '#fff',
-    padding: 16,
-    borderRadius: 8,
-    marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2},
+  width: (width - 48) / 2;
+    backgroundColor: '#fff';
+    padding: 16;
+    borderRadius: 8;
+    marginBottom: 16;
+    shadowColor: '#000';
+    shadowOffset: { width: 0, height: 2 ;},
+    shadowOpacity: 0.1;
+    shadowRadius: 4;
+    elevation: 2;},
   metricTitle: {,
-  fontSize: 14,
-    color: '#666',
-    marginBottom: 8},
+  fontSize: 14;
+    color: '#666';
+    marginBottom: 8;},
   metricValue: {,
-  fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 4},
+  fontSize: 24;
+    fontWeight: 'bold';
+    color: '#333';
+    marginBottom: 4;},
   metricSubtext: {,
-  fontSize: 12,
-    color: '#999'},
+  fontSize: 12;
+    color: '#999';},
   serviceCard: {,
-  backgroundColor: '#fff',
-    padding: 16,
-    borderRadius: 8,
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2},
+  backgroundColor: '#fff';
+    padding: 16;
+    borderRadius: 8;
+    marginBottom: 12;
+    shadowColor: '#000';
+    shadowOffset: { width: 0, height: 2 ;},
+    shadowOpacity: 0.1;
+    shadowRadius: 4;
+    elevation: 2;},
   serviceHeader: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 12},
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
+    marginBottom: 12;},
   serviceName: {,
-  fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333'},
+  fontSize: 16;
+    fontWeight: 'bold';
+    color: '#333';},
   serviceStatus: {,
-  fontSize: 16},
+  fontSize: 16;},
   serviceStats: {,
-  flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginBottom: 12},
+  flexDirection: 'row';
+    flexWrap: 'wrap';
+    marginBottom: 12;},
   statItem: {,
-  width: '50%',
-    marginBottom: 8},
+  width: '50%';
+    marginBottom: 8;},
   statLabel: {,
-  fontSize: 12,
-    color: '#666',
-    marginBottom: 2},
+  fontSize: 12;
+    color: '#666';
+    marginBottom: 2;},
   statValue: {,
-  fontSize: 14,
-    fontWeight: '500',
-    color: '#333'},
+  fontSize: 14;
+    fontWeight: '500';
+    color: '#333';},
   serviceMetrics: {,
-  marginTop: 8},
+  marginTop: 8;},
   metricLabel: {,
-  fontSize: 12,
-    color: '#666',
-    marginBottom: 4},
+  fontSize: 12;
+    color: '#666';
+    marginBottom: 4;},
   progressBar: {,
-  height: 4,
-    backgroundColor: '#e0e0e0',
-    borderRadius: 2,
-    overflow: 'hidden'},
+  height: 4;
+    backgroundColor: '#e0e0e0';
+    borderRadius: 2;
+    overflow: 'hidden';},
   progressFill: {,
-  height: '100%',
-    borderRadius: 2},
+  height: '100%';
+    borderRadius: 2;},
   behaviorCard: {,
-  backgroundColor: '#fff',
-    padding: 16,
-    borderRadius: 8,
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2},
+  backgroundColor: '#fff';
+    padding: 16;
+    borderRadius: 8;
+    marginBottom: 12;
+    shadowColor: '#000';
+    shadowOffset: { width: 0, height: 2 ;},
+    shadowOpacity: 0.1;
+    shadowRadius: 4;
+    elevation: 2;},
   behaviorHeader: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 12},
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
+    marginBottom: 12;},
   behaviorUser: {,
-  fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333'},
+  fontSize: 16;
+    fontWeight: 'bold';
+    color: '#333';},
   behaviorDuration: {,
-  fontSize: 12,
-    color: '#666'},
+  fontSize: 12;
+    color: '#666';},
   behaviorStats: {,
-  flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 12},
+  flexDirection: 'row';
+    justifyContent: 'space-around';
+    marginBottom: 12;},
   behaviorStat: {,
-  alignItems: 'center'},
+  alignItems: 'center';},
   behaviorStatLabel: {,
-  fontSize: 12,
-    color: '#666',
-    marginBottom: 2},
+  fontSize: 12;
+    color: '#666';
+    marginBottom: 2;},
   behaviorStatValue: {,
-  fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333'},
+  fontSize: 16;
+    fontWeight: 'bold';
+    color: '#333';},
   behaviorDetails: {,
-  marginTop: 8},
+  marginTop: 8;},
   behaviorDetailTitle: {,
-  fontSize: 12,
-    fontWeight: 'bold',
-    color: '#666',
-    marginTop: 8,
-    marginBottom: 4},
+  fontSize: 12;
+    fontWeight: 'bold';
+    color: '#666';
+    marginTop: 8;
+    marginBottom: 4;},
   behaviorDetailText: {,
-  fontSize: 12,
-    color: '#333'},
+  fontSize: 12;
+    color: '#333';},
   syncCard: {,
-  backgroundColor: '#fff',
-    padding: 16,
-    borderRadius: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2},
+  backgroundColor: '#fff';
+    padding: 16;
+    borderRadius: 8;
+    shadowColor: '#000';
+    shadowOffset: { width: 0, height: 2 ;},
+    shadowOpacity: 0.1;
+    shadowRadius: 4;
+    elevation: 2;},
   syncHeader: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16},
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
+    marginBottom: 16;},
   syncTitle: {,
-  fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333'},
+  fontSize: 16;
+    fontWeight: 'bold';
+    color: '#333';},
   syncStatus: {,
-  fontSize: 12,
-    fontWeight: '500',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 4},
+  fontSize: 12;
+    fontWeight: '500';
+    paddingHorizontal: 8;
+    paddingVertical: 4;
+    borderRadius: 4;},
   syncStats: {,
-  marginBottom: 16},
+  marginBottom: 16;},
   syncStat: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8},
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
+    marginBottom: 8;},
   syncStatLabel: {,
-  fontSize: 14,
-    color: '#666'},
+  fontSize: 14;
+    color: '#666';},
   syncStatValue: {,
-  fontSize: 14,
-    fontWeight: '500',
-    color: '#333'},
+  fontSize: 14;
+    fontWeight: '500';
+    color: '#333';},
   conflictWarning: {,
-  backgroundColor: '#fff3e0',
-    padding: 12,
-    borderRadius: 6,
-    borderLeftWidth: 4,
-    borderLeftColor: '#ff8800'},
+  backgroundColor: '#fff3e0';
+    padding: 12;
+    borderRadius: 6;
+    borderLeftWidth: 4;
+    borderLeftColor: '#ff8800';},
   conflictText: {,
-  fontSize: 14,
-    color: '#e65100'}});
+  fontSize: 14;
+    color: '#e65100';}});
 export default AnalyticsDashboard;

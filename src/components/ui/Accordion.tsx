@@ -22,8 +22,8 @@ if (
 }
 
 export interface AccordionItem {
-  key: string;,
-  title: string;,
+  key: string;
+  title: string;
   content: React.ReactNode;
   disabled?: boolean;
   icon?: React.ReactNode;
@@ -49,7 +49,7 @@ export interface AccordionProps {
 
 export const Accordion: React.FC<AccordionProps> = ({
   items,
-  activeKeys: controlledActiveKeys,
+  activeKeys: controlledActiveKeys;
   defaultActiveKeys = [],
   onChange,
   accordion = false,
@@ -72,7 +72,7 @@ export const Accordion: React.FC<AccordionProps> = ({
     controlledActiveKeys !== undefined;
       ? controlledActiveKeys;
       : internalActiveKeys;
-  const rotationAnims = useRef<{ [key: string]: Animated.Value }>({}).current;
+  const rotationAnims = useRef<{ [key: string]: Animated.Value ;}>({}).current;
 
   // 初始化动画值
   items.forEach(item) => {
@@ -111,10 +111,10 @@ export const Accordion: React.FC<AccordionProps> = ({
       // 旋转动画
       const targetValue = newActiveKeys.includes(key) ? 1 : 0;
       Animated.timing(rotationAnims[key], {
-        toValue: targetValue,
-        duration: 200,
+        toValue: targetValue;
+        duration: 200;
         useNativeDriver: true
-      }).start();
+      ;}).start();
     }
   };
 
@@ -126,12 +126,12 @@ export const Accordion: React.FC<AccordionProps> = ({
     const rotation = rotationAnims[itemKey].interpolate({
       inputRange: [0, 1],
       outputRange: ['0deg', '180deg']
-    });
+    ;});
 
     return (
-      <Animated.View style={ transform: [{ rotate: rotation }] }}>
+      <Animated.View style={ transform: [{ rotate: rotation ;}] }}>
         <Text;
-          style={[styles.defaultIcon, { color: currentTheme.colors.onSurface }]}
+          style={[styles.defaultIcon, { color: currentTheme.colors.onSurface ;}]}
         >
           ▼
         </Text>
@@ -141,69 +141,69 @@ export const Accordion: React.FC<AccordionProps> = ({
 
   const styles = StyleSheet.create({
     container: {,
-  backgroundColor: currentTheme.colors.surface,
-      borderRadius: 8,
+  backgroundColor: currentTheme.colors.surface;
+      borderRadius: 8;
       overflow: 'hidden'
-    },
+    ;},
     bordered: {,
-  borderWidth: 1,
+  borderWidth: 1;
       borderColor: currentTheme.colors.outline
-    },
+    ;},
     item: {,
   backgroundColor: currentTheme.colors.surface
-    },
+    ;},
     itemBordered: {,
-  borderBottomWidth: 1,
+  borderBottomWidth: 1;
       borderBottomColor: currentTheme.colors.outline
-    },
+    ;},
     header: {,
-  flexDirection: 'row',
-      alignItems: 'center',
-      paddingHorizontal: 16,
-      paddingVertical: 12,
+  flexDirection: 'row';
+      alignItems: 'center';
+      paddingHorizontal: 16;
+      paddingVertical: 12;
       backgroundColor: currentTheme.colors.surface
-    },
+    ;},
     headerActive: {,
   backgroundColor: currentTheme.colors.surfaceVariant
-    },
+    ;},
     headerDisabled: {,
   opacity: 0.5
-    },
+    ;},
     icon: {,
-  marginRight: 12,
-      width: 24,
-      height: 24,
-      justifyContent: 'center',
+  marginRight: 12;
+      width: 24;
+      height: 24;
+      justifyContent: 'center';
       alignItems: 'center'
-    },
+    ;},
     title: {,
-  flex: 1,
-      fontSize: 16,
-      fontWeight: '500',
+  flex: 1;
+      fontSize: 16;
+      fontWeight: '500';
       color: currentTheme.colors.onSurface
-    },
+    ;},
     titleActive: {,
-  color: currentTheme.colors.primary,
+  color: currentTheme.colors.primary;
       fontWeight: '600'
-    },
+    ;},
     expandIcon: {,
-  marginLeft: 12,
-      width: 24,
-      height: 24,
-      justifyContent: 'center',
+  marginLeft: 12;
+      width: 24;
+      height: 24;
+      justifyContent: 'center';
       alignItems: 'center'
-    },
+    ;},
     defaultIcon: {,
-  fontSize: 12,
+  fontSize: 12;
       fontWeight: 'bold'
-    },
+    ;},
     content: {,
-  paddingHorizontal: 16,
-      paddingVertical: 12,
-      backgroundColor: currentTheme.colors.background,
-      borderTopWidth: 1,
+  paddingHorizontal: 16;
+      paddingVertical: 12;
+      backgroundColor: currentTheme.colors.background;
+      borderTopWidth: 1;
       borderTopColor: currentTheme.colors.outline
-    }
+    ;}
   });
 
   return (
@@ -236,11 +236,11 @@ export const Accordion: React.FC<AccordionProps> = ({
               disabled={isDisabled}
               accessible={accessible}
               accessibilityRole="button"
-              accessibilityLabel={`${item.title} ${isExpanded ? '已展开' : '已折叠'}`}
+
               accessibilityState={
-                expanded: isExpanded,
+                expanded: isExpanded;
                 disabled: isDisabled
-              }}
+              ;}}
             >
               {item.icon && <View style={styles.icon}>{item.icon}</View>}
 
@@ -271,14 +271,14 @@ export const Accordion: React.FC<AccordionProps> = ({
 
 // 单个折叠面板项组件
 export interface AccordionPanelProps {
-  title: string;,
+  title: string;
   key: string;
   disabled?: boolean;
   icon?: React.ReactNode;
   children: React.ReactNode;
 }
 
-export const AccordionPanel: React.FC<AccordionPanelProps> = ({ children }) => {
+export const AccordionPanel: React.FC<AccordionPanelProps> = ({ children ;}) => {
   return <>{children}</>;
 };
 
@@ -294,12 +294,12 @@ export const AdvancedAccordion: React.FC<AdvancedAccordionProps> = ({
   const items: AccordionItem[] = React.Children.map(children, (child) => {
     if (React.isValidElement(child) && child.type === AccordionPanel) {
       return {
-        key: child.props.key || '',
-        title: child.props.title,
-        content: child.props.children,
-        disabled: child.props.disabled,
+        key: child.props.key || '';
+        title: child.props.title;
+        content: child.props.children;
+        disabled: child.props.disabled;
         icon: child.props.icon
-      };
+      ;};
     }
     return null;
   }).filter(Boolean) as AccordionItem[];

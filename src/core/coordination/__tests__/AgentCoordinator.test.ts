@@ -1,5 +1,4 @@
 import { AgentCoordinator, agentCoordinator, submitTask, getTaskStatus, cancelTask } from "../AgentCoordinator";
-import { AgentCoordinator, agentCoordinator, submitTask, getTaskStatus, cancelTask } from "../AgentCoordinator";
 describe("AgentCoordinator", () => {
   beforeEach(() => {
     jest.clearAllMocks();

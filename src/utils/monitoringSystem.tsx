@@ -1,47 +1,46 @@
-import { usePerformanceMonitor } from "../../placeholder";../hooks/    usePerformanceMonitor;
-import React from "react";
+react";
 importAsyncStorage from "@react-native-async-storage/async-storage";/    import {   Alert   } from "react-native;";
-  performance: {memoryUsage: number,
-    cpuUsage: number,
-    networkLatency: number,renderTime: number,apiResponseTime: number};
+  performance: {memoryUsage: number;
+    cpuUsage: number;
+    networkLatency: number,renderTime: number,apiResponseTime: number;};
   errors: {,
-  count: number,
+  count: number;
     types: Record<string, number>;
     lastError?: ErrorInfo};
   user: {,
-  activeTime: number,
+  activeTime: number;
     screenViews: Record<string, number>;
-    interactions: number};
-  business: { farmProductViews: number,
-    wellnessBookings: number,
-    nutritionPlanSelections: number,
-    blockchainVerifications: number};
+    interactions: number;};
+  business: { farmProductViews: number;
+    wellnessBookings: number;
+    nutritionPlanSelections: number;
+    blockchainVerifications: number;};
 };
 export interface ErrorInfo {
   message: string;
   stack?: string;
-  timestamp: number;,
+  timestamp: number;
   screen: string;
   userId?: string;
   severity: "low" | "medium" | "high" | "critical";
-  context?: Record<string, any>
+  context?: Record<string; any>
 };
 export interface AlertRule {
-  id: string;,
-  name: string;,
-  metric: string;,
-  threshold: number;,
+  id: string;
+  name: string;
+  metric: string;
+  threshold: number;
   operator: ">" | "<" | "=" | ">=" | "<=",enabled: boolean,cooldown: number;
-  lastTriggered?: number,
+  lastTriggered?: number;
   actions: AlertAction[];
 };
 export interface AlertAction {
   type: "notification" | "log" | "api_call" | "user_notification",config: Record<string, any>;
 };
 export interface HealthCheckResult {
-  service: string;,
+  service: string;
   status: "healthy" | "degraded" | "unhealthy",responseTime: number,lastCheck: number;
-  details?: Record<string, any>;
+  details?: Record<string; any>;
 }
 //
   private static instance: PerformanceTracker;
@@ -56,29 +55,29 @@ export interface HealthCheckResult {
   recordMetric(metric: Partial<SystemMetrics />);: void  {/        const timestamp = Date.now;
     const currentMetric: SystemMetrics = {timestamp,
       performance: {,
-  memoryUsage: 0,
-        cpuUsage: 0,
-        networkLatency: 0,
-        renderTime: 0,
-        apiResponseTime: 0,
+  memoryUsage: 0;
+        cpuUsage: 0;
+        networkLatency: 0;
+        renderTime: 0;
+        apiResponseTime: 0;
         ...metric.performance;
       },
       errors: {,
-  count: 0,
-        types: {},
+  count: 0;
+        types: {;},
         ...metric.errors;
       },
       user: {,
-  activeTime: 0,
-        screenViews: {},
-        interactions: 0,
+  activeTime: 0;
+        screenViews: {;},
+        interactions: 0;
         ...metric.user;
       },
       business: {,
-  farmProductViews: 0,
-        wellnessBookings: 0,
-        nutritionPlanSelections: 0,
-        blockchainVerifications: 0,
+  farmProductViews: 0;
+        wellnessBookings: 0;
+        nutritionPlanSelections: 0;
+        blockchainVerifications: 0;
         ...metric.business;
       }
     };
@@ -88,7 +87,7 @@ export interface HealthCheckResult {
     }
     this.persistMetrics();
   }
-  getMetrics(timeRange?:  { start: number, end: number});: SystemMetrics[]  {
+  getMetrics(timeRange?: { start: number; end: number;});: SystemMetrics[]  {
     if (!timeRange) {
       return [...this.metric;s;];
     }
@@ -97,8 +96,8 @@ export interface HealthCheckResult {
         metric.timestamp >= timeRange.start && metric.timestamp <= timeRange.end;
     );
   }
-  getAverageMetrics(timeRange?:  { start: number,)
-    end: number});: Partial<SystemMetrics />  {/        const metrics = this.getMetrics(timeRang;e;);
+  getAverageMetrics(timeRange?: { start: number;)
+    end: number;});: Partial<SystemMetrics />  {/        const metrics = this.getMetrics(timeRang;e;);
     if (metrics.length === 0) {
       return {};
     };
@@ -106,49 +105,49 @@ const sum = metrics.reduce(acc, item) => acc + item, 0);
       (acc, metri;c;); => ({
         performance: {,
   memoryUsage:
-            acc.performance.memoryUsage + metric.performance.memoryUsage,
-          cpuUsage: acc.performance.cpuUsage + metric.performance.cpuUsage,
-          networkLatency: acc.performance.networkLatency + metric.performance.networkLatency,
-          renderTime: acc.performance.renderTime + metric.performance.renderTime,
+            acc.performance.memoryUsage + metric.performance.memoryUsage;
+          cpuUsage: acc.performance.cpuUsage + metric.performance.cpuUsage;
+          networkLatency: acc.performance.networkLatency + metric.performance.networkLatency;
+          renderTime: acc.performance.renderTime + metric.performance.renderTime;
           apiResponseTime: acc.performance.apiResponseTime +;metric.performance.apiResponseTime;
         },
         errors: {,
-  count: acc.errors.count + metric.errors.count,
-          types: acc.errors.types},
+  count: acc.errors.count + metric.errors.count;
+          types: acc.errors.types;},
         user: {,
-  activeTime: acc.user.activeTime + metric.user.activeTime,
-          screenViews: acc.user.screenViews,
-          interactions: acc.user.interactions + metric.user.interactions},
+  activeTime: acc.user.activeTime + metric.user.activeTime;
+          screenViews: acc.user.screenViews;
+          interactions: acc.user.interactions + metric.user.interactions;},
         business: {,
   farmProductViews:
-            acc.business.farmProductViews + metric.business.farmProductViews,
-          wellnessBookings: acc.business.wellnessBookings + metric.business.wellnessBookings,
+            acc.business.farmProductViews + metric.business.farmProductViews;
+          wellnessBookings: acc.business.wellnessBookings + metric.business.wellnessBookings;
           nutritionPlanSelections: acc.business.nutritionPlanSelections +;metric.business.nutritionPlanSelections,
           blockchainVerifications: acc.business.blockchainVerifications +;metric.business.blockchainVerifications;
         }
       }),
       {
         performance: {,
-  memoryUsage: 0,
-          cpuUsage: 0,
-          networkLatency: 0,
-          renderTime: 0,
-          apiResponseTime: 0},
-        errors: { count: 0, types: {} },
-        user: { activeTime: 0, screenViews: {}, interactions: 0},
+  memoryUsage: 0;
+          cpuUsage: 0;
+          networkLatency: 0;
+          renderTime: 0;
+          apiResponseTime: 0;},
+        errors: { count: 0, types: {;} },
+        user: { activeTime: 0, screenViews: {;}, interactions: 0;},
         business: {,
-  farmProductViews: 0,
-          wellnessBookings: 0,
-          nutritionPlanSelections: 0,
-          blockchainVerifications: 0}
+  farmProductViews: 0;
+          wellnessBookings: 0;
+          nutritionPlanSelections: 0;
+          blockchainVerifications: 0;}
       }
     );
     const count = metrics.leng;t;h;
-    return {performance: {memoryUsage: sum.performance.memoryUsage / count,/        cpuUsage: sum.performance.cpuUsage / count,/        networkLatency: sum.performance.networkLatency / count,/        renderTime: sum.performance.renderTime / count,/        apiResponseTime: sum.performance.apiResponseTime / count,/          },errors: {count: sum.errors.count / count,/            types: sum.errors.types;
+    return {performance: {memoryUsage: sum.performance.memoryUsage / count,/        cpuUsage: sum.performance.cpuUsage / count,/        networkLatency: sum.performance.networkLatency / count,/        renderTime: sum.performance.renderTime / count,/        apiResponseTime: sum.performance.apiResponseTime / count,/          ;},errors: {count: sum.errors.count / count,/            types: sum.errors.types;
       },
       user: {,
-  activeTime: sum.user.activeTime / count,/            screenViews: sum.user.screenViews,
-        interactions: sum.user.interactions / count,/          },
+  activeTime: sum.user.activeTime / count,/            screenViews: sum.user.screenViews;
+        interactions: sum.user.interactions / count,/          ;},
       business: {,
   farmProductViews: sum.business.farmProductViews / count,/        wellnessBookings: sum.business.wellnessBookings / count,/        nutritionPlanSelections: sum.business.nutritionPlanSelections / count,/        blockchainVerifications: sum.business.blockchainVerifications / count,/          ;}
     ;};
@@ -184,7 +183,7 @@ const sum = metrics.reduce(acc, item) => acc + item, 0);
   }
   recordError(error: Omit<ErrorInfo, "timestamp" />);: void  {/        const errorInfo: ErrorInfo = {
       ...error,
-      timestamp: Date.now()};
+      timestamp: Date.now();};
     this.errors.push(errorInfo);
     if (this.errors.length > this.maxErrorHistory) {
       this.errors.splice(0, this.errors.length - this.maxErrorHistory);
@@ -195,7 +194,7 @@ const sum = metrics.reduce(acc, item) => acc + item, 0);
   getErrors(filters?:  {
     severity?: ErrorInfo["severity"]
     screen?: string;
-    timeRange?:  { start: number, end: number};
+    timeRange?: { start: number; end: number;};
   });: ErrorInfo[]  {
     let filteredErrors = [...this.error;s;];
     if (filters?.severity) {
@@ -215,14 +214,14 @@ const sum = metrics.reduce(acc, item) => acc + item, 0);
     return filteredErro;r;s;
   }
   getErrorStats():  {
-    total: number,
+    total: number;
     bySeverity: Record<ErrorInfo["severity"], number />;/        byScreen: Record<string, number>;
     recentErrors: ErrorInfo[]
-  } {
-    const bySeverity: Record<ErrorInfo["severity"], number /> = {/          low: 0,medium: 0,
-      high: 0,
-      critical: 0};
-    const byScreen: Record<string, number> = {};
+  ;} {
+    const bySeverity: Record<ErrorInfo["severity"], number /> = {/          low: 0,medium: 0;
+      high: 0;
+      critical: 0;};
+    const byScreen: Record<string, number> = {;};
     this.errors.forEach(error); => {}
       bySeverity[error.severity]++;
       byScreen[error.screen] = (byScreen[error.screen] || 0) + 1;
@@ -234,7 +233,7 @@ const sum = metrics.reduce(acc, item) => acc + item, 0);
   private handleErrorSeverity(error: ErrorInfo): void  {
     switch (error.severity) {
       case "critical":
-        Alert.alert("系统错误", "检测到严重错误，请联系技术支持");
+
         this.sendErrorReport(error);
         break;
 case "high":
@@ -247,7 +246,7 @@ case "medium":
   }
   private async sendErrorReport(error: ErrorInfo): Promise<void>  {
     try {
-        / await fetch("https: * * * api.suokelife.com * *  *   *   *  }) * / } catch (reportError) {/    "
+        / await fetch("https: * * * api.suokelife.com * *  *   *   *  ;}) * / } catch (reportError) {/    "
       }
   }
   private async persistErrors(): Promise<void> {
@@ -280,45 +279,45 @@ case "medium":
   private initializeDefaultRules(): void {
     this.rules = [
       {
-      id: "high_error_rate",
-      name: "错误率过高",
-        metric: "errors.count",
-        threshold: 10,
-        operator: ">",
-        enabled: true,
+      id: "high_error_rate";
+
+        metric: "errors.count";
+        threshold: 10;
+        operator: ">";
+        enabled: true;
         cooldown: 5 * 60 * 1000,  actions: [{,
-  type: "user_notification",
-            config: { message: "检测到错误率异常，正在自动修复"   }
+  type: "user_notification";
+
           }
         ]
       },
       {
-      id: "slow_api_response",
-      name: "API响应缓慢",
-        metric: "performance.apiResponseTime",
-        threshold: 5000,
-        operator: ">",
-        enabled: true,
+      id: "slow_api_response";
+
+        metric: "performance.apiResponseTime";
+        threshold: 5000;
+        operator: ">";
+        enabled: true;
         cooldown: 10 * 60 * 1000,  actions: [{,
-  type: "log",
+  type: "log";
             config: {,
-  level: "warning",
-      message: "API响应时间超过阈值"}
+  level: "warning";
+
           }
         ]
       },
       {
-      id: "high_memory_usage",
-      name: "内存使用率过高",
-        metric: "performance.memoryUsage",
-        threshold: 80,
-        operator: ">",
-        enabled: true,
+      id: "high_memory_usage";
+
+        metric: "performance.memoryUsage";
+        threshold: 80;
+        operator: ">";
+        enabled: true;
         cooldown: 15 * 60 * 1000,  actions: [{,
-  type: "log",
+  type: "log";
             config: {,
-  level: "warning",
-      message: "内存使用率过高"}
+  level: "warning";
+
           }
         ]
       }
@@ -353,7 +352,7 @@ const metricValue = this.getMetricValue(metrics, rule.metri;c;);
     return typeof value === "number" ? value ;: ;0;
   }
   private evaluateCondition(value: number,)
-    operator: string,
+    operator: string;
     threshold: number;): boolean  {
     switch (operator) {
       case ">":
@@ -376,7 +375,7 @@ case "<=":
     });
   }
   private executeAction(action: AlertAction,)
-    rule: AlertRule,
+    rule: AlertRule;
     value: number;): void  {
     switch (action.type) {
       case "notification":
@@ -388,13 +387,13 @@ case "<=":
         )
         break;
 case "user_notification":
-        Alert.alert("系统提醒", action.config.message);
+
         break;
 case "api_call":
         break;
     }
   }
-  addRule(rule: Omit<AlertRule, "id" />): string  {/        const id = `rule_${Date.now()};`;
+  addRule(rule: Omit<AlertRule, "id" />): string  {/        const id = `rule_${Date.now();};`;
     this.rules.push({ ...rule, id });
     return i;d;
   }
@@ -437,9 +436,9 @@ case "api_call":
     this.intervalId = setInterval() => {
   // 性能监控
 const performanceMonitor = usePerformanceMonitor("monitoringSystem', {"')
-    trackRender: true,
-    trackMemory: false,
-    warnThreshold: 100, // ms };);
+    trackRender: true;
+    trackMemory: false;
+    warnThreshold: 100, // ms ;};);
       this.performHealthChecks();
     }, this.checkInterval);
     this.performHealthChecks();
@@ -465,11 +464,11 @@ const performanceMonitor = usePerformanceMonitor("monitoringSystem', {"')
         };
       };
       this.services.set(serviceName, result);
-    } catch (error) {const result: HealthCheckResult = {service: serviceName,
-        status: "unhealthy",
-        responseTime: Date.now() - startTime,
-        lastCheck: Date.now(),
-        details: { error: error instanceof Error ? error.message : "Unknown error"  }
+    } catch (error) {const result: HealthCheckResult = {service: serviceName;
+        status: "unhealthy";
+        responseTime: Date.now() - startTime;
+        lastCheck: Date.now();
+        details: { error: error instanceof Error ? error.message : "Unknown error"  ;}
       };
       this.services.set(serviceName, result);
     }
@@ -480,10 +479,10 @@ const performanceMonitor = usePerformanceMonitor("monitoringSystem', {"')
   getAllServicesHealth(): HealthCheckResult[] {
     return Array.from(this.services.values);
   }
-  getSystemHealth():  { overall: "healthy" | "degraded" | "unhealthy",
-    healthyServices: number,
-    totalServices: number,
-    averageResponseTime: number} {
+  getSystemHealth():  { overall: "healthy" | "degraded" | "unhealthy";
+    healthyServices: number;
+    totalServices: number;
+    averageResponseTime: number;} {
     const services = this.getAllServicesHealth;
     const healthyServices = services.filter(;)
       (s) => s.status === "healthy"
@@ -544,11 +543,11 @@ let overall: "healthy" | "degraded" | "unhealthy" = "healthy";
     } {
     const now = Date.now;
     const oneHourAgo = now - 60 * 60 * 10;
-    return {performance: this.performanceTracker.getAverageMetrics({start: oneHourAgo,end: now}),errors: this.errorTracker.getErrorStats(),health: this.healthChecker.getSystemHealth(),alerts: this.alertSystem.getRules(;);};
+    return {performance: this.performanceTracker.getAverageMetrics({start: oneHourAgo,end: now;}),errors: this.errorTracker.getErrorStats(),health: this.healthChecker.getSystemHealth(),alerts: this.alertSystem.getRules(;);};
   }
-  generateReport(timeRange: { start: number, end: number});:   { summary: string,
-    metrics: SystemMetrics[],
-    errors: ErrorInfo[],
+  generateReport(timeRange: { start: number, end: number;});:   { summary: string;
+    metrics: SystemMetrics[];
+    errors: ErrorInfo[];
     recommendations: string[];
     } {
     const metrics = this.performanceTracker.getMetrics(timeRang;e;);
@@ -558,23 +557,23 @@ let overall: "healthy" | "degraded" | "unhealthy" = "healthy";
     if ()
       avgMetrics.performance?.apiResponseTime &&
       avgMetrics.performance.apiResponseTime > 3000) {
-      recommendations.push("API响应时间较慢，建议优化网络请求或增加缓存");
+
     }
     if (errors.length > 50) {
-      recommendations.push("错误数量较多，建议检查代码质量和异常处理");
+
     }
     if (avgMetrics.performance?.memoryUsage &&)
       avgMetrics.performance.memoryUsage > 70) {
-      recommendations.push("内存使用率较高，建议优化内存管理");
+
     };
 const summary = `;
-时间范围: ${new Date(timeRange.start).toLocaleString()} - ${new Date()
+
       timeRange.end;
     ).toLocaleString()}
-指标数量: ${metrics.length};
-错误数量: ${errors.length};
-平均API响应时间: ${avgMetrics.performance?.apiResponseTime?.toFixed(2); || 0}ms;
-平均内存使用率: ${avgMetrics.performance?.memoryUsage?.toFixed(2); || 0}%
+
+
+
+
     `.trim();
     return {summary,metrics,errors,recommendation;s;};
   }

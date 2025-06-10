@@ -1,5 +1,4 @@
-import {import { AgentType, AgentStatus, AgentHealthStatus } from "../../types/agents";
-import {import { AgentMetrics } from "../../agents/AgentManager";
+
 import { agentService } from '../../services/agentService';
 import { agentCoordinationService, AgentInfo } from '../../services/agentCoordinationService';
 import React, { useState, useEffect, useCallback } from "react";
@@ -21,14 +20,14 @@ import React, { useState, useEffect, useCallback } from "react";
 */
 interface AgentMonitorProps {
   refreshInterval?: number;
-  onAgentError?: (agentType: AgentType, error: string) => void;
+  onAgentError?: (agentType: AgentType; error: string) => void;
   style?: any;
 }
 /**
 * 状态卡片属性
 */
 interface StatusCardProps {
-  agentType: AgentType;,
+  agentType: AgentType;
   status: AgentHealthStatus;
   metrics?: AgentMetrics;
   onRestart?: () => void;
@@ -54,16 +53,16 @@ const StatusCard: React.FC<StatusCardProps> = ({
         return "#9E9E9E";
     }
   };
-  const getStatusText = (status: string) => {switch (status) {case "healthy":return "健康";
+
       case "degraded":
-        return "降级";
+
       case "unhealthy":
-        return "异常";
+
       case "offline":
-        return "离线";
+
       default:
-        return "未知";
-    }
+
+    ;}
   };
   return (
   <View style={styles.statusCard}>
@@ -75,7 +74,7 @@ const StatusCard: React.FC<StatusCardProps> = ({
         <View;
           style={[
             styles.statusIndicator,
-            { backgroundColor: getStatusColor(status.status) }}
+            { backgroundColor: getStatusColor(status.status) ;}}
           ]}
         >
           <Text style={styles.statusText}>{getStatusText(status.status)}</Text>
@@ -138,22 +137,22 @@ const StatusCard: React.FC<StatusCardProps> = ({
         </TouchableOpacity>;
       )};
       <Text style={styles.lastCheck}>;
-        最后检查: {status.lastCheck.toLocaleTimeString()};
+
       </Text>;
     </View>;
   );
 };
 interface AgentMonitorState {
-  agents: AgentInfo[];,
+  agents: AgentInfo[];
   metrics: Map<string, AgentMetrics>;
-  collaborationStats: {;,
-  total: number;,
-  active: number;,
-  completed: number;,
-  failed: number;,
+  collaborationStats: {
+  total: number;
+  active: number;
+  completed: number;
+  failed: number;
   averageDuration: number;
 };
-  isLoading: boolean,
+  isLoading: boolean;
   lastUpdate: Date;
 }
 /**
@@ -172,7 +171,7 @@ export const AgentMonitor: React.FC<AgentMonitorProps> = ({
   /**
   * 加载智能体数据
   */
-  const loadAgentData = useCallback(async () => {try {setState(prev => ({ ...prev, isLoading: true }));)
+  const loadAgentData = useCallback(async () => {try {setState(prev => ({ ...prev, isLoading: true ;}));)
       // 获取智能体列表
       const agents = agentCoordinationService.getAgents();
       // 获取协作统计
@@ -183,19 +182,19 @@ export const AgentMonitor: React.FC<AgentMonitorProps> = ({
         try {
           const metrics = await agentService.getAgentMetrics(agent.id);
           metricsMap.set(agent.id, {
-            responseTime: metrics.responseTime,
-            successRate: metrics.successRate,
-            activeConnections: metrics.activeConnections,
-            load: agent.load,
+            responseTime: metrics.responseTime;
+            successRate: metrics.successRate;
+            activeConnections: metrics.activeConnections;
+            load: agent.load;
             uptime: Date.now() - agent.lastHeartbeat.getTime();
           });
         } catch (error) {
           // 如果获取指标失败，使用默认值
           metricsMap.set(agent.id, {
-            responseTime: 0,
-            successRate: 0,
-            activeConnections: 0,
-            load: agent.load,
+            responseTime: 0;
+            successRate: 0;
+            activeConnections: 0;
+            load: agent.load;
             uptime: 0;
           });
         }
@@ -203,15 +202,15 @@ export const AgentMonitor: React.FC<AgentMonitorProps> = ({
       setState(prev => ({
         ...prev,
         agents,
-        metrics: metricsMap,
+        metrics: metricsMap;
         collaborationStats,
-        isLoading: false,
+        isLoading: false;
         lastUpdate: new Date();
       }));
     } catch (error: any) {
-      console.error('加载智能体数据失败:', error);
-      Alert.alert("错误", "加载智能体数据失败: ' + error.message);
-      setState(prev => ({ ...prev, isLoading: false }));
+
+
+      setState(prev => ({ ...prev, isLoading: false ;}));
     }
   }, []);
   /**
@@ -259,7 +258,7 @@ export const AgentMonitor: React.FC<AgentMonitorProps> = ({
   /**
   * 格式化百分比
   */
-  const formatPercentage = (value: number): string => {return `${(value * 100).toFixed(1)}%`;
+  const formatPercentage = (value: number): string => {return `${(value * 100).toFixed(1);}%`;
   };
   /**
   * 渲染智能体卡片
@@ -272,7 +271,7 @@ export const AgentMonitor: React.FC<AgentMonitorProps> = ({
             <Text style={styles.agentName}>{agent.name}</Text>;
             <Text style={styles.agentType}>{agent.type}</Text>;
           </View>;
-          <View style={[styles.statusIndicator, { backgroundColor: getStatusColor(agent.status) }}]} />;
+          <View style={[styles.statusIndicator, { backgroundColor: getStatusColor(agent.status) ;}}]} />;
         </View>;
         <View style={styles.metricsContainer}>;
           <View style={styles.metricRow}>;
@@ -280,7 +279,7 @@ export const AgentMonitor: React.FC<AgentMonitorProps> = ({
             <View style={styles.loadBar}>;
               <View ;
                 style={[;
-                  styles.loadFill,{width: `${agent.load * 100}}%`,backgroundColor: getHealthColor(agent.load);
+                  styles.loadFill,{width: `${agent.load * 100;}}%`,backgroundColor: getHealthColor(agent.load);
                   }
                 ]}
               />
@@ -335,15 +334,15 @@ export const AgentMonitor: React.FC<AgentMonitorProps> = ({
             <Text style={styles.statLabel}>总计</Text>
           </View>
           <View style={styles.statItem}>
-            <Text style={[styles.statValue, { color: '#4CAF50' }}]}>{collaborationStats.active}</Text>
+            <Text style={[styles.statValue, { color: '#4CAF50' ;}}]}>{collaborationStats.active}</Text>
             <Text style={styles.statLabel}>活跃</Text>;
           </View>;
           <View style={styles.statItem}>;
-            <Text style={[styles.statValue, { color: '#2196F3' }}]}>{collaborationStats.completed}</Text>;
+            <Text style={[styles.statValue, { color: '#2196F3' ;}}]}>{collaborationStats.completed}</Text>;
             <Text style={styles.statLabel}>完成</Text>;
           </View>;
           <View style={styles.statItem}>;
-            <Text style={[styles.statValue, { color: '#F44336' }}]}>{collaborationStats.failed}</Text>;
+            <Text style={[styles.statValue, { color: '#F44336' ;}}]}>{collaborationStats.failed}</Text>;
             <Text style={styles.statLabel}>失败</Text>;
           </View>;
         </View>;
@@ -371,7 +370,7 @@ export const AgentMonitor: React.FC<AgentMonitorProps> = ({
       <View style={styles.header}>;
         <Text style={styles.title}>智能体监控</Text>;
         <Text style={styles.lastUpdate}>;
-          最后更新: {state.lastUpdate.toLocaleTimeString()};
+
         </Text>;
       </View>;
       {renderCollaborationStats()};
@@ -389,162 +388,162 @@ export const AgentMonitor: React.FC<AgentMonitorProps> = ({
 const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {,
-  flex: 1,
+  flex: 1;
     backgroundColor: "#f5f5f5"
-  },
+  ;},
   header: {,
-  padding: 16,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
+  padding: 16;
+    backgroundColor: '#fff';
+    borderBottomWidth: 1;
     borderBottomColor: '#e0e0e0'
-  },
+  ;},
   title: {,
-  fontSize: 24,
-    fontWeight: "bold",
+  fontSize: 24;
+    fontWeight: "bold";
     color: "#333"
-  },
+  ;},
   lastUpdate: {,
-  fontSize: 12,
-    color: "#666",
+  fontSize: 12;
+    color: "#666";
     marginTop: 4;
   },
   statsContainer: {,
-  margin: 16,
-    padding: 16,
-    backgroundColor: "#fff",
-    borderRadius: 8,
+  margin: 16;
+    padding: 16;
+    backgroundColor: "#fff";
+    borderRadius: 8;
     elevation: 2;
   },
   statsTitle: {,
-  fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 12,
+  fontSize: 18;
+    fontWeight: "bold";
+    marginBottom: 12;
     color: "#333"
-  },
+  ;},
   statsGrid: {,
-  flexDirection: "row",
-    justifyContent: "space-around",
+  flexDirection: "row";
+    justifyContent: "space-around";
     marginBottom: 12;
   },
   statItem: {,
   alignItems: "center"
-  },
+  ;},
   statValue: {,
-  fontSize: 20,
-    fontWeight: "bold",
+  fontSize: 20;
+    fontWeight: "bold";
     color: "#333"
-  },
+  ;},
   statLabel: {,
-  fontSize: 12,
-    color: "#666",
+  fontSize: 12;
+    color: "#666";
     marginTop: 4;
   },
   averageDuration: {,
-  flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    paddingTop: 12,
-    borderTopWidth: 1,
+  flexDirection: "row";
+    justifyContent: "center";
+    alignItems: "center";
+    paddingTop: 12;
+    borderTopWidth: 1;
     borderTopColor: "#e0e0e0"
-  },
+  ;},
   agentsContainer: {,
   margin: 16;
   },
   sectionTitle: {,
-  fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 12,
+  fontSize: 18;
+    fontWeight: "bold";
+    marginBottom: 12;
     color: "#333"
-  },
+  ;},
   agentCard: {,
-  backgroundColor: "#fff",
-    borderRadius: 8,
-    padding: 16,
-    marginBottom: 12,
+  backgroundColor: "#fff";
+    borderRadius: 8;
+    padding: 16;
+    marginBottom: 12;
     elevation: 2;
   },
   agentHeader: {,
-  flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+  flexDirection: "row";
+    justifyContent: "space-between";
+    alignItems: "center";
     marginBottom: 12;
   },
   agentInfo: {,
   flex: 1;
   },
   agentName: {,
-  fontSize: 16,
-    fontWeight: "bold",
+  fontSize: 16;
+    fontWeight: "bold";
     color: "#333"
-  },
+  ;},
   agentType: {,
-  fontSize: 12,
-    color: "#666",
+  fontSize: 12;
+    color: "#666";
     marginTop: 2;
   },
   statusIndicator: {,
-  width: 12,
-    height: 12,
+  width: 12;
+    height: 12;
     borderRadius: 6;
   },
   metricsContainer: {,
   marginBottom: 12;
   },
   metricRow: {,
-  flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+  flexDirection: "row";
+    justifyContent: "space-between";
+    alignItems: "center";
     marginBottom: 8;
   },
   metricLabel: {,
-  fontSize: 14,
-    color: "#666",
+  fontSize: 14;
+    color: "#666";
     flex: 1;
   },
   metricValue: {,
-  fontSize: 14,
-    fontWeight: "500",
+  fontSize: 14;
+    fontWeight: "500";
     color: "#333"
-  },
+  ;},
   loadBar: {,
-  flex: 2,
-    height: 8,
-    backgroundColor: "#e0e0e0",
-    borderRadius: 4,
-    marginHorizontal: 8,
+  flex: 2;
+    height: 8;
+    backgroundColor: "#e0e0e0";
+    borderRadius: 4;
+    marginHorizontal: 8;
     overflow: "hidden"
-  },
+  ;},
   loadFill: {,
-  height: "100%",
+  height: "100%";
     borderRadius: 4;
   },
   capabilitiesContainer: {,
-  borderTopWidth: 1,
-    borderTopColor: "#e0e0e0",
+  borderTopWidth: 1;
+    borderTopColor: "#e0e0e0";
     paddingTop: 12;
   },
   capabilitiesTitle: {,
-  fontSize: 14,
-    fontWeight: "500",
-    color: "#333",
+  fontSize: 14;
+    fontWeight: "500";
+    color: "#333";
     marginBottom: 8;
   },
   capabilitiesList: {,
-  flexDirection: "row",
-    flexWrap: "wrap",
+  flexDirection: "row";
+    flexWrap: "wrap";
     alignItems: "center"
-  },
+  ;},
   capabilityTag: {,
-  backgroundColor: "#e3f2fd",
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-    marginRight: 8,
+  backgroundColor: "#e3f2fd";
+    paddingHorizontal: 8;
+    paddingVertical: 4;
+    borderRadius: 12;
+    marginRight: 8;
     marginBottom: 4;
   },capabilityText: {fontSize: 12,color: "#1976d2";
   },moreCapabilities: {fontSize: 12,color: "#666",fontStyle: "italic";
   },loadingText: {,
-  textAlign: "center",
+  textAlign: "center";
       color: "#666",fontSize: 16,marginTop: 20;
   };
 });

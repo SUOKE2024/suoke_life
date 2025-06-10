@@ -12,15 +12,15 @@ import { MazeProgress } from '../../types/maze';
   Dimensions;
 } from 'react-native';
 interface ProgressDisplayProps {
-  progress: MazeProgress;,
-  gameTime: number;,
-  isPaused: boolean;,
-  onPause: () => void;,
-  onResume: () => void;,
-  onSettings: () => void;,
+  progress: MazeProgress;
+  gameTime: number;
+  isPaused: boolean;
+  onPause: () => void;
+  onResume: () => void;
+  onSettings: () => void;
   onExit: () => void;
 }
-const { width: screenWidth } = Dimensions.get('window');
+const { width: screenWidth ;} = Dimensions.get('window');
 const ProgressDisplay: React.FC<ProgressDisplayProps> = ({
   progress,
   gameTime,
@@ -127,19 +127,19 @@ const ProgressDisplay: React.FC<ProgressDisplayProps> = ({
           <View;
             style={[
               styles.progressBarFill,
-              { width: `${getCompletionPercentage()}}%` }
+              { width: `${getCompletionPercentage();}}%` }
             ]};
           />;
         </View>;
         <Text style={styles.progressText}>;
-          探索进度 {getCompletionPercentage()}%;
+
         </Text>;
       </View>;
       {// 当前位置信息};
       <View style={styles.locationInfo}>;
         <Icon name="my-location" size={14} color="#C8E6C9" />;
         <Text style={styles.locationText}>;
-          位置: ({progress.currentPosition.x}, {progress.currentPosition.y});
+
         </Text>;
       </View>;
     </View>;
@@ -147,110 +147,110 @@ const ProgressDisplay: React.FC<ProgressDisplayProps> = ({
 };
 const styles = StyleSheet.create({
   container: {,
-  backgroundColor: '#2E7D32',
-    paddingTop: 8,
-    paddingBottom: 12,
+  backgroundColor: '#2E7D32';
+    paddingTop: 8;
+    paddingBottom: 12;
     paddingHorizontal: 16;
   },
   topBar: {,
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  flexDirection: 'row';
+    justifyContent: 'space-between';
+    alignItems: 'center';
     marginBottom: 12;
   },
   leftSection: {,
-  flexDirection: 'row',
+  flexDirection: 'row';
     alignItems: 'center'
-  },
+  ;},
   centerSection: {,
   alignItems: 'center'
-  },
+  ;},
   rightSection: {,
   alignItems: 'flex-end'
-  },
+  ;},
   controlButton: {,
-  width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#388E3C',
-    justifyContent: 'center',
-    alignItems: 'center',
+  width: 40;
+    height: 40;
+    borderRadius: 20;
+    backgroundColor: '#388E3C';
+    justifyContent: 'center';
+    alignItems: 'center';
     marginRight: 8;
   },
   exitButton: {,
-  width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#D32F2F',
-    justifyContent: 'center',
+  width: 40;
+    height: 40;
+    borderRadius: 20;
+    backgroundColor: '#D32F2F';
+    justifyContent: 'center';
     alignItems: 'center'
-  },
+  ;},
   timeContainer: {,
-  flexDirection: 'row',
-    alignItems: 'center',
+  flexDirection: 'row';
+    alignItems: 'center';
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingHorizontal: 12;
+    paddingVertical: 6;
     borderRadius: 16;
   },
   timeText: {,
-  color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginLeft: 4,
+  color: '#FFFFFF';
+    fontSize: 16;
+    fontWeight: 'bold';
+    marginLeft: 4;
     fontFamily: 'monospace'
-  },
+  ;},
   pausedText: {,
-  color: '#FFB74D',
-    fontSize: 12,
-    fontWeight: 'bold',
+  color: '#FFB74D';
+    fontSize: 12;
+    fontWeight: 'bold';
     marginTop: 2;
   },
   progressBar: {,
-  flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
+  flexDirection: 'row';
+    justifyContent: 'space-around';
+    alignItems: 'center';
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderRadius: 12,
-    paddingVertical: 8,
+    borderRadius: 12;
+    paddingVertical: 8;
     marginBottom: 8;
   },
   statItem: {,
-  alignItems: 'center',
+  alignItems: 'center';
     minWidth: 50;
   },
   statValue: {,
-  color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: 'bold',
+  color: '#FFFFFF';
+    fontSize: 14;
+    fontWeight: 'bold';
     marginTop: 2;
   },
   statLabel: {,
-  color: '#C8E6C9',
-    fontSize: 10,
+  color: '#C8E6C9';
+    fontSize: 10;
     marginTop: 1;
   },
   progressBarContainer: {,
   marginBottom: 6;
   },
   progressBarBackground: {,
-  height: 6,
+  height: 6;
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    borderRadius: 3,
+    borderRadius: 3;
     overflow: 'hidden'
-  },
+  ;},
   progressBarFill: {,
-  height: '100%',
-    backgroundColor: '#4CAF50',
+  height: '100%';
+    backgroundColor: '#4CAF50';
     borderRadius: 3;
   },
   progressText: {,
   color: '#C8E6C9',fontSize: 11,textAlign: 'center',marginTop: 4;
   },locationInfo: {,
-  flexDirection: "row",
+  flexDirection: "row";
       alignItems: 'center',justifyContent: 'center';
   },locationText: {,
-  color: "#C8E6C9",
+  color: "#C8E6C9";
       fontSize: 11,marginLeft: 4,fontFamily: 'monospace';
   };
 });

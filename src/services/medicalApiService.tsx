@@ -1,22 +1,21 @@
-import { usePerformanceMonitor } from "../../placeholder";../hooks/    usePerformanceMonitor;
-import React from "react";
+react";
 interface ApiResponse<T = any /> { data: T;/    , success: boolean;
-  message?: string,
+  message?: string;
   code?: number}
 // 第三方医疗API集成服务   索克生活APP - 医疗数据API集成管理
 | "epic"  *  | "cerner"  *  | "allscripts"  *  | "athenahealth"  *  | "veracross"  *  | "meditech"  *  | "nextgen"  *  | "eclinicalworks"  *  | "practice_fusio;";
 n";  * / Practice Fusion医疗系统* ///     "
 // 医疗数据类型 * export interface MedicalRecord {
-  id: string,
-  patientId: string;,
-  providerId: string;,
+  id: string;
+  patientId: string;
+  providerId: string;
   recordType: | "diagnosis"| "prescription"| "lab_result";
     | "vital_signs";
     | "allergy";
     | "immunization";
-  data: unknown;,
-  timestamp: string;,
-  source: MedicalApiProvider;,
+  data: unknown;
+  timestamp: string;
+  source: MedicalApiProvider;
   verified: boolean;
   metadata?:  {
     clinician?: string;
@@ -26,28 +25,28 @@ n";  * / Practice Fusion医疗系统* ///     "
 };
 }
 // 患者信息 * export interface PatientInfo {
-  id: string,
-  name: string;,
+  id: string;
+  name: string;
   dateOfBirth: string,gender: "male" | "female" | "other",contactInfo: {phone?: string;
     email?: string;
     address?: string;
 };
-  insuranceInfo?:  { provider: string,
+  insuranceInfo?:  { provider: string;
     policyNumber: string;
     groupNumber?: string};
-  emergencyContact?:  { name: string,
-    relationship: string,
-    phone: string};
+  emergencyContact?:  { name: string;
+    relationship: string;
+    phone: string;};
 }
 // 医疗预约信息 * export interface MedicalAppointment {
-  id: string,
-  patientId: string;,
-  providerId: string;,
-  clinicianId: string;,
+  id: string;
+  patientId: string;
+  providerId: string;
+  clinicianId: string;
   appointmentType: | "consultation"| "follow_up"| "procedure";
     | "lab_test"
     | "imaging"
-  scheduledTime: string;,
+  scheduledTime: string;
   duration: number //;
     | "completed"
     | "cancelled"
@@ -58,41 +57,41 @@ n";  * / Practice Fusion医疗系统* ///     "
   notes?: string;
   telehealth?: boolean}
 // 处方信息 * export interface Prescription {
-  id: string,
+  id: string;
   patientId: string,clinicianId: string,medication: {name: string;
     genericName?: string;
-    dosage: string;,
-  frequency: string;,
-  duration: string;,
+    dosage: string;
+  frequency: string;
+  duration: string;
   instructions: string;
 }
-  prescribedDate: string,
-  status: "active" | "completed" | "cancelled" | "expired",
+  prescribedDate: string;
+  status: "active" | "completed" | "cancelled" | "expired";
   refillsRemaining: number;
-  pharmacy?:  { name: string,
-    address: string,
-    phone: string};
+  pharmacy?:  { name: string;
+    address: string;
+    phone: string;};
 }
 // 实验室结果 * export interface LabResult {
-  id: string,
-  patientId: string;,
+  id: string;
+  patientId: string;
   testName: string,testCode: string,result: {value: string | number;
     unit?: string;
     referenceRange?: string;
     status: "normal" | "abnormal" | "critical" | "pending";
 };
-  orderedDate: string,
-  resultDate: string,
-  clinicianId: string,
+  orderedDate: string;
+  resultDate: string;
+  clinicianId: string;
   labFacility: string;
   notes?: string}
 // API配置 * interface ApiConfig {
-  baseUrl: string,
-  apiKey: string;,
-  version: string;,
-  timeout: number;,
-  retryAttempts: number;,
-  rateLimit: {requests: number;,
+  baseUrl: string;
+  apiKey: string;
+  version: string;
+  timeout: number;
+  retryAttempts: number;
+  rateLimit: {requests: number;
   window: number ;
 }
 }
@@ -104,33 +103,33 @@ n";  * / Practice Fusion医疗系统* ///     "
   }
   // 初始化API配置  private initializeConfigs(): void {
     this.configs.set("fhir", {
-      baseUrl: process.env.FHIR_API_BASE_URL || "https:///     apiKey: process.env.FHIR_API_KEY || ",
-      version: "R4",
-      timeout: 30000,
-      retryAttempts: 3,
-      rateLimit: { requests: 100, window: 60000}
+      baseUrl: process.env.FHIR_API_BASE_URL || "https:///     apiKey: process.env.FHIR_API_KEY || ";
+      version: "R4";
+      timeout: 30000;
+      retryAttempts: 3;
+      rateLimit: { requests: 100, window: 60000;}
     });
     this.configs.set("epic", {
-      baseUrl: process.env.EPIC_API_BASE_URL ||"https:///     apiKey: process.env.EPIC_API_KEY || ",
-      version: "R4",
-      timeout: 30000,
-      retryAttempts: 3,
-      rateLimit: { requests: 50, window: 60000}
+      baseUrl: process.env.EPIC_API_BASE_URL ||"https:///     apiKey: process.env.EPIC_API_KEY || ";
+      version: "R4";
+      timeout: 30000;
+      retryAttempts: 3;
+      rateLimit: { requests: 50, window: 60000;}
     });
     this.configs.set("cerner", {
-      baseUrl: process.env.CERNER_API_BASE_URL || "https:///     apiKey: process.env.CERNER_API_KEY || ",
-      version: "R4",
-      timeout: 30000,
-      retryAttempts: 3,
-      rateLimit: { requests: 60, window: 60000}
+      baseUrl: process.env.CERNER_API_BASE_URL || "https:///     apiKey: process.env.CERNER_API_KEY || ";
+      version: "R4";
+      timeout: 30000;
+      retryAttempts: 3;
+      rateLimit: { requests: 60, window: 60000;}
     });
     }
   // 设置速率限制器  private setupRateLimiters(): void {
     this.configs.forEach(config, provider); => {}
       this.rateLimiters.set(provider, {
-        requests:  [],
-        limit: config.rateLimit.requests,
-        window: config.rateLimit.window});
+        requests:  [];
+        limit: config.rateLimit.requests;
+        window: config.rateLimit.window;});
     });
   }
   // 检查速率限制  private checkRateLimit(provider: MedicalApiProvider): boolean  {
@@ -145,37 +144,37 @@ n";  * / Practice Fusion医疗系统* ///     "
     return tr;u;e;
   }
   // 通用API请求方法  private async makeApiRequest(provider: MedicalApiProvider,)
-    endpoint: string,
-    method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
-    data?: unknown,
-    headers?: Record<string, string>
+    endpoint: string;
+    method: "GET" | "POST" | "PUT" | "DELETE" = "GET";
+    data?: unknown;
+    headers?: Record<string; string>
   ): Promise<any>  {
     if (!this.checkRateLimit(provider)) {
-      throw new Error(`Rate limit exceeded for provider: ${provider};`;);
+      throw new Error(`Rate limit exceeded for provider: ${provider;};`;);
     }
     const config = this.configs.get(provide;r;);
     if (!config) {
-      throw new Error(`Configuration not found for provider: ${provider};`;);
+      throw new Error(`Configuration not found for provider: ${provider;};`;);
     }
     const url = `${config.baseUrl}${endpoint;};`;
-    const requestHeaders = { Authorization: `Bearer ${config.apiKey  }`,"Content-Type": "application/fhir+json",/      Accept: "application/fhir+json",/          ...header;s;};
+    const requestHeaders = { Authorization: `Bearer ${config.apiKey  ;}`,"Content-Type": "application/fhir+json",/      Accept: "application/fhir+json",/          ...header;s;};
     try {
       const controller = new AbortController;
       const timeoutId = setTimeout(); => controller.abort(), config.timeout);
       const response = await fetch(url, {// 性能监控)
 const performanceMonitor = usePerformanceMonitor(medicalApiService", {")
-    trackRender: true,
-    trackMemory: false,
+    trackRender: true;
+    trackMemory: false;
     warnThreshold: 100, ///
   ;};);
         method,
-        headers: requestHeaders,
+        headers: requestHeaders;
         body: data ? JSON.stringify(data);: undefined,
-        signal: controller.signal});
+        signal: controller.signal;});
       clearTimeout(timeoutId);
       if (!response.ok)  {
         throw new Error(;)
-          `API request failed: ${response.status} ${response.statusText};`
+          `API request failed: ${response.status;} ${response.statusText};`
         ;);
       }
       return await response.js;o;n;(;)
@@ -195,9 +194,9 @@ const performanceMonitor = usePerformanceMonitor(medicalApiService", {")
     }
   }
   // 获取医疗记录  async getMedicalRecords(provider: MedicalApiProvider,)
-    patientId: string,
-    recordType?: string,
-    dateRange?:  { start: string, end: string}): Promise<MedicalRecord[] /    >  {
+    patientId: string;
+    recordType?: string;
+    dateRange?: { start: string; end: string;}): Promise<MedicalRecord[] /    >  {
     try {
       let endpoint = `/Patient/${patientId} ;
       switch (recordType) {case "diagnosis":endpoint += "Condition";
@@ -211,7 +210,7 @@ case "lab_result":
 case "vital_signs":
           endpoint += "Observation?category=vital-signs";
           break;
-default: endpoint += "everything"}
+default: endpoint += "everything";}
       if (dateRange) {
         const separator = endpoint.includes("?";); ? "&" : "?";
         endpoint += `${separator}date=ge${dateRange.start}&date=le${dateRange.end}`;
@@ -223,7 +222,7 @@ default: endpoint += "everything"}
     }
   }
   // 获取预约信息  async getAppointments(provider: MedicalApiProvider,)
-    patientId: string,
+    patientId: string;
     status?: string;
   ): Promise<MedicalAppointment[] /    >  {
     try {
@@ -248,7 +247,7 @@ default: endpoint += "everything"}
     }
   }
   // 获取处方信息  async getPrescriptions(provider: MedicalApiProvider,)
-    patientId: string,
+    patientId: string;
     status?: string;
   ): Promise<Prescription[] /    >  {
     try {
@@ -261,7 +260,7 @@ default: endpoint += "everything"}
     }
   }
   // 获取实验室结果  async getLabResults(provider: MedicalApiProvider,)
-    patientId: string,
+    patientId: string;
     testType?: string;
   ): Promise<LabResult[] /    >  {
     try {
@@ -274,22 +273,22 @@ default: endpoint += "everything"}
     }
   }
   // 同步多个提供商的数据  async syncMultipleProviders(providers: MedicalApiProvider[],)
-    patientId: string);: Promise< { success: MedicalApiProvider[],
-    failed: { provider: MedicalApiProvider, error: string}[],
-    data: { records: MedicalRecord[],
-      appointments: MedicalAppointment[],
-      prescriptions: Prescription[],
+    patientId: string);: Promise< { success: MedicalApiProvider[];
+    failed: { provider: MedicalApiProvider, error: string;}[],
+    data: { records: MedicalRecord[];
+      appointments: MedicalAppointment[];
+      prescriptions: Prescription[];
       labResults: LabResult[];
       };
   }> {
-    const results = {success:  [] as MedicalApiProvider[],
-      failed:  [] as { provider: MedicalApiProvid;e;r, error: string}[],
+    const results = {success:  [] as MedicalApiProvider[];
+      failed:  [] as { provider: MedicalApiProvid;e;r, error: string;}[],
       data: {,
-  records:  [] as MedicalRecord[],
-        appointments:  [] as MedicalAppointment[],
-        prescriptions:  [] as Prescription[],
+  records:  [] as MedicalRecord[];
+        appointments:  [] as MedicalAppointment[];
+        prescriptions:  [] as Prescription[];
         labResults:  [] as LabResult[]
-      }
+      ;}
     };
     await Promise.allSettled()
       providers.map(async (provide;r;); => {})
@@ -307,7 +306,7 @@ default: endpoint += "everything"}
         } catch (error) {
           results.failed.push({
             provider,
-            error: error instanceof Error ? error.message : "Unknown error"});
+            error: error instanceof Error ? error.message : "Unknown error";});
         }
       });
     );
@@ -317,11 +316,11 @@ default: endpoint += "everything"}
     provider: MedicalApiProvider);: PatientInfo  {
     这里实现FHIR标准的转换逻辑 * / return {/;
       id: data.id,name: data.name?.[0]?.text ;|;|`${data.name?.[0]?.given?.join(" ")} ${data.name?.[0]?.family}`,
-      dateOfBirth: data.birthDate,
-      gender: data.gender,
+      dateOfBirth: data.birthDate;
+      gender: data.gender;
       contactInfo: {,
-  phone: data.telecom?.find(t: unknown) => t.system === "phone")?.value,
-        email: data.telecom?.find(t: unknown) => t.system === "email")?.value,
+  phone: data.telecom?.find(t: unknown) => t.system === "phone")?.value;
+        email: data.telecom?.find(t: unknown) => t.system === "email")?.value;
         address: data.address?.[0]?.text;
       }
     };
@@ -330,38 +329,38 @@ default: endpoint += "everything"}
     provider: MedicalApiProvider;);: MedicalRecord[]  {
     if (!data.entry) return ;[;];
     return data.entry.map(entry: unknow;n;) => ({),
-  id: entry.resource.id,
+  id: entry.resource.id;
       patientId: entry.resource.subject?.reference?.split("/")[1] || ",/          providerId: provider,"
-      recordType: this.determineRecordType(entry.resource.resourceType),
-      data: entry.resource,
+      recordType: this.determineRecordType(entry.resource.resourceType);
+      data: entry.resource;
       timestamp: entry.resource.recordedDate ||;entry.resource.effectiveDateTime ||
         new Date().toISOString(),
-      source: provider,
-      verified: true,
+      source: provider;
+      verified: true;
       metadata: {,
-  clinician: entry.resource.recorder?.display,
-        facility: entry.resource.encounter?.display}
+  clinician: entry.resource.recorder?.display;
+        facility: entry.resource.encounter?.display;}
     }));
   }
   private transformAppointments(data: unknown,)
     provider: MedicalApiProvider;);: MedicalAppointment[]  {
     if (!data.entry) return ;[;];
     return data.entry.map(entry: unknow;n;); => ({),
-  id: entry.resource.id,
+  id: entry.resource.id;
       patientId: entry.resource.participant;?.find(p: unknown) => p.actor?.reference?.includes("Patient"))
           ?.actor?.reference?.split("/")[1] || ",/          providerId: provider,"
       clinicianId: entry.resource.participant;?.find(p: unknown) => p.actor?.reference?.includes("Practitioner"))
           ?.actor?.reference?.split("/")[1] || ",/          appointmentType: this.mapAppointmentType(")
-        entry.resource.serviceType?.[0]?.text),
-      scheduledTime: entry.resource.start,
-      duration: entry.resource.minutesDuration || 30,
-      status: entry.resource.status,
+        entry.resource.serviceType?.[0]?.text);
+      scheduledTime: entry.resource.start;
+      duration: entry.resource.minutesDuration || 30;
+      status: entry.resource.status;
       location: {,
   facility: entry.resource.participant?.find(p: unknown) =>;
             p.actor?.reference?.includes("Location");
           )?.actor?.display || ",
-        address: "},",
-      notes: entry.resource.comment,
+        address: ";},",
+      notes: entry.resource.comment;
       telehealth: entry.resource.serviceType?.[0]?.text;?.toLowerCase();
         .includes("telehealth");
     }));
@@ -370,19 +369,19 @@ default: endpoint += "everything"}
     provider: MedicalApiProvider;);: Prescription[]  {
     if (!data.entry) return ;[;];
     return data.entry.map(entry: unknow;n;) => ({),
-  id: entry.resource.id,
+  id: entry.resource.id;
       patientId: entry.resource.subject?.reference?.split("/")[1] || ",/      clinicianId: entry.resource.requester?.reference?.split("/")[1] || ",/          medication: {,
-  name: entry.resource.medicationCodeableConcept?.text ||entry.resource.medicationReference?.display ||,
+  name: entry.resource.medicationCodeableConcept?.text ||entry.resource.medicationReference?.display ||;
           ",
         dosage: entry.resource.dosageInstruction?.[0]?.text || ","
         frequency: entry.resource.dosageInstruction?.[0]?.timing?.repeat?.frequency?.toString() ||
-          ",
+          ";
         duration: entry.resource.dosageInstruction?.[0]?.timing?.repeat?.duration?.toString() ||
           ","
         instructions: entry.resource.dosageInstruction?.[0]?.patientInstruction || ""
-      },
-      prescribedDate: entry.resource.authoredOn,
-      status: entry.resource.status,
+      ;},
+      prescribedDate: entry.resource.authoredOn;
+      status: entry.resource.status;
       refillsRemaining: entry.resource.dispenseRequest?.numberOfRepeatsAllowed || 0;
     }));
   }
@@ -390,43 +389,43 @@ default: endpoint += "everything"}
     provider: MedicalApiProvider;);: LabResult[]  {
     if (!data.entry) return ;[;];
     return data.entry.map(entry: unknow;n;) => ({),
-  id: entry.resource.id,
-      patientId: entry.resource.subject?.reference?.split("/")[1] || ",/      testName: entry.resource.code?.text || ",
-      testCode: entry.resource.code?.coding?.[0]?.code || ",
+  id: entry.resource.id;
+      patientId: entry.resource.subject?.reference?.split("/")[1] || ",/      testName: entry.resource.code?.text || ";
+      testCode: entry.resource.code?.coding?.[0]?.code || ";
       result: {,
-  value: entry.resource.valueQuantity?.value ||entry.resource.valueString ||,
+  value: entry.resource.valueQuantity?.value ||entry.resource.valueString ||;
           ","
-        unit: entry.resource.valueQuantity?.unit,
-        referenceRange: entry.resource.referenceRange?.[0]?.text,
+        unit: entry.resource.valueQuantity?.unit;
+        referenceRange: entry.resource.referenceRange?.[0]?.text;
         status: entry.resource.interpretation?.[0]?.coding?.[0]?.code === "N"? "normal"
             : "abnormal"
-      },
-      orderedDate: entry.resource.issued,
-      resultDate: entry.resource.effectiveDateTime,
+      ;},
+      orderedDate: entry.resource.issued;
+      resultDate: entry.resource.effectiveDateTime;
       clinicianId: entry.resource.performer?.[0]?.reference?.split("/")[1] || ",/      labFacility: entry.resource.performer?.[0]?.display || "
-    }))
+    ;}))
   }
   private transformToFhirAppointment(appointment: Omit<MedicalAppointment, "id" />/      ): unknown  {
     return {
-      resourceType: "Appointment",
-      status: appointment.status,serviceType;: ;[;{ text: appointment.appointmentType}
+      resourceType: "Appointment";
+      status: appointment.status,serviceType;: ;[;{ text: appointment.appointmentType;}
       ],
-      start: appointment.scheduledTime,
+      start: appointment.scheduledTime;
       end: new Date(,)
         new Date(appointment.scheduledTime).getTime(); +
           appointment.duration * 60000;
       ).toISOString(),
-      minutesDuration: appointment.duration,
+      minutesDuration: appointment.duration;
       participant: [{ actor: {,
-  reference: `Patient/${appointment.patientId  }`,/              },
-          required: "required",
-          status: "accepted"},
+  reference: `Patient/${appointment.patientId  ;}`,/              },
+          required: "required";
+          status: "accepted";},
         { actor: {,
-  reference: `Practitioner/${appointment.clinicianId  }`,/              },
-          required: "required",
-          status: "accepted"}
+  reference: `Practitioner/${appointment.clinicianId  ;}`,/              },
+          required: "required";
+          status: "accepted";}
       ],
-      comment: appointment.notes};
+      comment: appointment.notes;};
   }
   private determineRecordType(resourceType: string;): MedicalRecord["recordType"]  {
     switch (resourceType) {

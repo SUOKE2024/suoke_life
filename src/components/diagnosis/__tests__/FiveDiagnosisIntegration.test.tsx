@@ -8,13 +8,13 @@ import FiveDiagnosisScreen from '../FiveDiagnosisScreen';
 jest.mock('../../../services/fiveDiagnosisService');
 jest.mock('@react-navigation/native', () => ({
   useNavigation: () => ({
-    navigate: jest.fn(),
-    goBack: jest.fn(),
+    navigate: jest.fn();
+    goBack: jest.fn();
   }),
 }));
 
 jest.mock('react-native-image-picker', () => ({
-  launchImageLibrary: jest.fn(),
+  launchImageLibrary: jest.fn();
 }));
 
 // Mock Alert
@@ -25,39 +25,39 @@ describe('FiveDiagnosisScreen Integration', () => {
     jest.clearAllMocks();
     (fiveDiagnosisService.initialize as jest.Mock).mockResolvedValue(undefined);
     (fiveDiagnosisService.performDiagnosis as jest.Mock).mockResolvedValue({
-      sessionId: 'test-session',
-      userId: 'test-user',
-      timestamp: new Date().toISOString(),
-      overallConfidence: 0.85,
+      sessionId: 'test-session';
+      userId: 'test-user';
+      timestamp: new Date().toISOString();
+      overallConfidence: 0.85;
       primarySyndrome: {
-        name: '气虚证',
-        confidence: 0.82,
-        description: '气虚证候，表现为气短乏力、精神不振',
+
+        confidence: 0.82;
+
       },
       constitutionType: {
-        type: '气虚质',
-        characteristics: ['气短懒言', '容易疲劳', '声音低弱'],
-        recommendations: ['补气健脾', '适度运动', '规律作息'],
-      },
-      diagnosticResults: {},
+
+
+
+      ;},
+      diagnosticResults: {;},
       fusionAnalysis: {
-        evidenceStrength: 0.8,
-        syndromePatterns: ['气虚证'],
-        riskFactors: ['过度劳累', '饮食不规律'],
+        evidenceStrength: 0.8;
+
+
       },
       healthRecommendations: {
-        lifestyle: ['规律作息', '避免过度劳累'],
-        diet: ['补气食物', '温性食材'],
-        exercise: ['太极拳', '八段锦'],
-        treatment: ['中药调理', '针灸治疗'],
-        prevention: ['定期体检', '情志调节'],
-      },
+
+
+
+
+
+      ;},
       qualityMetrics: {
-        dataQuality: 0.9,
-        resultReliability: 0.85,
-        completeness: 0.8,
+        dataQuality: 0.9;
+        resultReliability: 0.85;
+        completeness: 0.8;
       },
-      overallAssessment: '整体健康状况良好，建议注意气虚调理',
+
     });
   });
 
@@ -65,11 +65,11 @@ describe('FiveDiagnosisScreen Integration', () => {
     const { getByText } = render(<FiveDiagnosisScreen />);
 
     await waitFor(() => {
-      expect(getByText('望诊')).toBeTruthy();
-      expect(getByText('闻诊')).toBeTruthy();
-      expect(getByText('问诊')).toBeTruthy();
-      expect(getByText('切诊')).toBeTruthy();
-      expect(getByText('算诊')).toBeTruthy();
+
+
+
+
+
     });
   });
 
@@ -85,11 +85,11 @@ describe('FiveDiagnosisScreen Integration', () => {
     const { getByText } = render(<FiveDiagnosisScreen />);
 
     await waitFor(() => {
-      expect(getByText('观察面色、舌象、体态等')).toBeTruthy();
-      expect(getByText('听声音、闻气味')).toBeTruthy();
-      expect(getByText('询问症状、病史等')).toBeTruthy();
-      expect(getByText('脉诊、按诊等')).toBeTruthy();
-      expect(getByText('数据分析、量化诊断')).toBeTruthy();
+
+
+
+
+
     });
   });
 
@@ -97,17 +97,17 @@ describe('FiveDiagnosisScreen Integration', () => {
     const { getByText, getByTestId } = render(<FiveDiagnosisScreen />);
 
     await waitFor(() => {
-      expect(getByText('望诊')).toBeTruthy();
+
     });
 
     // 模拟点击第一个步骤
-    const firstStep = getByText('望诊');
+
     fireEvent.press(firstStep);
 
     // 验证当前步骤已激活
     await waitFor(() => {
       // 这里可以添加更多的步骤状态验证
-      expect(getByText('望诊')).toBeTruthy();
+
     });
   });
 
@@ -129,8 +129,8 @@ describe('FiveDiagnosisScreen Integration', () => {
 
     await waitFor(() => {
       expect(Alert.alert).toHaveBeenCalledWith(
-        '错误',
-        '初始化诊断服务失败，请重试'
+
+
       );
     });
   });
@@ -142,7 +142,7 @@ describe('FiveDiagnosisScreen Integration', () => {
     );
 
     await waitFor(() => {
-      expect(getByText('望诊')).toBeTruthy();
+
     });
 
     // 这里可以模拟完成诊断流程的操作
@@ -154,11 +154,11 @@ describe('FiveDiagnosisScreen Integration', () => {
 
     await waitFor(() => {
       // 验证显示了5个诊断步骤
-      expect(getByText('望诊')).toBeTruthy();
-      expect(getByText('闻诊')).toBeTruthy();
-      expect(getByText('问诊')).toBeTruthy();
-      expect(getByText('切诊')).toBeTruthy();
-      expect(getByText('算诊')).toBeTruthy();
+
+
+
+
+
     });
   });
 });
@@ -213,30 +213,30 @@ describe('Five Diagnosis Service Integration', () => {
 
   it('should handle diagnosis input correctly', async () => {
     const mockInput = {
-      lookData: { faceImage: 'test-image' },
-      listenData: { voiceRecording: 'test-audio' },
-      inquiryData: { symptoms: ['头痛', '失眠'] },
-      palpationData: { pulseData: [75, 76, 74] },
+      lookData: { faceImage: 'test-image' ;},
+      listenData: { voiceRecording: 'test-audio' ;},
+
+      palpationData: { pulseData: [75, 76, 74] ;},
       calculationData: {
         personalInfo: {
-          birthYear: 1990,
-          birthMonth: 5,
-          birthDay: 15,
-          birthHour: 10,
-          gender: '男',
-          location: '北京',
+          birthYear: 1990;
+          birthMonth: 5;
+          birthDay: 15;
+          birthHour: 10;
+
+
         },
         analysisTypes: {
-          ziwuLiuzhu: true,
-          constitution: true,
-          bagua: false,
-          wuyunLiuqi: false,
-          comprehensive: true,
+          ziwuLiuzhu: true;
+          constitution: true;
+          bagua: false;
+          wuyunLiuqi: false;
+          comprehensive: true;
         },
-        currentTime: new Date().toISOString(),
-        healthConcerns: ['体质调理'],
+        currentTime: new Date().toISOString();
+
       },
-      timestamp: Date.now(),
+      timestamp: Date.now();
     };
 
     await fiveDiagnosisService.performDiagnosis(mockInput);

@@ -1,6 +1,4 @@
-import { EcoServicesAPI, ecoServicesAPI } from "../ecoServicesApi";
-import { EcoServicesAPI, ecoServicesAPI } from "../ecoServicesApi";
-import React from "react";
+
 describe("ecoServicesApi", () => {
   beforeEach(() => {
     jest.clearAllMocks();
