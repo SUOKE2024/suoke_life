@@ -36,7 +36,7 @@ export class OfflineCacheManager {
       defaultTTL: 24 * 60 * 60 * 1000,
       compressionEnabled: true,
       encryptionEnabled: true,
-      ...config,
+      ...config
     };
   }
 
@@ -67,7 +67,7 @@ export class OfflineCacheManager {
     const {
       type = 'user_data',
       priority = 'normal',
-      ttl = this.config.defaultTTL,
+      ttl = this.config.defaultTTL
     } = options || {};
 
     try {
@@ -79,7 +79,7 @@ export class OfflineCacheManager {
         expiresAt: ttl > 0 ? Date.now() + ttl : undefined,
         priority,
         size: this.calculateDataSize(data),
-        syncStatus: 'synced',
+        syncStatus: 'synced'
       };
 
       this.cache.set(key, entry);
@@ -135,7 +135,7 @@ export class OfflineCacheManager {
 
     return {
       totalEntries: this.cache.size,
-      totalSizeMB: Math.round(totalSize / (1024 * 1024)) * 100) / 100,
+      totalSizeMB: Math.round(totalSize / (1024 * 1024)) * 100) / 100
     };
   }
 
@@ -144,7 +144,7 @@ export class OfflineCacheManager {
       'basic_health_assessment',
       'symptom_screening',
       'cached_recommendations',
-      'local_health_records',
+      'local_health_records'
     ];
   }
 

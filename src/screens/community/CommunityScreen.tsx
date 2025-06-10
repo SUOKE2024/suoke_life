@@ -1,21 +1,21 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import {
+import {;
   FlatList,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {
+import {;
   borderRadius,
   colors,
   shadows,
   spacing,
-  typography,
+  typography
 } from '../../constants/theme';
 
 const CommunityScreen: React.FC = () => {
@@ -34,7 +34,7 @@ const CommunityScreen: React.FC = () => {
       likes: 128,
       comments: 45,
       timestamp: '2小时前',
-      liked: false,
+      liked: false
     },
     {
       id: '2',
@@ -44,8 +44,8 @@ const CommunityScreen: React.FC = () => {
       likes: 89,
       comments: 23,
       timestamp: '4小时前',
-      liked: true,
-    },
+      liked: true
+    }
   ];
 
   const topics = [
@@ -54,15 +54,15 @@ const CommunityScreen: React.FC = () => {
       name: '减肥心得',
       icon: 'scale-bathroom',
       posts: 1234,
-      trending: true,
+      trending: true
     },
     {
       id: '2',
       name: '运动健身',
       icon: 'dumbbell',
       posts: 2345,
-      trending: true,
-    },
+      trending: true
+    }
   ];
 
   const experts = [
@@ -72,7 +72,7 @@ const CommunityScreen: React.FC = () => {
       title: '主任医师',
       specialty: '心血管内科',
       rating: 4.9,
-      online: true,
+      online: true
     },
     {
       id: '2',
@@ -80,15 +80,15 @@ const CommunityScreen: React.FC = () => {
       title: '高级营养师',
       specialty: '临床营养',
       rating: 4.8,
-      online: false,
-    },
+      online: false
+    }
   ];
 
   const renderTabs = () => {
     const tabs = [
       { key: 'feed', title: '动态', icon: 'home' },
       { key: 'topics', title: '话题', icon: 'pound' },
-      { key: 'experts', title: '专家', icon: 'doctor' },
+      { key: 'experts', title: '专家', icon: 'doctor' }
     ];
 
     return (
@@ -109,7 +109,7 @@ const CommunityScreen: React.FC = () => {
             <Text;
               style={[
                 styles.tabText,
-                activeTab === tab.key && styles.activeTabText,
+                activeTab === tab.key && styles.activeTabText
               ]}
             >
               {tab.title}
@@ -271,7 +271,7 @@ const CommunityScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {,
   flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: colors.background
   },
   header: {,
   flexDirection: 'row',
@@ -281,7 +281,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
     backgroundColor: colors.surface,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: colors.border
   },
   backButton: {,
   width: 40,
@@ -289,12 +289,12 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: colors.gray100,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   headerTitle: {,
   fontSize: typography.fontSize.lg,
     fontWeight: '600' as const,
-    color: colors.text,
+    color: colors.text
   },
   publishButton: {,
   width: 40,
@@ -302,12 +302,12 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: colors.primary + '20',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   searchContainer: {,
   paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.surface
   },
   searchBar: {,
   flexDirection: 'row',
@@ -316,18 +316,18 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius.lg,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
-    gap: spacing.sm,
+    gap: spacing.sm
   },
   searchInput: {,
   flex: 1,
     fontSize: typography.fontSize.base,
-    color: colors.text,
+    color: colors.text
   },
   tabContainer: {,
   flexDirection: 'row',
     backgroundColor: colors.surface,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: colors.border
   },
   tab: {,
   flex: 1,
@@ -335,22 +335,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: spacing.md,
-    gap: spacing.xs,
+    gap: spacing.xs
   },
   activeTab: {,
   borderBottomWidth: 2,
-    borderBottomColor: colors.primary,
+    borderBottomColor: colors.primary
   },
   tabText: {,
   fontSize: typography.fontSize.sm,
-    color: colors.textSecondary,
+    color: colors.textSecondary
   },
   activeTabText: {,
   color: colors.primary,
-    fontWeight: '600' as const,
+    fontWeight: '600' as const
   },
   contentContainer: {,
-  flex: 1,
+  flex: 1
   },
   postCard: {,
   backgroundColor: colors.surface,
@@ -358,17 +358,17 @@ const styles = StyleSheet.create({
     marginVertical: spacing.sm,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
-    ...shadows.sm,
+    ...shadows.sm
   },
   postHeader: {,
   flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   userInfo: {,
   flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   avatar: {,
   width: 40,
@@ -377,29 +377,29 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary + '20',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: spacing.md,
+    marginRight: spacing.md
   },
   userName: {,
   fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
-    color: colors.text,
+    color: colors.text
   },
   postTime: {,
   fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
-    marginTop: 2,
+    marginTop: 2
   },
   topicText: {,
   fontSize: typography.fontSize.sm,
     color: colors.primary,
     fontWeight: '600' as const,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.sm
   },
   postContent: {,
   fontSize: typography.fontSize.base,
     color: colors.text,
     lineHeight: 22,
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   actionBar: {,
   flexDirection: 'row',
@@ -407,16 +407,16 @@ const styles = StyleSheet.create({
     gap: spacing.lg,
     paddingTop: spacing.md,
     borderTopWidth: 1,
-    borderTopColor: colors.border,
+    borderTopColor: colors.border
   },
   actionButton: {,
   flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.xs,
+    gap: spacing.xs
   },
   actionText: {,
   fontSize: typography.fontSize.sm,
-    color: colors.textSecondary,
+    color: colors.textSecondary
   },
   topicCard: {,
   flexDirection: 'row',
@@ -426,7 +426,7 @@ const styles = StyleSheet.create({
     marginVertical: spacing.sm,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
-    ...shadows.sm,
+    ...shadows.sm
   },
   topicIcon: {,
   width: 48,
@@ -435,31 +435,31 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary + '20',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: spacing.md,
+    marginRight: spacing.md
   },
   topicInfo: {,
-  flex: 1,
+  flex: 1
   },
   topicName: {,
   fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
     color: colors.text,
-    marginBottom: spacing.xs,
+    marginBottom: spacing.xs
   },
   topicStats: {,
   fontSize: typography.fontSize.sm,
-    color: colors.textSecondary,
+    color: colors.textSecondary
   },
   trendingBadge: {,
   backgroundColor: colors.error,
     paddingHorizontal: spacing.xs,
     paddingVertical: 2,
-    borderRadius: borderRadius.sm,
+    borderRadius: borderRadius.sm
   },
   trendingText: {,
   fontSize: typography.fontSize.xs,
     color: colors.white,
-    fontWeight: '600' as const,
+    fontWeight: '600' as const
   },
   expertCard: {,
   flexDirection: 'row',
@@ -469,7 +469,7 @@ const styles = StyleSheet.create({
     marginVertical: spacing.sm,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
-    ...shadows.sm,
+    ...shadows.sm
   },
   expertAvatar: {,
   width: 48,
@@ -479,7 +479,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: spacing.md,
-    position: 'relative',
+    position: 'relative'
   },
   onlineIndicator: {,
   position: 'absolute',
@@ -490,48 +490,48 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     backgroundColor: colors.success,
     borderWidth: 2,
-    borderColor: colors.surface,
+    borderColor: colors.surface
   },
   expertInfo: {,
-  flex: 1,
+  flex: 1
   },
   expertName: {,
   fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
     color: colors.text,
-    marginBottom: 2,
+    marginBottom: 2
   },
   expertTitle: {,
   fontSize: typography.fontSize.sm,
     color: colors.primary,
-    marginBottom: 2,
+    marginBottom: 2
   },
   expertSpecialty: {,
   fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
-    marginBottom: spacing.xs,
+    marginBottom: spacing.xs
   },
   ratingContainer: {,
   flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.xs,
+    gap: spacing.xs
   },
   rating: {,
   fontSize: typography.fontSize.sm,
     color: colors.text,
-    fontWeight: '600' as const,
+    fontWeight: '600' as const
   },
   consultButton: {,
   backgroundColor: colors.primary,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
-    borderRadius: borderRadius.md,
+    borderRadius: borderRadius.md
   },
   consultButtonText: {,
   fontSize: typography.fontSize.sm,
     color: colors.white,
-    fontWeight: '600' as const,
-  },
+    fontWeight: '600' as const
+  }
 });
 
 export default CommunityScreen;

@@ -1,5 +1,5 @@
 import { apiClient } from './apiClient';
-import {/**
+import {/**;
 * 玉米迷宫服务客户端
 * Corn Maze Service Client;
 */

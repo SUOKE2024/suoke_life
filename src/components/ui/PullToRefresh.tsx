@@ -23,7 +23,7 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
   onRefresh,
   style,
   refreshingText = '刷新中...',
-  enabled = true,
+  enabled = true
 }) => {
   const { currentTheme } = useTheme();
   const styles = createStyles(currentTheme);
@@ -51,28 +51,28 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
 const createStyles = (theme: any) => {
   return StyleSheet.create({
     container: {,
-  flex: 1,
+  flex: 1
     },
     refreshIndicator: {,
   height: 60,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: theme.colors.surface,
+      backgroundColor: theme.colors.surface
     },
     content: {,
   flex: 1,
-      backgroundColor: theme.colors.background,
+      backgroundColor: theme.colors.background
     },
     indicatorContainer: {,
   alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'center'
     },
     indicatorText: {,
   fontSize: 14,
       color: '#666',
       textAlign: 'center',
-      marginTop: 8,
-    },
+      marginTop: 8
+    }
   });
 };
 

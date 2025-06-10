@@ -1,11 +1,11 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import {
+import {;
   AuthStackParamList,
   ForgotPasswordScreen,
   LoginScreen,
   RegisterScreen,
-  WelcomeScreen,
+  WelcomeScreen
 } from '../screens/auth';
 
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
@@ -18,7 +18,7 @@ export const AuthNavigator: React.FC = () => {
         headerShown: false,
         animation: 'slide_from_right',
         gestureEnabled: true,
-        gestureDirection: 'horizontal',
+        gestureDirection: 'horizontal'
       }}
     >
       <AuthStack.Screen;

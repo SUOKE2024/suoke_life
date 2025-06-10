@@ -25,7 +25,7 @@ export const HealthPathwayVisualizer: React.FC<HealthPathwayVisualizerProps /   
         <TouchableOpacity;
 key={stage.key}
           style={[styles.stage, idx <= currentIdx && styles.activeStage]}
-          onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> onStagePress?.(stage.key)}/            >
+          onPress={() = accessibilityLabel="操作按钮" /> onStagePress?.(stage.key)}/            >
           <Text style={[styles.label, idx <= currentIdx && styles.activeLabel]} />/                {stage.label}
           </Text>/          <Text style={styles.desc}>{stage.desc}</Text>/          {idx < PATHWAY.length - 1 && <View style={styles.arrow}>}/        </TouchableOpacity>/          ))}
     </View>/      );

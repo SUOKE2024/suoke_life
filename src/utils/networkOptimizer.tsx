@@ -261,7 +261,7 @@ const fetchConfig: RequestInit = {method: config.method,
 i;g;): Promise<RequestResponse<T  /     >> => {}
   return networkOptimizer.request<T>(confi;g;);
 };
-export const batchRequest = <T = any />(/      config: RequestConf;)
+export const batchRequest = <T = any />(/      config: RequestConf;);
 i;g;): Promise<RequestResponse<T>> => {}
   return networkOptimizer.batchRequest<T>(confi;g;);
 };

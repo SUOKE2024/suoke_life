@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
-import {
+import {;
   Alert,
   Animated,
   Keyboard,
@@ -12,7 +12,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -35,7 +35,7 @@ const RegisterScreen: React.FC = () => {
     email: '',
     phone: '',
     password: '',
-    confirmPassword: '',
+    confirmPassword: ''
   });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -121,13 +121,13 @@ const RegisterScreen: React.FC = () => {
       Animated.timing(buttonScale, {
         toValue: 0.95,
         duration: 100,
-        useNativeDriver: true,
+        useNativeDriver: true
       }),
       Animated.timing(buttonScale, {
         toValue: 1,
         duration: 100,
-        useNativeDriver: true,
-      }),
+        useNativeDriver: true
+      })
     ]).start();
 
     try {
@@ -139,8 +139,8 @@ const RegisterScreen: React.FC = () => {
           text: '确定',
           onPress: () => {
             navigation.navigate('Login');
-          },
-        },
+          }
+        }
       ]);
     } catch (error) {
       Alert.alert('注册失败', '注册过程中出现错误，请重试');
@@ -202,7 +202,7 @@ const RegisterScreen: React.FC = () => {
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
-          {/* 头部区域 */}
+          {// 头部区域}
           <View style={styles.header}>
             <TouchableOpacity style={styles.backButton} onPress={handleBack}>
               <Text style={styles.backButtonText}>←</Text>
@@ -216,7 +216,7 @@ const RegisterScreen: React.FC = () => {
             <Text style={styles.subtitle}>加入索克生活，开启健康管理之旅</Text>
           </View>
 
-          {/* 表单区域 */}
+          {// 表单区域}
           <View style={styles.formSection}>
             {renderInput('username', '请输入用户名')}
             {renderInput('email', '请输入邮箱地址', false, 'email-address')}
@@ -224,7 +224,7 @@ const RegisterScreen: React.FC = () => {
             {renderInput('password', '请输入密码', true)}
             {renderInput('confirmPassword', '请再次输入密码', true)}
 
-            {/* 服务条款同意 */}
+            {// 服务条款同意}
             <View style={styles.termsContainer}>
               <TouchableOpacity;
                 style={styles.checkbox}
@@ -233,7 +233,7 @@ const RegisterScreen: React.FC = () => {
                 <View;
                   style={[
                     styles.checkboxInner,
-                    agreedToTerms && styles.checkboxChecked,
+                    agreedToTerms && styles.checkboxChecked
                   ]}
                 >
                   {agreedToTerms && <Text style={styles.checkmark}>✓</Text>}
@@ -251,17 +251,17 @@ const RegisterScreen: React.FC = () => {
               </View>
             </View>
 
-            {/* 注册按钮 */}
+            {// 注册按钮}
             <Animated.View;
               style={[
                 styles.buttonContainer,
-                { transform: [{ scale: buttonScale }] },
+                { transform: [{ scale: buttonScale }] }
               ]}
             >
               <TouchableOpacity;
                 style={[
                   styles.registerButton,
-                  loading && styles.registerButtonDisabled,
+                  loading && styles.registerButtonDisabled
                 ]}
                 onPress={handleRegister}
                 disabled={loading}
@@ -272,7 +272,7 @@ const RegisterScreen: React.FC = () => {
               </TouchableOpacity>
             </Animated.View>
 
-            {/* 登录链接 */}
+            {// 登录链接}
             <View style={styles.loginContainer}>
               <Text style={styles.loginText}>已有账户？</Text>
               <TouchableOpacity onPress={handleLogin}>
@@ -289,23 +289,23 @@ const RegisterScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {,
   flex: 1,
-    backgroundColor: '#F5F7FA',
+    backgroundColor: '#F5F7FA'
   },
   keyboardAvoid: {,
-  flex: 1,
+  flex: 1
   },
   scrollView: {,
-  flex: 1,
+  flex: 1
   },
   scrollContent: {,
   flexGrow: 1,
-    paddingBottom: 24,
+    paddingBottom: 24
   },
   header: {,
   alignItems: 'center',
     paddingTop: 24,
     paddingHorizontal: 24,
-    paddingBottom: 32,
+    paddingBottom: 32
   },
   backButton: {,
   position: 'absolute',
@@ -321,15 +321,15 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
+    elevation: 3
   },
   backButtonText: {,
   fontSize: 20,
     color: '#3498DB',
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   logoContainer: {,
-  marginBottom: 24,
+  marginBottom: 24
   },
   logoPlaceholder: {,
   width: 80,
@@ -342,30 +342,30 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 8,
-    elevation: 5,
+    elevation: 5
   },
   logoText: {,
   fontSize: 24,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: '#FFFFFF'
   },
   title: {,
   fontSize: 28,
     fontWeight: '700',
     color: '#2C3E50',
-    marginBottom: 8,
+    marginBottom: 8
   },
   subtitle: {,
   fontSize: 16,
     color: '#7F8C8D',
     textAlign: 'center',
-    lineHeight: 22,
+    lineHeight: 22
   },
   formSection: {,
-  paddingHorizontal: 24,
+  paddingHorizontal: 24
   },
   inputContainer: {,
-  marginBottom: 20,
+  marginBottom: 20
   },
   input: {,
   borderWidth: 1,
@@ -374,25 +374,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     fontSize: 16,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: '#F8F9FA'
   },
   inputError: {,
-  borderColor: '#E74C3C',
+  borderColor: '#E74C3C'
   },
   errorText: {,
   color: '#E74C3C',
     fontSize: 14,
-    marginTop: 4,
+    marginTop: 4
   },
   termsContainer: {,
   flexDirection: 'row',
     alignItems: 'flex-start',
     marginBottom: 32,
-    paddingHorizontal: 8,
+    paddingHorizontal: 8
   },
   checkbox: {,
   marginRight: 8,
-    marginTop: 2,
+    marginTop: 2
   },
   checkboxInner: {,
   width: 20,
@@ -402,36 +402,36 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFFFF'
   },
   checkboxChecked: {,
   backgroundColor: '#3498DB',
-    borderColor: '#3498DB',
+    borderColor: '#3498DB'
   },
   checkmark: {,
   color: '#FFFFFF',
     fontSize: 12,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   termsTextContainer: {,
   flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   termsText: {,
   fontSize: 14,
     color: '#7F8C8D',
-    lineHeight: 20,
+    lineHeight: 20
   },
   termsLink: {,
   fontSize: 14,
     color: '#3498DB',
     fontWeight: '500',
-    textDecorationLine: 'underline',
+    textDecorationLine: 'underline'
   },
   buttonContainer: {,
-  marginBottom: 24,
+  marginBottom: 24
   },
   registerButton: {,
   backgroundColor: '#3498DB',
@@ -442,32 +442,32 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
+    elevation: 3
   },
   registerButtonDisabled: {,
-  backgroundColor: '#BDC3C7',
+  backgroundColor: '#BDC3C7'
   },
   registerButtonText: {,
   color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   loginContainer: {,
   flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 24,
+    paddingTop: 24
   },
   loginText: {,
   fontSize: 16,
     color: '#7F8C8D',
-    marginRight: 4,
+    marginRight: 4
   },
   loginLink: {,
   fontSize: 16,
     color: '#3498DB',
-    fontWeight: '500',
-  },
+    fontWeight: '500'
+  }
 });
 
 export default RegisterScreen;

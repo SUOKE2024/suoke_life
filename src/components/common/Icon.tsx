@@ -101,14 +101,14 @@ const iconMap: Record<string, string> = {
   'external-link': '↗️',
   share: '📤',
   copy: '📋',
-  scissors: '✂️',
+  scissors: '✂️'
 };
 
 const Icon: React.FC<IconProps> = ({
   name,
   size = 24,
   color = '#000',
-  style,
+  style
 }) => {
   const iconSymbol = iconMap[name] || '?';
 
@@ -121,9 +121,9 @@ const Icon: React.FC<IconProps> = ({
           color,
           lineHeight: size,
           width: size,
-          height: size,
+          height: size
         },
-        style,
+        style
       ]}
     >
       {iconSymbol}
@@ -134,8 +134,8 @@ const Icon: React.FC<IconProps> = ({
 const styles = StyleSheet.create({
   icon: {,
   textAlign: 'center',
-    textAlignVertical: 'center',
-  },
+    textAlignVertical: 'center'
+  }
 });
 
 export default Icon;

@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react';
-import {
+import {;
   Alert,
   Animated,
   Dimensions,
@@ -8,7 +8,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 import { Button } from './Button';
@@ -65,7 +65,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   onFileRemove,
   style,
   disabled = false,
-  placeholder = '点击选择文件或拖拽文件到此处',
+  placeholder = '点击选择文件或拖拽文件到此处'
 }) => {
   const { theme } = useTheme();
   const [files, setFiles] = useState<FileItem[]>([]);
@@ -109,7 +109,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
         size: 1024 * 1024, // 1MB;
         type: 'image/jpeg',
         uri: 'https://via.placeholder.com/300x200',
-        uploadStatus: 'pending',
+        uploadStatus: 'pending'
       };
 
       const error = validateFile(mockFile);
@@ -153,7 +153,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
       const uploadingFiles = files.map(file) => ({
         ...file,
         uploadStatus: 'uploading' as const,
-        uploadProgress: 0,
+        uploadProgress: 0
       }));
       setFiles(uploadingFiles);
 
@@ -163,7 +163,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
         setFiles(prev) =>
           prev.map(file) => ({
             ...file,
-            uploadProgress: i,
+            uploadProgress: i
           }))
         );
       }
@@ -176,7 +176,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
         prev.map(file) => ({
           ...file,
           uploadStatus: 'success' as const,
-          uploadProgress: 100,
+          uploadProgress: 100
         }))
       );
     } catch (error) {
@@ -185,7 +185,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
         prev.map(file) => ({
           ...file,
           uploadStatus: 'error' as const,
-          error: error instanceof Error ? error.message : '上传失败',
+          error: error instanceof Error ? error.message : '上传失败'
         }))
       );
     } finally {
@@ -242,17 +242,17 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   const dragStyle = {
     borderColor: dragAnimation.interpolate({,
   inputRange: [0, 1],
-      outputRange: [theme.colors.border, theme.colors.primary],
+      outputRange: [theme.colors.border, theme.colors.primary]
     }),
     backgroundColor: dragAnimation.interpolate({,
   inputRange: [0, 1],
-      outputRange: [theme.colors.surface, theme.colors.primary + '10'],
-    }),
+      outputRange: [theme.colors.surface, theme.colors.primary + '10']
+    })
   };
 
   return (
     <View style={[styles.container, style]}>
-      {/* 上传区域 */}
+      {// 上传区域}
       <Animated.View style={[styles.uploadArea, dragStyle]}>
         <TouchableOpacity;
           onPress={handleFileSelect}
@@ -270,7 +270,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
         </TouchableOpacity>
       </Animated.View>
 
-      {/* 文件列表 */}
+      {// 文件列表}
       {files.length > 0 && (
         <View style={styles.fileList}>
           <FlatList;
@@ -280,7 +280,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
             showsVerticalScrollIndicator={false}
           />
 
-          {/* 上传按钮 */}
+          {// 上传按钮}
           {onUpload && (
             <Button;
               title={isUploading ? '上传中...' : '开始上传'}
@@ -295,7 +295,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
         </View>
       )}
 
-      {/* 预览模态框 */}
+      {// 预览模态框}
       {previewFile && (
         <Modal;
           visible={!!previewFile}
@@ -324,7 +324,7 @@ const createStyles = (theme: any) => {
 
   return StyleSheet.create({
     container: {,
-  flex: 1,
+  flex: 1
     },
     uploadArea: {,
   borderWidth: 2,
@@ -333,30 +333,30 @@ const createStyles = (theme: any) => {
       padding: theme.spacing.xl,
       alignItems: 'center',
       justifyContent: 'center',
-      minHeight: 120,
+      minHeight: 120
     },
     uploadButton: {,
   alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'center'
     },
     uploadIcon: {,
   fontSize: 32,
-      marginBottom: theme.spacing.sm,
+      marginBottom: theme.spacing.sm
     },
     uploadText: {,
   fontSize: theme.typography.body1.fontSize,
       fontWeight: theme.typography.body1.fontWeight,
       color: theme.colors.text,
       textAlign: 'center',
-      marginBottom: theme.spacing.xs,
+      marginBottom: theme.spacing.xs
     },
     uploadHint: {,
   fontSize: theme.typography.caption.fontSize,
       color: theme.colors.textSecondary,
-      textAlign: 'center',
+      textAlign: 'center'
     },
     fileList: {,
-  marginTop: theme.spacing.lg,
+  marginTop: theme.spacing.lg
     },
     fileItem: {,
   flexDirection: 'row',
@@ -366,45 +366,45 @@ const createStyles = (theme: any) => {
       borderRadius: theme.borderRadius.md,
       marginBottom: theme.spacing.sm,
       borderWidth: 1,
-      borderColor: theme.colors.border,
+      borderColor: theme.colors.border
     },
     filePreview: {,
-  marginRight: theme.spacing.md,
+  marginRight: theme.spacing.md
     },
     previewImage: {,
   width: 40,
       height: 40,
-      borderRadius: theme.borderRadius.sm,
+      borderRadius: theme.borderRadius.sm
     },
     fileInfo: {,
-  flex: 1,
+  flex: 1
     },
     fileName: {,
   fontSize: theme.typography.body2.fontSize,
       fontWeight: theme.typography.body2.fontWeight,
       color: theme.colors.text,
-      marginBottom: theme.spacing.xs,
+      marginBottom: theme.spacing.xs
     },
     fileSize: {,
   fontSize: theme.typography.caption.fontSize,
-      color: theme.colors.textSecondary,
+      color: theme.colors.textSecondary
     },
     uploadProgress: {,
-  marginTop: theme.spacing.xs,
+  marginTop: theme.spacing.xs
     },
     errorText: {,
   fontSize: theme.typography.caption.fontSize,
       color: theme.colors.error,
-      marginTop: theme.spacing.xs,
+      marginTop: theme.spacing.xs
     },
     fileActions: {,
   flexDirection: 'row',
-      alignItems: 'center',
+      alignItems: 'center'
     },
     successText: {,
   fontSize: 16,
       color: theme.colors.success,
-      marginRight: theme.spacing.sm,
+      marginRight: theme.spacing.sm
     },
     removeButton: {,
   width: 24,
@@ -412,38 +412,38 @@ const createStyles = (theme: any) => {
       borderRadius: 12,
       backgroundColor: theme.colors.error,
       alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'center'
     },
     removeButtonText: {,
   color: theme.colors.onError,
       fontSize: 16,
-      fontWeight: 'bold',
+      fontWeight: 'bold'
     },
     uploadActionButton: {,
-  marginTop: theme.spacing.lg,
+  marginTop: theme.spacing.lg
     },
     previewModal: {,
   alignItems: 'center',
-      padding: theme.spacing.lg,
+      padding: theme.spacing.lg
     },
     previewModalImage: {,
   width: width - 80,
       height: 300,
       borderRadius: theme.borderRadius.md,
-      marginBottom: theme.spacing.md,
+      marginBottom: theme.spacing.md
     },
     previewFileName: {,
   fontSize: theme.typography.h6.fontSize,
       fontWeight: theme.typography.h6.fontWeight,
       color: theme.colors.text,
       marginBottom: theme.spacing.xs,
-      textAlign: 'center',
+      textAlign: 'center'
     },
     previewFileSize: {,
   fontSize: theme.typography.body2.fontSize,
       color: theme.colors.textSecondary,
-      textAlign: 'center',
-    },
+      textAlign: 'center'
+    }
   });
 };
 

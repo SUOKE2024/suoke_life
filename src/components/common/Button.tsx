@@ -1,5 +1,5 @@
 import React from "react";
-import {
+import {;
     ActivityIndicator,
     StyleSheet,
     Text,
@@ -28,21 +28,21 @@ export const Button: React.FC<ButtonProps> = ({
   loading = false,
   disabled = false,
   style,
-  textStyle,
+  textStyle
 }) => {
   const buttonStyle = [
     styles.button,
     styles[variant],
     styles[size],
     (disabled || loading) && styles.disabled,
-    style,
+    style
   ];
 
   const buttonTextStyle = [
     styles.text,
     styles[`${variant}Text`],
     styles[`${size}Text`],
-    textStyle,
+    textStyle
   ];
 
   return (
@@ -71,57 +71,57 @@ const styles = StyleSheet.create({
   borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
-    flexDirection: "row",
+    flexDirection: "row"
   },
   primary: {,
-  backgroundColor: colors.primary,
+  backgroundColor: colors.primary
   },
   secondary: {,
-  backgroundColor: colors.secondary,
+  backgroundColor: colors.secondary
   },
   outline: {,
   backgroundColor: "transparent",
     borderWidth: 2,
-    borderColor: colors.primary,
+    borderColor: colors.primary
   },
   small: {,
   paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
-    minHeight: 36,
+    minHeight: 36
   },
   medium: {,
   paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
-    minHeight: 48,
+    minHeight: 48
   },
   large: {,
   paddingHorizontal: spacing.xl,
     paddingVertical: spacing.lg,
-    minHeight: 56,
+    minHeight: 56
   },
   text: {,
   fontWeight: "600",
-    textAlign: "center",
+    textAlign: "center"
   },
   primaryText: {,
-  color: colors.surface,
+  color: colors.surface
   },
   secondaryText: {,
-  color: colors.surface,
+  color: colors.surface
   },
   outlineText: {,
-  color: colors.primary,
+  color: colors.primary
   },
   smallText: {,
-  fontSize: 14,
+  fontSize: 14
   },
   mediumText: {,
-  fontSize: 16,
+  fontSize: 16
   },
   largeText: {,
-  fontSize: 18,
+  fontSize: 18
   },
   disabled: {,
-  opacity: 0.6,
-  },
+  opacity: 0.6
+  }
 });

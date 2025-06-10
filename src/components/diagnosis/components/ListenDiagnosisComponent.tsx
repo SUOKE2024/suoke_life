@@ -1,22 +1,22 @@
 import React, { useCallback, useState } from 'react';
-import {
+import {;
   ActivityIndicator,
   Alert,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { colors, spacing } from '../../../constants/theme';
-import {
+import {;
   DiagnosisComponentProps,
-  ListenDiagnosisData,
+  ListenDiagnosisData
 } from '../../../types/diagnosis';
 
 export const ListenDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
   onComplete,
-  onCancel,
+  onCancel
 }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [recordingType, setRecordingType] = useState<
@@ -39,7 +39,7 @@ export const ListenDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
         setIsRecording(false);
         setRecordings(prev) => ({
           ...prev,
-          [type]: `recording_${type}_${Date.now()}.wav`,
+          [type]: `recording_${type}_${Date.now()}.wav`
         }));
         setRecordingType(null);
         Alert.alert('录音完成', `${getRecordingTypeLabel(type)}录音已保存`);
@@ -79,7 +79,7 @@ export const ListenDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
               rhythm: '语速适中',
               quality: '音质清晰',
               features: ['声音有力', '语调平稳'],
-              confidence: 0.88,
+              confidence: 0.88
             }
           : null,
         breathingAnalysis: recordings.breathing;
@@ -88,7 +88,7 @@ export const ListenDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
               depth: '深度适中',
               frequency: '频率正常',
               features: ['呼吸顺畅', '无异常音'],
-              confidence: 0.85,
+              confidence: 0.85
             }
           : null,
         coughAnalysis: recordings.cough;
@@ -97,15 +97,15 @@ export const ListenDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
               intensity: '轻微',
               frequency: '偶发',
               features: ['咳嗽清浅', '无痰音'],
-              confidence: 0.82,
+              confidence: 0.82
             }
           : null,
         overallAssessment: '闻诊结果显示呼吸系统功能正常',
         recommendations: [
           '保持室内空气流通',
           '避免接触刺激性气味',
-          '适当进行呼吸锻炼',
-        ],
+          '适当进行呼吸锻炼'
+        ]
       };
 
       setAnalysisResult(mockResult);
@@ -123,8 +123,8 @@ export const ListenDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
       coughSound: recordings.cough,
       metadata: {
         analysisResult,
-        timestamp: new Date().toISOString(),
-      },
+        timestamp: new Date().toISOString()
+      }
     };
     onComplete(data);
   }, [recordings, analysisResult, onComplete]);
@@ -156,7 +156,7 @@ export const ListenDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
           <TouchableOpacity;
             style={[
               styles.recordButton,
-              isRecording && recordingType === type && styles.recordingButton,
+              isRecording && recordingType === type && styles.recordingButton
             ]}
             onPress={() => startRecording(type)}
             disabled={isRecording}
@@ -312,45 +312,45 @@ export const ListenDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
 const styles = StyleSheet.create({
   container: {,
   flex: 1,
-    padding: spacing.md,
+    padding: spacing.md
   },
   title: {,
   fontSize: 20,
     fontWeight: '600',
     color: colors.textPrimary,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.sm
   },
   subtitle: {,
   fontSize: 14,
     color: colors.textSecondary,
     marginBottom: spacing.lg,
-    lineHeight: 20,
+    lineHeight: 20
   },
   recordingSection: {,
   marginBottom: spacing.lg,
     backgroundColor: colors.surface,
     borderRadius: 8,
-    padding: spacing.md,
+    padding: spacing.md
   },
   sectionTitle: {,
   fontSize: 16,
     fontWeight: '600',
     color: colors.textPrimary,
-    marginBottom: spacing.xs,
+    marginBottom: spacing.xs
   },
   sectionDescription: {,
   fontSize: 14,
     color: colors.textSecondary,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.sm
   },
   instructionText: {,
   fontSize: 12,
     color: colors.textTertiary,
     marginBottom: spacing.md,
-    fontStyle: 'italic',
+    fontStyle: 'italic'
   },
   recordingContainer: {,
-  alignItems: 'center',
+  alignItems: 'center'
   },
   recordButton: {,
   backgroundColor: colors.primary,
@@ -358,107 +358,107 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
     borderRadius: 8,
     minWidth: 120,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   recordingButton: {,
-  backgroundColor: colors.error,
+  backgroundColor: colors.error
   },
   recordButtonText: {,
   fontSize: 16,
     fontWeight: '600',
-    color: colors.white,
+    color: colors.white
   },
   recordingIndicator: {,
   flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.sm,
+    gap: spacing.sm
   },
   recordingText: {,
   fontSize: 16,
     fontWeight: '600',
-    color: colors.white,
+    color: colors.white
   },
   recordedIndicator: {,
   flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.md,
+    gap: spacing.md
   },
   recordedText: {,
   fontSize: 16,
     color: colors.success,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   reRecordButton: {,
   backgroundColor: colors.border,
     paddingVertical: spacing.sm,
     paddingHorizontal: spacing.md,
-    borderRadius: 6,
+    borderRadius: 6
   },
   reRecordText: {,
   fontSize: 14,
-    color: colors.textSecondary,
+    color: colors.textSecondary
   },
   actionContainer: {,
-  marginVertical: spacing.md,
+  marginVertical: spacing.md
   },
   button: {,
   paddingVertical: spacing.md,
     paddingHorizontal: spacing.lg,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   analyzeButton: {,
-  backgroundColor: colors.primary,
+  backgroundColor: colors.primary
   },
   completeButton: {,
-  backgroundColor: colors.success,
+  backgroundColor: colors.success
   },
   buttonText: {,
   fontSize: 16,
     fontWeight: '600',
-    color: colors.white,
+    color: colors.white
   },
   resultContainer: {,
   backgroundColor: colors.surface,
     borderRadius: 8,
     padding: spacing.md,
-    marginTop: spacing.md,
+    marginTop: spacing.md
   },
   resultTitle: {,
   fontSize: 18,
     fontWeight: '600',
     color: colors.textPrimary,
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   analysisSection: {,
   marginBottom: spacing.md,
     paddingBottom: spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: colors.border
   },
   analysisTitle: {,
   fontSize: 16,
     fontWeight: '600',
     color: colors.textPrimary,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.sm
   },
   analysisText: {,
   fontSize: 14,
     color: colors.textSecondary,
-    marginBottom: spacing.xs,
+    marginBottom: spacing.xs
   },
   confidenceText: {,
   fontSize: 12,
     color: colors.primary,
-    fontWeight: '500',
+    fontWeight: '500'
   },
   recommendationSection: {,
-  marginTop: spacing.sm,
+  marginTop: spacing.sm
   },
   recommendationText: {,
   fontSize: 14,
     color: colors.textSecondary,
     marginBottom: spacing.xs,
-    lineHeight: 20,
-  },
+    lineHeight: 20
+  }
 });

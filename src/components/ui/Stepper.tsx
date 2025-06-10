@@ -1,11 +1,11 @@
 import React from 'react';
-import {
+import {;
   StyleSheet,
   Text,
   TextStyle,
   TouchableOpacity,
   View,
-  ViewStyle,
+  ViewStyle
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
@@ -46,7 +46,7 @@ export const Stepper: React.FC<StepperProps> = ({
   titleStyle,
   descriptionStyle,
   accessible = true,
-  testID,
+  testID
 }) => {
   const { currentTheme } = useTheme();
 
@@ -76,21 +76,21 @@ export const Stepper: React.FC<StepperProps> = ({
           iconSize: 24,
           fontSize: 12,
           descriptionFontSize: 10,
-          spacing: 8,
+          spacing: 8
         };
       case 'large':
         return {
           iconSize: 40,
           fontSize: 18,
           descriptionFontSize: 14,
-          spacing: 16,
+          spacing: 16
         };
       default:
         return {,
   iconSize: 32,
           fontSize: 14,
           descriptionFontSize: 12,
-          spacing: 12,
+          spacing: 12
         };
     }
   };
@@ -119,8 +119,8 @@ export const Stepper: React.FC<StepperProps> = ({
               width: sizeConfig.iconSize,
               height: sizeConfig.iconSize,
               borderColor: color,
-              backgroundColor: stepStatus === 'finish' ? color : 'transparent',
-            },
+              backgroundColor: stepStatus === 'finish' ? color : 'transparent'
+            }
           ]}
         >
           {step.icon}
@@ -150,8 +150,8 @@ export const Stepper: React.FC<StepperProps> = ({
             width: sizeConfig.iconSize,
             height: sizeConfig.iconSize,
             borderColor: color,
-            backgroundColor: stepStatus === 'finish' ? color : 'transparent',
-          },
+            backgroundColor: stepStatus === 'finish' ? color : 'transparent'
+          }
         ]}
       >
         {iconContent}
@@ -175,8 +175,8 @@ export const Stepper: React.FC<StepperProps> = ({
             {
               backgroundColor: color,
               marginLeft: sizeConfig.iconSize / 2 - 1,
-              height: 40,
-            },
+              height: 40
+            }
           ]}
         />
       );
@@ -188,8 +188,8 @@ export const Stepper: React.FC<StepperProps> = ({
           styles.horizontalConnector,
           {
             backgroundColor: color,
-            top: sizeConfig.iconSize / 2 - 1,
-          },
+            top: sizeConfig.iconSize / 2 - 1
+          }
         ]}
       />
     );
@@ -209,8 +209,8 @@ export const Stepper: React.FC<StepperProps> = ({
           accessibilityLabel: `步骤 ${index + 1}: ${step.title}`,
           accessibilityState: {,
   selected: index === current,
-            disabled: isDisabled,
-          },
+            disabled: isDisabled
+          }
         }
       : {};
 
@@ -222,7 +222,7 @@ export const Stepper: React.FC<StepperProps> = ({
             ? styles.horizontalStep;
             : styles.verticalStep,
           isDisabled && styles.disabledStep,
-          stepStyle,
+          stepStyle
         ]}
         {...containerProps}
       >
@@ -233,7 +233,7 @@ export const Stepper: React.FC<StepperProps> = ({
             style={[
               styles.textContainer,
               direction === 'horizontal' && styles.horizontalTextContainer,
-              { marginLeft: direction === 'vertical' ? sizeConfig.spacing : 0 },
+              { marginLeft: direction === 'vertical' ? sizeConfig.spacing : 0 }
             ]}
           >
             <Text;
@@ -241,9 +241,9 @@ export const Stepper: React.FC<StepperProps> = ({
                 styles.title,
                 {
                   fontSize: sizeConfig.fontSize,
-                  color: getStepColor(stepStatus),
+                  color: getStepColor(stepStatus)
                 },
-                titleStyle,
+                titleStyle
               ]}
             >
               {step.title}
@@ -255,9 +255,9 @@ export const Stepper: React.FC<StepperProps> = ({
                   styles.description,
                   {
                     fontSize: sizeConfig.descriptionFontSize,
-                    color: currentTheme.colors.onSurfaceVariant,
+                    color: currentTheme.colors.onSurfaceVariant
                   },
-                  descriptionStyle,
+                  descriptionStyle
                 ]}
               >
                 {step.description}
@@ -273,70 +273,70 @@ export const Stepper: React.FC<StepperProps> = ({
 
   const styles = StyleSheet.create({
     container: {,
-  backgroundColor: currentTheme.colors.surface,
+  backgroundColor: currentTheme.colors.surface
     },
     horizontalContainer: {,
   flexDirection: 'row',
-      alignItems: 'flex-start',
+      alignItems: 'flex-start'
     },
     verticalContainer: {,
-  flexDirection: 'column',
+  flexDirection: 'column'
     },
     horizontalStep: {,
   flex: 1,
-      position: 'relative',
+      position: 'relative'
     },
     verticalStep: {,
   flexDirection: 'row',
       alignItems: 'flex-start',
       paddingVertical: 8,
-      position: 'relative',
+      position: 'relative'
     },
     stepContent: {,
   flexDirection: direction === 'vertical' ? 'row' : 'column',
-      alignItems: direction === 'vertical' ? 'flex-start' : 'center',
+      alignItems: direction === 'vertical' ? 'flex-start' : 'center'
     },
     disabledStep: {,
-  opacity: 0.5,
+  opacity: 0.5
     },
     iconContainer: {,
   borderWidth: 2,
       borderRadius: 50,
       justifyContent: 'center',
-      alignItems: 'center',
+      alignItems: 'center'
     },
     iconText: {,
   fontWeight: 'bold',
-      fontSize: 14,
+      fontSize: 14
     },
     textContainer: {,
-  alignItems: direction === 'horizontal' ? 'center' : 'flex-start',
+  alignItems: direction === 'horizontal' ? 'center' : 'flex-start'
     },
     horizontalTextContainer: {,
   marginTop: 8,
-      alignItems: 'center',
+      alignItems: 'center'
     },
     title: {,
   fontWeight: '600',
-      textAlign: direction === 'horizontal' ? 'center' : 'left',
+      textAlign: direction === 'horizontal' ? 'center' : 'left'
     },
     description: {,
   marginTop: 4,
-      textAlign: direction === 'horizontal' ? 'center' : 'left',
+      textAlign: direction === 'horizontal' ? 'center' : 'left'
     },
     horizontalConnector: {,
   position: 'absolute',
       left: '50%',
       right: '-50%',
       height: 2,
-      zIndex: -1,
+      zIndex: -1
     },
     verticalConnector: {,
   position: 'absolute',
       width: 2,
       top: sizeConfig.iconSize + 8,
-      zIndex: -1,
-    },
+      zIndex: -1
+    }
   });
 
   return (
@@ -346,7 +346,7 @@ export const Stepper: React.FC<StepperProps> = ({
         direction === 'horizontal'
           ? styles.horizontalContainer;
           : styles.verticalContainer,
-        style,
+        style
       ]}
       testID={testID}
     >
@@ -384,7 +384,7 @@ export const AdvancedStepper: React.FC<AdvancedStepperProps> = ({
         title: child.props.title,
         description: child.props.description,
         icon: child.props.icon,
-        disabled: child.props.disabled,
+        disabled: child.props.disabled
       };
     }
     return null;

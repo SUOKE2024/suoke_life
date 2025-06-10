@@ -1,4 +1,4 @@
-import {
+import {;
   API_GATEWAY_CONFIG,
   getCurrentEnvConfig,
   ERROR_CODES,

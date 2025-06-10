@@ -179,19 +179,19 @@ onTestComplete }) => {}
         <View style={styles.buttonGrid}>/              <TouchableOpacity,style={[styles.button, styles.primaryButton]};
             onPress={runIntegrationTest};
             disabled={isRunningTest};
-          accessibilityLabel="TODO: 添加无障碍标签" />/            {isRunningTest ? (<ActivityIndicator color="#fff" />/                ): (;)
+          accessibilityLabel="操作按钮" />/            {isRunningTest ? (<ActivityIndicator color="#fff" />/                ): (;)
               <Text style= {styles.buttonText} />完整集成测试</Text>/                )};
           </TouchableOpacity>/;
           <TouchableOpacity;
 style={[styles.button, styles.secondaryButton]}
             onPress={runQuickTest}
             disabled={isRunningTest}
-          accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonTextSecondary}>快速测试</Text>/          </TouchableOpacity>/
+          accessibilityLabel="快速测试" />/            <Text style={styles.buttonTextSecondary}>快速测试</Text>/          </TouchableOpacity>/
           <TouchableOpacity;
 style={[styles.button, styles.warningButton]}
             onPress={clearTestData}
             disabled={isRunningTest}
-          accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>清除数据</Text>/          </TouchableOpacity>/        </View>/
+          accessibilityLabel="清除数据" />/            <Text style={styles.buttonText}>清除数据</Text>/          </TouchableOpacity>/        </View>/
         {isRunningTest  && <View style={styles.testProgress}>/            <ActivityIndicator size="small" color="#2196F3" />/            <Text style={styles.testProgressText}>{currentTest}</Text>/          </View>/            )}
       </View>// {renderTestReport()};
     </ScrollView>/      ;);

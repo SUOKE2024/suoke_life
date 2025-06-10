@@ -112,7 +112,7 @@ const effectStart = performance.now();
         <TouchableOpacity;
 key={metric.id}
           style={[styles.metricCard, { borderLeftColor: metric.color}}]}
-          onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setSelectedMetric(metric.id)}/            >
+          onPress={() = accessibilityLabel="操作按钮" /> setSelectedMetric(metric.id)}/            >
           <View style={styles.metricHeader}>/            <Icon name={metric.icon} size={24} color={metric.color} />/            <View style={[styles.trendBadge, { backgroundColor: getTrendColor(metric.trend)   }}]} />/                  <Icon;
 name={getTrendIcon(metric.trend)}
                 size={12}
@@ -171,8 +171,8 @@ data={constitutionData.map(item = /> ({/                name: item.name,))
           <View key={item.type} style={styles.constitutionItem}>/            <View style={[styles.constitutionDot, { backgroundColor: item.color}}]} />/            <View style={styles.constitutionInfo}>/              <Text style={styles.constitutionName}>{item.name}</Text>/              <Text style={styles.constitutionDescription}>{item.description}</Text>/            </View>/            <Text style={styles.constitutionPercentage}>{item.percentage}%</Text>/          </View>/    ))}
       </View>/    </View>/      ), []);
   //
-    <View style={styles.historyContainer}>/      <View style={styles.historyHeader}>/        <Text style={styles.sectionTitle}>五诊记录</Text>/        <TouchableOpacity onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> Alert.alert("查看全部, "跳转到完整的诊断历史页面")}>/          <Text style={styles.viewAllText}>查看全部</Text>/        </TouchableOpacity>/      </View>/          {diagnosisSessions.slice(0, 3).map(session) => (")
-        <TouchableOpacity key={session.id} style={styles.historyItem} accessibilityLabel="TODO: 添加无障碍标签" />/          <View style={styles.historyIcon}>/            <Icon name="stethoscope" size={20} color={colors.primary} />/          </View>/          <View style={styles.historyContent}>/            <Text style={styles.historyTitle}>五诊检查</Text>/            <Text style={styles.historyDate}>/                  {new Date(session.startTime).toLocaleDateString()}
+    <View style={styles.historyContainer}>/      <View style={styles.historyHeader}>/        <Text style={styles.sectionTitle}>五诊记录</Text>/        <TouchableOpacity onPress={() = accessibilityLabel="五诊记录" /> Alert.alert("查看全部, "跳转到完整的诊断历史页面")}>/          <Text style={styles.viewAllText}>查看全部</Text>/        </TouchableOpacity>/      </View>/          {diagnosisSessions.slice(0, 3).map(session) => (")
+        <TouchableOpacity key={session.id} style={styles.historyItem} accessibilityLabel="五诊检查" />/          <View style={styles.historyIcon}>/            <Icon name="stethoscope" size={20} color={colors.primary} />/          </View>/          <View style={styles.historyContent}>/            <Text style={styles.historyTitle}>五诊检查</Text>/            <Text style={styles.historyDate}>/                  {new Date(session.startTime).toLocaleDateString()}
             </Text>/          </View>/          <View style={[styles.historyStatus, { backgroundColor: session.status === completed" ? colors.success : colors.warning}}]} />/            <Text style={styles.historyStatusText}>/              {session.status === "completed ? "已完成" : 进行中"}"
             </Text>/          </View>/        </TouchableOpacity>/    ))}
     </View>/      ), []);
@@ -197,7 +197,7 @@ key={period}
           style={[styles.periodButton,
             selectedPeriod === period && styles.activePeriodButton;
           ]}
-          onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setSelectedPeriod(period)}/            >
+          onPress={() = accessibilityLabel="操作按钮" /> setSelectedPeriod(period)}/            >
           <Text;
 style={[styles.periodText,
               selectedPeriod === period && styles.activePeriodText;

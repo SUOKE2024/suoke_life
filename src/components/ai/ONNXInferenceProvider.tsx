@@ -1,5 +1,5 @@
 import React, {import { AppState, AppStateStatus, NetInfo } from "../../placeholder";react-native;
-import {import {/**
+import {import {/**;
 * * ONNX 推理提供者组件
 * 为索克生活应用提供设备端AI推理的React Context和钩子
   createContext,
@@ -345,8 +345,17 @@ const updateConfig = useCallback(config: Partial<ONNXRuntimeConfig>) => {}
     // 这里可以实现配置更新逻辑
 }, []);
   // 获取系统状态
-const getSystemStatus = useCallback() => {
-    // TODO: Implement function body;
+  const getSystemStatus = useCallback(() => {
+    if (!managerRef.current) {
+      return {
+        isInitialized: false,
+        modelsLoaded: 0,
+        memoryUsage: 0,
+        performanceMetrics: null
+      };
+    }
+    
+    return managerRef.current.getSystemStatus();
   }, []);
   // 根据设备调整配置
 const adjustConfigBasedOnDevice = useCallback(async() => {})

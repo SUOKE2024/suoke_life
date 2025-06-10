@@ -44,7 +44,7 @@ export const Pagination: React.FC<PaginationProps> = ({
   variant = 'default',
   style,
   disabled = false,
-  size = 'md',
+  size = 'md'
 }) => {
   const { currentTheme } = useTheme();
   const styles = createStyles(currentTheme, size);
@@ -84,7 +84,7 @@ export const Pagination: React.FC<PaginationProps> = ({
             <Text;
               style={[
                 styles.navButtonText,
-                (disabled || current <= 1) && styles.disabledNavButtonText,
+                (disabled || current <= 1) && styles.disabledNavButtonText
               ]}
             >
               ‹
@@ -102,7 +102,7 @@ export const Pagination: React.FC<PaginationProps> = ({
           <TouchableOpacity;
             style={[
               styles.navButton,
-              current >= total && styles.disabledNavButton,
+              current >= total && styles.disabledNavButton
             ]}
             onPress={handleNext}
             disabled={disabled || current >= total}
@@ -110,7 +110,7 @@ export const Pagination: React.FC<PaginationProps> = ({
             <Text;
               style={[
                 styles.navButtonText,
-                (disabled || current >= total) && styles.disabledNavButtonText,
+                (disabled || current >= total) && styles.disabledNavButtonText
               ]}
             >
               ›
@@ -127,18 +127,18 @@ const createStyles = (theme: any, size: 'sm' | 'md' | 'lg') => {
     sm: {,
   buttonSize: 32,
       fontSize: 14,
-      spacing: 4,
+      spacing: 4
     },
     md: {,
   buttonSize: 40,
       fontSize: 16,
-      spacing: 8,
+      spacing: 8
     },
     lg: {,
   buttonSize: 48,
       fontSize: 18,
-      spacing: 12,
-    },
+      spacing: 12
+    }
   };
 
   const config = sizeConfig[size];
@@ -148,11 +148,11 @@ const createStyles = (theme: any, size: 'sm' | 'md' | 'lg') => {
   flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      paddingVertical: 16,
+      paddingVertical: 16
     },
     paginationContainer: {,
   flexDirection: 'row',
-      alignItems: 'center',
+      alignItems: 'center'
     },
     navButton: {,
   width: config.buttonSize,
@@ -163,32 +163,32 @@ const createStyles = (theme: any, size: 'sm' | 'md' | 'lg') => {
       borderColor: theme.colors.outline,
       justifyContent: 'center',
       alignItems: 'center',
-      marginHorizontal: config.spacing,
+      marginHorizontal: config.spacing
     },
     disabledNavButton: {,
-  opacity: 0.5,
+  opacity: 0.5
     },
     navButtonText: {,
   fontSize: config.fontSize,
       color: theme.colors.onSurface,
-      fontWeight: '500',
+      fontWeight: '500'
     },
     disabledNavButtonText: {,
-  color: '#999',
+  color: '#999'
     },
     totalText: {,
   fontSize: 14,
       color: '#666',
-      marginRight: 16,
+      marginRight: 16
     },
     pageInfo: {,
-  paddingHorizontal: 16,
+  paddingHorizontal: 16
     },
     pageInfoText: {,
   fontSize: config.fontSize,
       color: theme.colors.onSurface,
-      fontWeight: '500',
-    },
+      fontWeight: '500'
+    }
   });
 };
 

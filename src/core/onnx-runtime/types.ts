@@ -1,4 +1,4 @@
-float32" | int32" | "uint8 | "int64" | bool";
+export type DataType = "float32" | "int32" | "uint8" | "int64" | "bool";
 // 量化配置
 export interface QuantizationConfig {
   level: QuantizationLevel;

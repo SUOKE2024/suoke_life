@@ -3,7 +3,7 @@
  * 提供用户友好的隐私控制界面，集成零知识证明和区块链验证
  */
 import React, { useState, useEffect, useCallback } from 'react';
-import {
+import {;
   View,
   Text,
   StyleSheet,

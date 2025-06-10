@@ -1,12 +1,12 @@
 import React, { useCallback, useState } from 'react';
-import {
+import {;
   Modal,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
@@ -105,7 +105,7 @@ export const SearchFilter: React.FC<SearchFilterProps> = ({
   layout = 'vertical',
   modal = false,
   modalVisible = false,
-  onModalClose,
+  onModalClose
 }) => {
   const { currentTheme } = useTheme();
   const styles = createStyles(currentTheme, size, layout);
@@ -171,7 +171,7 @@ export const SearchFilter: React.FC<SearchFilterProps> = ({
   const toggleGroupExpanded = useCallback(groupKey: string) => {
     setExpandedGroups(prev) => ({
       ...prev,
-      [groupKey]: !prev[groupKey],
+      [groupKey]: !prev[groupKey]
     }));
   }, []);
 
@@ -245,7 +245,7 @@ export const SearchFilter: React.FC<SearchFilterProps> = ({
             style={[
               styles.checkbox,
               group.type === 'single' && styles.radioButton,
-              isSelected && styles.checkedCheckbox,
+              isSelected && styles.checkedCheckbox
             ]}
           >
             {isSelected && (
@@ -257,7 +257,7 @@ export const SearchFilter: React.FC<SearchFilterProps> = ({
           <Text;
             style={[
               styles.optionLabel,
-              isSelected && styles.selectedOptionLabel,
+              isSelected && styles.selectedOptionLabel
             ]}
           >
             {option.label}
@@ -371,30 +371,30 @@ const createStyles = (theme: any, size: 'sm' | 'md' | 'lg', layout: string) => {
   padding: theme.spacing.sm,
       fontSize: theme.typography.fontSize.sm,
       inputHeight: 36,
-      spacing: theme.spacing.xs,
+      spacing: theme.spacing.xs
     },
     md: {,
   padding: theme.spacing.md,
       fontSize: theme.typography.fontSize.base,
       inputHeight: 44,
-      spacing: theme.spacing.sm,
+      spacing: theme.spacing.sm
     },
     lg: {,
   padding: theme.spacing.lg,
       fontSize: theme.typography.fontSize.lg,
       inputHeight: 52,
-      spacing: theme.spacing.md,
-    },
+      spacing: theme.spacing.md
+    }
   };
 
   const config = sizeConfig[size];
 
   return StyleSheet.create({
     container: {,
-  backgroundColor: theme.colors.surface,
+  backgroundColor: theme.colors.surface
     },
     searchContainer: {,
-  marginBottom: config.spacing,
+  marginBottom: config.spacing
     },
     searchInput: {,
   height: config.inputHeight,
@@ -404,13 +404,13 @@ const createStyles = (theme: any, size: 'sm' | 'md' | 'lg', layout: string) => {
       fontSize: config.fontSize,
       color: theme.colors.onSurface,
       borderWidth: 1,
-      borderColor: theme.colors.outline,
+      borderColor: theme.colors.outline
     },
     filtersContainer: {,
-  marginBottom: config.spacing,
+  marginBottom: config.spacing
     },
     filterGroup: {,
-  marginBottom: config.spacing,
+  marginBottom: config.spacing
     },
     groupHeader: {,
   flexDirection: 'row',
@@ -418,32 +418,32 @@ const createStyles = (theme: any, size: 'sm' | 'md' | 'lg', layout: string) => {
       alignItems: 'center',
       paddingVertical: config.spacing,
       borderBottomWidth: 1,
-      borderBottomColor: theme.colors.outline,
+      borderBottomColor: theme.colors.outline
     },
     groupTitle: {,
   fontSize: config.fontSize,
       fontWeight: theme.typography.fontWeight.semibold,
-      color: theme.colors.onSurface,
+      color: theme.colors.onSurface
     },
     expandIcon: {,
   fontSize: config.fontSize,
-      color: theme.colors.onSurfaceVariant,
+      color: theme.colors.onSurfaceVariant
     },
     groupOptions: {,
-  paddingTop: config.spacing,
+  paddingTop: config.spacing
     },
     filterOption: {,
   paddingVertical: config.spacing,
       paddingHorizontal: theme.spacing.sm,
       borderRadius: theme.borderRadius.sm,
-      marginBottom: theme.spacing.xs,
+      marginBottom: theme.spacing.xs
     },
     selectedFilterOption: {,
-  backgroundColor: theme.colors.primaryContainer,
+  backgroundColor: theme.colors.primaryContainer
     },
     optionContent: {,
   flexDirection: 'row',
-      alignItems: 'center',
+      alignItems: 'center'
     },
     checkbox: {,
   width: 20,
@@ -453,35 +453,35 @@ const createStyles = (theme: any, size: 'sm' | 'md' | 'lg', layout: string) => {
       borderRadius: 4,
       alignItems: 'center',
       justifyContent: 'center',
-      marginRight: theme.spacing.sm,
+      marginRight: theme.spacing.sm
     },
     radioButton: {,
-  borderRadius: 10,
+  borderRadius: 10
     },
     checkedCheckbox: {,
   backgroundColor: theme.colors.primary,
-      borderColor: theme.colors.primary,
+      borderColor: theme.colors.primary
     },
     checkmark: {,
   color: theme.colors.onPrimary,
       fontSize: 12,
-      fontWeight: theme.typography.fontWeight.bold,
+      fontWeight: theme.typography.fontWeight.bold
     },
     optionLabel: {,
   fontSize: config.fontSize,
       color: theme.colors.onSurface,
-      flex: 1,
+      flex: 1
     },
     selectedOptionLabel: {,
   color: theme.colors.onPrimaryContainer,
-      fontWeight: theme.typography.fontWeight.medium,
+      fontWeight: theme.typography.fontWeight.medium
     },
     actionsContainer: {,
   flexDirection: 'row',
       justifyContent: 'space-between',
       paddingTop: config.spacing,
       borderTopWidth: 1,
-      borderTopColor: theme.colors.outline,
+      borderTopColor: theme.colors.outline
     },
     clearButton: {,
   flex: 1,
@@ -490,12 +490,12 @@ const createStyles = (theme: any, size: 'sm' | 'md' | 'lg', layout: string) => {
       backgroundColor: theme.colors.surfaceVariant,
       borderRadius: theme.borderRadius.md,
       alignItems: 'center',
-      marginRight: theme.spacing.sm,
+      marginRight: theme.spacing.sm
     },
     clearButtonText: {,
   fontSize: config.fontSize,
       color: theme.colors.onSurfaceVariant,
-      fontWeight: theme.typography.fontWeight.medium,
+      fontWeight: theme.typography.fontWeight.medium
     },
     applyButton: {,
   flex: 1,
@@ -504,16 +504,16 @@ const createStyles = (theme: any, size: 'sm' | 'md' | 'lg', layout: string) => {
       backgroundColor: theme.colors.primary,
       borderRadius: theme.borderRadius.md,
       alignItems: 'center',
-      marginLeft: theme.spacing.sm,
+      marginLeft: theme.spacing.sm
     },
     applyButtonText: {,
   fontSize: config.fontSize,
       color: theme.colors.onPrimary,
-      fontWeight: theme.typography.fontWeight.medium,
+      fontWeight: theme.typography.fontWeight.medium
     },
     modalContainer: {,
   flex: 1,
-      backgroundColor: theme.colors.surface,
+      backgroundColor: theme.colors.surface
     },
     modalHeader: {,
   flexDirection: 'row',
@@ -521,26 +521,26 @@ const createStyles = (theme: any, size: 'sm' | 'md' | 'lg', layout: string) => {
       alignItems: 'center',
       padding: theme.spacing.md,
       borderBottomWidth: 1,
-      borderBottomColor: theme.colors.outline,
+      borderBottomColor: theme.colors.outline
     },
     modalTitle: {,
   fontSize: theme.typography.fontSize.lg,
       fontWeight: theme.typography.fontWeight.semibold,
-      color: theme.colors.onSurface,
+      color: theme.colors.onSurface
     },
     modalCloseText: {,
   fontSize: config.fontSize,
-      color: theme.colors.onSurfaceVariant,
+      color: theme.colors.onSurfaceVariant
     },
     modalApplyText: {,
   fontSize: config.fontSize,
       color: theme.colors.primary,
-      fontWeight: theme.typography.fontWeight.medium,
+      fontWeight: theme.typography.fontWeight.medium
     },
     modalContent: {,
   flex: 1,
-      padding: theme.spacing.md,
-    },
+      padding: theme.spacing.md
+    }
   });
 };
 

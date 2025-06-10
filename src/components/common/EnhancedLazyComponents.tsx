@@ -115,7 +115,7 @@ class PreloadManager {
   }
 }
 // 创建增强的懒加载组件
-export const createEnhancedLazyComponent = <T extends ComponentType<any>>()
+export const createEnhancedLazyComponent = <T extends ComponentType<any>>();
   importFunc: () => Promise<{ default: T }>,
   config: LazyComponentConfig = {}
 ): LazyExoticComponent<T> => {
@@ -179,7 +179,7 @@ export const createEnhancedLazyComponent = <T extends ComponentType<any>>()
   return WrappedComponent as LazyExoticComponent<T>;
 };
 // 预加载Hook;
-export const usePreloadComponent = ()
+export const usePreloadComponent = ();
   importFunc: () => Promise<any>,
   condition: boolean = true;
 ) => {
@@ -195,7 +195,7 @@ export const usePreloadComponent = ()
   return isPreloaded;
 };
 // 批量预加载Hook;
-export const useBatchPreload = ()
+export const useBatchPreload = ();
   components: Array<{,
   key: string;,
   importFunc: () => Promise<any>;

@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from 'react';
-import {
+import {;
   Animated,
   StyleSheet,
   Text,
   TextStyle,
   View,
-  ViewStyle,
+  ViewStyle
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
@@ -44,7 +44,7 @@ export const Progress: React.FC<ProgressProps> = ({
   labelStyle,
   accessible = true,
   accessibilityLabel,
-  testID,
+  testID
 }) => {
   const { currentTheme } = useTheme();
   const progressAnim = useRef(new Animated.Value(0)).current;
@@ -61,13 +61,13 @@ export const Progress: React.FC<ProgressProps> = ({
           Animated.timing(indeterminateAnim, {
             toValue: 1,
             duration: 1000,
-            useNativeDriver: false,
+            useNativeDriver: false
           }),
           Animated.timing(indeterminateAnim, {
             toValue: 0,
             duration: 1000,
-            useNativeDriver: false,
-          }),
+            useNativeDriver: false
+          })
         ])
       ).start();
     } else {
@@ -76,7 +76,7 @@ export const Progress: React.FC<ProgressProps> = ({
         Animated.timing(progressAnim, {
           toValue: percentage,
           duration: 500,
-          useNativeDriver: false,
+          useNativeDriver: false
         }).start();
       } else {
         progressAnim.setValue(percentage);
@@ -89,7 +89,7 @@ export const Progress: React.FC<ProgressProps> = ({
     indeterminate,
     percentage,
     progressAnim,
-    indeterminateAnim,
+    indeterminateAnim
   ]);
 
   const getSizeStyles = () => {
@@ -123,38 +123,38 @@ export const Progress: React.FC<ProgressProps> = ({
 
   const styles = StyleSheet.create({
     container: {,
-  width: '100%',
+  width: '100%'
     },
     progressBar: {,
   width: '100%',
       backgroundColor: backgroundColor || currentTheme.colors.outline,
       borderRadius: sizeStyles.borderRadius,
       height: sizeStyles.height,
-      overflow: 'hidden',
+      overflow: 'hidden'
     },
     progressFill: {,
   height: '100%',
       backgroundColor: progressColor,
-      borderRadius: sizeStyles.borderRadius,
+      borderRadius: sizeStyles.borderRadius
     },
     stripedFill: {
       // React Native不支持backgroundImage，这里可以用其他方式实现条纹效果
-      opacity: 0.8,
+      opacity: 0.8
     },
     label: {,
   fontSize: 14,
       color: currentTheme.colors.onSurface,
       textAlign: 'center',
       marginTop: 4,
-      ...labelStyle,
-    },
+      ...labelStyle
+    }
   });
 
   const renderProgressBar = () => {
     if (indeterminate) {
       const translateX = indeterminateAnim.interpolate({
         inputRange: [0, 1],
-        outputRange: ['-100%', '100%'],
+        outputRange: ['-100%', '100%']
       });
 
       return (
@@ -164,8 +164,8 @@ export const Progress: React.FC<ProgressProps> = ({
               styles.progressFill,
               {
                 width: '30%',
-                transform: [{ translateX }],
-              },
+                transform: [{ translateX }]
+              }
             ]}
           />
         </View>
@@ -175,7 +175,7 @@ export const Progress: React.FC<ProgressProps> = ({
     const width = progressAnim.interpolate({
       inputRange: [0, 100],
       outputRange: ['0%', '100%'],
-      extrapolate: 'clamp',
+      extrapolate: 'clamp'
     });
 
     return (
@@ -184,7 +184,7 @@ export const Progress: React.FC<ProgressProps> = ({
           style={[
             styles.progressFill,
             striped && styles.stripedFill,
-            { width },
+            { width }
           ]}
         />
       </View>
@@ -198,8 +198,8 @@ export const Progress: React.FC<ProgressProps> = ({
     accessibilityValue: {,
   min: 0,
       max,
-      now: normalizedValue,
-    },
+      now: normalizedValue
+    }
   });
 
   return (

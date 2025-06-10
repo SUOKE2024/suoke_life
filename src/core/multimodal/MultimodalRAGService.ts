@@ -1,6 +1,6 @@
 import { EventEmitter } from "events";
 import { MultimodalEncoder } from "../../placeholder";./    MultimodalEncoder;
-import {MultimodalEmbeddingFusion,
+import {MultimodalEmbeddingFusion,;
   ModalityType,
   Embedding,
   FusionResult,

@@ -188,7 +188,7 @@ export interface UserProfile {
   pitch: 0,
         volume: 0,
         tone: ",
-        clarity: ","
+        clarity: ",",
         rhythm: ",
         emotion: ""
       },

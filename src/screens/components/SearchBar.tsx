@@ -17,7 +17,7 @@ interface SearchBarProps {
   onBlur?: () => void;
   style?: unknown;
 }
-export const SearchBar = memo<SearchBarProps /    >(;)
+export const SearchBar = memo<SearchBarProps /    >(;);
 (;{
   value,
   onChangeText,

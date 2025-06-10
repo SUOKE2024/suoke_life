@@ -36,15 +36,15 @@ export const performanceConfig: PerformanceConfig = {,
   trackRender: true,
     trackMemory: true,
     trackNetwork: true,
-    logToConsole: true,warnThreshold: 50,errorThreshold: 100;
+    logToConsole: true,warnThreshold: 30,errorThreshold: 50;
   },
   production: {,
   trackRender: true,
     trackMemory: false,
     trackNetwork: true,
     logToConsole: false,
-    warnThreshold: 100,
-    errorThreshold: 200,
+    warnThreshold: 60,
+    errorThreshold: 50,
     reportToAnalytics: true;
   },
   components: {
@@ -57,7 +57,7 @@ export const performanceConfig: PerformanceConfig = {,
     },
     "ProfileScreen: {",
   enabled: true,
-      warnThreshold: 50,
+      warnThreshold: 30,
       trackMemory: true;
     },
     "HealthDashboard": {

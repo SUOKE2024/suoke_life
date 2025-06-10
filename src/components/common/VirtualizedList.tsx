@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import {
+import {;
   FlatList,
   VirtualizedList as RNVirtualizedList,
   Dimensions,
@@ -265,7 +265,7 @@ export const CardVirtualizedList = <T extends ListItem>({
   );
 };
 // 无限滚动Hook;
-export const useInfiniteScroll = <T extends ListItem>()
+export const useInfiniteScroll = <T extends ListItem>();
   fetchData: (page: number) => Promise<T[]>,
   pageSize: number = 20;
 ) => {

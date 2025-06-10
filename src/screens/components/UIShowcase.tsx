@@ -36,7 +36,7 @@ import React,{ useState } from "react;";
         {///              <Button;
 title="查看品牌色彩"
             variant="secondary"
-            onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setShowColorPreview(true)}/            style={styles.colorPreviewButton}>/          <Text variant="caption" style={styles.colorPreviewText}>/                查看更新后的索克绿和索克橙品牌色彩
+            onPress={() = accessibilityLabel="操作按钮" /> setShowColorPreview(true)}/            style={styles.colorPreviewButton}>/          <Text variant="caption" style={styles.colorPreviewText}>/                查看更新后的索克绿和索克橙品牌色彩
           </Text>/        </View>/
         <Divider margin="lg" />/
         {///
@@ -102,10 +102,10 @@ visible={modalVisible}
         </Text>/        <View style={styles.modalButtons}>/              <Button;
 title="取消"
             variant="outline"
-            onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setModalVisible(false)}/            style={styles.modalButton}>/              <Button;
+            onPress={() = accessibilityLabel="操作按钮" /> setModalVisible(false)}/            style={styles.modalButton}>/              <Button;
 title="确认"
             variant="primary"
-            onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setModalVisible(false)}/            style={styles.modalButton}>/        </View>/      </Modal>/    </ScrollView>/      );
+            onPress={() = accessibilityLabel="操作按钮" /> setModalVisible(false)}/            style={styles.modalButton}>/        </View>/      </Modal>/    </ScrollView>/      );
 }
 const styles = StyleSheet.create({container: {),
   flex: 1,

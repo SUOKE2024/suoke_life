@@ -28,7 +28,7 @@ export const validateRequired = (value: any): boolean => {
   return value != null && value !== undefined;
 };
 
-export const validateLength = (
+export const validateLength = (;
   value: string,
   minLength?: number,
   maxLength?: number;
@@ -41,7 +41,7 @@ export const validateLength = (
   return true;
 };
 
-export const validateNumberRange = (
+export const validateNumberRange = (;
   value: number,
   min?: number,
   max?: number;
@@ -51,7 +51,7 @@ export const validateNumberRange = (
   return true;
 };
 
-export const validateField = (
+export const validateField = (;
   value: unknown,
   rules: ValidationRule;
 ): { isValid: boolean; error?: string } => {
@@ -80,7 +80,7 @@ export const validateField = (
   return { isValid: true };
 };
 
-export const validateForm = (
+export const validateForm = (;
   data: Record<string, unknown>,
   rules: Record<string, ValidationRule>
 ): { isValid: boolean; errors: Record<string, string> } => {
@@ -95,6 +95,6 @@ export const validateForm = (
 
   return {
     isValid: Object.keys(errors).length === 0,
-    errors,
+    errors
   };
 };

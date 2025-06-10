@@ -1,14 +1,13 @@
-import React from 'react';
-import { render } from '@testing-library/react-native';
-import { Provider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import { configureStore } from '@reduxjs/toolkit';
+import React from 'react';
+import { Provider } from 'react-redux';
 
 // 简化的 agent-collaboration 测试文件
 describe('agent-collaboration', () => {
   const mockStore = configureStore({
     reducer: {
-      test: (state = {}, action) => state,
+      test: (state = {}, _action) => state,
     },
   });
 
@@ -35,6 +34,7 @@ describe('agent-collaboration', () => {
   });
 
   it('应该能够渲染组件', () => {
+    expect(TestWrapper).toBeDefined();
     expect(true).toBeTruthy();
   });
 

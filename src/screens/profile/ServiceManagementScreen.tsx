@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useCallback, useEffect, useState } from 'react';
-import {
+import {;
   ActivityIndicator,
   Alert,
   ScrollView,
@@ -8,7 +8,7 @@ import {
   Switch,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -37,7 +37,7 @@ export const ServiceManagementScreen: React.FC = () => {
       type: 'agent',
       isRunning: false,
       baseUrl: 'http://localhost:8015',
-      status: 'stopped',
+      status: 'stopped'
     },
     {
       id: 'xiaoke',
@@ -46,7 +46,7 @@ export const ServiceManagementScreen: React.FC = () => {
       type: 'agent',
       isRunning: false,
       baseUrl: 'http://localhost:8016',
-      status: 'stopped',
+      status: 'stopped'
     },
     {
       id: 'laoke',
@@ -55,7 +55,7 @@ export const ServiceManagementScreen: React.FC = () => {
       type: 'agent',
       isRunning: false,
       baseUrl: 'http://localhost:8017',
-      status: 'stopped',
+      status: 'stopped'
     },
     {
       id: 'soer',
@@ -64,7 +64,7 @@ export const ServiceManagementScreen: React.FC = () => {
       type: 'agent',
       isRunning: false,
       baseUrl: 'http://localhost:8018',
-      status: 'stopped',
+      status: 'stopped'
     },
     {
       id: 'auth',
@@ -73,7 +73,7 @@ export const ServiceManagementScreen: React.FC = () => {
       type: 'core',
       isRunning: false,
       baseUrl: 'http://localhost:8001',
-      status: 'stopped',
+      status: 'stopped'
     },
     {
       id: 'user',
@@ -82,7 +82,7 @@ export const ServiceManagementScreen: React.FC = () => {
       type: 'core',
       isRunning: false,
       baseUrl: 'http://localhost:8002',
-      status: 'stopped',
+      status: 'stopped'
     },
     {
       id: 'health',
@@ -91,7 +91,7 @@ export const ServiceManagementScreen: React.FC = () => {
       type: 'core',
       isRunning: false,
       baseUrl: 'http://localhost:8003',
-      status: 'stopped',
+      status: 'stopped'
     },
     {
       id: 'look',
@@ -100,7 +100,7 @@ export const ServiceManagementScreen: React.FC = () => {
       type: 'diagnosis',
       isRunning: false,
       baseUrl: 'http://localhost:8020',
-      status: 'stopped',
+      status: 'stopped'
     },
     {
       id: 'listen',
@@ -109,7 +109,7 @@ export const ServiceManagementScreen: React.FC = () => {
       type: 'diagnosis',
       isRunning: false,
       baseUrl: 'http://localhost:8022',
-      status: 'stopped',
+      status: 'stopped'
     },
     {
       id: 'inquiry',
@@ -118,7 +118,7 @@ export const ServiceManagementScreen: React.FC = () => {
       type: 'diagnosis',
       isRunning: false,
       baseUrl: 'http://localhost:8021',
-      status: 'stopped',
+      status: 'stopped'
     },
     {
       id: 'palpation',
@@ -127,8 +127,8 @@ export const ServiceManagementScreen: React.FC = () => {
       type: 'diagnosis',
       isRunning: false,
       baseUrl: 'http://localhost:8024',
-      status: 'stopped',
-    },
+      status: 'stopped'
+    }
   ];
 
   const initializeServices = useCallback() => {
@@ -149,22 +149,22 @@ export const ServiceManagementScreen: React.FC = () => {
             const response = await fetch(`${service.baseUrl}/health`, {
               method: 'GET',
               headers: {,
-  Accept: 'application/json',
+  Accept: 'application/json'
               },
-              signal: controller.signal,
+              signal: controller.signal
             });
             return {
               id: service.id,
               isRunning: response.ok,
               status: response.ok;
                 ? 'running'
-                : ('stopped' as 'running' | 'stopped'),
+                : ('stopped' as 'running' | 'stopped')
             };
           } catch (error) {
             return {
               id: service.id,
               isRunning: false,
-              status: 'stopped' as 'stopped',
+              status: 'stopped' as 'stopped'
             };
           }
         });
@@ -178,7 +178,7 @@ export const ServiceManagementScreen: React.FC = () => {
             updatedServices[index] = {
               ...updatedServices[index],
               isRunning: result.isRunning,
-              status: result.status,
+              status: result.status
             };
           }
         });
@@ -214,8 +214,8 @@ export const ServiceManagementScreen: React.FC = () => {
         const response = await fetch(`${service.baseUrl}/start`, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
-          },
+            'Content-Type': 'application/json'
+          }
         });
 
         if (response.ok) {
@@ -226,7 +226,7 @@ export const ServiceManagementScreen: React.FC = () => {
                     ...s,
                     isRunning: true,
                     status: 'running',
-                    lastAction: '启动成功',
+                    lastAction: '启动成功'
                   }
                 : s;
             )
@@ -266,8 +266,8 @@ export const ServiceManagementScreen: React.FC = () => {
         const response = await fetch(`${service.baseUrl}/stop`, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
-          },
+            'Content-Type': 'application/json'
+          }
         });
 
         if (response.ok) {
@@ -278,7 +278,7 @@ export const ServiceManagementScreen: React.FC = () => {
                     ...s,
                     isRunning: false,
                     status: 'stopped',
-                    lastAction: '停止成功',
+                    lastAction: '停止成功'
                   }
                 : s;
             )
@@ -348,7 +348,7 @@ export const ServiceManagementScreen: React.FC = () => {
             <View;
               style={[
                 styles.typeBadge,
-                { backgroundColor: getTypeColor(service.type) },
+                { backgroundColor: getTypeColor(service.type) }
               ]}
             >
               <Text style={styles.typeBadgeText}>
@@ -358,7 +358,7 @@ export const ServiceManagementScreen: React.FC = () => {
             <View;
               style={[
                 styles.statusBadge,
-                { backgroundColor: getStatusColor(service.status) },
+                { backgroundColor: getStatusColor(service.status) }
               ]}
             >
               <Text style={styles.statusBadgeText}>
@@ -481,7 +481,7 @@ export const ServiceManagementScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {,
   flex: 1,
-    backgroundColor: '#F5F7FA',
+    backgroundColor: '#F5F7FA'
   },
   header: {,
   flexDirection: 'row',
@@ -491,60 +491,60 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#E1E8ED',
+    borderBottomColor: '#E1E8ED'
   },
   backButton: {,
   fontSize: 24,
-    color: '#2C3E50',
+    color: '#2C3E50'
   },
   title: {,
   fontSize: 18,
     fontWeight: 'bold',
-    color: '#2C3E50',
+    color: '#2C3E50'
   },
   refreshButton: {,
   fontSize: 16,
     color: '#3498DB',
-    fontWeight: '600',
+    fontWeight: '600'
   },
   settingsSection: {,
   backgroundColor: '#FFFFFF',
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E1E8ED',
+    borderBottomColor: '#E1E8ED'
   },
   settingItem: {,
   flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   settingLabel: {,
   fontSize: 16,
     color: '#2C3E50',
-    fontWeight: '500',
+    fontWeight: '500'
   },
   content: {,
   flex: 1,
-    padding: 20,
+    padding: 20
   },
   loadingContainer: {,
   alignItems: 'center',
-    paddingVertical: 40,
+    paddingVertical: 40
   },
   loadingText: {,
   marginTop: 16,
     fontSize: 16,
-    color: '#7F8C8D',
+    color: '#7F8C8D'
   },
   serviceGroup: {,
-  marginBottom: 24,
+  marginBottom: 24
   },
   groupTitle: {,
   fontSize: 18,
     fontWeight: 'bold',
     color: '#2C3E50',
-    marginBottom: 12,
+    marginBottom: 12
   },
   serviceCard: {,
   backgroundColor: '#FFFFFF',
@@ -555,84 +555,84 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
+    elevation: 3
   },
   serviceHeader: {,
   flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: 12,
+    marginBottom: 12
   },
   serviceInfo: {,
   flex: 1,
-    marginRight: 16,
+    marginRight: 16
   },
   serviceName: {,
   fontSize: 16,
     fontWeight: 'bold',
     color: '#2C3E50',
-    marginBottom: 4,
+    marginBottom: 4
   },
   serviceDescription: {,
   fontSize: 14,
     color: '#7F8C8D',
-    marginBottom: 8,
+    marginBottom: 8
   },
   serviceDetails: {,
   flexDirection: 'row',
     gap: 8,
-    marginBottom: 4,
+    marginBottom: 4
   },
   typeBadge: {,
   paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: 4,
+    borderRadius: 4
   },
   typeBadgeText: {,
   color: '#FFFFFF',
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   statusBadge: {,
   paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: 4,
+    borderRadius: 4
   },
   statusBadgeText: {,
   color: '#FFFFFF',
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   lastAction: {,
   fontSize: 12,
     color: '#95A5A6',
-    fontStyle: 'italic',
+    fontStyle: 'italic'
   },
   serviceActions: {,
   flexDirection: 'row',
-    gap: 8,
+    gap: 8
   },
   actionButton: {,
   flex: 1,
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 6,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   startButton: {,
-  backgroundColor: '#27AE60',
+  backgroundColor: '#27AE60'
   },
   stopButton: {,
-  backgroundColor: '#E74C3C',
+  backgroundColor: '#E74C3C'
   },
   restartButton: {,
-  backgroundColor: '#F39C12',
+  backgroundColor: '#F39C12'
   },
   actionButtonText: {,
   color: '#FFFFFF',
     fontSize: 14,
-    fontWeight: '600',
-  },
+    fontWeight: '600'
+  }
 });
 
 export default ServiceManagementScreen;

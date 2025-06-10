@@ -171,18 +171,18 @@ export interface UserProfile {
   ///    >  {
     const features: LookingFeatures = {tongue: {,
   bodyColor: ",
-        bodyTexture: ","
+        bodyTexture: ",",
         bodySize: ",
-        coatingColor: ","
+        coatingColor: ",",
         coatingThickness: ",
-        coatingMoisture: ","
+        coatingMoisture: ",",
         movement: ""
       },
       face: {,
   complexion: ",
-        luster: ","
+        luster: ",",
         expression: ",
-        eyeCondition: ","
+        eyeCondition: ",",
         lipCondition: ""
       },
       body: {,

@@ -2,7 +2,7 @@ import React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ragService } from '../services/ragService';
-import {import type {queryRAG,
+import {import type {queryRAG,;
   analyzeTCM,
   recommendHerbs,
   streamQueryRAG,

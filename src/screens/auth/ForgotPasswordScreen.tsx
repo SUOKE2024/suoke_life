@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
-import {
+import {;
   Alert,
   KeyboardAvoidingView,
   Platform,
@@ -10,7 +10,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -233,22 +233,22 @@ const ForgotPasswordScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {,
   flex: 1,
-    backgroundColor: '#F5F7FA',
+    backgroundColor: '#F5F7FA'
   },
   keyboardAvoid: {,
-  flex: 1,
+  flex: 1
   },
   scrollView: {,
-  flex: 1,
+  flex: 1
   },
   scrollContent: {,
   flexGrow: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: 20
   },
   header: {,
   alignItems: 'center',
     paddingTop: 20,
-    paddingBottom: 40,
+    paddingBottom: 40
   },
   backButton: {,
   position: 'absolute',
@@ -259,14 +259,14 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: '#E1E8ED',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   backButtonText: {,
   fontSize: 20,
-    color: '#2C3E50',
+    color: '#2C3E50'
   },
   iconContainer: {,
-  marginBottom: 20,
+  marginBottom: 20
   },
   iconPlaceholder: {,
   width: 80,
@@ -274,33 +274,33 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     backgroundColor: '#3498DB',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   iconText: {,
-  fontSize: 32,
+  fontSize: 32
   },
   title: {,
   fontSize: 28,
     fontWeight: 'bold',
     color: '#2C3E50',
-    marginBottom: 8,
+    marginBottom: 8
   },
   subtitle: {,
   fontSize: 16,
     color: '#7F8C8D',
     textAlign: 'center',
-    lineHeight: 24,
+    lineHeight: 24
   },
   formSection: {,
-  paddingVertical: 20,
+  paddingVertical: 20
   },
   inputContainer: {,
-  marginBottom: 24,
+  marginBottom: 24
   },
   inputLabel: {,
   fontSize: 14,
     color: '#7F8C8D',
-    marginBottom: 8,
+    marginBottom: 8
   },
   input: {,
   borderWidth: 1,
@@ -310,15 +310,15 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     backgroundColor: '#FFFFFF',
     fontSize: 16,
-    minHeight: 48,
+    minHeight: 48
   },
   inputError: {,
-  borderColor: '#E74C3C',
+  borderColor: '#E74C3C'
   },
   errorText: {,
   fontSize: 14,
     color: '#E74C3C',
-    marginTop: 4,
+    marginTop: 4
   },
   button: {,
   borderRadius: 8,
@@ -326,63 +326,63 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 16,
+    marginBottom: 16
   },
   buttonText: {,
   fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   sendButton: {,
-  backgroundColor: '#3498DB',
+  backgroundColor: '#3498DB'
   },
   primaryButtonText: {,
-  color: '#FFFFFF',
+  color: '#FFFFFF'
   },
   securitySection: {,
   backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 20,
-    marginVertical: 20,
+    marginVertical: 20
   },
   securityTitle: {,
   fontSize: 18,
     fontWeight: '600',
     color: '#2C3E50',
-    marginBottom: 16,
+    marginBottom: 16
   },
   securityList: {,
-  gap: 12,
+  gap: 12
   },
   securityItem: {,
   flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   securityIcon: {,
   fontSize: 18,
-    marginRight: 12,
+    marginRight: 12
   },
   securityText: {,
   flex: 1,
     fontSize: 14,
-    color: '#7F8C8D',
+    color: '#7F8C8D'
   },
   alternativeSection: {,
   alignItems: 'center',
-    paddingVertical: 24,
+    paddingVertical: 24
   },
   alternativeText: {,
   fontSize: 16,
-    color: '#7F8C8D',
+    color: '#7F8C8D'
   },
   loginLink: {,
   color: '#3498DB',
-    fontWeight: '600',
+    fontWeight: '600'
   },
   successContainer: {,
   flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 40,
+    paddingVertical: 40
   },
   successIcon: {,
   width: 120,
@@ -391,67 +391,67 @@ const styles = StyleSheet.create({
     backgroundColor: '#27AE60',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 24,
+    marginBottom: 24
   },
   successIconText: {,
-  fontSize: 48,
+  fontSize: 48
   },
   successTitle: {,
   fontSize: 28,
     fontWeight: 'bold',
     color: '#2C3E50',
-    marginBottom: 16,
+    marginBottom: 16
   },
   successMessage: {,
   fontSize: 16,
     color: '#7F8C8D',
     textAlign: 'center',
     lineHeight: 24,
-    marginBottom: 32,
+    marginBottom: 32
   },
   actionButtons: {,
   width: '100%',
-    marginBottom: 24,
+    marginBottom: 24
   },
   resendButton: {,
   backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#3498DB',
+    borderColor: '#3498DB'
   },
   backToLoginButton: {,
-  backgroundColor: '#3498DB',
+  backgroundColor: '#3498DB'
   },
   helpSection: {,
   backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 20,
     width: '100%',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   helpTitle: {,
   fontSize: 18,
     fontWeight: '600',
     color: '#2C3E50',
-    marginBottom: 8,
+    marginBottom: 8
   },
   helpText: {,
   fontSize: 14,
     color: '#7F8C8D',
     textAlign: 'center',
-    marginBottom: 16,
+    marginBottom: 16
   },
   contactButton: {,
   paddingHorizontal: 20,
     paddingVertical: 8,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#3498DB',
+    borderColor: '#3498DB'
   },
   contactButtonText: {,
   fontSize: 14,
     color: '#3498DB',
-    fontWeight: '600',
-  },
+    fontWeight: '600'
+  }
 });
 
 export default ForgotPasswordScreen;

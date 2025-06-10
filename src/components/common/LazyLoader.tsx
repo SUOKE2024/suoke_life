@@ -1,16 +1,16 @@
 import React, { ComponentType, ReactNode } from 'react';
-import {
+import {;
   ActivityIndicator,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
-import {
+import {;
   borderRadius,
   colors,
   spacing,
-  typography,
+  typography
 } from '../../constants/theme';
 
 interface LazyLoaderProps {
@@ -92,7 +92,7 @@ const DefaultFallback: React.FC<{
 );
 
 const DefaultErrorFallback: React.FC<{ onRetry?: () => void }> = ({
-  onRetry,
+  onRetry
 }) => (
   <View style={styles.errorContainer}>
     <Text style={styles.errorTitle}>加载失败</Text>
@@ -113,12 +113,12 @@ export const LazyLoader: React.FC<LazyLoaderProps> = ({
   showProgress = true,
   timeout = 10000,
   retryCount = 3,
-  componentName,
+  componentName
 }) => {
   const [state, setState] = React.useState<LazyLoaderState>({
     hasError: false,
     isLoading: false,
-    retryAttempts: 0,
+    retryAttempts: 0
   });
 
   const [LazyComponent, setLazyComponent] =
@@ -139,7 +139,7 @@ export const LazyLoader: React.FC<LazyLoaderProps> = ({
 
       const componentModule = (await Promise.race([
         factory(),
-        timeoutPromise,
+        timeoutPromise
       ])) as any;
       setLazyComponent() => componentModule.default);
       setState(prev) => ({ ...prev, isLoading: false }));
@@ -150,7 +150,7 @@ export const LazyLoader: React.FC<LazyLoaderProps> = ({
         isLoading: false,
         hasError: true,
         error: error as Error,
-        retryAttempts: prev.retryAttempts + 1,
+        retryAttempts: prev.retryAttempts + 1
       }));
     }
   }, [factory, timeout, retryCount, state.retryAttempts]);
@@ -191,7 +191,7 @@ export const LazyLoader: React.FC<LazyLoaderProps> = ({
 };
 
 // 高阶组件版本
-export const withLazyLoader = <P extends object>(
+export const withLazyLoader = <P extends object>(;
   factory: () => Promise<{ default: ComponentType<P> }>,
   options?: Omit<LazyLoaderProps, 'factory' | 'props'>
 ) => {
@@ -201,7 +201,7 @@ export const withLazyLoader = <P extends object>(
 };
 
 // Hook 版本
-export const useLazyComponent = <T extends ComponentType<any>>(
+export const useLazyComponent = <T extends ComponentType<any>>(;
   factory: () => Promise<{ default: T }>,
   deps: React.DependencyList = []
 ) => {
@@ -243,7 +243,7 @@ export const useLazyComponent = <T extends ComponentType<any>>(
 };
 
 // 预加载函数
-export const preloadComponent = (
+export const preloadComponent = (;
   factory: () => Promise<{ default: ComponentType<any> }>
 ) => {
   return factory().catch(error) => {
@@ -252,7 +252,7 @@ export const preloadComponent = (
 };
 
 // 批量预加载
-export const preloadComponents = (
+export const preloadComponents = (;
   factories: Array<() => Promise<{ default: ComponentType<any> }>>
 ) => {
   return Promise.allSettled(
@@ -266,46 +266,46 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: spacing.xl,
-    backgroundColor: colors.background,
+    backgroundColor: colors.background
   },
   fallbackText: {,
   fontSize: typography.fontSize.base,
     color: colors.textSecondary,
     marginTop: spacing.md,
-    textAlign: 'center',
+    textAlign: 'center'
   },
   errorContainer: {,
   flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: spacing.xl,
-    backgroundColor: colors.background,
+    backgroundColor: colors.background
   },
   errorTitle: {,
   fontSize: typography.fontSize.lg,
     fontWeight: '600' as const,
     color: colors.error,
     marginBottom: spacing.sm,
-    textAlign: 'center',
+    textAlign: 'center'
   },
   errorMessage: {,
   fontSize: typography.fontSize.base,
     color: colors.textSecondary,
     marginBottom: spacing.lg,
     textAlign: 'center',
-    lineHeight: 22,
+    lineHeight: 22
   },
   retryButton: {,
   backgroundColor: colors.primary,
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
-    borderRadius: borderRadius.md,
+    borderRadius: borderRadius.md
   },
   retryButtonText: {,
   fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
-    color: colors.white,
-  },
+    color: colors.white
+  }
 });
 
 export default LazyLoader;

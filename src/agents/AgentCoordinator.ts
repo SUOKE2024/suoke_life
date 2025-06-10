@@ -14,7 +14,7 @@ export interface AgentContext {
 }
 
 export interface AgentResponse {
-  success: boolean;,
+  success: boolean;
   response: string;
   data?: any;
   context: AgentContext;
@@ -26,19 +26,19 @@ export interface AgentResponse {
 }
 
 export interface AgentCollaborationMessage {
-  id: string;,
-  timestamp: Date;,
-  participants: AgentType[];,
-  message: string;,
+  id: string;
+  timestamp: Date;
+  participants: AgentType[];
+  message: string;
   result: AgentResponse;
 }
 
 export interface AgentDecisionResult {
-  decision: string;,
-  confidence: number;,
-  reasoning: string[];,
-  alternatives: string[];,
-  recommendedActions: string[];,
+  decision: string;
+  confidence: number;
+  reasoning: string[];
+  alternatives: string[];
+  recommendedActions: string[];
   metadata: any;
 }
 
@@ -65,7 +65,7 @@ export class AgentCoordinator {
 
   async processCollaborativeTask(
     message: string,
-    context: AgentContext;
+    context: AgentContext
   ): Promise<AgentResponse> {
     if (!this.isInitialized) {
       throw new Error('协调器未初始化');
@@ -94,7 +94,7 @@ export class AgentCoordinator {
 
   private async handleDefaultTask(
     message: string,
-    context: AgentContext;
+    context: AgentContext
   ): Promise<AgentResponse> {
     const primaryAgent = this.selectPrimaryAgent(context);
 
@@ -102,13 +102,13 @@ export class AgentCoordinator {
     return {
       success: true,
       response: `智能体 ${primaryAgent} 处理了消息: ${message}`,
-      data: {,
-  agentType: primaryAgent,
+      data: {
+        agentType: primaryAgent,
         timestamp: new Date().toISOString(),
       },
       context,
-      metadata: {,
-  executionTime: 100,
+      metadata: {
+        executionTime: 100,
         confidence: 0.8,
       },
     };
@@ -139,7 +139,7 @@ export class AgentCoordinator {
       AgentType.SOER,
     ];
 
-    agentTypes.forEach(agentType) => {
+    agentTypes.forEach((agentType) => {
       statusMap.set(agentType, {
         status: 'healthy',
         load: 0.5,
@@ -168,7 +168,7 @@ export class AgentCoordinator {
   private log(
     level: 'info' | 'warn' | 'error',
     message: string,
-    data?: any;
+    data?: any
   ): void {
     const timestamp = new Date().toISOString();
     const logMessage = `[${timestamp}] [AgentCoordinator] [${level.toUpperCase()}] ${message}`;

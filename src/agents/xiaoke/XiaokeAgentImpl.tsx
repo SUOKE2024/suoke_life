@@ -1,5 +1,5 @@
 import { AgentBase } from "../base/AgentBase";
-import {AgentType,
+import {AgentType,;
   AgentCapability,
   AgentResponse,
   AgentContext;

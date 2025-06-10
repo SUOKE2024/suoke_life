@@ -36,7 +36,7 @@ const BenchmarkCreator: React.FC<{,
         bottom: 0,
         backgroundColor: 'rgba(0,0,0,0.5)',
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'center'
       }}
     >
       <View;
@@ -44,7 +44,7 @@ const BenchmarkCreator: React.FC<{,
           backgroundColor: 'white',
           padding: 20,
           borderRadius: 8,
-          width: '80%',
+          width: '80%'
         }}
       >
         <Text style={ fontSize: 18, marginBottom: 16 }}>创建基准测试</Text>
@@ -75,7 +75,7 @@ const BenchmarkResultDetail: React.FC<{,
         bottom: 0,
         backgroundColor: 'rgba(0,0,0,0.5)',
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'center'
       }}
     >
       <View;
@@ -83,7 +83,7 @@ const BenchmarkResultDetail: React.FC<{,
           backgroundColor: 'white',
           padding: 20,
           borderRadius: 8,
-          width: '80%',
+          width: '80%'
         }}
       >
         <Text style={ fontSize: 18, marginBottom: 16 }}>测试结果详情</Text>
@@ -94,7 +94,7 @@ const BenchmarkResultDetail: React.FC<{,
             backgroundColor: '#ccc',
             padding: 12,
             borderRadius: 4,
-            marginTop: 16,
+            marginTop: 16
           }}
         >
           <Text>关闭</Text>
@@ -125,22 +125,22 @@ export const BenchmarkScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* 主要内容 */}
+      {// 主要内容}
       <BenchmarkDashboard onTaskSelect={handleTaskSelect} />
 
-      {/* 浮动操作按钮 */}
+      {// 浮动操作按钮}
       <TouchableOpacity style={styles.fab} onPress={() => setShowCreator(true)}>
         <Text style={styles.fabText}>+</Text>
       </TouchableOpacity>
 
-      {/* 创建基准测试模态框 */}
+      {// 创建基准测试模态框}
       <BenchmarkCreator;
         visible={showCreator}
         onClose={() => setShowCreator(false)}
         onSubmit={handleTaskCreated}
       />
 
-      {/* 结果详情模态框 */}
+      {// 结果详情模态框}
       <BenchmarkResultDetail;
         visible={showResultDetail}
         taskId={selectedTaskId}
@@ -156,7 +156,7 @@ export const BenchmarkScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {,
   flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#f5f5f5'
   },
   fab: {,
   position: 'absolute',
@@ -172,13 +172,13 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
-    shadowRadius: 8,
+    shadowRadius: 8
   },
   fabText: {,
   fontSize: 24,
     color: '#fff',
-    fontWeight: 'bold',
-  },
+    fontWeight: 'bold'
+  }
 });
 
 export default BenchmarkScreen;

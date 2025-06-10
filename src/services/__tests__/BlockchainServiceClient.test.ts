@@ -1,5 +1,5 @@
 import { BlockchainServiceClient } from '../blockchain/BlockchainServiceClient';
-import {StoreHealthDataRequest,
+import {StoreHealthDataRequest,;
   VerifyHealthDataRequest,
   VerifyWithZKPRequest,
   GetHealthDataRecordsRequest,

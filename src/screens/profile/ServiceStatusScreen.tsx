@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useCallback, useEffect, useState } from 'react';
-import {
+import {;
   ActivityIndicator,
   Alert,
   RefreshControl,
@@ -8,7 +8,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -34,78 +34,78 @@ export const ServiceStatusScreen: React.FC = () => {
       status: 'unknown',
       lastChecked: new Date(),
       endpoint: 'http://localhost:8015',
-      category: 'agent',
+      category: 'agent'
     },
     {
       name: '小克服务',
       status: 'unknown',
       lastChecked: new Date(),
       endpoint: 'http://localhost:8016',
-      category: 'agent',
+      category: 'agent'
     },
     {
       name: '老克服务',
       status: 'unknown',
       lastChecked: new Date(),
       endpoint: 'http://localhost:8017',
-      category: 'agent',
+      category: 'agent'
     },
     {
       name: '索儿服务',
       status: 'unknown',
       lastChecked: new Date(),
       endpoint: 'http://localhost:8018',
-      category: 'agent',
+      category: 'agent'
     },
     {
       name: '认证服务',
       status: 'unknown',
       lastChecked: new Date(),
       endpoint: 'http://localhost:8001',
-      category: 'core',
+      category: 'core'
     },
     {
       name: '用户服务',
       status: 'unknown',
       lastChecked: new Date(),
       endpoint: 'http://localhost:8002',
-      category: 'core',
+      category: 'core'
     },
     {
       name: '健康数据服务',
       status: 'unknown',
       lastChecked: new Date(),
       endpoint: 'http://localhost:8003',
-      category: 'core',
+      category: 'core'
     },
     {
       name: '望诊服务',
       status: 'unknown',
       lastChecked: new Date(),
       endpoint: 'http://localhost:8020',
-      category: 'diagnosis',
+      category: 'diagnosis'
     },
     {
       name: '闻诊服务',
       status: 'unknown',
       lastChecked: new Date(),
       endpoint: 'http://localhost:8022',
-      category: 'diagnosis',
+      category: 'diagnosis'
     },
     {
       name: '问诊服务',
       status: 'unknown',
       lastChecked: new Date(),
       endpoint: 'http://localhost:8021',
-      category: 'diagnosis',
+      category: 'diagnosis'
     },
     {
       name: '切诊服务',
       status: 'unknown',
       lastChecked: new Date(),
       endpoint: 'http://localhost:8024',
-      category: 'diagnosis',
-    },
+      category: 'diagnosis'
+    }
   ];
 
   useEffect() => {
@@ -117,7 +117,7 @@ export const ServiceStatusScreen: React.FC = () => {
     setLoading(true);
     try {
       const updatedServices = [
-        ...(services.length > 0 ? services : initialServices),
+        ...(services.length > 0 ? services : initialServices)
       ];
       const controller = new AbortController();
       const timeoutId = setTimeout() => controller.abort(), 5000);
@@ -128,9 +128,9 @@ export const ServiceStatusScreen: React.FC = () => {
           const response = await fetch(`${service.endpoint}/health`, {
             method: 'GET',
             headers: {,
-  Accept: 'application/json',
+  Accept: 'application/json'
             },
-            signal: controller.signal,
+            signal: controller.signal
           });
           const endTime = Date.now();
           const responseTime = endTime - startTime;
@@ -141,14 +141,14 @@ export const ServiceStatusScreen: React.FC = () => {
               ? 'online'
               : ('offline' as 'online' | 'offline'),
             responseTime,
-            lastChecked: new Date(),
+            lastChecked: new Date()
           };
         } catch (error) {
           return {
             ...service,
             status: 'offline' as 'offline',
             responseTime: undefined,
-            lastChecked: new Date(),
+            lastChecked: new Date()
           };
         }
       });
@@ -191,7 +191,7 @@ export const ServiceStatusScreen: React.FC = () => {
       }
 
       Alert.alert(healthPercentage >= 80 ? '检查成功' : '检查警告', message, [
-        { text: '确定' },
+        { text: '确定' }
       ]);
     } catch (error) {
       Alert.alert('错误', '快速检查失败');
@@ -311,14 +311,14 @@ export const ServiceStatusScreen: React.FC = () => {
                             style={[
                               styles.statusIndicator,
                               {
-                                backgroundColor: getStatusColor(service.status),
-                              },
+                                backgroundColor: getStatusColor(service.status)
+                              }
                             ]}
                           />
                           <Text;
                             style={[
                               styles.statusText,
-                              { color: getStatusColor(service.status) },
+                              { color: getStatusColor(service.status) }
                             ]}
                           >
                             {getStatusText(service.status)}
@@ -332,8 +332,8 @@ export const ServiceStatusScreen: React.FC = () => {
                             {
                               backgroundColor: getCategoryColor(
                                 service.category;
-                              ),
-                            },
+                              )
+                            }
                           ]}
                         >
                           <Text style={styles.categoryBadgeText}>
@@ -367,7 +367,7 @@ export const ServiceStatusScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {,
   flex: 1,
-    backgroundColor: '#F5F7FA',
+    backgroundColor: '#F5F7FA'
   },
   header: {,
   flexDirection: 'row',
@@ -377,25 +377,25 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#E1E8ED',
+    borderBottomColor: '#E1E8ED'
   },
   backButton: {,
   fontSize: 24,
-    color: '#2C3E50',
+    color: '#2C3E50'
   },
   title: {,
   fontSize: 18,
     fontWeight: 'bold',
-    color: '#2C3E50',
+    color: '#2C3E50'
   },
   quickCheckButton: {,
   fontSize: 16,
     color: '#3498DB',
-    fontWeight: '600',
+    fontWeight: '600'
   },
   content: {,
   flex: 1,
-    padding: 20,
+    padding: 20
   },
   statusHeader: {,
   flexDirection: 'row',
@@ -404,42 +404,42 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     padding: 16,
     backgroundColor: '#FFFFFF',
-    borderRadius: 8,
+    borderRadius: 8
   },
   lastUpdateText: {,
   fontSize: 14,
-    color: '#7F8C8D',
+    color: '#7F8C8D'
   },
   summaryStats: {,
-  alignItems: 'flex-end',
+  alignItems: 'flex-end'
   },
   statsText: {,
   fontSize: 14,
     color: '#2C3E50',
-    fontWeight: '600',
+    fontWeight: '600'
   },
   loadingContainer: {,
   flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 40,
+    paddingVertical: 40
   },
   loadingText: {,
   marginTop: 16,
     fontSize: 16,
-    color: '#7F8C8D',
+    color: '#7F8C8D'
   },
   servicesContainer: {,
-  marginBottom: 20,
+  marginBottom: 20
   },
   categorySection: {,
-  marginBottom: 24,
+  marginBottom: 24
   },
   categoryTitle: {,
   fontSize: 18,
     fontWeight: 'bold',
     color: '#2C3E50',
-    marginBottom: 12,
+    marginBottom: 12
   },
   serviceItem: {,
   backgroundColor: '#FFFFFF',
@@ -450,60 +450,60 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
+    elevation: 3
   },
   serviceHeader: {,
   flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 12
   },
   serviceName: {,
   fontSize: 16,
     fontWeight: 'bold',
-    color: '#2C3E50',
+    color: '#2C3E50'
   },
   statusContainer: {,
   flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   statusIndicator: {,
   width: 12,
     height: 12,
     borderRadius: 6,
-    marginRight: 8,
+    marginRight: 8
   },
   statusText: {,
   fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   serviceDetails: {,
-  gap: 8,
+  gap: 8
   },
   categoryBadge: {,
   paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 4,
-    alignSelf: 'flex-start',
+    alignSelf: 'flex-start'
   },
   categoryBadgeText: {,
   color: '#FFFFFF',
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   responseTime: {,
   fontSize: 14,
-    color: '#7F8C8D',
+    color: '#7F8C8D'
   },
   lastChecked: {,
   fontSize: 14,
-    color: '#7F8C8D',
+    color: '#7F8C8D'
   },
   endpoint: {,
   fontSize: 12,
     color: '#95A5A6',
-    fontFamily: 'monospace',
-  },
+    fontFamily: 'monospace'
+  }
 });
 
 export default ServiceStatusScreen;

@@ -1,4 +1,3 @@
-
 import testAgents from '../test-agents';
 
 describe('test-agents', () => {

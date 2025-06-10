@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import {
+import {;
   Alert,
   ScrollView,
   Share,
@@ -8,17 +8,17 @@ import {
   Switch,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Button } from '../../components/ui/Button';
-import {
+import {;
   borderRadius,
   colors,
   shadows,
   spacing,
-  typography,
+  typography
 } from '../../constants/theme';
 
 interface SettingItem {
@@ -52,20 +52,20 @@ const EnhancedSettingsScreen: React.FC = () => {
       sms: false,
       healthReminders: true,
       medicationAlerts: true,
-      appointmentReminders: true,
+      appointmentReminders: true
     },
     privacy: {,
   dataSharing: false,
       analytics: true,
       locationTracking: false,
-      biometricAuth: true,
+      biometricAuth: true
     },
     preferences: {,
   darkMode: false,
       language: 'zh-CN',
       units: 'metric',
-      autoSync: true,
-    },
+      autoSync: true
+    }
   });
 
   // 用户信息
@@ -74,7 +74,7 @@ const EnhancedSettingsScreen: React.FC = () => {
     email: 'zhangxiaoming@example.com',
     phone: '+86 138****8888',
     membershipLevel: 'Premium',
-    joinDate: '2023-01-15',
+    joinDate: '2023-01-15'
   });
 
   // 更新设置
@@ -83,8 +83,8 @@ const EnhancedSettingsScreen: React.FC = () => {
       ...prev,
       [category]: {
         ...prev[category as keyof typeof prev],
-        [key]: value,
-      },
+        [key]: value
+      }
     }));
   };
 
@@ -93,7 +93,7 @@ const EnhancedSettingsScreen: React.FC = () => {
     Alert.alert('导出数据', '选择导出格式', [
       { text: 'PDF报告', onPress: () => console.log('导出PDF') },
       { text: 'JSON数据', onPress: () => console.log('导出JSON') },
-      { text: '取消', style: 'cancel' },
+      { text: '取消', style: 'cancel' }
     ]);
   };
 
@@ -105,8 +105,8 @@ const EnhancedSettingsScreen: React.FC = () => {
         text: '确定',
         onPress: () => {
           Alert.alert('成功', '缓存已清除');
-        },
-      },
+        }
+      }
     ]);
   };
 
@@ -115,7 +115,7 @@ const EnhancedSettingsScreen: React.FC = () => {
     Alert.alert('联系客服', '选择联系方式', [
       { text: '在线客服', onPress: () => console.log('在线客服') },
       { text: '电话客服', onPress: () => console.log('电话客服') },
-      { text: '取消', style: 'cancel' },
+      { text: '取消', style: 'cancel' }
     ]);
   };
 
@@ -124,7 +124,7 @@ const EnhancedSettingsScreen: React.FC = () => {
     try {
       await Share.share({
         message: '推荐一款很棒的健康管理应用 - 索克生活，快来下载体验吧！',
-        url: 'https://example.com/download',
+        url: 'https://example.com/download'
       });
     } catch (error) {
       console.error('分享失败:', error);
@@ -140,8 +140,8 @@ const EnhancedSettingsScreen: React.FC = () => {
         style: 'destructive',
         onPress: () => {
           navigation.navigate('Auth' as never);
-        },
-      },
+        }
+      }
     ]);
   };
 
@@ -157,7 +157,7 @@ const EnhancedSettingsScreen: React.FC = () => {
           subtitle: '编辑个人信息和头像',
           icon: 'account-edit',
           type: 'navigation',
-          onPress: () => navigation.navigate('Profile' as never),
+          onPress: () => navigation.navigate('Profile' as never)
         },
         {
           id: 'membership',
@@ -167,7 +167,7 @@ const EnhancedSettingsScreen: React.FC = () => {
           type: 'navigation',
           color: colors.warning,
           badge: 'Premium',
-          onPress: () => navigation.navigate('Membership' as never),
+          onPress: () => navigation.navigate('Membership' as never)
         },
         {
           id: 'security',
@@ -175,9 +175,9 @@ const EnhancedSettingsScreen: React.FC = () => {
           subtitle: '密码、双重验证',
           icon: 'shield-account',
           type: 'navigation',
-          onPress: () => navigation.navigate('Security' as never),
-        },
-      ],
+          onPress: () => navigation.navigate('Security' as never)
+        }
+      ]
     },
     {
       id: 'notifications',
@@ -191,7 +191,7 @@ const EnhancedSettingsScreen: React.FC = () => {
           type: 'switch',
           value: settings.notifications.push,
           onValueChange: (value) =>
-            updateSetting('notifications', 'push', value),
+            updateSetting('notifications', 'push', value)
         },
         {
           id: 'email',
@@ -201,7 +201,7 @@ const EnhancedSettingsScreen: React.FC = () => {
           type: 'switch',
           value: settings.notifications.email,
           onValueChange: (value) =>
-            updateSetting('notifications', 'email', value),
+            updateSetting('notifications', 'email', value)
         },
         {
           id: 'healthReminders',
@@ -211,7 +211,7 @@ const EnhancedSettingsScreen: React.FC = () => {
           type: 'switch',
           value: settings.notifications.healthReminders,
           onValueChange: (value) =>
-            updateSetting('notifications', 'healthReminders', value),
+            updateSetting('notifications', 'healthReminders', value)
         },
         {
           id: 'appointmentReminders',
@@ -221,9 +221,9 @@ const EnhancedSettingsScreen: React.FC = () => {
           type: 'switch',
           value: settings.notifications.appointmentReminders,
           onValueChange: (value) =>
-            updateSetting('notifications', 'appointmentReminders', value),
-        },
-      ],
+            updateSetting('notifications', 'appointmentReminders', value)
+        }
+      ]
     },
     {
       id: 'privacy',
@@ -237,7 +237,7 @@ const EnhancedSettingsScreen: React.FC = () => {
           type: 'switch',
           value: settings.privacy.biometricAuth,
           onValueChange: (value) =>
-            updateSetting('privacy', 'biometricAuth', value),
+            updateSetting('privacy', 'biometricAuth', value)
         },
         {
           id: 'dataSharing',
@@ -247,7 +247,7 @@ const EnhancedSettingsScreen: React.FC = () => {
           type: 'switch',
           value: settings.privacy.dataSharing,
           onValueChange: (value) =>
-            updateSetting('privacy', 'dataSharing', value),
+            updateSetting('privacy', 'dataSharing', value)
         },
         {
           id: 'analytics',
@@ -257,7 +257,7 @@ const EnhancedSettingsScreen: React.FC = () => {
           type: 'switch',
           value: settings.privacy.analytics,
           onValueChange: (value) =>
-            updateSetting('privacy', 'analytics', value),
+            updateSetting('privacy', 'analytics', value)
         },
         {
           id: 'locationTracking',
@@ -267,9 +267,9 @@ const EnhancedSettingsScreen: React.FC = () => {
           type: 'switch',
           value: settings.privacy.locationTracking,
           onValueChange: (value) =>
-            updateSetting('privacy', 'locationTracking', value),
-        },
-      ],
+            updateSetting('privacy', 'locationTracking', value)
+        }
+      ]
     },
     {
       id: 'preferences',
@@ -283,7 +283,7 @@ const EnhancedSettingsScreen: React.FC = () => {
           type: 'switch',
           value: settings.preferences.darkMode,
           onValueChange: (value) =>
-            updateSetting('preferences', 'darkMode', value),
+            updateSetting('preferences', 'darkMode', value)
         },
         {
           id: 'language',
@@ -292,8 +292,8 @@ const EnhancedSettingsScreen: React.FC = () => {
           icon: 'translate',
           type: 'navigation',
           onPress: () => {
-            /* 语言设置 */
-          },
+            // 语言设置
+          }
         },
         {
           id: 'units',
@@ -302,8 +302,8 @@ const EnhancedSettingsScreen: React.FC = () => {
           icon: 'ruler',
           type: 'navigation',
           onPress: () => {
-            /* 单位设置 */
-          },
+            // 单位设置
+          }
         },
         {
           id: 'autoSync',
@@ -313,9 +313,9 @@ const EnhancedSettingsScreen: React.FC = () => {
           type: 'switch',
           value: settings.preferences.autoSync,
           onValueChange: (value) =>
-            updateSetting('preferences', 'autoSync', value),
-        },
-      ],
+            updateSetting('preferences', 'autoSync', value)
+        }
+      ]
     },
     {
       id: 'data',
@@ -327,7 +327,7 @@ const EnhancedSettingsScreen: React.FC = () => {
           subtitle: '导出个人健康数据',
           icon: 'export',
           type: 'action',
-          onPress: () => handleExportData(),
+          onPress: () => handleExportData()
         },
         {
           id: 'backup',
@@ -336,8 +336,8 @@ const EnhancedSettingsScreen: React.FC = () => {
           icon: 'backup-restore',
           type: 'navigation',
           onPress: () => {
-            /* 备份设置 */
-          },
+            // 备份设置
+          }
         },
         {
           id: 'clear',
@@ -345,9 +345,9 @@ const EnhancedSettingsScreen: React.FC = () => {
           subtitle: '清理应用缓存数据',
           icon: 'delete-sweep',
           type: 'action',
-          onPress: () => handleClearCache(),
-        },
-      ],
+          onPress: () => handleClearCache()
+        }
+      ]
     },
     {
       id: 'support',
@@ -359,7 +359,7 @@ const EnhancedSettingsScreen: React.FC = () => {
           subtitle: '常见问题与使用指南',
           icon: 'help-circle',
           type: 'navigation',
-          onPress: () => navigation.navigate('Help' as never),
+          onPress: () => navigation.navigate('Help' as never)
         },
         {
           id: 'feedback',
@@ -367,7 +367,7 @@ const EnhancedSettingsScreen: React.FC = () => {
           subtitle: '提交建议或问题反馈',
           icon: 'message-text',
           type: 'navigation',
-          onPress: () => navigation.navigate('Feedback' as never),
+          onPress: () => navigation.navigate('Feedback' as never)
         },
         {
           id: 'contact',
@@ -375,7 +375,7 @@ const EnhancedSettingsScreen: React.FC = () => {
           subtitle: '在线客服支持',
           icon: 'headset',
           type: 'action',
-          onPress: () => handleContactSupport(),
+          onPress: () => handleContactSupport()
         },
         {
           id: 'share',
@@ -383,9 +383,9 @@ const EnhancedSettingsScreen: React.FC = () => {
           subtitle: '推荐给朋友',
           icon: 'share',
           type: 'action',
-          onPress: () => handleShareApp(),
-        },
-      ],
+          onPress: () => handleShareApp()
+        }
+      ]
     },
     {
       id: 'about',
@@ -398,8 +398,8 @@ const EnhancedSettingsScreen: React.FC = () => {
           icon: 'information',
           type: 'navigation',
           onPress: () => {
-            /* 版本信息 */
-          },
+            // 版本信息
+          }
         },
         {
           id: 'terms',
@@ -407,7 +407,7 @@ const EnhancedSettingsScreen: React.FC = () => {
           subtitle: '用户协议与隐私政策',
           icon: 'file-document',
           type: 'navigation',
-          onPress: () => navigation.navigate('Terms' as never),
+          onPress: () => navigation.navigate('Terms' as never)
         },
         {
           id: 'licenses',
@@ -415,10 +415,10 @@ const EnhancedSettingsScreen: React.FC = () => {
           subtitle: '第三方库许可信息',
           icon: 'license',
           type: 'navigation',
-          onPress: () => navigation.navigate('Licenses' as never),
-        },
-      ],
-    },
+          onPress: () => navigation.navigate('Licenses' as never)
+        }
+      ]
+    }
   ];
 
   // 渲染设置项
@@ -434,7 +434,7 @@ const EnhancedSettingsScreen: React.FC = () => {
           <View;
             style={[
               styles.iconContainer,
-              item.color && { backgroundColor: item.color + '20' },
+              item.color && { backgroundColor: item.color + '20' }
             ]}
           >
             <Icon;
@@ -454,7 +454,7 @@ const EnhancedSettingsScreen: React.FC = () => {
                 <View;
                   style={[
                     styles.badge,
-                    { backgroundColor: item.color || colors.primary },
+                    { backgroundColor: item.color || colors.primary }
                   ]}
                 >
                   <Text style={styles.badgeText}>{item.badge}</Text>
@@ -465,7 +465,7 @@ const EnhancedSettingsScreen: React.FC = () => {
               <Text;
                 style={[
                   styles.itemSubtitle,
-                  item.disabled && styles.disabledText,
+                  item.disabled && styles.disabledText
                 ]}
               >
                 {item.subtitle}
@@ -481,7 +481,7 @@ const EnhancedSettingsScreen: React.FC = () => {
               onValueChange={item.onValueChange}
               trackColor={
                 false: colors.gray300,
-                true: colors.primary + '40',
+                true: colors.primary + '40'
               }}
               thumbColor={item.value ? colors.primary : colors.gray400}
               disabled={item.disabled}
@@ -531,7 +531,7 @@ const EnhancedSettingsScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* 头部 */}
+      {// 头部}
       <View style={styles.header}>
         <TouchableOpacity;
           style={styles.backButton}
@@ -544,18 +544,18 @@ const EnhancedSettingsScreen: React.FC = () => {
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {/* 用户信息卡片 */}
+        {// 用户信息卡片}
         {renderUserCard()}
 
-        {/* 设置分组 */}
+        {// 设置分组}
         {settingSections.map(renderSettingSection)}
 
-        {/* 退出登录按钮 */}
+        {// 退出登录按钮}
         <View style={styles.logoutContainer}>
           <Button title="退出登录" onPress={handleLogout} />
         </View>
 
-        {/* 底部间距 */}
+        {// 底部间距}
         <View style={styles.bottomSpacing} />
       </ScrollView>
     </SafeAreaView>
@@ -565,7 +565,7 @@ const EnhancedSettingsScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {,
   flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: colors.background
   },
   header: {,
   flexDirection: 'row',
@@ -575,7 +575,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
     backgroundColor: colors.surface,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: colors.border
   },
   backButton: {,
   width: 40,
@@ -583,18 +583,18 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: colors.gray100,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   headerTitle: {,
   fontSize: typography.fontSize.lg,
     fontWeight: '600' as const,
-    color: colors.text,
+    color: colors.text
   },
   placeholder: {,
-  width: 40,
+  width: 40
   },
   content: {,
-  flex: 1,
+  flex: 1
   },
   userCard: {,
   flexDirection: 'row',
@@ -603,7 +603,7 @@ const styles = StyleSheet.create({
     margin: spacing.lg,
     padding: spacing.lg,
     borderRadius: borderRadius.lg,
-    ...shadows.sm,
+    ...shadows.sm
   },
   userAvatar: {,
   width: 60,
@@ -611,32 +611,32 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     backgroundColor: colors.primary,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   userInfo: {,
   flex: 1,
-    marginLeft: spacing.md,
+    marginLeft: spacing.md
   },
   userName: {,
   fontSize: typography.fontSize.lg,
     fontWeight: '600' as const,
     color: colors.text,
-    marginBottom: spacing.xs,
+    marginBottom: spacing.xs
   },
   userEmail: {,
   fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
-    marginBottom: spacing.xs,
+    marginBottom: spacing.xs
   },
   membershipBadge: {,
   flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   membershipText: {,
   fontSize: typography.fontSize.xs,
     color: colors.warning,
     marginLeft: spacing.xs,
-    fontWeight: '600' as const,
+    fontWeight: '600' as const
   },
   editButton: {,
   width: 36,
@@ -644,10 +644,10 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     backgroundColor: colors.gray100,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   section: {,
-  marginBottom: spacing.lg,
+  marginBottom: spacing.lg
   },
   sectionTitle: {,
   fontSize: typography.fontSize.sm,
@@ -655,13 +655,13 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     marginHorizontal: spacing.lg,
     marginBottom: spacing.sm,
-    textTransform: 'uppercase',
+    textTransform: 'uppercase'
   },
   sectionContent: {,
   backgroundColor: colors.surface,
     marginHorizontal: spacing.lg,
     borderRadius: borderRadius.lg,
-    ...shadows.sm,
+    ...shadows.sm
   },
   settingItem: {,
   flexDirection: 'row',
@@ -670,15 +670,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: colors.border
   },
   disabledItem: {,
-  opacity: 0.5,
+  opacity: 0.5
   },
   itemLeft: {,
   flexDirection: 'row',
     alignItems: 'center',
-    flex: 1,
+    flex: 1
   },
   iconContainer: {,
   width: 36,
@@ -687,50 +687,50 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary + '20',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: spacing.md,
+    marginRight: spacing.md
   },
   itemContent: {,
-  flex: 1,
+  flex: 1
   },
   titleRow: {,
   flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   itemTitle: {,
   fontSize: typography.fontSize.base,
     fontWeight: '500' as const,
     color: colors.text,
-    flex: 1,
+    flex: 1
   },
   itemSubtitle: {,
   fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
-    marginTop: 2,
+    marginTop: 2
   },
   disabledText: {,
-  color: colors.textSecondary,
+  color: colors.textSecondary
   },
   badge: {,
   paddingHorizontal: spacing.xs,
     paddingVertical: 2,
     borderRadius: borderRadius.sm,
-    marginLeft: spacing.sm,
+    marginLeft: spacing.sm
   },
   badgeText: {,
   fontSize: typography.fontSize.xs,
     color: colors.white,
-    fontWeight: '600' as const,
+    fontWeight: '600' as const
   },
   itemRight: {,
-  marginLeft: spacing.md,
+  marginLeft: spacing.md
   },
   logoutContainer: {,
-  margin: spacing.lg,
+  margin: spacing.lg
   },
   bottomSpacing: {,
-  height: spacing.xl,
-  },
+  height: spacing.xl
+  }
 });
 
 export default EnhancedSettingsScreen;

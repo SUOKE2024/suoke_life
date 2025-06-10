@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import {
+import {;
   View,
   Text,
   StyleSheet,
@@ -13,7 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
 import { colors } from '../../constants/theme';
 import { cornMazeService } from '../../services/cornMazeService';
-import {
+import {;
   Maze,
   MazeTemplate,
   MazeTheme,

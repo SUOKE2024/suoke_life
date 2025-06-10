@@ -44,7 +44,7 @@ barStyle={isDark ? light-content" : "dark-content}
 style={styles.iconButton}
               onPress={onLeftPress};
               activeOpacity={0.7}
-            accessibilityLabel="TODO: 添加无障碍标签" />/              <Iconname={leftIcon || (showBackButton ? "arrow-left" : menu")}"
+            accessibilityLabel="输入框左侧图标" />/              <Iconname={leftIcon || (showBackButton ? "arrow-left" : menu")}"
                 size={24}
                 color={isDark ? colors.white: textColor} />/            </TouchableOpacity>/              )}
         </View>/
@@ -68,7 +68,7 @@ style={[
 style={styles.iconButton}
                 onPress={onRightPress}
                 activeOpacity={0.7}
-              accessibilityLabel="TODO: 添加无障碍标签" />/                    <Iconname={rightIcon || "dots-vertical}"
+              accessibilityLabel="输入框右侧图标" />/                    <Iconname={rightIcon || "dots-vertical}"
                   size={24}
                   color={isDark ? colors.white: textColor} />/              </TouchableOpacity>/                )
           )}

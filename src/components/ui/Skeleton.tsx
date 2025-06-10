@@ -21,7 +21,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
   animation = 'pulse',
   style,
   children,
-  testID,
+  testID
 }) => {
   const { currentTheme } = useTheme();
   const animatedValue = useRef(new Animated.Value(0)).current;
@@ -35,19 +35,19 @@ export const Skeleton: React.FC<SkeletonProps> = ({
           Animated.timing(animatedValue, {
             toValue: 1,
             duration: 1000,
-            useNativeDriver: true,
+            useNativeDriver: true
           }),
           Animated.timing(animatedValue, {
             toValue: 0,
             duration: 1000,
-            useNativeDriver: true,
-          }),
+            useNativeDriver: true
+          })
         ]);
       } else if (animation === 'wave') {
         return Animated.timing(animatedValue, {
           toValue: 1,
           duration: 1500,
-          useNativeDriver: true,
+          useNativeDriver: true
         });
       }
       return null;
@@ -72,20 +72,20 @@ export const Skeleton: React.FC<SkeletonProps> = ({
         return {
           width: size as number,
           height: size as number,
-          borderRadius: (size as number) / 2,
+          borderRadius: (size as number) / 2
         };
       case 'rectangular':
         return {
           width: width as any,
           height: height as any,
-          borderRadius: borderRadius || 4,
+          borderRadius: borderRadius || 4
         };
       case 'text':
       default:
         return {,
   width: width as any,
           height: baseHeight,
-          borderRadius: borderRadius || baseHeight / 2,
+          borderRadius: borderRadius || baseHeight / 2
         };
     }
   };
@@ -96,7 +96,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
     if (animation === 'pulse') {
       const opacity = animatedValue.interpolate({
         inputRange: [0, 1],
-        outputRange: [0.3, 0.7],
+        outputRange: [0.3, 0.7]
       });
       return { opacity };
     }
@@ -104,7 +104,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
     if (animation === 'wave') {
       const translateX = animatedValue.interpolate({
         inputRange: [0, 1],
-        outputRange: [-100, 100],
+        outputRange: [-100, 100]
       });
       return { transform: [{ translateX }] };
     }
@@ -118,7 +118,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
   const styles = StyleSheet.create({
     skeleton: {,
   backgroundColor: currentTheme.colors.outline,
-      overflow: 'hidden',
+      overflow: 'hidden'
     },
     wave: {,
   position: 'absolute',
@@ -127,8 +127,8 @@ export const Skeleton: React.FC<SkeletonProps> = ({
       right: 0,
       bottom: 0,
       backgroundColor: currentTheme.colors.surface,
-      opacity: 0.5,
-    },
+      opacity: 0.5
+    }
   });
 
   if (children) {
@@ -153,9 +153,9 @@ export const Skeleton: React.FC<SkeletonProps> = ({
               left: 0,
               right: 0,
               bottom: 0,
-              backgroundColor: currentTheme.colors.surface,
+              backgroundColor: currentTheme.colors.surface
             },
-            animationStyle,
+            animationStyle
           ]}
         />
       )}
@@ -164,15 +164,15 @@ export const Skeleton: React.FC<SkeletonProps> = ({
 };
 
 // 预设的骨架屏组件
-export const SkeletonText: React.FC<Omit<SkeletonProps, 'variant'>> = (
+export const SkeletonText: React.FC<Omit<SkeletonProps, 'variant'>> = (;
   props;
 ) => <Skeleton {...props} variant="text" />;
 
-export const SkeletonCircle: React.FC<Omit<SkeletonProps, 'variant'>> = (
+export const SkeletonCircle: React.FC<Omit<SkeletonProps, 'variant'>> = (;
   props;
 ) => <Skeleton {...props} variant="circular" />;
 
-export const SkeletonRectangle: React.FC<Omit<SkeletonProps, 'variant'>> = (
+export const SkeletonRectangle: React.FC<Omit<SkeletonProps, 'variant'>> = (;
   props;
 ) => <Skeleton {...props} variant="rectangular" />;
 
@@ -194,7 +194,7 @@ export const SkeletonList: React.FC<SkeletonListProps> = ({
   showAvatar = true,
   showTitle = true,
   showSubtitle = true,
-  style,
+  style
 }) => {
   const items = Array.from({ length: count }, (_, index) => (
     <View;
@@ -203,7 +203,7 @@ export const SkeletonList: React.FC<SkeletonListProps> = ({
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: index < count - 1 ? spacing : 0,
-        height: itemHeight,
+        height: itemHeight
       }}
     >
       {showAvatar && (

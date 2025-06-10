@@ -44,7 +44,7 @@ export const Badge: React.FC<BadgeProps> = ({
   badgeStyle,
   badgeTextStyle,
   accessible = true,
-  testID,
+  testID
 }) => {
   const { currentTheme } = useTheme();
 
@@ -78,37 +78,37 @@ export const Badge: React.FC<BadgeProps> = ({
       case 'primary':
         return {
           backgroundColor: currentTheme.colors.primary,
-          color: currentTheme.colors.onPrimary,
+          color: currentTheme.colors.onPrimary
         };
       case 'secondary':
         return {
           backgroundColor: currentTheme.colors.secondary,
-          color: currentTheme.colors.onSecondary,
+          color: currentTheme.colors.onSecondary
         };
       case 'success':
         return {
           backgroundColor: '#4CAF50',
-          color: '#ffffff',
+          color: '#ffffff'
         };
       case 'warning':
         return {
           backgroundColor: '#FF9800',
-          color: '#ffffff',
+          color: '#ffffff'
         };
       case 'error':
         return {
           backgroundColor: currentTheme.colors.error,
-          color: '#ffffff',
+          color: '#ffffff'
         };
       case 'info':
         return {
           backgroundColor: '#2196F3',
-          color: '#ffffff',
+          color: '#ffffff'
         };
       default:
         return {,
   backgroundColor: currentTheme.colors.outline,
-          color: currentTheme.colors.onSurface,
+          color: currentTheme.colors.onSurface
         };
     }
   };
@@ -122,7 +122,7 @@ export const Badge: React.FC<BadgeProps> = ({
           height: dot ? 6 : 16,
           borderRadius: dot ? 3 : 8,
           fontSize: 10,
-          paddingHorizontal: dot ? 0 : 4,
+          paddingHorizontal: dot ? 0 : 4
         };
       case 'large':
         return {
@@ -130,7 +130,7 @@ export const Badge: React.FC<BadgeProps> = ({
           height: dot ? 10 : 24,
           borderRadius: dot ? 5 : 12,
           fontSize: 14,
-          paddingHorizontal: dot ? 0 : 8,
+          paddingHorizontal: dot ? 0 : 8
         };
       default: // medium;
         return {
@@ -138,7 +138,7 @@ export const Badge: React.FC<BadgeProps> = ({
           height: dot ? 8 : 20,
           borderRadius: dot ? 4 : 10,
           fontSize: 12,
-          paddingHorizontal: dot ? 0 : 6,
+          paddingHorizontal: dot ? 0 : 6
         };
     }
   };
@@ -153,28 +153,28 @@ export const Badge: React.FC<BadgeProps> = ({
           position: 'absolute' as const,
           top: offsetY,
           left: offsetX,
-          zIndex: 1,
+          zIndex: 1
         };
       case 'bottom-right':
         return {
           position: 'absolute' as const,
           bottom: offsetY,
           right: offsetX,
-          zIndex: 1,
+          zIndex: 1
         };
       case 'bottom-left':
         return {
           position: 'absolute' as const,
           bottom: offsetY,
           left: offsetX,
-          zIndex: 1,
+          zIndex: 1
         };
       default: // top-right;
         return {
           position: 'absolute' as const,
           top: offsetY,
           right: offsetX,
-          zIndex: 1,
+          zIndex: 1
         };
     }
   };
@@ -185,7 +185,7 @@ export const Badge: React.FC<BadgeProps> = ({
 
   const styles = StyleSheet.create({
     container: {,
-  position: 'relative',
+  position: 'relative'
     },
     badge: {
       ...positionStyle,
@@ -197,19 +197,19 @@ export const Badge: React.FC<BadgeProps> = ({
       justifyContent: 'center',
       alignItems: 'center',
       borderWidth: 2,
-      borderColor: currentTheme.colors.surface,
+      borderColor: currentTheme.colors.surface
     },
     badgeText: {,
   color: variantColors.color,
       fontSize: sizeConfig.fontSize,
       fontWeight: '600',
       textAlign: 'center',
-      lineHeight: sizeConfig.fontSize + 2,
+      lineHeight: sizeConfig.fontSize + 2
     },
     standalone: {,
   position: 'relative',
-      alignSelf: 'flex-start',
-    },
+      alignSelf: 'flex-start'
+    }
   });
 
   // 如果没有子元素，返回独立的徽章
@@ -221,7 +221,7 @@ export const Badge: React.FC<BadgeProps> = ({
             style={[
               styles.badge,
               { position: 'relative', top: 0, right: 0, left: 0, bottom: 0 },
-              badgeStyle,
+              badgeStyle
             ]}
             accessible={accessible}
             accessibilityRole="text"

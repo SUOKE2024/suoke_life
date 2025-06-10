@@ -3,14 +3,14 @@ import { createEnhancedLazyComponent } from '../components/common/EnhancedLazyCo
 // 路由优化配置 - 索克生活APP - 性能优化
 // 使用增强的懒加载组件配置
 // 主要屏幕
-export const LazyHomeScreen = createEnhancedLazyComponent() => import('../screens/main/HomeScreen'),
+export const LazyHomeScreen = createEnhancedLazyComponent() => import('../screens/main/HomeScreen'),;
   {
       loadingType: "skeleton",
       skeletonType: 'chat',
     preload: true,
     retryCount: 3}
 );
-export const LazyProfileScreen = createEnhancedLazyComponent() => import('../screens/profile/ProfileScreen'),
+export const LazyProfileScreen = createEnhancedLazyComponent() => import('../screens/profile/ProfileScreen'),;
   {
       loadingType: "skeleton",
       skeletonType: 'profile',
@@ -18,41 +18,41 @@ export const LazyProfileScreen = createEnhancedLazyComponent() => import('../scr
     retryCount: 2}
 );
 // 认证屏幕
-export const LazyLoginScreen = createEnhancedLazyComponent() => import('../screens/auth/LoginScreen'),
+export const LazyLoginScreen = createEnhancedLazyComponent() => import('../screens/auth/LoginScreen'),;
   {
       loadingType: "spinner",
       preload: false,
     retryCount: 2}
 );
-export const LazyRegisterScreen = createEnhancedLazyComponent() => import('../screens/auth/RegisterScreen'),
+export const LazyRegisterScreen = createEnhancedLazyComponent() => import('../screens/auth/RegisterScreen'),;
   {
       loadingType: "spinner",
       preload: false,
     retryCount: 2}
 );
 // 功能屏幕
-export const LazyDiagnosisScreen = createEnhancedLazyComponent() => import('../screens/diagnosis/FiveDiagnosisScreen'),
+export const LazyDiagnosisScreen = createEnhancedLazyComponent() => import('../screens/diagnosis/FiveDiagnosisScreen'),;
   {
       loadingType: "skeleton",
       skeletonType: 'list',
     preload: false,
     retryCount: 2}
 );
-export const LazyLifeScreen = createEnhancedLazyComponent() => import('../screens/life/LifeScreen'),
+export const LazyLifeScreen = createEnhancedLazyComponent() => import('../screens/life/LifeScreen'),;
   {
       loadingType: "skeleton",
       skeletonType: 'card',
     preload: false,
     retryCount: 2}
 );
-export const LazyExploreScreen = createEnhancedLazyComponent() => import('../screens/explore/ExploreScreen'),
+export const LazyExploreScreen = createEnhancedLazyComponent() => import('../screens/explore/ExploreScreen'),;
   {
       loadingType: "skeleton",
       skeletonType: 'card',
     preload: false,
     retryCount: 2}
 );
-export const LazySuokeScreen = createEnhancedLazyComponent() => import('../screens/suoke/SuokeScreen'),
+export const LazySuokeScreen = createEnhancedLazyComponent() => import('../screens/suoke/SuokeScreen'),;
   {
       loadingType: "skeleton",
       skeletonType: 'list',

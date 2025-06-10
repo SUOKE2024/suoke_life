@@ -1,12 +1,12 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
-import {
+import {;
   ScrollView,
   StyleSheet,
   Text,
   TextStyle,
   TouchableOpacity,
   View,
-  ViewStyle,
+  ViewStyle
 } from 'react-native';
 
 interface ErrorBoundaryProps {
@@ -36,21 +36,21 @@ export class ErrorBoundary extends Component<
     this.state = {
       hasError: false,
       error: null,
-      errorInfo: null,
+      errorInfo: null
     };
   }
 
   static getDerivedStateFromError(error: Error): Partial<ErrorBoundaryState> {
     return {
       hasError: true,
-      error,
+      error
     };
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     this.setState({
       error,
-      errorInfo,
+      errorInfo
     });
 
     // 调用错误回调
@@ -67,7 +67,7 @@ export class ErrorBoundary extends Component<
     this.setState({
       hasError: false,
       error: null,
-      errorInfo: null,
+      errorInfo: null
     });
   };
 
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8f9fa',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
+    padding: 20
   },
   content: {,
   backgroundColor: '#ffffff',
@@ -147,64 +147,64 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {,
   width: 0,
-      height: 2,
+      height: 2
     },
     shadowOpacity: 0.1,
     shadowRadius: 8,
-    elevation: 4,
+    elevation: 4
   },
   title: {,
   fontSize: 24,
     fontWeight: '600',
     color: '#1a1a1a',
     textAlign: 'center',
-    marginBottom: 12,
+    marginBottom: 12
   },
   message: {,
   fontSize: 16,
     color: '#666666',
     textAlign: 'center',
     lineHeight: 24,
-    marginBottom: 24,
+    marginBottom: 24
   },
   detailsContainer: {,
   backgroundColor: '#f5f5f5',
     borderRadius: 8,
     padding: 12,
     marginBottom: 24,
-    maxHeight: 200,
+    maxHeight: 200
   },
   detailsTitle: {,
   fontSize: 14,
     fontWeight: '600',
     color: '#333333',
     marginBottom: 8,
-    marginTop: 12,
+    marginTop: 12
   },
   errorText: {,
   fontSize: 12,
     color: '#d32f2f',
     fontFamily: 'monospace',
-    lineHeight: 16,
+    lineHeight: 16
   },
   stackText: {,
   fontSize: 11,
     color: '#666666',
     fontFamily: 'monospace',
-    lineHeight: 14,
+    lineHeight: 14
   },
   retryButton: {,
   backgroundColor: '#2196f3',
     borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 24,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   retryButtonText: {,
   color: '#ffffff',
     fontSize: 16,
-    fontWeight: '600',
-  },
+    fontWeight: '600'
+  }
 });
 
 // 高阶组件版本

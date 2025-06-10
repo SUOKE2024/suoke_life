@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from 'react';
-import {
+import {;
   Animated,
   Dimensions,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
@@ -72,7 +72,7 @@ export const Notification: React.FC<NotificationProps> = ({
   visible = true,
   animationType = 'slide',
   backdrop = false,
-  maxWidth = screenWidth - 32,
+  maxWidth = screenWidth - 32
 }) => {
   const { currentTheme } = useTheme();
   const styles = createStyles(currentTheme, type, position);
@@ -104,7 +104,7 @@ export const Notification: React.FC<NotificationProps> = ({
           toValue: 0,
           useNativeDriver: true,
           tension: 100,
-          friction: 8,
+          friction: 8
         })
       );
     }
@@ -114,7 +114,7 @@ export const Notification: React.FC<NotificationProps> = ({
         Animated.timing(opacity, {
           toValue: 1,
           duration: 300,
-          useNativeDriver: true,
+          useNativeDriver: true
         })
       );
     }
@@ -125,7 +125,7 @@ export const Notification: React.FC<NotificationProps> = ({
           toValue: 1,
           useNativeDriver: true,
           tension: 100,
-          friction: 8,
+          friction: 8
         })
       );
     }
@@ -142,7 +142,7 @@ export const Notification: React.FC<NotificationProps> = ({
         Animated.timing(translateY, {
           toValue: getInitialTranslateY(),
           duration: 250,
-          useNativeDriver: true,
+          useNativeDriver: true
         })
       );
     }
@@ -152,7 +152,7 @@ export const Notification: React.FC<NotificationProps> = ({
         Animated.timing(opacity, {
           toValue: 0,
           duration: 250,
-          useNativeDriver: true,
+          useNativeDriver: true
         })
       );
     }
@@ -162,7 +162,7 @@ export const Notification: React.FC<NotificationProps> = ({
         Animated.timing(scale, {
           toValue: 0.8,
           duration: 250,
-          useNativeDriver: true,
+          useNativeDriver: true
         })
       );
     }
@@ -188,7 +188,7 @@ export const Notification: React.FC<NotificationProps> = ({
       info: 'ℹ️',
       success: '✅',
       warning: '⚠️',
-      error: '❌',
+      error: '❌'
     };
 
     return <Text style={styles.defaultIcon}>{iconMap[type]}</Text>;
@@ -228,14 +228,14 @@ export const Notification: React.FC<NotificationProps> = ({
             key={index}
             style={[
               styles.actionButton,
-              action.style === 'primary' && styles.primaryActionButton,
+              action.style === 'primary' && styles.primaryActionButton
             ]}
             onPress={action.onPress}
           >
             <Text;
               style={[
                 styles.actionButtonText,
-                action.style === 'primary' && styles.primaryActionButtonText,
+                action.style === 'primary' && styles.primaryActionButtonText
               ]}
             >
               {action.label}
@@ -286,7 +286,7 @@ export const Notification: React.FC<NotificationProps> = ({
     const animatedStyle = {
       opacity:
         animationType === 'fade' || animationType === 'scale' ? opacity : 1,
-      transform: transforms,
+      transform: transforms
     };
 
     return (
@@ -319,7 +319,7 @@ const createStyles = (theme: any, type: string, position: string) => {
             theme.colors.successContainer || theme.colors.primaryContainer,
           border: theme.colors.success,
           text:
-            theme.colors.onSuccessContainer || theme.colors.onPrimaryContainer,
+            theme.colors.onSuccessContainer || theme.colors.onPrimaryContainer
         };
       case 'warning':
         return {
@@ -327,19 +327,19 @@ const createStyles = (theme: any, type: string, position: string) => {
             theme.colors.warningContainer || theme.colors.primaryContainer,
           border: theme.colors.warning,
           text:
-            theme.colors.onWarningContainer || theme.colors.onPrimaryContainer,
+            theme.colors.onWarningContainer || theme.colors.onPrimaryContainer
         };
       case 'error':
         return {
           background: theme.colors.errorContainer,
           border: theme.colors.error,
-          text: theme.colors.onErrorContainer,
+          text: theme.colors.onErrorContainer
         };
       default:
         return {,
   background: theme.colors.surfaceVariant,
           border: theme.colors.primary,
-          text: theme.colors.onSurfaceVariant,
+          text: theme.colors.onSurfaceVariant
         };
     }
   };
@@ -364,15 +364,15 @@ const createStyles = (theme: any, type: string, position: string) => {
       paddingBottom: position === 'bottom' ? 50 : 0,
       paddingHorizontal: theme.spacing.md,
       pointerEvents: 'box-none',
-      zIndex: 1000,
+      zIndex: 1000
     },
     backdropOverlay: {,
   backgroundColor: 'rgba(0, 0, 0, 0.3)',
-      pointerEvents: 'auto',
+      pointerEvents: 'auto'
     },
     wrapper: {,
   width: '100%',
-      alignItems: 'center',
+      alignItems: 'center'
     },
     container: {,
   backgroundColor: colors.background,
@@ -382,51 +382,51 @@ const createStyles = (theme: any, type: string, position: string) => {
       shadowColor: theme.colors.shadow,
       shadowOffset: {,
   width: 0,
-        height: 4,
+        height: 4
       },
       shadowOpacity: 0.15,
       shadowRadius: 8,
-      elevation: 8,
+      elevation: 8
     },
     content: {,
   flexDirection: 'row',
       alignItems: 'flex-start',
-      padding: theme.spacing.md,
+      padding: theme.spacing.md
     },
     iconContainer: {,
   marginRight: theme.spacing.sm,
-      paddingTop: theme.spacing.xs,
+      paddingTop: theme.spacing.xs
     },
     defaultIcon: {,
-  fontSize: 20,
+  fontSize: 20
     },
     textContainer: {,
-  flex: 1,
+  flex: 1
     },
     title: {,
   fontSize: theme.typography.fontSize.base,
       fontWeight: theme.typography.fontWeight.semibold,
       color: colors.text,
-      marginBottom: theme.spacing.xs,
+      marginBottom: theme.spacing.xs
     },
     message: {,
   fontSize: theme.typography.fontSize.sm,
       color: colors.text,
-      lineHeight: theme.typography.fontSize.sm * 1.4,
+      lineHeight: theme.typography.fontSize.sm * 1.4
     },
     closeButton: {,
   padding: theme.spacing.xs,
-      marginLeft: theme.spacing.sm,
+      marginLeft: theme.spacing.sm
     },
     closeButtonText: {,
   fontSize: 20,
       color: colors.text,
-      fontWeight: theme.typography.fontWeight.bold,
+      fontWeight: theme.typography.fontWeight.bold
     },
     actionsContainer: {,
   flexDirection: 'row',
       marginTop: theme.spacing.sm,
-      gap: theme.spacing.sm,
+      gap: theme.spacing.sm
     },
     actionButton: {,
   paddingHorizontal: theme.spacing.md,
@@ -434,20 +434,20 @@ const createStyles = (theme: any, type: string, position: string) => {
       borderRadius: theme.borderRadius.md,
       backgroundColor: theme.colors.surface,
       borderWidth: 1,
-      borderColor: colors.border,
+      borderColor: colors.border
     },
     primaryActionButton: {,
   backgroundColor: colors.border,
-      borderColor: colors.border,
+      borderColor: colors.border
     },
     actionButtonText: {,
   fontSize: theme.typography.fontSize.sm,
       color: colors.text,
-      fontWeight: theme.typography.fontWeight.medium,
+      fontWeight: theme.typography.fontWeight.medium
     },
     primaryActionButtonText: {,
-  color: theme.colors.onPrimary,
-    },
+  color: theme.colors.onPrimary
+    }
   });
 };
 

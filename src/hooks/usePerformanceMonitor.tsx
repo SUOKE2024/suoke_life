@@ -19,7 +19,7 @@ interface UsePerformanceMonitorReturn {
   clearMetrics: () => void;,
   averageRenderTime: number;
 }
-export const usePerformanceMonitor = ()
+export const usePerformanceMonitor = ();
   componentName: string,
   config: PerformanceConfig = {},
 ): UsePerformanceMonitorReturn => {
@@ -114,7 +114,7 @@ export const usePerformanceMonitor = ()
     averageRenderTime};
 };
 // 高阶组件版本
-export const withPerformanceMonitor = <P extends object>()
+export const withPerformanceMonitor = <P extends object>();
   WrappedComponent: React.ComponentType<P>,
   componentName: string,
   config: PerformanceConfig = {},

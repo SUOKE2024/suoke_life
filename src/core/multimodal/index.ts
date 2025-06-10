@@ -152,8 +152,7 @@ export const examples = {/**
       gender: "female",
       consultationDate: 2024-01-15""
     } */
-  } as MultimodalQuery, *///
-*///
+  } as MultimodalQuery;
   /**
 * * 体质辨识查询示例
   constitutionQuery: {,

@@ -3,7 +3,7 @@ export enum CachePriority {
   LOW = 1,
   MEDIUM = 2,
   HIGH = 3,
-  CRITICAL = 4,
+  CRITICAL = 4
 }
 // 缓存元数据接口;
 export interface CacheMetadata {

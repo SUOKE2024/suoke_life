@@ -1,11 +1,11 @@
 import React, { useMemo, useState } from 'react';
-import {
+import {;
   StyleSheet,
   Text,
   TextStyle,
   TouchableOpacity,
   View,
-  ViewStyle,
+  ViewStyle
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
@@ -61,7 +61,7 @@ export const Calendar: React.FC<CalendarProps> = ({
   disabledDayTextStyle,
   todayTextStyle,
   accessible = true,
-  testID,
+  testID
 }) => {
   const { currentTheme } = useTheme();
 
@@ -73,7 +73,7 @@ export const Calendar: React.FC<CalendarProps> = ({
         initialDate.getMonth(),
         1;
       ),
-      selectedDates: value ? [value] : defaultValue ? [defaultValue] : [],
+      selectedDates: value ? [value] : defaultValue ? [defaultValue] : []
     };
   });
 
@@ -224,45 +224,45 @@ export const Calendar: React.FC<CalendarProps> = ({
     container: {,
   backgroundColor: currentTheme.colors.surface,
       borderRadius: 8,
-      padding: 16,
+      padding: 16
     },
     header: {,
   flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      marginBottom: 16,
+      marginBottom: 16
     },
     headerButton: {,
   padding: 8,
-      borderRadius: 4,
+      borderRadius: 4
     },
     headerButtonText: {,
   fontSize: 18,
       fontWeight: 'bold',
-      color: currentTheme.colors.primary,
+      color: currentTheme.colors.primary
     },
     headerTitle: {,
   fontSize: 18,
       fontWeight: '600',
-      color: currentTheme.colors.onSurface,
+      color: currentTheme.colors.onSurface
     },
     weekHeader: {,
   flexDirection: 'row',
-      marginBottom: 8,
+      marginBottom: 8
     },
     weekDay: {,
   flex: 1,
       alignItems: 'center',
-      paddingVertical: 8,
+      paddingVertical: 8
     },
     weekDayText: {,
   fontSize: 12,
       fontWeight: '600',
-      color: currentTheme.colors.onSurfaceVariant,
+      color: currentTheme.colors.onSurfaceVariant
     },
     daysContainer: {,
   flexDirection: 'row',
-      flexWrap: 'wrap',
+      flexWrap: 'wrap'
     },
     dayButton: {,
   width: '14.28%', // 100% / 7 days;
@@ -270,41 +270,41 @@ export const Calendar: React.FC<CalendarProps> = ({
       justifyContent: 'center',
       alignItems: 'center',
       borderRadius: 4,
-      margin: 1,
+      margin: 1
     },
     dayText: {,
   fontSize: 14,
-      color: currentTheme.colors.onSurface,
+      color: currentTheme.colors.onSurface
     },
     otherMonthDay: {,
-  opacity: 0.3,
+  opacity: 0.3
     },
     selectedDay: {,
-  backgroundColor: currentTheme.colors.primary,
+  backgroundColor: currentTheme.colors.primary
     },
     selectedDayText: {,
   color: currentTheme.colors.onPrimary,
-      fontWeight: '600',
+      fontWeight: '600'
     },
     todayDay: {,
   borderWidth: 2,
-      borderColor: currentTheme.colors.primary,
+      borderColor: currentTheme.colors.primary
     },
     todayText: {,
   color: currentTheme.colors.primary,
-      fontWeight: '600',
+      fontWeight: '600'
     },
     disabledDay: {,
-  opacity: 0.3,
+  opacity: 0.3
     },
     disabledDayText: {,
-  color: currentTheme.colors.onSurfaceVariant,
-    },
+  color: currentTheme.colors.onSurfaceVariant
+    }
   });
 
   return (
     <View style={[styles.container, style]} testID={testID}>
-      {/* 头部 */}
+      {// 头部}
       <View style={[styles.header, headerStyle]}>
         <TouchableOpacity;
           style={styles.headerButton}
@@ -331,7 +331,7 @@ export const Calendar: React.FC<CalendarProps> = ({
         </TouchableOpacity>
       </View>
 
-      {/* 星期标题 */}
+      {// 星期标题}
       <View style={styles.weekHeader}>
         {weekDayNames.map(name, index) => (
           <View key={index} style={styles.weekDay}>
@@ -340,7 +340,7 @@ export const Calendar: React.FC<CalendarProps> = ({
         ))}
       </View>
 
-      {/* 日期网格 */}
+      {// 日期网格}
       <View style={styles.daysContainer}>
         {monthDays.map(date, index) => {
           const selected = isDateSelected(date);
@@ -359,7 +359,7 @@ export const Calendar: React.FC<CalendarProps> = ({
                 today && styles.todayDay,
                 today && todayStyle,
                 disabled && styles.disabledDay,
-                disabled && disabledDayStyle,
+                disabled && disabledDayStyle
               ]}
               onPress={() => handleDatePress(date)}
               disabled={disabled}
@@ -378,7 +378,7 @@ export const Calendar: React.FC<CalendarProps> = ({
                   today && styles.todayText,
                   today && todayTextStyle,
                   disabled && styles.disabledDayText,
-                  disabled && disabledDayTextStyle,
+                  disabled && disabledDayTextStyle
                 ]}
               >
                 {date.getDate()}

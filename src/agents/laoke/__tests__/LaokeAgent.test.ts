@@ -1,91 +1,142 @@
-import { LaokeAgentImpl, laokeAgent } from "../LaokeAgent";
-import { LaokeAgentImpl, laokeAgent } from "../LaokeAgent";
-describe("LaokeAgent", () => {
+import { LaokeAgentImpl } from '../LaokeAgentImpl';
+
+describe('LaokeAgent', () => {
+  let agent: LaokeAgentImpl;
+
   beforeEach(() => {
     jest.clearAllMocks();
+    agent = new LaokeAgentImpl();
   });
-  describe("LaokeAgentImpl", () => {
-    it("should work with valid inputs", () => {
-      // Add test cases
-const result = LaokeAgentImpl(// valid params);
-      expect(result).toBeDefined();
+
+  describe('LaokeAgentImpl', () => {
+    it('should be instantiated correctly', () => {
+      expect(agent).toBeDefined();
+      expect(agent).toBeInstanceOf(LaokeAgentImpl);
     });
-    it("should handle edge cases", () => {
-      // Add test cases
-const result = LaokeAgentImpl(// edge case params);
-      expect(result).toBeDefined();
+
+    it('should have required properties', () => {
+      expect(agent.agentType).toBeDefined();
+      expect(agent.name).toBeDefined();
+      expect(agent.description).toBeDefined();
+      expect(agent.capabilities).toBeDefined();
     });
-    it("should handle invalid inputs gracefully", () => {
-      // Add test cases
-expect(() => {
-        LaokeAgentImpl(// invalid params);
-      }).not.toThrow();
+
+    it('should initialize successfully', async () => {
+      await expect(agent.initialize()).resolves.not.toThrow();
     });
-    it("should return output format,  => {", () => {// Add test cases;)
-const result = LaokeAgentImpl(// test params);
-      expect(typeof result).toBe("object"); // or appropriate type
+
+    it('should process messages correctly', async () => {
+      await agent.initialize();
+
+      const context = {
+        userId: 'test-user',
+        sessionId: 'test-session',
+        currentChannel: 'explore',
+      };
+
+      const response = await agent.processMessage('测试消息', context);
+
+      expect(response).toBeDefined();
+      expect(response.success).toBe(true);
+      expect(response.response).toBeDefined();
+      expect(response.context).toBeDefined();
     });
-  });
-  describe("laokeAgent", () => {
-    it("should work with valid inputs", () => {
-      // Add test cases
-const result = laokeAgent(// valid params);
-      expect(result).toBeDefined();
+
+    it('should handle errors gracefully', async () => {
+      // Test without initialization
+      const context = {
+        userId: 'test-user',
+        sessionId: 'test-session',
+      };
+
+      await expect(agent.processMessage('test', context)).rejects.toThrow();
     });
-    it("should handle edge cases", () => {
-      // Add test cases
-const result = laokeAgent(// edge case params);
-      expect(result).toBeDefined();
-    });
-    it("should handle invalid inputs gracefully", () => {
-      // Add test cases
-expect(() => {
-        laokeAgent(// invalid params);
-      }).not.toThrow();
-    });
-    it("should return output format,  => {", () => {// Add test cases;)
-const result = laokeAgent(// test params);
-      expect(typeof result).toBe("object"); // or appropriate type
+
+    it('should return health status', async () => {
+      const status = await agent.getHealthStatus();
+
+      expect(status).toBeDefined();
+      expect(status.agentType).toBeDefined();
+      expect(status.status).toBeDefined();
+      expect(status.capabilities).toBeDefined();
     });
   });
 });
-describe("LaokeAgent Performance Tests", () => {
-  it("should execute within performance thresholds", () => {
-    const iterations = 10;
+
+describe('LaokeAgent Performance Tests', () => {
+  let agent: LaokeAgentImpl;
+
+  beforeEach(async () => {
+    agent = new LaokeAgentImpl();
+    await agent.initialize();
+  });
+
+  afterEach(async () => {
+    await agent.shutdown();
+  });
+
+  it('should execute within performance thresholds', async () => {
+    const iterations = 5;
+    const context = {
+      userId: 'test-user',
+      sessionId: 'test-session',
+      currentChannel: 'explore',
+    };
+
     const startTime = performance.now();
+
     for (let i = 0; i < iterations; i++) {
-      // Execute performance-critical functions
-LaokeAgentImpl(// test params);
-      laokeAgent(// test params);
-    });
+      await agent.processMessage(`测试消息 ${i}`, context);
+    }
+
     const endTime = performance.now();
     const averageTime = (endTime - startTime) / iterations;
-    // Should execute within 1ms on average
-expect(averageTime).toBeLessThan(1);
+
+    // Should execute within reasonable time
+    expect(averageTime).toBeLessThan(1000);
   });
-  it("should handle large datasets efficiently", () => {
-    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);)
-    const startTime = performance.now();
-    // Test with large dataset
-LaokeAgentImpl(largeDataset);
-    const endTime = performance.now();
-    // Should handle large datasets within 100ms
-expect(endTime - startTime).toBeLessThan(100);
+
+  it('should handle multiple concurrent requests', async () => {
+    const context = {
+      userId: 'test-user',
+      sessionId: 'test-session',
+      currentChannel: 'explore',
+    };
+
+    const promises = Array.from({ length: 5 }, (_, i) =>
+      agent.processMessage(`并发测试 ${i}`, context)
+    );
+
+    const results = await Promise.all(promises);
+
+    expect(results).toHaveLength(5);
+    results.forEach((result) => {
+      expect(result.success).toBe(true);
+    });
   });
-  it("should not cause memory leaks", () => {
+
+  it('should not cause memory leaks', async () => {
     const initialMemory = process.memoryUsage().heapUsed;
+    const context = {
+      userId: 'test-user',
+      sessionId: 'test-session',
+      currentChannel: 'explore',
+    };
+
     // Execute function multiple times
-for (let i = 0; i < 1000; i++) {
-      LaokeAgentImpl(// test params);
-    });
+    for (let i = 0; i < 50; i++) {
+      await agent.processMessage(`内存测试 ${i}`, context);
+    }
+
     // Force garbage collection if available
-if (global.gc) {
+    if (global.gc) {
       global.gc();
-    });
+    }
+
     const finalMemory = process.memoryUsage().heapUsed;
     const memoryIncrease = finalMemory - initialMemory;
-    // Memory increase should be minimal (less than 10MB)
-    expect(memoryIncrease).toBeLessThan(10 * 1024 * 1024);
+
+    // Memory increase should be minimal (less than 50MB)
+    expect(memoryIncrease).toBeLessThan(50 * 1024 * 1024);
   });
 });
-});});

@@ -128,7 +128,7 @@ I18nDemo", { ";
                 styles.languageButton,
                 language === lang.code && styles.activeLanguageButton;
               ]}}
-              onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> handleLanguageChange(lang.code)}/                  disabled={loading}
+              onPress={() = accessibilityLabel="操作按钮" /> handleLanguageChange(lang.code)}/                  disabled={loading}
             >
               <Text style={[ ///  >
                 styles.languageButtonText,
@@ -143,7 +143,7 @@ key={reg.code}
                 styles.regionButton,
                 region === reg.code && styles.activeRegionButton;
               ]}}
-              onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> handleRegionChange(reg.code)}/                  disabled={loading}
+              onPress={() = accessibilityLabel="操作按钮" /> handleRegionChange(reg.code)}/                  disabled={loading}
             >
               <Text style={[ ///  >
                 styles.regionButtonText,
@@ -157,15 +157,15 @@ title="测试所有格式化"
           onPress={testAllFormatting}
           style={styles.testButton}
           disabled={loading}
-        / accessibilityLabel="TODO: 添加无障碍标签" />/      </Card>/{///    "
+        / accessibilityLabel="操作按钮" />/      </Card>/{///    "
       {///              <TouchableOpacity;
 style={styles.preferenceButton}
-            onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> handleCulturalPreferencesChange({ colorScheme: culturalPreferences.colorScheme === "light" ? dark" : "light  })}/              >
+            onPress={() = accessibilityLabel="操作按钮" /> handleCulturalPreferencesChange({ colorScheme: culturalPreferences.colorScheme === "light" ? dark" : "light  })}/              >
             <Text style={styles.preferenceButtonText}>/              主题: {culturalPreferences.colorScheme === "light" ? 浅色" : "深色}
             </Text>/          </TouchableOpacity>/
           <TouchableOpacity;
 style={styles.preferenceButton}
-            onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> handleCulturalPreferencesChange({ fontSize: culturalPreferences.fontSize === "medium" ? large" : "medium  })}/              >
+            onPress={() = accessibilityLabel="操作按钮" /> handleCulturalPreferencesChange({ fontSize: culturalPreferences.fontSize === "medium" ? large" : "medium  })}/              >
             <Text style={styles.preferenceButtonText}>/              字体: {culturalPreferences.fontSize === "medium" ? 中等" : "大号}
             </Text>/          </TouchableOpacity>/        </View>/      </Card>/
       {///              {testResults.map(result, index) => ())
@@ -178,7 +178,7 @@ title="重置设置"
           onPress={handleReset}
           style={[styles.actionButton, styles.resetButton]}
           disabled={loading}
-        / accessibilityLabel="TODO: 添加无障碍标签" />/      </View>/    {loading  && <View style={styles.loadingOverlay}>/          <ActivityIndicator size="large" color={theme.colors.primary} />/        </View>/          )}
+        / accessibilityLabel="操作按钮" />/      </View>/    {loading  && <View style={styles.loadingOverlay}>/          <ActivityIndicator size="large" color={theme.colors.primary} />/        </View>/          )}
     </ScrollView>/      );
 }
 const styles = StyleSheet.create({container: {),

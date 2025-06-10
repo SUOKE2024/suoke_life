@@ -2,10 +2,10 @@ import React, { useState, useCallback } from 'react';
 import { usePerformanceMonitor } from './usePerformanceMonitor';
 export type AgentType = 'xiaoai' | 'xiaoke' | 'laoke' | 'soer';
 export interface UseAgentReturn {
-  selectedAgent: AgentType;,
-  setSelectedAgent: (agent: AgentType) => void;,
-  switchAgent: (agent: AgentType) => void;,
-  getAgentInfo: (agent: AgentType) => any;,
+  selectedAgent: AgentType;
+  setSelectedAgent: (agent: AgentType) => void;
+  switchAgent: (agent: AgentType) => void;
+  getAgentInfo: (agent: AgentType) => any;
   generateAgentResponse: (userInput: string, agent: AgentType) => string;
 }
 export const useAgent = (initialAgent: AgentType = 'xiaoai'): UseAgentReturn => {

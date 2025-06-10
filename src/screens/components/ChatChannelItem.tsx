@@ -2,7 +2,7 @@ import { ChatChannel } from "../../types/chat/import { colors, spacing, fonts, b
 import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/      View,";
 import React from "react";
 /
-import React,{ memo } from react""
+import React,{ memo } from react"";
   Text,
   StyleSheet,
   TouchableOpacity,

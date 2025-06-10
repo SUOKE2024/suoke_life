@@ -1,5 +1,5 @@
 import { ModelQuantizer } from "../core/onnx-runtime/    ModelQuantizer";
-import {ONNXModel,
+import {ONNXModel,;
   QuantizationConfig,
   QuantizationLevel,
   TargetDevice,

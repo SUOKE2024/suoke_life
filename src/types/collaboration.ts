@@ -29,7 +29,7 @@ export enum TaskPriority {
   LOW = 1,
   MEDIUM = 2,
   HIGH = 3,
-  CRITICAL = 4,
+  CRITICAL = 4
 }
 
 // 任务状态
@@ -38,7 +38,7 @@ export enum TaskStatus {
   IN_PROGRESS = 'in_progress',
   COMPLETED = 'completed',
   FAILED = 'failed',
-  CANCELLED = 'cancelled',
+  CANCELLED = 'cancelled'
 }
 
 // 协作状态
@@ -47,7 +47,7 @@ export enum CollaborationStatus {
   ACTIVE = 'active',
   WAITING = 'waiting',
   COMPLETED = 'completed',
-  ERROR = 'error',
+  ERROR = 'error'
 }
 
 // 消息类型
@@ -55,7 +55,7 @@ export enum MessageType {
   REQUEST = 'request',
   RESPONSE = 'response',
   NOTIFICATION = 'notification',
-  ERROR = 'error',
+  ERROR = 'error'
 }
 
 // 智能体协作接口

@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
-import {
+import {;
   Animated,
   FlatList,
   ScrollView,
@@ -8,16 +8,16 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {
+import {;
   borderRadius,
   colors,
   shadows,
   spacing,
-  typography,
+  typography
 } from '../../constants/theme';
 
 interface Message {
@@ -68,14 +68,14 @@ const AIHealthAssistantScreen: React.FC = () => {
       suggestions: [
         '我想了解我的健康状况',
         '最近感觉疲劳怎么办',
-        '如何改善睡眠质量',
-      ],
+        '如何改善睡眠质量'
+      ]
     },
     {
       id: '2',
       type: 'user',
       content: '最近总是感觉疲劳，精神不振，这是什么原因？',
-      timestamp: '09:05',
+      timestamp: '09:05'
     },
     {
       id: '3',
@@ -83,8 +83,8 @@ const AIHealthAssistantScreen: React.FC = () => {
       content:
         '根据您的描述，疲劳可能由多种因素引起：\n\n1. 睡眠质量不佳\n2. 营养不均衡\n3. 缺乏运动\n4. 工作压力过大\n5. 可能的健康问题\n\n建议您：\n• 保证每晚7-8小时优质睡眠\n• 均衡饮食，补充维生素B群\n• 适量运动，增强体质\n• 学会放松，减轻压力\n\n如果症状持续，建议咨询医生进行详细检查。',
       timestamp: '09:06',
-      suggestions: ['如何改善睡眠', '推荐营养补充', '制定运动计划'],
-    },
+      suggestions: ['如何改善睡眠', '推荐营养补充', '制定运动计划']
+    }
   ]);
 
   // 健康建议
@@ -96,7 +96,7 @@ const AIHealthAssistantScreen: React.FC = () => {
         '每晚保证7-8小时的优质睡眠，有助于身体恢复和免疫力提升。建议23:00前入睡，避免睡前使用电子设备。',
       category: '睡眠健康',
       icon: 'sleep',
-      priority: 'high' as const,
+      priority: 'high' as const
     },
     {
       id: '2',
@@ -105,7 +105,7 @@ const AIHealthAssistantScreen: React.FC = () => {
         '多吃新鲜蔬果，适量摄入优质蛋白质，减少加工食品。每日饮水量保持在1.5-2升。',
       category: '营养饮食',
       icon: 'food-apple',
-      priority: 'high' as const,
+      priority: 'high' as const
     },
     {
       id: '3',
@@ -114,7 +114,7 @@ const AIHealthAssistantScreen: React.FC = () => {
         '每周至少150分钟中等强度运动，可以选择快走、游泳、骑行等有氧运动。',
       category: '运动健身',
       icon: 'run',
-      priority: 'medium' as const,
+      priority: 'medium' as const
     },
     {
       id: '4',
@@ -123,8 +123,8 @@ const AIHealthAssistantScreen: React.FC = () => {
         '学会放松技巧，如深呼吸、冥想、瑜伽等。保持积极心态，及时排解负面情绪。',
       category: '心理健康',
       icon: 'meditation',
-      priority: 'medium' as const,
-    },
+      priority: 'medium' as const
+    }
   ];
 
   // 快捷操作
@@ -134,43 +134,43 @@ const AIHealthAssistantScreen: React.FC = () => {
       title: '症状分析',
       description: '描述症状，获取AI分析',
       icon: 'stethoscope',
-      color: colors.primary,
+      color: colors.primary
     },
     {
       id: '2',
       title: '健康评估',
       description: '全面评估健康状况',
       icon: 'heart-pulse',
-      color: colors.error,
+      color: colors.error
     },
     {
       id: '3',
       title: '用药咨询',
       description: '药物使用指导建议',
       icon: 'pill',
-      color: colors.warning,
+      color: colors.warning
     },
     {
       id: '4',
       title: '营养建议',
       description: '个性化饮食方案',
       icon: 'food',
-      color: colors.success,
+      color: colors.success
     },
     {
       id: '5',
       title: '运动计划',
       description: '定制运动健身方案',
       icon: 'dumbbell',
-      color: colors.info,
+      color: colors.info
     },
     {
       id: '6',
       title: '心理支持',
       description: '情绪管理和心理疏导',
       icon: 'brain',
-      color: colors.secondary,
-    },
+      color: colors.secondary
+    }
   ];
 
   useEffect() => {
@@ -178,13 +178,13 @@ const AIHealthAssistantScreen: React.FC = () => {
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 800,
-        useNativeDriver: true,
+        useNativeDriver: true
       }),
       Animated.timing(slideAnim, {
         toValue: 0,
         duration: 800,
-        useNativeDriver: true,
-      }),
+        useNativeDriver: true
+      })
     ]).start();
   }, []);
 
@@ -198,8 +198,8 @@ const AIHealthAssistantScreen: React.FC = () => {
       content: inputText,
       timestamp: new Date().toLocaleTimeString('zh-CN', {
         hour: '2-digit',
-        minute: '2-digit',
-      }),
+        minute: '2-digit'
+      })
     };
 
     setMessages(prev) => [...prev, newMessage]);
@@ -214,9 +214,9 @@ const AIHealthAssistantScreen: React.FC = () => {
         content: '感谢您的问题。我正在分析您的情况，请稍等片刻...',
         timestamp: new Date().toLocaleTimeString('zh-CN', {
           hour: '2-digit',
-          minute: '2-digit',
+          minute: '2-digit'
         }),
-        suggestions: ['了解更多', '相关建议', '专家咨询'],
+        suggestions: ['了解更多', '相关建议', '专家咨询']
       };
       setMessages(prev) => [...prev, aiResponse]);
       setIsTyping(false);
@@ -228,7 +228,7 @@ const AIHealthAssistantScreen: React.FC = () => {
     const tabs = [
       { key: 'chat', title: '智能问答', icon: 'chat' },
       { key: 'tips', title: '健康建议', icon: 'lightbulb' },
-      { key: 'analysis', title: '健康分析', icon: 'chart-line' },
+      { key: 'analysis', title: '健康分析', icon: 'chart-line' }
     ];
 
     return (
@@ -249,7 +249,7 @@ const AIHealthAssistantScreen: React.FC = () => {
             <Text;
               style={[
                 styles.tabText,
-                activeTab === tab.key && styles.activeTabText,
+                activeTab === tab.key && styles.activeTabText
               ]}
             >
               {tab.title}
@@ -265,7 +265,7 @@ const AIHealthAssistantScreen: React.FC = () => {
     <View;
       style={[
         styles.messageContainer,
-        item.type === 'user' ? styles.userMessage : styles.aiMessage,
+        item.type === 'user' ? styles.userMessage : styles.aiMessage
       ]}
     >
       {item.type === 'ai' && (
@@ -277,13 +277,13 @@ const AIHealthAssistantScreen: React.FC = () => {
       <View;
         style={[
           styles.messageBubble,
-          item.type === 'user' ? styles.userBubble : styles.aiBubble,
+          item.type === 'user' ? styles.userBubble : styles.aiBubble
         ]}
       >
         <Text;
           style={[
             styles.messageText,
-            item.type === 'user' ? styles.userText : styles.aiText,
+            item.type === 'user' ? styles.userText : styles.aiText
           ]}
         >
           {item.content}
@@ -316,7 +316,7 @@ const AIHealthAssistantScreen: React.FC = () => {
   // 渲染聊天界面
   const renderChatInterface = () => (
     <View style={styles.chatContainer}>
-      {/* 快捷操作 */}
+      {// 快捷操作}
       <View style={styles.quickActionsContainer}>
         <Text style={styles.sectionTitle}>快捷咨询</Text>
         <ScrollView;
@@ -333,7 +333,7 @@ const AIHealthAssistantScreen: React.FC = () => {
               <View;
                 style={[
                   styles.quickActionIcon,
-                  { backgroundColor: action.color + '20' },
+                  { backgroundColor: action.color + '20' }
                 ]}
               >
                 <Icon name={action.icon} size={24} color={action.color} />
@@ -345,7 +345,7 @@ const AIHealthAssistantScreen: React.FC = () => {
         </ScrollView>
       </View>
 
-      {/* 消息列表 */}
+      {// 消息列表}
       <FlatList;
         data={messages}
         renderItem={renderMessage}
@@ -354,7 +354,7 @@ const AIHealthAssistantScreen: React.FC = () => {
         showsVerticalScrollIndicator={false}
       />
 
-      {/* 输入框 */}
+      {// 输入框}
       <View style={styles.inputContainer}>
         <View style={styles.inputWrapper}>
           <TextInput;
@@ -368,7 +368,7 @@ const AIHealthAssistantScreen: React.FC = () => {
           <TouchableOpacity;
             style={[
               styles.sendButton,
-              inputText.trim() && styles.sendButtonActive,
+              inputText.trim() && styles.sendButtonActive
             ]}
             onPress={sendMessage}
             disabled={!inputText.trim()}
@@ -410,8 +410,8 @@ const AIHealthAssistantScreen: React.FC = () => {
                   ? colors.error;
                   : item.priority === 'medium'
                     ? colors.warning;
-                    : colors.success,
-            },
+                    : colors.success
+            }
           ]}
         >
           <Text style={styles.priorityText}>
@@ -456,7 +456,7 @@ const AIHealthAssistantScreen: React.FC = () => {
         <Text style={styles.sectionSubtitle}>综合评估您的健康状况</Text>
       </View>
 
-      {/* 健康评分 */}
+      {// 健康评分}
       <View style={styles.scoreCard}>
         <View style={styles.scoreHeader}>
           <Text style={styles.scoreTitle}>综合健康评分</Text>
@@ -477,7 +477,7 @@ const AIHealthAssistantScreen: React.FC = () => {
         </View>
       </View>
 
-      {/* 各项指标 */}
+      {// 各项指标}
       <View style={styles.metricsCard}>
         <Text style={styles.metricsTitle}>健康指标分析</Text>
         <View style={styles.metricsList}>
@@ -486,26 +486,26 @@ const AIHealthAssistantScreen: React.FC = () => {
               name: '睡眠质量',
               score: 78,
               status: '良好',
-              color: colors.primary,
+              color: colors.primary
             },
             {
               name: '运动活跃度',
               score: 65,
               status: '一般',
-              color: colors.warning,
+              color: colors.warning
             },
             {
               name: '营养均衡',
               score: 88,
               status: '优秀',
-              color: colors.success,
+              color: colors.success
             },
             {
               name: '心理状态',
               score: 92,
               status: '优秀',
-              color: colors.success,
-            },
+              color: colors.success
+            }
           ].map(metric, index) => (
             <View key={index} style={styles.metricItem}>
               <View style={styles.metricInfo}>
@@ -521,8 +521,8 @@ const AIHealthAssistantScreen: React.FC = () => {
                       styles.progressFill,
                       {
                         width: `${metric.score}%`,
-                        backgroundColor: metric.color,
-                      },
+                        backgroundColor: metric.color
+                      }
                     ]}
                   />
                 </View>
@@ -533,7 +533,7 @@ const AIHealthAssistantScreen: React.FC = () => {
         </View>
       </View>
 
-      {/* AI建议 */}
+      {// AI建议}
       <View style={styles.aiSuggestionsCard}>
         <Text style={styles.suggestionsTitle}>AI个性化建议</Text>
         <View style={styles.suggestionsList}>
@@ -541,7 +541,7 @@ const AIHealthAssistantScreen: React.FC = () => {
             '建议每晚23:00前入睡，提高睡眠质量',
             '增加有氧运动，每周至少3次，每次30分钟',
             '保持当前的饮食习惯，营养搭配很好',
-            '继续保持积极心态，适当进行放松练习',
+            '继续保持积极心态，适当进行放松练习'
           ].map(suggestion, index) => (
             <View key={index} style={styles.suggestionItem}>
               <Icon name="check-circle" size={16} color={colors.success} />
@@ -569,7 +569,7 @@ const AIHealthAssistantScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* 头部 */}
+      {// 头部}
       <View style={styles.header}>
         <TouchableOpacity;
           style={styles.backButton}
@@ -583,17 +583,17 @@ const AIHealthAssistantScreen: React.FC = () => {
         </TouchableOpacity>
       </View>
 
-      {/* 标签栏 */}
+      {// 标签栏}
       {renderTabs()}
 
-      {/* 内容区域 */}
+      {// 内容区域}
       <Animated.View;
         style={[
           styles.contentContainer,
           {
             opacity: fadeAnim,
-            transform: [{ translateY: slideAnim }],
-          },
+            transform: [{ translateY: slideAnim }]
+          }
         ]}
       >
         {renderContent()}
@@ -605,7 +605,7 @@ const AIHealthAssistantScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {,
   flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: colors.background
   },
   header: {,
   flexDirection: 'row',
@@ -615,7 +615,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
     backgroundColor: colors.surface,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: colors.border
   },
   backButton: {,
   width: 40,
@@ -623,12 +623,12 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: colors.gray100,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   headerTitle: {,
   fontSize: typography.fontSize.lg,
     fontWeight: '600' as const,
-    color: colors.text,
+    color: colors.text
   },
   settingsButton: {,
   width: 40,
@@ -636,13 +636,13 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: colors.gray100,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   tabContainer: {,
   flexDirection: 'row',
     backgroundColor: colors.surface,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: colors.border
   },
   tab: {,
   flex: 1,
@@ -650,46 +650,46 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: spacing.md,
-    gap: spacing.xs,
+    gap: spacing.xs
   },
   activeTab: {,
   borderBottomWidth: 2,
-    borderBottomColor: colors.primary,
+    borderBottomColor: colors.primary
   },
   tabText: {,
   fontSize: typography.fontSize.sm,
-    color: colors.textSecondary,
+    color: colors.textSecondary
   },
   activeTabText: {,
   color: colors.primary,
-    fontWeight: '600' as const,
+    fontWeight: '600' as const
   },
   contentContainer: {,
-  flex: 1,
+  flex: 1
   },
   sectionTitle: {,
   fontSize: typography.fontSize.lg,
     fontWeight: '600' as const,
-    color: colors.text,
+    color: colors.text
   },
   sectionSubtitle: {,
   fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
-    marginTop: spacing.xs,
+    marginTop: spacing.xs
   },
   // 聊天界面样式
   chatContainer: {,
-  flex: 1,
+  flex: 1
   },
   quickActionsContainer: {,
   padding: spacing.lg,
     backgroundColor: colors.surface,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: colors.border
   },
   quickActionsContent: {,
   paddingVertical: spacing.md,
-    gap: spacing.md,
+    gap: spacing.md
   },
   quickActionCard: {,
   width: 120,
@@ -697,7 +697,7 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius.lg,
     padding: spacing.md,
     alignItems: 'center',
-    ...shadows.sm,
+    ...shadows.sm
   },
   quickActionIcon: {,
   width: 48,
@@ -705,34 +705,34 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: spacing.sm,
+    marginBottom: spacing.sm
   },
   quickActionTitle: {,
   fontSize: typography.fontSize.sm,
     fontWeight: '600' as const,
     color: colors.text,
     textAlign: 'center',
-    marginBottom: spacing.xs,
+    marginBottom: spacing.xs
   },
   quickActionDesc: {,
   fontSize: typography.fontSize.xs,
     color: colors.textSecondary,
-    textAlign: 'center',
+    textAlign: 'center'
   },
   messagesList: {,
   flex: 1,
-    paddingHorizontal: spacing.lg,
+    paddingHorizontal: spacing.lg
   },
   messageContainer: {,
   flexDirection: 'row',
     marginVertical: spacing.sm,
-    alignItems: 'flex-end',
+    alignItems: 'flex-end'
   },
   userMessage: {,
-  justifyContent: 'flex-end',
+  justifyContent: 'flex-end'
   },
   aiMessage: {,
-  justifyContent: 'flex-start',
+  justifyContent: 'flex-start'
   },
   aiAvatar: {,
   width: 32,
@@ -741,7 +741,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary + '20',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: spacing.sm,
+    marginRight: spacing.sm
   },
   userAvatar: {,
   width: 32,
@@ -750,57 +750,57 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: spacing.sm,
+    marginLeft: spacing.sm
   },
   messageBubble: {,
   maxWidth: '75%',
     borderRadius: borderRadius.lg,
-    padding: spacing.md,
+    padding: spacing.md
   },
   userBubble: {,
   backgroundColor: colors.primary,
-    borderBottomRightRadius: 4,
+    borderBottomRightRadius: 4
   },
   aiBubble: {,
   backgroundColor: colors.gray100,
-    borderBottomLeftRadius: 4,
+    borderBottomLeftRadius: 4
   },
   messageText: {,
   fontSize: typography.fontSize.base,
-    lineHeight: 20,
+    lineHeight: 20
   },
   userText: {,
-  color: colors.white,
+  color: colors.white
   },
   aiText: {,
-  color: colors.text,
+  color: colors.text
   },
   messageTime: {,
   fontSize: typography.fontSize.xs,
     color: colors.textSecondary,
     marginTop: spacing.xs,
-    opacity: 0.7,
+    opacity: 0.7
   },
   suggestionsContainer: {,
   marginTop: spacing.md,
-    gap: spacing.xs,
+    gap: spacing.xs
   },
   suggestionButton: {,
   backgroundColor: colors.primary + '20',
     borderRadius: borderRadius.md,
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,
-    alignSelf: 'flex-start',
+    alignSelf: 'flex-start'
   },
   suggestionText: {,
   fontSize: typography.fontSize.sm,
-    color: colors.primary,
+    color: colors.primary
   },
   inputContainer: {,
   backgroundColor: colors.surface,
     borderTopWidth: 1,
     borderTopColor: colors.border,
-    padding: spacing.lg,
+    padding: spacing.lg
   },
   inputWrapper: {,
   flexDirection: 'row',
@@ -808,14 +808,14 @@ const styles = StyleSheet.create({
     backgroundColor: colors.gray100,
     borderRadius: borderRadius.lg,
     paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
+    paddingVertical: spacing.sm
   },
   textInput: {,
   flex: 1,
     fontSize: typography.fontSize.base,
     color: colors.text,
     maxHeight: 100,
-    marginRight: spacing.sm,
+    marginRight: spacing.sm
   },
   sendButton: {,
   width: 36,
@@ -823,38 +823,38 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     backgroundColor: colors.gray300,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   sendButtonActive: {,
-  backgroundColor: colors.primary,
+  backgroundColor: colors.primary
   },
   typingIndicator: {,
-  marginTop: spacing.sm,
+  marginTop: spacing.sm
   },
   typingText: {,
   fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
-    fontStyle: 'italic',
+    fontStyle: 'italic'
   },
   // 健康建议样式
   tipsContainer: {,
   flex: 1,
-    padding: spacing.lg,
+    padding: spacing.lg
   },
   tipsHeader: {,
-  marginBottom: spacing.lg,
+  marginBottom: spacing.lg
   },
   tipCard: {,
   backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     marginBottom: spacing.md,
-    ...shadows.sm,
+    ...shadows.sm
   },
   tipHeader: {,
   flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   tipIconContainer: {,
   width: 40,
@@ -863,81 +863,81 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary + '20',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: spacing.md,
+    marginRight: spacing.md
   },
   tipInfo: {,
-  flex: 1,
+  flex: 1
   },
   tipTitle: {,
   fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
-    color: colors.text,
+    color: colors.text
   },
   tipCategory: {,
   fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
-    marginTop: 2,
+    marginTop: 2
   },
   priorityBadge: {,
   paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,
-    borderRadius: borderRadius.sm,
+    borderRadius: borderRadius.sm
   },
   priorityText: {,
   fontSize: typography.fontSize.xs,
     color: colors.white,
-    fontWeight: '600' as const,
+    fontWeight: '600' as const
   },
   tipContent: {,
   fontSize: typography.fontSize.base,
     color: colors.text,
     lineHeight: 22,
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   tipAction: {,
   flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    gap: spacing.xs,
+    gap: spacing.xs
   },
   tipActionText: {,
   fontSize: typography.fontSize.sm,
     color: colors.primary,
-    fontWeight: '600' as const,
+    fontWeight: '600' as const
   },
   // 健康分析样式
   analysisContainer: {,
   flex: 1,
-    padding: spacing.lg,
+    padding: spacing.lg
   },
   analysisHeader: {,
-  marginBottom: spacing.lg,
+  marginBottom: spacing.lg
   },
   scoreCard: {,
   backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     marginBottom: spacing.lg,
-    ...shadows.sm,
+    ...shadows.sm
   },
   scoreHeader: {,
   flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: spacing.lg,
+    marginBottom: spacing.lg
   },
   scoreTitle: {,
   fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
-    color: colors.text,
+    color: colors.text
   },
   scoreDate: {,
   fontSize: typography.fontSize.sm,
-    color: colors.textSecondary,
+    color: colors.textSecondary
   },
   scoreContent: {,
   flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   scoreCircle: {,
   width: 80,
@@ -946,114 +946,114 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary + '20',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: spacing.lg,
+    marginRight: spacing.lg
   },
   scoreValue: {,
   fontSize: typography.fontSize['2xl'],
     fontWeight: '700' as const,
-    color: colors.primary,
+    color: colors.primary
   },
   scoreLabel: {,
   fontSize: typography.fontSize.sm,
-    color: colors.primary,
+    color: colors.primary
   },
   scoreDetails: {,
-  flex: 1,
+  flex: 1
   },
   scoreStatus: {,
   fontSize: typography.fontSize.lg,
     fontWeight: '600' as const,
     color: colors.text,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.sm
   },
   scoreDescription: {,
   fontSize: typography.fontSize.base,
     color: colors.textSecondary,
-    lineHeight: 20,
+    lineHeight: 20
   },
   metricsCard: {,
   backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     marginBottom: spacing.lg,
-    ...shadows.sm,
+    ...shadows.sm
   },
   metricsTitle: {,
   fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
     color: colors.text,
-    marginBottom: spacing.lg,
+    marginBottom: spacing.lg
   },
   metricsList: {,
-  gap: spacing.lg,
+  gap: spacing.lg
   },
   metricItem: {,
   flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   metricInfo: {,
-  flex: 1,
+  flex: 1
   },
   metricName: {,
   fontSize: typography.fontSize.base,
     color: colors.text,
-    marginBottom: spacing.xs,
+    marginBottom: spacing.xs
   },
   metricStatus: {,
   fontSize: typography.fontSize.sm,
-    fontWeight: '600' as const,
+    fontWeight: '600' as const
   },
   metricProgress: {,
   flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.md,
-    width: 120,
+    width: 120
   },
   progressBar: {,
   flex: 1,
     height: 8,
     backgroundColor: colors.gray200,
     borderRadius: 4,
-    overflow: 'hidden',
+    overflow: 'hidden'
   },
   progressFill: {,
   height: '100%',
-    borderRadius: 4,
+    borderRadius: 4
   },
   metricScore: {,
   fontSize: typography.fontSize.sm,
     fontWeight: '600' as const,
     color: colors.text,
     width: 24,
-    textAlign: 'right',
+    textAlign: 'right'
   },
   aiSuggestionsCard: {,
   backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
-    ...shadows.sm,
+    ...shadows.sm
   },
   suggestionsTitle: {,
   fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
     color: colors.text,
-    marginBottom: spacing.lg,
+    marginBottom: spacing.lg
   },
   suggestionsList: {,
-  gap: spacing.md,
+  gap: spacing.md
   },
   suggestionItem: {,
   flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: spacing.sm,
+    gap: spacing.sm
   },
   suggestionText: {,
   flex: 1,
     fontSize: typography.fontSize.base,
     color: colors.text,
-    lineHeight: 20,
-  },
+    lineHeight: 20
+  }
 });
 
 export default AIHealthAssistantScreen;

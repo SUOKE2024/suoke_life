@@ -103,7 +103,7 @@ const WellnessExperience: React.FC<WellnessExperienceProps /> = ({/   const perf
     <TouchableOpacity;
 key={scene.id}
       style={styles.sceneCard}
-      onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> startExperience(scene)}/        >
+      onPress={() = accessibilityLabel="操作按钮" /> startExperience(scene)}/        >
       <View style={styles.sceneHeader}>/        <Text style={styles.sceneName}>{scene.name}</Text>/        <View style={styles.sceneType}>/              <Icon;
 name={getSceneIcon(scene.type)}
             size={16}

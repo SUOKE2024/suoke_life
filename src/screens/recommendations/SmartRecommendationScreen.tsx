@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
-import {
+import {;
   Animated,
   Dimensions,
   RefreshControl,
@@ -8,17 +8,17 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Button } from '../../components/ui/Button';
-import {
+import {;
   borderRadius,
   colors,
   shadows,
   spacing,
-  typography,
+  typography
 } from '../../constants/theme';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -59,7 +59,7 @@ const SmartRecommendationScreen: React.FC = () => {
     healthGoals: ['减重', '改善睡眠', '增强免疫力'],
     currentConditions: ['轻度焦虑', '颈椎不适'],
     lifestyle: '久坐办公',
-    activityLevel: '轻度活跃',
+    activityLevel: '轻度活跃'
   });
 
   // 动画值
@@ -73,7 +73,7 @@ const SmartRecommendationScreen: React.FC = () => {
     { key: 'exercise', title: '运动', icon: 'run', color: colors.warning },
     { key: 'lifestyle', title: '生活', icon: 'home-heart', color: colors.info },
     { key: 'medical', title: '医疗', icon: 'medical-bag', color: colors.error },
-    { key: 'mental', title: '心理', icon: 'brain', color: colors.secondary },
+    { key: 'mental', title: '心理', icon: 'brain', color: colors.secondary }
   ];
 
   // 初始化动画
@@ -82,13 +82,13 @@ const SmartRecommendationScreen: React.FC = () => {
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 800,
-        useNativeDriver: true,
+        useNativeDriver: true
       }),
       Animated.timing(slideAnim, {
         toValue: 0,
         duration: 800,
-        useNativeDriver: true,
-      }),
+        useNativeDriver: true
+      })
     ]).start();
 
     loadRecommendations();
@@ -112,7 +112,7 @@ const SmartRecommendationScreen: React.FC = () => {
         difficulty: 'easy',
         benefits: ['改善睡眠质量', '缓解肌肉紧张', '稳定情绪'],
         icon: 'leaf',
-        color: colors.success,
+        color: colors.success
       },
       {
         id: '2',
@@ -128,7 +128,7 @@ const SmartRecommendationScreen: React.FC = () => {
         difficulty: 'easy',
         benefits: ['缓解颈椎疼痛', '改善血液循环', '预防颈椎病'],
         icon: 'neck',
-        color: colors.warning,
+        color: colors.warning
       },
       {
         id: '3',
@@ -144,7 +144,7 @@ const SmartRecommendationScreen: React.FC = () => {
         difficulty: 'medium',
         benefits: ['减轻焦虑', '提升专注力', '改善情绪'],
         icon: 'meditation',
-        color: colors.secondary,
+        color: colors.secondary
       },
       {
         id: '4',
@@ -160,7 +160,7 @@ const SmartRecommendationScreen: React.FC = () => {
         difficulty: 'easy',
         benefits: ['改善坐姿', '减少疲劳', '提高工作效率'],
         icon: 'desk',
-        color: colors.info,
+        color: colors.info
       },
       {
         id: '5',
@@ -176,8 +176,8 @@ const SmartRecommendationScreen: React.FC = () => {
         difficulty: 'easy',
         benefits: ['早期发现问题', '预防疾病', '健康管理'],
         icon: 'stethoscope',
-        color: colors.error,
-      },
+        color: colors.error
+      }
     ];
 
     setRecommendations(mockRecommendations);
@@ -236,7 +236,7 @@ const SmartRecommendationScreen: React.FC = () => {
           style={[
             styles.categoryButton,
             activeCategory === category.key && styles.activeCategoryButton,
-            { borderColor: category.color },
+            { borderColor: category.color }
           ]}
           onPress={() => setActiveCategory(category.key)}
         >
@@ -255,8 +255,8 @@ const SmartRecommendationScreen: React.FC = () => {
                 color:
                   activeCategory === category.key;
                     ? colors.white;
-                    : category.color,
-              },
+                    : category.color
+              }
             ]}
           >
             {category.title}
@@ -277,16 +277,16 @@ const SmartRecommendationScreen: React.FC = () => {
         styles.recommendationCard,
         {
           opacity: fadeAnim,
-          transform: [{ translateY: slideAnim }],
-        },
+          transform: [{ translateY: slideAnim }]
+        }
       ]}
     >
-      {/* 卡片头部 */}
+      {// 卡片头部}
       <View style={styles.cardHeader}>
         <View;
           style={[
             styles.iconContainer,
-            { backgroundColor: recommendation.color + '20' },
+            { backgroundColor: recommendation.color + '20' }
           ]}
         >
           <Icon;
@@ -301,7 +301,7 @@ const SmartRecommendationScreen: React.FC = () => {
             <View;
               style={[
                 styles.priorityBadge,
-                { backgroundColor: getPriorityColor(recommendation.priority) },
+                { backgroundColor: getPriorityColor(recommendation.priority) }
               ]}
             >
               <Text style={styles.priorityText}>
@@ -326,10 +326,10 @@ const SmartRecommendationScreen: React.FC = () => {
         </View>
       </View>
 
-      {/* 描述 */}
+      {// 描述}
       <Text style={styles.description}>{recommendation.description}</Text>
 
-      {/* 标签 */}
+      {// 标签}
       <View style={styles.tagsContainer}>
         {recommendation.tags.map(tag, tagIndex) => (
           <View key={tagIndex} style={styles.tag}>
@@ -338,7 +338,7 @@ const SmartRecommendationScreen: React.FC = () => {
         ))}
       </View>
 
-      {/* 预期效果 */}
+      {// 预期效果}
       <View style={styles.benefitsContainer}>
         <Text style={styles.benefitsTitle}>预期效果：</Text>
         {recommendation.benefits.slice(0, 2).map(benefit, benefitIndex) => (
@@ -349,7 +349,7 @@ const SmartRecommendationScreen: React.FC = () => {
         ))}
       </View>
 
-      {/* 时间信息 */}
+      {// 时间信息}
       {recommendation.estimatedTime && (
         <View style={styles.timeInfo}>
           <Icon name="clock-outline" size={16} color={colors.textSecondary} />
@@ -357,18 +357,18 @@ const SmartRecommendationScreen: React.FC = () => {
         </View>
       )}
 
-      {/* 操作按钮 */}
+      {// 操作按钮}
       <View style={styles.cardActions}>
         <Button;
           title="查看详情"
           onPress={() => {
-            /* 查看详情 */
+            // 查看详情
           }}
         />
         <Button;
           title="开始执行"
           onPress={() => {
-            /* 开始执行 */
+            // 开始执行
           }}
         />
       </View>
@@ -405,7 +405,7 @@ const SmartRecommendationScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* 头部 */}
+      {// 头部}
       <View style={styles.header}>
         <TouchableOpacity;
           style={styles.backButton}
@@ -425,13 +425,13 @@ const SmartRecommendationScreen: React.FC = () => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        {/* 用户画像 */}
+        {// 用户画像}
         {renderUserProfile()}
 
-        {/* 分类标签 */}
+        {// 分类标签}
         {renderCategories()}
 
-        {/* 推荐列表 */}
+        {// 推荐列表}
         <View style={styles.recommendationsContainer}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>
@@ -452,7 +452,7 @@ const SmartRecommendationScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {,
   flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: colors.background
   },
   header: {,
   flexDirection: 'row',
@@ -462,7 +462,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
     backgroundColor: colors.surface,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: colors.border
   },
   backButton: {,
   width: 40,
@@ -470,12 +470,12 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: colors.gray100,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   headerTitle: {,
   fontSize: typography.fontSize.lg,
     fontWeight: '600' as const,
-    color: colors.text,
+    color: colors.text
   },
   settingsButton: {,
   width: 40,
@@ -483,42 +483,42 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: colors.gray100,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   content: {,
-  flex: 1,
+  flex: 1
   },
   profileContainer: {,
   backgroundColor: colors.surface,
     margin: spacing.lg,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
-    ...shadows.sm,
+    ...shadows.sm
   },
   profileTitle: {,
   fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
     color: colors.text,
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   profileContent: {,
-  gap: spacing.sm,
+  gap: spacing.sm
   },
   profileItem: {,
   flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   profileText: {,
   fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
-    marginLeft: spacing.sm,
+    marginLeft: spacing.sm
   },
   categoriesContainer: {,
-  marginBottom: spacing.lg,
+  marginBottom: spacing.lg
   },
   categoriesContent: {,
   paddingHorizontal: spacing.lg,
-    gap: spacing.sm,
+    gap: spacing.sm
   },
   categoryButton: {,
   flexDirection: 'row',
@@ -527,46 +527,46 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm,
     borderRadius: borderRadius.full,
     borderWidth: 1,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.surface
   },
   activeCategoryButton: {,
-  backgroundColor: colors.primary,
+  backgroundColor: colors.primary
   },
   categoryText: {,
   fontSize: typography.fontSize.sm,
-    marginLeft: spacing.xs,
+    marginLeft: spacing.xs
   },
   activeCategoryText: {,
-  color: colors.white,
+  color: colors.white
   },
   recommendationsContainer: {,
-  paddingHorizontal: spacing.lg,
+  paddingHorizontal: spacing.lg
   },
   sectionHeader: {,
   flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: spacing.lg,
+    marginBottom: spacing.lg
   },
   sectionTitle: {,
   fontSize: typography.fontSize.lg,
     fontWeight: '600' as const,
-    color: colors.text,
+    color: colors.text
   },
   refreshText: {,
   fontSize: typography.fontSize.sm,
-    color: colors.primary,
+    color: colors.primary
   },
   recommendationCard: {,
   backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     marginBottom: spacing.lg,
-    ...shadows.sm,
+    ...shadows.sm
   },
   cardHeader: {,
   flexDirection: 'row',
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   iconContainer: {,
   width: 48,
@@ -574,105 +574,105 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: spacing.md,
+    marginRight: spacing.md
   },
   headerInfo: {,
-  flex: 1,
+  flex: 1
   },
   titleRow: {,
   flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: spacing.xs,
+    marginBottom: spacing.xs
   },
   cardTitle: {,
   fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
     color: colors.text,
     flex: 1,
-    marginRight: spacing.sm,
+    marginRight: spacing.sm
   },
   priorityBadge: {,
   paddingHorizontal: spacing.xs,
     paddingVertical: 2,
-    borderRadius: borderRadius.sm,
+    borderRadius: borderRadius.sm
   },
   priorityText: {,
   fontSize: typography.fontSize.xs,
     color: colors.white,
-    fontWeight: '600' as const,
+    fontWeight: '600' as const
   },
   metaInfo: {,
   flexDirection: 'row',
-    gap: spacing.md,
+    gap: spacing.md
   },
   confidenceText: {,
   fontSize: typography.fontSize.xs,
-    color: colors.textSecondary,
+    color: colors.textSecondary
   },
   difficultyText: {,
   fontSize: typography.fontSize.xs,
-    color: colors.textSecondary,
+    color: colors.textSecondary
   },
   description: {,
   fontSize: typography.fontSize.sm,
     color: colors.text,
     lineHeight: 20,
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   tagsContainer: {,
   flexDirection: 'row',
     flexWrap: 'wrap',
     gap: spacing.xs,
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   tag: {,
   backgroundColor: colors.gray100,
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,
-    borderRadius: borderRadius.sm,
+    borderRadius: borderRadius.sm
   },
   tagText: {,
   fontSize: typography.fontSize.xs,
-    color: colors.textSecondary,
+    color: colors.textSecondary
   },
   benefitsContainer: {,
-  marginBottom: spacing.md,
+  marginBottom: spacing.md
   },
   benefitsTitle: {,
   fontSize: typography.fontSize.sm,
     fontWeight: '600' as const,
     color: colors.text,
-    marginBottom: spacing.xs,
+    marginBottom: spacing.xs
   },
   benefitItem: {,
   flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: spacing.xs,
+    marginBottom: spacing.xs
   },
   benefitText: {,
   fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
-    marginLeft: spacing.xs,
+    marginLeft: spacing.xs
   },
   timeInfo: {,
   flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   timeText: {,
   fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
-    marginLeft: spacing.xs,
+    marginLeft: spacing.xs
   },
   cardActions: {,
   flexDirection: 'row',
     justifyContent: 'space-between',
-    gap: spacing.sm,
+    gap: spacing.sm
   },
   actionButton: {,
-  flex: 1,
-  },
+  flex: 1
+  }
 });
 
 export default SmartRecommendationScreen;

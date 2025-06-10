@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import {
+import {;
   Animated,
   ScrollView,
   StyleSheet,
@@ -7,7 +7,7 @@ import {
   TextStyle,
   TouchableOpacity,
   View,
-  ViewStyle,
+  ViewStyle
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
@@ -56,7 +56,7 @@ export const Tabs: React.FC<TabsProps> = ({
   activeTabTextStyle,
   contentStyle,
   accessible = true,
-  testID,
+  testID
 }) => {
   const { currentTheme } = useTheme();
   const [internalActiveKey, setInternalActiveKey] = useState(
@@ -81,13 +81,13 @@ export const Tabs: React.FC<TabsProps> = ({
       Animated.parallel([
         Animated.spring(indicatorAnim, {
           toValue: index,
-          useNativeDriver: true,
+          useNativeDriver: true
         }),
         Animated.timing(contentAnim, {
           toValue: index,
           duration: 200,
-          useNativeDriver: true,
-        }),
+          useNativeDriver: true
+        })
       ]).start();
     }
   };
@@ -98,7 +98,7 @@ export const Tabs: React.FC<TabsProps> = ({
   const getTabBarStyles = () => {
     const baseStyle = {
       flexDirection: 'row' as const,
-      backgroundColor: currentTheme.colors.surface,
+      backgroundColor: currentTheme.colors.surface
     };
 
     switch (type) {
@@ -107,18 +107,18 @@ export const Tabs: React.FC<TabsProps> = ({
           ...baseStyle,
           backgroundColor: currentTheme.colors.surfaceVariant,
           borderRadius: 8,
-          padding: 4,
+          padding: 4
         };
       case 'button':
         return {
           ...baseStyle,
-          backgroundColor: 'transparent',
+          backgroundColor: 'transparent'
         };
       default:
         return {
           ...baseStyle,
           borderBottomWidth: 1,
-          borderBottomColor: currentTheme.colors.outline,
+          borderBottomColor: currentTheme.colors.outline
         };
     }
   };
@@ -130,13 +130,13 @@ export const Tabs: React.FC<TabsProps> = ({
       alignItems: 'center' as const,
       justifyContent: 'center' as const,
       flex: scrollable ? 0 : 1,
-      minWidth: scrollable ? 80 : undefined,
+      minWidth: scrollable ? 80 : undefined
     };
 
     if (isDisabled) {
       return {
         ...baseStyle,
-        opacity: 0.5,
+        opacity: 0.5
       };
     }
 
@@ -148,7 +148,7 @@ export const Tabs: React.FC<TabsProps> = ({
             ? currentTheme.colors.primary;
             : 'transparent',
           borderRadius: 6,
-          marginHorizontal: 2,
+          marginHorizontal: 2
         };
       case 'button':
         return {
@@ -157,7 +157,7 @@ export const Tabs: React.FC<TabsProps> = ({
             ? currentTheme.colors.primary;
             : currentTheme.colors.surfaceVariant,
           borderRadius: 8,
-          marginHorizontal: 4,
+          marginHorizontal: 4
         };
       default:
         return {
@@ -165,7 +165,7 @@ export const Tabs: React.FC<TabsProps> = ({
           borderBottomWidth: isActive ? 2 : 0,
           borderBottomColor: isActive;
             ? currentTheme.colors.primary;
-            : 'transparent',
+            : 'transparent'
         };
     }
   };
@@ -173,13 +173,13 @@ export const Tabs: React.FC<TabsProps> = ({
   const getTabTextStyles = (isActive: boolean, isDisabled: boolean) => {
     const baseStyle = {
       fontSize: 16,
-      fontWeight: isActive ? ('600' as const) : ('400' as const),
+      fontWeight: isActive ? ('600' as const) : ('400' as const)
     };
 
     if (isDisabled) {
       return {
         ...baseStyle,
-        color: currentTheme.colors.onSurfaceVariant,
+        color: currentTheme.colors.onSurfaceVariant
       };
     }
 
@@ -190,14 +190,14 @@ export const Tabs: React.FC<TabsProps> = ({
           ...baseStyle,
           color: isActive;
             ? currentTheme.colors.onPrimary;
-            : currentTheme.colors.onSurface,
+            : currentTheme.colors.onSurface
         };
       default:
         return {
           ...baseStyle,
           color: isActive;
             ? currentTheme.colors.primary;
-            : currentTheme.colors.onSurface,
+            : currentTheme.colors.onSurface
         };
     }
   };
@@ -223,7 +223,7 @@ export const Tabs: React.FC<TabsProps> = ({
               style={[
                 getTabStyles(isActive, isDisabled),
                 tabStyle,
-                isActive && activeTabStyle,
+                isActive && activeTabStyle
               ]}
               onPress={() => handleTabPress(item.key, index)}
               disabled={isDisabled}
@@ -237,7 +237,7 @@ export const Tabs: React.FC<TabsProps> = ({
                   style={[
                     getTabTextStyles(isActive, isDisabled),
                     tabTextStyle,
-                    isActive && activeTabTextStyle,
+                    isActive && activeTabTextStyle
                   ]}
                 >
                   {item.title}
@@ -265,11 +265,11 @@ export const Tabs: React.FC<TabsProps> = ({
 
   const styles = StyleSheet.create({
     container: {,
-  flex: 1,
+  flex: 1
     },
     content: {,
   flex: 1,
-      padding: 16,
+      padding: 16
     },
     badge: {,
   backgroundColor: currentTheme.colors.error,
@@ -278,13 +278,13 @@ export const Tabs: React.FC<TabsProps> = ({
       paddingVertical: 2,
       marginLeft: 8,
       minWidth: 20,
-      alignItems: 'center',
+      alignItems: 'center'
     },
     badgeText: {,
   color: '#ffffff',
       fontSize: 12,
-      fontWeight: '600',
-    },
+      fontWeight: '600'
+    }
   });
 
   return (
@@ -325,7 +325,7 @@ export const AdvancedTabs: React.FC<AdvancedTabsProps> = ({
         title: child.props.tab,
         content: child.props.children,
         disabled: child.props.disabled,
-        badge: child.props.badge,
+        badge: child.props.badge
       };
     }
     return null;

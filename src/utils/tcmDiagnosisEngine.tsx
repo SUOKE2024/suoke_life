@@ -43,7 +43,7 @@ export class TCMDiagnosisEngine {
       constitution: '平和质',
       confidence: 0.8,
       symptoms: inquiryData.symptoms,
-      recommendations: ['保持良好作息', '适量运动', '均衡饮食'],
+      recommendations: ['保持良好作息', '适量运动', '均衡饮食']
     };
   }
 }

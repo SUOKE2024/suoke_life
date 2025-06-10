@@ -1,8 +1,7 @@
-
-import performance-benchmarks from '../performance-benchmarks.ts';
+import performanceBenchmarks from '../performance-benchmarks';
 describe('performance-benchmarks', () => {
   it('应该正确导出', () => {
-    expect(performance-benchmarks).toBeDefined();
+    expect(performanceBenchmarks).toBeDefined();
   });
   it('应该处理正常输入', () => {
     // 添加正常输入测试

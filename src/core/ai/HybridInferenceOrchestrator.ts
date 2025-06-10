@@ -59,9 +59,9 @@ export class HybridInferenceOrchestrator {
       performanceThresholds: {,
   localMaxLatency: 200,
         cloudMaxLatency: 2000,
-        minConfidence: 0.7,
+        minConfidence: 0.7
       },
-      ...config,
+      ...config
     };
 
     this.metrics = {
@@ -72,7 +72,7 @@ export class HybridInferenceOrchestrator {
       cacheHits: 0,
       failures: 0,
       averageLatency: 0,
-      throughput: 0,
+      throughput: 0
     };
   }
 
@@ -214,7 +214,7 @@ export class HybridInferenceOrchestrator {
       cacheHitRate: this.calculateCacheHitRate(),
       averageLatency: this.metrics.averageLatency,
       successRate: this.calculateSuccessRate(),
-      activeRequests,
+      activeRequests
     };
   }
 
@@ -338,14 +338,14 @@ export class HybridInferenceOrchestrator {
     const result = await localModelManager.inference({
       modelId: request.modelId,
       inputData: request.inputData,
-      options: request.options,
+      options: request.options
     });
 
     this.metrics.localRequests++;
 
     return {
       ...result,
-      source: 'local' as const,
+      source: 'local' as const
     };
   }
 
@@ -368,7 +368,7 @@ export class HybridInferenceOrchestrator {
     return {
       result: {,
   prediction: `cloud_result_${request.modelId}`,
-        analysis: 'detailed_cloud_analysis',
+        analysis: 'detailed_cloud_analysis'
       },
       confidence: 0.92,
       processingTime: Date.now() - startTime,
@@ -376,8 +376,8 @@ export class HybridInferenceOrchestrator {
       modelUsed: request.modelId,
       metadata: {,
   provider: 'cloud',
-        requestId,
-      },
+        requestId
+      }
     };
   }
 
@@ -390,7 +390,7 @@ export class HybridInferenceOrchestrator {
     // 并行执行本地和云端推理
     const [localResult, cloudResult] = await Promise.allSettled([
       this.executeLocalInference(request, requestId),
-      this.executeCloudInference(request, requestId),
+      this.executeCloudInference(request, requestId)
     ]);
 
     this.metrics.hybridRequests++;
@@ -416,8 +416,8 @@ export class HybridInferenceOrchestrator {
       metadata: {
         ...bestResult.metadata,
         hybridResults: results.length,
-        strategy: 'ensemble',
-      },
+        strategy: 'ensemble'
+      }
     };
   }
 
@@ -452,14 +452,14 @@ export class HybridInferenceOrchestrator {
       return await localModelManager.inference({
         modelId: 'health_basic_assessment', // 最基础的模型
         inputData: request.inputData,
-        options: { ...request.options, useCache: false },
+        options: { ...request.options, useCache: false }
       });
     } catch (error) {
       // 返回默认结果
       return {
         result: {,
   prediction: 'fallback_result',
-          message: '系统繁忙，请稍后重试',
+          message: '系统繁忙，请稍后重试'
         },
         confidence: 0.5,
         processingTime: 10,
@@ -467,8 +467,8 @@ export class HybridInferenceOrchestrator {
         modelUsed: 'fallback',
         metadata: {,
   isFallback: true,
-          originalError: error.message,
-        },
+          originalError: error.message
+        }
       };
     }
   }
@@ -478,14 +478,14 @@ export class HybridInferenceOrchestrator {
     await offlineCacheManager.set(cacheKey, result, {
       type: 'inference_result',
       ttl: 60 * 60 * 1000, // 1小时
-      priority: 'normal',
+      priority: 'normal'
     });
   }
 
   private generateCacheKey(request: any): string {
     const keyData = {
       modelId: request.modelId,
-      inputHash: JSON.stringify(request.inputData).slice(0, 100),
+      inputHash: JSON.stringify(request.inputData).slice(0, 100)
     };
     return `inference_${JSON.stringify(keyData)}`;
   }

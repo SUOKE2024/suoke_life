@@ -23,7 +23,7 @@ describe("XiaoaiChatInterface", () => { {
   it("should display correct initial state", () => {
     renderWithProvider(<XiaoaiChatInterface />);
     // Add specific assertions for initial state
-expect(screen.getByTestId("xiaoaichatexport interface)).toBeTruthy();"
+expect(screen.getByTestId("xiaoaichatexport interface)).toBeTruthy();";
   });
   it("should handle user interactions correctly", async (); => {
     renderWithProvider(<XiaoaiChatInterface />);
@@ -32,7 +32,7 @@ const button = screen.getByRole(button";);"
     fireEvent.press(button);
     await waitFor(() => {
       // Add assertions for interaction results
-expect(screen.getByTestId("xiaoaichatexport interface)).toBeTruthy();"
+expect(screen.getByTestId("xiaoaichatexport interface)).toBeTruthy();";
     });
   });
   it("should handle props correctly", () => {
@@ -40,7 +40,7 @@ expect(screen.getByTestId("xiaoaichatexport interface)).toBeTruthy();"
     ;};
     renderWithProvider(<XiaoaiChatInterface {...testProps} />);
     // Add assertions for prop handling
-expect(screen.getByTestId(xiaoaichatexport interface")).toBeTruthy();"
+expect(screen.getByTestId(xiaoaichatexport interface")).toBeTruthy();";
   });
   it("should handle error states gracefully, () => { {", () => {
     // Test error scenarios

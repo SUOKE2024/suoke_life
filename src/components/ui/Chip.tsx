@@ -1,11 +1,11 @@
 import React from 'react';
-import {
+import {;
   StyleSheet,
   Text,
   TextStyle,
   TouchableOpacity,
   View,
-  ViewStyle,
+  ViewStyle
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
@@ -51,7 +51,7 @@ export const Chip: React.FC<ChipProps> = ({
   style,
   textStyle,
   accessible = true,
-  testID,
+  testID
 }) => {
   const { currentTheme } = useTheme();
 
@@ -63,38 +63,38 @@ export const Chip: React.FC<ChipProps> = ({
       default: {,
   background: currentTheme.colors.surfaceVariant,
         text: currentTheme.colors.onSurfaceVariant,
-        border: currentTheme.colors.outline,
+        border: currentTheme.colors.outline
       },
       primary: {,
   background: currentTheme.colors.primary,
         text: currentTheme.colors.onPrimary,
-        border: currentTheme.colors.primary,
+        border: currentTheme.colors.primary
       },
       secondary: {,
   background: currentTheme.colors.secondary,
         text: currentTheme.colors.onSecondary,
-        border: currentTheme.colors.secondary,
+        border: currentTheme.colors.secondary
       },
       success: {,
   background: '#4CAF50',
         text: '#ffffff',
-        border: '#4CAF50',
+        border: '#4CAF50'
       },
       warning: {,
   background: '#FF9800',
         text: '#ffffff',
-        border: '#FF9800',
+        border: '#FF9800'
       },
       error: {,
   background: currentTheme.colors.error,
         text: '#ffffff',
-        border: currentTheme.colors.error,
+        border: currentTheme.colors.error
       },
       info: {,
   background: '#2196F3',
         text: '#ffffff',
-        border: '#2196F3',
-      },
+        border: '#2196F3'
+      }
     };
 
     const colorConfig = baseColors[color];
@@ -105,7 +105,7 @@ export const Chip: React.FC<ChipProps> = ({
           backgroundColor: 'transparent',
           borderColor: colorConfig.border,
           textColor: colorConfig.background,
-          borderWidth: 1,
+          borderWidth: 1
         };
       case 'elevated':
         return {
@@ -117,7 +117,7 @@ export const Chip: React.FC<ChipProps> = ({
           shadowColor: '#000',
           shadowOffset: { width: 0, height: 2 },
           shadowOpacity: 0.1,
-          shadowRadius: 4,
+          shadowRadius: 4
         };
       default: // filled;
         return {
@@ -128,7 +128,7 @@ export const Chip: React.FC<ChipProps> = ({
           textColor: selected;
             ? colorConfig.text;
             : currentTheme.colors.onSurfaceVariant,
-          borderWidth: 0,
+          borderWidth: 0
         };
     }
   };
@@ -142,7 +142,7 @@ export const Chip: React.FC<ChipProps> = ({
           paddingHorizontal: 8,
           fontSize: 12,
           iconSize: 16,
-          borderRadius: 12,
+          borderRadius: 12
         };
       case 'large':
         return {
@@ -150,7 +150,7 @@ export const Chip: React.FC<ChipProps> = ({
           paddingHorizontal: 16,
           fontSize: 16,
           iconSize: 20,
-          borderRadius: 20,
+          borderRadius: 20
         };
       default: // medium;
         return {
@@ -158,7 +158,7 @@ export const Chip: React.FC<ChipProps> = ({
           paddingHorizontal: 12,
           fontSize: 14,
           iconSize: 18,
-          borderRadius: 16,
+          borderRadius: 16
         };
     }
   };
@@ -182,44 +182,44 @@ export const Chip: React.FC<ChipProps> = ({
         shadowColor: colorConfig.shadowColor,
         shadowOffset: colorConfig.shadowOffset,
         shadowOpacity: colorConfig.shadowOpacity,
-        shadowRadius: colorConfig.shadowRadius,
-      }),
+        shadowRadius: colorConfig.shadowRadius
+      })
     },
     avatar: {,
   marginRight: 6,
       width: sizeConfig.iconSize,
       height: sizeConfig.iconSize,
       borderRadius: sizeConfig.iconSize / 2,
-      overflow: 'hidden',
+      overflow: 'hidden'
     },
     icon: {,
   marginRight: 6,
       width: sizeConfig.iconSize,
-      height: sizeConfig.iconSize,
+      height: sizeConfig.iconSize
     },
     text: {,
   flex: 1,
       fontSize: sizeConfig.fontSize,
       fontWeight: '500',
       color: colorConfig.textColor,
-      textAlign: 'center',
+      textAlign: 'center'
     },
     deleteIcon: {,
   marginLeft: 6,
       width: sizeConfig.iconSize,
       height: sizeConfig.iconSize,
       justifyContent: 'center',
-      alignItems: 'center',
+      alignItems: 'center'
     },
     deleteButton: {,
   padding: 2,
-      borderRadius: sizeConfig.iconSize / 2,
+      borderRadius: sizeConfig.iconSize / 2
     },
     deleteText: {,
   fontSize: sizeConfig.iconSize - 4,
       color: colorConfig.textColor,
-      fontWeight: 'bold',
-    },
+      fontWeight: 'bold'
+    }
   });
 
   const handlePress = () => {

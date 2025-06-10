@@ -9,16 +9,16 @@ export function maskIdCard(id: string): string {
 }
 export function maskName(name: string): string {
   if (!name) return '';
-  return name[0] + "*".repeat(name.length - 1);
+  return name[0] + '*'.repeat(name.length - 1);
 }
 export function maskSensitiveData(data: any): any {
-  if (typeof data === "string") {
+  if (typeof data === 'string') {
     return data;
   }
-    if (typeof data === "object" && data !== null) {
+  if (typeof data === 'object' && data !== null) {
     const masked = { ...data };
-    Object.keys(masked).forEach(key => {
-      if (typeof masked[key] === "string") {
+    Object.keys(masked).forEach((key) => {
+      if (typeof masked[key] === 'string') {
         if (/phone|mobile/i.test(key)) {
           masked[key] = maskPhone(masked[key]);
         } else if (/id(card)?/i.test(key)) {
@@ -30,14 +30,16 @@ export function maskSensitiveData(data: any): any {
     });
     return masked;
   }
-    return data;
+  return data;
 }
 export function sanitizeLogData(...args: any[]): any[] {
-  return args.map(arg => {
+  return args.map((arg) => {
     try {
-      return JSON.parse(JSON.stringify(arg, (key, value) => {
-        return maskSensitiveData(value);
-      }));
+      return JSON.parse(
+        JSON.stringify(arg, (key, value) => {
+          return maskSensitiveData(value);
+        })
+      );
     } catch {
       return arg;
     }
@@ -48,5 +50,5 @@ export default {
   maskIdCard,
   maskName,
   maskSensitiveData,
-  sanitizeLogData;
+  sanitizeLogData,
 };

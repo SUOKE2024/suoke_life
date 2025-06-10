@@ -53,7 +53,7 @@ agentId, status, onPress }) => {}
   const isOnline = status.isOnli;n;e;
   performanceMonitor.recordRender();
   return (;)
-    <TouchableOpacity style={styles.agentCard} onPress={onPress} accessibilityLabel="TODO: 添加无障碍标签" />/      <View style={styles.agentHeader}>/        <View style={[styles.agentIcon, { backgroundColor: info.col;o;r   }}]} />/          <Ionicons name={info.icon as any} size={24} color="white" />/        </View>/        <View style={styles.agentInfo}>/          <Text style={styles.agentName}>{info.name}</Text>/          <Text style={styles.agentDescription}>{info.description}</Text>/        </View>/        <View style={[styles.statusIndicator, { backgroundColor: isOnline ? "#4CAF50 : "#F44336"}}]} />/      </View>/    "
+    <TouchableOpacity style={styles.agentCard} onPress={onPress} accessibilityLabel="{info.name}" />/      <View style={styles.agentHeader}>/        <View style={[styles.agentIcon, { backgroundColor: info.col;o;r   }}]} />/          <Ionicons name={info.icon as any} size={24} color="white" />/        </View>/        <View style={styles.agentInfo}>/          <Text style={styles.agentName}>{info.name}</Text>/          <Text style={styles.agentDescription}>{info.description}</Text>/        </View>/        <View style={[styles.statusIndicator, { backgroundColor: isOnline ? "#4CAF50 : "#F44336"}}]} />/      </View>/    "
       <View style={styles.agentMetrics}>/        <View style={styles.metric}>/          <Text style={styles.metricLabel}>工作负载</Text>/          <View style={styles.progressBar}>/                <View,
               style={[
                 styles.progressFill,
@@ -194,7 +194,7 @@ const AgentManagementScreen: React.FC  = () => {}
     }
   }
   return (;)
-    <SafeAreaView style={styles.container}>/      <View style={styles.header}>/        <Text style={styles.title}>智能体管理中心</Text>/        <TouchableOpacity style={styles.addButton} onPress={startCollaborativeTask} accessibilityLabel="TODO: 添加无障碍标签" />/          <Ionicons name="add" size={24} color="white" />/        </TouchableOpacity>/      </View>/;
+    <SafeAreaView style={styles.container}>/      <View style={styles.header}>/        <Text style={styles.title}>智能体管理中心</Text>/        <TouchableOpacity style={styles.addButton} onPress={startCollaborativeTask} accessibilityLabel="智能体管理中心" />/          <Ionicons name="add" size={24} color="white" />/        </TouchableOpacity>/      </View>/;
       {serviceStatus && (;)
         <View style={styles.serviceStatus}>/          <Text style={styles.serviceStatusTitle}>服务状态</Text>/          <View style={styles.statusRow}>/            <Text style={styles.statusItem}>在线智能体: {serviceStatus.activeAgents}/4</Text>/            <Text style={styles.statusItem}>活跃任务: {serviceStatus.activeTasks}</Text>/            <Text style={styles.statusItem}>队列任务: {serviceStatus.queuedTasks}</Text>/          </View>/        </View>/    )};
       <ScrollView,style={styles.scrollView};

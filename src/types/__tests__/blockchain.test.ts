@@ -1,4 +1,4 @@
-import {BlockchainStatus,
+import {BlockchainStatus,;
   HealthDataRecord,
   StoreHealthDataRequest,
   StoreHealthDataResponse,

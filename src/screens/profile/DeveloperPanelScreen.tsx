@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useCallback, useEffect, useState } from 'react';
-import {
+import {;
   Alert,
   Platform,
   RefreshControl,
@@ -9,7 +9,7 @@ import {
   Switch,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -57,8 +57,8 @@ export const DeveloperPanelScreen: React.FC = () => {
           bySeverity: {,
   ERROR: 5,
             WARNING: 4,
-            INFO: 3,
-          },
+            INFO: 3
+          }
         },
         performanceStats: {,
   total: 156,
@@ -66,26 +66,26 @@ export const DeveloperPanelScreen: React.FC = () => {
   render: 89,
             api: 34,
             navigation: 23,
-            storage: 10,
+            storage: 10
           },
           averageDuration: {,
   render: 16.5,
             api: 245.8,
             navigation: 89.2,
-            storage: 12.3,
-          },
+            storage: 12.3
+          }
         },
         networkStats: {,
   totalRequests: 234,
           averageResponseTime: 187.5,
-          successRate: 94.2,
+          successRate: 94.2
         },
         systemInfo: {,
   platform: Platform.OS,
           version: Platform.Version.toString(),
           isDebug: __DEV__,
-          timestamp: new Date().toISOString(),
-        },
+          timestamp: new Date().toISOString()
+        }
       };
 
       setDebugInfo(mockDebugInfo);
@@ -107,13 +107,13 @@ export const DeveloperPanelScreen: React.FC = () => {
               errorStats: {,
   total: 0,
                 recent: 0,
-                bySeverity: {},
-              },
+                bySeverity: {}
+              }
             });
           }
           Alert.alert('成功', '错误日志已清除');
-        },
-      },
+        }
+      }
     ]);
   }, [debugInfo]);
 
@@ -130,13 +130,13 @@ export const DeveloperPanelScreen: React.FC = () => {
               performanceStats: {,
   total: 0,
                 byType: {},
-                averageDuration: {},
-              },
+                averageDuration: {}
+              }
             });
           }
           Alert.alert('成功', '性能指标已清除');
-        },
-      },
+        }
+      }
     ]);
   }, [debugInfo]);
 
@@ -169,7 +169,7 @@ export const DeveloperPanelScreen: React.FC = () => {
         timestamp: new Date().toISOString(),
         debugInfo,
         appVersion: '1.0.0',
-        buildNumber: '100',
+        buildNumber: '100'
       };
 
       Alert.alert(
@@ -301,8 +301,8 @@ export const DeveloperPanelScreen: React.FC = () => {
                       ? '#27AE60'
                       : successRate > 70;
                         ? '#F39C12'
-                        : '#E74C3C',
-                },
+                        : '#E74C3C'
+                }
               ]}
             >
               {successRate.toFixed(1)}%
@@ -404,7 +404,7 @@ export const DeveloperPanelScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {,
   flex: 1,
-    backgroundColor: '#F5F7FA',
+    backgroundColor: '#F5F7FA'
   },
   header: {,
   flexDirection: 'row',
@@ -414,31 +414,31 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#E1E8ED',
+    borderBottomColor: '#E1E8ED'
   },
   backButton: {,
   fontSize: 24,
-    color: '#2C3E50',
+    color: '#2C3E50'
   },
   title: {,
   fontSize: 18,
     fontWeight: 'bold',
-    color: '#2C3E50',
+    color: '#2C3E50'
   },
   refreshButton: {,
   fontSize: 16,
     color: '#3498DB',
-    fontWeight: '600',
+    fontWeight: '600'
   },
   scrollView: {,
   flex: 1,
-    padding: 20,
+    padding: 20
   },
   quickActions: {,
   flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 20,
-    gap: 12,
+    gap: 12
   },
   quickActionButton: {,
   flex: 1,
@@ -446,12 +446,12 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   quickActionText: {,
   color: '#FFFFFF',
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   section: {,
   backgroundColor: '#FFFFFF',
@@ -462,38 +462,38 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
+    elevation: 3
   },
   sectionTitle: {,
   fontSize: 18,
     fontWeight: 'bold',
     color: '#2C3E50',
-    marginBottom: 16,
+    marginBottom: 16
   },
   subSectionTitle: {,
   fontSize: 16,
     fontWeight: '600',
     color: '#2C3E50',
     marginTop: 16,
-    marginBottom: 12,
+    marginBottom: 12
   },
   statsContainer: {,
   flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 16,
+    marginBottom: 16
   },
   statItem: {,
-  alignItems: 'center',
+  alignItems: 'center'
   },
   statLabel: {,
   fontSize: 14,
     color: '#7F8C8D',
-    marginBottom: 4,
+    marginBottom: 4
   },
   statValue: {,
   fontSize: 20,
     fontWeight: 'bold',
-    color: '#2C3E50',
+    color: '#2C3E50'
   },
   severityItem: {,
   flexDirection: 'row',
@@ -501,16 +501,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: '#E1E8ED',
+    borderBottomColor: '#E1E8ED'
   },
   severityLabel: {,
   fontSize: 14,
-    color: '#2C3E50',
+    color: '#2C3E50'
   },
   severityCount: {,
   fontSize: 14,
     fontWeight: '600',
-    color: '#E74C3C',
+    color: '#E74C3C'
   },
   typeItem: {,
   flexDirection: 'row',
@@ -518,22 +518,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: '#E1E8ED',
+    borderBottomColor: '#E1E8ED'
   },
   typeLabel: {,
   flex: 1,
     fontSize: 14,
-    color: '#2C3E50',
+    color: '#2C3E50'
   },
   typeCount: {,
   fontSize: 14,
     fontWeight: '600',
     color: '#3498DB',
-    marginRight: 16,
+    marginRight: 16
   },
   typeAverage: {,
   fontSize: 14,
-    color: '#7F8C8D',
+    color: '#7F8C8D'
   },
   infoItem: {,
   flexDirection: 'row',
@@ -541,16 +541,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: '#E1E8ED',
+    borderBottomColor: '#E1E8ED'
   },
   infoLabel: {,
   fontSize: 14,
-    color: '#7F8C8D',
+    color: '#7F8C8D'
   },
   infoValue: {,
   fontSize: 14,
     fontWeight: '600',
-    color: '#2C3E50',
+    color: '#2C3E50'
   },
   actionButton: {,
   backgroundColor: '#E74C3C',
@@ -558,13 +558,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 8,
     alignItems: 'center',
-    marginTop: 16,
+    marginTop: 16
   },
   actionButtonText: {,
   color: '#FFFFFF',
     fontSize: 14,
-    fontWeight: '600',
-  },
+    fontWeight: '600'
+  }
 });
 
 export default DeveloperPanelScreen;

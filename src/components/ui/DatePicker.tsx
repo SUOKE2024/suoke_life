@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import {
+import {;
   Modal,
   StyleSheet,
   Text,
   TextStyle,
   TouchableOpacity,
   View,
-  ViewStyle,
+  ViewStyle
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
@@ -41,7 +41,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   placeholderStyle,
   accessible = true,
   accessibilityLabel,
-  testID,
+  testID
 }) => {
   const { currentTheme } = useTheme();
   const [isVisible, setIsVisible] = useState(false);
@@ -62,7 +62,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
       case 'time':
         return date.toLocaleTimeString('zh-CN', {
           hour: '2-digit',
-          minute: '2-digit',
+          minute: '2-digit'
         });
       case 'datetime':
         return date.toLocaleString('zh-CN', {
@@ -70,13 +70,13 @@ export const DatePicker: React.FC<DatePickerProps> = ({
           month: '2-digit',
           day: '2-digit',
           hour: '2-digit',
-          minute: '2-digit',
+          minute: '2-digit'
         });
       default:
         return date.toLocaleDateString('zh-CN', {
           year: 'numeric',
           month: '2-digit',
-          day: '2-digit',
+          day: '2-digit'
         });
     }
   };
@@ -113,7 +113,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
             <Text;
               style={[
                 styles.headerButtonText,
-                { color: currentTheme.colors.primary },
+                { color: currentTheme.colors.primary }
               ]}
             >
               确定
@@ -126,7 +126,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
             {formatDate(selectedDate)}
           </Text>
 
-          {/* 简化的选择器 - 实际项目中应使用专业的日期选择器组件 */}
+          {// 简化的选择器 - 实际项目中应使用专业的日期选择器组件}
           <View style={styles.quickActions}>
             <TouchableOpacity;
               style={styles.quickButton}
@@ -169,32 +169,32 @@ export const DatePicker: React.FC<DatePickerProps> = ({
       paddingVertical: 16,
       backgroundColor: currentTheme.colors.surface,
       minHeight: 48,
-      justifyContent: 'center',
+      justifyContent: 'center'
     },
     containerDisabled: {,
   backgroundColor: currentTheme.colors.surfaceVariant,
-      opacity: 0.6,
+      opacity: 0.6
     },
     text: {,
   fontSize: 16,
       color: currentTheme.colors.onSurface,
-      ...textStyle,
+      ...textStyle
     },
     placeholder: {,
   fontSize: 16,
       color: currentTheme.colors.onSurfaceVariant,
-      ...placeholderStyle,
+      ...placeholderStyle
     },
     modal: {,
   flex: 1,
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      justifyContent: 'flex-end',
+      justifyContent: 'flex-end'
     },
     pickerContainer: {,
   backgroundColor: currentTheme.colors.surface,
       borderTopLeftRadius: 16,
       borderTopRightRadius: 16,
-      maxHeight: '70%',
+      maxHeight: '70%'
     },
     pickerHeader: {,
   flexDirection: 'row',
@@ -203,46 +203,46 @@ export const DatePicker: React.FC<DatePickerProps> = ({
       paddingHorizontal: 16,
       paddingVertical: 16,
       borderBottomWidth: 1,
-      borderBottomColor: currentTheme.colors.outline,
+      borderBottomColor: currentTheme.colors.outline
     },
     headerButton: {,
   paddingHorizontal: 8,
-      paddingVertical: 4,
+      paddingVertical: 4
     },
     headerButtonText: {,
   fontSize: 16,
-      color: currentTheme.colors.onSurface,
+      color: currentTheme.colors.onSurface
     },
     headerTitle: {,
   fontSize: 18,
       fontWeight: '600',
-      color: currentTheme.colors.onSurface,
+      color: currentTheme.colors.onSurface
     },
     pickerContent: {,
-  padding: 16,
+  padding: 16
     },
     selectedDateText: {,
   fontSize: 24,
       fontWeight: '600',
       color: currentTheme.colors.primary,
       textAlign: 'center',
-      marginBottom: 24,
+      marginBottom: 24
     },
     quickActions: {,
   flexDirection: 'row',
       justifyContent: 'space-around',
-      marginTop: 16,
+      marginTop: 16
     },
     quickButton: {,
   paddingHorizontal: 16,
       paddingVertical: 8,
       backgroundColor: currentTheme.colors.surfaceVariant,
-      borderRadius: 8,
+      borderRadius: 8
     },
     quickButtonText: {,
   fontSize: 14,
-      color: currentTheme.colors.onSurface,
-    },
+      color: currentTheme.colors.onSurface
+    }
   });
 
   return (

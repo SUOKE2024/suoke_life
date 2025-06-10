@@ -1,11 +1,11 @@
 import React, { useMemo, useState } from 'react';
-import {
+import {;
   FlatList,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
@@ -99,7 +99,7 @@ export const Table: React.FC<TableProps> = ({
   onRowPress,
   emptyText = '暂无数据',
   loading = false,
-  pagination,
+  pagination
 }) => {
   const { currentTheme } = useTheme();
   const styles = createStyles(currentTheme, size, bordered, striped);
@@ -222,8 +222,8 @@ export const Table: React.FC<TableProps> = ({
                     ? 'center'
                     : column.align === 'right'
                       ? 'flex-end'
-                      : 'flex-start',
-              },
+                      : 'flex-start'
+              }
             ]}
             onPress={() => handleSort(column)}
             disabled={!column.sortable}
@@ -261,9 +261,9 @@ export const Table: React.FC<TableProps> = ({
                 ? 'center'
                 : column.align === 'right'
                   ? 'flex-end'
-                  : 'flex-start',
+                  : 'flex-start'
           },
-          cellStyle,
+          cellStyle
         ]}
       >
         {typeof content === 'string' || typeof content === 'number' ? (
@@ -287,7 +287,7 @@ export const Table: React.FC<TableProps> = ({
           styles.row,
           striped && !isEven && styles.stripedRow,
           isSelected && styles.selectedRow,
-          rowStyle,
+          rowStyle
         ]}
         onPress={() => onRowPress?.(item, index)}
         disabled={!onRowPress}
@@ -363,18 +363,18 @@ const createStyles = (
     sm: {,
   cellPadding: theme.spacing.xs,
       fontSize: theme.typography.fontSize.sm,
-      minHeight: 32,
+      minHeight: 32
     },
     md: {,
   cellPadding: theme.spacing.sm,
       fontSize: theme.typography.fontSize.base,
-      minHeight: 40,
+      minHeight: 40
     },
     lg: {,
   cellPadding: theme.spacing.md,
       fontSize: theme.typography.fontSize.lg,
-      minHeight: 48,
-    },
+      minHeight: 48
+    }
   };
 
   const config = sizeConfig[size];
@@ -383,17 +383,17 @@ const createStyles = (
     container: {,
   backgroundColor: theme.colors.surface,
       borderRadius: theme.borderRadius.md,
-      overflow: 'hidden',
+      overflow: 'hidden'
     },
     tableContainer: {,
-  minWidth: '100%',
+  minWidth: '100%'
     },
     headerRow: {,
   flexDirection: 'row',
       backgroundColor: theme.colors.surfaceVariant,
       borderBottomWidth: bordered ? 1 : 0,
       borderBottomColor: theme.colors.outline,
-      minHeight: config.minHeight,
+      minHeight: config.minHeight
     },
     headerCell: {,
   flex: 1,
@@ -404,29 +404,29 @@ const createStyles = (
       paddingVertical: config.cellPadding,
       borderRightWidth: bordered ? 1 : 0,
       borderRightColor: theme.colors.outline,
-      minHeight: config.minHeight,
+      minHeight: config.minHeight
     },
     headerText: {,
   fontSize: config.fontSize,
       fontWeight: theme.typography.fontWeight.semibold,
-      color: theme.colors.onSurface,
+      color: theme.colors.onSurface
     },
     sortIcon: {,
   fontSize: config.fontSize,
       color: theme.colors.onSurfaceVariant,
-      marginLeft: theme.spacing.xs,
+      marginLeft: theme.spacing.xs
     },
     row: {,
   flexDirection: 'row',
       borderBottomWidth: bordered ? 1 : 0,
       borderBottomColor: theme.colors.outline,
-      minHeight: config.minHeight,
+      minHeight: config.minHeight
     },
     stripedRow: {,
-  backgroundColor: theme.colors.surfaceVariant,
+  backgroundColor: theme.colors.surfaceVariant
     },
     selectedRow: {,
-  backgroundColor: theme.colors.primaryContainer,
+  backgroundColor: theme.colors.primaryContainer
     },
     cell: {,
   flex: 1,
@@ -435,39 +435,39 @@ const createStyles = (
       paddingVertical: config.cellPadding,
       borderRightWidth: bordered ? 1 : 0,
       borderRightColor: theme.colors.outline,
-      minHeight: config.minHeight,
+      minHeight: config.minHeight
     },
     cellText: {,
   fontSize: config.fontSize,
-      color: theme.colors.onSurface,
+      color: theme.colors.onSurface
     },
     selectionCell: {,
   width: 50,
-      alignItems: 'center',
+      alignItems: 'center'
     },
     checkbox: {,
-  padding: theme.spacing.xs,
+  padding: theme.spacing.xs
     },
     checkboxText: {,
   fontSize: config.fontSize,
-      color: theme.colors.primary,
+      color: theme.colors.primary
     },
     emptyContainer: {,
   padding: theme.spacing.xl,
       alignItems: 'center',
       justifyContent: 'center',
-      minHeight: 120,
+      minHeight: 120
     },
     emptyText: {,
   fontSize: config.fontSize,
-      color: theme.colors.onSurfaceVariant,
+      color: theme.colors.onSurfaceVariant
     },
     loadingText: {,
   fontSize: config.fontSize,
       color: theme.colors.onSurfaceVariant,
       textAlign: 'center',
-      padding: theme.spacing.xl,
-    },
+      padding: theme.spacing.xl
+    }
   });
 };
 

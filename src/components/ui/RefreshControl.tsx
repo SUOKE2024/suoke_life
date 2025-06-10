@@ -1,8 +1,8 @@
 import React from 'react';
-import {
+import {;
   Platform,
   RefreshControl as RNRefreshControl,
-  RefreshControlProps as RNRefreshControlProps,
+  RefreshControlProps as RNRefreshControlProps
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 

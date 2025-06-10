@@ -3,7 +3,7 @@ import {import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from '../common/Icon';
 import { colors } from '../../constants/theme';
 import { cornMazeService } from '../../services/cornMazeService';
-import {View,
+import {View,;
   Text,
   StyleSheet,
   ScrollView,

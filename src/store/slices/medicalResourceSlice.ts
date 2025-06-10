@@ -177,7 +177,7 @@ const initialState: MedicalResourceState = {,
   }
 };
 // 异步Actions;
-export const searchMedicalResources = createAsyncThunk(;)
+export const searchMedicalResources = createAsyncThunk(;);
   'medicalResource/searchResources',
   async (query: SearchQuery, { rejectWithValue }) => {
     try {
@@ -196,7 +196,7 @@ export const searchMedicalResources = createAsyncThunk(;)
     }
   }
 );
-export const getMedicalResourceDetails = createAsyncThunk(;)
+export const getMedicalResourceDetails = createAsyncThunk(;);
   'medicalResource/getDetails',
   async (resourceId: string, { rejectWithValue }) => {
     try {
@@ -211,7 +211,7 @@ export const getMedicalResourceDetails = createAsyncThunk(;)
     }
   }
 );
-export const bookAppointment = createAsyncThunk(;)
+export const bookAppointment = createAsyncThunk(;);
   'medicalResource/bookAppointment',
   async (appointmentData: Omit<Appointment, 'id' | 'status'>, { rejectWithValue }) => {
     try {
@@ -230,7 +230,7 @@ export const bookAppointment = createAsyncThunk(;)
     }
   }
 );
-export const getUserAppointments = createAsyncThunk(;)
+export const getUserAppointments = createAsyncThunk(;);
   'medicalResource/getUserAppointments',
   async (userId: string, { rejectWithValue }) => {
     try {
@@ -245,7 +245,7 @@ export const getUserAppointments = createAsyncThunk(;)
     }
   }
 );
-export const getNearbyResources = createAsyncThunk(;)
+export const getNearbyResources = createAsyncThunk(;);
   'medicalResource/getNearbyResources',
   async (location: { lat: number; lng: number; radius?: number }, { rejectWithValue }) => {
     try {
@@ -264,7 +264,7 @@ export const getNearbyResources = createAsyncThunk(;)
     }
   }
 );
-export const checkServiceHealth = createAsyncThunk(;)
+export const checkServiceHealth = createAsyncThunk(;);
   'medicalResource/checkServiceHealth',
   async (_, { rejectWithValue }) => {
     try {

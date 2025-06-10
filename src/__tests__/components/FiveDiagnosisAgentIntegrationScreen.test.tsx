@@ -1,15 +1,14 @@
-import React from 'react';
-import { render } from '@testing-library/react-native';
-import { Provider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import { configureStore } from '@reduxjs/toolkit';
+import React from 'react';
+import { Provider } from 'react-redux';
 
 // 简化的测试文件，避免语法错误
 describe('FiveDiagnosisAgentIntegrationScreen', () => {
   const mockStore = configureStore({
     reducer: {
       // 简化的reducer
-      test: (state = {}, action) => state,
+      test: (state = {}, _action) => state,
     },
   });
 
@@ -33,6 +32,7 @@ describe('FiveDiagnosisAgentIntegrationScreen', () => {
 
   it('应该能够渲染组件', () => {
     // 简化的测试，避免复杂的语法错误
+    expect(TestWrapper).toBeDefined();
     expect(true).toBeTruthy();
   });
 

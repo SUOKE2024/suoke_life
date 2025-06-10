@@ -1,7 +1,7 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import {
+import {;
   ActivityIndicator,
   Alert,
   Animated,
@@ -14,7 +14,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -99,8 +99,8 @@ const AgentChatScreen: React.FC = () => {
       colors: {,
   primary: '#4A90E2',
         secondary: '#E3F2FD',
-        accent: '#2196F3',
-      },
+        accent: '#2196F3'
+      }
     },
     xiaoke: {,
   id: 'xiaoke',
@@ -113,8 +113,8 @@ const AgentChatScreen: React.FC = () => {
       colors: {,
   primary: '#7B68EE',
         secondary: '#F3E5F5',
-        accent: '#9C27B0',
-      },
+        accent: '#9C27B0'
+      }
     },
     laoke: {,
   id: 'laoke',
@@ -127,8 +127,8 @@ const AgentChatScreen: React.FC = () => {
       colors: {,
   primary: '#FF6B6B',
         secondary: '#FFEBEE',
-        accent: '#F44336',
-      },
+        accent: '#F44336'
+      }
     },
     soer: {,
   id: 'soer',
@@ -141,9 +141,9 @@ const AgentChatScreen: React.FC = () => {
       colors: {,
   primary: '#4ECDC4',
         secondary: '#E0F2F1',
-        accent: '#009688',
-      },
-    },
+        accent: '#009688'
+      }
+    }
   };
 
   // 初始化智能体信息
@@ -158,7 +158,7 @@ const AgentChatScreen: React.FC = () => {
         sender: 'agent',
         timestamp: new Date(),
         type: 'text',
-        status: 'read',
+        status: 'read'
       };
       setMessages([welcomeMessage]);
     }
@@ -173,13 +173,13 @@ const AgentChatScreen: React.FC = () => {
         Animated.timing(typingAnimation, {
           toValue: 1,
           duration: 600,
-          useNativeDriver: true,
+          useNativeDriver: true
         }),
         Animated.timing(typingAnimation, {
           toValue: 0,
           duration: 600,
-          useNativeDriver: true,
-        }),
+          useNativeDriver: true
+        })
       ])
     ).start();
   };
@@ -201,7 +201,7 @@ const AgentChatScreen: React.FC = () => {
       sender: 'user',
       timestamp: new Date(),
       type: 'text',
-      status: 'sending',
+      status: 'sending'
     };
 
     setMessages(prev) => [...prev, userMessage]);
@@ -237,7 +237,7 @@ const AgentChatScreen: React.FC = () => {
         timestamp: new Date(),
         type: response.type || 'text',
         status: 'read',
-        metadata: response.metadata,
+        metadata: response.metadata
       };
 
       setMessages(prev) => [...prev, agentMessage]);
@@ -276,23 +276,23 @@ const AgentChatScreen: React.FC = () => {
       xiaoai: [
         '我可以帮您分析图像、语音或其他多模态数据。请上传您需要分析的内容。',
         '基于您的描述，我建议进行多模态健康检测。这将包括面部分析、语音分析等。',
-        '我的多模态感知能力可以同时处理图像、语音和文本信息，为您提供综合分析。',
+        '我的多模态感知能力可以同时处理图像、语音和文本信息，为您提供综合分析。'
       ],
       xiaoke: [
         '根据您的需求，我为您推荐以下健康服务：定期体检、营养咨询、运动指导。',
         '我可以帮您预约专业的健康服务，包括中医诊疗、营养咨询等。',
-        '基于您的健康档案，我建议制定个性化的健康管理计划。',
+        '基于您的健康档案，我建议制定个性化的健康管理计划。'
       ],
       laoke: [
         '关于这个健康问题，中医理论认为需要从整体调理的角度来看待。',
         '我来为您分享一些相关的健康知识和养生经验。',
-        '根据传统中医理论，这种情况通常与体质和生活习惯有关。',
+        '根据传统中医理论，这种情况通常与体质和生活习惯有关。'
       ],
       soer: [
         '根据您的情况，我建议调整饮食结构，增加优质蛋白质和维生素的摄入。',
         '我为您制定了一个营养均衡的饮食计划，包括三餐搭配和运动建议。',
-        '健康的生活方式包括规律作息、均衡饮食和适量运动。',
-      ],
+        '健康的生活方式包括规律作息、均衡饮食和适量运动。'
+      ]
     };
 
     const agentResponses =
@@ -303,7 +303,7 @@ const AgentChatScreen: React.FC = () => {
     return {
       text: randomResponse,
       type: 'text' as const,
-      metadata: {},
+      metadata: {}
     };
   };
 
@@ -316,14 +316,14 @@ const AgentChatScreen: React.FC = () => {
       <View;
         style={[
           styles.messageContainer,
-          isUser ? styles.userMessageContainer : styles.agentMessageContainer,
+          isUser ? styles.userMessageContainer : styles.agentMessageContainer
         ]}
       >
         {!isUser && (
           <View;
             style={[
               styles.avatarContainer,
-              { backgroundColor: colors.secondary },
+              { backgroundColor: colors.secondary }
             ]}
           >
             <Text style={styles.avatarText}>{agentInfo?.avatar}</Text>
@@ -335,13 +335,13 @@ const AgentChatScreen: React.FC = () => {
             styles.messageBubble,
             isUser;
               ? [styles.userBubble, { backgroundColor: colors.primary }]
-              : styles.agentBubble,
+              : styles.agentBubble
           ]}
         >
           <Text;
             style={[
               styles.messageText,
-              isUser ? styles.userMessageText : styles.agentMessageText,
+              isUser ? styles.userMessageText : styles.agentMessageText
             ]}
           >
             {message.text}
@@ -351,12 +351,12 @@ const AgentChatScreen: React.FC = () => {
             <Text;
               style={[
                 styles.timestampText,
-                isUser ? styles.userTimestampText : styles.agentTimestampText,
+                isUser ? styles.userTimestampText : styles.agentTimestampText
               ]}
             >
               {message.timestamp.toLocaleTimeString('zh-CN', {
                 hour: '2-digit',
-                minute: '2-digit',
+                minute: '2-digit'
               })}
             </Text>
 
@@ -421,7 +421,7 @@ const AgentChatScreen: React.FC = () => {
         <View;
           style={[
             styles.avatarContainer,
-            { backgroundColor: colors.secondary },
+            { backgroundColor: colors.secondary }
           ]}
         >
           <Text style={styles.avatarText}>{agentInfo.avatar}</Text>
@@ -436,8 +436,8 @@ const AgentChatScreen: React.FC = () => {
               styles.typingDot,
               {
                 opacity: typingAnimation,
-                transform: [{ scale: typingAnimation }],
-              },
+                transform: [{ scale: typingAnimation }]
+              }
             ]}
           />
           <Animated.View;
@@ -491,7 +491,7 @@ const AgentChatScreen: React.FC = () => {
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor={colors.primary} />
 
-      {/* 头部 */}
+      {// 头部}
       <View style={[styles.header, { backgroundColor: colors.primary }]}>
         <TouchableOpacity;
           style={styles.backButton}
@@ -519,7 +519,7 @@ const AgentChatScreen: React.FC = () => {
         </TouchableOpacity>
       </View>
 
-      {/* 消息列表 */}
+      {// 消息列表}
       <KeyboardAvoidingView;
         style={styles.chatContainer}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -538,7 +538,7 @@ const AgentChatScreen: React.FC = () => {
           ListFooterComponent={renderTypingIndicator}
         />
 
-        {/* 输入框 */}
+        {// 输入框}
         <View style={styles.inputContainer}>
           <View style={styles.inputWrapper}>
             <TextInput;
@@ -554,7 +554,7 @@ const AgentChatScreen: React.FC = () => {
             <TouchableOpacity;
               style={[
                 styles.sendButton,
-                { backgroundColor: inputText.trim() ? colors.primary : '#CCC' },
+                { backgroundColor: inputText.trim() ? colors.primary : '#CCC' }
               ]}
               onPress={sendMessage}
               disabled={!inputText.trim()}
@@ -571,36 +571,36 @@ const AgentChatScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {,
   flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: '#F8F9FA'
   },
   loadingContainer: {,
   flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   loadingText: {,
   marginTop: 10,
     fontSize: 16,
-    color: '#666',
+    color: '#666'
   },
   errorContainer: {,
   flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 40,
+    paddingHorizontal: 40
   },
   errorTitle: {,
   fontSize: 20,
     fontWeight: 'bold',
     color: '#333',
     marginTop: 16,
-    marginBottom: 8,
+    marginBottom: 8
   },
   errorSubtitle: {,
   fontSize: 14,
     color: '#666',
     textAlign: 'center',
-    marginBottom: 24,
+    marginBottom: 24
   },
   header: {,
   flexDirection: 'row',
@@ -611,16 +611,16 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowRadius: 4
   },
   backButton: {,
   padding: 8,
-    marginRight: 8,
+    marginRight: 8
   },
   headerInfo: {,
   flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   headerAvatar: {,
   width: 40,
@@ -628,46 +628,46 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 12,
+    marginRight: 12
   },
   headerAvatarText: {,
-  fontSize: 20,
+  fontSize: 20
   },
   headerTextContainer: {,
-  flex: 1,
+  flex: 1
   },
   headerTitle: {,
   fontSize: 18,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: '#FFFFFF'
   },
   headerSubtitle: {,
   fontSize: 12,
     color: '#E3F2FD',
-    marginTop: 2,
+    marginTop: 2
   },
   moreButton: {,
-  padding: 8,
+  padding: 8
   },
   chatContainer: {,
-  flex: 1,
+  flex: 1
   },
   messagesList: {,
-  flex: 1,
+  flex: 1
   },
   messagesContainer: {,
-  paddingVertical: 16,
+  paddingVertical: 16
   },
   messageContainer: {,
   flexDirection: 'row',
     marginVertical: 4,
-    paddingHorizontal: 16,
+    paddingHorizontal: 16
   },
   userMessageContainer: {,
-  justifyContent: 'flex-end',
+  justifyContent: 'flex-end'
   },
   agentMessageContainer: {,
-  justifyContent: 'flex-start',
+  justifyContent: 'flex-start'
   },
   avatarContainer: {,
   width: 32,
@@ -676,19 +676,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 8,
-    alignSelf: 'flex-end',
+    alignSelf: 'flex-end'
   },
   avatarText: {,
-  fontSize: 16,
+  fontSize: 16
   },
   messageBubble: {,
   maxWidth: width * 0.75,
     paddingHorizontal: 16,
     paddingVertical: 12,
-    borderRadius: 20,
+    borderRadius: 20
   },
   userBubble: {,
-  borderBottomRightRadius: 4,
+  borderBottomRightRadius: 4
   },
   agentBubble: {,
   backgroundColor: '#FFFFFF',
@@ -697,36 +697,36 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
-    elevation: 2,
+    elevation: 2
   },
   messageText: {,
   fontSize: 16,
-    lineHeight: 22,
+    lineHeight: 22
   },
   userMessageText: {,
-  color: '#FFFFFF',
+  color: '#FFFFFF'
   },
   agentMessageText: {,
-  color: '#333',
+  color: '#333'
   },
   messageFooter: {,
   flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    marginTop: 4,
+    marginTop: 4
   },
   timestampText: {,
   fontSize: 11,
-    marginRight: 4,
+    marginRight: 4
   },
   userTimestampText: {,
-  color: 'rgba(255, 255, 255, 0.7)',
+  color: 'rgba(255, 255, 255, 0.7)'
   },
   agentTimestampText: {,
-  color: '#999',
+  color: '#999'
   },
   statusIcon: {,
-  marginLeft: 2,
+  marginLeft: 2
   },
   typingBubble: {,
   flexDirection: 'row',
@@ -740,21 +740,21 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
-    elevation: 2,
+    elevation: 2
   },
   typingDot: {,
   width: 8,
     height: 8,
     borderRadius: 4,
     backgroundColor: '#999',
-    marginHorizontal: 2,
+    marginHorizontal: 2
   },
   inputContainer: {,
   paddingHorizontal: 16,
     paddingVertical: 12,
     backgroundColor: '#FFFFFF',
     borderTopWidth: 1,
-    borderTopColor: '#E0E0E0',
+    borderTopColor: '#E0E0E0'
   },
   inputWrapper: {,
   flexDirection: 'row',
@@ -762,27 +762,27 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5F5F5',
     borderRadius: 25,
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: 8
   },
   textInput: {,
   flex: 1,
     fontSize: 16,
     color: '#333',
     maxHeight: 100,
-    marginRight: 8,
+    marginRight: 8
   },
   sendButton: {,
   width: 36,
     height: 36,
     borderRadius: 18,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   backButtonText: {,
   color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: '600',
-  },
+    fontWeight: '600'
+  }
 });
 
 export default AgentChatScreen;

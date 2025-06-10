@@ -100,7 +100,7 @@ style={containerStyle}}
       disabled={disabled}
       testID={testID}
       activeOpacity={0.7}
-    accessibilityLabel="TODO: 添加无障碍标签" />/      <View style={getCheckboxStyle()}} />{renderCheckIcon()}</View>/          {renderLabel()};
+    accessibilityLabel="操作按钮" />/      <View style={getCheckboxStyle()}} />{renderCheckIcon()}</View>/          {renderLabel()};
     </TouchableOpacity>/      ;);
 }
 const styles = StyleSheet.create({container: {),

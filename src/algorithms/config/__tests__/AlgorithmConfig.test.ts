@@ -1,4 +1,3 @@
-import React from 'react';
 import AlgorithmConfig from '../AlgorithmConfig';
 beforeEach(() => {
   jest.clearAllMocks();
@@ -20,7 +19,8 @@ describe('AlgorithmConfig', () => {
       new AlgorithmConfig({});
     }).not.toThrow();
   });
-  it('should return correct output format', () => {// Add test cases;)
+  it('should return correct output format', () => {
+    // Add test cases
     const config = new AlgorithmConfig();
     expect(typeof config).toBe('object');
   });
@@ -46,7 +46,12 @@ describe('AlgorithmConfig Performance Tests', () => {
     expect(averageTime).toBeLessThan(100);
   });
   it('should handle large datasets efficiently', () => {
-    const largeConfig = {looking: { enabled: true },listening: { enabled: true },inquiry: { enabled: true },palpation: { enabled: true },calculation: { enabled: true };
+    const largeConfig = {
+      looking: { enabled: true },
+      listening: { enabled: true },
+      inquiry: { enabled: true },
+      palpation: { enabled: true },
+      calculation: { enabled: true },
     };
     const startTime = performance.now();
     // Test with large dataset

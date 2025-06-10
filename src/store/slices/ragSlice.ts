@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { ragService } from '../../services/ragService';
 import { RAG_CONFIG } from '../../constants/config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import type {RAGQueryRequest,
+import type {RAGQueryRequest,;
   RAGQueryResponse,
   TCMAnalysisRequest,
   TCMAnalysisResponse,
@@ -100,7 +100,7 @@ const initialState: RAGState = {,
   }
 };
 // 异步Thunk：基础RAG查询
-export const queryRAG = createAsyncThunk(;)
+export const queryRAG = createAsyncThunk(;);
   'rag/query',
   async (request: RAGQueryRequest, { dispatch, rejectWithValue }) => {
     try {
@@ -122,7 +122,7 @@ export const queryRAG = createAsyncThunk(;)
   }
 );
 // 异步Thunk：中医分析
-export const analyzeTCMSyndrome = createAsyncThunk(;)
+export const analyzeTCMSyndrome = createAsyncThunk(;);
   'rag/analyzeTCMSyndrome',
   async (request: TCMAnalysisRequest, { rejectWithValue }) => {
     try {
@@ -134,7 +134,7 @@ export const analyzeTCMSyndrome = createAsyncThunk(;)
   }
 );
 // 异步Thunk：中药推荐
-export const recommendHerbs = createAsyncThunk(;)
+export const recommendHerbs = createAsyncThunk(;);
   'rag/recommendHerbs',
   async (request: HerbRecommendationRequest, { rejectWithValue }) => {
     try {
@@ -146,7 +146,7 @@ export const recommendHerbs = createAsyncThunk(;)
   }
 );
 // 异步Thunk：流式查询
-export const streamQueryRAG = createAsyncThunk(;)
+export const streamQueryRAG = createAsyncThunk(;);
   'rag/streamQuery',
   async ()
     { request, onChunk }: { request: RAGQueryRequest; onChunk: (chunk: StreamResponse) => void },
@@ -166,7 +166,7 @@ export const streamQueryRAG = createAsyncThunk(;)
   }
 );
 // 异步Thunk：多模态查询
-export const multimodalQuery = createAsyncThunk(;)
+export const multimodalQuery = createAsyncThunk(;);
   'rag/multimodalQuery',
   async (request: RAGQueryRequest, { dispatch, rejectWithValue }) => {
     try {

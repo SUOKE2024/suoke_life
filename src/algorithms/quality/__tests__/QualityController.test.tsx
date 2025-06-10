@@ -1,6 +1,5 @@
 import { performance } from 'perf_hooks';
-
-import React from 'react';
+import { QualityController } from '../QualityController';
 describe('QualityController', () => {
   beforeEach(() => {
     jest.clearAllMocks();

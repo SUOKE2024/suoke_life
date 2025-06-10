@@ -40,7 +40,7 @@ const initialState: AgentState = {,
   preferredAgents: [],
     interactionSettings: {}}};
 // 异步操作 - 获取所有智能体状态
-export const fetchAllAgentStatuses = createAsyncThunk()
+export const fetchAllAgentStatuses = createAsyncThunk();
   'agents/fetchAllStatuses',
   async (_, { rejectWithValue }) => {
     try {
@@ -52,7 +52,7 @@ export const fetchAllAgentStatuses = createAsyncThunk()
   },
 );
 // 异步操作 - 获取单个智能体状态
-export const fetchAgentStatus = createAsyncThunk()
+export const fetchAgentStatus = createAsyncThunk();
   'agents/fetchStatus',
   async (agentId: string, { rejectWithValue }) => {
     try {
@@ -67,7 +67,7 @@ export const fetchAgentStatus = createAsyncThunk()
   },
 );
 // 异步操作 - 启动智能体交互
-export const startAgentInteraction = createAsyncThunk()
+export const startAgentInteraction = createAsyncThunk();
   'agents/startInteraction',
   async ({ agentId, userId }: { agentId: string; userId: string }, { rejectWithValue }) => {
     try {
@@ -79,7 +79,7 @@ export const startAgentInteraction = createAsyncThunk()
   },
 );
 // 异步操作 - 发送消息
-export const sendMessageToAgent = createAsyncThunk()
+export const sendMessageToAgent = createAsyncThunk();
   'agents/sendMessage',
   async ()
     { sessionId, content, type = 'text' }: { sessionId: string; content: string; type?: 'text' | 'image' | 'audio' },
@@ -94,7 +94,7 @@ export const sendMessageToAgent = createAsyncThunk()
   },
 );
 // 异步操作 - 结束交互
-export const endAgentInteraction = createAsyncThunk()
+export const endAgentInteraction = createAsyncThunk();
   'agents/endInteraction',
   async (sessionId: string, { rejectWithValue }) => {
     try {
@@ -106,7 +106,7 @@ export const endAgentInteraction = createAsyncThunk()
   },
 );
 // 异步操作 - 更新智能体配置
-export const updateAgentConfiguration = createAsyncThunk()
+export const updateAgentConfiguration = createAsyncThunk();
   'agents/updateConfig',
   async ()
     { agentId, config }: { agentId: string; config: Partial<AgentStatus> },

@@ -18,7 +18,7 @@ export class StorageManager {
     const item: StorageItem = {
       data,
       timestamp: Date.now(),
-      ttl,
+      ttl
     };
     await AsyncStorage.setItem(key, JSON.stringify(item));
   }

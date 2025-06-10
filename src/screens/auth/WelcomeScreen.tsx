@@ -1,13 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useEffect, useRef } from 'react';
-import {
+import {;
   Animated,
   Dimensions,
   StatusBar,
   StyleSheet,
   Text,
-  View,
+  View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -40,19 +40,19 @@ const WelcomeScreen: React.FC = () => {
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 2000,
-        useNativeDriver: true,
+        useNativeDriver: true
       }),
       Animated.spring(scaleAnim, {
         toValue: 1,
         tension: 20,
         friction: 7,
-        useNativeDriver: true,
+        useNativeDriver: true
       }),
       Animated.timing(slideAnim, {
         toValue: 0,
         duration: 1500,
-        useNativeDriver: true,
-      }),
+        useNativeDriver: true
+      })
     ]).start();
 
     // 3秒后自动跳转到登录页面
@@ -72,11 +72,11 @@ const WelcomeScreen: React.FC = () => {
             styles.logoContainer,
             {
               opacity: fadeAnim,
-              transform: [{ scale: scaleAnim }, { translateY: slideAnim }],
-            },
+              transform: [{ scale: scaleAnim }, { translateY: slideAnim }]
+            }
           ]}
         >
-          {/* Logo占位符 */}
+          {// Logo占位符}
           <View style={styles.logoPlaceholder}>
             <Text style={styles.logoText}>索克</Text>
           </View>
@@ -86,8 +86,8 @@ const WelcomeScreen: React.FC = () => {
               styles.titleContainer,
               {
                 opacity: fadeAnim,
-                transform: [{ translateY: slideAnim }],
-              },
+                transform: [{ translateY: slideAnim }]
+              }
             ]}
           >
             <Text style={styles.title}>索克生活</Text>
@@ -99,8 +99,8 @@ const WelcomeScreen: React.FC = () => {
           style={[
             styles.loadingContainer,
             {
-              opacity: fadeAnim,
-            },
+              opacity: fadeAnim
+            }
           ]}
         >
           <View style={styles.loadingDots}>
@@ -118,18 +118,18 @@ const WelcomeScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {,
   flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFFFF'
   },
   content: {,
   flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 20,
+    paddingHorizontal: 20
   },
   logoContainer: {,
   justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 80,
+    marginBottom: 80
   },
   logoPlaceholder: {,
   width: 120,
@@ -143,44 +143,44 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.3,
     shadowRadius: 20,
-    elevation: 10,
+    elevation: 10
   },
   logoText: {,
   fontSize: 36,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: '#FFFFFF'
   },
   titleContainer: {,
-  alignItems: 'center',
+  alignItems: 'center'
   },
   title: {,
   fontSize: 32,
     fontWeight: 'bold',
     color: '#2C3E50',
     marginBottom: 8,
-    textAlign: 'center',
+    textAlign: 'center'
   },
   subtitle: {,
   fontSize: 16,
     color: '#7F8C8D',
     textAlign: 'center',
-    lineHeight: 24,
+    lineHeight: 24
   },
   loadingContainer: {,
   position: 'absolute',
     bottom: 100,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   loadingDots: {,
   flexDirection: 'row',
-    marginBottom: 16,
+    marginBottom: 16
   },
   dot: {,
   width: 8,
     height: 8,
     borderRadius: 4,
     backgroundColor: '#3498DB',
-    marginHorizontal: 4,
+    marginHorizontal: 4
   },
   dot1: {
     // 第一个点的样式
@@ -194,8 +194,8 @@ const styles = StyleSheet.create({
   loadingText: {,
   fontSize: 14,
     color: '#7F8C8D',
-    textAlign: 'center',
-  },
+    textAlign: 'center'
+  }
 });
 
 export default WelcomeScreen;

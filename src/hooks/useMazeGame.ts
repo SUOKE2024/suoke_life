@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Alert, Vibration } from 'react-native';
 import { cornMazeService } from '../services/cornMazeService';
-import {Maze,
+import {Maze,;
   MazeProgress,
   Position,
   Direction,

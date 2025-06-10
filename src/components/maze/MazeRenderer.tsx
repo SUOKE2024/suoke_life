@@ -1,5 +1,5 @@
 import React, { useMemo, useRef, useEffect } from 'react';
-import {import Svg, {import {/**
+import {import Svg, {import {/**;
 * 迷宫渲染器组件
 * Maze Renderer Component;
 */

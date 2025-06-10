@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
+import {;
   View,
   Text,
   StyleSheet,
@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   Alert,
   Modal} from 'react-native';
-import {
+import {;
   GATEWAY_FEATURES,
   GATEWAY_PERFORMANCE_CONFIG,
   GATEWAY_CACHE_CONFIG,

@@ -1,7 +1,7 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useCallback, useEffect, useState } from 'react';
-import {
+import {;
   ActivityIndicator,
   Alert,
   Dimensions,
@@ -11,7 +11,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -95,8 +95,8 @@ const DiagnosisServiceScreen: React.FC = () => {
       colors: {,
   primary: '#FF6B6B',
         secondary: '#FFEBEE',
-        accent: '#F44336',
-      },
+        accent: '#F44336'
+      }
     },
     look: {,
   id: 'look',
@@ -109,8 +109,8 @@ const DiagnosisServiceScreen: React.FC = () => {
       colors: {,
   primary: '#4CAF50',
         secondary: '#E8F5E8',
-        accent: '#2E7D32',
-      },
+        accent: '#2E7D32'
+      }
     },
     listen: {,
   id: 'listen',
@@ -123,8 +123,8 @@ const DiagnosisServiceScreen: React.FC = () => {
       colors: {,
   primary: '#2196F3',
         secondary: '#E3F2FD',
-        accent: '#1976D2',
-      },
+        accent: '#1976D2'
+      }
     },
     inquiry: {,
   id: 'inquiry',
@@ -137,8 +137,8 @@ const DiagnosisServiceScreen: React.FC = () => {
       colors: {,
   primary: '#9C27B0',
         secondary: '#F3E5F5',
-        accent: '#7B1FA2',
-      },
+        accent: '#7B1FA2'
+      }
     },
     palpation: {,
   id: 'palpation',
@@ -151,9 +151,9 @@ const DiagnosisServiceScreen: React.FC = () => {
       colors: {,
   primary: '#FF9800',
         secondary: '#FFF3E0',
-        accent: '#F57C00',
-      },
-    },
+        accent: '#F57C00'
+      }
+    }
   };
 
   // 初始化服务信息
@@ -177,7 +177,7 @@ const DiagnosisServiceScreen: React.FC = () => {
           result: '根据分析，您的整体状况良好',
           confidence: 0.85,
           timestamp: new Date(Date.now() - 86400000), // 1天前
-          details: { score: 85, recommendations: ['保持良好作息', '适量运动'] },
+          details: { score: 85, recommendations: ['保持良好作息', '适量运动'] }
         },
         {
           id: '2',
@@ -185,8 +185,8 @@ const DiagnosisServiceScreen: React.FC = () => {
           result: '建议关注睡眠质量',
           confidence: 0.72,
           timestamp: new Date(Date.now() - 172800000), // 2天前
-          details: { score: 72, recommendations: ['改善睡眠环境', '规律作息'] },
-        },
+          details: { score: 72, recommendations: ['改善睡眠环境', '规律作息'] }
+        }
       ];
       setDiagnosisResults(mockHistory);
     } catch (error) {
@@ -211,7 +211,7 @@ const DiagnosisServiceScreen: React.FC = () => {
         result: generateMockResult(serviceInfo.id),
         confidence: 0.75 + Math.random() * 0.2,
         timestamp: new Date(),
-        details: generateMockDetails(serviceInfo.id),
+        details: generateMockDetails(serviceInfo.id)
       };
 
       setDiagnosisResults(prev) => [mockResult, ...prev]);
@@ -231,28 +231,28 @@ const DiagnosisServiceScreen: React.FC = () => {
       calculation: [
         '根据症状分析，建议关注脾胃调理',
         '体质偏向气虚，建议补气养血',
-        '整体健康状况良好，保持现状',
+        '整体健康状况良好，保持现状'
       ],
       look: [
         '面色红润，气色良好',
         '舌苔略厚，建议清淡饮食',
-        '眼神清亮，精神状态佳',
+        '眼神清亮，精神状态佳'
       ],
       listen: [
         '声音洪亮，肺气充足',
         '呼吸平稳，无异常音',
-        '语音清晰，神志清楚',
+        '语音清晰，神志清楚'
       ],
       inquiry: [
         '症状描述清晰，建议进一步检查',
         '病史信息完整，诊断依据充分',
-        '主诉明确，治疗方向清楚',
+        '主诉明确，治疗方向清楚'
       ],
       palpation: [
         '脉象平和，心率正常',
         '脉搏有力，血液循环良好',
-        '脉象略弦，建议放松心情',
-      ],
+        '脉象略弦，建议放松心情'
+      ]
     };
 
     const serviceResults =
@@ -267,14 +267,14 @@ const DiagnosisServiceScreen: React.FC = () => {
       metrics: {,
   accuracy: Math.floor(80 + Math.random() * 15),
         reliability: Math.floor(75 + Math.random() * 20),
-        completeness: Math.floor(85 + Math.random() * 10),
+        completeness: Math.floor(85 + Math.random() * 10)
       },
       recommendations: [
         '保持规律作息',
         '适量运动锻炼',
         '均衡营养饮食',
-        '定期健康检查',
-      ].slice(0, 2 + Math.floor(Math.random() * 2)),
+        '定期健康检查'
+      ].slice(0, 2 + Math.floor(Math.random() * 2))
     };
   };
 
@@ -291,13 +291,13 @@ const DiagnosisServiceScreen: React.FC = () => {
               key={index}
               style={[
                 styles.capabilityItem,
-                { backgroundColor: serviceInfo.colors.secondary },
+                { backgroundColor: serviceInfo.colors.secondary }
               ]}
             >
               <Text;
                 style={[
                   styles.capabilityText,
-                  { color: serviceInfo.colors.primary },
+                  { color: serviceInfo.colors.primary }
                 ]}
               >
                 {capability}
@@ -340,7 +340,7 @@ const DiagnosisServiceScreen: React.FC = () => {
               <View;
                 style={[
                   styles.confidenceBadge,
-                  { backgroundColor: getConfidenceColor(result.confidence) },
+                  { backgroundColor: getConfidenceColor(result.confidence) }
                 ]}
               >
                 <Text style={styles.confidenceText}>
@@ -380,7 +380,7 @@ const DiagnosisServiceScreen: React.FC = () => {
             <View;
               style={[
                 styles.modalHeader,
-                { backgroundColor: serviceInfo.colors.primary },
+                { backgroundColor: serviceInfo.colors.primary }
               ]}
             >
               <Text style={styles.modalTitle}>诊断结果</Text>
@@ -409,8 +409,8 @@ const DiagnosisServiceScreen: React.FC = () => {
                           width: `${currentResult.confidence * 100}%`,
                           backgroundColor: getConfidenceColor(
                             currentResult.confidence;
-                          ),
-                        },
+                          )
+                        }
                       ]}
                     />
                   </View>
@@ -487,7 +487,7 @@ const DiagnosisServiceScreen: React.FC = () => {
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor={colors.primary} />
 
-      {/* 头部 */}
+      {// 头部}
       <View style={[styles.header, { backgroundColor: colors.primary }]}>
         <TouchableOpacity;
           style={styles.headerBackButton}
@@ -512,21 +512,21 @@ const DiagnosisServiceScreen: React.FC = () => {
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {/* 服务描述 */}
+        {// 服务描述}
         <View style={styles.descriptionContainer}>
           <Text style={styles.descriptionText}>{serviceInfo.description}</Text>
         </View>
 
-        {/* 服务能力 */}
+        {// 服务能力}
         {renderCapabilities()}
 
-        {/* 开始诊断按钮 */}
+        {// 开始诊断按钮}
         <View style={styles.actionContainer}>
           <TouchableOpacity;
             style={[
               styles.diagnosisButton,
               { backgroundColor: colors.primary },
-              diagnosing && styles.diagnosisButtonDisabled,
+              diagnosing && styles.diagnosisButtonDisabled
             ]}
             onPress={startDiagnosis}
             disabled={diagnosing}
@@ -542,11 +542,11 @@ const DiagnosisServiceScreen: React.FC = () => {
           </TouchableOpacity>
         </View>
 
-        {/* 诊断历史 */}
+        {// 诊断历史}
         {renderDiagnosisHistory()}
       </ScrollView>
 
-      {/* 结果模态框 */}
+      {// 结果模态框}
       {renderResultModal()}
     </SafeAreaView>
   );
@@ -555,47 +555,47 @@ const DiagnosisServiceScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {,
   flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: '#F8F9FA'
   },
   loadingContainer: {,
   flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   loadingText: {,
   marginTop: 10,
     fontSize: 16,
-    color: '#666',
+    color: '#666'
   },
   errorContainer: {,
   flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 40,
+    paddingHorizontal: 40
   },
   errorTitle: {,
   fontSize: 20,
     fontWeight: 'bold',
     color: '#333',
     marginTop: 16,
-    marginBottom: 8,
+    marginBottom: 8
   },
   errorSubtitle: {,
   fontSize: 14,
     color: '#666',
     textAlign: 'center',
-    marginBottom: 24,
+    marginBottom: 24
   },
   backButton: {,
   backgroundColor: '#4A90E2',
     paddingHorizontal: 24,
     paddingVertical: 12,
-    borderRadius: 8,
+    borderRadius: 8
   },
   backButtonText: {,
   color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   header: {,
   flexDirection: 'row',
@@ -606,39 +606,39 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowRadius: 4
   },
   headerBackButton: {,
   padding: 8,
-    marginRight: 8,
+    marginRight: 8
   },
   headerInfo: {,
   flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   headerIcon: {,
   fontSize: 32,
-    marginRight: 12,
+    marginRight: 12
   },
   headerTextContainer: {,
-  flex: 1,
+  flex: 1
   },
   headerTitle: {,
   fontSize: 18,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: '#FFFFFF'
   },
   headerSubtitle: {,
   fontSize: 12,
     color: '#E3F2FD',
-    marginTop: 2,
+    marginTop: 2
   },
   moreButton: {,
-  padding: 8,
+  padding: 8
   },
   content: {,
-  flex: 1,
+  flex: 1
   },
   descriptionContainer: {,
   margin: 16,
@@ -649,42 +649,42 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
-    elevation: 2,
+    elevation: 2
   },
   descriptionText: {,
   fontSize: 14,
     color: '#666',
-    lineHeight: 20,
+    lineHeight: 20
   },
   capabilitiesContainer: {,
   margin: 16,
-    marginTop: 0,
+    marginTop: 0
   },
   sectionTitle: {,
   fontSize: 18,
     fontWeight: '600',
     color: '#333',
-    marginBottom: 12,
+    marginBottom: 12
   },
   capabilitiesGrid: {,
   flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
+    gap: 8
   },
   capabilityItem: {,
   paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
     marginRight: 8,
-    marginBottom: 8,
+    marginBottom: 8
   },
   capabilityText: {,
   fontSize: 12,
-    fontWeight: '500',
+    fontWeight: '500'
   },
   actionContainer: {,
   margin: 16,
-    marginTop: 0,
+    marginTop: 0
   },
   diagnosisButton: {,
   flexDirection: 'row',
@@ -696,20 +696,20 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
+    elevation: 3
   },
   diagnosisButtonDisabled: {,
-  opacity: 0.7,
+  opacity: 0.7
   },
   diagnosisButtonText: {,
   color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '600',
-    marginLeft: 8,
+    marginLeft: 8
   },
   historyContainer: {,
   margin: 16,
-    marginTop: 0,
+    marginTop: 0
   },
   historyItem: {,
   backgroundColor: '#FFFFFF',
@@ -720,125 +720,125 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
-    elevation: 2,
+    elevation: 2
   },
   historyHeader: {,
   flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 8
   },
   historyDate: {,
   fontSize: 12,
-    color: '#999',
+    color: '#999'
   },
   confidenceBadge: {,
   paddingHorizontal: 8,
     paddingVertical: 2,
-    borderRadius: 10,
+    borderRadius: 10
   },
   confidenceText: {,
   fontSize: 10,
     color: '#FFFFFF',
-    fontWeight: '600',
+    fontWeight: '600'
   },
   historyResult: {,
   fontSize: 14,
     color: '#333',
-    lineHeight: 20,
+    lineHeight: 20
   },
   emptyHistory: {,
   alignItems: 'center',
-    paddingVertical: 40,
+    paddingVertical: 40
   },
   emptyHistoryText: {,
   fontSize: 16,
     color: '#666',
     marginTop: 12,
-    fontWeight: '500',
+    fontWeight: '500'
   },
   emptyHistorySubtext: {,
   fontSize: 12,
     color: '#999',
-    marginTop: 4,
+    marginTop: 4
   },
   modalOverlay: {,
   flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   modalContent: {,
   backgroundColor: '#FFFFFF',
     borderRadius: 16,
     width: width * 0.9,
     maxHeight: height * 0.8,
-    overflow: 'hidden',
+    overflow: 'hidden'
   },
   modalHeader: {,
   flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
-    paddingVertical: 16,
+    paddingVertical: 16
   },
   modalTitle: {,
   fontSize: 18,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: '#FFFFFF'
   },
   modalCloseButton: {,
-  padding: 4,
+  padding: 4
   },
   modalBody: {,
-  padding: 20,
+  padding: 20
   },
   resultSection: {,
-  marginBottom: 20,
+  marginBottom: 20
   },
   resultTitle: {,
   fontSize: 16,
     fontWeight: '600',
     color: '#333',
-    marginBottom: 8,
+    marginBottom: 8
   },
   resultText: {,
   fontSize: 14,
     color: '#666',
-    lineHeight: 20,
+    lineHeight: 20
   },
   confidenceContainer: {,
   flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   confidenceBar: {,
   flex: 1,
     height: 8,
     backgroundColor: '#E0E0E0',
     borderRadius: 4,
-    marginRight: 12,
+    marginRight: 12
   },
   confidenceFill: {,
   height: '100%',
-    borderRadius: 4,
+    borderRadius: 4
   },
   confidencePercentage: {,
   fontSize: 14,
     fontWeight: '600',
     color: '#333',
-    minWidth: 40,
+    minWidth: 40
   },
   recommendationItem: {,
   flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 8
   },
   recommendationText: {,
   fontSize: 14,
     color: '#666',
     marginLeft: 8,
-    flex: 1,
-  },
+    flex: 1
+  }
 });
 
 export default DiagnosisServiceScreen;

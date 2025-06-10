@@ -1,42 +1,42 @@
-import { AgentCoordinator } from "./AgentCoordinator";
-import { AgentType } from "./types/agents";
+import { AgentCoordinator } from './AgentCoordinator';
+import { AgentType } from './types/agents';
 
 /**
  * 智能体管理器配置
  */
 export interface AgentManagerConfig {
-  maxConcurrentTasks: number;,
-  healthCheckInterval: number;,
-  autoRestart: boolean;,
-  logLevel: "debug" | "info" | "warn" | "error";,
-  performanceMonitoring: boolean;,
-  resourceLimits: {,
-  memory: number;,
-  cpu: number;
+  maxConcurrentTasks: number;
+  healthCheckInterval: number;
+  autoRestart: boolean;
+  logLevel: 'debug' | 'info' | 'warn' | 'error';
+  performanceMonitoring: boolean;
+  resourceLimits: {
+    memory: number;
+    cpu: number;
   };
 }
 
 /**
  * 智能体状态
  */
-export type AgentStatus = 
-  | "initializing"
-  | "active"
-  | "inactive"
-  | "error"
-  | "maintenance";
+export type AgentStatus =
+  | 'initializing'
+  | 'active'
+  | 'inactive'
+  | 'error'
+  | 'maintenance';
 
 /**
  * 智能体性能指标
  */
 export interface AgentMetrics {
-  tasksProcessed: number;,
-  successRate: number;,
-  averageResponseTime: number;,
-  errorCount: number;,
-  lastActive: Date;,
-  memoryUsage: number;,
-  cpuUsage: number;,
+  tasksProcessed: number;
+  successRate: number;
+  averageResponseTime: number;
+  errorCount: number;
+  lastActive: Date;
+  memoryUsage: number;
+  cpuUsage: number;
   uptime: number;
 }
 
@@ -57,10 +57,10 @@ export class AgentManager {
       maxConcurrentTasks: 10,
       healthCheckInterval: 30000, // 30秒
       autoRestart: true,
-      logLevel: "info",
+      logLevel: 'info',
       performanceMonitoring: true,
-      resourceLimits: {,
-  memory: 512, // MB;
+      resourceLimits: {
+        memory: 512, // MB
         cpu: 80, // 百分比
       },
       ...config,
@@ -74,23 +74,23 @@ export class AgentManager {
    */
   async initialize(): Promise<void> {
     try {
-      this.log("info", "智能体管理器开始初始化...");
-      
+      this.log('info', '智能体管理器开始初始化...');
+
       // 初始化协调器
       await this.coordinator.initialize();
-      
+
       // 启动健康检查
       this.startHealthCheck();
-      
+
       // 启动性能监控
       if (this.config.performanceMonitoring) {
         this.startPerformanceMonitoring();
       }
-      
+
       this.isRunning = true;
-      this.log("info", "智能体管理器初始化完成");
+      this.log('info', '智能体管理器初始化完成');
     } catch (error) {
-      this.log("error", "智能体管理器初始化失败", error);
+      this.log('error', '智能体管理器初始化失败', error);
       throw error;
     }
   }
@@ -100,25 +100,28 @@ export class AgentManager {
    */
   async processTask(message: string, context: any): Promise<any> {
     if (!this.isRunning) {
-      throw new Error("智能体管理器未运行");
+      throw new Error('智能体管理器未运行');
     }
 
     const startTime = Date.now();
     try {
       // 检查并发任务限制
       if (this.getCurrentTaskCount() >= this.config.maxConcurrentTasks) {
-        throw new Error("达到最大并发任务限制");
+        throw new Error('达到最大并发任务限制');
       }
 
       // 通过协调器处理任务
-      const result = await this.coordinator.processCollaborativeTask(message, context);
-      
+      const result = await this.coordinator.processCollaborativeTask(
+        message,
+        context
+      );
+
       // 更新性能指标
       this.updateMetrics(result, Date.now() - startTime);
-      
+
       return result;
     } catch (error) {
-      this.log("error", "任务处理失败", error);
+      this.log('error', '任务处理失败', error);
       this.updateErrorMetrics();
       throw error;
     }
@@ -127,29 +130,35 @@ export class AgentManager {
   /**
    * 获取智能体状态
    */
-  async getAgentStatus(agentType?: AgentType): Promise<Map<AgentType, any> | any> {
+  async getAgentStatus(
+    agentType?: AgentType
+  ): Promise<Map<AgentType, any> | any> {
     const allStatus = await this.coordinator.getAllAgentStatus();
-    
+
     if (agentType) {
-      return allStatus.get(agentType) || {
-        agentType,
-        status: "error",
-        load: 0,
-        responseTime: 0,
-        errorRate: 1,
-        lastCheck: new Date(),
-        capabilities: [],
-        version: "0.0.0",
-      };
+      return (
+        allStatus.get(agentType) || {
+          agentType,
+          status: 'error',
+          load: 0,
+          responseTime: 0,
+          errorRate: 1,
+          lastCheck: new Date(),
+          capabilities: [],
+          version: '0.0.0',
+        }
+      );
     }
-    
+
     return allStatus;
   }
 
   /**
    * 获取性能指标
    */
-  getMetrics(agentType?: AgentType): Map<AgentType, AgentMetrics> | AgentMetrics | undefined {
+  getMetrics(
+    agentType?: AgentType
+  ): Map<AgentType, AgentMetrics> | AgentMetrics | undefined {
     if (agentType) {
       return this.metrics.get(agentType);
     }
@@ -160,13 +169,13 @@ export class AgentManager {
    * 重启智能体
    */
   async restartAgent(agentType: AgentType): Promise<void> {
-    this.log("info", `重启智能体: ${agentType}`);
+    this.log('info', `重启智能体: ${agentType}`);
     try {
       // 这里应该实现具体的重启逻辑
       // 由于当前架构限制，我们记录重启事件
-      this.log("info", `智能体 ${agentType} 重启完成`);
+      this.log('info', `智能体 ${agentType} 重启完成`);
     } catch (error) {
-      this.log("error", `智能体 ${agentType} 重启失败`, error);
+      this.log('error', `智能体 ${agentType} 重启失败`, error);
       throw error;
     }
   }
@@ -175,14 +184,16 @@ export class AgentManager {
    * 获取系统概览
    */
   getSystemOverview(): any {
-    const totalTasks = Array.from(this.metrics.values()).reduce(sum, metrics) => sum + metrics.tasksProcessed,
-      0;
+    const totalTasks = Array.from(this.metrics.values()).reduce(
+      (sum, metrics) => sum + metrics.tasksProcessed,
+      0
     );
-    
-    const totalErrors = Array.from(this.metrics.values()).reduce(sum, metrics) => sum + metrics.errorCount,
-      0;
+
+    const totalErrors = Array.from(this.metrics.values()).reduce(
+      (sum, metrics) => sum + metrics.errorCount,
+      0
     );
-    
+
     const avgResponseTime = this.calculateAverageResponseTime();
     const systemUptime = this.getSystemUptime();
 
@@ -190,7 +201,8 @@ export class AgentManager {
       totalAgents: this.metrics.size,
       totalTasksProcessed: totalTasks,
       totalErrors,
-      overallSuccessRate: totalTasks > 0 ? (totalTasks - totalErrors) / totalTasks : 0,
+      overallSuccessRate:
+        totalTasks > 0 ? (totalTasks - totalErrors) / totalTasks : 0,
       averageResponseTime: avgResponseTime,
       systemUptime,
       isHealthy: this.isSystemHealthy(),
@@ -203,7 +215,8 @@ export class AgentManager {
    * 关闭管理器
    */
   async shutdown(): Promise<void> {
-    this.log("info", "智能体管理器正在关闭...");
+    this.log('info', '智能体管理器开始关闭...');
+
     this.isRunning = false;
 
     // 停止健康检查
@@ -214,22 +227,22 @@ export class AgentManager {
 
     // 关闭协调器
     await this.coordinator.shutdown();
-    
-    this.log("info", "智能体管理器已关闭");
+
+    this.log('info', '智能体管理器已关闭');
   }
 
   /**
    * 初始化性能指标
    */
   private initializeMetrics(): void {
-    const agentTypes = [
+    const agentTypes: AgentType[] = [
       AgentType.XIAOAI,
       AgentType.XIAOKE,
       AgentType.LAOKE,
       AgentType.SOER,
     ];
 
-    agentTypes.forEach(agentType) => {
+    agentTypes.forEach((agentType) => {
       this.metrics.set(agentType, {
         tasksProcessed: 0,
         successRate: 1.0,
@@ -247,7 +260,7 @@ export class AgentManager {
    * 启动健康检查
    */
   private startHealthCheck(): void {
-    this.healthCheckTimer = setInterval() => {
+    this.healthCheckTimer = setInterval(() => {
       this.performHealthCheck();
     }, this.config.healthCheckInterval);
   }
@@ -257,16 +270,16 @@ export class AgentManager {
    */
   private async performHealthCheck(): Promise<void> {
     try {
-      for (const [agentType, metrics] of this.metrics) {
-        // 简化的健康检查逻辑
-        const isHealthy = metrics.errorCount < 10 && metrics.successRate > 0.8;
-        
-        if (!isHealthy && this.config.autoRestart) {
+      const agentStatus = await this.coordinator.getAllAgentStatus();
+
+      for (const [agentType, status] of agentStatus) {
+        if (status.status === 'error' && this.config.autoRestart) {
+          this.log('warn', `检测到智能体 ${agentType} 异常，尝试重启`);
           await this.restartAgent(agentType);
         }
       }
     } catch (error) {
-      this.log("error", "健康检查失败", error);
+      this.log('error', '健康检查失败', error);
     }
   }
 
@@ -274,33 +287,34 @@ export class AgentManager {
    * 启动性能监控
    */
   private startPerformanceMonitoring(): void {
-    setInterval() => {
-      for (const [agentType, metrics] of this.metrics) {
-        // 更新运行时间
-        metrics.uptime = Date.now() - this.startTime.getTime();
-        
-        // 模拟资源使用情况
-        metrics.memoryUsage = Math.random() * 100;
-        metrics.cpuUsage = Math.random() * 100;
-      }
-    }, 5000); // 每5秒更新一次
+    setInterval(() => {
+      this.collectPerformanceMetrics();
+    }, 60000); // 每分钟收集一次
   }
 
   /**
-   * 更新性能指标
+   * 收集性能指标
+   */
+  private collectPerformanceMetrics(): void {
+    for (const [agentType, metrics] of this.metrics) {
+      // 这里应该实现具体的性能指标收集逻辑
+      // 由于当前架构限制，我们模拟一些基本指标
+      metrics.uptime = Date.now() - this.startTime.getTime();
+      metrics.lastActive = new Date();
+    }
+  }
+
+  /**
+   * 更新任务指标
    */
   private updateMetrics(result: any, responseTime: number): void {
-    // 简化的指标更新逻辑
+    // 这里应该根据实际结果更新指标
+    // 由于当前架构限制，我们进行基本的指标更新
     for (const [agentType, metrics] of this.metrics) {
       metrics.tasksProcessed++;
-      metrics.averageResponseTime = 
+      metrics.averageResponseTime =
         (metrics.averageResponseTime + responseTime) / 2;
       metrics.lastActive = new Date();
-      
-      if (result.success) {
-        metrics.successRate = 
-          (metrics.successRate * (metrics.tasksProcessed - 1) + 1) / metrics.tasksProcessed;
-      }
     }
   }
 
@@ -310,31 +324,26 @@ export class AgentManager {
   private updateErrorMetrics(): void {
     for (const [agentType, metrics] of this.metrics) {
       metrics.errorCount++;
-      metrics.successRate = 
-        (metrics.successRate * (metrics.tasksProcessed - 1)) / metrics.tasksProcessed;
+      metrics.successRate =
+        metrics.tasksProcessed > 0
+          ? (metrics.tasksProcessed - metrics.errorCount) /
+            metrics.tasksProcessed
+          : 0;
     }
-  }
-
-  /**
-   * 获取当前任务数量
-   */
-  private getCurrentTaskCount(): number {
-    // 简化实现
-    return 0;
   }
 
   /**
    * 计算平均响应时间
    */
   private calculateAverageResponseTime(): number {
-    const metrics = Array.from(this.metrics.values());
-    if (metrics.length === 0) return 0;
-    
-    const totalResponseTime = metrics.reduce(sum, m) => sum + m.averageResponseTime,
-      0;
+    const allMetrics = Array.from(this.metrics.values());
+    if (allMetrics.length === 0) return 0;
+
+    const totalResponseTime = allMetrics.reduce(
+      (sum, metrics) => sum + metrics.averageResponseTime,
+      0
     );
-    
-    return totalResponseTime / metrics.length;
+    return totalResponseTime / allMetrics.length;
   }
 
   /**
@@ -345,44 +354,33 @@ export class AgentManager {
   }
 
   /**
-   * 检查系统是否健康
+   * 检查系统健康状态
    */
   private isSystemHealthy(): boolean {
-    const metrics = Array.from(this.metrics.values());
-    return metrics.every(m => m.successRate > 0.8 && m.errorCount < 10);
+    const allMetrics = Array.from(this.metrics.values());
+    return allMetrics.every((metrics) => metrics.successRate > 0.8);
+  }
+
+  /**
+   * 获取当前任务数量
+   */
+  private getCurrentTaskCount(): number {
+    // 这里应该实现获取当前并发任务数量的逻辑
+    // 由于当前架构限制，返回0
+    return 0;
   }
 
   /**
    * 日志记录
    */
-  private log(level: "debug" | "info" | "warn" | "error", message: string, data?: any): void {
-    if (this.shouldLog(level)) {
-      const timestamp = new Date().toISOString();
-      const logMessage = `[${timestamp}] [AgentManager] [${level.toUpperCase()}] ${message}`;
-      
-      switch (level) {
-        case "debug":
-        case "info":
-          console.log(logMessage, data || "");
-          break;
-        case "warn":
-          console.warn(logMessage, data || "");
-          break;
-        case "error":
-          console.error(logMessage, data || "");
-          break;
-      }
+  private log(level: string, message: string, error?: any): void {
+    const timestamp = new Date().toISOString();
+    const logMessage = `[${timestamp}] [${level.toUpperCase()}] ${message}`;
+
+    if (error) {
+      console.error(logMessage, error);
+    } else {
+      console.log(logMessage);
     }
   }
-
-  /**
-   * 检查是否应该记录日志
-   */
-  private shouldLog(level: "debug" | "info" | "warn" | "error"): boolean {
-    const levels = ["debug", "info", "warn", "error"];
-    const currentLevelIndex = levels.indexOf(this.config.logLevel);
-    const messageLevelIndex = levels.indexOf(level);
-    
-    return messageLevelIndex >= currentLevelIndex;
-  }
-} 
+}

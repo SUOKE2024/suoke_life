@@ -1,310 +1,164 @@
-import { apiClient } from ../../services/    apiClient;
-import React from "react";
-/
-  SoerAgent,
-  HealthAnalysis,
-  LifestylePlan,
-  CompanionResponse,
-  SmartDevice,
-  DeviceCoordinationResult,
-  HealthReminder,
-  EmotionalState,
-  UserProfile,
-  { LifestyleContext } from "./types;//
-* LIFE频道版主，提供生活健康管理、陪伴服务和数据整合分析
-export class SoerAgentImpl implements SoerAgent {private personality: unknown = {style:
-caring",         tone: warm",           / 温暖的语调*  生活方式专业*  全方位关怀* ///    "
-  private serviceEndpoint = /api/agents/soer"/    "
+import { AgentBase } from '../base/AgentBase';
+import {
+  AgentCapability,
+  AgentContext,
+  AgentResponse,
+  AgentType,
+} from '../types';
+
+/**
+ * 索儿智能体React组件
+ * LIFE频道版主，负责生活健康管理、陪伴服务和数据整合分析
+ */
+export class SoerAgent extends AgentBase {
+  private personality = {
+    style: 'caring',
+    tone: 'warm',
+  };
+
   constructor() {
-    }
-  // 核心消息处理功能  async processMessage(message: string,)
-    context: LifestyleContext,
-    userId?: string,
-    sessionId?: string;
-  ): Promise<any>  {
-    try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/message`, {/            text: message,context,)
-        user_id: userId,
-        session_id: session;I;d;};);
-      response.data.text = this.applyPersonalityToResponse(response.data.text, context);
-      return response.da;t;a;
-    } catch (error) {
-      return this.generateFallbackResponse(message, contex;t;);
-    }
+    super();
+    this.agentType = AgentType.SOER;
+    this.name = '索儿';
+    this.description = 'LIFE频道版主，专注生活健康管理、陪伴服务和数据整合分析';
+    this.capabilities = [
+      AgentCapability.EMOTIONAL_SUPPORT,
+      AgentCapability.WELLNESS_COACHING,
+      AgentCapability.HEALTH_MONITORING,
+    ];
   }
-  // 分析健康数据  async analyzeHealthData(userId: string,)
-    dataSources: string[],
-    timeRange?: { start: Date,
-      end: Date},
-    analysisType?: "comprehensive" | focused" | "trend | "predictive"
-  ): Promise<HealthAnalysis /    >  {
-    try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/analyze-health-data`, {/            user_id: userId,data_sources: dataSources,)
-        time_range: timeRange,
-        analysis_type: analysisTy;p;e;};);
-      return {id: response.data.id,userId: response.data.user_id,analysisType: response.data.analysis_type,timeRange: {start: new Date(response.data.time_range.start),end: new Date(response.data.time_range.end)},dataSources: response.data.data_sources,metrics: response.data.metrics,insights: response.data.insights,recommendations: response.data.recommendations,riskFactors: response.data.risk_factors,createdAt: new Date(response.data.created_at),nextAnalysis: new Date(response.data.next_analysis;);}
-    } catch (error) {
-      throw error;
-    }
+
+  async initialize(): Promise<void> {
+    this.log('info', '索儿智能体初始化完成');
+    this.isInitialized = true;
   }
-  // 创建生活方式计划  async createLifestylePlan(userProfile: UserProfile,)
-    healthGoals: string[],
-    constraints?: unknown,
-    preferences?: unknown;
-  ): Promise<LifestylePlan | null /    >  {
-    try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/create-lifestyle-plan`, {/            user_profile: userProfile,health_goals: healthGoals,)
-        constraints,
-        preferenc;e;s;};);
-      return {id: response.data.id,userId: response.data.user_id,title: response.data.title,description: response.data.description,goals: response.data.goals.map(goal: unknow;n;); => ({
-          ...goal,
-          deadline: new Date(goal.deadline)})),
-        schedule: {,
-  daily: response.data.schedule.daily,
-          weekly: response.data.schedule.weekly,
-          monthly: response.data.schedule.monthly;
-        },
-        habits: response.data.habits,
-        milestones: response.data.milestones.map(milestone: unknown); => ({
-          ...milestone,
-          targetDate: new Date(milestone.target_date),
-          achievedDate: milestone.achieved_date ? new Date(milestone.achieved_date);: undefined;
-        })),
-        adaptations: response.data.adaptations.map(adaptation: unknown); => ( {
-          ...adaptation,
-          date: new Date(adaptation.date)})),
-        createdAt: new Date(response.data.created_at),
-        updatedAt: new Date(response.data.updated_at),
-        status: response.data.status;
-      }
-    } catch (error) {
-      return nu;l;l;
-    }
-  }
-  // 更新生活方式计划  async updateLifestylePlan(planId: string,)
-    updates: Partial<LifestylePlan />/  ): Promise<LifestylePlan | null /    >  {
-    try {
-      const response = await apiClient.put(`${this.serviceEndpoint}/lifestyle-plan/${planId}`, updat;e;s;);// return {id: response.data.id,userId: response.data.user_id,title: response.data.title,description: response.data.description,goals: response.data.goals.map(goal: unknow;n;); => ({
-          ...goal,
-          deadline: new Date(goal.deadline)})),
-        schedule: response.data.schedule,
-        habits: response.data.habits,
-        milestones: response.data.milestones.map(milestone: unknown); => ({
-          ...milestone,
-          targetDate: new Date(milestone.target_date),
-          achievedDate: milestone.achieved_date ? new Date(milestone.achieved_date);: undefined;
-        })),
-        adaptations: response.data.adaptations.map(adaptation: unknown); => ( {
-          ...adaptation,
-          date: new Date(adaptation.date)})),
-        createdAt: new Date(response.data.created_at),
-        updatedAt: new Date(response.data.updated_at),
-        status: response.data.status;
-      }
-    } catch (error) {
-      return nu;l;l;
-    }
-  }
-  // 陪伴聊天  async companionChat(userId: string,)
+
+  async processMessage(
     message: string,
-    mood?: string,
-    context?: unknown;
-  ): Promise<CompanionResponse /    >  {
+    context: AgentContext
+  ): Promise<AgentResponse> {
     try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/companion-chat`, {/            user_id: userId,message,)
-        mood,
-        conte;x;t;};);
-      return {id: response.data.id,userId: response.data.user_id,message: response.data.message,emotion: response.data.emotion,suggestions: response.data.suggestions,followUp: {scheduled: response.data.follow_up.scheduled,time: response.data.follow_up.time ? new Date(response.data.follow_up.tim;e;);: undefined,
-          topic: response.data.follow_up.topic;
-        },
-        moodAssessment: response.data.mood_assessment,
-        resources: response.data.resources,
-        timestamp: new Date(response.data.timestamp)}
-    } catch (error)  {
-      return {id: "error,";
-        userId,message: "亲爱的，我现在有点忙，但我一直在这里陪伴你。有什么需要帮助的吗？",emotion: supportive",;
-        suggestions;: ;[{
-      type: "conversation,",
-      title: "聊聊今天的心情", "
-            description: 分享一下你今天的感受""
-          },
-          {
-      type: "activity,",
-      title: "放松一下", "
-            description: 做一些让你感到舒适的事情""
-          }
-        ],
-        followUp: { scheduled: false  },
-        moodAssessment: {,
-  detected: "neutral,",
-          confidence: 50,
-          trend: "stable"
-        },
-        resources: [],
-        timestamp: new Date()};
-    }
-  }
-  // 评估情绪状态  async assessEmotionalState(userId: string,)
-    indicators: unknown): Promise<EmotionalState /    >  {
-    try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/assess-emotional-state`, {/            user_id: userId,indicato;r;s;};);
-      return {userId: response.data.user_id,timestamp: new Date(response.data.timestamp),mood: response.data.mood,intensity: response.data.intensity,triggers: response.data.triggers,context: response.data.context,physicalSymptoms: response.data.physical_symptoms,copingStrategies: response.data.coping_strategies,supportNeeded: response.data.support_needed,notes: response.data.note;s;}
-    } catch (error) {
-      return {userId,timestamp: new Date(),mood: "neutral,",intensity: 5,triggers: [],context: {,
-  activity: "unknown",
-      location: unknown",;
-          socialSituation: "unknown,",timeOfDay: "unknown";
-        },physicalSymptoms: [],copingStrategies: [],supportNeeded: fals;e;};
-    }
-  }
-  // 协调智能设备  async coordinateDevices(userId: string,)
-    devices: string[],
-    scenario: string,
-    preferences?: unknown;
-  ): Promise<DeviceCoordinationResult /    >  {
-    try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/coordinate-devices`, {/            user_id: userId,devices,)
-        scenario,
-        preferenc;e;s;};);
-      return {id: response.data.id,userId: response.data.user_id,scenario: response.data.scenario,devices: response.data.devices,overallStatus: response.data.overall_status,executionTime: response.data.execution_time,energyImpact: response.data.energy_impact,userSatisfaction: response.data.user_satisfaction,timestamp: new Date(response.data.timestamp),nextOptimization: response.data.next_optimization ? new Date(response.data.next_optimizatio;n;);: undefined;
+      if (!this.validateInput(message)) {
+        return this.createErrorResponse('消息内容无效', null);
       }
-    } catch (error)  {
-      return {id: "error,";
-        userId,scenario,devices: devices.map(deviceId => ({deviceId,action: "failed",parameters: {},status: failed"};)),"
-        overallStatus: "failed,",
-        executionTime: 0,
-        energyImpact: {,
-  consumption: 0,
-          savings: 0,
-          efficiency: 0;
-        },
-        timestamp: new Date()};
-    }
-  }
-  ///    >  {
-    try {
-      const response = await apiClient.get(`${this.serviceEndpoint}/devices/user/${userId;};`;);// return response.data.map(device: unknow;n;); => ({),
-  id: device.id,
-        name: device.name,
-        type: device.type,
-        brand: device.brand,
-        model: device.model,
-        status: device.status,
-        capabilities: device.capabilities,
-        currentState: device.current_state,
-        location: device.location,
-        batteryLevel: device.battery_level,
-        lastUpdate: new Date(device.last_update),
-        settings: device.settings,
-        automations: device.automations;
-      }))
-    } catch (error) {
-      return [;];
-    }
-  }
-  // 优化设备设置  async optimizeDeviceSettings(userId: string,)
-    goals: string[]): Promise< { recommendations: unknown[],
-    estimatedImpact: unknown}> {
-    try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/devices/optimize`, {/            user_id: userId,goa;l;s;};);
-      return {recommendations: response.data.recommendations,
-        estimatedImpact: response.data.estimated_impac;t;}
-    } catch (error) {
-      return {recommendations: [],
-        estimatedImpact: {}
-      ;}
-    }
-  }
-  // 创建健康提醒  async createReminder(userId: string,)
-    reminder: Omit<HealthReminder, "id | "createdAt" />/  ): Promise<HealthReminder /    >  {"
-    try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/reminders`, {/            user_id: userId,...reminder,)
-        scheduled_time: reminder.scheduledTime.toISOString(),
-        completed_at: reminder.completedAt?.toISOString};);
-      return {id: response.data.id,userId: response.data.user_id,type: response.data.type,title: response.data.title,description: response.data.description,scheduledTime: new Date(response.data.scheduled_time),frequency: response.data.frequency,priority: response.data.priority,status: response.data.status,customization: response.data.customization,completionTracking: response.data.completion_tracking,createdAt: new Date(response.data.created_at),completedAt: response.data.completed_at ? new Date(response.data.completed_a;t;);: undefined;
+
+      // 处理生活健康相关消息
+      if (this.isHealthRelated(message)) {
+        return this.handleHealthMessage(message, context);
       }
-    } catch (error)  {
-      throw error;
-    }
-  }
-  // 获取用户提醒  async getUserReminders(userId: string,)
-    status?: string;
-  ): Promise<HealthReminder[] /    >  {
-    try {
-      const endpoint = status;
-        ? `${this.serviceEndpoint}/reminders/user/${userId}?status=${status}`/        : `${this.serviceEndpoint}/reminders/user/${userId;}`;/
-      const response = await apiClient.get(endpo;i;n;t;);
-      return response.data.map(reminder: unknow;n;); => ({),
-  id: reminder.id,
-        userId: reminder.user_id,
-        type: reminder.type,
-        title: reminder.title,
-        description: reminder.description,
-        scheduledTime: new Date(reminder.scheduled_time),
-        frequency: reminder.frequency,
-        priority: reminder.priority,
-        status: reminder.status,
-        customization: reminder.customization,
-        completionTracking: reminder.completion_tracking,
-        createdAt: new Date(reminder.created_at),
-        completedAt: reminder.completed_at ? new Date(reminder.completed_at);: undefined;
-      }));
-    } catch (error)  {
-      return [;];
-    }
-  }
-  // 整合健康数据  async integrateHealthData(userId: string,)
-    sources: string[]);: Promise< { success: boolean,
-    integratedData: unknown,
-    conflicts: unknown[],
-    recommendations: string[]
-    }> {
-    try {
-      const response = await apiClient.post(`${this.serviceEndpoint}/integrate-health-data`, {/            user_id: userId,sourc;e;s;};);
-      return {success: response.data.success,integratedData: response.data.integrated_data,conflicts: response.data.conflicts,recommendations: response.data.recommendation;s;}
+
+      // 处理情感支持相关消息
+      if (this.isEmotionalSupport(message)) {
+        return this.handleEmotionalMessage(message, context);
+      }
+
+      // 处理设备协调相关消息
+      if (this.isDeviceRelated(message)) {
+        return this.handleDeviceMessage(message, context);
+      }
+
+      // 默认陪伴聊天
+      return this.handleCompanionChat(message, context);
     } catch (error) {
-      return {success: false,integratedData: {},conflicts: [],recommendations: [;]
-      ;};
+      this.log('error', '处理消息时发生错误', error);
+      return this.createErrorResponse('处理消息时发生错误', error);
     }
   }
-  // 获取智能体状态  async getStatus(): Promise<any> {
-    try {
-      const response = await apiClient.get(`${this.serviceEndpoint}/statu;s;`;);/          return response.da;t;a;
-    } catch (error) {
-      return {
-      status: "offline,",
-      capabilities: [],performance: {accuracy: 0,responseTime: 0,userSatisfaction: 0};};
-    }
+
+  private validateInput(message: string): boolean {
+    return message && message.trim().length > 0;
   }
-  // 设置个性化特征  setPersonality(traits: unknown): void  {
-    this.personality = { ...this.personality, ...traits };
+
+  private isHealthRelated(message: string): boolean {
+    const healthKeywords = ['健康', '运动', '饮食', '睡眠', '体重', '血压'];
+    return healthKeywords.some((keyword) => message.includes(keyword));
   }
-  // 应用个性化风格到响应  private applyPersonalityToResponse(text: string, context: LifestyleContext): string  {
-    let styledText = tex;t;
-    if (context.type === "health_check") {
-      styledText = `亲爱的，让我来关心一下你的健康状况。${styledText}`
-    } else if (context.type === companion_chat") {"
-      styledText = `我一直在这里陪伴着你。${styledText}`
-    } else if (context.urgency === "high) {"
-      styledText = `我很关心你现在的情况。${styledText}`
-    }
-    if (!styledText.includes("记住")) {
-      styledText +=  记住，我会一直在这里支持你，照顾好自己哦！""
-    }
-    return styledTe;x;t;
+
+  private isEmotionalSupport(message: string): boolean {
+    const emotionKeywords = ['心情', '压力', '焦虑', '开心', '难过', '烦恼'];
+    return emotionKeywords.some((keyword) => message.includes(keyword));
   }
-  // 生成备用响应  private generateFallbackResponse(message: string, context: LifestyleContext): unknown  {
+
+  private isDeviceRelated(message: string): boolean {
+    const deviceKeywords = ['设备', '智能', '控制', '开关', '调节'];
+    return deviceKeywords.some((keyword) => message.includes(keyword));
+  }
+
+  private async handleHealthMessage(
+    message: string,
+    context: AgentContext
+  ): Promise<AgentResponse> {
+    const response =
+      '我是索儿，您的健康生活伙伴。我可以帮您制定健康计划、监测健康数据，让我们一起追求更好的生活品质！';
+    return this.createSuccessResponse(response, { type: 'health_advice' });
+  }
+
+  private async handleEmotionalMessage(
+    message: string,
+    context: AgentContext
+  ): Promise<AgentResponse> {
+    const response =
+      '亲爱的，我理解您的感受。无论何时，我都在这里陪伴您。让我们一起找到让您感到舒适和快乐的方式。';
+    return this.createSuccessResponse(response, { type: 'emotional_support' });
+  }
+
+  private async handleDeviceMessage(
+    message: string,
+    context: AgentContext
+  ): Promise<AgentResponse> {
+    const response =
+      '我可以帮您协调各种智能设备，创造最舒适的生活环境。请告诉我您希望如何调整您的设备设置。';
+    return this.createSuccessResponse(response, {
+      type: 'device_coordination',
+    });
+  }
+
+  private async handleCompanionChat(
+    message: string,
+    context: AgentContext
+  ): Promise<AgentResponse> {
+    const response =
+      '您好！我是索儿，很高兴与您聊天。我在这里陪伴您，分享生活的美好时光。有什么想聊的吗？';
+    return this.createSuccessResponse(response, { type: 'companion_chat' });
+  }
+
+  private createErrorResponse(message: string, error: any): AgentResponse {
     return {
-      text: "亲爱的，虽然我现在遇到了一些技术问题，但我的关怀之心从未改变。让我们一起找到解决的方法，我会一直陪伴在你身边。,",
-      type: "fallback",suggestions: ;[查看健康数据", "制定生活计划,设备智能控制", "
-        情感陪伴聊天""
-      ],
-      timestamp: Date.now()};
+      success: false,
+      response: message,
+      error: error?.message || error,
+    };
   }
-  // 清理资源  async cleanup(userId: string): Promise<void>  {
-    try {
-      } catch (error) {
-      }
+
+  private createSuccessResponse(message: string, data: any): AgentResponse {
+    return {
+      success: true,
+      response: message,
+      data: { message, ...data },
+    };
+  }
+
+  async getHealthStatus(): Promise<any> {
+    return {
+      status: 'healthy',
+      lastCheck: new Date(),
+      metrics: {},
+    };
+  }
+
+  async shutdown(): Promise<void> {
+    this.log('info', '索儿智能体正在关闭...');
+    this.isInitialized = false;
+  }
+
+  protected log(level: string, message: string, error?: any): void {
+    const timestamp = new Date().toISOString();
+    console.log(
+      `[${timestamp}] [${level.toUpperCase()}] [索儿] ${message}`,
+      error || ''
+    );
   }
 }
-//   ;
+
+// 导出索儿智能体实例
+export const soerAgent = new SoerAgent();

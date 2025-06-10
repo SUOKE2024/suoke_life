@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import {
+import {;
   GestureResponderEvent,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  ViewStyle,
+  ViewStyle
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
@@ -38,7 +38,7 @@ export const Rating: React.FC<RatingProps> = ({
   style,
   accessible = true,
   accessibilityLabel,
-  testID,
+  testID
 }) => {
   const { currentTheme } = useTheme();
   const [hoverValue, setHoverValue] = useState<number | null>(null);
@@ -104,18 +104,18 @@ export const Rating: React.FC<RatingProps> = ({
     const styles = StyleSheet.create({
       starContainer: {,
   position: 'relative',
-        marginRight: index < max - 1 ? 2 : 0,
+        marginRight: index < max - 1 ? 2 : 0
       },
       star: {,
   width: sizeStyles.width,
         height: sizeStyles.height,
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'center'
       },
       starText: {,
   fontSize: sizeStyles.fontSize,
         color: inactiveColor,
-        textAlign: 'center',
+        textAlign: 'center'
       },
       starFilled: {,
   position: 'absolute',
@@ -125,13 +125,13 @@ export const Rating: React.FC<RatingProps> = ({
         height: sizeStyles.height,
         justifyContent: 'center',
         alignItems: 'center',
-        overflow: 'hidden',
+        overflow: 'hidden'
       },
       starFilledText: {,
   fontSize: sizeStyles.fontSize,
         color: activeColor,
-        textAlign: 'center',
-      },
+        textAlign: 'center'
+      }
     });
 
     return (
@@ -154,8 +154,8 @@ export const Rating: React.FC<RatingProps> = ({
               styles.starFilled,
               {
                 width:
-                  ratingValue === 0.5 ? sizeStyles.width / 2 : sizeStyles.width,
-              },
+                  ratingValue === 0.5 ? sizeStyles.width / 2 : sizeStyles.width
+              }
             ]}
           >
             <Text style={styles.starFilledText}>{iconSymbol}</Text>
@@ -168,8 +168,8 @@ export const Rating: React.FC<RatingProps> = ({
   const containerStyles = StyleSheet.create({
     container: {,
   flexDirection: 'row',
-      alignItems: 'center',
-    },
+      alignItems: 'center'
+    }
   });
 
   return (
@@ -184,7 +184,7 @@ export const Rating: React.FC<RatingProps> = ({
       accessibilityValue={
         min: 0,
         max,
-        now: value,
+        now: value
       }}
     >
       {Array.from({ length: max }, (_, index) => renderStar(index))}

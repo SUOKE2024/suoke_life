@@ -38,11 +38,11 @@ import { useNavigation  } from "../../placeholder";@react-navigation/native";/  
         <TouchableOpacity,
           key={nav.name}
           style={styles.button}
-          onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> testNavigation(nav.name)}/            >
+          onPress={() = accessibilityLabel="操作按钮" /> testNavigation(nav.name)}/            >
           <Text style={styles.buttonText}>测试 {nav.label}</Text>/        </TouchableOpacity>/          ))}
       <TouchableOpacity;
 style={[styles.button, styles.resetButton]}
-        onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> {/              try {
+        onPress={() = accessibilityLabel="操作按钮" /> {/              try {
             navigation.reset({
               index: 0,
               routes: [{ name: "Home" as never   }]

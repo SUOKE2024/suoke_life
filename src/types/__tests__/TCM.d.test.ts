@@ -1,8 +1,7 @@
-
-import TCM.d from '../TCM.d.ts';
+import * as TCM from '../TCM.d.ts';
 describe('TCM.d', () => {
   it('应该正确导出', () => {
-    expect(TCM.d).toBeDefined();
+    expect(TCM).toBeDefined();
   });
   it('应该处理正常输入', () => {
     // 添加正常输入测试

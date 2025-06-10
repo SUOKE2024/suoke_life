@@ -1,5 +1,5 @@
 // 服务分类类型
-export type ServiceCategory  = | 'diagnosis'
+export type ServiceCategory  = | 'diagnosis';
   | 'product'
   | 'service'
   | 'subscription'
@@ -11,7 +11,7 @@ export type ServiceCategory  = | 'diagnosis'
 // 诊断类型
 export type DiagnosisType = 'look' | 'listen' | 'inquiry' | 'palpation';
 // 服务状态
-export type ServiceStatus  = | 'available'
+export type ServiceStatus  = | 'available';
   | 'unavailable'
   | 'coming_soon'
   | 'maintenance';

@@ -1,10 +1,10 @@
-import React, {
+import React, {;
   ComponentType,
   Profiler,
   ProfilerOnRenderCallback,
   useEffect,
   useRef,
-  useState,
+  useState
 } from 'react';
 import PerformanceMonitor from '../../utils/performanceMonitor';
 
@@ -20,7 +20,7 @@ export const PerformanceProfiler: React.FC<PerformanceProfilerProps> = ({
   id,
   children,
   onRender,
-  enableLogging = false,
+  enableLogging = false
 }) => {
   const handleRender: ProfilerOnRenderCallback = (
     profileId,
@@ -38,7 +38,7 @@ export const PerformanceProfiler: React.FC<PerformanceProfilerProps> = ({
         actualDuration: `${actualDuration.toFixed(2)}ms`,
         baseDuration: `${baseDuration.toFixed(2)}ms`,
         startTime: `${startTime.toFixed(2)}ms`,
-        commitTime: `${commitTime.toFixed(2)}ms`,
+        commitTime: `${commitTime.toFixed(2)}ms`
       });
     }
 
@@ -138,7 +138,7 @@ export function usePerformanceMonitoring(componentName: string) {
   return {
     renderCount: renderCountRef.current,
     renderTime,
-    mountTime: mountTimeRef.current,
+    mountTime: mountTimeRef.current
   };
 }
 
@@ -218,7 +218,7 @@ export const PerformanceBenchmark: React.FC<PerformanceBenchmarkProps> = ({
   name,
   iterations = 100,
   onComplete,
-  children,
+  children
 }) => {
   const [isRunning, setIsRunning] = useState(false);
   const [results, setResults] = useState<BenchmarkResult | null>(null);
@@ -245,7 +245,7 @@ export const PerformanceBenchmark: React.FC<PerformanceBenchmarkProps> = ({
           averageTime,
           minTime,
           maxTime,
-          fps,
+          fps
         };
 
         setResults(benchmarkResult);
@@ -288,7 +288,7 @@ export const PerformanceBenchmark: React.FC<PerformanceBenchmarkProps> = ({
             marginTop: 10,
             padding: 10,
             border: '1px solid #ccc',
-            borderRadius: 4,
+            borderRadius: 4
           }}
         >
           <h4>Benchmark Results: {results.name}</h4>

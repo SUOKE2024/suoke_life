@@ -51,7 +51,7 @@ const RootNavigator: React.FC<{,
       screenOptions={
         headerShown: false,
         gestureEnabled: true,
-        animation: 'slide_from_right',
+        animation: 'slide_from_right'
       }}
     >
       {isAuthenticated || isDemoMode ? (
@@ -61,7 +61,7 @@ const RootNavigator: React.FC<{,
             name="Main"
             component={MainNavigator}
             options={
-              animationTypeForReplace: 'push',
+              animationTypeForReplace: 'push'
             }}
           />
           <Stack.Screen;
@@ -69,7 +69,7 @@ const RootNavigator: React.FC<{,
             component={ChatDetailScreen}
             options={
               presentation: 'card',
-              animation: 'slide_from_right',
+              animation: 'slide_from_right'
             }}
           />
           <Stack.Screen;
@@ -77,7 +77,7 @@ const RootNavigator: React.FC<{,
             component={AgentChatScreen}
             options={
               presentation: 'card',
-              animation: 'slide_from_right',
+              animation: 'slide_from_right'
             }}
           />
           <Stack.Screen;
@@ -85,7 +85,7 @@ const RootNavigator: React.FC<{,
             component={DiagnosisServiceScreen}
             options={
               presentation: 'card',
-              animation: 'slide_from_right',
+              animation: 'slide_from_right'
             }}
           />
           <Stack.Screen;
@@ -93,7 +93,7 @@ const RootNavigator: React.FC<{,
             component={AgentDemoScreen}
             options={
               presentation: 'card',
-              animation: 'slide_from_right',
+              animation: 'slide_from_right'
             }}
           />
         </>
@@ -104,7 +104,7 @@ const RootNavigator: React.FC<{,
             name="Auth"
             component={AuthNavigator}
             options={
-              animationTypeForReplace: 'pop',
+              animationTypeForReplace: 'pop'
             }}
           />
           <Stack.Screen;
@@ -112,7 +112,7 @@ const RootNavigator: React.FC<{,
             component={AgentDemoScreen}
             options={
               presentation: 'card',
-              animation: 'slide_from_right',
+              animation: 'slide_from_right'
             }}
           />
         </>

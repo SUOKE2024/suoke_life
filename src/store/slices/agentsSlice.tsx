@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { apiClient } from "../../services/apiClient";
-import {AgentsState,
+import {AgentsState,;
   AgentMessage,
   AgentType,
   AgentResponse;

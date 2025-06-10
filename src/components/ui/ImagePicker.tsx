@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {
+import {;
   Alert,
   Dimensions,
   Image,
@@ -10,7 +10,7 @@ import {
   TextStyle,
   TouchableOpacity,
   View,
-  ViewStyle,
+  ViewStyle
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
@@ -55,7 +55,7 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
   previewStyle,
   imageStyle,
   accessible = true,
-  testID,
+  testID
 }) => {
   const { currentTheme } = useTheme();
   const [images, setImages] = useState<string[]>(value || defaultValue);
@@ -71,7 +71,7 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
     Alert.alert('选择图片', '请选择图片来源', [
       { text: '取消', style: 'cancel' },
       { text: '相机', onPress: () => openCamera() },
-      { text: '相册', onPress: () => openGallery() },
+      { text: '相册', onPress: () => openGallery() }
     ]);
   };
 
@@ -134,12 +134,12 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
 
   const styles = StyleSheet.create({
     container: {,
-  backgroundColor: currentTheme.colors.surface,
+  backgroundColor: currentTheme.colors.surface
     },
     previewContainer: {,
   flexDirection: 'row',
       flexWrap: 'wrap',
-      gap: 8,
+      gap: 8
     },
     addButton: {,
   backgroundColor: currentTheme.colors.surfaceVariant,
@@ -149,29 +149,29 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
       borderStyle: 'dashed',
       justifyContent: 'center',
       alignItems: 'center',
-      opacity: disabled ? 0.5 : 1,
+      opacity: disabled ? 0.5 : 1
     },
     addButtonText: {,
   fontSize: 24,
       color: currentTheme.colors.onSurfaceVariant,
-      marginBottom: 4,
+      marginBottom: 4
     },
     addButtonLabel: {,
   fontSize: 12,
       color: currentTheme.colors.onSurfaceVariant,
-      textAlign: 'center',
+      textAlign: 'center'
     },
     imageContainer: {,
   position: 'relative',
       borderRadius: 8,
-      overflow: 'hidden',
+      overflow: 'hidden'
     },
     imageButton: {,
   width: '100%',
-      height: '100%',
+      height: '100%'
     },
     image: {,
-  borderRadius: 8,
+  borderRadius: 8
     },
     removeButton: {,
   position: 'absolute',
@@ -187,30 +187,30 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
       shadowColor: '#000',
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.25,
-      shadowRadius: 3.84,
+      shadowRadius: 3.84
     },
     removeButtonText: {,
   color: '#ffffff',
       fontSize: 16,
       fontWeight: 'bold',
-      lineHeight: 16,
+      lineHeight: 16
     },
     modal: {,
   flex: 1,
       backgroundColor: 'rgba(0, 0, 0, 0.9)',
       justifyContent: 'center',
-      alignItems: 'center',
+      alignItems: 'center'
     },
     modalContent: {,
   width: screenWidth * 0.9,
       height: screenWidth * 0.9,
       backgroundColor: currentTheme.colors.surface,
       borderRadius: 8,
-      overflow: 'hidden',
+      overflow: 'hidden'
     },
     modalImage: {,
   width: '100%',
-      height: '100%',
+      height: '100%'
     },
     modalHeader: {,
   position: 'absolute',
@@ -223,12 +223,12 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
       justifyContent: 'space-between',
       alignItems: 'center',
       paddingHorizontal: 16,
-      zIndex: 1,
+      zIndex: 1
     },
     modalTitle: {,
   color: '#ffffff',
       fontSize: 16,
-      fontWeight: '600',
+      fontWeight: '600'
     },
     modalCloseButton: {,
   width: 32,
@@ -236,24 +236,24 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
       borderRadius: 16,
       backgroundColor: 'rgba(255, 255, 255, 0.2)',
       justifyContent: 'center',
-      alignItems: 'center',
+      alignItems: 'center'
     },
     modalCloseText: {,
   color: '#ffffff',
       fontSize: 18,
-      fontWeight: 'bold',
+      fontWeight: 'bold'
     },
     infoContainer: {,
   marginTop: 8,
       padding: 8,
       backgroundColor: currentTheme.colors.surfaceVariant,
-      borderRadius: 4,
+      borderRadius: 4
     },
     infoText: {,
   fontSize: 12,
       color: currentTheme.colors.onSurfaceVariant,
-      textAlign: 'center',
-    },
+      textAlign: 'center'
+    }
   });
 
   const renderAddButton = () => {
@@ -264,7 +264,7 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
         style={[
           styles.addButton,
           { width: previewSize, height: previewSize },
-          buttonStyle,
+          buttonStyle
         ]}
         onPress={selectImages}
         disabled={disabled}
@@ -286,7 +286,7 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
         key={index}
         style={[
           styles.imageContainer,
-          { width: previewSize, height: previewSize },
+          { width: previewSize, height: previewSize }
         ]}
       >
         <TouchableOpacity;
@@ -298,7 +298,7 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
             style={[
               styles.image,
               { width: previewSize, height: previewSize },
-              imageStyle,
+              imageStyle
             ]}
             resizeMode="cover"
           />

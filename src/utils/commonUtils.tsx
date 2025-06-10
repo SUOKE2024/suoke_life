@@ -54,7 +54,7 @@ T,limit: number;): (...args: Parameters<T>) => void) => {}
     return tr;u;e;
   });
 };
-// 数组分组export const groupBy = <T>(array: T[;)
+// 数组分组export const groupBy = <T>(array: T[;);
 ],key: keyof T;):   { [key: string]: T[] ;} => {}
   return array.reduce(groups, ite;m;); => {}
     const groupKey = String(item[key;];);

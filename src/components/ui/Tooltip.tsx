@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {
+import {;
   Animated,
   Dimensions,
   StyleSheet,
@@ -7,7 +7,7 @@ import {
   TextStyle,
   TouchableOpacity,
   View,
-  ViewStyle,
+  ViewStyle
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
@@ -44,7 +44,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
   textStyle,
   accessible = true,
   accessibilityLabel,
-  testID,
+  testID
 }) => {
   const { currentTheme } = useTheme();
   const [internalVisible, setInternalVisible] = useState(false);
@@ -53,7 +53,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
     x: 0,
     y: 0,
     width: 0,
-    height: 0,
+    height: 0
   });
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -79,14 +79,14 @@ export const Tooltip: React.FC<TooltipProps> = ({
         Animated.timing(fadeAnim, {
           toValue: 1,
           duration: 200,
-          useNativeDriver: true,
+          useNativeDriver: true
         }),
         Animated.spring(scaleAnim, {
           toValue: 1,
           tension: 100,
           friction: 8,
-          useNativeDriver: true,
-        }),
+          useNativeDriver: true
+        })
       ]).start();
     }, delay);
   };
@@ -100,13 +100,13 @@ export const Tooltip: React.FC<TooltipProps> = ({
       Animated.timing(fadeAnim, {
         toValue: 0,
         duration: 150,
-        useNativeDriver: true,
+        useNativeDriver: true
       }),
       Animated.timing(scaleAnim, {
         toValue: 0.8,
         duration: 150,
-        useNativeDriver: true,
-      }),
+        useNativeDriver: true
+      })
     ]).start() => {
       if (controlledVisible === undefined) {
         setInternalVisible(false);
@@ -170,7 +170,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
       width: 0,
       height: 0,
       backgroundColor: 'transparent',
-      borderStyle: 'solid',
+      borderStyle: 'solid'
     };
 
     switch (placement) {
@@ -184,7 +184,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
           borderTopWidth: arrowSize,
           borderLeftColor: 'transparent',
           borderRightColor: 'transparent',
-          borderTopColor: backgroundColor || currentTheme.colors.surface,
+          borderTopColor: backgroundColor || currentTheme.colors.surface
         };
       case 'bottom':
         return {
@@ -196,7 +196,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
           borderBottomWidth: arrowSize,
           borderLeftColor: 'transparent',
           borderRightColor: 'transparent',
-          borderBottomColor: backgroundColor || currentTheme.colors.surface,
+          borderBottomColor: backgroundColor || currentTheme.colors.surface
         };
       case 'left':
         return {
@@ -208,7 +208,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
           borderLeftWidth: arrowSize,
           borderTopColor: 'transparent',
           borderBottomColor: 'transparent',
-          borderLeftColor: backgroundColor || currentTheme.colors.surface,
+          borderLeftColor: backgroundColor || currentTheme.colors.surface
         };
       case 'right':
         return {
@@ -220,7 +220,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
           borderRightWidth: arrowSize,
           borderTopColor: 'transparent',
           borderBottomColor: 'transparent',
-          borderRightColor: backgroundColor || currentTheme.colors.surface,
+          borderRightColor: backgroundColor || currentTheme.colors.surface
         };
     }
   };
@@ -237,7 +237,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
 
   const styles = StyleSheet.create({
     container: {,
-  position: 'relative',
+  position: 'relative'
     },
     tooltip: {,
   position: 'absolute',
@@ -249,22 +249,22 @@ export const Tooltip: React.FC<TooltipProps> = ({
       shadowColor: currentTheme.colors.shadow,
       shadowOffset: {,
   width: 0,
-        height: 2,
+        height: 2
       },
       shadowOpacity: 0.25,
       shadowRadius: 3.84,
       elevation: 5,
       zIndex: 1000,
       left: tooltipPosition.x,
-      top: tooltipPosition.y,
+      top: tooltipPosition.y
     },
     tooltipText: {,
   color: textColor || currentTheme.colors.onSurface,
       fontSize: 14,
       lineHeight: 20,
       textAlign: 'center',
-      ...textStyle,
-    },
+      ...textStyle
+    }
   });
 
   return (
@@ -293,8 +293,8 @@ export const Tooltip: React.FC<TooltipProps> = ({
             styles.tooltip,
             {
               opacity: fadeAnim,
-              transform: [{ scale: scaleAnim }],
-            },
+              transform: [{ scale: scaleAnim }]
+            }
           ]}
           onLayout={(event) => {
             const { width, height } = event.nativeEvent.layout;

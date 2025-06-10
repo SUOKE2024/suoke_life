@@ -1,12 +1,12 @@
 import { Platform, Alert, Linking } from 'react-native';
-import {
+import {;
   PERMISSIONS,
   RESULTS,
   check,
   request,
   PermissionStatus;
 } from 'react-native-permissions';
-export type PermissionType =
+export type PermissionType =;
   | "camera"
   | "microphone"
   | "location"

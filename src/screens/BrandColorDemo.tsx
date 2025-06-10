@@ -43,7 +43,7 @@ importReact from react;
             variant={btn.variant}
             size={btn.size}
             title={btn.title}
-            onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> {}}/                style={ marginRight: 8, marginBottom: 8}}
+            onPress={() = accessibilityLabel="操作按钮" /> {}}/                style={ marginRight: 8, marginBottom: 8}}
           />/    ))}
       </View>/    </View>/      );
 };
@@ -136,7 +136,7 @@ const BrandColorDemo: React.FC  = () => {}
           color: theme.colors.primary,
           fontWeight: "bold"}} />/              🎨 按钮组件演示
         </Text>/
-        <ButtonShowcase title="主要按钮 (索克绿)" buttons={primaryButtons} / accessibilityLabel="TODO: 添加无障碍标签" />/        <ButtonShowcase title="次要按钮 (索克橙)" buttons={secondaryButtons} / accessibilityLabel="TODO: 添加无障碍标签" />/        <ButtonShowcase title="轮廓按钮" buttons={outlineButtons} / accessibilityLabel="TODO: 添加无障碍标签" />/      </Card>/{///
+        <ButtonShowcase title="主要按钮 (索克绿)" buttons={primaryButtons} / accessibilityLabel="添加新项目" />/        <ButtonShowcase title="次要按钮 (索克橙)" buttons={secondaryButtons} / accessibilityLabel="添加新项目" />/        <ButtonShowcase title="轮廓按钮" buttons={outlineButtons} / accessibilityLabel="TODO: 添加无障碍标签" />/      </Card>/{///
       {///              设计理念 💡
         </Text>/        <Text variant="body1" style={styles.footerText}>/              索克生活的品牌色彩设计深度融合了中医文化内涵与现代设计美学。
           索克绿象征着生命的蓬勃与健康的活力，体现了我们对用户健康的专业承诺；

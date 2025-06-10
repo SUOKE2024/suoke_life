@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from 'react';
-import {
+import {;
   Animated,
   Dimensions,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
@@ -44,7 +44,7 @@ export const Toast: React.FC<ToastProps> = ({
   onPress,
   icon,
   style,
-  textStyle,
+  textStyle
 }) => {
   const { currentTheme } = useTheme();
   const styles = createStyles(currentTheme, type, position);
@@ -62,13 +62,13 @@ export const Toast: React.FC<ToastProps> = ({
         toValue: 0,
         useNativeDriver: true,
         tension: 100,
-        friction: 8,
+        friction: 8
       }),
       Animated.timing(opacity, {
         toValue: 1,
         duration: 300,
-        useNativeDriver: true,
-      }),
+        useNativeDriver: true
+      })
     ]).start();
   };
 
@@ -78,13 +78,13 @@ export const Toast: React.FC<ToastProps> = ({
       Animated.timing(translateY, {
         toValue: position === 'top' ? -100 : 100,
         duration: 250,
-        useNativeDriver: true,
+        useNativeDriver: true
       }),
       Animated.timing(opacity, {
         toValue: 0,
         duration: 250,
-        useNativeDriver: true,
-      }),
+        useNativeDriver: true
+      })
     ]).start() => {
       onClose?.();
     });
@@ -106,7 +106,7 @@ export const Toast: React.FC<ToastProps> = ({
       info: 'ℹ️',
       success: '✅',
       warning: '⚠️',
-      error: '❌',
+      error: '❌'
     };
 
     return <Text style={styles.icon}>{iconMap[type]}</Text>;
@@ -141,9 +141,9 @@ export const Toast: React.FC<ToastProps> = ({
           styles.container,
           {
             opacity,
-            transform: [{ translateY }],
+            transform: [{ translateY }]
           },
-          style,
+          style
         ]}
       >
         <TouchableOpacity;
@@ -175,7 +175,7 @@ const createStyles = (theme: any, type: string, position: string) => {
             theme.colors.successContainer || theme.colors.primaryContainer,
           border: theme.colors.success,
           text:
-            theme.colors.onSuccessContainer || theme.colors.onPrimaryContainer,
+            theme.colors.onSuccessContainer || theme.colors.onPrimaryContainer
         };
       case 'warning':
         return {
@@ -183,19 +183,19 @@ const createStyles = (theme: any, type: string, position: string) => {
             theme.colors.warningContainer || theme.colors.primaryContainer,
           border: theme.colors.warning,
           text:
-            theme.colors.onWarningContainer || theme.colors.onPrimaryContainer,
+            theme.colors.onWarningContainer || theme.colors.onPrimaryContainer
         };
       case 'error':
         return {
           background: theme.colors.errorContainer,
           border: theme.colors.error,
-          text: theme.colors.onErrorContainer,
+          text: theme.colors.onErrorContainer
         };
       default:
         return {,
   background: theme.colors.surfaceVariant,
           border: theme.colors.primary,
-          text: theme.colors.onSurfaceVariant,
+          text: theme.colors.onSurfaceVariant
         };
     }
   };
@@ -215,7 +215,7 @@ const createStyles = (theme: any, type: string, position: string) => {
       paddingBottom: position === 'bottom' ? 50 : 0,
       paddingHorizontal: theme.spacing.md,
       pointerEvents: 'box-none',
-      zIndex: 1000,
+      zIndex: 1000
     },
     container: {,
   maxWidth: screenWidth - 32,
@@ -226,36 +226,36 @@ const createStyles = (theme: any, type: string, position: string) => {
       shadowColor: theme.colors.shadow,
       shadowOffset: {,
   width: 0,
-        height: 4,
+        height: 4
       },
       shadowOpacity: 0.15,
       shadowRadius: 8,
-      elevation: 8,
+      elevation: 8
     },
     content: {,
   flexDirection: 'row',
       alignItems: 'center',
-      padding: theme.spacing.md,
+      padding: theme.spacing.md
     },
     icon: {,
   fontSize: 20,
-      marginRight: theme.spacing.sm,
+      marginRight: theme.spacing.sm
     },
     message: {,
   flex: 1,
       fontSize: theme.typography.fontSize.sm,
       color: colors.text,
-      lineHeight: theme.typography.fontSize.sm * 1.4,
+      lineHeight: theme.typography.fontSize.sm * 1.4
     },
     closeButton: {,
   padding: theme.spacing.xs,
-      marginLeft: theme.spacing.sm,
+      marginLeft: theme.spacing.sm
     },
     closeText: {,
   fontSize: 18,
       color: colors.text,
-      fontWeight: theme.typography.fontWeight.bold,
-    },
+      fontWeight: theme.typography.fontWeight.bold
+    }
   });
 };
 

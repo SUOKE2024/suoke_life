@@ -78,7 +78,7 @@ export const Chart: React.FC<ChartProps> = ({
   formatXLabel = (label) => label,
   formatValue = (value) => value.toString(),
   smooth = false,
-  fillOpacity = 0.3,
+  fillOpacity = 0.3
 }) => {
   const { currentTheme } = useTheme();
   const styles = createStyles(currentTheme);
@@ -90,7 +90,7 @@ export const Chart: React.FC<ChartProps> = ({
     currentTheme.colors.success,
     currentTheme.colors.warning,
     currentTheme.colors.error,
-    currentTheme.colors.info,
+    currentTheme.colors.info
   ];
 
   const colors = colorScheme || defaultColors;
@@ -138,8 +138,8 @@ export const Chart: React.FC<ChartProps> = ({
             {
               top: y,
               width: width - 60,
-              left: 40,
-            },
+              left: 40
+            }
           ]}
         />
       );
@@ -165,8 +165,8 @@ export const Chart: React.FC<ChartProps> = ({
           style={[
             styles.yLabel,
             {
-              top: y,
-            },
+              top: y
+            }
           ]}
         >
           {formatYLabel(value)}
@@ -190,8 +190,8 @@ export const Chart: React.FC<ChartProps> = ({
           styles.xLabel,
           {
             left: 50 + index * barWidth + barWidth / 2,
-            bottom: 5,
-          },
+            bottom: 5
+          }
         ]}
       >
         {formatXLabel(item.label)}
@@ -220,8 +220,8 @@ export const Chart: React.FC<ChartProps> = ({
                 height: Math.max(barHeight, 2),
                 left: 50 + index * (barWidth + barSpacing),
                 bottom: 20,
-                backgroundColor: color,
-              },
+                backgroundColor: color
+              }
             ]}
           />
           {showValues && (
@@ -230,8 +230,8 @@ export const Chart: React.FC<ChartProps> = ({
                 styles.valueLabel,
                 {
                   left: 50 + index * (barWidth + barSpacing) + barWidth / 2,
-                  bottom: 25 + barHeight,
-                },
+                  bottom: 25 + barHeight
+                }
               ]}
             >
               {formatValue(item.value)}
@@ -275,8 +275,8 @@ export const Chart: React.FC<ChartProps> = ({
 
     return (
       <>
-        {/* 这里应该使用SVG来绘制路径，但React Native需要额外的库 */}
-        {/* 简化版本：只显示点 */}
+        {// 这里应该使用SVG来绘制路径，但React Native需要额外的库}
+        {// 简化版本：只显示点}
         {points.map(point, index) => (
           <View key={index}>
             <View;
@@ -285,8 +285,8 @@ export const Chart: React.FC<ChartProps> = ({
                 {
                   left: point.x - 4,
                   top: point.y - 4,
-                  backgroundColor: colors[0],
-                },
+                  backgroundColor: colors[0]
+                }
               ]}
             />
             {showValues && (
@@ -295,8 +295,8 @@ export const Chart: React.FC<ChartProps> = ({
                   styles.valueLabel,
                   {
                     left: point.x,
-                    top: point.y - 20,
-                  },
+                    top: point.y - 20
+                  }
                 ]}
               >
                 {formatValue(data[index].value)}
@@ -304,7 +304,7 @@ export const Chart: React.FC<ChartProps> = ({
             )}
           </View>
         ))}
-        {/* 连接线（简化版） */}
+        {// 连接线（简化版）}
         {points.slice(1).map(point, index) => {
           const prevPoint = points[index];
           const lineWidth = Math.sqrt(
@@ -326,8 +326,8 @@ export const Chart: React.FC<ChartProps> = ({
                   left: prevPoint.x,
                   top: prevPoint.y,
                   transform: [{ rotate: `${angle}rad` }],
-                  backgroundColor: colors[0],
-                },
+                  backgroundColor: colors[0]
+                }
               ]}
             />
           );
@@ -361,7 +361,7 @@ export const Chart: React.FC<ChartProps> = ({
 
       return (
         <View key={index}>
-          {/* 这里应该使用SVG绘制扇形，简化版本使用圆形 */}
+          {// 这里应该使用SVG绘制扇形，简化版本使用圆形}
           <View;
             style={[
               styles.pieSlice,
@@ -371,8 +371,8 @@ export const Chart: React.FC<ChartProps> = ({
                 borderRadius: radius * percentage,
                 backgroundColor: color,
                 left: centerX - radius * percentage,
-                top: centerY - radius * percentage,
-              },
+                top: centerY - radius * percentage
+              }
             ]}
           />
           {showValues && (
@@ -381,8 +381,8 @@ export const Chart: React.FC<ChartProps> = ({
                 styles.pieLabel,
                 {
                   left: labelX,
-                  top: labelY,
-                },
+                  top: labelY
+                }
               ]}
             >
               {`${(percentage * 100).toFixed(1)}%`}
@@ -413,8 +413,8 @@ export const Chart: React.FC<ChartProps> = ({
               {
                 width: width - 100,
                 height: barHeight,
-                left: 80,
-              },
+                left: 80
+              }
             ]}
           />
           <View;
@@ -424,8 +424,8 @@ export const Chart: React.FC<ChartProps> = ({
                 width: (width - 100) * progress,
                 height: barHeight,
                 left: 80,
-                backgroundColor: color,
-              },
+                backgroundColor: color
+              }
             ]}
           />
           <Text;
@@ -433,8 +433,8 @@ export const Chart: React.FC<ChartProps> = ({
               styles.progressLabel,
               {
                 left: 10,
-                top: barHeight / 2 - 8,
-              },
+                top: barHeight / 2 - 8
+              }
             ]}
           >
             {formatXLabel(item.label)}
@@ -445,8 +445,8 @@ export const Chart: React.FC<ChartProps> = ({
                 styles.progressValue,
                 {
                   right: 10,
-                  top: barHeight / 2 - 8,
-                },
+                  top: barHeight / 2 - 8
+                }
               ]}
             >
               {formatValue(item.value)}
@@ -515,24 +515,24 @@ const createStyles = (theme: any) => {
     container: {,
   backgroundColor: theme.colors.surface,
       borderRadius: theme.borderRadius.md,
-      padding: theme.spacing.md,
+      padding: theme.spacing.md
     },
     title: {,
   fontSize: theme.typography.fontSize.lg,
       fontWeight: theme.typography.fontWeight.semibold,
       color: theme.colors.onSurface,
       textAlign: 'center',
-      marginBottom: theme.spacing.md,
+      marginBottom: theme.spacing.md
     },
     chartContainer: {,
   position: 'relative',
-      backgroundColor: theme.colors.surface,
+      backgroundColor: theme.colors.surface
     },
     gridLine: {,
   position: 'absolute',
       height: 1,
       backgroundColor: theme.colors.outline,
-      opacity: 0.3,
+      opacity: 0.3
     },
     yLabel: {,
   position: 'absolute',
@@ -540,7 +540,7 @@ const createStyles = (theme: any) => {
       fontSize: theme.typography.fontSize.xs,
       color: theme.colors.onSurfaceVariant,
       textAlign: 'right',
-      width: 30,
+      width: 30
     },
     xLabel: {,
   position: 'absolute',
@@ -548,11 +548,11 @@ const createStyles = (theme: any) => {
       color: theme.colors.onSurfaceVariant,
       textAlign: 'center',
       transform: [{ translateX: -20 }],
-      width: 40,
+      width: 40
     },
     bar: {,
   position: 'absolute',
-      borderRadius: theme.borderRadius.sm,
+      borderRadius: theme.borderRadius.sm
     },
     valueLabel: {,
   position: 'absolute',
@@ -560,7 +560,7 @@ const createStyles = (theme: any) => {
       color: theme.colors.onSurface,
       textAlign: 'center',
       transform: [{ translateX: -15 }],
-      width: 30,
+      width: 30
     },
     linePoint: {,
   position: 'absolute',
@@ -568,15 +568,15 @@ const createStyles = (theme: any) => {
       height: 8,
       borderRadius: 4,
       borderWidth: 2,
-      borderColor: theme.colors.surface,
+      borderColor: theme.colors.surface
     },
     line: {,
   position: 'absolute',
       height: 2,
-      transformOrigin: 'left center',
+      transformOrigin: 'left center'
     },
     pieSlice: {,
-  position: 'absolute',
+  position: 'absolute'
     },
     pieLabel: {,
   position: 'absolute',
@@ -584,49 +584,49 @@ const createStyles = (theme: any) => {
       color: theme.colors.onSurface,
       textAlign: 'center',
       transform: [{ translateX: -15 }, { translateY: -8 }],
-      width: 30,
+      width: 30
     },
     progressBackground: {,
   position: 'absolute',
       backgroundColor: theme.colors.surfaceVariant,
-      borderRadius: theme.borderRadius.sm,
+      borderRadius: theme.borderRadius.sm
     },
     progressBar: {,
   position: 'absolute',
-      borderRadius: theme.borderRadius.sm,
+      borderRadius: theme.borderRadius.sm
     },
     progressLabel: {,
   position: 'absolute',
       fontSize: theme.typography.fontSize.sm,
-      color: theme.colors.onSurface,
+      color: theme.colors.onSurface
     },
     progressValue: {,
   position: 'absolute',
       fontSize: theme.typography.fontSize.sm,
-      color: theme.colors.onSurface,
+      color: theme.colors.onSurface
     },
     legend: {,
   flexDirection: 'row',
       flexWrap: 'wrap',
       justifyContent: 'center',
-      marginTop: theme.spacing.md,
+      marginTop: theme.spacing.md
     },
     legendItem: {,
   flexDirection: 'row',
       alignItems: 'center',
       marginRight: theme.spacing.md,
-      marginBottom: theme.spacing.xs,
+      marginBottom: theme.spacing.xs
     },
     legendColor: {,
   width: 12,
       height: 12,
       borderRadius: 6,
-      marginRight: theme.spacing.xs,
+      marginRight: theme.spacing.xs
     },
     legendLabel: {,
   fontSize: theme.typography.fontSize.sm,
-      color: theme.colors.onSurface,
-    },
+      color: theme.colors.onSurface
+    }
   });
 };
 

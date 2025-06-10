@@ -1,25 +1,24 @@
 import { AgentType } from '../types/agents';
-import React from 'react';
 // 索克生活四智能体系统配置
 // 基于README.md第1013-1063行的智能体描述
 export interface AgentConfig {
-  id: string;,
-  name: string;,
-  type: AgentType;,
-  description: string;,
-  channel: string;,
-  role: string;,
-  capabilities: string[];,
+  id: string;
+  name: string;
+  type: AgentType;
+  description: string;
+  channel: string;
+  role: string;
+  capabilities: string[];
   technicalFeatures: Record<string, boolean>;
-  apiEndpoint: string;,
-  port: number;,
-  enabled: boolean;,
-  maxConcurrentTasks: number;,
-  responseTimeout: number;,
+  apiEndpoint: string;
+  port: number;
+  enabled: boolean;
+  maxConcurrentTasks: number;
+  responseTimeout: number;
   retryAttempts: number;
 }
 // 小艾智能体配置 - 首页聊天频道版主 & 四诊协调智能体
-export const XIAOAI_CONFIG: AgentConfig = {,
+export const XIAOAI_CONFIG: AgentConfig = {
   id: 'xiaoai-001',
   name: '小艾',
   type: AgentType.XIAOAI,
@@ -44,8 +43,8 @@ export const XIAOAI_CONFIG: AgentConfig = {,
     'sign_language_recognition', // 手语识别
     'elderly_friendly_interface', // 老年友好界面
   ],
-  technicalFeatures: {,
-  multimodalLLM: true, // 多模态大语言模型 (GPT-4o / Gemini 1.5 Pro)
+  technicalFeatures: {
+    multimodalLLM: true, // 多模态大语言模型 (GPT-4o / Gemini 1.5 Pro)
     localModel: true, // 轻量级本地模型 (Llama 3-8B)
     visionRecognition: true, // 视觉识别组件
     fourDiagnosisIntegration: true, // 四诊合参模块集成
@@ -59,7 +58,7 @@ export const XIAOAI_CONFIG: AgentConfig = {,
   retryAttempts: 3,
 };
 // 小克智能体配置 - SUOKE频道版主 & 服务管理智能体
-export const XIAOKE_CONFIG: AgentConfig = {,
+export const XIAOKE_CONFIG: AgentConfig = {
   id: 'xiaoke-001',
   name: '小克',
   type: AgentType.XIAOKE,
@@ -81,8 +80,8 @@ export const XIAOKE_CONFIG: AgentConfig = {,
     'store_management', // 在线店铺管理
     'health_product_recommendation', // 健康商品推荐
   ],
-  technicalFeatures: {,
-  recommendationAlgorithm: true, // 推荐算法
+  technicalFeatures: {
+    recommendationAlgorithm: true, // 推荐算法
     crmSystem: true, // CRM系统集成
     blockchainTraceability: true, // 区块链溯源
     apiGateway: true, // API网关
@@ -96,7 +95,7 @@ export const XIAOKE_CONFIG: AgentConfig = {,
   retryAttempts: 3,
 };
 // 老克智能体配置 - 探索频道版主 & 知识传播智能体
-export const LAOKE_CONFIG: AgentConfig = {,
+export const LAOKE_CONFIG: AgentConfig = {
   id: 'laoke-001',
   name: '老克',
   type: AgentType.LAOKE,
@@ -116,8 +115,8 @@ export const LAOKE_CONFIG: AgentConfig = {,
     'blog_management', // 用户博客管理
     'content_quality_assurance', // 内容质量保障
   ],
-  technicalFeatures: {,
-  knowledgeGraph: true, // 知识图谱
+  technicalFeatures: {
+    knowledgeGraph: true, // 知识图谱
     ragSystem: true, // RAG系统
     learningTracking: true, // 学习进度追踪
     arvrInteraction: true, // AR/VR互动系统
@@ -132,7 +131,7 @@ export const LAOKE_CONFIG: AgentConfig = {,
   retryAttempts: 3,
 };
 // 索儿智能体配置 - LIFE频道版主 & 生活健康管理智能体
-export const SOER_CONFIG: AgentConfig = {,
+export const SOER_CONFIG: AgentConfig = {
   id: 'soer-001',
   name: '索儿',
   type: AgentType.SOER,
@@ -158,8 +157,8 @@ export const SOER_CONFIG: AgentConfig = {,
     'stress_management', // 压力管理
     'emotional_counseling', // 情绪疏导
   ],
-  technicalFeatures: {,
-  dataFusion: true, // 多源异构数据融合
+  technicalFeatures: {
+    dataFusion: true, // 多源异构数据融合
     edgeComputing: true, // 边缘计算
     privacyProtection: true, // 隐私保护
     reinforcementLearning: true, // 强化学习
@@ -182,9 +181,9 @@ export const AGENT_CONFIGS: Record<AgentType, AgentConfig> = {
 };
 // 智能体协作配置
 export interface CollaborationConfig {
-  primaryAgent: AgentType;,
-  supportingAgents: AgentType[];,
-  scenario: string;,
+  primaryAgent: AgentType;
+  supportingAgents: AgentType[];
+  scenario: string;
   description: string;
 }
 export const COLLABORATION_SCENARIOS: CollaborationConfig[] = [
@@ -198,28 +197,26 @@ export const COLLABORATION_SCENARIOS: CollaborationConfig[] = [
     primaryAgent: AgentType.XIAOKE,
     supportingAgents: [AgentType.XIAOAI, AgentType.SOER],
     scenario: 'personalized_service_recommendation',
-    description: '小克主导的个性化服务推荐，基于小艾的健康评估和索儿的生活数据',
+    description: '小克主导的个性化服务推荐，结合健康数据和用户偏好',
   },
   {
     primaryAgent: AgentType.LAOKE,
-    supportingAgents: [AgentType.XIAOAI, AgentType.XIAOKE],
-    scenario: 'health_education_and_training',
-    description: '老克主导的健康教育培训，结合小艾的专业知识和小克的服务资源',
+    supportingAgents: [AgentType.XIAOAI, AgentType.SOER],
+    scenario: 'knowledge_based_health_education',
+    description: '老克主导的知识传播，结合个人健康状况提供教育内容',
   },
   {
     primaryAgent: AgentType.SOER,
-    supportingAgents: [AgentType.XIAOAI, AgentType.XIAOKE, AgentType.LAOKE],
-    scenario: 'lifestyle_management_and_companionship',
-    description: '索儿主导的生活管理和陪伴，整合其他智能体的专业能力',
+    supportingAgents: [AgentType.XIAOAI, AgentType.XIAOKE],
+    scenario: 'lifestyle_health_management',
+    description: '索儿主导的生活健康管理，整合多源数据提供全面健康指导',
   },
 ];
-// 默认配置
+// 默认智能体配置
 export const DEFAULT_AGENT_CONFIG = {
-  enableHealthMonitoring: true,
-  enableLoadBalancing: true,
-  enableFailover: true,
-  maxRetries: 3,
-  timeoutMs: 30000,
-  healthCheckIntervalMs: 60000,
+  timeout: 30000,
+  retries: 3,
+  maxConcurrentTasks: 10,
+  healthCheckInterval: 60000,
   logLevel: 'info' as const,
 };

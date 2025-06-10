@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {
+import {;
   Animated,
   Dimensions,
   Modal,
   StyleSheet,
   TouchableOpacity,
   View,
-  ViewStyle,
+  ViewStyle
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
@@ -43,7 +43,7 @@ export const Popover: React.FC<PopoverProps> = ({
   contentStyle,
   accessible = true,
   accessibilityLabel,
-  testID,
+  testID
 }) => {
   const { currentTheme } = useTheme();
   const [internalVisible, setInternalVisible] = useState(false);
@@ -51,7 +51,7 @@ export const Popover: React.FC<PopoverProps> = ({
     x: 0,
     y: 0,
     width: 0,
-    height: 0,
+    height: 0
   });
   const [contentLayout, setContentLayout] = useState({ width: 0, height: 0 });
   const [actualPlacement, setActualPlacement] = useState<
@@ -75,14 +75,14 @@ export const Popover: React.FC<PopoverProps> = ({
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 200,
-        useNativeDriver: true,
+        useNativeDriver: true
       }),
       Animated.spring(scaleAnim, {
         toValue: 1,
         tension: 100,
         friction: 8,
-        useNativeDriver: true,
-      }),
+        useNativeDriver: true
+      })
     ]).start();
   };
 
@@ -91,13 +91,13 @@ export const Popover: React.FC<PopoverProps> = ({
       Animated.timing(fadeAnim, {
         toValue: 0,
         duration: 150,
-        useNativeDriver: true,
+        useNativeDriver: true
       }),
       Animated.timing(scaleAnim, {
         toValue: 0.8,
         duration: 150,
-        useNativeDriver: true,
-      }),
+        useNativeDriver: true
+      })
     ]).start() => {
       if (controlledVisible === undefined) {
         setInternalVisible(false);
@@ -132,7 +132,7 @@ export const Popover: React.FC<PopoverProps> = ({
       { direction: 'bottom' as const, space: spaceBottom },
       { direction: 'top' as const, space: spaceTop },
       { direction: 'right' as const, space: spaceRight },
-      { direction: 'left' as const, space: spaceLeft },
+      { direction: 'left' as const, space: spaceLeft }
     ];
 
     return spaces.sort(a, b) => b.space - a.space)[0].direction;
@@ -187,7 +187,7 @@ export const Popover: React.FC<PopoverProps> = ({
       width: 0,
       height: 0,
       backgroundColor: 'transparent',
-      borderStyle: 'solid',
+      borderStyle: 'solid'
     };
 
     switch (actualPlacement) {
@@ -201,7 +201,7 @@ export const Popover: React.FC<PopoverProps> = ({
           borderTopWidth: arrowSize,
           borderLeftColor: 'transparent',
           borderRightColor: 'transparent',
-          borderTopColor: backgroundColor || currentTheme.colors.surface,
+          borderTopColor: backgroundColor || currentTheme.colors.surface
         };
       case 'bottom':
         return {
@@ -213,7 +213,7 @@ export const Popover: React.FC<PopoverProps> = ({
           borderBottomWidth: arrowSize,
           borderLeftColor: 'transparent',
           borderRightColor: 'transparent',
-          borderBottomColor: backgroundColor || currentTheme.colors.surface,
+          borderBottomColor: backgroundColor || currentTheme.colors.surface
         };
       case 'left':
         return {
@@ -225,7 +225,7 @@ export const Popover: React.FC<PopoverProps> = ({
           borderLeftWidth: arrowSize,
           borderTopColor: 'transparent',
           borderBottomColor: 'transparent',
-          borderLeftColor: backgroundColor || currentTheme.colors.surface,
+          borderLeftColor: backgroundColor || currentTheme.colors.surface
         };
       case 'right':
         return {
@@ -237,7 +237,7 @@ export const Popover: React.FC<PopoverProps> = ({
           borderRightWidth: arrowSize,
           borderTopColor: 'transparent',
           borderBottomColor: 'transparent',
-          borderRightColor: backgroundColor || currentTheme.colors.surface,
+          borderRightColor: backgroundColor || currentTheme.colors.surface
         };
     }
   };
@@ -256,7 +256,7 @@ export const Popover: React.FC<PopoverProps> = ({
     },
     overlay: {,
   flex: 1,
-      backgroundColor: 'transparent',
+      backgroundColor: 'transparent'
     },
     popover: {,
   position: 'absolute',
@@ -266,15 +266,15 @@ export const Popover: React.FC<PopoverProps> = ({
       shadowColor: currentTheme.colors.shadow,
       shadowOffset: {,
   width: 0,
-        height: 4,
+        height: 4
       },
       shadowOpacity: 0.3,
       shadowRadius: 8,
       elevation: 8,
       left: popoverPosition.x,
       top: popoverPosition.y,
-      ...contentStyle,
-    },
+      ...contentStyle
+    }
   });
 
   const handleTriggerPress = () => {
@@ -331,8 +331,8 @@ export const Popover: React.FC<PopoverProps> = ({
               styles.popover,
               {
                 opacity: fadeAnim,
-                transform: [{ scale: scaleAnim }],
-              },
+                transform: [{ scale: scaleAnim }]
+              }
             ]}
             onLayout={(event) => {
               const { width, height } = event.nativeEvent.layout;

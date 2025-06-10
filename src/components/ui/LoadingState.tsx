@@ -31,7 +31,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
   style,
   size = 'md',
   color,
-  skeletonConfig = { lines: 3, showAvatar: false, showImage: false },
+  skeletonConfig = { lines: 3, showAvatar: false, showImage: false }
 }) => {
   const { currentTheme } = useTheme();
   const styles = createStyles(currentTheme);
@@ -46,7 +46,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
         Animated.timing(spinValue, {
           toValue: 1,
           duration: 1000,
-          useNativeDriver: true,
+          useNativeDriver: true
         })
       );
       spinAnimation.start();
@@ -59,13 +59,13 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
           Animated.timing(pulseValue, {
             toValue: 1,
             duration: 800,
-            useNativeDriver: true,
+            useNativeDriver: true
           }),
           Animated.timing(pulseValue, {
             toValue: 0.5,
             duration: 800,
-            useNativeDriver: true,
-          }),
+            useNativeDriver: true
+          })
         ])
       );
       pulseAnimation.start();
@@ -77,7 +77,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
         Animated.timing(dotsValue, {
           toValue: 1,
           duration: 1500,
-          useNativeDriver: true,
+          useNativeDriver: true
         })
       );
       dotsAnimation.start();
@@ -110,7 +110,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
   const renderSpinner = () => {
     const spin = spinValue.interpolate({
       inputRange: [0, 1],
-      outputRange: ['0deg', '360deg'],
+      outputRange: ['0deg', '360deg']
     });
 
     return (
@@ -119,7 +119,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
           styles.spinner,
           getSizeStyles(),
           { transform: [{ rotate: spin }] },
-          color && { borderTopColor: color },
+          color && { borderTopColor: color }
         ]}
       />
     );
@@ -133,8 +133,8 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
           getSizeStyles(),
           {
             opacity: pulseValue,
-            backgroundColor: color || currentTheme.colors.primary,
-          },
+            backgroundColor: color || currentTheme.colors.primary
+          }
         ]}
       />
     );
@@ -153,7 +153,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
                 ? [0.3, 1, 0.3, 0.3]
                 : index === 1;
                   ? [0.3, 0.3, 1, 0.3]
-                  : [0.3, 0.3, 0.3, 1],
+                  : [0.3, 0.3, 0.3, 1]
           });
 
           return (
@@ -163,8 +163,8 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
                 styles.dot,
                 {
                   opacity,
-                  backgroundColor: color || currentTheme.colors.primary,
-                },
+                  backgroundColor: color || currentTheme.colors.primary
+                }
               ]}
             />
           );
@@ -236,7 +236,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
             style={[
               styles.message,
               { fontSize: getMessageSize() },
-              color && { color },
+              color && { color }
             ]}
           >
             {message}
@@ -253,56 +253,56 @@ const createStyles = (theme: any) => {
   flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      padding: theme.spacing.lg,
+      padding: theme.spacing.lg
     },
     loadingContent: {,
   alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'center'
     },
     spinner: {,
   borderWidth: 3,
       borderColor: theme.colors.outline,
       borderTopColor: theme.colors.primary,
-      borderRadius: 50,
+      borderRadius: 50
     },
     pulse: {,
-  borderRadius: 50,
+  borderRadius: 50
     },
     dotsContainer: {,
   flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'center'
     },
     dot: {,
   width: 8,
       height: 8,
       borderRadius: 4,
-      marginHorizontal: 4,
+      marginHorizontal: 4
     },
     message: {,
   marginTop: theme.spacing.md,
       color: theme.colors.onSurfaceVariant,
-      textAlign: 'center',
+      textAlign: 'center'
     },
     skeletonContainer: {,
   width: '100%',
-      padding: theme.spacing.md,
+      padding: theme.spacing.md
     },
     skeletonRow: {,
   flexDirection: 'row',
       alignItems: 'center',
-      marginBottom: theme.spacing.md,
+      marginBottom: theme.spacing.md
     },
     skeletonContent: {,
   flex: 1,
-      marginLeft: theme.spacing.md,
+      marginLeft: theme.spacing.md
     },
     skeletonImage: {,
-  marginBottom: theme.spacing.md,
+  marginBottom: theme.spacing.md
     },
     skeletonLine: {,
-  marginBottom: theme.spacing.sm,
-    },
+  marginBottom: theme.spacing.sm
+    }
   });
 };
 

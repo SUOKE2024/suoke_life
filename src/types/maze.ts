@@ -47,12 +47,12 @@ export enum GameEventType {
 }
 // 位置坐标
 export interface Position {
-  x: number;,
+  x: number;
   y: number;
 }
 // 迷宫节点
 export interface MazeNode {
-  x: number;,
+  x: number;
   y: number;,
   nodeType: NodeType;
   content?: string; // 节点内容

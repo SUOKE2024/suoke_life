@@ -1,7 +1,7 @@
 import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/      View,";
 import React from "react";
 importIcon from "../../../components/common/Icon/import { colors, spacing  } from "../../placeholder";../../../constants/theme"; 区块链健康数据管理组件   提供安全的健康数据存储和管理功能
-import React,{ useState, useEffect } from react""
+import React,{ useState, useEffect } from react"";
   Text,
   StyleSheet,
   ScrollView,
@@ -140,7 +140,7 @@ const [activeTab, setActiveTab] = useState<"records | "permissions" | security">
   //
     <View style={styles.tabBar}>/          <TouchableOpacity;
 style={[styles.tab, activeTab === "records && styles.activeTab]}"
-        onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setActiveTab("records")}/          >
+        onPress={() = accessibilityLabel="操作按钮" /> setActiveTab("records")}/          >
         <Icon;
 name="database"
           size={20}
@@ -148,7 +148,7 @@ name="database"
         </Text>/      </TouchableOpacity>/
       <TouchableOpacity;
 style={[styles.tab, activeTab === "permissions" && styles.activeTab]}
-        onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setActiveTab(permissions")}/          >"
+        onPress={() = accessibilityLabel="操作按钮" /> setActiveTab(permissions")}/          >"
         <Icon;
 name="key"
           size={20}
@@ -156,7 +156,7 @@ name="key"
         </Text>/      </TouchableOpacity>/
       <TouchableOpacity;
 style={[styles.tab, activeTab === security" && styles.activeTab]}"
-        onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setActiveTab("security)}/          >"
+        onPress={() = accessibilityLabel="操作按钮" /> setActiveTab("security)}/          >"
         <Icon;
 name="shield-check"
           size={20}
@@ -166,7 +166,7 @@ name="shield-check"
     <TouchableOpacity;
 key={record.id}
       style={styles.recordCard}
-      onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setSelectedRecord(record)}/        >
+      onPress={() = accessibilityLabel="操作按钮" /> setSelectedRecord(record)}/        >
       <View style={styles.recordHeader}>/        <View style={[styles.recordIcon, { backgroundColor: getTypeColor(record.type) + "20   }}]} />/          <Icon name={getTypeIcon(record.type)} size={24} color={getTypeColor(record.type)} />/        </View>/    "
         <View style={styles.recordInfo}>/          <Text style={styles.recordTitle}>{record.title}</Text>/          <Text style={styles.recordDescription}>{record.description}</Text>/          <Text style={styles.recordTimestamp}>/                {record.timestamp.toLocaleDateString("zh-CN")}
           </Text>/        </View>/
@@ -199,7 +199,7 @@ value={true}
           trackColor={ false: colors.gray300, true: colors.primary + 50"}}"
           thumbColor={colors.primary} />/      </View>/
       <View style={styles.securityCard}>/        <View style={styles.securityHeader}>/          <Icon name="key-variant" size={32} color={colors.primary} />/          <Text style={styles.securityTitle}>私钥管理</Text>/        </View>/        <Text style={styles.securityDescription}>/              您的私钥安全存储在设备中，用于数据加密和身份验证
-        </Text>/        <TouchableOpacity style={styles.securityButton} accessibilityLabel="TODO: 添加无障碍标签" />/          <Text style={styles.securityButtonText}>备份私钥</Text>/        </TouchableOpacity>/      </View>/
+        </Text>/        <TouchableOpacity style={styles.securityButton} accessibilityLabel="备份私钥" />/          <Text style={styles.securityButtonText}>备份私钥</Text>/        </TouchableOpacity>/      </View>/
       <View style={styles.securityCard}>/        <View style={styles.securityHeader}>/          <Icon name="shield-lock" size={32} color={colors.primary} />/          <Text style={styles.securityTitle}>零知识证明</Text>/        </View>/        <Text style={styles.securityDescription}>/              在不泄露具体数据的情况下，证明您的健康状态符合特定条件
         </Text>/            <Switch;
 value={true}
@@ -232,7 +232,7 @@ value={true}
 visible={visible}
       animationType="slide"
       presentationStyle="fullScreen"
-      onRequestClose={onClose} />/      <View style={styles.container}>/        <View style={styles.header}>/          <TouchableOpacity onPress={onClose} style={styles.closeButton} accessibilityLabel="TODO: 添加无障碍标签" />/            <Icon name="close" size={24} color={colors.textPrimary} />/          </TouchableOpacity>/          <Text style={styles.title}>区块链健康数据</Text>/          <TouchableOpacity style={styles.helpButton} accessibilityLabel="TODO: 添加无障碍标签" />/            <Icon name="help-circle" size={24} color={colors.textPrimary} />/          </TouchableOpacity>/        </View>/
+      onRequestClose={onClose} />/      <View style={styles.container}>/        <View style={styles.header}>/          <TouchableOpacity onPress={onClose} style={styles.closeButton} accessibilityLabel="关闭" />/            <Icon name="close" size={24} color={colors.textPrimary} />/          </TouchableOpacity>/          <Text style={styles.title}>区块链健康数据</Text>/          <TouchableOpacity style={styles.helpButton} accessibilityLabel="关闭" />/            <Icon name="help-circle" size={24} color={colors.textPrimary} />/          </TouchableOpacity>/        </View>/
         {renderTabBar()}
         {renderContent()}
         {isLoading   && <View style={styles.loadingOverlay}>/            <ActivityIndicator size="large" color={colors.primary} />/            <Text style={styles.loadingText}>处理中...</Text>/          </View>/            )};

@@ -13,20 +13,66 @@ alwaysApply: false
 
 This document defines the development guidelines and best practices for the Suoke Life project in Cursor IDE. All project contributors should follow these rules to ensure code quality and project consistency.
 
-## 技术框架
-## Technology Framework
+## 项目概述
+## Project Overview
 
-- **前端**: React Native 0.73+, TypeScript 4.8+
+索克生活是一个由人工智能智能体驱动的现代化健康管理平台，融合中医智慧与现代预防医学技术，通过四个独立智能体（小艾、小克、老克、索儿）提供个性化全生命周期健康管理服务。
+
+Suoke Life is a modern health management platform driven by artificial intelligence agents, integrating traditional Chinese medicine wisdom with modern preventive medicine technology, providing personalized full-lifecycle health management services through four independent agents (Xiaoai, Xiaoke, Laoke, Soer).
+
+## 技术架构
+## Technology Architecture
+
+### 核心技术栈
+### Core Technology Stack
+
+- **前端**: React Native 0.79+, TypeScript 4.8+, Expo 53+
 - **后端**: Python (FastAPI, gRPC)
 - **数据库**: SQLite (移动端本地存储), PostgreSQL, MongoDB (服务端)
-- **状态管理**: Redux Toolkit
-- **API通信**: Axios, gRPC
+- **状态管理**: Redux Toolkit, React Context
+- **API通信**: Axios, gRPC, WebSocket
+- **AI集成**: Claude AI, ONNX Runtime, 本地推理
+- **容器化**: Docker, Kubernetes
+- **监控**: Prometheus, Grafana
+- **区块链**: 健康数据隐私保护
 
-- **Frontend**: React Native 0.73+, TypeScript 4.8+
-- **Backend**: Python (FastAPI, gRPC)
+- **Frontend**: React Native 0.79+, TypeScript 4.8+, Expo 53+
+- **Backend**: Python (FastAPI, gRPC), Go (some microservices)
 - **Database**: SQLite (mobile local storage), PostgreSQL, MongoDB (server-side)
-- **State Management**: Redux Toolkit
-- **API Communication**: Axios, gRPC
+- **State Management**: Redux Toolkit, React Context
+- **API Communication**: Axios, gRPC, WebSocket
+- **AI Integration**: Claude AI, ONNX Runtime, Local Inference
+- **Containerization**: Docker, Kubernetes
+- **Monitoring**: Prometheus, Grafana
+- **Blockchain**: Health data privacy protection
+
+### 微服务架构
+### Microservices Architecture
+
+```
+索克生活平台
+├── 统一知识服务 (unified-knowledge-service)
+├── 统一支持服务 (unified-support-service)
+├── 诊断服务 (diagnostic-services)
+│   ├── 望诊服务 (look-service)
+│   ├── 闻诊服务 (listen-service)
+│   ├── 问诊服务 (inquiry-service)
+│   ├── 切诊服务 (palpation-service)
+│   └── 算诊服务 (calculation-service)
+├── 智能体服务 (agent-services)
+│   ├── 小艾服务 (xiaoai-service)
+│   ├── 小克服务 (xiaoke-service)
+│   ├── 老克服务 (laoke-service)
+│   └── 索儿服务 (soer-service)
+├── 通信服务 (communication-service)
+├── 用户管理服务 (user-management-service)
+├── 统一健康数据服务 (unified-health-data-service)
+├── 工具服务 (utility-services)
+├── API网关 (api-gateway)
+├── 公共服务 (common)
+├── 区块链服务 (blockchain-service)
+└── Claude AI 集成 (claude-integration)
+```
 
 ## 编码规范
 ## Coding Standards
@@ -35,98 +81,86 @@ This document defines the development guidelines and best practices for the Suok
 ### Global Standards
 
 - 使用空格而非Tab进行缩进
-- 缩进大小：2个空格
-- 行长度限制：100字符
+- 缩进大小：2个空格 (TypeScript/JavaScript), 4个空格 (Python)
+- 行长度限制：100字符 (TypeScript), 88字符 (Python)
 - 文件使用UTF-8编码
 - 文件末尾保留一个空行
 - 删除行尾空白字符
 - 优先使用英文注释和变量名，确保国际化协作可行性
+- 所有文件必须包含适当的类型定义
 
 - Use spaces instead of tabs for indentation
-- Indentation size: 2 spaces
-- Line length limit: 100 characters
+- Indentation size: 2 spaces (TypeScript/JavaScript), 4 spaces (Python)
+- Line length limit: 100 characters (TypeScript), 88 characters (Python)
 - Use UTF-8 encoding for files
 - Keep one empty line at the end of the file
 - Remove trailing whitespace
 - Prioritize English comments and variable names to ensure international collaboration feasibility
+- All files must include appropriate type definitions
 
-### JavaScript/TypeScript规范
-### JavaScript/TypeScript Standards
+### TypeScript/React Native规范
+### TypeScript/React Native Standards
 
-- 使用TypeScript编写所有新功能
+- 使用TypeScript编写所有新功能，严格模式开启
 - 使用ES6+语法特性和函数式编程风格
 - 变量声明优先使用`const`，其次使用`let`，禁止使用`var`
-- 所有函数、类、接口必须有类型定义
-- 避免使用`any`类型，必要时使用`unknown`
-- 使用接口`interface`定义对象类型，使用类型别名`type`定义联合类型或交叉类型
-- 在组件上使用React.FC类型声明，并明确定义Props接口
-- 使用空格对齐代码以提高可读性
+- 所有函数、类、接口必须有完整的类型定义
+- 避免使用`any`类型，必要时使用`unknown`或具体类型
+- 使用接口`interface`定义对象类型，使用类型别名`type`定义联合类型
+- 组件必须使用`React.FC`类型声明，并明确定义Props接口
+- 使用函数组件和React Hooks，避免使用类组件
+- 合理使用`memo`, `useMemo`, `useCallback`优化性能
+- 使用`StyleSheet.create`创建样式，避免内联样式
 
-- Use TypeScript for all new features
+- Use TypeScript for all new features with strict mode enabled
 - Use ES6+ syntax features and functional programming style
 - Prioritize `const` for variable declarations, then `let`, never use `var`
-- All functions, classes, and interfaces must have type definitions
-- Avoid using the `any` type, use `unknown` when necessary
-- Use `interface` to define object types, use `type` aliases for union or intersection types
-- Use React.FC type declaration on components, and clearly define Props interfaces
-- Use space alignment to improve code readability
+- All functions, classes, and interfaces must have complete type definitions
+- Avoid using the `any` type, use `unknown` or specific types when necessary
+- Use `interface` to define object types, use `type` aliases for union types
+- Components must use `React.FC` type declaration with clearly defined Props interfaces
+- Use functional components and React Hooks, avoid class components
+- Use `memo`, `useMemo`, `useCallback` appropriately for performance optimization
+- Use `StyleSheet.create` for styles, avoid inline styles
 
 ```typescript
-// ✅ 正确示例
-// ✅ Correct example
-interface UserProps {
-  id: string;
+// ✅ 正确示例 - Correct example
+interface UserProfileProps {
+  userId: string;
   name: string;
   email?: string;
+  onUpdate?: (user: UserData) => void;
 }
 
-const UserProfile: React.FC<UserProps> = ({ id, name, email }) => {
+interface UserData {
+  id: string;
+  name: string;
+  email: string;
+  healthProfile?: HealthProfile;
+}
+
+const UserProfile: React.FC<UserProfileProps> = memo(({ 
+  userId, 
+  name, 
+  email, 
+  onUpdate 
+}) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [userData, setUserData] = useState<UserData | null>(null);
+  
+  const handleUpdate = useCallback((updatedUser: UserData) => {
+    setUserData(updatedUser);
+    onUpdate?.(updatedUser);
+  }, [onUpdate]);
   
   return (
-    <View>
-      <Text>{name}</Text>
-      {email && <Text>{email}</Text>}
+    <View style={styles.container}>
+      <Text style={styles.title}>{name}</Text>
+      {email && <Text style={styles.email}>{email}</Text>}
     </View>
   );
-};
+});
 
-// ❌ 错误示例
-// ❌ Incorrect example
-var UserProfile = (props) => {
-  var loading = false;
-  
-  return (
-    <View>
-      <Text>{props.name}</Text>
-      {props.email && <Text>{props.email}</Text>}
-    </View>
-  );
-}
-```
-
-### React Native规范
-### React Native Standards
-
-- 使用函数组件和React Hooks，避免使用类组件
-- 将大型组件拆分为小型、可复用的组件
-- 使用`StyleSheet.create`创建样式，避免内联样式
-- 组件props应有完整的TypeScript类型定义
-- 使用解构获取props和state
-- 合理使用memo, useMemo和useCallback优化性能
-- 遵循Hooks调用规则，不在条件或循环中调用Hook
-
-- Use functional components and React Hooks, avoid class components
-- Break large components into smaller, reusable components
-- Use `StyleSheet.create` to create styles, avoid inline styles
-- Component props should have complete TypeScript type definitions
-- Use destructuring to get props and state
-- Use memo, useMemo, and useCallback appropriately to optimize performance
-- Follow Hooks calling rules, don't call Hooks inside conditions or loops
-
-```typescript
-// ✅ 正确示例
-// ✅ Correct example
 const styles = StyleSheet.create({
   container: {
     padding: 16,
@@ -135,89 +169,165 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: 'bold',
-  }
+    color: '#333333',
+  },
+  email: {
+    fontSize: 14,
+    color: '#666666',
+    marginTop: 4,
+  },
 });
-
-// ❌ 错误示例
-// ❌ Incorrect example
-<View style={{padding: 16, backgroundColor: '#ffffff'}}>
-  <Text style={{fontSize: 18, fontWeight: 'bold'}}>Title</Text>
-</View>
 ```
 
 ### Python规范
 ### Python Standards
 
-- 遵循PEP 8编码规范
+- 遵循PEP 8编码规范，使用Black格式化工具
 - 使用4个空格缩进
 - 最大行长度为88字符(Black格式化工具默认)
-- 使用类型注解(Type Hints)
+- 使用类型注解(Type Hints)，包括函数参数和返回值
 - 使用f-strings进行字符串格式化
-- 函数和类必须有文档字符串(docstring)
+- 函数和类必须有详细的文档字符串(docstring)
 - 使用虚拟环境管理依赖
+- 异步函数使用async/await语法
+- 错误处理使用具体的异常类型
 
-- Follow PEP 8 coding guidelines
+- Follow PEP 8 coding guidelines, use Black formatter
 - Use 4 spaces for indentation
 - Maximum line length of 88 characters (Black formatter default)
-- Use type hints
+- Use type hints including function parameters and return values
 - Use f-strings for string formatting
-- Functions and classes must have docstrings
+- Functions and classes must have detailed docstrings
 - Use virtual environments for dependency management
+- Use async/await syntax for asynchronous functions
+- Use specific exception types for error handling
 
 ```python
-# ✅ 正确示例
-# ✅ Correct example
-def get_user_by_id(user_id: str) -> Optional[User]:
-    """
-    根据用户ID获取用户信息
-    Get user information by user ID
+# ✅ 正确示例 - Correct example
+from typing import Optional, List, Dict, Any
+from dataclasses import dataclass
+from datetime import datetime
+import logging
+
+logger = logging.getLogger(__name__)
+
+@dataclass
+class HealthData:
+    """健康数据模型 - Health data model"""
+    user_id: str
+    timestamp: datetime
+    vital_signs: Dict[str, float]
+    symptoms: List[str]
+    diagnosis_result: Optional[str] = None
+
+class HealthDataService:
+    """健康数据服务 - Health data service"""
     
-    Args:
-        user_id: 用户唯一标识
-                User unique identifier
+    async def get_user_health_data(
+        self, 
+        user_id: str, 
+        start_date: Optional[datetime] = None
+    ) -> List[HealthData]:
+        """
+        获取用户健康数据
+        Get user health data
         
-    Returns:
-        用户对象，若不存在则返回None
-        User object, or None if not found
-    """
-    try:
-        return db.users.find_one({"id": user_id})
-    except Exception as e:
-        logger.error(f"获取用户失败: {e}")
-        logger.error(f"Failed to get user: {e}")
-        return None
+        Args:
+            user_id: 用户唯一标识 - User unique identifier
+            start_date: 开始日期 - Start date
+            
+        Returns:
+            健康数据列表 - List of health data
+            
+        Raises:
+            ValueError: 当用户ID无效时 - When user ID is invalid
+            DatabaseError: 当数据库操作失败时 - When database operation fails
+        """
+        try:
+            if not user_id:
+                raise ValueError("用户ID不能为空 - User ID cannot be empty")
+                
+            # 实现数据获取逻辑
+            # Implement data retrieval logic
+            health_data = await self._fetch_from_database(user_id, start_date)
+            
+            logger.info(f"成功获取用户 {user_id} 的健康数据 - Successfully retrieved health data for user {user_id}")
+            return health_data
+            
+        except Exception as e:
+            logger.error(f"获取健康数据失败: {e} - Failed to get health data: {e}")
+            raise
 ```
 
-### 命名规范
-### Naming Conventions
+### 智能体开发规范
+### Agent Development Standards
 
-- **文件命名**:
-  - React组件文件: PascalCase，如`UserProfile.tsx`
-  - 非组件TS/JS文件: camelCase，如`apiService.ts`
-  - Python文件: snake_case，如`user_service.py`
-  
-- **变量/函数命名**:
-  - TS/JS: camelCase，如`getUserData`
-  - Python: snake_case，如`get_user_data`
-  
-- **组件命名**: PascalCase，如`UserProfile`
-- **接口/类型命名**: PascalCase，如`UserData`
-- **常量命名**: 全大写下划线分隔，如`API_BASE_URL`
-- **CSS类命名**: camelCase，使用React Native StyleSheet
+- 每个智能体保持独立的业务逻辑和配置
+- 智能体间通信使用标准化的消息总线
+- 智能体配置统一管理在`src/agents/config`目录
+- 智能体提示词和知识库分离管理
+- 实现智能体的健康检查和监控接口
+- 支持智能体的动态配置和热更新
 
-- **File naming**:
-  - React component files: PascalCase, e.g., `UserProfile.tsx`
-  - Non-component TS/JS files: camelCase, e.g., `apiService.ts`
-  - Python files: snake_case, e.g., `user_service.py`
+- Each agent maintains independent business logic and configuration
+- Inter-agent communication uses standardized message bus
+- Agent configurations are centrally managed in `src/agents/config` directory
+- Agent prompts and knowledge bases are managed separately
+- Implement health check and monitoring interfaces for agents
+- Support dynamic configuration and hot updates for agents
+
+```typescript
+// ✅ 智能体接口规范 - Agent interface standards
+interface AgentBase {
+  id: string;
+  name: string;
+  version: string;
+  capabilities: AgentCapability[];
   
-- **Variable/function naming**:
-  - TS/JS: camelCase, e.g., `getUserData`
-  - Python: snake_case, e.g., `get_user_data`
+  // 核心方法 - Core methods
+  initialize(): Promise<void>;
+  process(input: AgentInput): Promise<AgentOutput>;
+  healthCheck(): Promise<HealthStatus>;
+  shutdown(): Promise<void>;
   
-- **Component naming**: PascalCase, e.g., `UserProfile`
-- **Interface/type naming**: PascalCase, e.g., `UserData`
-- **Constant naming**: UPPERCASE with underscores, e.g., `API_BASE_URL`
-- **CSS class naming**: camelCase, using React Native StyleSheet
+  // 配置管理 - Configuration management
+  updateConfig(config: AgentConfig): Promise<void>;
+  getConfig(): AgentConfig;
+}
+
+interface AgentCapability {
+  name: string;
+  description: string;
+  inputTypes: string[];
+  outputTypes: string[];
+}
+
+// 小艾智能体示例 - Xiaoai agent example
+class XiaoaiAgent implements AgentBase {
+  id = 'xiaoai';
+  name = '小艾';
+  version = '1.0.0';
+  capabilities = [
+    {
+      name: 'user_interaction',
+      description: '用户交互和体验优化',
+      inputTypes: ['text', 'voice', 'gesture'],
+      outputTypes: ['text', 'voice', 'ui_update']
+    }
+  ];
+  
+  async process(input: AgentInput): Promise<AgentOutput> {
+    // 实现小艾的处理逻辑
+    // Implement Xiaoai's processing logic
+    return {
+      agentId: this.id,
+      result: await this.processUserInteraction(input),
+      confidence: 0.95,
+      timestamp: new Date()
+    };
+  }
+}
+```
 
 ## 文件组织
 ## File Organization
@@ -227,108 +337,192 @@ def get_user_by_id(user_id: str) -> Optional[User]:
 
 ```
 src/
-├── api/          # API服务接口 (API service interfaces)
-│   ├── agents/   # 智能代理API (Intelligent agent APIs)
-│   ├── medical/  # 医疗服务API (Medical service APIs)
-│   └── user/     # 用户服务API (User service APIs)
-├── assets/       # 静态资源 (Static assets)
-├── components/   # 共享组件 (Shared components)
-│   ├── common/   # 通用UI组件 (Common UI components)
-│   └── medical/  # 医疗相关组件 (Medical-related components)
-├── features/     # 功能模块 (Feature modules)
-│   ├── agents/   # 智能代理相关功能 (Intelligent agent features)
-│   ├── auth/     # 认证功能 (Authentication features)
-│   └── ...
-├── navigation/   # 导航配置 (Navigation configuration)
-├── screens/      # 屏幕组件 (Screen components)
-├── services/     # 业务服务 (Business services)
-├── store/        # Redux状态管理 (Redux state management)
-├── types/        # 类型定义 (Type definitions)
-└── utils/        # 工具函数 (Utility functions)
+├── agents/                    # 智能体相关代码
+│   ├── base/                 # 智能体基础类
+│   ├── config/               # 智能体配置
+│   ├── factory/              # 智能体工厂
+│   ├── interfaces/           # 智能体接口定义
+│   ├── xiaoai/              # 小艾智能体
+│   ├── xiaoke/              # 小克智能体
+│   ├── laoke/               # 老克智能体
+│   ├── soer/                # 索儿智能体
+│   └── types/               # 智能体类型定义
+├── algorithms/               # 算法模块
+│   ├── knowledge/           # 知识算法
+│   ├── modules/             # 诊断算法模块
+│   └── quality/             # 质量控制算法
+├── components/               # 共享组件
+│   ├── common/              # 通用UI组件
+│   ├── ai/                  # AI相关组件
+│   ├── diagnosis/           # 诊断相关组件
+│   ├── health/              # 健康管理组件
+│   ├── performance/         # 性能监控组件
+│   └── ui/                  # 基础UI组件
+├── core/                     # 核心功能
+│   ├── ai/                  # AI核心功能
+│   ├── auth/                # 认证核心
+│   ├── cache/               # 缓存管理
+│   ├── multimodal/          # 多模态处理
+│   ├── onnx-runtime/        # ONNX运行时
+│   └── performance/         # 性能优化
+├── screens/                  # 屏幕组件
+│   ├── agents/              # 智能体相关屏幕
+│   ├── auth/                # 认证屏幕
+│   ├── diagnosis/           # 诊断屏幕
+│   ├── health/              # 健康管理屏幕
+│   ├── main/                # 主要屏幕
+│   └── settings/            # 设置屏幕
+├── services/                 # 业务服务
+│   ├── api/                 # API服务
+│   ├── blockchain/          # 区块链服务
+│   ├── cache/               # 缓存服务
+│   └── websocket/           # WebSocket服务
+├── store/                    # Redux状态管理
+│   ├── slices/              # Redux切片
+│   └── middleware/          # 中间件
+├── types/                    # 类型定义
+├── utils/                    # 工具函数
+├── hooks/                    # 自定义Hooks
+├── navigation/               # 导航配置
+├── constants/                # 常量定义
+├── config/                   # 配置文件
+├── i18n/                     # 国际化
+└── assets/                   # 静态资源
 ```
 
-### 后端目录结构
-### Backend Directory Structure
+### 后端微服务结构
+### Backend Microservices Structure
 
-每个微服务应遵循以下结构:
-Each microservice should follow this structure:
+每个微服务遵循统一的目录结构:
+Each microservice follows a unified directory structure:
 
 ```
-services/xxx-service/
-├── api/           # API定义 (API definitions)
-│   ├── grpc/      # gRPC服务定义 (gRPC service definitions)
-│   └── rest/      # REST API定义 (REST API definitions)
-├── cmd/           # 命令入口 (Command entries)
-│   └── server/    # 服务器入口 (Server entry)
-├── config/        # 配置文件 (Configuration files)
-├── internal/      # 内部包 (Internal packages)
-│   ├── delivery/  # 处理层(控制器) (Delivery layer/controllers)
-│   ├── model/     # 数据模型 (Data models)
-│   ├── repository/# 数据访问层 (Data access layer)
-│   └── service/   # 业务逻辑层 (Business logic layer)
-├── pkg/           # 可公开复用的包 (Public reusable packages)
-└── test/          # 测试文件 (Test files)
+services/[service-name]/
+├── api/                      # API定义
+│   ├── grpc/                # gRPC服务定义
+│   └── rest/                # REST API定义
+├── cmd/                      # 命令入口
+│   └── server/              # 服务器入口
+├── config/                   # 配置文件
+├── internal/                 # 内部包
+│   ├── delivery/            # 处理层(控制器)
+│   ├── model/               # 数据模型
+│   ├── repository/          # 数据访问层
+│   └── service/             # 业务逻辑层
+├── pkg/                      # 可公开复用的包
+├── scripts/                  # 脚本文件
+├── tests/                    # 测试文件
+├── docs/                     # 文档
+├── deploy/                   # 部署配置
+└── monitoring/               # 监控配置
 ```
 
-## Git工作流
-## Git Workflow
+## 命名规范
+## Naming Conventions
 
-- 使用GitFlow工作流
-- 主分支:
-  - `main`: 生产环境代码
-  - `develop`: 开发环境代码
-- 临时分支:
-  - `feature/xxx`: 新功能
-  - `fix/xxx`: 错误修复
-  - `docs/xxx`: 文档更新
-  - `refactor/xxx`: 代码重构
-  - `test/xxx`: 测试相关
+### 文件命名
+### File Naming
 
-- Use GitFlow workflow
-- Main branches:
-  - `main`: Production code
-  - `develop`: Development code
-- Temporary branches:
-  - `feature/xxx`: New features
-  - `fix/xxx`: Bug fixes
-  - `docs/xxx`: Documentation updates
-  - `refactor/xxx`: Code refactoring
-  - `test/xxx`: Test-related changes
+- **React组件文件**: PascalCase，如`UserProfile.tsx`, `HealthDashboard.tsx`
+- **非组件TS/JS文件**: camelCase，如`apiService.ts`, `healthDataUtils.ts`
+- **Python文件**: snake_case，如`user_service.py`, `health_data_processor.py`
+- **配置文件**: kebab-case，如`docker-compose.yml`, `claude-integration.yml`
+- **智能体文件**: PascalCase + Agent后缀，如`XiaoaiAgent.tsx`, `LaokeAgentImpl.ts`
+
+- **React component files**: PascalCase, e.g., `UserProfile.tsx`, `HealthDashboard.tsx`
+- **Non-component TS/JS files**: camelCase, e.g., `apiService.ts`, `healthDataUtils.ts`
+- **Python files**: snake_case, e.g., `user_service.py`, `health_data_processor.py`
+- **Configuration files**: kebab-case, e.g., `docker-compose.yml`, `claude-integration.yml`
+- **Agent files**: PascalCase + Agent suffix, e.g., `XiaoaiAgent.tsx`, `LaokeAgentImpl.ts`
+
+### 变量和函数命名
+### Variable and Function Naming
+
+- **TypeScript/JavaScript**: camelCase
+  - 函数: `getUserHealthData`, `processAgentMessage`
+  - 变量: `healthData`, `agentResponse`
+  - 常量: `UPPER_SNAKE_CASE`, 如`API_BASE_URL`, `MAX_RETRY_COUNT`
+  
+- **Python**: snake_case
+  - 函数: `get_user_health_data`, `process_agent_message`
+  - 变量: `health_data`, `agent_response`
+  - 常量: `UPPER_SNAKE_CASE`, 如`API_BASE_URL`, `MAX_RETRY_COUNT`
+
+### 组件和类命名
+### Component and Class Naming
+
+- **React组件**: PascalCase，如`HealthDashboard`, `AgentChatInterface`
+- **接口/类型**: PascalCase，如`UserData`, `AgentConfig`, `HealthMetrics`
+- **智能体类**: PascalCase + Agent，如`XiaoaiAgent`, `HealthDataAgent`
+- **服务类**: PascalCase + Service，如`HealthDataService`, `AgentCoordinationService`
+
+## Git工作流与提交规范
+## Git Workflow and Commit Standards
+
+### 分支策略
+### Branch Strategy
+
+- **主分支**:
+  - `main`: 生产环境代码，受保护分支
+  - `develop`: 开发环境代码，集成分支
+  
+- **功能分支**:
+  - `feature/agent-xiaoai-enhancement`: 智能体功能增强
+  - `feature/health-data-visualization`: 健康数据可视化
+  - `feature/claude-integration`: Claude AI集成
+  
+- **修复分支**:
+  - `fix/agent-communication-bug`: 智能体通信错误修复
+  - `fix/health-data-sync-issue`: 健康数据同步问题
+  
+- **其他分支**:
+  - `docs/api-documentation`: 文档更新
+  - `refactor/agent-architecture`: 架构重构
+  - `test/e2e-agent-collaboration`: 端到端测试
 
 ### 提交规范
 ### Commit Standards
 
-遵循Conventional Commits规范:
-Follow the Conventional Commits specification:
+遵循Conventional Commits规范，支持中英文描述:
+Follow Conventional Commits specification with Chinese and English descriptions:
 
 ```
-<类型>[可选的作用域]: <描述>
-
-[可选的正文]
-
-[可选的脚注]
-```
-
-```
+<类型>[可选作用域]: <描述>
 <type>[optional scope]: <description>
 
-[optional body]
+[可选正文 - optional body]
 
-[optional footer]
+[可选脚注 - optional footer]
 ```
 
-类型包括:
-Types include:
+**提交类型 - Commit Types:**
 - `feat`: 新功能 (new feature)
 - `fix`: 错误修复 (bug fix)
 - `docs`: 文档变更 (documentation changes)
-- `style`: 代码格式变更(不影响功能) (code formatting changes, no functional changes)
+- `style`: 代码格式变更 (code formatting changes)
 - `refactor`: 代码重构 (code refactoring)
 - `perf`: 性能优化 (performance improvement)
 - `test`: 测试相关 (test-related changes)
 - `build`: 构建系统变更 (build system changes)
 - `ci`: 持续集成变更 (continuous integration changes)
 - `chore`: 其他变更 (other changes)
+- `agent`: 智能体相关变更 (agent-related changes)
+- `health`: 健康功能相关 (health feature related)
+
+**示例 - Examples:**
+```
+feat(agent): 添加小艾智能体语音交互功能
+feat(agent): add voice interaction for Xiaoai agent
+
+fix(health): 修复健康数据同步问题
+fix(health): fix health data synchronization issue
+
+docs(api): 更新智能体API文档
+docs(api): update agent API documentation
+
+perf(diagnosis): 优化五诊算法性能
+perf(diagnosis): optimize five diagnosis algorithm performance
+```
 
 ## 代码质量与测试
 ## Code Quality and Testing
@@ -336,190 +530,277 @@ Types include:
 ### 静态分析与格式化
 ### Static Analysis and Formatting
 
-- 使用ESLint和Prettier检查和格式化JavaScript/TypeScript代码
-- 使用Flake8和Black检查和格式化Python代码
-- 提交前运行代码检查和格式化
+- **TypeScript/JavaScript**:
+  - ESLint: 代码质量检查
+  - Prettier: 代码格式化
+  - TypeScript: 类型检查
+  
+- **Python**:
+  - Black: 代码格式化
+  - Flake8: 代码质量检查
+  - mypy: 类型检查
+  - pylint: 代码分析
 
-- Use ESLint and Prettier to check and format JavaScript/TypeScript code
-- Use Flake8 and Black to check and format Python code
-- Run code checks and formatting before committing
+- **提交前检查**:
+  - pre-commit hooks
+  - lint-staged
+  - 类型检查
+  - 单元测试
 
-### 测试规范
-### Testing Standards
+### 测试策略
+### Testing Strategy
 
-- 写单元测试覆盖关键业务逻辑
-- 写集成测试测试组件间交互
-- 使用Jest和React Native Testing Library测试前端代码
-- 使用pytest测试Python代码
-- 测试覆盖率目标: 80%+
+- **单元测试**: 覆盖率目标 95%+
+  - React组件: Jest + React Native Testing Library
+  - Python服务: pytest + pytest-cov
+  - 智能体逻辑: 专门的智能体测试框架
 
-- Write unit tests covering key business logic
-- Write integration tests for component interactions
-- Use Jest and React Native Testing Library for frontend testing
-- Use pytest for Python code testing
-- Test coverage goal: 80%+
+- **集成测试**:
+  - API集成测试
+  - 智能体协作测试
+  - 数据库集成测试
+  - 微服务间通信测试
 
-## 文档要求
-## Documentation Requirements
+- **端到端测试**:
+  - 用户旅程测试
+  - 智能体协作流程测试
+  - 健康数据处理流程测试
 
-- 所有公共API必须有完整文档
-- 复杂组件需要有使用示例
-- 核心业务逻辑需要有流程说明
-- 更新代码同时更新相关文档
+- **性能测试**:
+  - 智能体响应时间测试
+  - 内存使用监控
+  - API性能基准测试
 
-- All public APIs must have complete documentation
-- Complex components need usage examples
-- Core business logic needs process explanations
-- Update related documentation when updating code
+```typescript
+// ✅ 测试示例 - Test example
+describe('XiaoaiAgent', () => {
+  let agent: XiaoaiAgent;
+  
+  beforeEach(() => {
+    agent = new XiaoaiAgent();
+  });
+  
+  it('should process user interaction correctly', async () => {
+    const input: AgentInput = {
+      type: 'text',
+      content: '我想了解我的健康状况',
+      userId: 'test-user-123'
+    };
+    
+    const result = await agent.process(input);
+    
+    expect(result.agentId).toBe('xiaoai');
+    expect(result.confidence).toBeGreaterThan(0.8);
+    expect(result.result).toBeDefined();
+  });
+  
+  it('should handle health check', async () => {
+    const health = await agent.healthCheck();
+    
+    expect(health.status).toBe('healthy');
+    expect(health.timestamp).toBeDefined();
+  });
+});
+```
 
-## 性能考量
-## Performance Considerations
+## Claude AI 集成规范
+## Claude AI Integration Standards
 
-- 使用合适的React生命周期优化组件渲染
-- 使用memo, useMemo和useCallback缓存组件和函数引用
-- 使用PureComponent或React.memo减少不必要的重渲染
-- 为长列表使用FlatList或SectionList，实现虚拟化和优化
-- 合理管理Redux状态，避免过度使用Context
-- 使用Hermes引擎提升JavaScript性能
+### Claude 配置管理
+### Claude Configuration Management
 
-- Use appropriate React lifecycle methods to optimize component rendering
-- Use memo, useMemo, and useCallback to cache component and function references
-- Use PureComponent or React.memo to reduce unnecessary re-renders
-- Use FlatList or SectionList for long lists, implementing virtualization and optimization
-- Manage Redux state appropriately, avoid overuse of Context
-- Use the Hermes engine to enhance JavaScript performance
+- 使用`.claude.yml`文件管理Claude AI配置
+- 智能体特定的Claude配置分离管理
+- 支持不同环境的Claude配置
+- 定期更新Claude模型版本
 
-## 安全规范
-## Security Standards
+### 代码审查集成
+### Code Review Integration
 
-- 不在代码中硬编码密钥、密码或其他敏感信息
-- 使用环境变量和安全存储管理密钥
-- 对用户输入进行验证和转义
-- 确保API请求使用HTTPS
-- 实现适当的认证和授权机制
+- 自动触发Claude代码审查
+- 智能体代码的专门审查规则
+- 健康数据处理的安全性检查
+- 中医算法的准确性验证
 
-- Do not hardcode keys, passwords, or other sensitive information in the code
-- Use environment variables and secure storage for key management
-- Validate and escape user input
-- Ensure API requests use HTTPS
-- Implement appropriate authentication and authorization mechanisms
+### 文档生成
+### Documentation Generation
 
-## 无障碍性要求
-## Accessibility Requirements
+- 自动生成API文档
+- 智能体能力矩阵文档
+- 健康数据处理流程文档
+- 中英文双语文档支持
 
-- 所有交互元素必须有适当的标签和角色
-- 支持屏幕阅读器友好的交互
-- 确保颜色对比度符合WCAG标准
-- 支持动态字体大小
-- 实现语音控制和无障碍导航
+## 性能优化规范
+## Performance Optimization Standards
 
-- All interactive elements must have appropriate labels and roles
-- Support screen reader-friendly interactions
-- Ensure color contrast meets WCAG standards
-- Support dynamic font sizes
-- Implement voice control and accessible navigation
+### React Native性能
+### React Native Performance
 
-## 国际化与本地化
-## Internationalization and Localization
+- 使用`React.memo`优化组件渲染
+- 合理使用`useMemo`和`useCallback`
+- 长列表使用`FlatList`或`VirtualizedList`
+- 图片懒加载和缓存策略
+- 智能体响应的异步处理
 
-- 使用i18next或类似工具管理多语言支持
-- 外部化所有用户可见的文本
-- 考虑右到左(RTL)语言的布局调整
-- 支持不同区域的日期、数字和货币格式
+### 智能体性能
+### Agent Performance
 
-- Use i18next or similar tools for multilingual support
-- Externalize all user-visible text
-- Consider layout adjustments for right-to-left (RTL) languages
-- Support different regional date, number, and currency formats
+- 智能体响应时间监控
+- 智能体内存使用优化
+- 智能体间通信优化
+- 智能体配置热更新
 
-## 调试与性能监控
-## Debugging and Performance Monitoring
+### 数据处理性能
+### Data Processing Performance
 
-- 使用React DevTools和Redux DevTools进行调试
-- 使用Flipper进行网络监控和布局检查
-- 定期进行性能检测和优化
-- 集成崩溃报告和性能监控工具
+- 健康数据批量处理
+- 数据库查询优化
+- 缓存策略实现
+- 异步数据处理
 
-- Use React DevTools and Redux DevTools for debugging
-- Use Flipper for network monitoring and layout inspection
-- Regularly perform performance testing and optimization
-- Integrate crash reporting and performance monitoring tools
+## 安全与隐私规范
+## Security and Privacy Standards
 
-## 依赖管理
-## Dependency Management
+### 健康数据安全
+### Health Data Security
 
-- 使用package.json管理前端依赖
-- 使用requirements.txt管理Python依赖
-- 定期更新依赖以修复安全漏洞
-- 慎重添加新依赖，评估其必要性和维护状态
+- 健康数据加密存储
+- 数据传输加密
+- 访问权限控制
+- 数据匿名化处理
+- HIPAA合规性检查
 
-- Use package.json to manage frontend dependencies
-- Use requirements.txt to manage Python dependencies
-- Regularly update dependencies to fix security vulnerabilities
-- Carefully add new dependencies, evaluating their necessity and maintenance status
+### 智能体安全
+### Agent Security
 
-## 适配多种设备和屏幕
-## Adapting to Various Devices and Screens
+- 智能体间通信加密
+- 智能体配置安全存储
+- 智能体访问权限控制
+- 智能体行为监控
 
-- 使用Responsive组件和平台特定设计
-- 适配不同屏幕尺寸和方向
-- 支持暗色模式和动态主题
-- 考虑不同设备的性能差异
+### API安全
+### API Security
 
-- Use Responsive components and platform-specific designs
-- Adapt to different screen sizes and orientations
-- Support dark mode and dynamic themes
-- Consider performance differences across devices
+- API认证和授权
+- 请求频率限制
+- 输入验证和清理
+- 错误信息安全处理
 
-## 应用特有规范
-## Application-Specific Standards
+## 中医特色功能规范
+## Traditional Chinese Medicine Feature Standards
 
-### 本地数据存储
-### Local Data Storage
+### 中医术语标准化
+### TCM Terminology Standardization
 
-- 使用SQLite作为本地数据库，不使用Hive
-- 表名使用下划线命名法，如`health_data`
-- 每个表包含创建时间(`created_at`)和更新时间(`updated_at`)字段
-- 需要编写迁移脚本管理数据库架构变更
+- 使用标准中医词汇库
+- 中医术语英文对照
+- 中医概念数字化表示
+- 中医知识图谱构建
 
-- Use SQLite as the local database, not Hive
-- Use underscore naming for tables, e.g., `health_data`
-- Each table should include created time (`created_at`) and updated time (`updated_at`) fields
-- Write migration scripts to manage database schema changes
+### 诊断算法规范
+### Diagnosis Algorithm Standards
 
-### 智能体开发
-### Intelligent Agent Development
+- 五诊算法模块化设计
+- 诊断结果置信度计算
+- 诊断依据可追溯性
+- 诊断算法版本管理
 
-- 智能体代码应遵循功能模块化设计
-- 每个智能体(小艾、小克、老克、索儿)保持独立的业务逻辑
-- 智能体间通信使用消息总线
-- 智能体配置和提示词统一管理在`config/prompts`目录
+### 中医数据管理
+### TCM Data Management
 
-- Agent code should follow modular design principles
-- Each agent (Xiaoai, Xiaoke, Laoke, Soer) should maintain independent business logic
-- Use message bus for inter-agent communication
-- Centralize agent configuration and prompts in the `config/prompts` directory
+- 中药材数据标准化
+- 食疗方案数据结构
+- 体质辨识数据模型
+- 中医文献引用规范
 
-### 中医特色功能
-### Traditional Chinese Medicine Features
+## 监控与日志规范
+## Monitoring and Logging Standards
 
-- 中医术语统一使用标准中医词汇
-- 舌诊、面诊等图像分析算法单独模块化
-- 体质辨识算法需提供判断依据和置信度
-- 中药材和食疗数据需标注来源和参考文献
+### 应用监控
+### Application Monitoring
 
-- Use standardized TCM terminology consistently
-- Modularize image analysis algorithms for tongue and face diagnosis
-- Constitution identification algorithms must provide basis for judgment and confidence levels
-- Herbal medicine and dietary therapy data need source annotations and references
+- 智能体性能监控
+- 健康数据处理监控
+- API响应时间监控
+- 错误率监控
+
+### 日志管理
+### Log Management
+
+- 结构化日志格式
+- 日志级别规范
+- 敏感信息脱敏
+- 日志聚合和分析
+
+### 告警机制
+### Alert Mechanism
+
+- 智能体异常告警
+- 性能阈值告警
+- 安全事件告警
+- 健康检查失败告警
+
+## 部署与运维规范
+## Deployment and Operations Standards
+
+### 容器化部署
+### Containerized Deployment
+
+- Docker镜像构建规范
+- Kubernetes部署配置
+- 微服务编排管理
+- 配置管理和密钥管理
+
+### 环境管理
+### Environment Management
+
+- 开发环境配置
+- 测试环境配置
+- 生产环境配置
+- 环境间数据同步
+
+### 版本发布
+### Version Release
+
+- 语义化版本控制
+- 灰度发布策略
+- 回滚机制
+- 发布后验证
+
+## 文档规范
+## Documentation Standards
+
+### API文档
+### API Documentation
+
+- OpenAPI/Swagger规范
+- 智能体API文档
+- 微服务API文档
+- 中英文双语支持
+
+### 代码文档
+### Code Documentation
+
+- 函数和类的详细注释
+- 复杂算法的实现说明
+- 智能体行为描述
+- 中医算法原理说明
+
+### 用户文档
+### User Documentation
+
+- 用户使用指南
+- 智能体交互指南
+- 健康数据管理指南
+- 故障排除指南
 
 ## 总结
 ## Summary
 
-请严格遵循上述规范进行开发。如有任何问题或建议，请联系项目维护者。
+本规范基于索克生活项目的实际代码结构和技术实现制定，涵盖了智能体开发、健康数据处理、中医特色功能、Claude AI集成等各个方面。请严格遵循上述规范进行开发，确保项目的高质量和一致性。
 
-规范可能会随项目发展而更新，请定期查看最新版本。
+This specification is formulated based on the actual code structure and technical implementation of the Suoke Life project, covering agent development, health data processing, TCM features, Claude AI integration, and other aspects. Please strictly follow the above guidelines for development to ensure high quality and consistency of the project.
 
-Please strictly follow the above guidelines for development. If you have any questions or suggestions, please contact the project maintainers.
+规范将随着项目发展持续更新，请定期查看最新版本。如有任何问题或建议，请联系项目维护者。
 
-The guidelines may be updated as the project evolves, please check for the latest version regularly.
+The guidelines will be continuously updated as the project evolves. Please check for the latest version regularly. If you have any questions or suggestions, please contact the project maintainers.

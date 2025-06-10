@@ -1,303 +1,405 @@
-import { AgentType, AgentCapability, AgentContext } from '../types';
 import { AgentBase } from '../base/AgentBase';
-import { XiaoaiAgentImpl } from '../xiaoai/XiaoaiAgentImpl';
-import { XiaokeAgentImpl } from '../xiaoke/XiaokeAgentImpl';
 import { LaokeAgentImpl } from '../laoke/LaokeAgentImpl';
 import { SoerAgentImpl } from '../soer/SoerAgentImpl';
+import { AgentType } from '../types/agents';
+import { XiaoaiAgentImpl } from '../xiaoai/XiaoaiAgentImpl';
+import { XiaokeAgentImpl } from '../xiaoke/XiaokeAgentImpl';
+
 /**
-* 智能体配置接口
-*/
-export interface AgentConfig {
-  agentType: AgentType;
-  capabilities?: AgentCapability[];
-  customSettings?: Record<string, any>;
+ * 智能体工厂配置接口
+ */
+export interface AgentFactoryConfig {
   enableLogging?: boolean;
-  maxConcurrentTasks?: number;
+  defaultTimeout?: number;
+  maxRetries?: number;
+  enableMetrics?: boolean;
+}
+
+/**
+ * 智能体创建选项
+ */
+export interface AgentCreationOptions {
+  id?: string;
+  name?: string;
+  config?: Record<string, any>;
   timeout?: number;
+  retries?: number;
 }
+
 /**
-* 智能体实例信息
-*/
-export interface AgentInstance {
-  id: string;,
-  type: AgentType;,
-  agent: AgentBase;,
-  config: AgentConfig;,
-  createdAt: Date;,
-  lastUsed: Date;,
-  isActive: boolean;
-}
-/**
-* 智能体工厂类
-* 负责智能体的创建、配置、缓存和生命周期管理
-*/
+ * 智能体工厂类
+ * 负责创建和管理四个核心智能体实例
+ */
 export class AgentFactory {
   private static instance: AgentFactory;
-  private agentInstances: Map<string, AgentInstance> = new Map();
-  private agentPool: Map<AgentType, AgentBase[]> = new Map();
-  private maxPoolSize: number = 5;
-  private constructor() {
-    this.initializeAgentPools();
+  private agentInstances: Map<string, AgentBase> = new Map();
+  private config: AgentFactoryConfig;
+  private isInitialized: boolean = false;
+
+  constructor(config: AgentFactoryConfig = {}) {
+    this.config = {
+      enableLogging: true,
+      defaultTimeout: 30000,
+      maxRetries: 3,
+      enableMetrics: false,
+      ...config,
+    };
   }
+
   /**
-  * 获取工厂单例
-  */
-  public static getInstance(): AgentFactory {
+   * 获取工厂单例实例
+   */
+  static getInstance(config?: AgentFactoryConfig): AgentFactory {
     if (!AgentFactory.instance) {
-      AgentFactory.instance = new AgentFactory();
+      AgentFactory.instance = new AgentFactory(config);
     }
     return AgentFactory.instance;
   }
+
   /**
-  * 创建智能体实例
-  */
-  public async createAgent(config: AgentConfig): Promise<AgentInstance> {
-    try {
-      const agentId = this.generateAgentId(config.agentType);
-      // 尝试从池中获取
-      const pooledAgent = this.getFromPool(config.agentType);
-      let agent: AgentBase;
-      if (pooledAgent) {
-        agent = pooledAgent;
-        this.log('info', `从池中获取智能体: ${config.agentType}`);
-      } else {
-        agent = await this.instantiateAgent(config.agentType);
-        this.log('info', `创建新智能体实例: ${config.agentType}`);
-      }
-      // 配置智能体
-      await this.configureAgent(agent, config);
-      // 初始化智能体
-      await agent.initialize();
-      const instance: AgentInstance = {,
-  id: agentId,
-        type: config.agentType,
-        agent,
-        config,
-        createdAt: new Date(),
-        lastUsed: new Date(),
-        isActive: true;
-      };
-      this.agentInstances.set(agentId, instance);
-      this.log('info', `智能体实例创建成功: ${agentId}`);
-      return instance;
-    } catch (error) {
-      this.log("error",智能体创建失败', error);
-      throw error;
-    }
-  }
-  /**
-  * 获取智能体实例
-  */
-  public getAgent(agentId: string): AgentInstance | undefined {
-    const instance = this.agentInstances.get(agentId);
-    if (instance) {
-      instance.lastUsed = new Date();
-    }
-    return instance;
-  }
-  /**
-  * 根据类型创建或获取智能体
-  */
-  public async getOrCreateAgent()
-    agentType: AgentType,
-    config?: Partial<AgentConfig>
-  ): Promise<AgentInstance> {
-    // 查找现有的活跃实例
-    const existingInstance = this.findActiveInstance(agentType);
-    if (existingInstance) {
-      existingInstance.lastUsed = new Date();
-      return existingInstance;
-    }
-    // 创建新实例
-    const fullConfig: AgentConfig = {
-      agentType,
-      enableLogging: true,
-      maxConcurrentTasks: 5,
-      timeout: 30000,
-      ...config;
-    };
-    return this.createAgent(fullConfig);
-  }
-  /**
-  * 批量创建智能体
-  */
-  public async createAgentBatch(configs: AgentConfig[]): Promise<AgentInstance[]> {
-    const promises = configs.map(config => this.createAgent(config));
-    return Promise.all(promises);
-  }
-  /**
-  * 释放智能体实例
-  */
-  public async releaseAgent(agentId: string, returnToPool: boolean = true): Promise<void> {
-    const instance = this.agentInstances.get(agentId);
-    if (!instance) {
-      this.log('warn', `智能体实例不存在: ${agentId}`);
+   * 初始化工厂
+   */
+  async initialize(): Promise<void> {
+    if (this.isInitialized) {
+      this.log('warn', 'AgentFactory已经初始化');
       return;
     }
+
     try {
-      // 标记为非活跃
-      instance.isActive = false;
-      // 如果需要返回池中且池未满
-      if (returnToPool && this.canReturnToPool(instance.type)) {
-        await this.returnToPool(instance.agent, instance.type);
-        this.log('info', `智能体返回池中: ${agentId}`);
-      } else {
-        // 关闭智能体
-        await instance.agent.shutdown();
-        this.log('info', `智能体已关闭: ${agentId}`);
-      }
-      // 从实例映射中移除
-      this.agentInstances.delete(agentId);
+      this.log('info', '正在初始化智能体工厂...');
+
+      // 预创建核心智能体实例
+      await this.preCreateCoreAgents();
+
+      this.isInitialized = true;
+      this.log('info', '智能体工厂初始化完成');
     } catch (error) {
-      this.log('error', `释放智能体失败: ${agentId}`, error);
+      this.log('error', '智能体工厂初始化失败', error);
       throw error;
     }
   }
+
   /**
-  * 获取所有活跃实例
-  */
-  public getActiveInstances(): AgentInstance[] {
-    return Array.from(this.agentInstances.values()).filter(instance => instance.isActive);
-  }
-  /**
-  * 获取实例统计信息
-  */
-  public getStatistics(): any {
-    const instances = Array.from(this.agentInstances.values());
-    const activeCount = instances.filter(i => i.isActive).length;
-    const typeStats = new Map<AgentType, number>();
-    instances.forEach(instance => {
-      const count = typeStats.get(instance.type) || 0;
-      typeStats.set(instance.type, count + 1);
-    });
-    return {totalInstances: instances.length,activeInstances: activeCount,inactiveInstances: instances.length - activeCount,typeDistribution: Object.fromEntries(typeStats),poolSizes: Object.fromEntries(;)
-        Array.from(this.agentPool.entries()).map([type, agents]) => [type, agents.length]);
-      );
-    };
-  }
-  /**
-  * 清理非活跃实例
-  */
-  public async cleanupInactiveInstances(maxIdleTime: number = 300000): Promise<void> {
-    const now = new Date();
-    const instancesToCleanup: string[] = [];
-    for (const [id, instance] of this.agentInstances) {
-      const idleTime = now.getTime() - instance.lastUsed.getTime();
-      if (!instance.isActive || idleTime > maxIdleTime) {
-        instancesToCleanup.push(id);
+   * 预创建核心智能体实例
+   */
+  private async preCreateCoreAgents(): Promise<void> {
+    const coreAgents: Array<{ type: AgentType; id: string; name: string }> = [
+      { type: AgentType.XIAOAI, id: 'xiaoai', name: '小艾' },
+      { type: AgentType.XIAOKE, id: 'xiaoke', name: '小克' },
+      { type: AgentType.LAOKE, id: 'laoke', name: '老克' },
+      { type: AgentType.SOER, id: 'soer', name: '索儿' },
+    ];
+
+    for (const agentInfo of coreAgents) {
+      try {
+        const agent = await this.createAgent(agentInfo.type, {
+          id: agentInfo.id,
+          name: agentInfo.name,
+        });
+        this.log('info', `核心智能体 ${agentInfo.name} 创建成功`);
+      } catch (error) {
+        this.log('error', `创建核心智能体 ${agentInfo.name} 失败`, error);
+        throw error;
       }
     }
-    this.log('info', `清理 ${instancesToCleanup.length} 个非活跃实例`);
-    for (const id of instancesToCleanup) {
-      await this.releaseAgent(id, false);
+  }
+
+  /**
+   * 创建智能体实例
+   */
+  async createAgent(
+    type: AgentType,
+    options: AgentCreationOptions = {}
+  ): Promise<AgentBase> {
+    try {
+      this.log('info', `正在创建智能体: ${type}`);
+
+      // 检查是否已存在实例
+      const instanceId = options.id || this.generateAgentId(type);
+      if (this.agentInstances.has(instanceId)) {
+        this.log('warn', `智能体实例 ${instanceId} 已存在，返回现有实例`);
+        return this.agentInstances.get(instanceId)!;
+      }
+
+      // 创建智能体实例
+      const agent = await this.instantiateAgent(type, options);
+
+      // 初始化智能体
+      await this.initializeAgent(agent, options);
+
+      // 注册实例
+      this.agentInstances.set(instanceId, agent);
+
+      this.log('info', `智能体 ${type} 创建成功，ID: ${instanceId}`);
+      return agent;
+    } catch (error) {
+      this.log('error', `创建智能体 ${type} 失败`, error);
+      throw new Error(
+        `Failed to create agent ${type}: ${(error as Error).message}`
+      );
     }
   }
+
   /**
-  * 关闭工厂
-  */
-  public async shutdown(): Promise<void> {
-    this.log("info",智能体工厂正在关闭...');
-    // 关闭所有实例
-    const shutdownPromises = Array.from(this.agentInstances.keys()).map(id =>;)
-      this.releaseAgent(id, false);
-    );
-    await Promise.all(shutdownPromises);
-    // 清空池
-    for (const [type, agents] of this.agentPool) {
-      const poolShutdownPromises = agents.map(agent => agent.shutdown());
-      await Promise.all(poolShutdownPromises);
-    }
-    this.agentPool.clear();
-    this.log("info",智能体工厂已关闭');
-  }
-  /**
-  * 初始化智能体池
-  */
-  private initializeAgentPools(): void {
-    const agentTypes = [AgentType.XIAOAI, AgentType.XIAOKE, AgentType.LAOKE, AgentType.SOER];
-    agentTypes.forEach(type => {
-      this.agentPool.set(type, []);
-    });
-  }
-  /**
-  * 实例化智能体
-  */
-  private async instantiateAgent(agentType: AgentType): Promise<AgentBase> {
-    switch (agentType) {
+   * 实例化具体的智能体类
+   */
+  private async instantiateAgent(
+    type: AgentType,
+    options: AgentCreationOptions
+  ): Promise<AgentBase> {
+    switch (type) {
       case AgentType.XIAOAI:
         return new XiaoaiAgentImpl();
+
       case AgentType.XIAOKE:
         return new XiaokeAgentImpl();
+
       case AgentType.LAOKE:
         return new LaokeAgentImpl();
+
       case AgentType.SOER:
-        return new SoerAgentImpl(),
-  default:
-        throw new Error(`不支持的智能体类型: ${agentType}`);
+        return new SoerAgentImpl();
+
+      default:
+        throw new Error(`不支持的智能体类型: ${type}`);
     }
   }
+
   /**
-  * 配置智能体
-  */
-  private async configureAgent(agent: AgentBase, config: AgentConfig): Promise<void> {
-    // 这里可以根据配置设置智能体的各种参数
-    // 由于当前AgentBase没有配置方法，这里只是占位
-    if (config.customSettings) {
-      // 应用自定义设置
+   * 初始化智能体
+   */
+  private async initializeAgent(
+    agent: AgentBase,
+    options: AgentCreationOptions
+  ): Promise<void> {
+    try {
+      // 初始化智能体
+      await agent.initialize();
+
+      this.log('info', `智能体 ${agent.getName()} 初始化完成`);
+    } catch (error) {
+      this.log('error', `智能体 ${agent.getName()} 初始化失败`, error);
+      throw error;
     }
   }
+
   /**
-  * 从池中获取智能体
-  */
-  private getFromPool(agentType: AgentType): AgentBase | null {
-    const pool = this.agentPool.get(agentType);
-    return pool && pool.length > 0 ? pool.pop()! : null;
+   * 获取智能体实例
+   */
+  getAgent(id: string): AgentBase | undefined {
+    return this.agentInstances.get(id);
   }
+
   /**
-  * 返回智能体到池中
-  */
-  private async returnToPool(agent: AgentBase, agentType: AgentType): Promise<void> {
-    const pool = this.agentPool.get(agentType);
-    if (pool && pool.length < this.maxPoolSize) {
-      // 重置智能体状态
-      如果有重置方法的话
-      pool.push(agent);
-    } else {
-      await agent.shutdown();
-    }
-  }
-  /**
-  * 检查是否可以返回池中
-  */
-  private canReturnToPool(agentType: AgentType): boolean {
-    const pool = this.agentPool.get(agentType);
-    return pool ? pool.length < this.maxPoolSize : false;
-  }
-  /**
-  * 查找活跃实例
-  */
-  private findActiveInstance(agentType: AgentType): AgentInstance | undefined {
-    for (const instance of this.agentInstances.values()) {
-      if (instance.type === agentType && instance.isActive) {
-        return instance;
+   * 获取指定类型的智能体
+   */
+  getAgentByType(type: AgentType): AgentBase | undefined {
+    for (const agent of this.agentInstances.values()) {
+      if (agent.getAgentType() === type) {
+        return agent;
       }
     }
     return undefined;
   }
+
   /**
-  * 生成智能体ID;
-  */
-  private generateAgentId(agentType: AgentType): string {
-    const timestamp = Date.now();
-    const random = Math.random().toString(36).substr(2, 9);
-    return `${agentType}_${timestamp}_${random}`;
+   * 获取所有智能体实例
+   */
+  getAllAgents(): Map<string, AgentBase> {
+    return new Map(this.agentInstances);
   }
+
   /**
-  * 记录日志
-  */
-  private log(level: 'info' | 'warn' | 'error', message: string, data?: any): void {
+   * 获取核心智能体组合
+   */
+  getCoreAgents(): {
+    xiaoai?: AgentBase;
+    xiaoke?: AgentBase;
+    laoke?: AgentBase;
+    soer?: AgentBase;
+  } {
+    return {
+      xiaoai: this.getAgentByType(AgentType.XIAOAI),
+      xiaoke: this.getAgentByType(AgentType.XIAOKE),
+      laoke: this.getAgentByType(AgentType.LAOKE),
+      soer: this.getAgentByType(AgentType.SOER),
+    };
+  }
+
+  /**
+   * 销毁智能体实例
+   */
+  async destroyAgent(id: string): Promise<boolean> {
+    const agent = this.agentInstances.get(id);
+    if (!agent) {
+      this.log('warn', `智能体 ${id} 不存在`);
+      return false;
+    }
+
+    try {
+      await agent.shutdown();
+      this.agentInstances.delete(id);
+      this.log('info', `智能体 ${id} 已销毁`);
+      return true;
+    } catch (error) {
+      this.log('error', `销毁智能体 ${id} 失败`, error);
+      return false;
+    }
+  }
+
+  /**
+   * 销毁所有智能体实例
+   */
+  async destroyAllAgents(): Promise<void> {
+    this.log('info', '正在销毁所有智能体实例...');
+
+    const destroyPromises = Array.from(this.agentInstances.keys()).map((id) =>
+      this.destroyAgent(id)
+    );
+
+    await Promise.allSettled(destroyPromises);
+    this.agentInstances.clear();
+
+    this.log('info', '所有智能体实例已销毁');
+  }
+
+  /**
+   * 重启智能体
+   */
+  async restartAgent(id: string): Promise<AgentBase | undefined> {
+    const agent = this.agentInstances.get(id);
+    if (!agent) {
+      this.log('warn', `智能体 ${id} 不存在`);
+      return undefined;
+    }
+
+    try {
+      const agentType = agent.getAgentType();
+
+      // 销毁现有实例
+      await this.destroyAgent(id);
+
+      // 重新创建
+      return await this.createAgent(agentType, { id });
+    } catch (error) {
+      this.log('error', `重启智能体 ${id} 失败`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * 检查智能体健康状态
+   */
+  async checkAgentHealth(id: string): Promise<boolean> {
+    const agent = this.agentInstances.get(id);
+    if (!agent) {
+      return false;
+    }
+
+    try {
+      const health = await agent.getHealthStatus();
+      return health && health.status === 'healthy';
+    } catch (error) {
+      this.log('error', `检查智能体 ${id} 健康状态失败`, error);
+      return false;
+    }
+  }
+
+  /**
+   * 获取工厂统计信息
+   */
+  getFactoryStats(): {
+    totalAgents: number;
+    agentsByType: Record<string, number>;
+    healthyAgents: number;
+    isInitialized: boolean;
+  } {
+    const agentsByType: Record<string, number> = {};
+    let healthyAgents = 0;
+
+    for (const agent of this.agentInstances.values()) {
+      const type = agent.getAgentType();
+      agentsByType[type] = (agentsByType[type] || 0) + 1;
+
+      // 简化的健康检查
+      try {
+        if (agent.isReady()) {
+          healthyAgents++;
+        }
+      } catch {
+        // 忽略健康检查错误
+      }
+    }
+
+    return {
+      totalAgents: this.agentInstances.size,
+      agentsByType,
+      healthyAgents,
+      isInitialized: this.isInitialized,
+    };
+  }
+
+  /**
+   * 生成智能体ID
+   */
+  private generateAgentId(type: AgentType): string {
+    const timestamp = Date.now();
+    const random = Math.random().toString(36).substring(2, 8);
+    return `${type.toLowerCase()}_${timestamp}_${random}`;
+  }
+
+  /**
+   * 获取默认智能体名称
+   */
+  private getDefaultAgentName(type: AgentType): string {
+    const nameMap: Record<AgentType, string> = {
+      [AgentType.XIAOAI]: '小艾',
+      [AgentType.XIAOKE]: '小克',
+      [AgentType.LAOKE]: '老克',
+      [AgentType.SOER]: '索儿',
+    };
+    return nameMap[type] || type;
+  }
+
+  /**
+   * 关闭工厂
+   */
+  async shutdown(): Promise<void> {
+    this.log('info', '正在关闭智能体工厂...');
+
+    try {
+      await this.destroyAllAgents();
+      this.isInitialized = false;
+      this.log('info', '智能体工厂已关闭');
+    } catch (error) {
+      this.log('error', '关闭智能体工厂失败', error);
+      throw error;
+    }
+  }
+
+  /**
+   * 重置工厂
+   */
+  async reset(): Promise<void> {
+    await this.shutdown();
+    await this.initialize();
+  }
+
+  /**
+   * 日志记录
+   */
+  private log(
+    level: 'info' | 'warn' | 'error',
+    message: string,
+    data?: any
+  ): void {
+    if (!this.config.enableLogging) {
+      return;
+    }
+
     const timestamp = new Date().toISOString();
     const logMessage = `[${timestamp}] [AgentFactory] [${level.toUpperCase()}] ${message}`;
+
     switch (level) {
       case 'info':
         console.log(logMessage, data || '');
@@ -311,5 +413,67 @@ export class AgentFactory {
     }
   }
 }
-// 导出工厂单例
-export const agentFactory = AgentFactory.getInstance();
+
+/**
+ * 默认工厂实例
+ */
+export const defaultAgentFactory = AgentFactory.getInstance();
+
+/**
+ * 便捷方法：创建小艾智能体
+ */
+export async function createXiaoaiAgent(
+  options?: AgentCreationOptions
+): Promise<AgentBase> {
+  return defaultAgentFactory.createAgent(AgentType.XIAOAI, options);
+}
+
+/**
+ * 便捷方法：创建小克智能体
+ */
+export async function createXiaokeAgent(
+  options?: AgentCreationOptions
+): Promise<AgentBase> {
+  return defaultAgentFactory.createAgent(AgentType.XIAOKE, options);
+}
+
+/**
+ * 便捷方法：创建老克智能体
+ */
+export async function createLaokeAgent(
+  options?: AgentCreationOptions
+): Promise<AgentBase> {
+  return defaultAgentFactory.createAgent(AgentType.LAOKE, options);
+}
+
+/**
+ * 便捷方法：创建索儿智能体
+ */
+export async function createSoerAgent(
+  options?: AgentCreationOptions
+): Promise<AgentBase> {
+  return defaultAgentFactory.createAgent(AgentType.SOER, options);
+}
+
+/**
+ * 便捷方法：获取所有核心智能体
+ */
+export async function createAllCoreAgents(): Promise<{
+  xiaoai: AgentBase;
+  xiaoke: AgentBase;
+  laoke: AgentBase;
+  soer: AgentBase;
+}> {
+  const factory = defaultAgentFactory;
+
+  const [xiaoai, xiaoke, laoke, soer] = await Promise.all([
+    factory.createAgent(AgentType.XIAOAI, { id: 'xiaoai', name: '小艾' }),
+    factory.createAgent(AgentType.XIAOKE, { id: 'xiaoke', name: '小克' }),
+    factory.createAgent(AgentType.LAOKE, { id: 'laoke', name: '老克' }),
+    factory.createAgent(AgentType.SOER, { id: 'soer', name: '索儿' }),
+  ]);
+
+  return { xiaoai, xiaoke, laoke, soer };
+}
+
+export default AgentFactory;

@@ -1,20 +1,20 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useCallback, useEffect, useState } from 'react';
-import {
+import {;
   Alert,
   Dimensions,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { colors, spacing } from '../../constants/theme';
 import { fiveDiagnosisService } from '../../services/fiveDiagnosisService';
-import {
+import {;
   DiagnosisInput,
   DiagnosisStep,
-  FiveDiagnosisResult,
+  FiveDiagnosisResult
 } from '../../types/diagnosis';
 import Icon from '../common/Icon';
 import CalculationDiagnosisComponent from './CalculationDiagnosisComponent';
@@ -30,7 +30,7 @@ interface FiveDiagnosisScreenProps {
 }
 
 const FiveDiagnosisScreen: React.FC<FiveDiagnosisScreenProps> = ({
-  onComplete,
+  onComplete
 }) => {
   const navigation = useNavigation();
   const [currentStep, setCurrentStep] = useState<number>(0);
@@ -47,36 +47,36 @@ const FiveDiagnosisScreen: React.FC<FiveDiagnosisScreenProps> = ({
       title: '望诊',
       description: '观察面色、舌象、体态等',
       icon: 'eye',
-      component: LookDiagnosisComponent,
+      component: LookDiagnosisComponent
     },
     {
       id: 'listen',
       title: '闻诊',
       description: '听声音、闻气味',
       icon: 'ear',
-      component: ListenDiagnosisComponent,
+      component: ListenDiagnosisComponent
     },
     {
       id: 'inquiry',
       title: '问诊',
       description: '询问症状、病史等',
       icon: 'message-circle',
-      component: InquiryDiagnosisComponent,
+      component: InquiryDiagnosisComponent
     },
     {
       id: 'palpation',
       title: '切诊',
       description: '脉诊、按诊等',
       icon: 'hand',
-      component: PalpationDiagnosisComponent,
+      component: PalpationDiagnosisComponent
     },
     {
       id: 'calculation',
       title: '算诊',
       description: '数据分析、量化诊断',
       icon: 'bar-chart',
-      component: CalculationDiagnosisComponent,
-    },
+      component: CalculationDiagnosisComponent
+    }
   ];
 
   const initializeDiagnosisService = useCallback(async () => {
@@ -103,7 +103,7 @@ const FiveDiagnosisScreen: React.FC<FiveDiagnosisScreenProps> = ({
   const handleStepComplete = useCallback(stepIndex: number, data: unknown) => {
       setStepData(prev) => ({
         ...prev,
-        [stepIndex]: data,
+        [stepIndex]: data
       }));
 
       if (stepIndex === currentStep && stepIndex < diagnosisSteps.length - 1) {
@@ -131,7 +131,7 @@ const FiveDiagnosisScreen: React.FC<FiveDiagnosisScreenProps> = ({
         inquiryData: stepData[2],
         palpationData: stepData[3],
         calculationData: stepData[4],
-        timestamp: Date.now(),
+        timestamp: Date.now()
       };
 
       const result = await fiveDiagnosisService.performDiagnosis(input);
@@ -155,12 +155,12 @@ const FiveDiagnosisScreen: React.FC<FiveDiagnosisScreenProps> = ({
       [
         {
           text: '查看详情',
-          onPress: () => showDetailedResult(result),
+          onPress: () => showDetailedResult(result)
         },
         {
           text: '确定',
-          style: 'default',
-        },
+          style: 'default'
+        }
       ]
     );
   }, []);
@@ -173,7 +173,7 @@ const FiveDiagnosisScreen: React.FC<FiveDiagnosisScreenProps> = ({
     Alert.alert('重置诊断', '确定要重置所有诊断数据吗？', [
       {
         text: '取消',
-        style: 'cancel',
+        style: 'cancel'
       },
       {
         text: '确定',
@@ -182,8 +182,8 @@ const FiveDiagnosisScreen: React.FC<FiveDiagnosisScreenProps> = ({
           setCurrentStep(0);
           setStepData({});
           setAnalysisResult(null);
-        },
-      },
+        }
+      }
     ]);
   }, []);
 
@@ -210,7 +210,7 @@ const FiveDiagnosisScreen: React.FC<FiveDiagnosisScreenProps> = ({
                 styles.stepButton,
                 isCompleted && styles.stepCompleted,
                 isCurrent && styles.stepCurrent,
-                !isAccessible && styles.stepDisabled,
+                !isAccessible && styles.stepDisabled
               ]}
               onPress={() => handleStepPress(index)}
               accessibilityLabel={`${step.title}诊断步骤`}
@@ -234,7 +234,7 @@ const FiveDiagnosisScreen: React.FC<FiveDiagnosisScreenProps> = ({
                   styles.stepTitle,
                   isCompleted && styles.stepTitleCompleted,
                   isCurrent && styles.stepTitleCurrent,
-                  !isAccessible && styles.stepTitleDisabled,
+                  !isAccessible && styles.stepTitleDisabled
                 ]}
               >
                 {step.title}
@@ -301,7 +301,7 @@ const FiveDiagnosisScreen: React.FC<FiveDiagnosisScreenProps> = ({
             styles.actionButton,
             styles.analyzeButton,
             (!canPerformAnalysis() || isAnalyzing) &&
-              styles.analyzeButtonDisabled,
+              styles.analyzeButtonDisabled
           ]}
           onPress={performAnalysis}
           disabled={!canPerformAnalysis() || isAnalyzing}
@@ -320,7 +320,7 @@ const FiveDiagnosisScreen: React.FC<FiveDiagnosisScreenProps> = ({
             style={[
               styles.analyzeButtonText,
               (!canPerformAnalysis() || isAnalyzing) &&
-                styles.analyzeButtonTextDisabled,
+                styles.analyzeButtonTextDisabled
             ]}
           >
             {isAnalyzing ? '分析中...' : '开始分析'}
@@ -332,7 +332,7 @@ const FiveDiagnosisScreen: React.FC<FiveDiagnosisScreenProps> = ({
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {/* 头部 */}
+      {// 头部}
       <View style={styles.header}>
         <TouchableOpacity;
           onPress={() => navigation.goBack()}
@@ -345,19 +345,19 @@ const FiveDiagnosisScreen: React.FC<FiveDiagnosisScreenProps> = ({
         <View style={styles.headerRight} />
       </View>
 
-      {/* 进度条 */}
+      {// 进度条}
       {renderProgressBar()}
 
-      {/* 步骤指示器 */}
+      {// 步骤指示器}
       {renderStepIndicator()}
 
-      {/* 当前步骤内容 */}
+      {// 当前步骤内容}
       {renderCurrentStep()}
 
-      {/* 操作按钮 */}
+      {// 操作按钮}
       {renderActionButtons()}
 
-      {/* 结果显示 */}
+      {// 结果显示}
       {analysisResult && (
         <View style={styles.resultContainer}>
           <Text style={styles.resultTitle}>诊断结果</Text>
@@ -373,7 +373,7 @@ const FiveDiagnosisScreen: React.FC<FiveDiagnosisScreenProps> = ({
 const styles = StyleSheet.create({
   container: {,
   flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: colors.background
   },
   header: {,
   flexDirection: 'row',
@@ -382,43 +382,43 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: colors.border
   },
   backButton: {,
-  padding: spacing.sm,
+  padding: spacing.sm
   },
   headerTitle: {,
   fontSize: 18,
     fontWeight: '600',
-    color: colors.textPrimary,
+    color: colors.textPrimary
   },
   headerRight: {,
-  width: 40,
+  width: 40
   },
   progressContainer: {,
   paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
+    paddingVertical: spacing.md
   },
   progressBar: {,
   height: 4,
     backgroundColor: colors.border,
     borderRadius: 2,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.sm
   },
   progressFill: {,
   height: '100%',
     backgroundColor: colors.primary,
-    borderRadius: 2,
+    borderRadius: 2
   },
   progressText: {,
   fontSize: 12,
     color: colors.textSecondary,
-    textAlign: 'center',
+    textAlign: 'center'
   },
   stepIndicator: {,
   flexDirection: 'row',
     paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
+    paddingVertical: spacing.md
   },
   stepButton: {,
   flex: 1,
@@ -426,67 +426,67 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm,
     marginHorizontal: spacing.xs,
     borderRadius: 8,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.surface
   },
   stepCompleted: {,
-  backgroundColor: colors.primary,
+  backgroundColor: colors.primary
   },
   stepCurrent: {,
   backgroundColor: colors.surface,
     borderWidth: 2,
-    borderColor: colors.primary,
+    borderColor: colors.primary
   },
   stepDisabled: {,
-  backgroundColor: colors.border,
+  backgroundColor: colors.border
   },
   stepTitle: {,
   fontSize: 12,
     color: colors.textSecondary,
-    marginTop: spacing.xs,
+    marginTop: spacing.xs
   },
   stepTitleCompleted: {,
-  color: colors.white,
+  color: colors.white
   },
   stepTitleCurrent: {,
   color: colors.primary,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   stepTitleDisabled: {,
-  color: colors.textTertiary,
+  color: colors.textTertiary
   },
   stepContent: {,
   margin: spacing.lg,
     backgroundColor: colors.surface,
     borderRadius: 12,
-    padding: spacing.lg,
+    padding: spacing.lg
   },
   stepHeader: {,
   flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: spacing.lg,
+    marginBottom: spacing.lg
   },
   stepInfo: {,
   marginLeft: spacing.md,
-    flex: 1,
+    flex: 1
   },
   stepName: {,
   fontSize: 18,
     fontWeight: '600',
-    color: colors.textPrimary,
+    color: colors.textPrimary
   },
   stepDescription: {,
   fontSize: 14,
     color: colors.textSecondary,
-    marginTop: spacing.xs,
+    marginTop: spacing.xs
   },
   stepComponent: {,
-  minHeight: 200,
+  minHeight: 200
   },
   actionButtons: {,
   flexDirection: 'row',
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
-    gap: spacing.md,
+    gap: spacing.md
   },
   actionButton: {,
   flex: 1,
@@ -495,31 +495,31 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: spacing.md,
     borderRadius: 8,
-    gap: spacing.sm,
+    gap: spacing.sm
   },
   resetButton: {,
   backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.border
   },
   resetButtonText: {,
   color: colors.textSecondary,
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   analyzeButton: {,
-  backgroundColor: colors.primary,
+  backgroundColor: colors.primary
   },
   analyzeButtonDisabled: {,
-  backgroundColor: colors.border,
+  backgroundColor: colors.border
   },
   analyzeButtonText: {,
   color: colors.white,
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   analyzeButtonTextDisabled: {,
-  color: colors.textSecondary,
+  color: colors.textSecondary
   },
   resultContainer: {,
   margin: spacing.lg,
@@ -527,19 +527,19 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: spacing.lg,
     borderLeftWidth: 4,
-    borderLeftColor: colors.success,
+    borderLeftColor: colors.success
   },
   resultTitle: {,
   fontSize: 18,
     fontWeight: '600',
     color: colors.textPrimary,
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   resultText: {,
   fontSize: 16,
     color: colors.textSecondary,
-    lineHeight: 24,
-  },
+    lineHeight: 24
+  }
 });
 
 export default React.memo(FiveDiagnosisScreen);

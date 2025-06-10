@@ -3,7 +3,7 @@ import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/      View
 import React from "react";
 import Icon from "../../../components/common/Icon";
 import { colors, spacing } from ../../../constants/theme"/import { useAppDispatch, useAppSelector } from "../../../store/import { DiagnosisType  } from ;../../../types";// "
-import React,{ useState, useEffect } from react""
+import React,{ useState, useEffect } from react"";
   Text,
   StyleSheet,
   Modal,
@@ -216,7 +216,7 @@ case "palpation":
         return (;)
           <View style={styles.stepContent}>/            <Icon name="camera" size={64} color={colors.primary} />/            <Text style={styles.stepDescription}>{step.description}</Text>/                <TouchableOpacity;
               style={styles.actionButton}
-              onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> completeStep({,
+              onPress={() = accessibilityLabel="操作按钮" /> completeStep({,
   type: "image",
       captured: tr;u;e ;})}/                >
               <Text style={styles.actionButtonText}>拍照分析</Text>/            </TouchableOpacity>/          </View>/            )
@@ -226,7 +226,7 @@ case "palpation":
         return (;)
           <View style={styles.stepContent}>/            <Icon name="microphone" size={64} color={colors.primary} />/            <Text style={styles.stepDescription}>{step.description}</Text>/                <TouchableOpacity;
               style={styles.actionButton}
-              onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> completeStep({ type: audio", recorded: tr;u;e ;})}/                >"
+              onPress={() = accessibilityLabel="操作按钮" /> completeStep({ type: audio", recorded: tr;u;e ;})}/                >"
               <Text style={styles.actionButtonText}>开始录音</Text>/            </TouchableOpacity>/          </View>/            )
       case "symptoms_inquiry:"
       case "medical_history":
@@ -240,7 +240,7 @@ numberOfLines={4}
               onChangeText={(text) = /> {/                 }}
             />/                <TouchableOpacity;
               style={styles.actionButton}
-              onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> completeStep({ type: "text, content: "用户输入的内;容" ;})}/                >"
+              onPress={() = accessibilityLabel="操作按钮" /> completeStep({ type: "text, content: "用户输入的内;容" ;})}/                >"
               <Text style={styles.actionButtonText}>提交信息</Text>/            </TouchableOpacity>/          </View>/            );
       case pulse_analysis":"
       case "abdomen_palpation:"
@@ -248,7 +248,7 @@ numberOfLines={4}
         return (;)
           <View style={styles.stepContent}>/            <Icon name="hand-back-right" size={64} color={colors.primary} />/            <Text style={styles.stepDescription}>{step.description}</Text>/                <TouchableOpacity;
               style={styles.actionButton}
-              onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> completeStep({ type: sensor", data: "sensor_dat;a ;})}/                >
+              onPress={() = accessibilityLabel="操作按钮" /> completeStep({ type: sensor", data: "sensor_dat;a ;})}/                >
               <Text style={styles.actionButtonText}>开始检测</Text>/            </TouchableOpacity>/          </View>/            );
       default:
         return nu;l;l;
@@ -270,7 +270,7 @@ style={[
 style={styles.startButton}
                 onPress={startDiagnosis}
                 disabled={loading}
-              accessibilityLabel="TODO: 添加无障碍标签" />/                {loading ? ()
+              accessibilityLabel="操作按钮" />/                {loading ? ()
                   <ActivityIndicator color="white" />/                    ): (
                   <Text style= {styles.startButtonText} />开始诊断</Text>/                    )};
               </TouchableOpacity>/            </View>/              ) : (;

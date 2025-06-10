@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useCallback, useEffect, useState } from 'react';
-import {
+import {;
   ActivityIndicator,
   Alert,
   Animated,
@@ -13,7 +13,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -24,11 +24,11 @@ const { width, height } = Dimensions.get('window');
 // 联系人类型定义
 export interface Contact {
   id: string;,
-  name: string;
+  name: string;,
   avatar: string;,
-  message: string;
+  message: string;,
   time: string;,
-  unread: number;
+  unread: number;,
   type: 'agent' | 'doctor' | 'user' | 'service';
   isOnline?: boolean;
   tag?: string;
@@ -39,23 +39,23 @@ export interface Contact {
 // 联系人组类型定义
 export interface ContactGroup {
   id: string;,
-  name: string;
+  name: string;,
   contacts: Contact[];,
   type: 'agents' | 'medical' | 'community' | 'services';
 }
 // 微服务状态类型
 interface ServiceStatus {
   name: string;,
-  endpoint: string;
+  endpoint: string;,
   status: 'healthy' | 'unhealthy' | 'unknown';,
   lastCheck: Date;
   responseTime?: number;
 }
 type MainTabParamList = {
   Home: undefined;,
-  Suoke: undefined;
+  Suoke: undefined;,
   Explore: undefined;,
-  Life: undefined;
+  Life: undefined;,
   Profile: undefined;,
   ChatDetail: { chatId: string; chatType: string; chatName: string };
   AgentChat: { agentId: string; agentName: string };
@@ -106,8 +106,8 @@ const HomeScreen: React.FC = () => {
   // 工具函数
   const getAgentInfo = (agentType: string) => {
     const agentConfigs: any = {,
-  xiaoai: {
-        name: '小艾',
+  xiaoai: {,
+  name: '小艾',
         avatar: '🤖',
         tag: '多模态感知',
         greeting: '您好！我是小艾，可以帮您分析图像、语音等多模态数据',
@@ -151,7 +151,7 @@ const HomeScreen: React.FC = () => {
     if (diffDays < 7) return `${diffDays}天前`;
     return date.toLocaleDateString('zh-CN', {
       month: 'short',
-      day: 'numeric',
+      day: 'numeric'
     });
   };
   // 生成智能体联系人数据
@@ -404,7 +404,7 @@ const HomeScreen: React.FC = () => {
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
       
-      {/* 头部 */}
+      {// 头部}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>索克生活</Text>
         <Text style={styles.headerSubtitle}>
@@ -412,7 +412,7 @@ const HomeScreen: React.FC = () => {
         </Text>
       </View>
 
-      {/* 搜索框 */}
+      {// 搜索框}
       <View style={styles.searchContainer}>
         <Icon name="magnify" size={20} color="#999" style={styles.searchIcon} />
         <TextInput;
@@ -432,7 +432,7 @@ const HomeScreen: React.FC = () => {
         )}
       </View>
 
-      {/* 联系人列表 */}
+      {// 联系人列表}
       <Animated.View;
         style={[
           styles.listContainer,

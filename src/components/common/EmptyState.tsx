@@ -1,6 +1,6 @@
 import React from "react";
 // EmptyState.tsx   索克生活APP - 自动生成的类型安全文件     @description TODO: 添加文件描述 @author 索克生活开发团队   @version 1.0.0;
-importIcon from "./Icon/import { colors, spacing, fonts  } from "../../placeholder";../../constants/theme";// import React,{ memo } from react""
+importIcon from "./Icon/import { colors, spacing, fonts  } from "../../placeholder";../../constants/theme";// import React,{ memo } from react"";
   View,
   Text,
   { StyleSheet } from "react-native;";

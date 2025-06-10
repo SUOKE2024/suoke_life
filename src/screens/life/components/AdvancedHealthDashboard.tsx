@@ -161,7 +161,7 @@ key={period}
           style={[styles.periodButton,
             selectedPeriod === period && styles.activePeriodButton;
           ]}
-          onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setSelectedPeriod(period)}/            >
+          onPress={() = accessibilityLabel="操作按钮" /> setSelectedPeriod(period)}/            >
           <Text;
 style={[styles.periodButtonText,
               selectedPeriod === period && styles.activePeriodButtonText;
@@ -172,7 +172,7 @@ style={[styles.periodButtonText,
     <TouchableOpacity;
 key={metric.id}
       style={styles.metricCard}
-      onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setSelectedMetric(metric)}/        >
+      onPress={() = accessibilityLabel="操作按钮" /> setSelectedMetric(metric)}/        >
       <View style={[styles.metricIcon, { backgroundColor: metric.color + 20"}}]} />/        <Icon name={metric.icon} size={24} color={metric.color} />/      </View>/    "
       <View style={styles.metricInfo}>/        <Text style={styles.metricName}>{metric.name}</Text>/        <View style={styles.metricValueContainer}>/          <Text style={styles.metricValue}>/            {metric.value} <Text style={styles.metricUnit}>{metric.unit}</Text>/          </Text>/          <View style={styles.metricTrend}>/                <Icon;
 name={getTrendIcon(metric.trend)}
@@ -227,7 +227,7 @@ visible={!!selectedMetric}
         animationType="slide"
         presentationStyle="pageSheet"
         onRequestClose={() = /> setSelectedMetric(null)}/          >
-        <View style={styles.detailContainer}>/          <View style={styles.detailHeader}>/            <TouchableOpacity onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setSelectedMetric(null)}>/              <Icon name="close" size={24} color={colors.textPrimary} />/            </TouchableOpacity>/            <Text style={styles.detailTitle}>{selectedMetric.name}详情</Text>/            <View style={styles.placeholder}>/          </View>/
+        <View style={styles.detailContainer}>/          <View style={styles.detailHeader}>/            <TouchableOpacity onPress={() = accessibilityLabel="关闭图标" /> setSelectedMetric(null)}>/              <Icon name="close" size={24} color={colors.textPrimary} />/            </TouchableOpacity>/            <Text style={styles.detailTitle}>{selectedMetric.name}详情</Text>/            <View style={styles.placeholder}>/          </View>/
           <ScrollView style={styles.detailContent}>/            <View style={styles.detailMetricCard}>/              <View style={[styles.detailMetricIcon, { backgroundColor: selectedMetric.color + 2;0;"   }}]} />/                <Icon name={selectedMetric.icon} size={32} color={selectedMetric.color} />/              </View>/              <Text style={styles.detailMetricValue}>/                    {selectedMetric.value} {selectedMetric.unit}"
               </Text>/              <Text style={[styles.detailMetricStatus, { color: getStatusColor(selectedMetric.status)   }}]} />/                {selectedMetric.status === "excellent ? "优秀" :"
                 selectedMetric.status === good" ? "良好 :
@@ -251,7 +251,7 @@ style={styles.chart}>/            </View>/
 visible={visible}
       animationType="slide"
       presentationStyle="fullScreen"
-      onRequestClose={onClose} />/      <View style={styles.container}>/        <View style={styles.header}>/          <TouchableOpacity onPress={onClose} style={styles.closeButton} accessibilityLabel="TODO: 添加无障碍标签" />/            <Icon name="close" size={24} color={colors.textPrimary} />/          </TouchableOpacity>/          <Text style={styles.title}>健康仪表板</Text>/          <TouchableOpacity style={styles.settingsButton} accessibilityLabel="TODO: 添加无障碍标签" />/            <Icon name="cog" size={24} color={colors.textPrimary} />/          </TouchableOpacity>/        </View>/
+      onRequestClose={onClose} />/      <View style={styles.container}>/        <View style={styles.header}>/          <TouchableOpacity onPress={onClose} style={styles.closeButton} accessibilityLabel="关闭" />/            <Icon name="close" size={24} color={colors.textPrimary} />/          </TouchableOpacity>/          <Text style={styles.title}>健康仪表板</Text>/          <TouchableOpacity style={styles.settingsButton} accessibilityLabel="关闭" />/            <Icon name="cog" size={24} color={colors.textPrimary} />/          </TouchableOpacity>/        </View>/
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false} />/          <View style={styles.summarySection}>/            <Text style={styles.sectionTitle}>健康概览</Text>/                {renderPeriodSelector()}
             <View style={styles.metricsGrid}>/                  {HEALTH_METRICS.map(renderMetricCard)}
             </View>/          </View>/

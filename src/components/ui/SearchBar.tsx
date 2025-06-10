@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import {
+import {;
   Animated,
   FlatList,
   Keyboard,
@@ -7,7 +7,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
@@ -74,7 +74,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   onSuggestionPress,
   loading = false,
   maxLength,
-  disabled = false,
+  disabled = false
 }) => {
   const { currentTheme } = useTheme();
   const styles = createStyles(currentTheme);
@@ -91,27 +91,27 @@ export const SearchBar: React.FC<SearchBarProps> = ({
         Animated.timing(fadeAnim, {
           toValue: 1,
           duration: 200,
-          useNativeDriver: true,
+          useNativeDriver: true
         }),
         Animated.spring(scaleAnim, {
           toValue: 1,
           tension: 100,
           friction: 8,
-          useNativeDriver: true,
-        }),
+          useNativeDriver: true
+        })
       ]).start();
     } else {
       Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 0,
           duration: 150,
-          useNativeDriver: true,
+          useNativeDriver: true
         }),
         Animated.timing(scaleAnim, {
           toValue: 0.95,
           duration: 150,
-          useNativeDriver: true,
-        }),
+          useNativeDriver: true
+        })
       ]).start();
     }
   }, [showDropdown, fadeAnim, scaleAnim]);
@@ -213,8 +213,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           styles.dropdown,
           {
             opacity: fadeAnim,
-            transform: [{ scale: scaleAnim }],
-          },
+            transform: [{ scale: scaleAnim }]
+          }
         ]}
       >
         {data.length > 0 ? (
@@ -252,7 +252,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
       <View;
         style={[
           styles.searchContainer,
-          isFocused && styles.searchContainerFocused,
+          isFocused && styles.searchContainerFocused
         ]}
       >
         <Text style={styles.searchIcon}>🔍</Text>
@@ -294,7 +294,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 const createStyles = (theme: any) => {
   return StyleSheet.create({
     container: {,
-  position: 'relative',
+  position: 'relative'
     },
     searchContainer: {,
   flexDirection: 'row',
@@ -304,38 +304,38 @@ const createStyles = (theme: any) => {
       paddingHorizontal: theme.spacing.md,
       paddingVertical: theme.spacing.sm,
       borderWidth: 1,
-      borderColor: 'transparent',
+      borderColor: 'transparent'
     },
     searchContainerFocused: {,
   borderColor: theme.colors.primary,
-      backgroundColor: theme.colors.surface,
+      backgroundColor: theme.colors.surface
     },
     searchIcon: {,
   fontSize: 16,
       marginRight: theme.spacing.sm,
-      color: theme.colors.onSurfaceVariant,
+      color: theme.colors.onSurfaceVariant
     },
     input: {,
   flex: 1,
       fontSize: theme.typography.fontSize.base,
       color: theme.colors.onSurface,
-      paddingVertical: 0,
+      paddingVertical: 0
     },
     clearButton: {,
   padding: theme.spacing.xs,
-      marginLeft: theme.spacing.sm,
+      marginLeft: theme.spacing.sm
     },
     clearIcon: {,
   fontSize: 14,
-      color: theme.colors.onSurfaceVariant,
+      color: theme.colors.onSurfaceVariant
     },
     cancelButton: {,
   marginLeft: theme.spacing.md,
-      paddingVertical: theme.spacing.sm,
+      paddingVertical: theme.spacing.sm
     },
     cancelText: {,
   fontSize: theme.typography.fontSize.base,
-      color: theme.colors.primary,
+      color: theme.colors.primary
     },
     dropdown: {,
   position: 'absolute',
@@ -349,15 +349,15 @@ const createStyles = (theme: any) => {
       shadowColor: '#000',
       shadowOffset: {,
   width: 0,
-        height: 2,
+        height: 2
       },
       shadowOpacity: 0.1,
       shadowRadius: 8,
       elevation: 5,
-      zIndex: 1000,
+      zIndex: 1000
     },
     dropdownList: {,
-  maxHeight: 160,
+  maxHeight: 160
     },
     dropdownItem: {,
   flexDirection: 'row',
@@ -365,41 +365,41 @@ const createStyles = (theme: any) => {
       paddingHorizontal: theme.spacing.md,
       paddingVertical: theme.spacing.sm,
       borderBottomWidth: 1,
-      borderBottomColor: theme.colors.outline,
+      borderBottomColor: theme.colors.outline
     },
     historyIcon: {,
   fontSize: 14,
       marginRight: theme.spacing.sm,
-      color: theme.colors.onSurfaceVariant,
+      color: theme.colors.onSurfaceVariant
     },
     suggestionIcon: {,
   fontSize: 14,
       marginRight: theme.spacing.sm,
-      color: theme.colors.primary,
+      color: theme.colors.primary
     },
     dropdownItemText: {,
   flex: 1,
       fontSize: theme.typography.fontSize.base,
-      color: theme.colors.onSurface,
+      color: theme.colors.onSurface
     },
     clearHistoryButton: {,
   padding: theme.spacing.md,
       alignItems: 'center',
       borderTopWidth: 1,
-      borderTopColor: theme.colors.outline,
+      borderTopColor: theme.colors.outline
     },
     clearHistoryText: {,
   fontSize: theme.typography.fontSize.sm,
-      color: theme.colors.error,
+      color: theme.colors.error
     },
     emptyDropdown: {,
   padding: theme.spacing.lg,
-      alignItems: 'center',
+      alignItems: 'center'
     },
     emptyText: {,
   fontSize: theme.typography.fontSize.sm,
-      color: theme.colors.onSurfaceVariant,
-    },
+      color: theme.colors.onSurfaceVariant
+    }
   });
 };
 

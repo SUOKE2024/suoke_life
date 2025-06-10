@@ -1,7 +1,7 @@
 import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/      View,";
 import React from "react";
 importIcon from "../../../components/common/Icon/import { colors, spacing  } from "../../placeholder";../../../constants/theme"; 四诊系统导航组件   提供望、闻、问、切四诊功能的统一入口
-import React,{ useState, useEffect } from react""
+import React,{ useState, useEffect } from react"";
   Text,
   StyleSheet,
   TouchableOpacity,
@@ -108,7 +108,7 @@ key={method.id}
         selectedMethod?.id === method.id && styles.selectedMethodCard,
         method.status !== "available" && styles.disabledMethodCard;
       ]}}
-      onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> handleMethodSelect(method)}/          disabled={method.status !== available"}"
+      onPress={() = accessibilityLabel="操作按钮" /> handleMethodSelect(method)}/          disabled={method.status !== available"}"
     >
       <View style={[styles.methodIcon, { backgroundColor: method.color + "20}}]} />/        <Icon name={method.icon} size={32} color={method.color} />/      </View>/    "
       <View style={styles.methodInfo}>/        <View style={styles.methodHeader}>/          <Text style={styles.methodName}>{method.name}</Text>/          <View style={styles.statusBadge}>/                {method.status === "available"  && <Text style={styles.accuracyText}>{method.accuracy}%</Text>/                )}
@@ -139,7 +139,7 @@ key={method.id}
 visible={visible}
       animationType="slide"
       presentationStyle="pageSheet"
-      onRequestClose={onClose} />/      <View style={styles.container}>/        <View style={styles.header}>/          <TouchableOpacity onPress={onClose} style={styles.closeButton} accessibilityLabel="TODO: 添加无障碍标签" />/            <Icon name="close" size={24} color={colors.textPrimary} />/          </TouchableOpacity>/          <Text style={styles.title}>四诊系统</Text>/          <View style={styles.placeholder}>/        </View>/
+      onRequestClose={onClose} />/      <View style={styles.container}>/        <View style={styles.header}>/          <TouchableOpacity onPress={onClose} style={styles.closeButton} accessibilityLabel="关闭" />/            <Icon name="close" size={24} color={colors.textPrimary} />/          </TouchableOpacity>/          <Text style={styles.title}>四诊系统</Text>/          <View style={styles.placeholder}>/        </View>/
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false} />/          <View style={styles.introSection}>/            <Text style={styles.introTitle}>中医四诊合参</Text>/            <Text style={styles.introDescription}>/                  运用现代AI技术结合传统中医理论，通过望、闻、问、切四种诊断方法，
               为您提供全面的健康评估和个性化建议。
             </Text>/          </View>/
@@ -151,7 +151,7 @@ visible={visible}
 style={[styles.startButton, isLoading && styles.disabledButton]}
               onPress={startDiagnosis}
               disabled={isLoading}
-            accessibilityLabel="TODO: 添加无障碍标签" />/              {isLoading ? ()
+            accessibilityLabel="操作按钮" />/              {isLoading ? ()
                 <ActivityIndicator color="white" />/                  ): (
                 <>
                   <Icon name="play" size= {20} color="white" />/                  <Text style={styles.startButtonText}>开始{selectedMethod.name}</Text>/                </>/                  )};

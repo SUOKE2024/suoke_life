@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import {
+import {;
   Animated,
   LayoutAnimation,
   Platform,
@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   UIManager,
   View,
-  ViewStyle,
+  ViewStyle
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
@@ -62,7 +62,7 @@ export const Accordion: React.FC<AccordionProps> = ({
   contentStyle,
   titleStyle,
   accessible = true,
-  testID,
+  testID
 }) => {
   const { currentTheme } = useTheme();
   const [internalActiveKeys, setInternalActiveKeys] =
@@ -113,7 +113,7 @@ export const Accordion: React.FC<AccordionProps> = ({
       Animated.timing(rotationAnims[key], {
         toValue: targetValue,
         duration: 200,
-        useNativeDriver: true,
+        useNativeDriver: true
       }).start();
     }
   };
@@ -125,7 +125,7 @@ export const Accordion: React.FC<AccordionProps> = ({
 
     const rotation = rotationAnims[itemKey].interpolate({
       inputRange: [0, 1],
-      outputRange: ['0deg', '180deg'],
+      outputRange: ['0deg', '180deg']
     });
 
     return (
@@ -143,67 +143,67 @@ export const Accordion: React.FC<AccordionProps> = ({
     container: {,
   backgroundColor: currentTheme.colors.surface,
       borderRadius: 8,
-      overflow: 'hidden',
+      overflow: 'hidden'
     },
     bordered: {,
   borderWidth: 1,
-      borderColor: currentTheme.colors.outline,
+      borderColor: currentTheme.colors.outline
     },
     item: {,
-  backgroundColor: currentTheme.colors.surface,
+  backgroundColor: currentTheme.colors.surface
     },
     itemBordered: {,
   borderBottomWidth: 1,
-      borderBottomColor: currentTheme.colors.outline,
+      borderBottomColor: currentTheme.colors.outline
     },
     header: {,
   flexDirection: 'row',
       alignItems: 'center',
       paddingHorizontal: 16,
       paddingVertical: 12,
-      backgroundColor: currentTheme.colors.surface,
+      backgroundColor: currentTheme.colors.surface
     },
     headerActive: {,
-  backgroundColor: currentTheme.colors.surfaceVariant,
+  backgroundColor: currentTheme.colors.surfaceVariant
     },
     headerDisabled: {,
-  opacity: 0.5,
+  opacity: 0.5
     },
     icon: {,
   marginRight: 12,
       width: 24,
       height: 24,
       justifyContent: 'center',
-      alignItems: 'center',
+      alignItems: 'center'
     },
     title: {,
   flex: 1,
       fontSize: 16,
       fontWeight: '500',
-      color: currentTheme.colors.onSurface,
+      color: currentTheme.colors.onSurface
     },
     titleActive: {,
   color: currentTheme.colors.primary,
-      fontWeight: '600',
+      fontWeight: '600'
     },
     expandIcon: {,
   marginLeft: 12,
       width: 24,
       height: 24,
       justifyContent: 'center',
-      alignItems: 'center',
+      alignItems: 'center'
     },
     defaultIcon: {,
   fontSize: 12,
-      fontWeight: 'bold',
+      fontWeight: 'bold'
     },
     content: {,
   paddingHorizontal: 16,
       paddingVertical: 12,
       backgroundColor: currentTheme.colors.background,
       borderTopWidth: 1,
-      borderTopColor: currentTheme.colors.outline,
-    },
+      borderTopColor: currentTheme.colors.outline
+    }
   });
 
   return (
@@ -222,7 +222,7 @@ export const Accordion: React.FC<AccordionProps> = ({
             style={[
               styles.item,
               bordered && !isLastItem && styles.itemBordered,
-              itemStyle,
+              itemStyle
             ]}
           >
             <TouchableOpacity;
@@ -230,7 +230,7 @@ export const Accordion: React.FC<AccordionProps> = ({
                 styles.header,
                 isExpanded && styles.headerActive,
                 isDisabled && styles.headerDisabled,
-                headerStyle,
+                headerStyle
               ]}
               onPress={() => handlePress(item.key)}
               disabled={isDisabled}
@@ -239,7 +239,7 @@ export const Accordion: React.FC<AccordionProps> = ({
               accessibilityLabel={`${item.title} ${isExpanded ? '已展开' : '已折叠'}`}
               accessibilityState={
                 expanded: isExpanded,
-                disabled: isDisabled,
+                disabled: isDisabled
               }}
             >
               {item.icon && <View style={styles.icon}>{item.icon}</View>}
@@ -248,7 +248,7 @@ export const Accordion: React.FC<AccordionProps> = ({
                 style={[
                   styles.title,
                   isExpanded && styles.titleActive,
-                  titleStyle,
+                  titleStyle
                 ]}
               >
                 {item.title}
@@ -298,7 +298,7 @@ export const AdvancedAccordion: React.FC<AdvancedAccordionProps> = ({
         title: child.props.title,
         content: child.props.children,
         disabled: child.props.disabled,
-        icon: child.props.icon,
+        icon: child.props.icon
       };
     }
     return null;

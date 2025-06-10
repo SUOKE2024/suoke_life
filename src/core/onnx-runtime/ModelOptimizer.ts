@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import {import {ONNXModel,
+import {import {ONNXModel,;
   ModelOptimizationOptions,
   OptimizationLevel,
   GraphOptimizationLevel,

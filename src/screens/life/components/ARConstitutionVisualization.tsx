@@ -1,5 +1,5 @@
 import React, { useState, useRef, useMemo, useCallback } from "react";
-import {
+import {;
   View,
   Text,
   StyleSheet,

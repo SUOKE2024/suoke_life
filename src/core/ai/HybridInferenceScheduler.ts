@@ -139,7 +139,7 @@ export class HybridInferenceScheduler {
     if (request.requiresPrivacy) {
       return {
         strategy: 'local_only',
-        reasoning: '隐私要求，必须本地处理',
+        reasoning: '隐私要求，必须本地处理'
       };
     }
 
@@ -147,7 +147,7 @@ export class HybridInferenceScheduler {
     if (!networkStatus.isOnline) {
       return {
         strategy: 'local_only',
-        reasoning: '网络不可用，使用本地推理',
+        reasoning: '网络不可用，使用本地推理'
       };
     }
 
@@ -158,7 +158,7 @@ export class HybridInferenceScheduler {
     ) {
       return {
         strategy: 'local_with_cloud_fallback',
-        reasoning: '简单任务，本地模型可用，本地优先',
+        reasoning: '简单任务，本地模型可用，本地优先'
       };
     }
 
@@ -166,7 +166,7 @@ export class HybridInferenceScheduler {
     if (request.complexity === 'complex' && networkStatus.isStable) {
       return {
         strategy: 'cloud_with_local_fallback',
-        reasoning: '复杂任务，网络稳定，云端优先',
+        reasoning: '复杂任务，网络稳定，云端优先'
       };
     }
 
@@ -177,7 +177,7 @@ export class HybridInferenceScheduler {
     ) {
       return {
         strategy: 'cloud_only',
-        reasoning: '设备性能不足，使用云端处理',
+        reasoning: '设备性能不足，使用云端处理'
       };
     }
 
@@ -185,14 +185,14 @@ export class HybridInferenceScheduler {
     if (request.priority === 'critical') {
       return {
         strategy: 'hybrid_ensemble',
-        reasoning: '关键任务，使用混合集成提高准确性',
+        reasoning: '关键任务，使用混合集成提高准确性'
       };
     }
 
     // 默认策略
     return {
       strategy: 'local_with_cloud_fallback',
-      reasoning: '默认策略：本地优先，云端备用',
+      reasoning: '默认策略：本地优先，云端备用'
     };
   }
 
@@ -217,8 +217,8 @@ export class HybridInferenceScheduler {
         modelUsed: request.modelId,
         metadata: {,
   device: 'local',
-          strategy: 'local_only',
-        },
+          strategy: 'local_only'
+        }
       };
     } catch (error) {
       throw new Error(`本地推理失败: ${error}`);
@@ -246,8 +246,8 @@ export class HybridInferenceScheduler {
         modelUsed: request.modelId,
         metadata: {,
   device: 'cloud',
-          strategy: 'cloud_only',
-        },
+          strategy: 'cloud_only'
+        }
       };
     } catch (error) {
       throw new Error(`云端推理失败: ${error}`);
@@ -294,7 +294,7 @@ export class HybridInferenceScheduler {
       // 并行执行本地和云端推理
       const [localResult, cloudResult] = await Promise.allSettled([
         this.executeLocalInference(request),
-        this.executeCloudInference(request),
+        this.executeCloudInference(request)
       ]);
 
       // 集成结果
@@ -325,8 +325,8 @@ export class HybridInferenceScheduler {
             localResult.status === 'fulfilled' ? localResult.value : null,
           cloudResult:
             cloudResult.status === 'fulfilled' ? cloudResult.value : null,
-          strategy: 'hybrid_ensemble',
-        },
+          strategy: 'hybrid_ensemble'
+        }
       };
     } catch (error) {
       throw new Error(`混合推理失败: ${error}`);
@@ -343,7 +343,7 @@ export class HybridInferenceScheduler {
     if (results.length === 1) {
       return {
         result: results[0].result,
-        confidence: results[0].confidence,
+        confidence: results[0].confidence
       };
     }
 
@@ -372,7 +372,7 @@ export class HybridInferenceScheduler {
       connectionType: 'wifi',
       bandwidth: 50,
       latency: 20,
-      isStable: true,
+      isStable: true
     };
   }
 
@@ -386,7 +386,7 @@ export class HybridInferenceScheduler {
       memoryMB: 4096,
       gpuAvailable: true,
       batteryLevel: 80,
-      thermalState: 'normal',
+      thermalState: 'normal'
     };
   }
 
@@ -409,7 +409,7 @@ export class HybridInferenceScheduler {
     return {
       prediction: `local_result_${request.modelId}`,
       features: request.inputData,
-      timestamp: Date.now(),
+      timestamp: Date.now()
     };
   }
 
@@ -436,7 +436,7 @@ export class HybridInferenceScheduler {
       prediction: `cloud_result_${request.modelId}`,
       features: request.inputData,
       advanced_analysis: true,
-      timestamp: Date.now(),
+      timestamp: Date.now()
     };
   }
 

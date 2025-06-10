@@ -59,7 +59,8 @@ jest.mock('@react-navigation/native', () => ({
     params: {},
   }),
   useFocusEffect: jest.fn(),
-  NavigationContainer: ({ children }: { children: React.ReactNode }) => children,
+  NavigationContainer: ({ children }: { children: React.ReactNode }) =>
+    children,
 }));
 
 // 模拟Redux
@@ -103,4 +104,4 @@ afterEach(() => {
 // 测试环境信息
 console.log('🚀 索克生活端到端测试环境已初始化');
 
-export { };
+export {};

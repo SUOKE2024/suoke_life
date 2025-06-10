@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import {
+import {;
   ActivityIndicator,
   Alert,
   Animated,
@@ -7,17 +7,17 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { colors, spacing } from '../../../constants/theme';
-import {
+import {;
   DiagnosisComponentProps,
-  PalpationDiagnosisData,
+  PalpationDiagnosisData
 } from '../../../types/diagnosis';
 
 export const PalpationDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
   onComplete,
-  onCancel,
+  onCancel
 }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [recordingType, setRecordingType] = useState<
@@ -37,13 +37,13 @@ export const PalpationDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
           Animated.timing(pulseAnimation, {
             toValue: 1.2,
             duration: 600,
-            useNativeDriver: true,
+            useNativeDriver: true
           }),
           Animated.timing(pulseAnimation, {
             toValue: 1,
             duration: 600,
-            useNativeDriver: true,
-          }),
+            useNativeDriver: true
+          })
         ])
       );
       pulseAnimationLoop.start();
@@ -80,13 +80,13 @@ export const PalpationDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
         leftWrist: {,
   cun: { strength: 'moderate', rhythm: 'regular', depth: 'normal' },
           guan: { strength: 'weak', rhythm: 'regular', depth: 'deep' },
-          chi: { strength: 'strong', rhythm: 'regular', depth: 'shallow' },
+          chi: { strength: 'strong', rhythm: 'regular', depth: 'shallow' }
         },
         rightWrist: {,
   cun: { strength: 'moderate', rhythm: 'regular', depth: 'normal' },
           guan: { strength: 'moderate', rhythm: 'regular', depth: 'normal' },
-          chi: { strength: 'weak', rhythm: 'irregular', depth: 'deep' },
-        },
+          chi: { strength: 'weak', rhythm: 'irregular', depth: 'deep' }
+        }
       };
 
       setPressureData(mockPressureData);
@@ -126,7 +126,7 @@ export const PalpationDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
                     : avgPulseRate < 60;
                       ? '脉率偏慢，可能有寒证'
                       : '脉率正常',
-                confidence: 0.89,
+                confidence: 0.89
               }
             : null,
         pressureAnalysis: pressureData;
@@ -135,24 +135,24 @@ export const PalpationDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
   overall: '左手脉象整体偏弱',
                 cun: '心肺功能正常',
                 guan: '肝胆功能稍弱',
-                chi: '肾功能良好',
+                chi: '肾功能良好'
               },
               rightWrist: {,
   overall: '右手脉象基本正常',
                 cun: '心肺功能正常',
                 guan: '脾胃功能正常',
-                chi: '肾功能稍弱',
+                chi: '肾功能稍弱'
               },
-              confidence: 0.85,
+              confidence: 0.85
             }
           : null,
         syndromePattern: {,
   pattern: '气血两虚',
           description: '气血不足，脏腑功能偏弱',
           severity: '轻度',
-          recommendations: ['补气养血', '调理脾胃', '适当休息', '营养均衡'],
+          recommendations: ['补气养血', '调理脾胃', '适当休息', '营养均衡']
         },
-        overallAssessment: '切诊结果显示整体体质偏虚，建议调理',
+        overallAssessment: '切诊结果显示整体体质偏虚，建议调理'
       };
 
       setAnalysisResult(mockResult);
@@ -169,8 +169,8 @@ export const PalpationDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
       touchData: pressureData,
       metadata: {
         analysisResult,
-        timestamp: new Date().toISOString(),
-      },
+        timestamp: new Date().toISOString()
+      }
     };
     onComplete(data);
   }, [pulseData, pressureData, analysisResult, onComplete]);
@@ -187,7 +187,7 @@ export const PalpationDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
           style={[
             styles.pulseIndicator,
             { transform: [{ scale: pulseAnimation }] },
-            isRecording && recordingType === 'pulse' && styles.pulseRecording,
+            isRecording && recordingType === 'pulse' && styles.pulseRecording
           ]}
         >
           <Text style={styles.pulseText}>
@@ -216,7 +216,7 @@ export const PalpationDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
           styles.testButton,
           isRecording &&
             recordingType === 'pulse' &&
-            styles.testButtonRecording,
+            styles.testButtonRecording
         ]}
         onPress={startPulseRecording}
         disabled={isRecording}
@@ -276,7 +276,7 @@ export const PalpationDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
           styles.testButton,
           isRecording &&
             recordingType === 'pressure' &&
-            styles.testButtonRecording,
+            styles.testButtonRecording
         ]}
         onPress={startPressureTest}
         disabled={isRecording}
@@ -431,40 +431,40 @@ export const PalpationDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
 const styles = StyleSheet.create({
   container: {,
   flex: 1,
-    padding: spacing.md,
+    padding: spacing.md
   },
   title: {,
   fontSize: 20,
     fontWeight: '600',
     color: colors.textPrimary,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.sm
   },
   subtitle: {,
   fontSize: 14,
     color: colors.textSecondary,
     marginBottom: spacing.lg,
-    lineHeight: 20,
+    lineHeight: 20
   },
   testSection: {,
   marginBottom: spacing.lg,
     backgroundColor: colors.surface,
     borderRadius: 8,
-    padding: spacing.md,
+    padding: spacing.md
   },
   sectionTitle: {,
   fontSize: 16,
     fontWeight: '600',
     color: colors.textPrimary,
-    marginBottom: spacing.xs,
+    marginBottom: spacing.xs
   },
   sectionDescription: {,
   fontSize: 14,
     color: colors.textSecondary,
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   pulseContainer: {,
   alignItems: 'center',
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   pulseIndicator: {,
   width: 80,
@@ -473,41 +473,41 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   pulseRecording: {,
-  backgroundColor: colors.error,
+  backgroundColor: colors.error
   },
   pulseText: {,
   fontSize: 14,
     fontWeight: '600',
-    color: colors.white,
+    color: colors.white
   },
   pulseDataContainer: {,
-  alignItems: 'center',
+  alignItems: 'center'
   },
   pulseDataText: {,
   fontSize: 12,
     color: colors.textSecondary,
-    marginBottom: spacing.xs,
+    marginBottom: spacing.xs
   },
   pressureContainer: {,
   flexDirection: 'row',
     justifyContent: 'space-around',
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   wristDiagram: {,
-  alignItems: 'center',
+  alignItems: 'center'
   },
   wristTitle: {,
   fontSize: 14,
     fontWeight: '600',
     color: colors.textPrimary,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.sm
   },
   pulsePoints: {,
   flexDirection: 'row',
-    gap: spacing.sm,
+    gap: spacing.sm
   },
   pulsePoint: {,
   width: 30,
@@ -515,98 +515,98 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     backgroundColor: colors.border,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   pulsePointText: {,
   fontSize: 12,
     color: colors.textSecondary,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   testButton: {,
   backgroundColor: colors.primary,
     paddingVertical: spacing.md,
     paddingHorizontal: spacing.lg,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   testButtonRecording: {,
-  backgroundColor: colors.error,
+  backgroundColor: colors.error
   },
   testButtonText: {,
   fontSize: 16,
     fontWeight: '600',
-    color: colors.white,
+    color: colors.white
   },
   actionContainer: {,
-  marginVertical: spacing.md,
+  marginVertical: spacing.md
   },
   button: {,
   paddingVertical: spacing.md,
     paddingHorizontal: spacing.lg,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   analyzeButton: {,
-  backgroundColor: colors.primary,
+  backgroundColor: colors.primary
   },
   completeButton: {,
-  backgroundColor: colors.success,
+  backgroundColor: colors.success
   },
   buttonText: {,
   fontSize: 16,
     fontWeight: '600',
-    color: colors.white,
+    color: colors.white
   },
   resultContainer: {,
   backgroundColor: colors.surface,
     borderRadius: 8,
     padding: spacing.md,
-    marginTop: spacing.md,
+    marginTop: spacing.md
   },
   resultTitle: {,
   fontSize: 18,
     fontWeight: '600',
     color: colors.textPrimary,
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   analysisSection: {,
   marginBottom: spacing.md,
     paddingBottom: spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: colors.border
   },
   analysisTitle: {,
   fontSize: 16,
     fontWeight: '600',
     color: colors.textPrimary,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.sm
   },
   analysisText: {,
   fontSize: 14,
     color: colors.textSecondary,
-    marginBottom: spacing.xs,
+    marginBottom: spacing.xs
   },
   confidenceText: {,
   fontSize: 12,
     color: colors.primary,
-    fontWeight: '500',
+    fontWeight: '500'
   },
   wristAnalysis: {,
-  marginBottom: spacing.sm,
+  marginBottom: spacing.sm
   },
   wristAnalysisTitle: {,
   fontSize: 14,
     fontWeight: '600',
     color: colors.textPrimary,
-    marginBottom: spacing.xs,
+    marginBottom: spacing.xs
   },
   recommendationSection: {,
-  marginTop: spacing.sm,
+  marginTop: spacing.sm
   },
   recommendationText: {,
   fontSize: 14,
     color: colors.textSecondary,
     marginBottom: spacing.xs,
-    lineHeight: 20,
-  },
+    lineHeight: 20
+  }
 });

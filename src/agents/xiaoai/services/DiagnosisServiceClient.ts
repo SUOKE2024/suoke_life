@@ -1,0 +1,716 @@
+// 诊断服务客户端 - 整合四诊服务的统一客户端
+
+// 基础类型定义
+interface ImageData {
+  data: ArrayBuffer;
+  format: string;
+  width: number;
+  height: number;
+}
+
+interface AudioData {
+  data: ArrayBuffer;
+  format: string;
+  duration: number;
+  sampleRate?: number;
+}
+
+interface PalpationData {
+  type: string;
+  sensorData: Record<string, any>;
+  timestamp: number;
+}
+
+interface InquiryResult {
+  sessionId: string;
+  response: string;
+  extractedSymptoms: string[];
+  confidence: number;
+  nextQuestions: string[];
+  isComplete: boolean;
+}
+
+interface LookResult {
+  analysis: string;
+  features: Array<{
+    type: string;
+    description: string;
+    confidence: number;
+  }>;
+  confidence: number;
+  recommendations: string[];
+}
+
+interface ListenResult {
+  analysis: string;
+  features: Array<{
+    type: string;
+    description: string;
+    confidence: number;
+  }>;
+  confidence: number;
+  recommendations: string[];
+}
+
+interface PalpationResult {
+  analysis: string;
+  measurements: Record<string, any>;
+  confidence: number;
+  recommendations: string[];
+}
+
+// 服务接口定义
+interface InquiryServiceClient {
+  startSession(userId: string): Promise<string>;
+  askQuestion(sessionId: string, question: string): Promise<InquiryResult>;
+  getSymptomAnalysis(sessionId: string): Promise<any>;
+}
+
+interface LookServiceClient {
+  analyzeFace(imageData: ImageData): Promise<LookResult>;
+  analyzeTongue(imageData: ImageData): Promise<LookResult>;
+}
+
+interface ListenServiceClient {
+  analyzeVoice(audioData: AudioData): Promise<ListenResult>;
+  analyzeBreathing(audioData: AudioData): Promise<ListenResult>;
+}
+
+interface PalpationServiceClient {
+  analyzePalpation(data: PalpationData): Promise<PalpationResult>;
+  startRealTimeMonitoring(userId: string): Promise<string>;
+}
+
+interface DiagnosisServiceClient {
+  inquiry: InquiryServiceClient;
+  look: LookServiceClient;
+  listen: ListenServiceClient;
+  palpation: PalpationServiceClient;
+  healthCheck(): Promise<{ [key: string]: boolean }>;
+  comprehensiveDiagnosis(data: any): Promise<any>;
+  clearCache(): void;
+}
+
+// API配置
+const API_CONFIG = {
+  inquiry: {
+    baseUrl: 'http://localhost:8001',
+    timeout: 30000,
+    retries: 3,
+  },
+  look: {
+    baseUrl: 'http://localhost:8080',
+    timeout: 30000,
+    retries: 3,
+  },
+  listen: {
+    baseUrl: 'http://localhost:8000',
+    timeout: 30000,
+    retries: 3,
+  },
+  palpation: {
+    baseUrl: 'http://localhost:8002',
+    timeout: 30000,
+    retries: 3,
+  },
+  calculation: {
+    baseUrl: 'http://localhost:8003',
+    timeout: 30000,
+    retries: 3,
+  },
+};
+
+// 错误类型定义
+export class DiagnosisApiError extends Error {
+  constructor(
+    message: string,
+    public statusCode?: number,
+    public service?: string,
+    public retryable: boolean = false
+  ) {
+    super(message);
+    this.name = 'DiagnosisApiError';
+  }
+}
+
+// 缓存管理器
+class CacheManager {
+  private cache = new Map<
+    string,
+    { data: any; timestamp: number; ttl: number }
+  >();
+
+  set(key: string, data: any, ttl: number = 300000): void {
+    // 默认5分钟TTL
+    this.cache.set(key, {
+      data,
+      timestamp: Date.now(),
+      ttl,
+    });
+  }
+
+  get(key: string): any | null {
+    const item = this.cache.get(key);
+    if (!item) return null;
+
+    if (Date.now() - item.timestamp > item.ttl) {
+      this.cache.delete(key);
+      return null;
+    }
+
+    return item.data;
+  }
+
+  clear(): void {
+    this.cache.clear();
+  }
+}
+
+const cacheManager = new CacheManager();
+
+// 增强的API请求函数
+async function apiRequest<T>(
+  url: string,
+  options: RequestInit = {},
+  timeout: number = 30000,
+  retries: number = 3,
+  service: string = 'unknown'
+): Promise<T> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeout);
+  let lastError: Error;
+
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      const response = await fetch(url, {
+        ...options,
+        signal: controller.signal,
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Request-ID': `${service}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          ...options.headers,
+        },
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        const isRetryable = response.status >= 500 || response.status === 429;
+        throw new DiagnosisApiError(
+          `HTTP ${response.status}: ${errorText || response.statusText}`,
+          response.status,
+          service,
+          isRetryable
+        );
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      lastError = error as Error;
+      clearTimeout(timeoutId);
+
+      // 如果是最后一次尝试或错误不可重试，直接抛出
+      if (
+        attempt === retries ||
+        (error instanceof DiagnosisApiError && !error.retryable)
+      ) {
+        throw error;
+      }
+
+      // 等待后重试，使用指数退避
+      const delay = Math.min(1000 * Math.pow(2, attempt), 10000);
+      await new Promise((resolve) => setTimeout(resolve, delay));
+    }
+  }
+
+  throw lastError!;
+}
+
+// 数据验证器
+class DataValidator {
+  static validateImageData(data: ImageData): void {
+    if (!data.data || data.data.byteLength === 0) {
+      throw new Error('图像数据不能为空');
+    }
+    if (
+      !data.format ||
+      !['jpeg', 'jpg', 'png', 'webp'].includes(data.format.toLowerCase())
+    ) {
+      throw new Error('不支持的图像格式');
+    }
+    if (data.width <= 0 || data.height <= 0) {
+      throw new Error('图像尺寸无效');
+    }
+  }
+
+  static validateAudioData(data: AudioData): void {
+    if (!data.data || data.data.byteLength === 0) {
+      throw new Error('音频数据不能为空');
+    }
+    if (
+      !data.format ||
+      !['wav', 'mp3', 'aac', 'flac'].includes(data.format.toLowerCase())
+    ) {
+      throw new Error('不支持的音频格式');
+    }
+    if (data.duration <= 0) {
+      throw new Error('音频时长无效');
+    }
+  }
+
+  static validatePalpationData(data: PalpationData): void {
+    if (!data.type || !['pulse', 'touch', 'pressure'].includes(data.type)) {
+      throw new Error('无效的切诊类型');
+    }
+    if (!data.sensorData || Object.keys(data.sensorData).length === 0) {
+      throw new Error('传感器数据不能为空');
+    }
+  }
+}
+
+// 问诊服务客户端实现
+export class InquiryServiceClientImpl implements InquiryServiceClient {
+  private baseUrl: string;
+  private timeout: number;
+  private retries: number;
+
+  constructor() {
+    this.baseUrl = API_CONFIG.inquiry.baseUrl;
+    this.timeout = API_CONFIG.inquiry.timeout;
+    this.retries = API_CONFIG.inquiry.retries;
+  }
+
+  async startSession(userId: string): Promise<string> {
+    const cacheKey = `inquiry_session_${userId}`;
+    const cached = cacheManager.get(cacheKey);
+    if (cached) return cached;
+
+    const url = `${this.baseUrl}/api/v1/inquiry/session/start`;
+    const response = await apiRequest<any>(
+      url,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          user_id: userId,
+          session_type: 'comprehensive',
+          language: 'zh-CN',
+        }),
+      },
+      this.timeout,
+      this.retries,
+      'inquiry'
+    );
+
+    const sessionId = response.session_id;
+    cacheManager.set(cacheKey, sessionId, 1800000); // 30分钟缓存
+    return sessionId;
+  }
+
+  async askQuestion(
+    sessionId: string,
+    question: string
+  ): Promise<InquiryResult> {
+    const url = `${this.baseUrl}/api/v1/inquiry/interact`;
+    const response = await apiRequest<any>(
+      url,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          session_id: sessionId,
+          user_input: question,
+          interaction_type: 'question',
+        }),
+      },
+      this.timeout,
+      this.retries,
+      'inquiry'
+    );
+
+    return {
+      sessionId: response.session_id,
+      response: response.ai_response || '感谢您的回答，让我继续了解您的情况。',
+      extractedSymptoms: response.extracted_symptoms || [],
+      confidence: response.confidence || 0.8,
+      nextQuestions: response.suggested_questions || [],
+      isComplete: response.is_complete || false,
+    };
+  }
+
+  async getSymptomAnalysis(sessionId: string): Promise<any> {
+    const url = `${this.baseUrl}/api/v1/inquiry/analysis`;
+    const response = await apiRequest<any>(
+      url,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          session_id: sessionId,
+          analysis_type: 'comprehensive',
+        }),
+      },
+      this.timeout,
+      this.retries,
+      'inquiry'
+    );
+
+    return response;
+  }
+}
+
+// 望诊服务客户端实现
+export class LookServiceClientImpl implements LookServiceClient {
+  private baseUrl: string;
+  private timeout: number;
+  private retries: number;
+
+  constructor() {
+    this.baseUrl = API_CONFIG.look.baseUrl;
+    this.timeout = API_CONFIG.look.timeout;
+    this.retries = API_CONFIG.look.retries;
+  }
+
+  async analyzeFace(imageData: ImageData): Promise<LookResult> {
+    DataValidator.validateImageData(imageData);
+
+    const url = `${this.baseUrl}/api/v1/look/face`;
+    const formData = new FormData();
+    formData.append(
+      'image',
+      new Blob([imageData.data]),
+      `face.${imageData.format}`
+    );
+    formData.append('analysis_type', 'comprehensive');
+
+    const response = await apiRequest<any>(
+      url,
+      {
+        method: 'POST',
+        body: formData,
+        headers: {}, // 让浏览器自动设置Content-Type
+      },
+      this.timeout,
+      this.retries,
+      'look'
+    );
+
+    return {
+      analysis: response.analysis || '面部分析完成',
+      features: response.features || [],
+      confidence: response.confidence || 0.8,
+      recommendations: response.recommendations || [],
+    };
+  }
+
+  async analyzeTongue(imageData: ImageData): Promise<LookResult> {
+    DataValidator.validateImageData(imageData);
+
+    const url = `${this.baseUrl}/api/v1/look/tongue`;
+    const formData = new FormData();
+    formData.append(
+      'image',
+      new Blob([imageData.data]),
+      `tongue.${imageData.format}`
+    );
+    formData.append('analysis_type', 'comprehensive');
+
+    const response = await apiRequest<any>(
+      url,
+      {
+        method: 'POST',
+        body: formData,
+        headers: {}, // 让浏览器自动设置Content-Type
+      },
+      this.timeout,
+      this.retries,
+      'look'
+    );
+
+    return {
+      analysis: response.analysis || '舌诊分析完成',
+      features: response.features || [],
+      confidence: response.confidence || 0.8,
+      recommendations: response.recommendations || [],
+    };
+  }
+}
+
+// 闻诊服务客户端实现
+export class ListenServiceClientImpl implements ListenServiceClient {
+  private baseUrl: string;
+  private timeout: number;
+  private retries: number;
+
+  constructor() {
+    this.baseUrl = API_CONFIG.listen.baseUrl;
+    this.timeout = API_CONFIG.listen.timeout;
+    this.retries = API_CONFIG.listen.retries;
+  }
+
+  async analyzeVoice(audioData: AudioData): Promise<ListenResult> {
+    DataValidator.validateAudioData(audioData);
+
+    const url = `${this.baseUrl}/api/v1/listen/voice`;
+    const formData = new FormData();
+    formData.append(
+      'audio',
+      new Blob([audioData.data]),
+      `voice.${audioData.format}`
+    );
+    formData.append('analysis_type', 'comprehensive');
+
+    const response = await apiRequest<any>(
+      url,
+      {
+        method: 'POST',
+        body: formData,
+        headers: {}, // 让浏览器自动设置Content-Type
+      },
+      this.timeout,
+      this.retries,
+      'listen'
+    );
+
+    return {
+      analysis: response.analysis || '语音分析完成',
+      features: response.features || [],
+      confidence: response.confidence || 0.8,
+      recommendations: response.recommendations || [],
+    };
+  }
+
+  async analyzeBreathing(audioData: AudioData): Promise<ListenResult> {
+    DataValidator.validateAudioData(audioData);
+
+    const url = `${this.baseUrl}/api/v1/listen/breathing`;
+    const formData = new FormData();
+    formData.append(
+      'audio',
+      new Blob([audioData.data]),
+      `breathing.${audioData.format}`
+    );
+    formData.append('analysis_type', 'comprehensive');
+
+    const response = await apiRequest<any>(
+      url,
+      {
+        method: 'POST',
+        body: formData,
+        headers: {}, // 让浏览器自动设置Content-Type
+      },
+      this.timeout,
+      this.retries,
+      'listen'
+    );
+
+    return {
+      analysis: response.analysis || '呼吸音分析完成',
+      features: response.features || [],
+      confidence: response.confidence || 0.8,
+      recommendations: response.recommendations || [],
+    };
+  }
+}
+
+// 切诊服务客户端实现
+export class PalpationServiceClientImpl implements PalpationServiceClient {
+  private baseUrl: string;
+  private timeout: number;
+  private retries: number;
+
+  constructor() {
+    this.baseUrl = API_CONFIG.palpation.baseUrl;
+    this.timeout = API_CONFIG.palpation.timeout;
+    this.retries = API_CONFIG.palpation.retries;
+  }
+
+  async analyzePalpation(data: PalpationData): Promise<PalpationResult> {
+    DataValidator.validatePalpationData(data);
+
+    const url = `${this.baseUrl}/api/v1/palpation/analyze`;
+    const response = await apiRequest<any>(
+      url,
+      {
+        method: 'POST',
+        body: JSON.stringify(data),
+      },
+      this.timeout,
+      this.retries,
+      'palpation'
+    );
+
+    return {
+      analysis: response.analysis || '切诊分析完成',
+      measurements: response.measurements || {},
+      confidence: response.confidence || 0.8,
+      recommendations: response.recommendations || [],
+    };
+  }
+
+  async startRealTimeMonitoring(userId: string): Promise<string> {
+    const url = `${this.baseUrl}/api/v1/palpation/monitor/start`;
+    const response = await apiRequest<any>(
+      url,
+      {
+        method: 'POST',
+        body: JSON.stringify({ user_id: userId }),
+      },
+      this.timeout,
+      this.retries,
+      'palpation'
+    );
+
+    return response.session_id;
+  }
+}
+
+// 综合诊断服务客户端实现
+export class DiagnosisServiceClientImpl implements DiagnosisServiceClient {
+  public inquiry: InquiryServiceClient;
+  public look: LookServiceClient;
+  public listen: ListenServiceClient;
+  public palpation: PalpationServiceClient;
+
+  constructor() {
+    this.inquiry = new InquiryServiceClientImpl();
+    this.look = new LookServiceClientImpl();
+    this.listen = new ListenServiceClientImpl();
+    this.palpation = new PalpationServiceClientImpl();
+  }
+
+  async healthCheck(): Promise<{ [key: string]: boolean }> {
+    const services = ['inquiry', 'look', 'listen', 'palpation'];
+    const results: { [key: string]: boolean } = {};
+
+    await Promise.allSettled(
+      services.map(async (service) => {
+        try {
+          const config = API_CONFIG[service as keyof typeof API_CONFIG];
+          const response = await fetch(`${config.baseUrl}/health`, {
+            method: 'GET',
+            signal: AbortSignal.timeout(5000),
+          });
+          results[service] = response.ok;
+        } catch {
+          results[service] = false;
+        }
+      })
+    );
+
+    return results;
+  }
+
+  async comprehensiveDiagnosis(data: {
+    userId: string;
+    imageData?: ImageData;
+    audioData?: AudioData;
+    palpationData?: PalpationData;
+    symptoms?: string[];
+  }): Promise<any> {
+    const results: any = {};
+
+    try {
+      // 并行执行各种诊断
+      const promises: Promise<any>[] = [];
+
+      // 问诊
+      if (data.symptoms && data.symptoms.length > 0) {
+        promises.push(
+          this.inquiry.startSession(data.userId).then((sessionId) => {
+            return { type: 'inquiry', sessionId };
+          })
+        );
+      }
+
+      // 望诊
+      if (data.imageData) {
+        promises.push(
+          this.look.analyzeFace(data.imageData).then((result) => {
+            return { type: 'look', result };
+          })
+        );
+      }
+
+      // 闻诊
+      if (data.audioData) {
+        promises.push(
+          this.listen.analyzeVoice(data.audioData).then((result) => {
+            return { type: 'listen', result };
+          })
+        );
+      }
+
+      // 切诊
+      if (data.palpationData) {
+        promises.push(
+          this.palpation.analyzePalpation(data.palpationData).then((result) => {
+            return { type: 'palpation', result };
+          })
+        );
+      }
+
+      const diagnosisResults = await Promise.allSettled(promises);
+
+      // 处理结果
+      diagnosisResults.forEach((result, index) => {
+        if (result.status === 'fulfilled') {
+          results[result.value.type] = result.value.result || result.value;
+        } else {
+          console.error(`诊断失败:`, result.reason);
+        }
+      });
+
+      // 计算综合置信度
+      const overallConfidence = this.calculateOverallConfidence(results);
+
+      return {
+        userId: data.userId,
+        timestamp: new Date().toISOString(),
+        results,
+        overallConfidence,
+        recommendations: this.generateRecommendations(results),
+      };
+    } catch (error) {
+      throw new DiagnosisApiError(
+        `综合诊断失败: ${(error as Error).message}`,
+        500,
+        'comprehensive',
+        false
+      );
+    }
+  }
+
+  private calculateOverallConfidence(results: any): number {
+    const confidences: number[] = [];
+    Object.values(results).forEach((result: any) => {
+      if (result && typeof result.confidence === 'number') {
+        confidences.push(result.confidence);
+      }
+    });
+
+    return confidences.length > 0
+      ? confidences.reduce((sum, conf) => sum + conf, 0) / confidences.length
+      : 0;
+  }
+
+  private generateRecommendations(results: any): string[] {
+    const recommendations: string[] = [];
+
+    Object.values(results).forEach((result: any) => {
+      if (result && Array.isArray(result.recommendations)) {
+        recommendations.push(...result.recommendations);
+      }
+    });
+
+    return Array.from(new Set(recommendations)); // 去重
+  }
+
+  clearCache(): void {
+    cacheManager.clear();
+  }
+}
+
+// 创建诊断服务客户端实例
+export const diagnosisServiceClient = new DiagnosisServiceClientImpl();
+
+export default DiagnosisServiceClientImpl;

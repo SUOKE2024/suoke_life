@@ -1,5 +1,5 @@
 import React, { useState, useEffect    } from "../../placeholder";react;
-import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/      View,"
+import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/      View,";
 importIcon from "react-native-vector-icons/MaterialCommunityIcons/import { colors, spacing, fonts  } from "../../placeholder";../../constants/theme";/importnativeModulesManager from ../../utils/nativeModules"/importnotificationManager from "../../utils/notifications// Text,
   StyleSheet,
   TouchableOpacity,
@@ -235,7 +235,7 @@ const NativeFeaturesDemo: React.FC  = () => {}
         <TouchableOpacity;
 style={styles.permissionButton}
           onPress={requestAllPermissions}
-        accessibilityLabel="TODO: 添加无障碍标签" />/          <Icon name="shield-key" size={20} color="white" />/          <Text style={styles.permissionButtonText}>请求所有权限</Text>/        </TouchableOpacity>/      </View>/
+        accessibilityLabel="权限图标" />/          <Icon name="shield-key" size={20} color="white" />/          <Text style={styles.permissionButtonText}>请求所有权限</Text>/        </TouchableOpacity>/      </View>/
       {///
         {///                {renderStatusIndicator(features.camera)}
           </View>/          <Text style={styles.featureDescription}>/                测试相机拍照功能，用于五诊中的望诊
@@ -246,7 +246,7 @@ style={[
             ]}}
             onPress={testCamera}
             disabled={!features.camera.available || features.camera.loading}
-          accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.testButtonText}>测试拍照</Text>/          </TouchableOpacity>/        </View>/
+          accessibilityLabel="测试拍照" />/            <Text style={styles.testButtonText}>测试拍照</Text>/          </TouchableOpacity>/        </View>/
         {///                {renderStatusIndicator(features.voice)}
           </View>/          <Text style={styles.featureDescription}>/                测试语音识别功能，用于五诊中的问诊
           </Text>/              <TouchableOpacity;
@@ -256,7 +256,7 @@ style={[
             ]}}
             onPress={testVoiceRecognition}
             disabled={!features.voice.available || features.voice.loading}
-          accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.testButtonText}>/              {features.voice.loading ? 正在识别..." : "测试语音识别}
+          accessibilityLabel="操作按钮" />/            <Text style={styles.testButtonText}>/              {features.voice.loading ? 正在识别..." : "测试语音识别}
             </Text>/          </TouchableOpacity>/        </View>/
         {///                {renderStatusIndicator(features.location)}
           </View>/          <Text style={styles.featureDescription}>/                测试位置服务功能，用于基于位置的健康服务
@@ -267,7 +267,7 @@ style={[
             ]}}
             onPress={testLocation}
             disabled={!features.location.available || features.location.loading}
-          accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.testButtonText}>/              {features.location.loading ? "正在定位..." : 测试定位"}"
+          accessibilityLabel="操作按钮" />/            <Text style={styles.testButtonText}>/              {features.location.loading ? "正在定位..." : 测试定位"}"
             </Text>/          </TouchableOpacity>/        </View>/
         {///                {renderStatusIndicator(features.notifications)}
           </View>/          <Text style={styles.featureDescription}>/                测试推送通知功能，用于健康提醒和消息推送
@@ -279,10 +279,10 @@ style={[
               ]}}
               onPress={testNotifications}
               disabled={!features.notifications.available || features.notifications.loading}
-            accessibilityLabel="TODO: 添加无障碍标签" />/              <Text style={styles.testButtonText}>测试通知</Text>/            </TouchableOpacity>/                <TouchableOpacity;
+            accessibilityLabel="测试通知" />/              <Text style={styles.testButtonText}>测试通知</Text>/            </TouchableOpacity>/                <TouchableOpacity;
 style={[styles.testButton, styles.halfButton]}
               onPress={createHealthReminders}
-            accessibilityLabel="TODO: 添加无障碍标签" />/              <Text style={styles.testButtonText}>创建提醒</Text>/            </TouchableOpacity>/          </View>/        </View>/      </View>/
+            accessibilityLabel="创建提醒" />/              <Text style={styles.testButtonText}>创建提醒</Text>/            </TouchableOpacity>/          </View>/        </View>/      </View>/
       {///      );
 }
 const styles = StyleSheet.create({container: {),

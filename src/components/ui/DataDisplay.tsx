@@ -1,10 +1,10 @@
 import React from 'react';
-import {
+import {;
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
@@ -97,7 +97,7 @@ export const DataDisplay: React.FC<DataDisplayProps> = ({
   titleStyle,
   collapsible = false,
   defaultExpanded = true,
-  onExpandChange,
+  onExpandChange
 }) => {
   const { currentTheme } = useTheme();
   const styles = createStyles(currentTheme, size, bordered, layout);
@@ -183,7 +183,7 @@ export const DataDisplay: React.FC<DataDisplayProps> = ({
           layout === 'horizontal' && styles.horizontalItem,
           layout === 'grid' && styles.gridItem,
           divider && index < data.length - 1 && styles.itemWithDivider,
-          itemStyle,
+          itemStyle
         ]}
       >
         <Text;
@@ -191,7 +191,7 @@ export const DataDisplay: React.FC<DataDisplayProps> = ({
             styles.label,
             layout === 'horizontal' && { width: labelWidth },
             { textAlign: labelAlign },
-            labelStyle,
+            labelStyle
           ]}
         >
           {item.label}
@@ -204,7 +204,7 @@ export const DataDisplay: React.FC<DataDisplayProps> = ({
               style={[
                 styles.value,
                 { color: statusColor, textAlign: valueAlign },
-                valueStyle,
+                valueStyle
               ]}
             >
               {formattedValue}
@@ -248,7 +248,7 @@ export const DataDisplay: React.FC<DataDisplayProps> = ({
       rows.push(
         <View key={i} style={styles.gridRow}>
           {rowItems.map(item, index) => renderItem(item, i + index))}
-          {/* 填充空白项 */}
+          {// 填充空白项}
           {rowItems.length < columns &&
             Array.from({ length: columns - rowItems.length }).map(_, index) => (
                 <View key={`empty-${index}`} style={styles.gridItem} />
@@ -316,20 +316,20 @@ const createStyles = (
   padding: theme.spacing.sm,
       fontSize: theme.typography.fontSize.sm,
       titleFontSize: theme.typography.fontSize.base,
-      spacing: theme.spacing.xs,
+      spacing: theme.spacing.xs
     },
     md: {,
   padding: theme.spacing.md,
       fontSize: theme.typography.fontSize.base,
       titleFontSize: theme.typography.fontSize.lg,
-      spacing: theme.spacing.sm,
+      spacing: theme.spacing.sm
     },
     lg: {,
   padding: theme.spacing.lg,
       fontSize: theme.typography.fontSize.lg,
       titleFontSize: theme.typography.fontSize.xl,
-      spacing: theme.spacing.md,
-    },
+      spacing: theme.spacing.md
+    }
   };
 
   const config = sizeConfig[size];
@@ -340,8 +340,8 @@ const createStyles = (
       borderRadius: theme.borderRadius.md,
       ...(bordered && {
         borderWidth: 1,
-        borderColor: theme.colors.outline,
-      }),
+        borderColor: theme.colors.outline
+      })
     },
     titleContainer: {,
   flexDirection: 'row',
@@ -349,70 +349,70 @@ const createStyles = (
       alignItems: 'center',
       padding: config.padding,
       borderBottomWidth: 1,
-      borderBottomColor: theme.colors.outline,
+      borderBottomColor: theme.colors.outline
     },
     title: {,
   fontSize: config.titleFontSize,
       fontWeight: theme.typography.fontWeight.semibold,
-      color: theme.colors.onSurface,
+      color: theme.colors.onSurface
     },
     expandIcon: {,
   fontSize: config.fontSize,
-      color: theme.colors.onSurfaceVariant,
+      color: theme.colors.onSurfaceVariant
     },
     listContainer: {,
-  padding: config.padding,
+  padding: config.padding
     },
     gridContainer: {,
-  padding: config.padding,
+  padding: config.padding
     },
     gridRow: {,
   flexDirection: 'row',
-      marginBottom: config.spacing,
+      marginBottom: config.spacing
     },
     item: {,
-  marginBottom: config.spacing,
+  marginBottom: config.spacing
     },
     horizontalItem: {,
   flexDirection: 'row',
-      alignItems: 'center',
+      alignItems: 'center'
     },
     gridItem: {,
   flex: 1,
-      marginRight: config.spacing,
+      marginRight: config.spacing
     },
     itemWithDivider: {,
   borderBottomWidth: 1,
       borderBottomColor: theme.colors.outline,
-      paddingBottom: config.spacing,
+      paddingBottom: config.spacing
     },
     label: {,
   fontSize: config.fontSize,
       fontWeight: theme.typography.fontWeight.medium,
       color: theme.colors.onSurfaceVariant,
-      marginBottom: layout === 'vertical' ? theme.spacing.xs : 0,
+      marginBottom: layout === 'vertical' ? theme.spacing.xs : 0
     },
     valueContainer: {,
   flexDirection: 'row',
       alignItems: 'center',
-      flex: 1,
+      flex: 1
     },
     value: {,
   fontSize: config.fontSize,
       color: theme.colors.onSurface,
-      flex: 1,
+      flex: 1
     },
     actionButton: {,
   marginLeft: theme.spacing.sm,
       paddingHorizontal: theme.spacing.sm,
       paddingVertical: theme.spacing.xs,
       backgroundColor: theme.colors.primaryContainer,
-      borderRadius: theme.borderRadius.sm,
+      borderRadius: theme.borderRadius.sm
     },
     actionText: {,
   fontSize: theme.typography.fontSize.sm,
-      color: theme.colors.onPrimaryContainer,
-    },
+      color: theme.colors.onPrimaryContainer
+    }
   });
 };
 

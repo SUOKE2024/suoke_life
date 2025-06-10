@@ -2,7 +2,7 @@ import { colors, spacing, borderRadius, fonts } from "../../constants/theme/impo
 import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/      View,";
 import React from "react";
 /
-import React,{ memo } from react""
+import React,{ memo } from react"";
   Text,
   StyleSheet,
   TouchableOpacity,
@@ -78,7 +78,7 @@ style={[
         onPress={handlePress}
         onLongPress={handleLongPress}
         activeOpacity={0.8}
-      accessibilityLabel="TODO: 添加无障碍标签" />/            <Textstyle={[
+      accessibilityLabel="操作按钮" />/            <Textstyle={[
             styles.messageText,
             isUser ? styles.userText : styles.agentText;
           ]}} />/              {message.text}

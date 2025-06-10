@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { usePerformanceMonitor } from '../../hooks/usePerformanceMonitor';
-import {
+import {;
   View,
   Text,
   StyleSheet,
@@ -14,7 +14,7 @@ import {
   Animated,
   Platform;
 } from 'react-native';
-import {
+import {;
   fiveDiagnosisService,
   FiveDiagnosisInput,
   FiveDiagnosisResult,

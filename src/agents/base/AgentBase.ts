@@ -1,9 +1,9 @@
 import {
-    AgentCapability,
-    AgentContext,
-    AgentResponse,
-    AgentType;
-} from "../types";
+  AgentCapability,
+  AgentContext,
+  AgentResponse,
+  AgentType,
+} from '../types';
 
 /**
  * 智能体基础抽象类
@@ -15,12 +15,12 @@ export abstract class AgentBase {
   protected description: string;
   protected capabilities: AgentCapability[];
   protected isInitialized: boolean = false;
-  protected version: string = "1.0.0";
+  protected version: string = '1.0.0';
 
   constructor() {
     this.agentType = AgentType.XIAOAI; // 默认值，子类会覆盖
-    this.name = "";
-    this.description = "";
+    this.name = '';
+    this.description = '';
     this.capabilities = [];
   }
 
@@ -34,7 +34,7 @@ export abstract class AgentBase {
    */
   abstract processMessage(
     message: string,
-    context: AgentContext;
+    context: AgentContext
   ): Promise<AgentResponse>;
 
   /**
@@ -100,11 +100,11 @@ export abstract class AgentBase {
    * 验证上下文
    */
   protected validateContext(context: AgentContext): boolean {
-    return context && typeof context.userId === "string";
+    return context && typeof context.userId === 'string';
   }
 
   /**
-   * 生成响应ID;
+   * 生成响应ID
    */
   protected generateResponseId(): string {
     return `${this.agentType}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -114,22 +114,22 @@ export abstract class AgentBase {
    * 记录日志
    */
   protected log(
-    level: "info" | "warn" | "error",
+    level: 'info' | 'warn' | 'error',
     message: string,
-    data?: any;
+    data?: any
   ): void {
     const timestamp = new Date().toISOString();
     const logMessage = `[${timestamp}] [${this.agentType}] [${level.toUpperCase()}] ${message}`;
-    
+
     switch (level) {
-      case "info":
-        console.log(logMessage, data || "");
+      case 'info':
+        console.log(logMessage, data || '');
         break;
-      case "warn":
-        console.warn(logMessage, data || "");
+      case 'warn':
+        console.warn(logMessage, data || '');
         break;
-      case "error":
-        console.error(logMessage, data || "");
+      case 'error':
+        console.error(logMessage, data || '');
         break;
     }
   }
@@ -140,18 +140,14 @@ export abstract class AgentBase {
   protected createErrorResponse(
     message: string,
     error?: any,
-    context?: AgentContext;
+    context?: AgentContext
   ): AgentResponse {
     return {
       success: false,
       response: message,
       error: error?.message || error,
-      context: context || { userId: "unknown" },
-      metadata: {,
-  agentType: this.agentType,
-        timestamp: new Date().toISOString(),
-        responseId: this.generateResponseId(),
-      },
+      timestamp: new Date(),
+      agentId: this.agentType,
     };
   }
 
@@ -162,19 +158,14 @@ export abstract class AgentBase {
     message: string,
     data?: any,
     context?: AgentContext,
-    metadata?: any;
+    metadata?: any
   ): AgentResponse {
     return {
       success: true,
       response: message,
       data,
-      context: context || { userId: "unknown" },
-      metadata: {,
-  agentType: this.agentType,
-        timestamp: new Date().toISOString(),
-        responseId: this.generateResponseId(),
-        ...metadata,
-      },
+      timestamp: new Date(),
+      agentId: this.agentType,
     };
   }
 }

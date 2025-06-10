@@ -174,7 +174,7 @@ export class MessageBusService {
   /**
   * 订阅主题（使用WebSocket）
   */
-  async subscribe()
+  async subscribe(
     topic: string,
     callback: (message: Message) => void,
     options: {
@@ -188,7 +188,8 @@ export class MessageBusService {
       topic,
       callback,
       filter: options.filter,
-      isActive: true};
+      isActive: true;
+    };
     this.subscriptions.set(subscriptionId, subscription);
     // 如果WebSocket连接可用，发送订阅请求
     if (this.webSocket && this.webSocket.readyState === WebSocket.OPEN) {
@@ -197,7 +198,8 @@ export class MessageBusService {
         subscriptionId,
         topic,
         filter: options.filter,
-        subscriptionName: options.subscriptionName});
+        subscriptionName: options.subscriptionName;
+      });
     }
     return subscriptionId;
   }
@@ -215,7 +217,8 @@ export class MessageBusService {
     if (this.webSocket && this.webSocket.readyState === WebSocket.OPEN) {
       this.sendWebSocketMessage({
         type: 'unsubscribe',
-        subscriptionId});
+        subscriptionId;
+      });
     }
     return true;
   }
@@ -250,7 +253,6 @@ export class MessageBusService {
       this.webSocket.onopen = () => {
         console.log('WebSocket connected to message bus');
         this.reconnectAttempts = 0;
-        // 重新订阅所有活跃的订阅
         this.resubscribeAll();
       };
       this.webSocket.onmessage = event => {
@@ -262,7 +264,7 @@ export class MessageBusService {
         }
       };
       this.webSocket.onclose = () => {
-        console.log('WebSocket disconnected from message bus');
+        console.log('WebSocket connection closed');
         this.handleWebSocketReconnect();
       };
       this.webSocket.onerror = error => {
@@ -279,19 +281,14 @@ export class MessageBusService {
     if (data.type === 'message' && data.subscriptionId) {
       const subscription = this.subscriptions.get(data.subscriptionId);
       if (subscription && subscription.isActive) {
-        const message: Message = {,
-  id: data.message.id,
-          topic: data.message.topic,
-          payload: data.message.payload,
-          attributes: data.message.attributes,
-          publishTime: data.message.publishTime,
-          publisherId: data.message.publisherId};
         try {
-          subscription.callback(message);
+          subscription.callback(data.message);
         } catch (error) {
           console.error('Error in subscription callback:', error);
         }
       }
+    } else if (data.type === 'error') {
+      console.error('WebSocket message error:', data.error);
     }
   }
   /**
@@ -308,13 +305,10 @@ export class MessageBusService {
   private handleWebSocketReconnect(): void {
     if (this.reconnectAttempts < this.maxReconnectAttempts) {
       this.reconnectAttempts++;
-      const delay = this.reconnectDelay * Math.pow(2, this.reconnectAttempts - 1);
-      console.log()
-        `Attempting to reconnect WebSocket in ${delay}ms (attempt ${this.reconnectAttempts})`
-      );
+      console.log(`Attempting to reconnect WebSocket (${this.reconnectAttempts}/${this.maxReconnectAttempts})`);
       setTimeout() => {
         this.initializeWebSocket();
-      }, delay);
+      }, this.reconnectDelay * this.reconnectAttempts);
     } else {
       console.error('Max WebSocket reconnection attempts reached');
     }
@@ -326,20 +320,21 @@ export class MessageBusService {
     for (const subscription of this.subscriptions.values()) {
       if (subscription.isActive) {
         this.sendWebSocketMessage({
-      type: "subscribe",
-      subscriptionId: subscription.id,
+          type: 'subscribe',
+          subscriptionId: subscription.id,
           topic: subscription.topic,
-          filter: subscription.filter});
+          filter: subscription.filter;
+        });
       }
     }
   }
   /**
   * 清理资源
   */
-  dispose(): void {
+  async disconnect(): Promise<void> {
     // 清理所有订阅
     for (const subscriptionId of this.subscriptions.keys()) {
-      this.unsubscribe(subscriptionId);
+      await this.unsubscribe(subscriptionId);
     }
     // 关闭WebSocket连接
     if (this.webSocket) {

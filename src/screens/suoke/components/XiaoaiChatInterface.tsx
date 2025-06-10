@@ -1,4 +1,4 @@
-import { usePerformanceMonitor  } from "../../placeholder";../hooks/usePerformanceMonitor";/    import {   View,"
+import { usePerformanceMonitor  } from "../../placeholder";../hooks/usePerformanceMonitor";/    import {   View,";
 import React,{ useState, useRef, useEffect, useCallback, useMemo } from "react;";
   Text,
   StyleSheet,
@@ -11,7 +11,7 @@ import React,{ useState, useRef, useEffect, useCallback, useMemo } from "react;"
   Dimensions,
   KeyboardAvoidingView,
   { Platform    } from react-native""
-importIcon from "../../../components/common/Icon/import { colors  } from "../../placeholder";../../../constants/theme";/import { xiaoaiAgent } from ../../../agents/xiaoai/XiaoaiAgent"/    import { ChatContext,"
+importIcon from "../../../components/common/Icon/import { colors  } from "../../placeholder";../../../constants/theme";/import { xiaoaiAgent } from ../../../agents/xiaoai/XiaoaiAgent"/    import { ChatContext,";
   ChatMessage,
   ChatResponse,
   UserProfile } from "../../../agents/xiaoai/types/    ";
@@ -160,7 +160,7 @@ const XiaoaiChatInterface: React.FC<XiaoaiChatInterfaceProps /> = ({/   const pe
                 <TouchableOpacity;
 key={index}
                   style={styles.suggestionButton}
-                  onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> handleSuggestionPress(suggestion)}/                    >
+                  onPress={() = accessibilityLabel="操作按钮" /> handleSuggestionPress(suggestion)}/                    >
                   <Text style={styles.suggestionText}>{suggestion}</Text>/                </TouchableOpacity>/                  ))}
             </View>/              )}
         </View>/
@@ -180,7 +180,7 @@ style={[
             { transform: [{ translateY: slideAnim   }}]
             }
           ]} />/          {//
-                </Text>/              </View>/            </View>/            <TouchableOpacity onPress={onClose} style={styles.closeButton} accessibilityLabel="TODO: 添加无障碍标签" />/              <Icon name="x" size={24} color={colors.textSecondary} />/            </TouchableOpacity>/          </View>/
+                </Text>/              </View>/            </View>/            <TouchableOpacity onPress={onClose} style={styles.closeButton} accessibilityLabel="关闭" />/              <Icon name="x" size={24} color={colors.textSecondary} />/            </TouchableOpacity>/          </View>/
           {///              <KeyboardAvoidingView;
 style={styles.chatContainer}
             behavior={Platform.OS === ios" ? "padding : "height"} />/                <ScrollView;
@@ -203,7 +203,7 @@ style={[;
                   ]}}
                   onPress={sendMessage}
                   disabled={!inputText.trim() || isLoading}
-                accessibilityLabel="TODO: 添加无障碍标签" />/                      <Iconname="send"
+                accessibilityLabel="send图标" />/                      <Iconname="send"
                     size={20}
                     color={
                       !inputText.trim(); || isLoading;

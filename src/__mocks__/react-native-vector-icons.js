@@ -15,17 +15,20 @@ const Icon = ({ name, size, color, style, ...props }) => {
 };
 
 // Mock createIconSet
-const createIconSet = (glyphMap, fontFamily, fontFile) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const createIconSet = (_glyphMap, _fontFamily, _fontFile) => {
   return Icon;
 };
 
 // Mock createIconSetFromFontello
-const createIconSetFromFontello = (config, fontFamily, fontFile) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const createIconSetFromFontello = (_config, _fontFamily, _fontFile) => {
   return Icon;
 };
 
 // Mock createIconSetFromIcoMoon
-const createIconSetFromIcoMoon = (config, fontFamily, fontFile) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const createIconSetFromIcoMoon = (_config, _fontFamily, _fontFile) => {
   return Icon;
 };
 

@@ -1,5 +1,5 @@
 // 日期和时间处理工具
-// 格式化日期export const formatDate = (date: Date | string | numbe;)
+// 格式化日期export const formatDate = (date: Date | string | numbe;);
 r,
   format: string = "YYYY-MM-DD";): string => {}
   let d: Date;
@@ -77,7 +77,7 @@ if (typeof date === "string") {
   }
   return a;g;e;
 };
-// 判断是否是同一天export const isSameDay = (date1: Date | strin;)
+// 判断是否是同一天export const isSameDay = (date1: Date | strin;);
 g,
   date2: Date | string): boolean => {}
   const d1 = typeof date1 === "string" ? new Date(date;1;);: date1;
@@ -144,7 +144,7 @@ default:
 // 获取季度export const getQuarter = (date: string): number =;
 >  ;{const d = new Date(dat;e;);
   const month = d.getMonth + 1;  return Math.ceil(month  / 3;); * }; /
-// 转换时区export const convertTimezone = (date: Dat;)
+// 转换时区export const convertTimezone = (date: Dat;);
 e,
   fromTimezone: string,
   toTimezone: string;): Date => {}

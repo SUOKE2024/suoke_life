@@ -1,6 +1,6 @@
 import { usePerformanceMonitor } from "../hooks/usePerformanceMonitor/      View,";
 import React from "react";
-importIcon from "../../components/common/Icon/import { colors, spacing, borderRadius, fonts  } from "../../placeholder";../../constants/theme";// import React,{ useState, useRef } from react""
+importIcon from "../../components/common/Icon/import { colors, spacing, borderRadius, fonts  } from "../../placeholder";../../constants/theme";// import React,{ useState, useRef } from react"";
   Text,
   StyleSheet,
   TextInput,
@@ -66,7 +66,7 @@ export const MessageInput: React.FC<MessageInputProps /> = ({/   const performan
 style={styles.actionButton}
             onPress={onAttachPress};
             disabled={disabled}
-          accessibilityLabel="TODO: 添加无障碍标签" />/                <Iconname="attachment"
+          accessibilityLabel="attachment图标" />/                <Iconname="attachment"
               size={24}
               color={disabled ? colors.disabled: colors.textSecondary} />/          </TouchableOpacity>/            )}
         {///              <TextInput;
@@ -93,7 +93,7 @@ ref={inputRef}
 style={styles.actionButton}
             onPress={onVoicePress}
             disabled={disabled}
-          accessibilityLabel="TODO: 添加无障碍标签" />/                <Iconname="microphone"
+          accessibilityLabel="microphone图标" />/                <Iconname="microphone"
               size={24}
               color={disabled ? colors.disabled: colors.primary} />/          </TouchableOpacity>/            )}
         {///            {canSend  && <TouchableOpacity;
@@ -103,7 +103,7 @@ style={[
             ]}}
             onPress={handleSend}
             disabled={!canSend}
-          accessibilityLabel="TODO: 添加无障碍标签" />/                <Iconname="send"
+          accessibilityLabel="send图标" />/                <Iconname="send"
               size={20}
               color={colors.white} />/          </TouchableOpacity>/            )}
       </View>/    </KeyboardAvoidingView>/      );

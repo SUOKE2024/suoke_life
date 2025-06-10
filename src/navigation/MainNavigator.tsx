@@ -83,7 +83,7 @@ export const MainNavigator: React.FC = () => {
         },
         tabBarActiveTintColor: '#3498DB',
         tabBarInactiveTintColor: '#95A5A6',
-        headerShown: false,
+        headerShown: false
       })}
     >
       <Tab.Screen;

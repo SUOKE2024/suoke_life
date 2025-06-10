@@ -26,7 +26,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   icon,
   style,
   animated = true,
-  children,
+  children
 }) => {
   const { currentTheme } = useTheme();
   const styles = createStyles(currentTheme);
@@ -40,13 +40,13 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
         Animated.timing(fadeAnim, {
           toValue: 1,
           duration: 800,
-          useNativeDriver: true,
+          useNativeDriver: true
         }),
         Animated.timing(translateYAnim, {
           toValue: 0,
           duration: 600,
-          useNativeDriver: true,
-        }),
+          useNativeDriver: true
+        })
       ]).start();
     }
   }, [animated, fadeAnim, translateYAnim]);
@@ -57,32 +57,32 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
         return {
           icon: icon || '📊',
           title: title || '暂无数据',
-          description: description || '当前没有可显示的数据',
+          description: description || '当前没有可显示的数据'
         };
       case 'noResults':
         return {
           icon: icon || '🔍',
           title: title || '无搜索结果',
           description:
-            description || '没有找到符合条件的结果，请尝试其他关键词',
+            description || '没有找到符合条件的结果，请尝试其他关键词'
         };
       case 'noConnection':
         return {
           icon: icon || '📡',
           title: title || '网络连接失败',
-          description: description || '请检查网络连接后重试',
+          description: description || '请检查网络连接后重试'
         };
       case 'noContent':
         return {
           icon: icon || '📝',
           title: title || '暂无内容',
-          description: description || '这里还没有任何内容',
+          description: description || '这里还没有任何内容'
         };
       default:
         return {,
   icon: icon || '🤔',
           title: title || '空空如也',
-          description: description || '这里什么都没有',
+          description: description || '这里什么都没有'
         };
     }
   };
@@ -95,8 +95,8 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
         style,
         {
           opacity: fadeAnim,
-          transform: [{ translateY: translateYAnim }],
-        },
+          transform: [{ translateY: translateYAnim }]
+        }
       ]
     : [styles.container, style];
 
@@ -123,11 +123,11 @@ const createStyles = (theme: any) => {
   flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      padding: theme.spacing.xl,
+      padding: theme.spacing.xl
     },
     content: {,
   alignItems: 'center',
-      maxWidth: 280,
+      maxWidth: 280
     },
     iconContainer: {,
   width: 100,
@@ -136,29 +136,29 @@ const createStyles = (theme: any) => {
       backgroundColor: theme.colors.surfaceVariant,
       justifyContent: 'center',
       alignItems: 'center',
-      marginBottom: theme.spacing.lg,
+      marginBottom: theme.spacing.lg
     },
     icon: {,
-  fontSize: 48,
+  fontSize: 48
     },
     title: {,
   fontSize: theme.typography.fontSize.lg,
       fontWeight: theme.typography.fontWeight.semibold,
       color: theme.colors.onSurface,
       textAlign: 'center',
-      marginBottom: theme.spacing.md,
+      marginBottom: theme.spacing.md
     },
     description: {,
   fontSize: theme.typography.fontSize.base,
       color: theme.colors.onSurfaceVariant,
       textAlign: 'center',
       lineHeight: 22,
-      marginBottom: theme.spacing.lg,
+      marginBottom: theme.spacing.lg
     },
     actionsContainer: {,
   width: '100%',
-      alignItems: 'center',
-    },
+      alignItems: 'center'
+    }
   });
 };
 

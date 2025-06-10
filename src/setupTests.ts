@@ -17,62 +17,62 @@ jest.mock('react-native-vector-icons/Ionicons', () => 'Icon');
 jest.mock('react-native-vector-icons/FontAwesome', () => 'Icon');
 // Mock react-native-permissions;
 jest.mock('react-native-permissions', () => ({
-  PERMISSIONS: {,
-  IOS: {,
-  CAMERA: 'ios.permission.CAMERA',
+  PERMISSIONS: {
+    IOS: {
+      CAMERA: 'ios.permission.CAMERA',
       MICROPHONE: 'ios.permission.MICROPHONE',
       LOCATION_WHEN_IN_USE: 'ios.permission.LOCATION_WHEN_IN_USE',
     },
-    ANDROID: {,
-  CAMERA: 'android.permission.CAMERA',
+    ANDROID: {
+      CAMERA: 'android.permission.CAMERA',
       RECORD_AUDIO: 'android.permission.RECORD_AUDIO',
       ACCESS_FINE_LOCATION: 'android.permission.ACCESS_FINE_LOCATION',
     },
   },
-  RESULTS: {,
-  GRANTED: 'granted',
+  RESULTS: {
+    GRANTED: 'granted',
     DENIED: 'denied',
     BLOCKED: 'blocked',
     UNAVAILABLE: 'unavailable',
   },
-  request: jest.fn() => Promise.resolve('granted')),
-  check: jest.fn() => Promise.resolve('granted')),
-  requestMultiple: jest.fn() => Promise.resolve({})),
-  checkMultiple: jest.fn() => Promise.resolve({})),
+  request: jest.fn(() => Promise.resolve('granted')),
+  check: jest.fn(() => Promise.resolve('granted')),
+  requestMultiple: jest.fn(() => Promise.resolve({})),
+  checkMultiple: jest.fn(() => Promise.resolve({})),
 }));
 // Mock react-native-device-info;
 jest.mock('react-native-device-info', () => ({
-  getUniqueId: jest.fn() => Promise.resolve('mock-unique-id')),
-  getDeviceId: jest.fn() => 'mock-device-id'),
-  getSystemName: jest.fn() => 'iOS'),
-  getSystemVersion: jest.fn() => '14.0'),
-  getModel: jest.fn() => 'iPhone'),
-  getBrand: jest.fn() => 'Apple'),
-  getBuildNumber: jest.fn() => '1'),
-  getVersion: jest.fn() => '1.0.0'),
-  getReadableVersion: jest.fn() => '1.0.0.1'),
-  getDeviceName: jest.fn() => Promise.resolve('Test Device')),
+  getUniqueId: jest.fn(() => Promise.resolve('mock-unique-id')),
+  getDeviceId: jest.fn(() => 'mock-device-id'),
+  getSystemName: jest.fn(() => 'iOS'),
+  getSystemVersion: jest.fn(() => '14.0'),
+  getModel: jest.fn(() => 'iPhone'),
+  getBrand: jest.fn(() => 'Apple'),
+  getBuildNumber: jest.fn(() => '1'),
+  getVersion: jest.fn(() => '1.0.0'),
+  getReadableVersion: jest.fn(() => '1.0.0.1'),
+  getDeviceName: jest.fn(() => Promise.resolve('Test Device')),
 }));
 // Mock react-native-mmkv;
 jest.mock('react-native-mmkv', () => ({
-  MMKV: jest.fn().mockImplementation() => ({,
-  set: jest.fn(),
+  MMKV: jest.fn().mockImplementation(() => ({
+    set: jest.fn(),
     getString: jest.fn(),
     getNumber: jest.fn(),
     getBoolean: jest.fn(),
     contains: jest.fn(),
     delete: jest.fn(),
-    getAllKeys: jest.fn() => []),
+    getAllKeys: jest.fn(() => []),
     clearAll: jest.fn(),
   })),
-  defaultMMKV: {,
-  set: jest.fn(),
+  defaultMMKV: {
+    set: jest.fn(),
     getString: jest.fn(),
     getNumber: jest.fn(),
     getBoolean: jest.fn(),
     contains: jest.fn(),
     delete: jest.fn(),
-    getAllKeys: jest.fn() => []),
+    getAllKeys: jest.fn(() => []),
     clearAll: jest.fn(),
   },
 }));
@@ -90,8 +90,8 @@ jest.mock('react-native-voice', () => ({
 }));
 // Mock react-navigation;
 jest.mock('@react-navigation/native', () => ({
-  useNavigation: () => ({,
-  navigate: jest.fn(),
+  useNavigation: () => ({
+    navigate: jest.fn(),
     goBack: jest.fn(),
     dispatch: jest.fn(),
   }),

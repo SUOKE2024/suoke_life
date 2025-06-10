@@ -9,7 +9,7 @@ const STORAGE_KEYS = {
 /**
 * 存储认证令牌
 */
-export const storeAuthTokens = async (;)
+export const storeAuthTokens = async (;);
   accessToken: string,
   refreshToken: string;
 ): Promise<void> => {

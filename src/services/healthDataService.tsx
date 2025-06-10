@@ -12,7 +12,7 @@ export interface HealthData {
   source: 'manual' | 'device' | 'sync';
   metadata?: Record<string, any>;
 }
-export type HealthDataType =
+export type HealthDataType =;
   | 'heart_rate'
   | 'blood_pressure'
   | 'body_temperature'

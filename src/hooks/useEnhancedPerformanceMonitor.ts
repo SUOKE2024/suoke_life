@@ -241,7 +241,7 @@ class PerformanceCollector {
   }
 }
 // 增强的性能监控Hook;
-export const useEnhancedPerformanceMonitor = ()
+export const useEnhancedPerformanceMonitor = ();
   componentName: string,
   config: Partial<PerformanceMonitorConfig> = {}
 ) => {
@@ -319,7 +319,7 @@ export const useEnhancedPerformanceMonitor = ()
     clearData: () => collector.current?.clear()};
 };
 // 性能监控装饰器
-export const withPerformanceMonitoring = <P extends object>()
+export const withPerformanceMonitoring = <P extends object>();
   WrappedComponent: React.ComponentType<P>,
   componentName?: string;
 ) => {

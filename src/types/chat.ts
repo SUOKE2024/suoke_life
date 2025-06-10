@@ -7,17 +7,17 @@ export type ChannelType = "agent" | "user" | "doctor" | "gro;u;";
 p;
 export interface ChatChannel {
 }
-id: string}
-  name: string,
-  type: ChannelType,
-  avatar: string,
+id: string;
+  name: string;
+  type: ChannelType;
+  avatar: string;
   lastMessage: string,
   lastMessageTime: string,unreadCount: number,isOnline: boolean;
   agentType?: AgentType;
   specialization?: string}
 export interface ChatMessage {
 }
-id: string}
+id: string;
   channelId: string,
   senderId: string,
   senderName: string,
@@ -33,10 +33,10 @@ emoji: string}
   userName: string}
 export interface Contact {
 }
-id: string};
-  name: string,type: ChannelType;
+id: string;;
+  name: string;type: ChannelType;
   agentType?: AgentType;
-  avatar: string,
+  avatar: string;
   isOnline: boolean;
   lastSeen?: string;
   specialization?: string;

@@ -1,206 +1,157 @@
-import { XIAOAI_CONFIG, XIAOKE_CONFIG, LAOKE_CONFIG, SOER_CONFIG, AGENT_CONFIGS, COLLABORATION_SCENARIOS, DEFAULT_AGENT_CONFIG } from "../agents.config";
-import { XIAOAI_CONFIG, XIAOKE_CONFIG, LAOKE_CONFIG, SOER_CONFIG, AGENT_CONFIGS, COLLABORATION_SCENARIOS, DEFAULT_AGENT_CONFIG } from "../agents.config";
-describe("agents.config", () => {
+import {
+  AGENT_CONFIGS,
+  COLLABORATION_SCENARIOS,
+  DEFAULT_AGENT_CONFIG,
+  LAOKE_CONFIG,
+  SOER_CONFIG,
+  XIAOAI_CONFIG,
+  XIAOKE_CONFIG,
+} from '../agents.config';
+
+describe('agents.config', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-  describe("XIAOAI_CONFIG", () => {
-    it("should work with valid inputs", () => {
-      // Add test cases
-const result = XIAOAI_CONFIG(// valid params);
-      expect(result).toBeDefined();
+
+  describe('XIAOAI_CONFIG', () => {
+    it('should be defined', () => {
+      expect(XIAOAI_CONFIG).toBeDefined();
     });
-    it("should handle edge cases", () => {
-      // Add test cases
-const result = XIAOAI_CONFIG(// edge case params);
-      expect(result).toBeDefined();
-    });
-    it("should handle invalid inputs gracefully", () => {
-      // Add test cases
-expect(() => {
-        XIAOAI_CONFIG(// invalid params);
-      }).not.toThrow();
-    });
-    it("should return output format,  => {", () => {// Add test cases;)
-const result = XIAOAI_CONFIG(// test params);
-      expect(typeof result).toBe("object"); // or appropriate type
+
+    it('should have correct structure', () => {
+      expect(typeof XIAOAI_CONFIG).toBe('object');
+      expect(XIAOAI_CONFIG).toHaveProperty('name');
+      expect(XIAOAI_CONFIG).toHaveProperty('type');
     });
   });
-  describe("XIAOKE_CONFIG", () => {
-    it("should work with valid inputs", () => {
-      // Add test cases
-const result = XIAOKE_CONFIG(// valid params);
-      expect(result).toBeDefined();
+
+  describe('XIAOKE_CONFIG', () => {
+    it('should be defined', () => {
+      expect(XIAOKE_CONFIG).toBeDefined();
     });
-    it("should handle edge cases", () => {
-      // Add test cases
-const result = XIAOKE_CONFIG(// edge case params);
-      expect(result).toBeDefined();
-    });
-    it("should handle invalid inputs gracefully", () => {
-      // Add test cases
-expect(() => {
-        XIAOKE_CONFIG(// invalid params);
-      }).not.toThrow();
-    });
-    it("should return output format,  => {", () => {// Add test cases;)
-const result = XIAOKE_CONFIG(// test params);
-      expect(typeof result).toBe("object"); // or appropriate type
+
+    it('should have correct structure', () => {
+      expect(typeof XIAOKE_CONFIG).toBe('object');
+      expect(XIAOKE_CONFIG).toHaveProperty('name');
+      expect(XIAOKE_CONFIG).toHaveProperty('type');
     });
   });
-  describe("LAOKE_CONFIG", () => {
-    it("should work with valid inputs", () => {
-      // Add test cases
-const result = LAOKE_CONFIG(// valid params);
-      expect(result).toBeDefined();
+
+  describe('LAOKE_CONFIG', () => {
+    it('should be defined', () => {
+      expect(LAOKE_CONFIG).toBeDefined();
     });
-    it("should handle edge cases", () => {
-      // Add test cases
-const result = LAOKE_CONFIG(// edge case params);
-      expect(result).toBeDefined();
-    });
-    it("should handle invalid inputs gracefully", () => {
-      // Add test cases
-expect(() => {
-        LAOKE_CONFIG(// invalid params);
-      }).not.toThrow();
-    });
-    it("should return output format,  => {", () => {// Add test cases;)
-const result = LAOKE_CONFIG(// test params);
-      expect(typeof result).toBe("object"); // or appropriate type
+
+    it('should have correct structure', () => {
+      expect(typeof LAOKE_CONFIG).toBe('object');
+      expect(LAOKE_CONFIG).toHaveProperty('name');
+      expect(LAOKE_CONFIG).toHaveProperty('type');
     });
   });
-  describe("SOER_CONFIG", () => {
-    it("should work with valid inputs", () => {
-      // Add test cases
-const result = SOER_CONFIG(// valid params);
-      expect(result).toBeDefined();
+
+  describe('SOER_CONFIG', () => {
+    it('should be defined', () => {
+      expect(SOER_CONFIG).toBeDefined();
     });
-    it("should handle edge cases", () => {
-      // Add test cases
-const result = SOER_CONFIG(// edge case params);
-      expect(result).toBeDefined();
-    });
-    it("should handle invalid inputs gracefully", () => {
-      // Add test cases
-expect(() => {
-        SOER_CONFIG(// invalid params);
-      }).not.toThrow();
-    });
-    it("should return output format,  => {", () => {// Add test cases;)
-const result = SOER_CONFIG(// test params);
-      expect(typeof result).toBe("object"); // or appropriate type
+
+    it('should have correct structure', () => {
+      expect(typeof SOER_CONFIG).toBe('object');
+      expect(SOER_CONFIG).toHaveProperty('name');
+      expect(SOER_CONFIG).toHaveProperty('type');
     });
   });
-  describe("AGENT_CONFIGS", () => {
-    it("should work with valid inputs", () => {
-      // Add test cases
-const result = AGENT_CONFIGS(// valid params);
-      expect(result).toBeDefined();
+
+  describe('AGENT_CONFIGS', () => {
+    it('should be defined', () => {
+      expect(AGENT_CONFIGS).toBeDefined();
     });
-    it("should handle edge cases", () => {
-      // Add test cases
-const result = AGENT_CONFIGS(// edge case params);
-      expect(result).toBeDefined();
-    });
-    it("should handle invalid inputs gracefully", () => {
-      // Add test cases
-expect(() => {
-        AGENT_CONFIGS(// invalid params);
-      }).not.toThrow();
-    });
-    it("should return output format,  => {", () => {// Add test cases;)
-const result = AGENT_CONFIGS(// test params);
-      expect(typeof result).toBe("object"); // or appropriate type
+
+    it('should contain all agent configs', () => {
+      expect(typeof AGENT_CONFIGS).toBe('object');
+      expect(AGENT_CONFIGS).toHaveProperty('xiaoai');
+      expect(AGENT_CONFIGS).toHaveProperty('xiaoke');
+      expect(AGENT_CONFIGS).toHaveProperty('laoke');
+      expect(AGENT_CONFIGS).toHaveProperty('soer');
     });
   });
-  describe("COLLABORATION_SCENARIOS", () => {
-    it("should work with valid inputs", () => {
-      // Add test cases
-const result = COLLABORATION_SCENARIOS(// valid params);
-      expect(result).toBeDefined();
+
+  describe('COLLABORATION_SCENARIOS', () => {
+    it('should be defined', () => {
+      expect(COLLABORATION_SCENARIOS).toBeDefined();
     });
-    it("should handle edge cases", () => {
-      // Add test cases
-const result = COLLABORATION_SCENARIOS(// edge case params);
-      expect(result).toBeDefined();
-    });
-    it("should handle invalid inputs gracefully", () => {
-      // Add test cases
-expect(() => {
-        COLLABORATION_SCENARIOS(// invalid params);
-      }).not.toThrow();
-    });
-    it("should return output format,  => {", () => {// Add test cases;)
-const result = COLLABORATION_SCENARIOS(// test params);
-      expect(typeof result).toBe("object"); // or appropriate type
+
+    it('should be an array or object', () => {
+      expect(
+        Array.isArray(COLLABORATION_SCENARIOS) ||
+          typeof COLLABORATION_SCENARIOS === 'object'
+      ).toBe(true);
     });
   });
-  describe("DEFAULT_AGENT_CONFIG", () => {
-    it("should work with valid inputs", () => {
-      // Add test cases
-const result = DEFAULT_AGENT_CONFIG(// valid params);
-      expect(result).toBeDefined();
+
+  describe('DEFAULT_AGENT_CONFIG', () => {
+    it('should be defined', () => {
+      expect(DEFAULT_AGENT_CONFIG).toBeDefined();
     });
-    it("should handle edge cases", () => {
-      // Add test cases
-const result = DEFAULT_AGENT_CONFIG(// edge case params);
-      expect(result).toBeDefined();
-    });
-    it("should handle invalid inputs gracefully", () => {
-      // Add test cases
-expect(() => {
-        DEFAULT_AGENT_CONFIG(// invalid params);
-      }).not.toThrow();
-    });
-    it("should return output format,  => {", () => {// Add test cases;)
-const result = DEFAULT_AGENT_CONFIG(// test params);
-      expect(typeof result).toBe("object"); // or appropriate type
+
+    it('should have default properties', () => {
+      expect(typeof DEFAULT_AGENT_CONFIG).toBe('object');
+      expect(DEFAULT_AGENT_CONFIG).toHaveProperty('timeout');
+      expect(DEFAULT_AGENT_CONFIG).toHaveProperty('retries');
     });
   });
 });
-describe("agents.config Performance Tests", () => {
-  it("should execute within performance thresholds", () => {
+
+describe('agents.config Performance Tests', () => {
+  it('should execute within performance thresholds', () => {
     const iterations = 10;
     const startTime = performance.now();
+
     for (let i = 0; i < iterations; i++) {
-      // Execute performance-critical functions
-XIAOAI_CONFIG(// test params);
-      XIAOKE_CONFIG(// test params);
-      LAOKE_CONFIG(// test params);
-      SOER_CONFIG(// test params);
-      AGENT_CONFIGS(// test params);
-      COLLABORATION_SCENARIOS(// test params);
-      DEFAULT_AGENT_CONFIG(// test params);
-    });
+      // Access configuration objects
+      const configs = [XIAOAI_CONFIG, XIAOKE_CONFIG, LAOKE_CONFIG, SOER_CONFIG];
+      configs.forEach((config) => {
+        expect(config).toBeDefined();
+      });
+    }
+
     const endTime = performance.now();
     const averageTime = (endTime - startTime) / iterations;
+
     // Should execute within 1ms on average
-expect(averageTime).toBeLessThan(1);
+    expect(averageTime).toBeLessThan(1);
   });
-  it("should handle large datasets efficiently", () => {
-    const largeDataset = new Array(10000).fill(0).map(((_, i) => i);)
+
+  it('should handle configuration access efficiently', () => {
     const startTime = performance.now();
-    // Test with large dataset
-XIAOAI_CONFIG(largeDataset);
+
+    // Test configuration access
+    const allConfigs = AGENT_CONFIGS;
+    expect(allConfigs).toBeDefined();
+
     const endTime = performance.now();
-    // Should handle large datasets within 100ms
-expect(endTime - startTime).toBeLessThan(100);
+
+    // Should handle configuration access within 10ms
+    expect(endTime - startTime).toBeLessThan(10);
   });
-  it("should not cause memory leaks", () => {
+
+  it('should not cause memory leaks', () => {
     const initialMemory = process.memoryUsage().heapUsed;
-    // Execute function multiple times
-for (let i = 0; i < 1000; i++) {
-      XIAOAI_CONFIG(// test params);
-    });
+
+    // Access configurations multiple times
+    for (let i = 0; i < 1000; i++) {
+      const config = XIAOAI_CONFIG;
+      expect(config).toBeDefined();
+    }
+
     // Force garbage collection if available
-if (global.gc) {
+    if (global.gc) {
       global.gc();
-    });
+    }
+
     const finalMemory = process.memoryUsage().heapUsed;
     const memoryIncrease = finalMemory - initialMemory;
-    // Memory increase should be minimal (less than 10MB)
-    expect(memoryIncrease).toBeLessThan(10 * 1024 * 1024);
+
+    // Memory increase should be minimal (less than 1MB)
+    expect(memoryIncrease).toBeLessThan(1024 * 1024);
   });
 });
-});});});});});});});

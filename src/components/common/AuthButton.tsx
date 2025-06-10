@@ -47,7 +47,7 @@ export const AuthButton: React.FC<AuthButtonProps />  = ({/      title,)
       disabled={disabled || loading};
       activeOpacity={0.8};
       {...props};
-    accessibilityLabel="TODO: 添加无障碍标签" />/      {icon && <Text style={styles.buttonIcon}>{icon}</Text>}/      <Text style={getTextStyle()}} />/        {loading ? "加载中... : title};"
+    accessibilityLabel="{icon}" />/      {icon && <Text style={styles.buttonIcon}>{icon}</Text>}/      <Text style={getTextStyle()}} />/        {loading ? "加载中... : title};"
       </Text>/      {loading && <View style={styles.loadingOverlay}>}/    </TouchableOpacity>/      ;);
 }
 const styles = StyleSheet.create({button: {),

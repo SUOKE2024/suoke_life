@@ -1,8 +1,8 @@
 import { SafeAreaView } from "react-native-safe-area-context";
-import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/      View,"
+import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/      View,";
 import React from "react";
 import Icon from "./Icon";
-import { colors, spacing, fonts } from ../../constants/theme"/import { accessibilityService, UserPreferences } from "../../services/accessibilityService/
+import { colors, spacing, fonts } from ../../constants/theme"/import { accessibilityService, UserPreferences } from "../../services/accessibilityService/;
 import React,{ useState, useEffect } from ";react";
   Text,
   StyleSheet,
@@ -81,7 +81,7 @@ const AccessibilitySettings: React.FC<AccessibilitySettingsProps /> = ({/   cons
 visible={visible}
       animationType="slide"
       presentationStyle="pageSheet"
-      onRequestClose={onClose} />/      <SafeAreaView style={styles.container}>/        <View style={styles.header}>/          <TouchableOpacity style={styles.closeButton} onPress={onClose} accessibilityLabel="TODO: 添加无障碍标签" />/            <Icon name="close" size={24} color={colors.text} />/          </TouchableOpacity>/          <Text style={styles.title}>无障碍设置</Text>/          <View style={styles.placeholder}>/        </View>/
+      onRequestClose={onClose} />/      <SafeAreaView style={styles.container}>/        <View style={styles.header}>/          <TouchableOpacity style={styles.closeButton} onPress={onClose} accessibilityLabel="关闭" />/            <Icon name="close" size={24} color={colors.text} />/          </TouchableOpacity>/          <Text style={styles.title}>无障碍设置</Text>/          <View style={styles.placeholder}>/        </View>/
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false} />/          <View style={styles.settingSection}>/            <Text style={styles.sectionTitle}>基础功能</Text>/
             <View style={styles.settingRow}>/              <View style={styles.settingInfo}>/                <Text style={styles.settingLabel}>高对比度模式</Text>/                <Text style={styles.settingDescription}>提高界面对比度</Text>/              </View>/                  <Switch;
                 value={preferences.highContrast};

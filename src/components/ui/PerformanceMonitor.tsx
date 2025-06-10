@@ -1,5 +1,5 @@
 import { createUIUXOptimizationService } from "../../services/    uiUxOptimizationService";
-import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/      View,"
+import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/      View,";
 import React from "react";
 interface ApiResponse<T = any /> { data: T;/    , success: boolean;
   message?: string;
@@ -277,10 +277,10 @@ const effectEnd = performance.now();
       ]} />/      <View style={styles.header}>/        <Text style={styles.title}>性能监控</Text>/        <View style={styles.headerButtons}>/              <TouchableOpacity;
 style={[styles.button, styles.optimizeButton]}
             onPress={manualOptimize}
-          accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>优化</Text>/          </TouchableOpacity>/              <TouchableOpacity;
+          accessibilityLabel="优化" />/            <Text style={styles.buttonText}>优化</Text>/          </TouchableOpacity>/              <TouchableOpacity;
 style={[styles.button, styles.clearButton]}
             onPress={clearWarnings}
-          accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>清除</Text>/          </TouchableOpacity>/        </View>/      </View>/
+          accessibilityLabel="清除" />/            <Text style={styles.buttonText}>清除</Text>/          </TouchableOpacity>/        </View>/      </View>/
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false} />/        {///              {renderMetricItem("FPS", metrics.fps, ", [30, 45, 55])}"
           {renderMetricItem("内存使用, metrics.memoryUsage, "%", [80, 60, 40])}"
           {renderMetricItem(渲染时间", metrics.renderTime, "ms, [32, 20, 16])}

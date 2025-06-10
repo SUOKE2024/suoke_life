@@ -23,7 +23,7 @@ describe("AGENT_CONFIG", () => { {
   it("should display correct initial state", () => {
     renderWithProvider(<AGENT_CONFIG />);
     // Add specific assertions for initial state
-expect(screen.getByTestId("agentchatexport interface)).toBeTruthy();"
+expect(screen.getByTestId("agentchatexport interface)).toBeTruthy();";
   });
   it("should handle user interactions correctly", async (); => {
     renderWithProvider(<AGENT_CONFIG />);
@@ -32,7 +32,7 @@ const button = screen.getByRole(button";);"
     fireEvent.press(button);
     await waitFor(() => {
       // Add assertions for interaction results
-expect(screen.getByTestId("agentchatexport interface)).toBeTruthy();"
+expect(screen.getByTestId("agentchatexport interface)).toBeTruthy();";
     });
   });
   it("should handle props correctly", () => {
@@ -40,7 +40,7 @@ expect(screen.getByTestId("agentchatexport interface)).toBeTruthy();"
     ;};
     renderWithProvider(<AGENT_CONFIG {...testProps} />);
     // Add assertions for prop handling
-expect(screen.getByTestId(agentchatexport interface")).toBeTruthy();"
+expect(screen.getByTestId(agentchatexport interface")).toBeTruthy();";
   });
   it("should handle error states gracefully, () => { {", () => {
     // Test error scenarios

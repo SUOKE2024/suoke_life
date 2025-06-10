@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {
+import {;
   Modal,
   ScrollView,
   StyleSheet,
@@ -7,7 +7,7 @@ import {
   TextStyle,
   TouchableOpacity,
   View,
-  ViewStyle,
+  ViewStyle
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
@@ -65,7 +65,7 @@ const DEFAULT_COLORS = [
   '#404040',
   '#808080',
   '#C0C0C0',
-  '#FFFFFF',
+  '#FFFFFF'
 ];
 
 export const ColorPicker: React.FC<ColorPickerProps> = ({
@@ -78,7 +78,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
   textStyle,
   accessible = true,
   accessibilityLabel,
-  testID,
+  testID
 }) => {
   const { currentTheme } = useTheme();
   const [isVisible, setIsVisible] = useState(false);
@@ -102,7 +102,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
               style={[
                 styles.colorItem,
                 { backgroundColor: color },
-                value === color && styles.selectedColor,
+                value === color && styles.selectedColor
               ]}
               onPress={() => handleColorSelect(color)}
               accessible={accessible}
@@ -128,11 +128,11 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
       backgroundColor: currentTheme.colors.surface,
       minHeight: 48,
       flexDirection: 'row',
-      alignItems: 'center',
+      alignItems: 'center'
     },
     containerDisabled: {,
   backgroundColor: currentTheme.colors.surfaceVariant,
-      opacity: 0.6,
+      opacity: 0.6
     },
     colorPreview: {,
   width: 24,
@@ -140,56 +140,56 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
       borderRadius: 4,
       marginRight: 12,
       borderWidth: 1,
-      borderColor: currentTheme.colors.outline,
+      borderColor: currentTheme.colors.outline
     },
     text: {,
   fontSize: 16,
       color: currentTheme.colors.onSurface,
       flex: 1,
-      ...textStyle,
+      ...textStyle
     },
     placeholder: {,
   fontSize: 16,
       color: currentTheme.colors.onSurfaceVariant,
-      flex: 1,
+      flex: 1
     },
     modal: {,
   flex: 1,
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
       justifyContent: 'center',
-      alignItems: 'center',
+      alignItems: 'center'
     },
     modalContent: {,
   backgroundColor: currentTheme.colors.surface,
       borderRadius: 16,
       padding: 20,
       maxWidth: '90%',
-      maxHeight: '80%',
+      maxHeight: '80%'
     },
     modalHeader: {,
   flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      marginBottom: 20,
+      marginBottom: 20
     },
     modalTitle: {,
   fontSize: 18,
       fontWeight: '600',
-      color: currentTheme.colors.onSurface,
+      color: currentTheme.colors.onSurface
     },
     closeButton: {,
-  padding: 8,
+  padding: 8
     },
     closeButtonText: {,
   fontSize: 16,
-      color: currentTheme.colors.primary,
+      color: currentTheme.colors.primary
     },
     colorGrid: {,
-  alignItems: 'center',
+  alignItems: 'center'
     },
     colorRow: {,
   flexDirection: 'row',
-      marginBottom: 8,
+      marginBottom: 8
     },
     colorItem: {,
   width: 40,
@@ -197,23 +197,23 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
       borderRadius: 8,
       marginHorizontal: 4,
       borderWidth: 2,
-      borderColor: 'transparent',
+      borderColor: 'transparent'
     },
     selectedColor: {,
   borderColor: currentTheme.colors.primary,
-      borderWidth: 3,
+      borderWidth: 3
     },
     customColorSection: {,
   marginTop: 20,
       paddingTop: 20,
       borderTopWidth: 1,
-      borderTopColor: currentTheme.colors.outline,
+      borderTopColor: currentTheme.colors.outline
     },
     customColorTitle: {,
   fontSize: 16,
       fontWeight: '500',
       color: currentTheme.colors.onSurface,
-      marginBottom: 12,
+      marginBottom: 12
     },
     hexInput: {,
   borderWidth: 1,
@@ -223,8 +223,8 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
       paddingVertical: 8,
       fontSize: 16,
       color: currentTheme.colors.onSurface,
-      backgroundColor: currentTheme.colors.surface,
-    },
+      backgroundColor: currentTheme.colors.surface
+    }
   });
 
   return (
@@ -278,7 +278,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
                   <View;
                     style={[
                       styles.colorPreview,
-                      { backgroundColor: value, marginRight: 12 },
+                      { backgroundColor: value, marginRight: 12 }
                     ]}
                   />
                 )}

@@ -1,9 +1,9 @@
 import {
-    Agent,
-    AgentCapability,
-    AgentMetrics,
-    AgentStatus,
-    AgentTask;
+  Agent,
+  AgentCapability,
+  AgentMetrics,
+  AgentStatus,
+  AgentTask,
 } from '../types/agents';
 
 /**
@@ -25,12 +25,12 @@ export abstract class BaseAgent implements Agent {
   protected totalResponseTime: number = 0;
   protected lastActive: Date = new Date();
 
-  constructor(params: {,
-  id: string;,
-  name: string;,
-  description: string;,
-  capabilities: string[];,
-  status: AgentStatus;
+  constructor(params: {
+    id: string;
+    name: string;
+    description: string;
+    capabilities: string[];
+    status: AgentStatus;
     config?: unknown;
   }) {
     this.id = params.id;
@@ -90,7 +90,10 @@ export abstract class BaseAgent implements Agent {
 
   // 错误处理
   protected handleError(error: Error, task: AgentTask): void {
-    console.error(`Agent ${this.name} error processing task ${task.id}:`, error);
+    console.error(
+      `Agent ${this.name} error processing task ${task.id}:`,
+      error
+    );
   }
 
   // 上下文管理

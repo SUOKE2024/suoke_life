@@ -1,13 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useCallback, useEffect, useState } from 'react';
-import {
+import {;
   ActivityIndicator,
   Alert,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -42,7 +42,7 @@ export const ApiIntegrationDemo: React.FC = () => {
     passed: 0,
     failed: 0,
     successRate: 0,
-    avgDuration: 0,
+    avgDuration: 0
   });
 
   const mockTestResults: ApiTestResult[] = [
@@ -52,7 +52,7 @@ export const ApiIntegrationDemo: React.FC = () => {
       status: 'PASSED',
       duration: 145,
       endpoint: '/health',
-      method: 'GET',
+      method: 'GET'
     },
     {
       name: '用户登录',
@@ -60,7 +60,7 @@ export const ApiIntegrationDemo: React.FC = () => {
       status: 'PASSED',
       duration: 234,
       endpoint: '/auth/login',
-      method: 'POST',
+      method: 'POST'
     },
     {
       name: '获取用户信息',
@@ -68,7 +68,7 @@ export const ApiIntegrationDemo: React.FC = () => {
       status: 'PASSED',
       duration: 189,
       endpoint: '/user/profile',
-      method: 'GET',
+      method: 'GET'
     },
     {
       name: '启动问诊',
@@ -77,7 +77,7 @@ export const ApiIntegrationDemo: React.FC = () => {
       duration: 315,
       endpoint: '/diagnosis/inquiry',
       method: 'POST',
-      error: '连接超时',
+      error: '连接超时'
     },
     {
       name: '智能体状态',
@@ -85,8 +85,8 @@ export const ApiIntegrationDemo: React.FC = () => {
       status: 'PASSED',
       duration: 167,
       endpoint: '/agents/status',
-      method: 'GET',
-    },
+      method: 'GET'
+    }
   ];
 
   const loadTestResults = useCallback(async () => {
@@ -110,7 +110,7 @@ export const ApiIntegrationDemo: React.FC = () => {
         passed,
         failed,
         successRate: (passed / total) * 100,
-        avgDuration,
+        avgDuration
       });
     } catch (error) {
       Alert.alert('错误', '加载测试结果失败');
@@ -135,8 +135,8 @@ export const ApiIntegrationDemo: React.FC = () => {
           } finally {
             setLoading(false);
           }
-        },
-      },
+        }
+      }
     ]);
   }, [loadTestResults]);
 
@@ -219,8 +219,8 @@ export const ApiIntegrationDemo: React.FC = () => {
                 styles.statusBadge,
                 {
                   backgroundColor:
-                    result.status === 'PASSED' ? '#27AE60' : '#E74C3C',
-                },
+                    result.status === 'PASSED' ? '#27AE60' : '#E74C3C'
+                }
               ]}
             >
               <Text style={styles.statusText}>{result.status}</Text>
@@ -288,7 +288,7 @@ export const ApiIntegrationDemo: React.FC = () => {
           <Text;
             style={[
               styles.tabText,
-              currentTab === 'overview' && styles.activeTabText,
+              currentTab === 'overview' && styles.activeTabText
             ]}
           >
             概览
@@ -301,7 +301,7 @@ export const ApiIntegrationDemo: React.FC = () => {
           <Text;
             style={[
               styles.tabText,
-              currentTab === 'results' && styles.activeTabText,
+              currentTab === 'results' && styles.activeTabText
             ]}
           >
             测试结果
@@ -314,7 +314,7 @@ export const ApiIntegrationDemo: React.FC = () => {
           <Text;
             style={[
               styles.tabText,
-              currentTab === 'live' && styles.activeTabText,
+              currentTab === 'live' && styles.activeTabText
             ]}
           >
             实时测试
@@ -340,7 +340,7 @@ export const ApiIntegrationDemo: React.FC = () => {
 const styles = StyleSheet.create({
   container: {,
   flex: 1,
-    backgroundColor: '#F5F7FA',
+    backgroundColor: '#F5F7FA'
   },
   header: {,
   flexDirection: 'row',
@@ -350,61 +350,61 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#E1E8ED',
+    borderBottomColor: '#E1E8ED'
   },
   backButton: {,
   fontSize: 24,
-    color: '#2C3E50',
+    color: '#2C3E50'
   },
   title: {,
   fontSize: 18,
     fontWeight: 'bold',
-    color: '#2C3E50',
+    color: '#2C3E50'
   },
   refreshButton: {,
   fontSize: 16,
     color: '#3498DB',
-    fontWeight: '600',
+    fontWeight: '600'
   },
   tabContainer: {,
   flexDirection: 'row',
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#E1E8ED',
+    borderBottomColor: '#E1E8ED'
   },
   tab: {,
   flex: 1,
     paddingVertical: 16,
     alignItems: 'center',
     borderBottomWidth: 2,
-    borderBottomColor: 'transparent',
+    borderBottomColor: 'transparent'
   },
   activeTab: {,
-  borderBottomColor: '#3498DB',
+  borderBottomColor: '#3498DB'
   },
   tabText: {,
   fontSize: 16,
-    color: '#7F8C8D',
+    color: '#7F8C8D'
   },
   activeTabText: {,
   color: '#3498DB',
-    fontWeight: '600',
+    fontWeight: '600'
   },
   content: {,
-  flex: 1,
+  flex: 1
   },
   loadingContainer: {,
   flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   loadingText: {,
   marginTop: 16,
     fontSize: 16,
-    color: '#7F8C8D',
+    color: '#7F8C8D'
   },
   overviewContainer: {,
-  padding: 20,
+  padding: 20
   },
   summaryCard: {,
   backgroundColor: '#FFFFFF',
@@ -415,115 +415,115 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
+    elevation: 3
   },
   summaryTitle: {,
   fontSize: 18,
     fontWeight: 'bold',
     color: '#2C3E50',
-    marginBottom: 16,
+    marginBottom: 16
   },
   statsGrid: {,
   flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   statItem: {,
-  alignItems: 'center',
+  alignItems: 'center'
   },
   statValue: {,
   fontSize: 24,
     fontWeight: 'bold',
-    color: '#2C3E50',
+    color: '#2C3E50'
   },
   statLabel: {,
   fontSize: 14,
     color: '#7F8C8D',
-    marginTop: 4,
+    marginTop: 4
   },
   actionButton: {,
   backgroundColor: '#3498DB',
     borderRadius: 8,
     paddingVertical: 16,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   actionButtonText: {,
   color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   resultsContainer: {,
-  padding: 20,
+  padding: 20
   },
   resultCard: {,
   backgroundColor: '#FFFFFF',
     borderRadius: 8,
     padding: 16,
-    marginBottom: 12,
+    marginBottom: 12
   },
   resultHeader: {,
   flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 8
   },
   resultName: {,
   fontSize: 16,
     fontWeight: '600',
-    color: '#2C3E50',
+    color: '#2C3E50'
   },
   statusBadge: {,
   paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: 4,
+    borderRadius: 4
   },
   statusText: {,
   color: '#FFFFFF',
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   resultCategory: {,
   fontSize: 14,
     color: '#7F8C8D',
-    marginBottom: 4,
+    marginBottom: 4
   },
   resultEndpoint: {,
   fontSize: 14,
     color: '#7F8C8D',
-    marginBottom: 4,
+    marginBottom: 4
   },
   resultDuration: {,
   fontSize: 14,
     color: '#7F8C8D',
-    marginBottom: 4,
+    marginBottom: 4
   },
   resultError: {,
   fontSize: 14,
     color: '#E74C3C',
-    marginBottom: 8,
+    marginBottom: 8
   },
   retryButton: {,
   backgroundColor: '#E74C3C',
     borderRadius: 4,
     paddingVertical: 8,
     paddingHorizontal: 12,
-    alignSelf: 'flex-start',
+    alignSelf: 'flex-start'
   },
   retryButtonText: {,
   color: '#FFFFFF',
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   liveContainer: {,
-  padding: 20,
+  padding: 20
   },
   liveTitle: {,
   fontSize: 18,
     fontWeight: 'bold',
     color: '#2C3E50',
-    marginBottom: 20,
+    marginBottom: 20
   },
   liveActions: {,
-  gap: 12,
+  gap: 12
   },
   liveButton: {,
   backgroundColor: '#FFFFFF',
@@ -532,13 +532,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#E1E8ED',
+    borderColor: '#E1E8ED'
   },
   liveButtonText: {,
   fontSize: 16,
     color: '#3498DB',
-    fontWeight: '600',
-  },
+    fontWeight: '600'
+  }
 });
 
 export default ApiIntegrationDemo;

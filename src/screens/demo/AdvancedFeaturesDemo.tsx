@@ -288,9 +288,9 @@ value={testData.graphqlQuery}
 style={[styles.button, state.graphqlLoading && styles.buttonDisabled]}
             onPress={testGraphQLQuery}
             disabled={state.graphqlLoading}
-          accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>/              {state.graphqlLoading ? 查询中..." : "执行查询}
+          accessibilityLabel="操作按钮" />/            <Text style={styles.buttonText}>/              {state.graphqlLoading ? 查询中..." : "执行查询}
             </Text>/          </TouchableOpacity>/
-          <TouchableOpacity style={styles.button} onPress={testGraphQLMutation} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>测试变更</Text>/          </TouchableOpacity>/        </View>/
+          <TouchableOpacity style={styles.button} onPress={testGraphQLMutation} accessibilityLabel="测试变更" />/            <Text style={styles.buttonText}>测试变更</Text>/          </TouchableOpacity>/        </View>/
         {state.graphqlResult ? (<Text style={styles.result}>{state.graphqlResult}</Text>/    ): null}
       </View>/
       {//
@@ -298,8 +298,8 @@ style={[styles.button, state.graphqlLoading && styles.buttonDisabled]}
         <View style={styles.statusRow}>/          <Text />同步状态: </Text>/          <Text style={styles.status}>{state.syncStatus}</Text>/        </View>/
         <View style={styles.statusRow}>/          <Text />待同步操作: </Text>/          <Text style={styles.status}>{state.operationCount}</Text>/        </View>/
         <View style={styles.statusRow}>/          <Text />冲突数量: </Text>/          <Text style={styles.status}>{state.conflictCount}</Text>/        </View>/
-        <View style={styles.buttonRow}>/          <TouchableOpacity style={styles.button} onPress={addOfflineOperation} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>添加离线操作</Text>/          </TouchableOpacity>/
-          <TouchableOpacity style={styles.button} onPress={manualSync} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>手动同步</Text>/          </TouchableOpacity>/        </View>/      </View>/
+        <View style={styles.buttonRow}>/          <TouchableOpacity style={styles.button} onPress={addOfflineOperation} accessibilityLabel="添加新项目" />/            <Text style={styles.buttonText}>添加离线操作</Text>/          </TouchableOpacity>/
+          <TouchableOpacity style={styles.button} onPress={manualSync} accessibilityLabel="手动同步" />/            <Text style={styles.buttonText}>手动同步</Text>/          </TouchableOpacity>/        </View>/      </View>/
       {//
           </Text>/        </View>/
         <View style={styles.statusRow}>/          <Text />延迟: </Text>/          <Text style={styles.status}>{state.wsLatency}ms</Text>/        </View>/
@@ -312,14 +312,14 @@ style={styles.textInput}
 style={[styles.button, state.wsConnected && styles.buttonDisabled]}
             onPress={connectWebSocket}
             disabled={state.wsConnected}
-          accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>连接</Text>/          </TouchableOpacity>/
+          accessibilityLabel="连接" />/            <Text style={styles.buttonText}>连接</Text>/          </TouchableOpacity>/
           <TouchableOpacity;
 style={[styles.button, !state.wsConnected && styles.buttonDisabled]}
             onPress={disconnectWebSocket}
             disabled={!state.wsConnected}
-          accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>断开</Text>/          </TouchableOpacity>/
-          <TouchableOpacity style={styles.button} onPress={sendWebSocketMessage} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>发送消息</Text>/          </TouchableOpacity>/
-          <TouchableOpacity style={styles.button} onPress={subscribeChannel} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>订阅频道</Text>/          </TouchableOpacity>/        </View>/
+          accessibilityLabel="断开" />/            <Text style={styles.buttonText}>断开</Text>/          </TouchableOpacity>/
+          <TouchableOpacity style={styles.button} onPress={sendWebSocketMessage} accessibilityLabel="发送消息" />/            <Text style={styles.buttonText}>发送消息</Text>/          </TouchableOpacity>/
+          <TouchableOpacity style={styles.button} onPress={subscribeChannel} accessibilityLabel="订阅频道" />/            <Text style={styles.buttonText}>订阅频道</Text>/          </TouchableOpacity>/        </View>/
         <Text style={styles.subTitle}>最近消息:</Text>/            {state.wsMessages.map(message, index); => ()
           <Text key={index} style={styles.message}>/                {message}
           </Text>/            ))}
@@ -334,9 +334,9 @@ style={[styles.textInput, { flex: 1}}]}
             value={testData.cacheValue}
             onChangeText={(text) = /> setTestData(prev => ({ ...prev, cacheValue: text}))}/                placeholder="缓存值"
           />/        </View>/
-        <View style={styles.buttonRow}>/          <TouchableOpacity style={styles.button} onPress={testCacheSet} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>设置缓存</Text>/          </TouchableOpacity>/
-          <TouchableOpacity style={styles.button} onPress={testCacheGet} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>获取缓存</Text>/          </TouchableOpacity>/
-          <TouchableOpacity style={styles.button} onPress={clearCaches} accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.buttonText}>清空缓存</Text>/          </TouchableOpacity>/        </View>/
+        <View style={styles.buttonRow}>/          <TouchableOpacity style={styles.button} onPress={testCacheSet} accessibilityLabel="打开设置" />/            <Text style={styles.buttonText}>设置缓存</Text>/          </TouchableOpacity>/
+          <TouchableOpacity style={styles.button} onPress={testCacheGet} accessibilityLabel="获取缓存" />/            <Text style={styles.buttonText}>获取缓存</Text>/          </TouchableOpacity>/
+          <TouchableOpacity style={styles.button} onPress={clearCaches} accessibilityLabel="清空缓存" />/            <Text style={styles.buttonText}>清空缓存</Text>/          </TouchableOpacity>/        </View>/
         <Text style={styles.subTitle}>缓存统计:</Text>/        <Text style={styles.cacheStats}>/          内存缓存: {state.cacheStats.memory.size || 0} 项, 命中率: {(state.cacheStats.memory.hitRate || 0) * 100).toFixed(1)}%
         </Text>/        <Text style={styles.cacheStats}>/          持久缓存: {state.cacheStats.persistent.size || 0} 项, 命中率: {(state.cacheStats.persistent.hitRate || 0) * 100).toFixed(1)}%
         </Text>/        <Text style={styles.cacheStats}>/          API缓存: {state.cacheStats.api.size || 0} 项, 命中率: {(state.cacheStats.api.hitRate || 0) * 100).toFixed(1)}%

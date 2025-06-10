@@ -1,10 +1,10 @@
 import React from 'react';
-import {
+import {;
   Animated,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
@@ -86,7 +86,7 @@ export const StatCard: React.FC<StatCardProps> = ({
   loading = false,
   placeholder = '加载中...',
   animated = true,
-  animationDelay = 0,
+  animationDelay = 0
 }) => {
   const { currentTheme } = useTheme();
   const styles = createStyles(
@@ -110,13 +110,13 @@ export const StatCard: React.FC<StatCardProps> = ({
           toValue: 1,
           duration: 600,
           delay: animationDelay,
-          useNativeDriver: true,
+          useNativeDriver: true
         }),
         Animated.spring(scaleAnim, {
           toValue: 1,
           delay: animationDelay,
-          useNativeDriver: true,
-        }),
+          useNativeDriver: true
+        })
       ]).start();
     }
   }, [animated, animationDelay, fadeAnim, scaleAnim]);
@@ -212,7 +212,7 @@ export const StatCard: React.FC<StatCardProps> = ({
               style={[
                 styles.trendNumber,
                 { color: getTrendColor() },
-                trendStyle,
+                trendStyle
               ]}
             >
               {Math.abs(trend)}%
@@ -264,8 +264,8 @@ export const StatCard: React.FC<StatCardProps> = ({
       style={[
         {
           opacity: fadeAnim,
-          transform: [{ scale: scaleAnim }],
-        },
+          transform: [{ scale: scaleAnim }]
+        }
       ]}
     >
       <CardComponent;
@@ -295,7 +295,7 @@ const createStyles = (
       subtitleFontSize: theme.typography.fontSize.xs,
       trendFontSize: theme.typography.fontSize.xs,
       iconSize: 24,
-      minHeight: 80,
+      minHeight: 80
     },
     md: {,
   padding: theme.spacing.md,
@@ -304,7 +304,7 @@ const createStyles = (
       subtitleFontSize: theme.typography.fontSize.sm,
       trendFontSize: theme.typography.fontSize.sm,
       iconSize: 32,
-      minHeight: 100,
+      minHeight: 100
     },
     lg: {,
   padding: theme.spacing.lg,
@@ -313,8 +313,8 @@ const createStyles = (
       subtitleFontSize: theme.typography.fontSize.base,
       trendFontSize: theme.typography.fontSize.base,
       iconSize: 40,
-      minHeight: 120,
-    },
+      minHeight: 120
+    }
   };
 
   const config = sizeConfig[size];
@@ -326,40 +326,40 @@ const createStyles = (
         return {
           background: theme.colors.primaryContainer,
           border: theme.colors.primary,
-          accent: theme.colors.primary,
+          accent: theme.colors.primary
         };
       case 'success':
         return {
           background:
             theme.colors.successContainer || theme.colors.primaryContainer,
           border: theme.colors.success,
-          accent: theme.colors.success,
+          accent: theme.colors.success
         };
       case 'warning':
         return {
           background:
             theme.colors.warningContainer || theme.colors.primaryContainer,
           border: theme.colors.warning,
-          accent: theme.colors.warning,
+          accent: theme.colors.warning
         };
       case 'error':
         return {
           background: theme.colors.errorContainer,
           border: theme.colors.error,
-          accent: theme.colors.error,
+          accent: theme.colors.error
         };
       case 'info':
         return {
           background:
             theme.colors.infoContainer || theme.colors.primaryContainer,
           border: theme.colors.info || theme.colors.primary,
-          accent: theme.colors.info || theme.colors.primary,
+          accent: theme.colors.info || theme.colors.primary
         };
       default:
         return {,
   background: theme.colors.surface,
           border: theme.colors.outline,
-          accent: theme.colors.onSurface,
+          accent: theme.colors.onSurface
         };
     }
   };
@@ -374,117 +374,117 @@ const createStyles = (
       minHeight: config.minHeight,
       ...(bordered && {
         borderWidth: 1,
-        borderColor: colorConfig.border,
+        borderColor: colorConfig.border
       }),
       ...(shadow && {
         shadowColor: theme.colors.shadow,
         shadowOffset: {,
   width: 0,
-          height: 2,
+          height: 2
         },
         shadowOpacity: 0.1,
         shadowRadius: 4,
-        elevation: 3,
-      }),
+        elevation: 3
+      })
     },
     verticalLayout: {,
-  flex: 1,
+  flex: 1
     },
     horizontalLayout: {,
   flexDirection: 'row',
       alignItems: 'center',
-      flex: 1,
+      flex: 1
     },
     header: {,
   flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'flex-start',
-      marginBottom: theme.spacing.sm,
+      marginBottom: theme.spacing.sm
     },
     horizontalContent: {,
   flex: 1,
-      marginLeft: theme.spacing.md,
+      marginLeft: theme.spacing.md
     },
     iconContainer: {,
   width: config.iconSize,
       height: config.iconSize,
       alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'center'
     },
     mainContent: {,
-  flex: 1,
+  flex: 1
     },
     title: {,
   fontSize: config.titleFontSize,
       fontWeight: theme.typography.fontWeight.medium,
       color: theme.colors.onSurface,
-      marginBottom: theme.spacing.xs,
+      marginBottom: theme.spacing.xs
     },
     valueContainer: {,
   flexDirection: 'row',
       alignItems: 'baseline',
-      marginBottom: theme.spacing.xs,
+      marginBottom: theme.spacing.xs
     },
     value: {,
   fontSize: config.valueFontSize,
       fontWeight: theme.typography.fontWeight.bold,
-      color: colorConfig.accent,
+      color: colorConfig.accent
     },
     prefix: {,
   fontSize: config.valueFontSize * 0.7,
       fontWeight: theme.typography.fontWeight.medium,
       color: colorConfig.accent,
-      marginRight: theme.spacing.xs,
+      marginRight: theme.spacing.xs
     },
     suffix: {,
   fontSize: config.valueFontSize * 0.7,
       fontWeight: theme.typography.fontWeight.medium,
       color: colorConfig.accent,
-      marginLeft: theme.spacing.xs,
+      marginLeft: theme.spacing.xs
     },
     subtitle: {,
   fontSize: config.subtitleFontSize,
       color: theme.colors.onSurfaceVariant,
-      lineHeight: config.subtitleFontSize * 1.4,
+      lineHeight: config.subtitleFontSize * 1.4
     },
     trendContainer: {,
   flexDirection: layout === 'horizontal' ? 'column' : 'row',
-      alignItems: layout === 'horizontal' ? 'flex-end' : 'center',
+      alignItems: layout === 'horizontal' ? 'flex-end' : 'center'
     },
     trendValue: {,
   flexDirection: 'row',
-      alignItems: 'center',
+      alignItems: 'center'
     },
     trendIcon: {,
   fontSize: config.trendFontSize,
-      marginRight: theme.spacing.xs,
+      marginRight: theme.spacing.xs
     },
     trendNumber: {,
   fontSize: config.trendFontSize,
-      fontWeight: theme.typography.fontWeight.semibold,
+      fontWeight: theme.typography.fontWeight.semibold
     },
     trendText: {,
   fontSize: config.trendFontSize,
       color: theme.colors.onSurfaceVariant,
       marginTop: layout === 'horizontal' ? theme.spacing.xs : 0,
-      marginLeft: layout === 'horizontal' ? 0 : theme.spacing.sm,
+      marginLeft: layout === 'horizontal' ? 0 : theme.spacing.sm
     },
     loadingContainer: {,
   flex: 1,
       justifyContent: 'center',
-      alignItems: 'center',
+      alignItems: 'center'
     },
     loadingPlaceholder: {,
   width: '60%',
       height: config.valueFontSize,
       backgroundColor: theme.colors.outline,
       borderRadius: theme.borderRadius.sm,
-      marginBottom: theme.spacing.sm,
+      marginBottom: theme.spacing.sm
     },
     loadingText: {,
   fontSize: config.subtitleFontSize,
-      color: theme.colors.onSurfaceVariant,
-    },
+      color: theme.colors.onSurfaceVariant
+    }
   });
 };
 

@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import {
+import {;
   ActivityIndicator,
   Alert,
   ScrollView,
@@ -7,12 +7,12 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { colors, spacing } from '../../../constants/theme';
-import {
+import {;
   DiagnosisComponentProps,
-  InquiryDiagnosisData,
+  InquiryDiagnosisData
 } from '../../../types/diagnosis';
 
 interface Symptom {
@@ -24,7 +24,7 @@ interface Symptom {
 
 export const InquiryDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
   onComplete,
-  onCancel,
+  onCancel
 }) => {
   const [currentSymptoms, setCurrentSymptoms] = useState<Symptom[]>([
     { id: '1', name: '头痛', category: '头部', selected: false },
@@ -36,7 +36,7 @@ export const InquiryDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
     { id: '7', name: '咳嗽', category: '呼吸', selected: false },
     { id: '8', name: '胸闷', category: '呼吸', selected: false },
     { id: '9', name: '心悸', category: '心血管', selected: false },
-    { id: '10', name: '腰痛', category: '骨骼肌肉', selected: false },
+    { id: '10', name: '腰痛', category: '骨骼肌肉', selected: false }
   ]);
 
   const [medicalHistory, setMedicalHistory] = useState('');
@@ -44,7 +44,7 @@ export const InquiryDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
     sleep: '',
     diet: '',
     exercise: '',
-    stress: '',
+    stress: ''
   });
   const [painLevel, setPainLevel] = useState(0);
   const [symptomDuration, setSymptomDuration] = useState('');
@@ -79,13 +79,13 @@ export const InquiryDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
           symptomPattern: '气虚血瘀',
           severity: painLevel > 5 ? '中重度' : '轻度',
           duration: symptomDuration || '未明确',
-          confidence: 0.87,
+          confidence: 0.87
         },
         syndromePattern: {,
   pattern: '脾胃虚弱',
           description: '脾胃功能失调，气血生化不足',
           characteristics: ['消化不良', '精神疲倦', '食欲减退'],
-          confidence: 0.82,
+          confidence: 0.82
         },
         riskAssessment: {,
   level: '低风险',
@@ -94,10 +94,10 @@ export const InquiryDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
             '调整作息时间',
             '改善饮食结构',
             '适当运动锻炼',
-            '减轻精神压力',
-          ],
+            '减轻精神压力'
+          ]
         },
-        overallAssessment: '问诊结果显示主要为功能性症状，建议调理生活方式',
+        overallAssessment: '问诊结果显示主要为功能性症状，建议调理生活方式'
       };
 
       setAnalysisResult(mockResult);
@@ -116,7 +116,7 @@ export const InquiryDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
       lifestyle,
       currentSymptoms: selectedSymptoms.map(s) => s.name),
       painLevel,
-      duration: symptomDuration,
+      duration: symptomDuration
     };
     onComplete(data);
   }, [
@@ -125,7 +125,7 @@ export const InquiryDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
     lifestyle,
     painLevel,
     symptomDuration,
-    onComplete,
+    onComplete
   ]);
 
   const renderSymptomSection = () => {
@@ -147,14 +147,14 @@ export const InquiryDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
                     key={symptom.id}
                     style={[
                       styles.symptomButton,
-                      symptom.selected && styles.symptomButtonSelected,
+                      symptom.selected && styles.symptomButtonSelected
                     ]}
                     onPress={() => toggleSymptom(symptom.id)}
                   >
                     <Text;
                       style={[
                         styles.symptomText,
-                        symptom.selected && styles.symptomTextSelected,
+                        symptom.selected && styles.symptomTextSelected
                       ]}
                     >
                       {symptom.name}
@@ -180,14 +180,14 @@ export const InquiryDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
             key={index}
             style={[
               styles.painLevelButton,
-              painLevel === index && styles.painLevelButtonSelected,
+              painLevel === index && styles.painLevelButtonSelected
             ]}
             onPress={() => setPainLevel(index)}
           >
             <Text;
               style={[
                 styles.painLevelText,
-                painLevel === index && styles.painLevelTextSelected,
+                painLevel === index && styles.painLevelTextSelected
               ]}
             >
               {index}
@@ -379,47 +379,47 @@ export const InquiryDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
 const styles = StyleSheet.create({
   container: {,
   flex: 1,
-    padding: spacing.md,
+    padding: spacing.md
   },
   title: {,
   fontSize: 20,
     fontWeight: '600',
     color: colors.textPrimary,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.sm
   },
   subtitle: {,
   fontSize: 14,
     color: colors.textSecondary,
     marginBottom: spacing.lg,
-    lineHeight: 20,
+    lineHeight: 20
   },
   symptomSection: {,
-  marginBottom: spacing.lg,
+  marginBottom: spacing.lg
   },
   sectionTitle: {,
   fontSize: 16,
     fontWeight: '600',
     color: colors.textPrimary,
-    marginBottom: spacing.xs,
+    marginBottom: spacing.xs
   },
   sectionDescription: {,
   fontSize: 14,
     color: colors.textSecondary,
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   categoryContainer: {,
-  marginBottom: spacing.md,
+  marginBottom: spacing.md
   },
   categoryTitle: {,
   fontSize: 14,
     fontWeight: '600',
     color: colors.textPrimary,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.sm
   },
   symptomGrid: {,
   flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: spacing.sm,
+    gap: spacing.sm
   },
   symptomButton: {,
   paddingVertical: spacing.sm,
@@ -427,30 +427,30 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.border
   },
   symptomButtonSelected: {,
   backgroundColor: colors.primary,
-    borderColor: colors.primary,
+    borderColor: colors.primary
   },
   symptomText: {,
   fontSize: 14,
-    color: colors.textSecondary,
+    color: colors.textSecondary
   },
   symptomTextSelected: {,
   color: colors.white,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   painSection: {,
   marginBottom: spacing.lg,
     backgroundColor: colors.surface,
     borderRadius: 8,
-    padding: spacing.md,
+    padding: spacing.md
   },
   painLevelContainer: {,
   flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: spacing.sm,
+    marginBottom: spacing.sm
   },
   painLevelButton: {,
   width: 30,
@@ -458,38 +458,38 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     backgroundColor: colors.border,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   painLevelButtonSelected: {,
-  backgroundColor: colors.primary,
+  backgroundColor: colors.primary
   },
   painLevelText: {,
   fontSize: 12,
     color: colors.textSecondary,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   painLevelTextSelected: {,
-  color: colors.white,
+  color: colors.white
   },
   painLevelLabels: {,
   flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   painLevelLabel: {,
   fontSize: 12,
-    color: colors.textTertiary,
+    color: colors.textTertiary
   },
   inputSection: {,
-  marginBottom: spacing.lg,
+  marginBottom: spacing.lg
   },
   inputGroup: {,
-  marginBottom: spacing.md,
+  marginBottom: spacing.md
   },
   inputLabel: {,
   fontSize: 14,
     fontWeight: '600',
     color: colors.textPrimary,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.sm
   },
   textInput: {,
   borderWidth: 1,
@@ -499,76 +499,76 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm,
     fontSize: 14,
     color: colors.textPrimary,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.surface
   },
   multilineInput: {,
   height: 80,
-    textAlignVertical: 'top',
+    textAlignVertical: 'top'
   },
   lifestyleSection: {,
-  marginBottom: spacing.lg,
+  marginBottom: spacing.lg
   },
   actionContainer: {,
-  marginVertical: spacing.md,
+  marginVertical: spacing.md
   },
   button: {,
   paddingVertical: spacing.md,
     paddingHorizontal: spacing.lg,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   analyzeButton: {,
-  backgroundColor: colors.primary,
+  backgroundColor: colors.primary
   },
   completeButton: {,
-  backgroundColor: colors.success,
+  backgroundColor: colors.success
   },
   buttonText: {,
   fontSize: 16,
     fontWeight: '600',
-    color: colors.white,
+    color: colors.white
   },
   resultContainer: {,
   backgroundColor: colors.surface,
     borderRadius: 8,
     padding: spacing.md,
-    marginTop: spacing.md,
+    marginTop: spacing.md
   },
   resultTitle: {,
   fontSize: 18,
     fontWeight: '600',
     color: colors.textPrimary,
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   analysisSection: {,
   marginBottom: spacing.md,
     paddingBottom: spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: colors.border
   },
   analysisTitle: {,
   fontSize: 16,
     fontWeight: '600',
     color: colors.textPrimary,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.sm
   },
   analysisText: {,
   fontSize: 14,
     color: colors.textSecondary,
-    marginBottom: spacing.xs,
+    marginBottom: spacing.xs
   },
   confidenceText: {,
   fontSize: 12,
     color: colors.primary,
-    fontWeight: '500',
+    fontWeight: '500'
   },
   recommendationSection: {,
-  marginTop: spacing.sm,
+  marginTop: spacing.sm
   },
   recommendationText: {,
   fontSize: 14,
     color: colors.textSecondary,
     marginBottom: spacing.xs,
-    lineHeight: 20,
-  },
+    lineHeight: 20
+  }
 });

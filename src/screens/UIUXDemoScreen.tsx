@@ -174,7 +174,7 @@ key={level}
                     styles.performanceLevelButton,
                     performanceLevel === level && styles.performanceLevelButtonActive;
                   ]}}
-                  onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setPerformanceLevel(level)}/                    >
+                  onPress={() = accessibilityLabel="操作按钮" /> setPerformanceLevel(level)}/                    >
                   <Text;
 style={[
                       styles.performanceLevelButtonText,
@@ -201,41 +201,41 @@ style={[
 style={[styles.demoButton, getResponsiveStyle(styles.primaryButton)]}
               onPress={demoSpringBounce}
               disabled={!enableAnimations}
-            accessibilityLabel="TODO: 添加无障碍标签" />/              <Ionicons name="radio-button-on" size={20} color="#ffffff" />/              <Text style={styles.buttonText}>弹簧反弹</Text>/            </TouchableOpacity>/
+            accessibilityLabel="弹簧反弹" />/              <Ionicons name="radio-button-on" size={20} color="#ffffff" />/              <Text style={styles.buttonText}>弹簧反弹</Text>/            </TouchableOpacity>/
             <TouchableOpacity;
 style={[styles.demoButton, getResponsiveStyle(styles.secondaryButton)]}
               onPress={demoElasticScale}
               disabled={!enableAnimations}
-            accessibilityLabel="TODO: 添加无障碍标签" />/              <Ionicons name="resize" size={20} color="#ffffff" />/              <Text style={styles.buttonText}>弹性缩放</Text>/            </TouchableOpacity>/
+            accessibilityLabel="弹性缩放" />/              <Ionicons name="resize" size={20} color="#ffffff" />/              <Text style={styles.buttonText}>弹性缩放</Text>/            </TouchableOpacity>/
             <TouchableOpacity;
 style={[styles.demoButton, getResponsiveStyle(styles.accentButton)]}
               onPress={demoRippleEffect}
               disabled={!enableAnimations}
-            accessibilityLabel="TODO: 添加无障碍标签" />/              <Ionicons name="radio-button-off" size={20} color="#ffffff" />/              <Text style={styles.buttonText}>涟漪效果</Text>/            </TouchableOpacity>/
+            accessibilityLabel="涟漪效果" />/              <Ionicons name="radio-button-off" size={20} color="#ffffff" />/              <Text style={styles.buttonText}>涟漪效果</Text>/            </TouchableOpacity>/
             <TouchableOpacity;
 style={[styles.demoButton, getResponsiveStyle(styles.warningButton)]}
               onPress={demoRotateAnimation}
               disabled={!enableAnimations}
-            accessibilityLabel="TODO: 添加无障碍标签" />/              <Ionicons name="refresh" size={20} color="#ffffff" />/              <Text style={styles.buttonText}>旋转动画</Text>/            </TouchableOpacity>/
+            accessibilityLabel="旋转动画" />/              <Ionicons name="refresh" size={20} color="#ffffff" />/              <Text style={styles.buttonText}>旋转动画</Text>/            </TouchableOpacity>/
             <TouchableOpacity;
 style={[styles.demoButton, getResponsiveStyle(styles.successButton)]}
               onPress={demoSlideAnimation}
               disabled={!enableAnimations}
-            accessibilityLabel="TODO: 添加无障碍标签" />/              <Ionicons name="arrow-forward" size={20} color="#ffffff" />/              <Text style={styles.buttonText}>滑动动画</Text>/            </TouchableOpacity>/
+            accessibilityLabel="滑动动画" />/              <Ionicons name="arrow-forward" size={20} color="#ffffff" />/              <Text style={styles.buttonText}>滑动动画</Text>/            </TouchableOpacity>/
             <TouchableOpacity;
 style={[styles.demoButton, getResponsiveStyle(styles.infoButton)]}
               onPress={demoFadeAnimation}
               disabled={!enableAnimations}
-            accessibilityLabel="TODO: 添加无障碍标签" />/              <Ionicons name="eye" size={20} color="#ffffff" />/              <Text style={styles.buttonText}>淡入淡出</Text>/            </TouchableOpacity>/          </View>/        </View>/
+            accessibilityLabel="淡入淡出" />/              <Ionicons name="eye" size={20} color="#ffffff" />/              <Text style={styles.buttonText}>淡入淡出</Text>/            </TouchableOpacity>/          </View>/        </View>/
         {///
           <View style={styles.performanceButtons}>/                <TouchableOpacity;
 style={[styles.performanceButton, getResponsiveStyle(styles.primaryButton)]}
               onPress={demoPerformanceOptimization}
-            accessibilityLabel="TODO: 添加无障碍标签" />/              <Ionicons name="speedometer" size={20} color="#ffffff" />/              <Text style={styles.buttonText}>性能优化</Text>/            </TouchableOpacity>/
+            accessibilityLabel="性能优化" />/              <Ionicons name="speedometer" size={20} color="#ffffff" />/              <Text style={styles.buttonText}>性能优化</Text>/            </TouchableOpacity>/
             <TouchableOpacity;
 style={[styles.performanceButton, getResponsiveStyle(styles.errorButton)]}
               onPress={clearAllAnimations}
-            accessibilityLabel="TODO: 添加无障碍标签" />/              <Ionicons name="stop" size={20} color="#ffffff" />/              <Text style={styles.buttonText}>清理动画</Text>/            </TouchableOpacity>/          </View>/        </View>/
+            accessibilityLabel="清理动画" />/              <Ionicons name="stop" size={20} color="#ffffff" />/              <Text style={styles.buttonText}>清理动画</Text>/            </TouchableOpacity>/          </View>/        </View>/
         {///
           <View style={styles.responsiveDemo}>/            <Text style={getResponsiveStyle(styles.responsiveText)}} />/                  这是响应式文本，会根据屏幕尺寸自动调整大小
             </Text>/

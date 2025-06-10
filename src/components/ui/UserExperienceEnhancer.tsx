@@ -299,10 +299,10 @@ const effectEnd = performance.now;
             <View style={styles.errorActions}>/                  {error.retryable && error.onRetry   && <TouchableOpacity;
 style={styles.retryButton}
                   onPress={error.onRetry}
-                accessibilityLabel="TODO: 添加无障碍标签" />/                  <Text style={styles.retryButtonText}>重试</Text>/                </TouchableOpacity>/    )}
+                accessibilityLabel="重试操作" />/                  <Text style={styles.retryButtonText}>重试</Text>/                </TouchableOpacity>/    )}
               <TouchableOpacity;
 style={styles.dismissButton}
-                onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> {/                   onInteraction?.(dismissError") "
+                onPress={() = accessibilityLabel="操作按钮" /> {/                   onInteraction?.(dismissError") "
                 }}
               >
                 <Text style={styles.dismissButtonText}>关闭</Text>/              </TouchableOpacity>/            </View>/          </View>/        </View>/      </Modal>/        );

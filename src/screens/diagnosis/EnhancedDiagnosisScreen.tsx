@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
-import {
+import {;
   Alert,
   Animated,
   Dimensions,
@@ -8,18 +8,18 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Button } from '../../components/ui/Button';
 import { ProgressBar } from '../../components/ui/ProgressBar';
-import {
+import {;
   borderRadius,
   colors,
   shadows,
   spacing,
-  typography,
+  typography
 } from '../../constants/theme';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -67,7 +67,7 @@ const EnhancedDiagnosisScreen: React.FC = () => {
       icon: 'eye',
       color: colors.primary,
       completed: false,
-      active: true,
+      active: true
     },
     {
       id: 'listen',
@@ -76,7 +76,7 @@ const EnhancedDiagnosisScreen: React.FC = () => {
       icon: 'ear-hearing',
       color: colors.secondary,
       completed: false,
-      active: false,
+      active: false
     },
     {
       id: 'inquiry',
@@ -85,7 +85,7 @@ const EnhancedDiagnosisScreen: React.FC = () => {
       icon: 'comment-question',
       color: colors.warning,
       completed: false,
-      active: false,
+      active: false
     },
     {
       id: 'palpation',
@@ -94,8 +94,8 @@ const EnhancedDiagnosisScreen: React.FC = () => {
       icon: 'hand-back-left',
       color: colors.info,
       completed: false,
-      active: false,
-    },
+      active: false
+    }
   ]);
 
   // 初始化动画
@@ -104,17 +104,17 @@ const EnhancedDiagnosisScreen: React.FC = () => {
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 800,
-        useNativeDriver: true,
+        useNativeDriver: true
       }),
       Animated.timing(slideAnim, {
         toValue: 0,
         duration: 800,
-        useNativeDriver: true,
+        useNativeDriver: true
       }),
       Animated.spring(scaleAnim, {
         toValue: 1,
-        useNativeDriver: true,
-      }),
+        useNativeDriver: true
+      })
     ]).start();
   }, []);
 
@@ -138,7 +138,7 @@ const EnhancedDiagnosisScreen: React.FC = () => {
               ? true;
               : index === currentStep;
                 ? false;
-                : step.active,
+                : step.active
         }))
       );
 
@@ -148,7 +148,7 @@ const EnhancedDiagnosisScreen: React.FC = () => {
       setTimeout() => {
         scrollViewRef.current?.scrollTo({
           y: (currentStep + 1) * 200,
-          animated: true,
+          animated: true
         });
       }, 300);
     } else {
@@ -157,7 +157,7 @@ const EnhancedDiagnosisScreen: React.FC = () => {
         prev.map(step, index) => ({
           ...step,
           completed: index === currentStep ? true : step.completed,
-          active: false,
+          active: false
         }))
       );
 
@@ -181,9 +181,9 @@ const EnhancedDiagnosisScreen: React.FC = () => {
         '健脾益气，调理脾胃',
         '饮食清淡，少食多餐',
         '适当运动，增强体质',
-        '保持心情舒畅',
+        '保持心情舒畅'
       ],
-      prescription: '四君子汤加减',
+      prescription: '四君子汤加减'
     };
 
     setDiagnosisResult(result);
@@ -200,7 +200,7 @@ const EnhancedDiagnosisScreen: React.FC = () => {
       prev.map(step, index) => ({
         ...step,
         completed: false,
-        active: index === 0,
+        active: index === 0
       }))
     );
   };
@@ -222,9 +222,9 @@ const EnhancedDiagnosisScreen: React.FC = () => {
             opacity: fadeAnim,
             transform: [
               { translateY: slideAnim },
-              { scale: isCurrent ? scaleAnim : 1 },
-            ],
-          },
+              { scale: isCurrent ? scaleAnim : 1 }
+            ]
+          }
         ]}
       >
         <View style={styles.stepHeader}>
@@ -232,7 +232,7 @@ const EnhancedDiagnosisScreen: React.FC = () => {
             style={[
               styles.stepIcon,
               { backgroundColor: step.color },
-              isCompleted && styles.completedStepIcon,
+              isCompleted && styles.completedStepIcon
             ]}
           >
             <Icon;
@@ -443,11 +443,11 @@ const EnhancedDiagnosisScreen: React.FC = () => {
               {
                 rotate: fadeAnim.interpolate({,
   inputRange: [0, 1],
-                  outputRange: ['0deg', '360deg'],
-                }),
-              },
-            ],
-          },
+                  outputRange: ['0deg', '360deg']
+                })
+              }
+            ]
+          }
         ]}
       >
         <Icon name="brain" size={64} color={colors.primary} />
@@ -462,7 +462,7 @@ const EnhancedDiagnosisScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* 头部 */}
+      {// 头部}
       <View style={styles.header}>
         <TouchableOpacity;
           style={styles.backButton}
@@ -476,13 +476,13 @@ const EnhancedDiagnosisScreen: React.FC = () => {
         </TouchableOpacity>
       </View>
 
-      {/* 进度条 */}
+      {// 进度条}
       <View style={styles.progressContainer}>
         <ProgressBar progress={progress} style={styles.progressBar} />
         <Text style={styles.progressText}>{Math.round(progress)}% 完成</Text>
       </View>
 
-      {/* 内容区域 */}
+      {// 内容区域}
       <ScrollView;
         ref={scrollViewRef}
         style={styles.content}
@@ -503,7 +503,7 @@ const EnhancedDiagnosisScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {,
   flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: colors.background
   },
   header: {,
   flexDirection: 'row',
@@ -513,7 +513,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
     backgroundColor: colors.surface,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: colors.border
   },
   backButton: {,
   width: 40,
@@ -521,12 +521,12 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: colors.gray100,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   headerTitle: {,
   fontSize: typography.fontSize.lg,
     fontWeight: '600' as const,
-    color: colors.text,
+    color: colors.text
   },
   helpButton: {,
   width: 40,
@@ -534,26 +534,26 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: colors.gray100,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   progressContainer: {,
   paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.surface
   },
   progressBar: {,
-  marginBottom: spacing.xs,
+  marginBottom: spacing.xs
   },
   progressText: {,
   fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
-    textAlign: 'center',
+    textAlign: 'center'
   },
   content: {,
-  flex: 1,
+  flex: 1
   },
   stepsContainer: {,
-  padding: spacing.lg,
+  padding: spacing.lg
   },
   stepCard: {,
   backgroundColor: colors.surface,
@@ -562,80 +562,80 @@ const styles = StyleSheet.create({
     marginBottom: spacing.lg,
     borderWidth: 1,
     borderColor: colors.border,
-    ...shadows.sm,
+    ...shadows.sm
   },
   activeStepCard: {,
   borderColor: colors.primary,
-    ...shadows.md,
+    ...shadows.md
   },
   completedStepCard: {,
   backgroundColor: colors.success + '10',
-    borderColor: colors.success,
+    borderColor: colors.success
   },
   stepHeader: {,
   flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   stepIcon: {,
   width: 48,
     height: 48,
     borderRadius: 24,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   completedStepIcon: {,
-  backgroundColor: colors.success,
+  backgroundColor: colors.success
   },
   stepInfo: {,
   flex: 1,
-    marginLeft: spacing.md,
+    marginLeft: spacing.md
   },
   stepTitle: {,
   fontSize: typography.fontSize.lg,
     fontWeight: '600' as const,
-    color: colors.text,
+    color: colors.text
   },
   activeStepTitle: {,
-  color: colors.primary,
+  color: colors.primary
   },
   stepDescription: {,
   fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
-    marginTop: 2,
+    marginTop: 2
   },
   stepStatus: {,
   width: 24,
     height: 24,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   activeIndicator: {,
   width: 12,
     height: 12,
     borderRadius: 6,
-    backgroundColor: colors.primary,
+    backgroundColor: colors.primary
   },
   stepContent: {,
   marginTop: spacing.lg,
     paddingTop: spacing.lg,
     borderTopWidth: 1,
-    borderTopColor: colors.border,
+    borderTopColor: colors.border
   },
   contentContainer: {,
-  alignItems: 'center',
+  alignItems: 'center'
   },
   contentTitle: {,
   fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
     color: colors.text,
     marginBottom: spacing.lg,
-    textAlign: 'center',
+    textAlign: 'center'
   },
   uploadContainer: {,
   flexDirection: 'row',
     justifyContent: 'space-around',
     width: '100%',
-    marginBottom: spacing.lg,
+    marginBottom: spacing.lg
   },
   uploadButton: {,
   alignItems: 'center',
@@ -644,17 +644,17 @@ const styles = StyleSheet.create({
     borderColor: colors.primary,
     borderStyle: 'dashed',
     borderRadius: borderRadius.md,
-    width: '45%',
+    width: '45%'
   },
   uploadText: {,
   fontSize: typography.fontSize.sm,
     color: colors.primary,
     marginTop: spacing.sm,
-    textAlign: 'center',
+    textAlign: 'center'
   },
   recordContainer: {,
   alignItems: 'center',
-    marginBottom: spacing.lg,
+    marginBottom: spacing.lg
   },
   recordButton: {,
   width: 120,
@@ -664,33 +664,33 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 3,
-    borderColor: colors.secondary,
+    borderColor: colors.secondary
   },
   recordText: {,
   fontSize: typography.fontSize.sm,
     color: colors.secondary,
-    marginTop: spacing.sm,
+    marginTop: spacing.sm
   },
   instructionText: {,
   fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
     textAlign: 'center',
     marginBottom: spacing.lg,
-    lineHeight: 20,
+    lineHeight: 20
   },
   questionContainer: {,
   width: '100%',
-    marginBottom: spacing.lg,
+    marginBottom: spacing.lg
   },
   questionText: {,
   fontSize: typography.fontSize.base,
     color: colors.text,
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   symptomsGrid: {,
   flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   symptomButton: {,
   width: '48%',
@@ -698,67 +698,67 @@ const styles = StyleSheet.create({
     backgroundColor: colors.gray100,
     borderRadius: borderRadius.md,
     marginBottom: spacing.sm,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   symptomText: {,
   fontSize: typography.fontSize.sm,
-    color: colors.text,
+    color: colors.text
   },
   pulseContainer: {,
   alignItems: 'center',
-    marginBottom: spacing.lg,
+    marginBottom: spacing.lg
   },
   pulseIndicator: {,
   alignItems: 'center',
-    marginTop: spacing.lg,
+    marginTop: spacing.lg
   },
   pulseText: {,
   fontSize: typography.fontSize.base,
     color: colors.info,
-    marginTop: spacing.sm,
+    marginTop: spacing.sm
   },
   nextButton: {,
-  width: '100%',
+  width: '100%'
   },
   processingContainer: {,
   flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: spacing.xl,
+    padding: spacing.xl
   },
   processingIcon: {,
-  marginBottom: spacing.lg,
+  marginBottom: spacing.lg
   },
   processingTitle: {,
   fontSize: typography.fontSize.xl,
     fontWeight: '600' as const,
     color: colors.text,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.sm
   },
   processingText: {,
   fontSize: typography.fontSize.base,
     color: colors.textSecondary,
     textAlign: 'center',
     marginBottom: spacing.xl,
-    lineHeight: 22,
+    lineHeight: 22
   },
   processingProgress: {,
-  width: '80%',
+  width: '80%'
   },
   resultContainer: {,
-  padding: spacing.lg,
+  padding: spacing.lg
   },
   resultHeader: {,
   flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: spacing.xl,
+    marginBottom: spacing.xl
   },
   resultTitle: {,
   fontSize: typography.fontSize.xl,
     fontWeight: '600' as const,
     color: colors.text,
-    marginLeft: spacing.sm,
+    marginLeft: spacing.sm
   },
   syndromeCard: {,
   backgroundColor: colors.primary + '10',
@@ -766,65 +766,65 @@ const styles = StyleSheet.create({
     padding: spacing.lg,
     marginBottom: spacing.lg,
     borderWidth: 1,
-    borderColor: colors.primary,
+    borderColor: colors.primary
   },
   syndromeTitle: {,
   fontSize: typography.fontSize.sm,
     color: colors.primary,
-    marginBottom: spacing.xs,
+    marginBottom: spacing.xs
   },
   syndromeName: {,
   fontSize: typography.fontSize.xl,
     fontWeight: '700' as const,
     color: colors.primary,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.sm
   },
   confidenceContainer: {,
   flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   confidenceLabel: {,
   fontSize: typography.fontSize.sm,
-    color: colors.textSecondary,
+    color: colors.textSecondary
   },
   confidenceValue: {,
   fontSize: typography.fontSize.sm,
     fontWeight: '600' as const,
-    color: colors.primary,
+    color: colors.primary
   },
   symptomsCard: {,
   backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     marginBottom: spacing.lg,
-    ...shadows.sm,
+    ...shadows.sm
   },
   cardTitle: {,
   fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
     color: colors.text,
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   symptomItem: {,
   flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: spacing.xs,
+    marginBottom: spacing.xs
   },
   symptomItemText: {,
   fontSize: typography.fontSize.sm,
     color: colors.text,
-    marginLeft: spacing.xs,
+    marginLeft: spacing.xs
   },
   recommendationsCard: {,
   backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     marginBottom: spacing.lg,
-    ...shadows.sm,
+    ...shadows.sm
   },
   recommendationItem: {,
   flexDirection: 'row',
-    marginBottom: spacing.sm,
+    marginBottom: spacing.sm
   },
   recommendationNumber: {,
   width: 20,
@@ -835,13 +835,13 @@ const styles = StyleSheet.create({
     fontSize: typography.fontSize.xs,
     textAlign: 'center',
     lineHeight: 20,
-    marginRight: spacing.sm,
+    marginRight: spacing.sm
   },
   recommendationText: {,
   flex: 1,
     fontSize: typography.fontSize.sm,
     color: colors.text,
-    lineHeight: 20,
+    lineHeight: 20
   },
   prescriptionCard: {,
   backgroundColor: colors.warning + '10',
@@ -849,21 +849,21 @@ const styles = StyleSheet.create({
     padding: spacing.lg,
     marginBottom: spacing.lg,
     borderWidth: 1,
-    borderColor: colors.warning,
+    borderColor: colors.warning
   },
   prescriptionText: {,
   fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
-    color: colors.warning,
+    color: colors.warning
   },
   actionButtons: {,
   flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: spacing.lg,
+    marginTop: spacing.lg
   },
   actionButton: {,
-  width: '48%',
-  },
+  width: '48%'
+  }
 });
 
 export default EnhancedDiagnosisScreen;

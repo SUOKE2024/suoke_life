@@ -18,7 +18,7 @@ return (;)
 style={styles.container}
       onPress={onPress}
       disabled={!onPress}
-    accessibilityLabel="TODO: 添加无障碍标签" />/      <View style={styles.header}>/            <View;
+    accessibilityLabel="操作按钮" />/      <View style={styles.header}>/            <View;
 style={[
             styles.iconContainer,
             { backgroundColor: metric.color + "2;0;"   }}

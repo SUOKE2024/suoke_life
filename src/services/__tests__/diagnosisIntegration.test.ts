@@ -1,7 +1,10 @@
-import { FiveDiagnosisService, FiveDiagnosisInput } from '../fiveDiagnosisService';
+import {
+  FiveDiagnosisInput,
+  FiveDiagnosisService,
+} from '../fiveDiagnosisService';
 /**
-* 诊断服务集成测试
-*/
+ * 诊断服务集成测试
+ */
 describe('诊断服务集成测试', () => {
   let fiveDiagnosisService: FiveDiagnosisService;
   beforeAll(async () => {
@@ -11,17 +14,21 @@ describe('诊断服务集成测试', () => {
   describe('API集成测试', () => {
     test('五诊综合分析API', async () => {
       const input: FiveDiagnosisInput = {
-      userId: "test-user-001",
-      sessionId: 'test-session-001',
+        userId: 'test-user-001',
+        sessionId: 'test-session-001',
         lookingData: {
-      tongueImage: "data:image/jpeg;base64,test",
-      faceImage: 'data:image/jpeg;base64,test'},
+          tongueImage: 'data:image/jpeg;base64,test',
+          faceImage: 'data:image/jpeg;base64,test',
+        },
         inquiryData: {
-          symptoms: ["头痛", "失眠'],
+          symptoms: ['头痛', '失眠'],
           medicalHistory: ['无'],
           lifestyle: {
-      sleep: "7小时", "
-      exercise: '偶尔'}}};
+            sleep: '7小时',
+            exercise: '偶尔',
+          },
+        },
+      };
       const result = await fiveDiagnosisService.performDiagnosis(input);
       expect(result).toBeDefined();
       expect(result.diagnosticResults).toBeDefined();
@@ -40,9 +47,13 @@ describe('诊断服务集成测试', () => {
       const input: FiveDiagnosisInput = {
         userId: '', // 空用户ID
         lookingData: {
-      tongueImage: "test",
-      faceImage: 'test'}};
-      await expect(fiveDiagnosisService.performDiagnosis(input)).rejects.toThrow();
+          tongueImage: 'test',
+          faceImage: 'test',
+        },
+      };
+      await expect(
+        fiveDiagnosisService.performDiagnosis(input)
+      ).rejects.toThrow();
     });
   });
 });

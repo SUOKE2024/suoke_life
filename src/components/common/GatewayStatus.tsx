@@ -3,7 +3,7 @@
 * 显示网关健康状态、性能指标和服务状态
 */
 import React, { useState, useEffect } from 'react';
-import {
+import {;
   View,
   Text,
   StyleSheet,

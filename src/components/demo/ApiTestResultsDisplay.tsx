@@ -1,5 +1,5 @@
 import { colors, spacing, typography } from "../../constants/    theme";
-import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/      View,"
+import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/      View,";
 import React from "react";
 /
 importReact from ";react";
@@ -100,7 +100,7 @@ style={[
         <TouchableOpacity;
 key={index}
           style={styles.testItem}
-          onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> onViewDetails?.(test)}/            >
+          onPress={() = accessibilityLabel="操作按钮" /> onViewDetails?.(test)}/            >
           <View style={styles.testHeader}>/            <Text style={styles.testIcon}>{getStatusIcon(test.status)}</Text>/            <View style={styles.testInfo}>/              <Text style={styles.testName}>{test.name}</Text>/              <Text style={styles.testEndpoint}>/                    {test.method} {test.endpoint}
               </Text>/            </View>/            <View style={styles.testMeta}>/              <Text style={styles.testDuration}>{test.duration}ms</Text>/  >
                 styles.testStatus,
@@ -108,7 +108,7 @@ key={index}
               ]} />/                    {test.status}
               </Text>/            </View>/          </View>/              {test.error  && <View style={styles.errorContainer}>/              <Text style={styles.errorText}>{test.error}</Text>/                  {onRetryTest  && <TouchableOpacity;
 style={styles.retryButton}
-                  onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> onRetryTest(test.name)}/                    >
+                  onPress={() = accessibilityLabel="操作按钮" /> onRetryTest(test.name)}/                    >
                   <Text style={styles.retryButtonText}>重试</Text>/                </TouchableOpacity>/                  )}
             </View>/              )}
         </TouchableOpacity>/          ))}

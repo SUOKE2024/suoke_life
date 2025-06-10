@@ -71,7 +71,7 @@ AccessibilityPanel",{/    "
         </Text>/      </View>/;
       <View style={styles.sliderContainer}>/            <TouchableOpacity;
 style={[styles.sliderButton, { backgroundColor: theme.colors.outline}}]}
-          onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> {/                const newValue = Math.max(min, value - step);
+          onPress={() = accessibilityLabel="操作按钮" /> {/                const newValue = Math.max(min, value - step);
             handleConfigUpdate(key, newValue);
           }}
           accessible={true}
@@ -83,7 +83,7 @@ style={[styles.sliderButton, { backgroundColor: theme.colors.outline}}]}
           </Text>/        </View>/
         <TouchableOpacity;
 style={[styles.sliderButton, { backgroundColor: theme.colors.outline}}]}
-          onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> {/            const newValue = Math.min(max, value + step);
+          onPress={() = accessibilityLabel="操作按钮" /> {/            const newValue = Math.min(max, value + step);
             handleConfigUpdate(key, newValue);
           }}
           accessible={true}
@@ -100,7 +100,7 @@ title="关闭"
             variant="ghost"
             size="small"
             onPress={onClose}
-          / accessibilityLabel="TODO: 添加无障碍标签" />/    )}
+          / accessibilityLabel="操作按钮" />/    )}
       </View>/
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false} />/        <View style={styles.section}>/          <Text style={[styles.sectionTitle, { color: theme.colors.primary}}]} />/                视觉辅助
           </Text>/
@@ -171,7 +171,7 @@ title="关闭"
         <View style={styles.actions}>/              <Button;
 title="重置为默认设置"
             variant="outline"
-            onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> {/                  resetConfig();
+            onPress={() = accessibilityLabel="操作按钮" /> {/                  resetConfig();
               announceForAccessibility(无障碍设置已重置为默认值");"
             }}
             style={styles.resetButton}>/        </View>/      </ScrollView>/    </View>/      );

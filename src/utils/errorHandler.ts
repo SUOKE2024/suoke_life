@@ -404,13 +404,13 @@ export const errorHandler = ErrorHandler.getInstance();
 // 便捷函数
 export const handleError = (error: Partial<AppError> & { type: ErrorType; message: string }) =>
   errorHandler.handleError(error);
-export const handleNetworkError = (error: any, context?: Record<string, any>) =>
+export const handleNetworkError = (error: any, context?: Record<string, any>) =>;
   errorHandler.handleNetworkError(error, context);
-export const handleAgentServiceError = (error: any, agentId?: string, context?: Record<string, any>) =>
+export const handleAgentServiceError = (error: any, agentId?: string, context?: Record<string, any>) =>;
   errorHandler.handleAgentServiceError(error, agentId, context);
-export const handleValidationError = (field: string, value: any, rule: string) =>
+export const handleValidationError = (field: string, value: any, rule: string) =>;
   errorHandler.handleValidationError(field, value, rule);
-export const handlePermissionError = (permission: string, context?: Record<string, any>) =>
+export const handlePermissionError = (permission: string, context?: Record<string, any>) =>;
   errorHandler.handlePermissionError(permission, context);
 // React Hook for error handling;
 export const useErrorHandler = () => {

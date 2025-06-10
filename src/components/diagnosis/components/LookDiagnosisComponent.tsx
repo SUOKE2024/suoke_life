@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import {
+import {;
   ActivityIndicator,
   Alert,
   Image,
@@ -7,21 +7,21 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
-import {
+import {;
   ImagePickerResponse,
-  launchImageLibrary,
+  launchImageLibrary
 } from 'react-native-image-picker';
 import { colors, spacing } from '../../../constants/theme';
-import {
+import {;
   DiagnosisComponentProps,
-  LookDiagnosisData,
+  LookDiagnosisData
 } from '../../../types/diagnosis';
 
 export const LookDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
   onComplete,
-  onCancel,
+  onCancel
 }) => {
   const [faceImage, setFaceImage] = useState<string | null>(null);
   const [tongueImage, setTongueImage] = useState<string | null>(null);
@@ -33,7 +33,7 @@ export const LookDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
       mediaType: 'photo' as const,
       quality: 0.8,
       maxWidth: 1024,
-      maxHeight: 1024,
+      maxHeight: 1024
     };
 
     launchImageLibrary(options, (response: ImagePickerResponse) => {
@@ -69,7 +69,7 @@ export const LookDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
               complexion: '面色红润',
               spirit: '精神饱满',
               features: ['气色良好', '五官端正'],
-              confidence: 0.85,
+              confidence: 0.85
             }
           : null,
         tongueAnalysis: tongueImage;
@@ -77,11 +77,11 @@ export const LookDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
               tongueBody: '舌质淡红',
               tongueCoating: '苔薄白',
               features: ['舌体适中', '舌苔正常'],
-              confidence: 0.82,
+              confidence: 0.82
             }
           : null,
         overallAssessment: '望诊结果显示整体健康状况良好',
-        recommendations: ['保持良好的作息习惯', '注意饮食均衡', '适当运动锻炼'],
+        recommendations: ['保持良好的作息习惯', '注意饮食均衡', '适当运动锻炼']
       };
 
       setAnalysisResult(mockResult);
@@ -98,8 +98,8 @@ export const LookDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
       tongueImage,
       metadata: {
         analysisResult,
-        timestamp: new Date().toISOString(),
-      },
+        timestamp: new Date().toISOString()
+      }
     };
     onComplete(data);
   }, [faceImage, tongueImage, analysisResult, onComplete]);
@@ -231,118 +231,118 @@ export const LookDiagnosisComponent: React.FC<DiagnosisComponentProps> = ({
 const styles = StyleSheet.create({
   container: {,
   flex: 1,
-    padding: spacing.md,
+    padding: spacing.md
   },
   title: {,
   fontSize: 20,
     fontWeight: '600',
     color: colors.textPrimary,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.sm
   },
   subtitle: {,
   fontSize: 14,
     color: colors.textSecondary,
     marginBottom: spacing.lg,
-    lineHeight: 20,
+    lineHeight: 20
   },
   imageSection: {,
-  marginBottom: spacing.lg,
+  marginBottom: spacing.lg
   },
   sectionTitle: {,
   fontSize: 16,
     fontWeight: '600',
     color: colors.textPrimary,
-    marginBottom: spacing.xs,
+    marginBottom: spacing.xs
   },
   sectionDescription: {,
   fontSize: 12,
     color: colors.textSecondary,
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   imageContainer: {,
   borderRadius: 8,
     overflow: 'hidden',
     borderWidth: 2,
     borderColor: colors.border,
-    borderStyle: 'dashed',
+    borderStyle: 'dashed'
   },
   image: {,
   width: '100%',
     height: 200,
-    resizeMode: 'cover',
+    resizeMode: 'cover'
   },
   imagePlaceholder: {,
   width: '100%',
     height: 200,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.surface,
+    backgroundColor: colors.surface
   },
   placeholderText: {,
   fontSize: 14,
-    color: colors.textSecondary,
+    color: colors.textSecondary
   },
   actionContainer: {,
-  marginVertical: spacing.md,
+  marginVertical: spacing.md
   },
   button: {,
   paddingVertical: spacing.md,
     paddingHorizontal: spacing.lg,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   analyzeButton: {,
-  backgroundColor: colors.primary,
+  backgroundColor: colors.primary
   },
   completeButton: {,
-  backgroundColor: colors.success,
+  backgroundColor: colors.success
   },
   buttonText: {,
   fontSize: 16,
     fontWeight: '600',
-    color: colors.white,
+    color: colors.white
   },
   resultContainer: {,
   backgroundColor: colors.surface,
     borderRadius: 8,
     padding: spacing.md,
-    marginTop: spacing.md,
+    marginTop: spacing.md
   },
   resultTitle: {,
   fontSize: 18,
     fontWeight: '600',
     color: colors.textPrimary,
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   analysisSection: {,
   marginBottom: spacing.md,
     paddingBottom: spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: colors.border
   },
   analysisTitle: {,
   fontSize: 16,
     fontWeight: '600',
     color: colors.textPrimary,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.sm
   },
   analysisText: {,
   fontSize: 14,
     color: colors.textSecondary,
-    marginBottom: spacing.xs,
+    marginBottom: spacing.xs
   },
   confidenceText: {,
   fontSize: 12,
     color: colors.primary,
-    fontWeight: '500',
+    fontWeight: '500'
   },
   recommendationSection: {,
-  marginTop: spacing.sm,
+  marginTop: spacing.sm
   },
   recommendationText: {,
   fontSize: 14,
     color: colors.textSecondary,
     marginBottom: spacing.xs,
-    lineHeight: 20,
-  },
+    lineHeight: 20
+  }
 });

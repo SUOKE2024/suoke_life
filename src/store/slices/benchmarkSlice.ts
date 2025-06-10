@@ -77,56 +77,56 @@ const initialState: BenchmarkState = {,
   }
 };
 // 异步操作
-export const fetchBenchmarkTasks = createAsyncThunk(;)
+export const fetchBenchmarkTasks = createAsyncThunk(;);
   'benchmark/fetchTasks',
   async (status?: string) => {
     const tasks = await benchmarkService.listBenchmarks(status);
     return tasks;
   }
 );
-export const fetchBenchmarkResult = createAsyncThunk(;)
+export const fetchBenchmarkResult = createAsyncThunk(;);
   'benchmark/fetchResult',
   async (taskId: string) => {
     const result = await benchmarkService.getBenchmarkResult(taskId);
     return result;
   }
 );
-export const fetchHealthStatus = createAsyncThunk(;)
+export const fetchHealthStatus = createAsyncThunk(;);
   'benchmark/fetchHealth',
   async () => {
     const status = await benchmarkService.getHealthStatus();
     return status;
   }
 );
-export const fetchPlugins = createAsyncThunk(;)
+export const fetchPlugins = createAsyncThunk(;);
   'benchmark/fetchPlugins',
   async () => {
     const plugins = await benchmarkService.listPlugins();
     return plugins;
   }
 );
-export const submitBenchmark = createAsyncThunk(;)
+export const submitBenchmark = createAsyncThunk(;);
   'benchmark/submit',
   async (config: BenchmarkConfig) => {
     const taskId = await benchmarkService.submitBenchmark(config);
     return taskId;
   }
 );
-export const submitPluginBenchmark = createAsyncThunk(;)
+export const submitPluginBenchmark = createAsyncThunk(;);
   'benchmark/submitPlugin',
   async ({ pluginName, config }: { pluginName: string; config: any }) => {
     const taskId = await benchmarkService.runPluginBenchmark(pluginName, config);
     return taskId;
   }
 );
-export const cancelBenchmark = createAsyncThunk(;)
+export const cancelBenchmark = createAsyncThunk(;);
   'benchmark/cancel',
   async (taskId: string) => {
     await benchmarkService.cancelBenchmark(taskId);
     return taskId;
   }
 );
-export const generateReport = createAsyncThunk(;)
+export const generateReport = createAsyncThunk(;);
   'benchmark/generateReport',
   async ({ taskId, format }: { taskId: string; format: 'html' | 'json' }) => {
     const reportUrl = await benchmarkService.generateReport(taskId, format);

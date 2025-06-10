@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import {
+import {;
   Animated,
   Dimensions,
   Modal,
@@ -7,7 +7,7 @@ import {
   Text,
   TouchableOpacity,
   View,
-  ViewStyle,
+  ViewStyle
 } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 
@@ -38,7 +38,7 @@ export const Drawer: React.FC<DrawerProps> = ({
   overlayStyle,
   accessible = true,
   accessibilityLabel,
-  testID,
+  testID
 }) => {
   const { currentTheme } = useTheme();
   const screenWidth = Dimensions.get('window').width;
@@ -55,26 +55,26 @@ export const Drawer: React.FC<DrawerProps> = ({
         Animated.timing(translateX, {
           toValue: 0,
           duration: 300,
-          useNativeDriver: true,
+          useNativeDriver: true
         }),
         Animated.timing(overlayOpacity, {
           toValue: 1,
           duration: 300,
-          useNativeDriver: true,
-        }),
+          useNativeDriver: true
+        })
       ]).start();
     } else {
       Animated.parallel([
         Animated.timing(translateX, {
           toValue: position === 'left' ? -drawerWidth : drawerWidth,
           duration: 250,
-          useNativeDriver: true,
+          useNativeDriver: true
         }),
         Animated.timing(overlayOpacity, {
           toValue: 0,
           duration: 250,
-          useNativeDriver: true,
-        }),
+          useNativeDriver: true
+        })
       ]).start();
     }
   }, [visible, translateX, overlayOpacity, position, drawerWidth]);
@@ -82,12 +82,12 @@ export const Drawer: React.FC<DrawerProps> = ({
   const styles = StyleSheet.create({
     modal: {,
   flex: 1,
-      flexDirection: 'row',
+      flexDirection: 'row'
     },
     overlay: {
       ...StyleSheet.absoluteFillObject,
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      ...overlayStyle,
+      ...overlayStyle
     },
     drawer: {,
   position: 'absolute',
@@ -98,13 +98,13 @@ export const Drawer: React.FC<DrawerProps> = ({
       shadowColor: currentTheme.colors.shadow,
       shadowOffset: {,
   width: position === 'left' ? 2 : -2,
-        height: 0,
+        height: 0
       },
       shadowOpacity: 0.25,
       shadowRadius: 8,
       elevation: 16,
       [position]: 0,
-      ...style,
+      ...style
     },
     content: {,
   flex: 1,
@@ -117,17 +117,17 @@ export const Drawer: React.FC<DrawerProps> = ({
       paddingHorizontal: 16,
       paddingVertical: 12,
       borderBottomWidth: 1,
-      borderBottomColor: currentTheme.colors.outline,
+      borderBottomColor: currentTheme.colors.outline
     },
     closeButton: {,
   padding: 8,
       borderRadius: 20,
-      backgroundColor: currentTheme.colors.surfaceVariant,
+      backgroundColor: currentTheme.colors.surfaceVariant
     },
     closeButtonText: {,
   fontSize: 18,
-      color: currentTheme.colors.onSurface,
-    },
+      color: currentTheme.colors.onSurface
+    }
   });
 
   if (!visible) {
@@ -157,8 +157,8 @@ export const Drawer: React.FC<DrawerProps> = ({
           style={[
             styles.drawer,
             {
-              transform: [{ translateX }],
-            },
+              transform: [{ translateX }]
+            }
           ]}
         >
           <View style={styles.content}>
@@ -206,7 +206,7 @@ export const DrawerItem: React.FC<DrawerItemProps> = ({
   textStyle,
   accessible = true,
   accessibilityLabel,
-  testID,
+  testID
 }) => {
   const { currentTheme } = useTheme();
 
@@ -221,17 +221,17 @@ export const DrawerItem: React.FC<DrawerItemProps> = ({
       borderRadius: 8,
       backgroundColor: active;
         ? currentTheme.colors.primary + '20'
-        : 'transparent',
+        : 'transparent'
     },
     itemDisabled: {,
-  opacity: 0.5,
+  opacity: 0.5
     },
     icon: {,
   marginRight: 12,
       width: 24,
       height: 24,
       justifyContent: 'center',
-      alignItems: 'center',
+      alignItems: 'center'
     },
     text: {,
   fontSize: 16,
@@ -239,8 +239,8 @@ export const DrawerItem: React.FC<DrawerItemProps> = ({
         ? currentTheme.colors.primary;
         : currentTheme.colors.onSurface,
       flex: 1,
-      ...textStyle,
-    },
+      ...textStyle
+    }
   });
 
   return (
@@ -272,13 +272,13 @@ export const DrawerSection: React.FC<DrawerSectionProps> = ({
   title,
   children,
   style,
-  titleStyle,
+  titleStyle
 }) => {
   const { currentTheme } = useTheme();
 
   const styles = StyleSheet.create({
     section: {,
-  marginVertical: 8,
+  marginVertical: 8
     },
     title: {,
   fontSize: 14,
@@ -288,8 +288,8 @@ export const DrawerSection: React.FC<DrawerSectionProps> = ({
       paddingVertical: 8,
       textTransform: 'uppercase',
       letterSpacing: 0.5,
-      ...titleStyle,
-    },
+      ...titleStyle
+    }
   });
 
   return (

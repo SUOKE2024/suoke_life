@@ -29,7 +29,7 @@ title="← 返回组件库"
               variant="outline"
               onPress={onBack};
               style={styles.backButton}
-            / accessibilityLabel="TODO: 添加无障碍标签" />/          </View>/            ;)}
+            / accessibilityLabel="操作按钮" />/          </View>/            ;)}
         <Text variant="h1" style={styles.title}>/              索克生活品牌色彩
         </Text>/
         {///                主要品牌色

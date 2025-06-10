@@ -1,0 +1,555 @@
+/**
+ * MemoryMonitor - 内存监控组件
+ * 实时显示应用内存使用情况和优化建议
+ */
+
+import React, { useEffect, useState } from 'react';
+import {
+  Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { localModelManager } from '../../core/ai/LocalModelManager';
+import { optimizedCacheService } from '../../core/cache/OptimizedCacheService';
+
+interface MemoryStats {
+  totalMemory: number;
+  usedMemory: number;
+  availableMemory: number;
+  modelMemory: number;
+  cacheMemory: number;
+  systemMemory: number;
+}
+
+interface PerformanceMetrics {
+  memoryPressure: 'low' | 'medium' | 'high' | 'critical';
+  recommendations: string[];
+  optimizationActions: Array<{
+    title: string;
+    description: string;
+    action: () => Promise<void>;
+    impact: 'low' | 'medium' | 'high';
+  }>;
+}
+
+export const MemoryMonitor: React.FC = () => {
+  const [memoryStats, setMemoryStats] = useState<MemoryStats>({
+    totalMemory: 0,
+    usedMemory: 0,
+    availableMemory: 0,
+    modelMemory: 0,
+    cacheMemory: 0,
+    systemMemory: 0,
+  });
+
+  const [performanceMetrics, setPerformanceMetrics] =
+    useState<PerformanceMetrics>({
+      memoryPressure: 'low',
+      recommendations: [],
+      optimizationActions: [],
+    });
+
+  const [isMonitoring, setIsMonitoring] = useState(false);
+  const [autoOptimize, setAutoOptimize] = useState(true);
+
+  useEffect(() => {
+    if (isMonitoring) {
+      const interval = setInterval(updateMemoryStats, 2000);
+      return () => clearInterval(interval);
+    }
+  }, [isMonitoring]);
+
+  useEffect(() => {
+    updateMemoryStats();
+    setIsMonitoring(true);
+  }, []);
+
+  const updateMemoryStats = async (): Promise<void> => {
+    try {
+      // 获取模型管理器内存统计
+      const modelStats = localModelManager.getMemoryStats();
+
+      // 获取缓存服务内存统计
+      const cacheStats = optimizedCacheService.getMemoryUsage();
+
+      // 模拟系统内存信息（实际应用中会调用原生模块）
+      const totalMemory = 4 * 1024 * 1024 * 1024; // 4GB
+      const modelMemory = modelStats.usedMemory;
+      const cacheMemory = cacheStats.current;
+      const systemMemory = totalMemory * 0.3; // 假设系统占用30%
+      const usedMemory = modelMemory + cacheMemory + systemMemory;
+      const availableMemory = totalMemory - usedMemory;
+
+      const newStats: MemoryStats = {
+        totalMemory,
+        usedMemory,
+        availableMemory,
+        modelMemory,
+        cacheMemory,
+        systemMemory,
+      };
+
+      setMemoryStats(newStats);
+
+      // 分析性能指标
+      const metrics = analyzePerformance(newStats, modelStats, cacheStats);
+      setPerformanceMetrics(metrics);
+
+      // 自动优化
+      if (autoOptimize && metrics.memoryPressure === 'high') {
+        await performAutoOptimization();
+      }
+    } catch (error) {
+      console.error('Failed to update memory stats:', error);
+    }
+  };
+
+  const analyzePerformance = (
+    stats: MemoryStats,
+    modelStats: any,
+    cacheStats: any
+  ): PerformanceMetrics => {
+    const memoryUsageRatio = stats.usedMemory / stats.totalMemory;
+    let memoryPressure: 'low' | 'medium' | 'high' | 'critical';
+    const recommendations: string[] = [];
+    const optimizationActions: PerformanceMetrics['optimizationActions'] = [];
+
+    // 确定内存压力级别
+    if (memoryUsageRatio < 0.6) {
+      memoryPressure = 'low';
+    } else if (memoryUsageRatio < 0.75) {
+      memoryPressure = 'medium';
+      recommendations.push('考虑清理不必要的缓存');
+    } else if (memoryUsageRatio < 0.9) {
+      memoryPressure = 'high';
+      recommendations.push('建议立即清理内存');
+      recommendations.push('卸载未使用的AI模型');
+    } else {
+      memoryPressure = 'critical';
+      recommendations.push('内存严重不足，需要紧急清理');
+      recommendations.push('关闭非必要功能');
+    }
+
+    // 生成优化建议
+    if (stats.cacheMemory > 50 * 1024 * 1024) {
+      // 50MB
+      optimizationActions.push({
+        title: '清理缓存',
+        description: `缓存占用 ${formatBytes(stats.cacheMemory)}，建议清理`,
+        action: async () => {
+          await optimizedCacheService.cleanup();
+          await updateMemoryStats();
+        },
+        impact: 'medium',
+      });
+    }
+
+    if (modelStats.loadedModels > 2) {
+      optimizationActions.push({
+        title: '卸载未使用模型',
+        description: `当前加载 ${modelStats.loadedModels} 个模型，建议卸载不常用的`,
+        action: async () => {
+          // 实现模型卸载逻辑
+          await updateMemoryStats();
+        },
+        impact: 'high',
+      });
+    }
+
+    if (cacheStats.itemCount > 300) {
+      optimizationActions.push({
+        title: '压缩缓存项',
+        description: `缓存项过多 (${cacheStats.itemCount})，建议压缩`,
+        action: async () => {
+          await optimizedCacheService.cleanup();
+          await updateMemoryStats();
+        },
+        impact: 'low',
+      });
+    }
+
+    return {
+      memoryPressure,
+      recommendations,
+      optimizationActions,
+    };
+  };
+
+  const performAutoOptimization = async (): Promise<void> => {
+    try {
+      console.log('Performing auto optimization...');
+
+      // 清理缓存
+      await optimizedCacheService.cleanup();
+
+      // 触发垃圾回收（如果可能）
+      if (global.gc) {
+        global.gc();
+      }
+
+      await updateMemoryStats();
+    } catch (error) {
+      console.error('Auto optimization failed:', error);
+    }
+  };
+
+  const executeOptimizationAction = async (
+    action: PerformanceMetrics['optimizationActions'][0]
+  ): Promise<void> => {
+    try {
+      await action.action();
+      Alert.alert('优化完成', `${action.title} 执行成功`);
+    } catch (error) {
+      Alert.alert('优化失败', `${action.title} 执行失败: ${error.message}`);
+    }
+  };
+
+  const formatBytes = (bytes: number): string => {
+    if (bytes === 0) return '0 B';
+    const k = 1024;
+    const sizes = ['B', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  };
+
+  const getMemoryPressureColor = (pressure: string): string => {
+    switch (pressure) {
+      case 'low':
+        return '#4CAF50';
+      case 'medium':
+        return '#FF9800';
+      case 'high':
+        return '#FF5722';
+      case 'critical':
+        return '#F44336';
+      default:
+        return '#9E9E9E';
+    }
+  };
+
+  const getMemoryUsagePercentage = (): number => {
+    return (memoryStats.usedMemory / memoryStats.totalMemory) * 100;
+  };
+
+  return (
+    <ScrollView style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>内存监控</Text>
+        <TouchableOpacity
+          style={[
+            styles.toggleButton,
+            { backgroundColor: isMonitoring ? '#4CAF50' : '#9E9E9E' },
+          ]}
+          onPress={() => setIsMonitoring(!isMonitoring)}
+        >
+          <Text style={styles.toggleButtonText}>
+            {isMonitoring ? '监控中' : '已停止'}
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* 内存使用概览 */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>内存使用概览</Text>
+
+        <View style={styles.memoryBar}>
+          <View
+            style={[
+              styles.memoryUsed,
+              {
+                width: `${getMemoryUsagePercentage()}%`,
+                backgroundColor: getMemoryPressureColor(
+                  performanceMetrics.memoryPressure
+                ),
+              },
+            ]}
+          />
+        </View>
+
+        <Text style={styles.memoryText}>
+          {formatBytes(memoryStats.usedMemory)} /{' '}
+          {formatBytes(memoryStats.totalMemory)}(
+          {getMemoryUsagePercentage().toFixed(1)}%)
+        </Text>
+
+        <View style={styles.memoryDetails}>
+          <View style={styles.memoryItem}>
+            <Text style={styles.memoryLabel}>AI模型:</Text>
+            <Text style={styles.memoryValue}>
+              {formatBytes(memoryStats.modelMemory)}
+            </Text>
+          </View>
+          <View style={styles.memoryItem}>
+            <Text style={styles.memoryLabel}>缓存:</Text>
+            <Text style={styles.memoryValue}>
+              {formatBytes(memoryStats.cacheMemory)}
+            </Text>
+          </View>
+          <View style={styles.memoryItem}>
+            <Text style={styles.memoryLabel}>系统:</Text>
+            <Text style={styles.memoryValue}>
+              {formatBytes(memoryStats.systemMemory)}
+            </Text>
+          </View>
+          <View style={styles.memoryItem}>
+            <Text style={styles.memoryLabel}>可用:</Text>
+            <Text style={[styles.memoryValue, { color: '#4CAF50' }]}>
+              {formatBytes(memoryStats.availableMemory)}
+            </Text>
+          </View>
+        </View>
+      </View>
+
+      {/* 性能状态 */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>性能状态</Text>
+        <View style={styles.statusContainer}>
+          <View
+            style={[
+              styles.statusIndicator,
+              {
+                backgroundColor: getMemoryPressureColor(
+                  performanceMetrics.memoryPressure
+                ),
+              },
+            ]}
+          />
+          <Text style={styles.statusText}>
+            内存压力: {performanceMetrics.memoryPressure.toUpperCase()}
+          </Text>
+        </View>
+      </View>
+
+      {/* 优化建议 */}
+      {performanceMetrics.recommendations.length > 0 && (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>优化建议</Text>
+          {performanceMetrics.recommendations.map((recommendation, index) => (
+            <Text key={index} style={styles.recommendation}>
+              • {recommendation}
+            </Text>
+          ))}
+        </View>
+      )}
+
+      {/* 优化操作 */}
+      {performanceMetrics.optimizationActions.length > 0 && (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>优化操作</Text>
+          {performanceMetrics.optimizationActions.map((action, index) => (
+            <View key={index} style={styles.actionItem}>
+              <View style={styles.actionInfo}>
+                <Text style={styles.actionTitle}>{action.title}</Text>
+                <Text style={styles.actionDescription}>
+                  {action.description}
+                </Text>
+                <Text
+                  style={[
+                    styles.actionImpact,
+                    {
+                      color:
+                        action.impact === 'high'
+                          ? '#4CAF50'
+                          : action.impact === 'medium'
+                            ? '#FF9800'
+                            : '#9E9E9E',
+                    },
+                  ]}
+                >
+                  影响: {action.impact}
+                </Text>
+              </View>
+              <TouchableOpacity
+                style={styles.actionButton}
+                onPress={() => executeOptimizationAction(action)}
+              >
+                <Text style={styles.actionButtonText}>执行</Text>
+              </TouchableOpacity>
+            </View>
+          ))}
+        </View>
+      )}
+
+      {/* 自动优化设置 */}
+      <View style={styles.section}>
+        <View style={styles.settingItem}>
+          <Text style={styles.settingLabel}>自动优化</Text>
+          <TouchableOpacity
+            style={[
+              styles.settingToggle,
+              { backgroundColor: autoOptimize ? '#4CAF50' : '#9E9E9E' },
+            ]}
+            onPress={() => setAutoOptimize(!autoOptimize)}
+          >
+            <Text style={styles.settingToggleText}>
+              {autoOptimize ? '开启' : '关闭'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </ScrollView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+    padding: 16,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  toggleButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+  },
+  toggleButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  section: {
+    backgroundColor: 'white',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 12,
+  },
+  memoryBar: {
+    height: 8,
+    backgroundColor: '#E0E0E0',
+    borderRadius: 4,
+    marginBottom: 8,
+  },
+  memoryUsed: {
+    height: '100%',
+    borderRadius: 4,
+  },
+  memoryText: {
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 16,
+  },
+  memoryDetails: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  memoryItem: {
+    width: '48%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  memoryLabel: {
+    fontSize: 14,
+    color: '#666',
+  },
+  memoryValue: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  statusContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  statusIndicator: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    marginRight: 8,
+  },
+  statusText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  recommendation: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 4,
+    lineHeight: 20,
+  },
+  actionItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E0E0E0',
+  },
+  actionInfo: {
+    flex: 1,
+    marginRight: 12,
+  },
+  actionTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 4,
+  },
+  actionDescription: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 4,
+  },
+  actionImpact: {
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+  actionButton: {
+    backgroundColor: '#2196F3',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 6,
+  },
+  actionButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  settingItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  settingLabel: {
+    fontSize: 16,
+    color: '#333',
+  },
+  settingToggle: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+  },
+  settingToggleText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+});
+
+export default MemoryMonitor;

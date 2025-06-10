@@ -1,10 +1,10 @@
 // FHIR健康数据标准工具（前端TypeScript版）
 // 支持健康数据采集、存储、交换的FHIR格式转换与校验
 export interface FhirObservation {
-  resourceType: "Observation";,
-  status: string;,
-  category: Array<{;,
-  coding: Array<{;,
+  resourceType: "Observation";
+  status: string;
+  category: Array<{
+  coding: Array<{
   system: string;,
   code: string;
 }>;

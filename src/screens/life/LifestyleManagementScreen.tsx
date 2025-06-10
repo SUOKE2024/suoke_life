@@ -1,22 +1,22 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
-import {
+import {;
   Animated,
   Dimensions,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {
+import {;
   borderRadius,
   colors,
   shadows,
   spacing,
-  typography,
+  typography
 } from '../../constants/theme';
 
 const { width } = Dimensions.get('window');
@@ -37,7 +37,7 @@ const LifestyleManagementScreen: React.FC = () => {
     water: { consumed: 6, target: 8 },
     exercise: { minutes: 45, target: 60 },
     sleep: { hours: 7.5, target: 8 },
-    steps: { count: 8500, target: 10000 },
+    steps: { count: 8500, target: 10000 }
   };
 
   // 饮食记录
@@ -48,7 +48,7 @@ const LifestyleManagementScreen: React.FC = () => {
       time: '08:00',
       foods: ['燕麦粥', '鸡蛋', '牛奶'],
       calories: 420,
-      icon: 'weather-sunny',
+      icon: 'weather-sunny'
     },
     {
       id: '2',
@@ -56,7 +56,7 @@ const LifestyleManagementScreen: React.FC = () => {
       time: '12:30',
       foods: ['鸡胸肉沙拉', '糙米饭'],
       calories: 650,
-      icon: 'weather-partly-cloudy',
+      icon: 'weather-partly-cloudy'
     },
     {
       id: '3',
@@ -64,8 +64,8 @@ const LifestyleManagementScreen: React.FC = () => {
       time: '18:00',
       foods: ['蒸鱼', '蔬菜汤', '红薯'],
       calories: 580,
-      icon: 'weather-night',
-    },
+      icon: 'weather-night'
+    }
   ];
 
   // 运动计划
@@ -77,7 +77,7 @@ const LifestyleManagementScreen: React.FC = () => {
       calories: 250,
       status: 'completed',
       time: '07:00',
-      icon: 'run',
+      icon: 'run'
     },
     {
       id: '2',
@@ -86,7 +86,7 @@ const LifestyleManagementScreen: React.FC = () => {
       calories: 180,
       status: 'pending',
       time: '19:00',
-      icon: 'dumbbell',
+      icon: 'dumbbell'
     },
     {
       id: '3',
@@ -95,8 +95,8 @@ const LifestyleManagementScreen: React.FC = () => {
       calories: 80,
       status: 'pending',
       time: '21:00',
-      icon: 'yoga',
-    },
+      icon: 'yoga'
+    }
   ];
 
   // 睡眠数据
@@ -107,7 +107,7 @@ const LifestyleManagementScreen: React.FC = () => {
     quality: 85,
     deepSleep: 2.1,
     lightSleep: 4.2,
-    rem: 1.2,
+    rem: 1.2
   };
 
   // 健康习惯
@@ -118,7 +118,7 @@ const LifestyleManagementScreen: React.FC = () => {
       description: '每2小时喝一杯水',
       completed: true,
       streak: 15,
-      icon: 'water',
+      icon: 'water'
     },
     {
       id: '2',
@@ -126,7 +126,7 @@ const LifestyleManagementScreen: React.FC = () => {
       description: '每日10分钟冥想',
       completed: false,
       streak: 8,
-      icon: 'meditation',
+      icon: 'meditation'
     },
     {
       id: '3',
@@ -134,7 +134,7 @@ const LifestyleManagementScreen: React.FC = () => {
       description: '每日维生素D',
       completed: true,
       streak: 22,
-      icon: 'pill',
+      icon: 'pill'
     },
     {
       id: '4',
@@ -142,8 +142,8 @@ const LifestyleManagementScreen: React.FC = () => {
       description: '早晚护肤程序',
       completed: false,
       streak: 5,
-      icon: 'face-woman',
-    },
+      icon: 'face-woman'
+    }
   ];
 
   useEffect() => {
@@ -151,13 +151,13 @@ const LifestyleManagementScreen: React.FC = () => {
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 800,
-        useNativeDriver: true,
+        useNativeDriver: true
       }),
       Animated.timing(slideAnim, {
         toValue: 0,
         duration: 800,
-        useNativeDriver: true,
-      }),
+        useNativeDriver: true
+      })
     ]).start();
   }, []);
 
@@ -167,7 +167,7 @@ const LifestyleManagementScreen: React.FC = () => {
       { key: 'diet', title: '饮食', icon: 'food-apple' },
       { key: 'exercise', title: '运动', icon: 'dumbbell' },
       { key: 'sleep', title: '睡眠', icon: 'sleep' },
-      { key: 'habits', title: '习惯', icon: 'check-circle' },
+      { key: 'habits', title: '习惯', icon: 'check-circle' }
     ];
 
     return (
@@ -182,7 +182,7 @@ const LifestyleManagementScreen: React.FC = () => {
             key={category.key}
             style={[
               styles.categoryTab,
-              activeCategory === category.key && styles.activeCategoryTab,
+              activeCategory === category.key && styles.activeCategoryTab
             ]}
             onPress={() => setActiveCategory(category.key as any)}
           >
@@ -196,7 +196,7 @@ const LifestyleManagementScreen: React.FC = () => {
             <Text;
               style={[
                 styles.categoryText,
-                activeCategory === category.key && styles.activeCategoryText,
+                activeCategory === category.key && styles.activeCategoryText
               ]}
             >
               {category.title}
@@ -283,7 +283,7 @@ const LifestyleManagementScreen: React.FC = () => {
               <View;
                 style={[
                   styles.progressFill,
-                  { width: '75%', backgroundColor: colors.primary },
+                  { width: '75%', backgroundColor: colors.primary }
                 ]}
               />
             </View>
@@ -295,7 +295,7 @@ const LifestyleManagementScreen: React.FC = () => {
               <View;
                 style={[
                   styles.progressFill,
-                  { width: '60%', backgroundColor: colors.warning },
+                  { width: '60%', backgroundColor: colors.warning }
                 ]}
               />
             </View>
@@ -307,7 +307,7 @@ const LifestyleManagementScreen: React.FC = () => {
               <View;
                 style={[
                   styles.progressFill,
-                  { width: '45%', backgroundColor: colors.error },
+                  { width: '45%', backgroundColor: colors.error }
                 ]}
               />
             </View>
@@ -370,8 +370,8 @@ const LifestyleManagementScreen: React.FC = () => {
                   styles.progressFill,
                   {
                     width: `${(todayData.steps.count / todayData.steps.target) * 100}%`,
-                    backgroundColor: colors.success,
-                  },
+                    backgroundColor: colors.success
+                  }
                 ]}
               />
             </View>
@@ -383,7 +383,7 @@ const LifestyleManagementScreen: React.FC = () => {
               <View;
                 style={[
                   styles.progressFill,
-                  { width: '85%', backgroundColor: colors.error },
+                  { width: '85%', backgroundColor: colors.error }
                 ]}
               />
             </View>
@@ -427,19 +427,19 @@ const LifestyleManagementScreen: React.FC = () => {
             <View;
               style={[
                 styles.phaseSegment,
-                { flex: sleepData.deepSleep, backgroundColor: colors.primary },
+                { flex: sleepData.deepSleep, backgroundColor: colors.primary }
               ]}
             />
             <View;
               style={[
                 styles.phaseSegment,
-                { flex: sleepData.lightSleep, backgroundColor: colors.info },
+                { flex: sleepData.lightSleep, backgroundColor: colors.info }
               ]}
             />
             <View;
               style={[
                 styles.phaseSegment,
-                { flex: sleepData.rem, backgroundColor: colors.warning },
+                { flex: sleepData.rem, backgroundColor: colors.warning }
               ]}
             />
           </View>
@@ -448,7 +448,7 @@ const LifestyleManagementScreen: React.FC = () => {
               <View;
                 style={[
                   styles.legendColor,
-                  { backgroundColor: colors.primary },
+                  { backgroundColor: colors.primary }
                 ]}
               />
               <Text style={styles.legendText}>深睡 {sleepData.deepSleep}h</Text>
@@ -465,7 +465,7 @@ const LifestyleManagementScreen: React.FC = () => {
               <View;
                 style={[
                   styles.legendColor,
-                  { backgroundColor: colors.warning },
+                  { backgroundColor: colors.warning }
                 ]}
               />
               <Text style={styles.legendText}>REM {sleepData.rem}h</Text>
@@ -520,7 +520,7 @@ const LifestyleManagementScreen: React.FC = () => {
             <View;
               style={[
                 styles.progressFill,
-                { width: '50%', backgroundColor: colors.success },
+                { width: '50%', backgroundColor: colors.success }
               ]}
             />
           </View>
@@ -548,7 +548,7 @@ const LifestyleManagementScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* 头部 */}
+      {// 头部}
       <View style={styles.header}>
         <TouchableOpacity;
           style={styles.backButton}
@@ -566,20 +566,20 @@ const LifestyleManagementScreen: React.FC = () => {
         style={styles.scrollContainer}
         showsVerticalScrollIndicator={false}
       >
-        {/* 今日概览 */}
+        {// 今日概览}
         {renderTodayOverview()}
 
-        {/* 分类标签 */}
+        {// 分类标签}
         {renderCategoryTabs()}
 
-        {/* 内容区域 */}
+        {// 内容区域}
         <Animated.View;
           style={[
             styles.contentContainer,
             {
               opacity: fadeAnim,
-              transform: [{ translateY: slideAnim }],
-            },
+              transform: [{ translateY: slideAnim }]
+            }
           ]}
         >
           {renderContent()}
@@ -592,7 +592,7 @@ const LifestyleManagementScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {,
   flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: colors.background
   },
   header: {,
   flexDirection: 'row',
@@ -602,7 +602,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
     backgroundColor: colors.surface,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: colors.border
   },
   backButton: {,
   width: 40,
@@ -610,12 +610,12 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: colors.gray100,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   headerTitle: {,
   fontSize: typography.fontSize.lg,
     fontWeight: '600' as const,
-    color: colors.text,
+    color: colors.text
   },
   settingsButton: {,
   width: 40,
@@ -623,25 +623,25 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: colors.gray100,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   scrollContainer: {,
-  flex: 1,
+  flex: 1
   },
   overviewContainer: {,
   padding: spacing.lg,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.surface
   },
   sectionTitle: {,
   fontSize: typography.fontSize.lg,
     fontWeight: '600' as const,
     color: colors.text,
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   overviewGrid: {,
   flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: spacing.md,
+    gap: spacing.md
   },
   overviewCard: {,
   flex: 1,
@@ -650,28 +650,28 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius.lg,
     padding: spacing.md,
     alignItems: 'center',
-    ...shadows.sm,
+    ...shadows.sm
   },
   overviewValue: {,
   fontSize: typography.fontSize.lg,
     fontWeight: '700' as const,
     color: colors.text,
-    marginTop: spacing.sm,
+    marginTop: spacing.sm
   },
   overviewLabel: {,
   fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
-    marginTop: spacing.xs,
+    marginTop: spacing.xs
   },
   categoryContainer: {,
   backgroundColor: colors.surface,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: colors.border
   },
   categoryContent: {,
   paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
-    gap: spacing.md,
+    gap: spacing.md
   },
   categoryTab: {,
   flexDirection: 'row',
@@ -680,30 +680,30 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm,
     borderRadius: borderRadius.lg,
     backgroundColor: colors.primary + '20',
-    gap: spacing.xs,
+    gap: spacing.xs
   },
   activeCategoryTab: {,
-  backgroundColor: colors.primary,
+  backgroundColor: colors.primary
   },
   categoryText: {,
   fontSize: typography.fontSize.sm,
     color: colors.primary,
-    fontWeight: '600' as const,
+    fontWeight: '600' as const
   },
   activeCategoryText: {,
-  color: colors.white,
+  color: colors.white
   },
   contentContainer: {,
-  flex: 1,
+  flex: 1
   },
   contentSection: {,
-  padding: spacing.lg,
+  padding: spacing.lg
   },
   sectionHeader: {,
   flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: spacing.lg,
+    marginBottom: spacing.lg
   },
   addButton: {,
   width: 32,
@@ -711,287 +711,287 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: colors.primary + '20',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   dietCard: {,
   backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     marginBottom: spacing.md,
-    ...shadows.sm,
+    ...shadows.sm
   },
   dietHeader: {,
   flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   mealInfo: {,
   flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.sm,
+    gap: spacing.sm
   },
   mealName: {,
   fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
-    color: colors.text,
+    color: colors.text
   },
   mealTime: {,
   fontSize: typography.fontSize.sm,
-    color: colors.textSecondary,
+    color: colors.textSecondary
   },
   caloriesText: {,
   fontSize: typography.fontSize.sm,
     fontWeight: '600' as const,
-    color: colors.primary,
+    color: colors.primary
   },
   foodList: {,
-  gap: spacing.xs,
+  gap: spacing.xs
   },
   foodItem: {,
   fontSize: typography.fontSize.sm,
-    color: colors.textSecondary,
+    color: colors.textSecondary
   },
   nutritionSummary: {,
   backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     marginTop: spacing.md,
-    ...shadows.sm,
+    ...shadows.sm
   },
   summaryTitle: {,
   fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
     color: colors.text,
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   nutritionBar: {,
-  gap: spacing.md,
+  gap: spacing.md
   },
   nutritionItem: {,
   flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.md,
+    gap: spacing.md
   },
   nutritionLabel: {,
   fontSize: typography.fontSize.sm,
     color: colors.text,
-    width: 80,
+    width: 80
   },
   progressBar: {,
   flex: 1,
     height: 8,
     backgroundColor: colors.gray200,
     borderRadius: 4,
-    overflow: 'hidden',
+    overflow: 'hidden'
   },
   progressFill: {,
   height: '100%',
-    borderRadius: 4,
+    borderRadius: 4
   },
   nutritionValue: {,
   fontSize: typography.fontSize.sm,
     fontWeight: '600' as const,
     color: colors.text,
     width: 40,
-    textAlign: 'right',
+    textAlign: 'right'
   },
   exerciseCard: {,
   backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     marginBottom: spacing.md,
-    ...shadows.sm,
+    ...shadows.sm
   },
   exerciseHeader: {,
   flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   exerciseInfo: {,
   flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.md,
+    gap: spacing.md
   },
   exerciseDetails: {,
-  flex: 1,
+  flex: 1
   },
   exerciseName: {,
   fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
-    color: colors.text,
+    color: colors.text
   },
   exerciseTime: {,
   fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
-    marginTop: 2,
+    marginTop: 2
   },
   exerciseStatus: {,
   alignItems: 'flex-end',
-    gap: spacing.xs,
+    gap: spacing.xs
   },
   exerciseStats: {,
   backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     marginTop: spacing.md,
-    ...shadows.sm,
+    ...shadows.sm
   },
   statsGrid: {,
   flexDirection: 'row',
-    gap: spacing.md,
+    gap: spacing.md
   },
   statCard: {,
   flex: 1,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   statValue: {,
   fontSize: typography.fontSize.xl,
     fontWeight: '700' as const,
-    color: colors.text,
+    color: colors.text
   },
   statLabel: {,
   fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
     marginTop: spacing.xs,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.sm
   },
   sleepCard: {,
   backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
-    ...shadows.sm,
+    ...shadows.sm
   },
   sleepHeader: {,
   flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: spacing.lg,
+    marginBottom: spacing.lg
   },
   sleepTime: {,
-  alignItems: 'center',
+  alignItems: 'center'
   },
   sleepLabel: {,
   fontSize: typography.fontSize.sm,
-    color: colors.textSecondary,
+    color: colors.textSecondary
   },
   sleepValue: {,
   fontSize: typography.fontSize.lg,
     fontWeight: '600' as const,
     color: colors.text,
-    marginTop: spacing.xs,
+    marginTop: spacing.xs
   },
   sleepDuration: {,
-  alignItems: 'center',
+  alignItems: 'center'
   },
   sleepDurationText: {,
   fontSize: typography.fontSize['3xl'],
     fontWeight: '700' as const,
-    color: colors.primary,
+    color: colors.primary
   },
   sleepQuality: {,
   fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
-    marginTop: spacing.xs,
+    marginTop: spacing.xs
   },
   sleepPhases: {,
-  marginTop: spacing.lg,
+  marginTop: spacing.lg
   },
   phaseBar: {,
   flexDirection: 'row',
     height: 20,
     borderRadius: 10,
     overflow: 'hidden',
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   phaseSegment: {,
-  height: '100%',
+  height: '100%'
   },
   phaseLegend: {,
   flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-around'
   },
   legendItem: {,
   flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.xs,
+    gap: spacing.xs
   },
   legendColor: {,
   width: 12,
     height: 12,
-    borderRadius: 6,
+    borderRadius: 6
   },
   legendText: {,
   fontSize: typography.fontSize.xs,
-    color: colors.textSecondary,
+    color: colors.textSecondary
   },
   habitCard: {,
   backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     marginBottom: spacing.md,
-    ...shadows.sm,
+    ...shadows.sm
   },
   habitHeader: {,
   flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   habitInfo: {,
   flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.md,
-    flex: 1,
+    flex: 1
   },
   habitDetails: {,
-  flex: 1,
+  flex: 1
   },
   habitName: {,
   fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
-    color: colors.text,
+    color: colors.text
   },
   habitDescription: {,
   fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
-    marginTop: 2,
+    marginTop: 2
   },
   habitStatus: {,
   alignItems: 'center',
-    gap: spacing.xs,
+    gap: spacing.xs
   },
   streakText: {,
   fontSize: typography.fontSize.sm,
     fontWeight: '600' as const,
-    color: colors.primary,
+    color: colors.primary
   },
   checkButton: {,
-  padding: spacing.xs,
+  padding: spacing.xs
   },
   habitsSummary: {,
   backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     marginTop: spacing.md,
-    ...shadows.sm,
+    ...shadows.sm
   },
   completionRate: {,
   flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.md,
+    gap: spacing.md
   },
   completionText: {,
   fontSize: typography.fontSize.sm,
     color: colors.text,
-    width: 80,
+    width: 80
   },
   completionPercentage: {,
   fontSize: typography.fontSize.sm,
     fontWeight: '600' as const,
     color: colors.text,
     width: 40,
-    textAlign: 'right',
-  },
+    textAlign: 'right'
+  }
 });
 
 export default LifestyleManagementScreen;

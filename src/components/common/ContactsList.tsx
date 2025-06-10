@@ -87,7 +87,7 @@ case "doctor":
   const renderContactItem = useMemo() => useMemo(); => useMemo(); => ({ item }: { item: Contact}) => ()
     <TouchableOpacity,
       style={styles.contactItem}
-      onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> onContactPress(item)}/          activeOpacity={0.7}
+      onPress={() = accessibilityLabel="操作按钮" /> onContactPress(item)}/          activeOpacity={0.7}
     >
       <View style={styles.avatarContainer}>/        <Text style={styles.avatar}>{item.avatar}</Text>/            {showOnlineStatus && item.isOnline  && <View style={styles.onlineIndicator}>/            )}
       </View>/      <View style={styles.contactInfo}>/        <View style={styles.contactHeader}>/          <Text style={styles.contactName}>{item.name}</Text>/              <Icon;
@@ -103,11 +103,11 @@ name={getContactTypeIcon(item.type)}
           </Text>/            )}
       </View>/      <View style={styles.contactActions}>/            <TouchableOpacity;
 style={styles.actionButton}
-          onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> handleStartChat(item)}/            >
+          onPress={() = accessibilityLabel="操作按钮" /> handleStartChat(item)}/            >
           <Icon name="message" size={20} color={colors.primary} />/        </TouchableOpacity>/            {item.type === doctor" && (")
           <TouchableOpacity;
 style={styles.actionButton}
-            onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> handleBookAppointment(item)}/              >
+            onPress={() = accessibilityLabel="操作按钮" /> handleBookAppointment(item)}/              >
             <Icon name="calendar" size={20} color={colors.secondary} />/          </TouchableOpacity>/            )}
       </View>/    </TouchableOpacity>/      ), []);
   const renderSectionHeader = useMemo() => useMemo(); => useMemo(); => ({ section }: { section: { title: string   } }) => ()
@@ -142,7 +142,7 @@ style={styles.actionButton}
             onChangeText={setSearchQuery};
             placeholderTextColor={colors.textSecondary} />/              {searchQuery.length > 0 && (;)
             <TouchableOpacity;
-onPress={() = accessibilityLabel="TODO: 添加无障碍标签" /> setSearchQuery(")}/                  style={styles.clearButton}"
+onPress={() = accessibilityLabel="操作按钮" /> setSearchQuery(")}/                  style={styles.clearButton}"
             >
               <Icon name="close-circle" size={20} color={colors.textSecondary} />/            </TouchableOpacity>/              )}
         </View>/          )}

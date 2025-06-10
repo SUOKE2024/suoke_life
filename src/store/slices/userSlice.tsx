@@ -11,7 +11,7 @@ const initialState: UserState = {,
 };
 
 // 获取用户资料
-export const fetchUserProfile = createAsyncThunk<
+export const fetchUserProfile = createAsyncThunk<;
   UserProfile,
   void,
   { rejectValue: string }
@@ -31,7 +31,7 @@ export const fetchUserProfile = createAsyncThunk<
 });
 
 // 更新用户资料
-export const updateUserProfile = createAsyncThunk<
+export const updateUserProfile = createAsyncThunk<;
   UserProfile,
   Partial<UserProfile>,
   { rejectValue: string }
@@ -52,7 +52,7 @@ export const updateUserProfile = createAsyncThunk<
 });
 
 // 获取健康数据
-export const fetchHealthData = createAsyncThunk<
+export const fetchHealthData = createAsyncThunk<;
   HealthData[],
   { limit?: number; offset?: number },
   { rejectValue: string }
@@ -80,7 +80,7 @@ export const fetchHealthData = createAsyncThunk<
 });
 
 // 添加健康数据
-export const addHealthData = createAsyncThunk<
+export const addHealthData = createAsyncThunk<;
   HealthData,
   Omit<HealthData, "id" | "userId" | "timestamp">,
   { rejectValue: string }

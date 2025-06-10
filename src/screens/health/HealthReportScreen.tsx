@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
-import {
+import {;
   Animated,
   Dimensions,
   RefreshControl,
@@ -9,17 +9,17 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Button } from '../../components/ui/Button';
-import {
+import {;
   borderRadius,
   colors,
   shadows,
   spacing,
-  typography,
+  typography
 } from '../../constants/theme';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -79,8 +79,8 @@ const HealthReportScreen: React.FC = () => {
       metabolism: 82,
       immunity: 90,
       mental: 78,
-      sleep: 85,
-    },
+      sleep: 85
+    }
   };
 
   // 健康指标
@@ -96,7 +96,7 @@ const HealthReportScreen: React.FC = () => {
       icon: 'heart-pulse',
       color: colors.success,
       description: '血压正常，继续保持良好的生活习惯',
-      recommendation: '建议继续保持规律运动和健康饮食',
+      recommendation: '建议继续保持规律运动和健康饮食'
     },
     {
       id: '2',
@@ -109,7 +109,7 @@ const HealthReportScreen: React.FC = () => {
       icon: 'heart',
       color: colors.primary,
       description: '静息心率优秀，心血管健康状况良好',
-      recommendation: '可以适当增加有氧运动强度',
+      recommendation: '可以适当增加有氧运动强度'
     },
     {
       id: '3',
@@ -122,7 +122,7 @@ const HealthReportScreen: React.FC = () => {
       icon: 'scale-bathroom',
       color: colors.info,
       description: 'BMI在正常范围内，体重控制良好',
-      recommendation: '保持当前的饮食和运动习惯',
+      recommendation: '保持当前的饮食和运动习惯'
     },
     {
       id: '4',
@@ -135,7 +135,7 @@ const HealthReportScreen: React.FC = () => {
       icon: 'water',
       color: colors.warning,
       description: '空腹血糖正常，代谢功能良好',
-      recommendation: '注意控制糖分摄入，保持规律饮食',
+      recommendation: '注意控制糖分摄入，保持规律饮食'
     },
     {
       id: '5',
@@ -148,8 +148,8 @@ const HealthReportScreen: React.FC = () => {
       icon: 'sleep',
       color: colors.secondary,
       description: '睡眠质量良好，深度睡眠充足',
-      recommendation: '建议保持规律作息，避免睡前使用电子设备',
-    },
+      recommendation: '建议保持规律作息，避免睡前使用电子设备'
+    }
   ];
 
   // AI洞察
@@ -162,7 +162,7 @@ const HealthReportScreen: React.FC = () => {
         '过去30天您的心率变异性提升了12%，表明心血管适应性增强。这与您坚持的有氧运动密切相关。',
       priority: 'medium',
       actionable: false,
-      icon: 'heart-plus',
+      icon: 'heart-plus'
     },
     {
       id: '2',
@@ -172,7 +172,7 @@ const HealthReportScreen: React.FC = () => {
         '检测到您的皮质醇水平在工作日明显升高，建议增加放松练习和压力管理技巧。',
       priority: 'high',
       actionable: true,
-      icon: 'alert-circle',
+      icon: 'alert-circle'
     },
     {
       id: '3',
@@ -182,8 +182,8 @@ const HealthReportScreen: React.FC = () => {
         '您的蛋白质摄入充足，但维生素D略显不足。建议适当增加户外活动或补充维生素D。',
       priority: 'medium',
       actionable: true,
-      icon: 'nutrition',
-    },
+      icon: 'nutrition'
+    }
   ];
 
   // 初始化动画
@@ -192,13 +192,13 @@ const HealthReportScreen: React.FC = () => {
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 800,
-        useNativeDriver: true,
+        useNativeDriver: true
       }),
       Animated.timing(slideAnim, {
         toValue: 0,
         duration: 800,
-        useNativeDriver: true,
-      }),
+        useNativeDriver: true
+      })
     ]).start();
 
     loadReportData();
@@ -211,7 +211,7 @@ const HealthReportScreen: React.FC = () => {
       setReportData({
         generatedAt: new Date().toISOString(),
         period: '最近30天',
-        dataPoints: 847,
+        dataPoints: 847
       });
     }, 1000);
   };
@@ -278,7 +278,7 @@ const HealthReportScreen: React.FC = () => {
     try {
       await Share.share({
         message: `我的健康报告 - 综合评分: ${healthScore.overall}分\n\n生成时间: ${new Date().toLocaleDateString()}\n\n索克生活健康管理平台`,
-        title: '健康报告分享',
+        title: '健康报告分享'
       });
     } catch (error) {
       console.error('分享失败:', error);
@@ -291,7 +291,7 @@ const HealthReportScreen: React.FC = () => {
       { key: 'overview', title: '概览', icon: 'view-dashboard' },
       { key: 'metrics', title: '指标', icon: 'chart-line' },
       { key: 'insights', title: '洞察', icon: 'lightbulb' },
-      { key: 'trends', title: '趋势', icon: 'trending-up' },
+      { key: 'trends', title: '趋势', icon: 'trending-up' }
     ];
 
     return (
@@ -312,7 +312,7 @@ const HealthReportScreen: React.FC = () => {
             <Text;
               style={[
                 styles.tabText,
-                activeTab === tab.key && styles.activeTabText,
+                activeTab === tab.key && styles.activeTabText
               ]}
             >
               {tab.title}
@@ -335,9 +335,9 @@ const HealthReportScreen: React.FC = () => {
               styles.scoreProgress,
               {
                 transform: [
-                  { rotate: `${(healthScore.overall / 100) * 360}deg` },
-                ],
-              },
+                  { rotate: `${(healthScore.overall / 100) * 360}deg` }
+                ]
+              }
             ]}
           />
         </View>
@@ -373,7 +373,7 @@ const HealthReportScreen: React.FC = () => {
             <View;
               style={[
                 styles.metricIcon,
-                { backgroundColor: metric.color + '20' },
+                { backgroundColor: metric.color + '20' }
               ]}
             >
               <Icon name={metric.icon} size={24} color={metric.color} />
@@ -389,7 +389,7 @@ const HealthReportScreen: React.FC = () => {
               <View;
                 style={[
                   styles.statusBadge,
-                  { backgroundColor: getStatusColor(metric.status) },
+                  { backgroundColor: getStatusColor(metric.status) }
                 ]}
               >
                 <Text style={styles.statusText}>
@@ -414,8 +414,8 @@ const HealthReportScreen: React.FC = () => {
                       styles.changeText,
                       {
                         color:
-                          metric.change > 0 ? colors.success : colors.error,
-                      },
+                          metric.change > 0 ? colors.success : colors.error
+                      }
                     ]}
                   >
                     {metric.change > 0 ? '+' : ''}
@@ -456,8 +456,8 @@ const HealthReportScreen: React.FC = () => {
                       ? colors.success + '20'
                       : insight.type === 'warning'
                         ? colors.error + '20'
-                        : colors.info + '20',
-                },
+                        : colors.info + '20'
+                }
               ]}
             >
               <Icon;
@@ -484,8 +484,8 @@ const HealthReportScreen: React.FC = () => {
                           ? colors.error;
                           : insight.priority === 'medium'
                             ? colors.warning;
-                            : colors.success,
-                    },
+                            : colors.success
+                    }
                   ]}
                 >
                   <Text style={styles.priorityText}>
@@ -512,7 +512,7 @@ const HealthReportScreen: React.FC = () => {
               <Button;
                 title="查看建议"
                 onPress={() => {
-                  /* 查看建议 */
+                  // 查看建议
                 }}
               />
             </View>
@@ -577,7 +577,7 @@ const HealthReportScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* 头部 */}
+      {// 头部}
       <View style={styles.header}>
         <TouchableOpacity;
           style={styles.backButton}
@@ -591,7 +591,7 @@ const HealthReportScreen: React.FC = () => {
         </TouchableOpacity>
       </View>
 
-      {/* 标签栏 */}
+      {// 标签栏}
       {renderTabs()}
 
       <ScrollView;
@@ -605,11 +605,11 @@ const HealthReportScreen: React.FC = () => {
             styles.contentContainer,
             {
               opacity: fadeAnim,
-              transform: [{ translateY: slideAnim }],
-            },
+              transform: [{ translateY: slideAnim }]
+            }
           ]}
         >
-          {/* 报告信息 */}
+          {// 报告信息}
           {reportData && (
             <View style={styles.reportInfo}>
               <Text style={styles.reportInfoText}>
@@ -621,7 +621,7 @@ const HealthReportScreen: React.FC = () => {
             </View>
           )}
 
-          {/* 内容区域 */}
+          {// 内容区域}
           {renderContent()}
         </Animated.View>
       </ScrollView>
@@ -632,7 +632,7 @@ const HealthReportScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {,
   flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: colors.background
   },
   header: {,
   flexDirection: 'row',
@@ -642,7 +642,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
     backgroundColor: colors.surface,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: colors.border
   },
   backButton: {,
   width: 40,
@@ -650,12 +650,12 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: colors.gray100,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   headerTitle: {,
   fontSize: typography.fontSize.lg,
     fontWeight: '600' as const,
-    color: colors.text,
+    color: colors.text
   },
   shareButton: {,
   width: 40,
@@ -663,13 +663,13 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: colors.gray100,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   tabContainer: {,
   flexDirection: 'row',
     backgroundColor: colors.surface,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: colors.border
   },
   tab: {,
   flex: 1,
@@ -677,59 +677,59 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: spacing.md,
-    gap: spacing.xs,
+    gap: spacing.xs
   },
   activeTab: {,
   borderBottomWidth: 2,
-    borderBottomColor: colors.primary,
+    borderBottomColor: colors.primary
   },
   tabText: {,
   fontSize: typography.fontSize.sm,
-    color: colors.textSecondary,
+    color: colors.textSecondary
   },
   activeTabText: {,
   color: colors.primary,
-    fontWeight: '600' as const,
+    fontWeight: '600' as const
   },
   content: {,
-  flex: 1,
+  flex: 1
   },
   contentContainer: {,
-  padding: spacing.lg,
+  padding: spacing.lg
   },
   reportInfo: {,
   backgroundColor: colors.surface,
     padding: spacing.md,
     borderRadius: borderRadius.md,
     marginBottom: spacing.lg,
-    ...shadows.sm,
+    ...shadows.sm
   },
   reportInfoText: {,
   fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
-    textAlign: 'center',
+    textAlign: 'center'
   },
   scoreContainer: {,
   backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
     marginBottom: spacing.lg,
-    ...shadows.sm,
+    ...shadows.sm
   },
   overallScore: {,
   alignItems: 'center',
     marginBottom: spacing.lg,
-    position: 'relative',
+    position: 'relative'
   },
   scoreValue: {,
   fontSize: 48,
     fontWeight: '700' as const,
-    color: colors.primary,
+    color: colors.primary
   },
   scoreLabel: {,
   fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
-    marginTop: spacing.xs,
+    marginTop: spacing.xs
   },
   scoreRing: {,
   position: 'absolute',
@@ -738,7 +738,7 @@ const styles = StyleSheet.create({
     borderRadius: 60,
     borderWidth: 8,
     borderColor: colors.gray200,
-    top: -10,
+    top: -10
   },
   scoreProgress: {,
   position: 'absolute',
@@ -748,38 +748,38 @@ const styles = StyleSheet.create({
     borderWidth: 8,
     borderColor: colors.primary,
     borderRightColor: 'transparent',
-    borderBottomColor: 'transparent',
+    borderBottomColor: 'transparent'
   },
   categoryScores: {,
   flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-around'
   },
   categoryScore: {,
-  alignItems: 'center',
+  alignItems: 'center'
   },
   categoryValue: {,
   fontSize: typography.fontSize.lg,
     fontWeight: '600' as const,
-    color: colors.text,
+    color: colors.text
   },
   categoryLabel: {,
   fontSize: typography.fontSize.xs,
     color: colors.textSecondary,
-    marginTop: spacing.xs,
+    marginTop: spacing.xs
   },
   metricsContainer: {,
-  gap: spacing.md,
+  gap: spacing.md
   },
   metricCard: {,
   backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
-    ...shadows.sm,
+    ...shadows.sm
   },
   metricHeader: {,
   flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   metricIcon: {,
   width: 48,
@@ -787,86 +787,86 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: spacing.md,
+    marginRight: spacing.md
   },
   metricInfo: {,
-  flex: 1,
+  flex: 1
   },
   metricName: {,
   fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
     color: colors.text,
-    marginBottom: spacing.xs,
+    marginBottom: spacing.xs
   },
   metricValue: {,
   flexDirection: 'row',
-    alignItems: 'baseline',
+    alignItems: 'baseline'
   },
   metricNumber: {,
   fontSize: typography.fontSize.xl,
     fontWeight: '700' as const,
-    color: colors.text,
+    color: colors.text
   },
   metricUnit: {,
   fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
-    marginLeft: spacing.xs,
+    marginLeft: spacing.xs
   },
   metricStatus: {,
-  alignItems: 'flex-end',
+  alignItems: 'flex-end'
   },
   statusBadge: {,
   paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,
     borderRadius: borderRadius.sm,
-    marginBottom: spacing.xs,
+    marginBottom: spacing.xs
   },
   statusText: {,
   fontSize: typography.fontSize.xs,
     color: colors.white,
-    fontWeight: '600' as const,
+    fontWeight: '600' as const
   },
   trendContainer: {,
   flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   changeText: {,
   fontSize: typography.fontSize.xs,
     marginLeft: spacing.xs,
-    fontWeight: '600' as const,
+    fontWeight: '600' as const
   },
   metricDescription: {,
   fontSize: typography.fontSize.sm,
     color: colors.text,
     lineHeight: 20,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.sm
   },
   recommendationContainer: {,
   flexDirection: 'row',
     alignItems: 'flex-start',
     backgroundColor: colors.warning + '10',
     padding: spacing.sm,
-    borderRadius: borderRadius.sm,
+    borderRadius: borderRadius.sm
   },
   recommendationText: {,
   fontSize: typography.fontSize.sm,
     color: colors.text,
     marginLeft: spacing.sm,
-    flex: 1,
+    flex: 1
   },
   insightsContainer: {,
-  gap: spacing.md,
+  gap: spacing.md
   },
   insightCard: {,
   backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
-    ...shadows.sm,
+    ...shadows.sm
   },
   insightHeader: {,
   flexDirection: 'row',
     alignItems: 'flex-start',
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   insightIcon: {,
   width: 40,
@@ -874,62 +874,62 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: spacing.md,
+    marginRight: spacing.md
   },
   insightInfo: {,
-  flex: 1,
+  flex: 1
   },
   insightTitle: {,
   fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
     color: colors.text,
-    marginBottom: spacing.xs,
+    marginBottom: spacing.xs
   },
   insightMeta: {,
   flexDirection: 'row',
-    gap: spacing.sm,
+    gap: spacing.sm
   },
   priorityBadge: {,
   paddingHorizontal: spacing.xs,
     paddingVertical: 2,
-    borderRadius: borderRadius.sm,
+    borderRadius: borderRadius.sm
   },
   priorityText: {,
   fontSize: typography.fontSize.xs,
     color: colors.white,
-    fontWeight: '600' as const,
+    fontWeight: '600' as const
   },
   actionableBadge: {,
   backgroundColor: colors.primary + '20',
     paddingHorizontal: spacing.xs,
     paddingVertical: 2,
-    borderRadius: borderRadius.sm,
+    borderRadius: borderRadius.sm
   },
   actionableText: {,
   fontSize: typography.fontSize.xs,
     color: colors.primary,
-    fontWeight: '600' as const,
+    fontWeight: '600' as const
   },
   insightContent: {,
   fontSize: typography.fontSize.sm,
     color: colors.text,
     lineHeight: 20,
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   insightActions: {,
-  alignItems: 'flex-start',
+  alignItems: 'flex-start'
   },
   trendsContainer: {,
   backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.lg,
-    ...shadows.sm,
+    ...shadows.sm
   },
   trendsTitle: {,
   fontSize: typography.fontSize.lg,
     fontWeight: '600' as const,
     color: colors.text,
-    marginBottom: spacing.lg,
+    marginBottom: spacing.lg
   },
   chartPlaceholder: {,
   alignItems: 'center',
@@ -937,39 +937,39 @@ const styles = StyleSheet.create({
     height: 200,
     backgroundColor: colors.gray100,
     borderRadius: borderRadius.md,
-    marginBottom: spacing.lg,
+    marginBottom: spacing.lg
   },
   chartPlaceholderText: {,
   fontSize: typography.fontSize.base,
     color: colors.textSecondary,
-    marginTop: spacing.sm,
+    marginTop: spacing.sm
   },
   chartPlaceholderSubtext: {,
   fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
-    marginTop: spacing.xs,
+    marginTop: spacing.xs
   },
   trendSummary: {,
-  marginTop: spacing.lg,
+  marginTop: spacing.lg
   },
   trendSummaryTitle: {,
   fontSize: typography.fontSize.base,
     fontWeight: '600' as const,
     color: colors.text,
-    marginBottom: spacing.md,
+    marginBottom: spacing.md
   },
   trendItems: {,
-  gap: spacing.sm,
+  gap: spacing.sm
   },
   trendItem: {,
   flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   trendItemText: {,
   fontSize: typography.fontSize.sm,
     color: colors.text,
-    marginLeft: spacing.sm,
-  },
+    marginLeft: spacing.sm
+  }
 });
 
 export default HealthReportScreen;

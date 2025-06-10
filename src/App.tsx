@@ -1,40 +1,46 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { Suspense, useCallback, useEffect, useState } from 'react';
 import { Alert, StatusBar, StyleSheet, Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { APP_CONFIG, getCurrentEnvConfig } from './constants/config';
 import { ApiServiceProvider } from './services/IntegratedApiService';
 
 // 懒加载屏幕组件
-const HomeScreen = React.lazy() => import('./screens/main/HomeScreen'));
-const LifeOverviewScreen = React.lazy() => import('./screens/health/LifeOverviewScreen')
+const HomeScreen = React.lazy(() => import('./screens/main/HomeScreen'));
+const LifeOverviewScreen = React.lazy(
+  () => import('./screens/health/LifeOverviewScreen')
 );
-const FiveDiagnosisAgentIntegrationScreen = React.lazy() => import('./screens/demo/FiveDiagnosisAgentIntegrationScreen')
+const FiveDiagnosisAgentIntegrationScreen = React.lazy(
+  () => import('./screens/demo/FiveDiagnosisAgentIntegrationScreen')
 );
-const ExploreScreen = React.lazy() => import('./screens/explore/ExploreScreen')
+const ExploreScreen = React.lazy(
+  () => import('./screens/explore/ExploreScreen')
 );
 
 // 临时创建简单的ProfileScreen组件
 const ProfileScreen = () => (
-  <View style={ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+  <View style={styles.profileContainer}>
     <Text>个人资料页面</Text>
   </View>
 );
 
 // 懒加载网关组件
-const GatewayMonitor = React.lazy() => import('./components/common/GatewayMonitor')
+const GatewayMonitor = React.lazy(
+  () => import('./components/common/GatewayMonitor')
 );
-const GatewayConfig = React.lazy() => import('./components/common/GatewayConfig')
+const GatewayConfig = React.lazy(
+  () => import('./components/common/GatewayConfig')
 );
-const AnalyticsDashboard = React.lazy() => import('./components/common/AnalyticsDashboard')
+const AnalyticsDashboard = React.lazy(
+  () => import('./components/common/AnalyticsDashboard')
 );
-const GatewayConfigManager = React.lazy() => import('./components/common/GatewayConfigManager')
+const GatewayConfigManager = React.lazy(
+  () => import('./components/common/GatewayConfigManager')
 );
 
 const Tab = createBottomTabNavigator();
-const Stack = createStackNavigator();
+// const Stack = createStackNavigator(); // 暂时未使用，保留以备后续路由扩展
 
 // 网关管理屏幕
 const GatewayManagementScreen = () => {
@@ -60,25 +66,25 @@ const GatewayManagementScreen = () => {
   return (
     <View style={styles.gatewayContainer}>
       <View style={styles.tabContainer}>
-        <Text;
+        <Text
           style={[styles.tab, activeTab === 'monitor' && styles.activeTab]}
           onPress={() => setActiveTab('monitor')}
         >
           监控
         </Text>
-        <Text;
+        <Text
           style={[styles.tab, activeTab === 'config' && styles.activeTab]}
           onPress={() => setActiveTab('config')}
         >
           配置
         </Text>
-        <Text;
+        <Text
           style={[styles.tab, activeTab === 'analytics' && styles.activeTab]}
           onPress={() => setActiveTab('analytics')}
         >
           分析
         </Text>
-        <Text;
+        <Text
           style={[styles.tab, activeTab === 'settings' && styles.activeTab]}
           onPress={() => setActiveTab('settings')}
         >
@@ -93,28 +99,28 @@ const GatewayManagementScreen = () => {
 // 主标签导航
 const MainTabs = () => {
   return (
-    <Tab.Navigator;
+    <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName: string;
           switch (route.name) {
             case 'Main':
-              iconName = 'home';
+              iconName = focused ? 'home' : 'home-outline';
               break;
             case 'Health':
-              iconName = 'favorite';
+              iconName = focused ? 'favorite' : 'favorite-border';
               break;
             case 'Diagnosis':
-              iconName = 'healing';
+              iconName = focused ? 'healing' : 'local-hospital';
               break;
             case 'Explore':
-              iconName = 'explore';
+              iconName = focused ? 'explore' : 'explore-off';
               break;
             case 'Profile':
-              iconName = 'person';
+              iconName = focused ? 'person' : 'person-outline';
               break;
             case 'Gateway':
-              iconName = 'settings';
+              iconName = focused ? 'settings' : 'settings-outline';
               break;
             default:
               iconName = 'help';
@@ -126,36 +132,36 @@ const MainTabs = () => {
         headerShown: false,
       })}
     >
-      <Tab.Screen;
+      <Tab.Screen
         name="Main"
         component={HomeScreen}
-        options={ title: '首页' }}
+        options={{ title: '首页' }}
       />
-      <Tab.Screen;
+      <Tab.Screen
         name="Health"
         component={LifeOverviewScreen}
-        options={ title: '健康' }}
+        options={{ title: '健康' }}
       />
-      <Tab.Screen;
+      <Tab.Screen
         name="Diagnosis"
         component={FiveDiagnosisAgentIntegrationScreen}
-        options={ title: '四诊' }}
+        options={{ title: '四诊' }}
       />
-      <Tab.Screen;
+      <Tab.Screen
         name="Explore"
         component={ExploreScreen}
-        options={ title: '探索' }}
+        options={{ title: '探索' }}
       />
-      <Tab.Screen;
+      <Tab.Screen
         name="Profile"
         component={ProfileScreen}
-        options={ title: '我的' }}
+        options={{ title: '我的' }}
       />
       {APP_CONFIG.ENVIRONMENT === 'development' && (
-        <Tab.Screen;
+        <Tab.Screen
           name="Gateway"
           component={GatewayManagementScreen}
-          options={ title: '网关' }}
+          options={{ title: '网关' }}
         />
       )}
     </Tab.Navigator>
@@ -169,11 +175,7 @@ const AppStatusChecker: React.FC<{ children: React.ReactNode }> = ({
   const [isReady, setIsReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect() => {
-    checkAppStatus();
-  }, []);
-
-  const checkAppStatus = async () => {
+  const checkAppStatus = useCallback(async () => {
     try {
       // 检查环境配置
       const config = getCurrentEnvConfig();
@@ -181,8 +183,8 @@ const AppStatusChecker: React.FC<{ children: React.ReactNode }> = ({
         environment: APP_CONFIG.ENVIRONMENT,
         gatewayUrl: config.GATEWAY_URL,
         features: Object.entries(config)
-          .filter([key, value]) => key.startsWith('ENABLE_') && value)
-          .map([key]) => key),
+          .filter(([key, value]) => key.startsWith('ENABLE_') && value)
+          .map(([key]) => key),
       });
 
       // 在开发环境中进行额外检查
@@ -201,7 +203,11 @@ const AppStatusChecker: React.FC<{ children: React.ReactNode }> = ({
         { text: '继续', onPress: () => setIsReady(true) },
       ]);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    checkAppStatus();
+  }, [checkAppStatus]);
 
   if (error && !isReady) {
     return (
@@ -251,20 +257,25 @@ const App: React.FC = () => {
 
 // 样式定义
 const styles = StyleSheet.create({
-  gatewayContainer: {,
-  flex: 1,
+  profileContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  gatewayContainer: {
+    flex: 1,
     backgroundColor: '#f5f5f5',
   },
-  tabContainer: {,
-  flexDirection: 'row',
+  tabContainer: {
+    flexDirection: 'row',
     backgroundColor: '#ffffff',
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
   },
-  tab: {,
-  flex: 1,
+  tab: {
+    flex: 1,
     textAlign: 'center',
     paddingVertical: 8,
     paddingHorizontal: 12,
@@ -275,38 +286,38 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
   },
-  activeTab: {,
-  backgroundColor: '#2196F3',
+  activeTab: {
+    backgroundColor: '#2196F3',
     color: '#ffffff',
   },
-  errorContainer: {,
-  flex: 1,
+  errorContainer: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
     backgroundColor: '#ffffff',
   },
-  errorTitle: {,
-  fontSize: 18,
+  errorTitle: {
+    fontSize: 18,
     fontWeight: 'bold',
     color: '#f44336',
     marginTop: 16,
     marginBottom: 8,
   },
-  errorMessage: {,
-  fontSize: 14,
+  errorMessage: {
+    fontSize: 14,
     color: '#666666',
     textAlign: 'center',
     lineHeight: 20,
   },
-  loadingContainer: {,
-  flex: 1,
+  loadingContainer: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#ffffff',
   },
-  loadingText: {,
-  fontSize: 16,
+  loadingText: {
+    fontSize: 16,
     color: '#2196F3',
     marginTop: 16,
     fontWeight: '500',

@@ -188,13 +188,13 @@ break;
 export const mcpTimestamp = MCPTimestampService.getInstance();
 /**
 * * 便捷函数
-export const createMCPTimestamp = (;)
+export const createMCPTimestamp = (;);
   source: MCPTimestamp[source"] = "device,precision: MCPTimestamp["precision"] = millisecond;
 ): MCPTimestamp => mcpTimestamp.now(source, precision);
-export const createTimeRange = (;)
+export const createTimeRange = (;);
   start: Date | MCPTimestamp,end: Date | MCPTimestamp;
 ): TimeRange => mcpTimestamp.createTimeRange(start, end);
-export const formatMCPTimestamp = (;)
+export const formatMCPTimestamp = (;);
   timestamp: MCPTimestamp,options?: Intl.DateTimeFormatOptions;
 ): string => mcpTimestamp.format(timestamp, options);
 export const validateMCPTimestamp = (timestamp: MCPTimestamp): boolean =>;

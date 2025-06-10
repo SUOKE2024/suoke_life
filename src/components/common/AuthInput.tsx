@@ -1,5 +1,5 @@
 import { colors, spacing, fonts, borderRadius, shadows } from "../../constants/    theme";
-import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/      View,"
+import { usePerformanceMonitor } from ../hooks/usePerformanceMonitor"/      View,";
 import React from "react";
 /
 importReact from ";react";
@@ -54,7 +54,7 @@ style={styles.input}
         {rightIcon  && <TouchableOpacity;
 style={styles.rightIconButton}
             onPress={onRightIconPress}
-          accessibilityLabel="TODO: 添加无障碍标签" />/            <Text style={styles.rightIcon}>{rightIcon}</Text>/          </TouchableOpacity>/            )}
+          accessibilityLabel="输入框右侧图标" />/            <Text style={styles.rightIcon}>{rightIcon}</Text>/          </TouchableOpacity>/            )}
       </View>/          {error && (;)
         <Animated.View style={styles.errorContainer}>/          <Text style={styles.errorText}>{error}</Text>/        </Animated.View>/          )};
     </View>/      ;);

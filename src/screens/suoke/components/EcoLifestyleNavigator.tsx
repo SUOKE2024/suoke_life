@@ -3,7 +3,7 @@ import { usePerformanceMonitor } from "../hooks/    usePerformanceMonitor";
 import React from "react";
 importIcon from "../../../components/common/    Icon";
 // 生态生活导航组件   提供食农结合和山水养生功能的统一入口
-import React,{ useState } from react""
+import React,{ useState } from react"";
   View,
   Text,
   StyleSheet,

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import {
+import {;
   ActivityIndicator,
   Dimensions,
   RefreshControl,
@@ -7,7 +7,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -62,27 +62,27 @@ const ServiceStatusMonitor: React.FC<ServiceStatusMonitorProps> = ({
           id: 'xiaoai',
           name: '小艾服务',
           endpoint: 'http://localhost:8015',
-          port: 8015,
+          port: 8015
         },
         {
           id: 'xiaoke',
           name: '小克服务',
           endpoint: 'http://localhost:8016',
-          port: 8016,
+          port: 8016
         },
         {
           id: 'laoke',
           name: '老克服务',
           endpoint: 'http://localhost:8017',
-          port: 8017,
+          port: 8017
         },
         {
           id: 'soer',
           name: '索儿服务',
           endpoint: 'http://localhost:8018',
-          port: 8018,
-        },
-      ],
+          port: 8018
+        }
+      ]
     },
     diagnosis: {,
   name: '诊断服务',
@@ -92,33 +92,33 @@ const ServiceStatusMonitor: React.FC<ServiceStatusMonitorProps> = ({
           id: 'look',
           name: '望诊服务',
           endpoint: 'http://localhost:8020',
-          port: 8020,
+          port: 8020
         },
         {
           id: 'inquiry',
           name: '问诊服务',
           endpoint: 'http://localhost:8021',
-          port: 8021,
+          port: 8021
         },
         {
           id: 'listen',
           name: '闻诊服务',
           endpoint: 'http://localhost:8022',
-          port: 8022,
+          port: 8022
         },
         {
           id: 'calculation',
           name: '算诊服务',
           endpoint: 'http://localhost:8023',
-          port: 8023,
+          port: 8023
         },
         {
           id: 'palpation',
           name: '切诊服务',
           endpoint: 'http://localhost:8024',
-          port: 8024,
-        },
-      ],
+          port: 8024
+        }
+      ]
     },
     core: {,
   name: '核心服务',
@@ -128,33 +128,33 @@ const ServiceStatusMonitor: React.FC<ServiceStatusMonitorProps> = ({
           id: 'api-gateway',
           name: 'API网关',
           endpoint: 'http://localhost:8000',
-          port: 8000,
+          port: 8000
         },
         {
           id: 'user-management',
           name: '用户管理',
           endpoint: 'http://localhost:8001',
-          port: 8001,
+          port: 8001
         },
         {
           id: 'unified-knowledge',
           name: '统一知识',
           endpoint: 'http://localhost:8002',
-          port: 8002,
+          port: 8002
         },
         {
           id: 'unified-health-data',
           name: '统一健康数据',
           endpoint: 'http://localhost:8003',
-          port: 8003,
+          port: 8003
         },
         {
           id: 'unified-support',
           name: '统一支持',
           endpoint: 'http://localhost:8004',
-          port: 8004,
-        },
-      ],
+          port: 8004
+        }
+      ]
     },
     infrastructure: {,
   name: '基础设施',
@@ -164,22 +164,22 @@ const ServiceStatusMonitor: React.FC<ServiceStatusMonitorProps> = ({
           id: 'blockchain',
           name: '区块链服务',
           endpoint: 'http://localhost:8005',
-          port: 8005,
+          port: 8005
         },
         {
           id: 'communication',
           name: '通信服务',
           endpoint: 'http://localhost:8006',
-          port: 8006,
+          port: 8006
         },
         {
           id: 'utility',
           name: '工具服务',
           endpoint: 'http://localhost:8007',
-          port: 8007,
-        },
-      ],
-    },
+          port: 8007
+        }
+      ]
+    }
   };
 
   // 检查服务状态
@@ -196,8 +196,8 @@ const ServiceStatusMonitor: React.FC<ServiceStatusMonitorProps> = ({
           method: 'GET',
           signal: controller.signal,
           headers: {
-            'Content-Type': 'application/json',
-          },
+            'Content-Type': 'application/json'
+          }
         });
 
         clearTimeout(timeoutId);
@@ -224,7 +224,7 @@ const ServiceStatusMonitor: React.FC<ServiceStatusMonitorProps> = ({
             status: 'unhealthy',
             lastCheck: new Date(),
             responseTime,
-            errorMessage: `HTTP ${response.status}`,
+            errorMessage: `HTTP ${response.status}`
           };
         }
       } catch (error) {
@@ -243,7 +243,7 @@ const ServiceStatusMonitor: React.FC<ServiceStatusMonitorProps> = ({
           version: mockStatus === 'healthy' ? '1.0.0' : undefined,
           uptime: mockStatus === 'healthy' ? Math.random() * 86400 : undefined,
           errorMessage:
-            mockStatus === 'unhealthy' ? 'Connection failed' : undefined,
+            mockStatus === 'unhealthy' ? 'Connection failed' : undefined
         };
       }
     },
@@ -265,7 +265,7 @@ const ServiceStatusMonitor: React.FC<ServiceStatusMonitorProps> = ({
         id: categoryKey,
         name: categoryConfig.name,
         services: serviceStatuses,
-        color: categoryConfig.color,
+        color: categoryConfig.color
       });
     }
 
@@ -351,7 +351,7 @@ const ServiceStatusMonitor: React.FC<ServiceStatusMonitorProps> = ({
         <View;
           style={[
             styles.statusBadge,
-            { backgroundColor: getStatusColor(service.status) },
+            { backgroundColor: getStatusColor(service.status) }
           ]}
         >
           <Text style={styles.statusText}>
@@ -459,7 +459,7 @@ const ServiceStatusMonitor: React.FC<ServiceStatusMonitorProps> = ({
       }
       showsVerticalScrollIndicator={false}
     >
-      {/* 状态概览 */}
+      {// 状态概览}
       <View style={styles.overviewContainer}>
         <Text style={styles.overviewTitle}>服务状态概览</Text>
         <Text style={styles.lastUpdateText}>
@@ -478,7 +478,7 @@ const ServiceStatusMonitor: React.FC<ServiceStatusMonitorProps> = ({
                 <View;
                   style={[
                     styles.statIndicator,
-                    { backgroundColor: category.color },
+                    { backgroundColor: category.color }
                   ]}
                 />
                 <Text style={styles.statLabel}>{category.name}</Text>
@@ -491,7 +491,7 @@ const ServiceStatusMonitor: React.FC<ServiceStatusMonitorProps> = ({
         </View>
       </View>
 
-      {/* 服务详情 */}
+      {// 服务详情}
       {serviceCategories.map(renderServiceCategory)}
     </ScrollView>
   );
@@ -500,18 +500,18 @@ const ServiceStatusMonitor: React.FC<ServiceStatusMonitorProps> = ({
 const styles = StyleSheet.create({
   container: {,
   flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: '#F8F9FA'
   },
   loadingContainer: {,
   flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 40,
+    paddingVertical: 40
   },
   loadingText: {,
   marginTop: 10,
     fontSize: 14,
-    color: '#666',
+    color: '#666'
   },
   overviewContainer: {,
   backgroundColor: '#FFFFFF',
@@ -522,23 +522,23 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
-    elevation: 2,
+    elevation: 2
   },
   overviewTitle: {,
   fontSize: 18,
     fontWeight: '600',
     color: '#333',
-    marginBottom: 4,
+    marginBottom: 4
   },
   lastUpdateText: {,
   fontSize: 12,
     color: '#999',
-    marginBottom: 16,
+    marginBottom: 16
   },
   statsContainer: {,
   flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 12,
+    gap: 12
   },
   statItem: {,
   flexDirection: 'row',
@@ -547,23 +547,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
-    minWidth: (width - 64) / 2,
+    minWidth: (width - 64) / 2
   },
   statIndicator: {,
   width: 8,
     height: 8,
     borderRadius: 4,
-    marginRight: 8,
+    marginRight: 8
   },
   statLabel: {,
   fontSize: 12,
     color: '#666',
-    flex: 1,
+    flex: 1
   },
   statValue: {,
   fontSize: 12,
     fontWeight: '600',
-    color: '#333',
+    color: '#333'
   },
   categoryContainer: {,
   backgroundColor: '#FFFFFF',
@@ -574,7 +574,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
-    elevation: 2,
+    elevation: 2
   },
   categoryHeader: {,
   flexDirection: 'row',
@@ -583,82 +583,82 @@ const styles = StyleSheet.create({
     padding: 16,
     borderLeftWidth: 4,
     borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
+    borderBottomColor: '#F0F0F0'
   },
   categoryTitle: {,
   fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: '#333'
   },
   categoryStats: {,
   fontSize: 12,
-    color: '#666',
+    color: '#666'
   },
   servicesContainer: {,
   padding: 16,
-    paddingTop: 0,
+    paddingTop: 0
   },
   serviceItem: {,
   backgroundColor: '#F8F9FA',
     padding: 12,
     borderRadius: 8,
-    marginTop: 12,
+    marginTop: 12
   },
   serviceHeader: {,
   flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   serviceInfo: {,
   flexDirection: 'row',
     alignItems: 'center',
-    flex: 1,
+    flex: 1
   },
   statusIcon: {,
-  marginRight: 8,
+  marginRight: 8
   },
   serviceName: {,
   fontSize: 14,
     fontWeight: '500',
     color: '#333',
-    flex: 1,
+    flex: 1
   },
   statusBadge: {,
   paddingHorizontal: 8,
     paddingVertical: 2,
-    borderRadius: 10,
+    borderRadius: 10
   },
   statusText: {,
   fontSize: 10,
     color: '#FFFFFF',
-    fontWeight: '600',
+    fontWeight: '600'
   },
   serviceDetails: {,
   marginTop: 8,
     paddingTop: 8,
     borderTopWidth: 1,
-    borderTopColor: '#E0E0E0',
+    borderTopColor: '#E0E0E0'
   },
   detailRow: {,
   flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 4,
+    marginBottom: 4
   },
   detailLabel: {,
   fontSize: 11,
     color: '#666',
-    flex: 1,
+    flex: 1
   },
   detailValue: {,
   fontSize: 11,
     color: '#333',
     flex: 2,
-    textAlign: 'right',
+    textAlign: 'right'
   },
   errorText: {,
-  color: '#F44336',
-  },
+  color: '#F44336'
+  }
 });
 
 export default ServiceStatusMonitor;
