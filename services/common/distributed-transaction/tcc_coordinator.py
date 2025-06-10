@@ -37,7 +37,7 @@ class TCCResource(ABC):
     """TCC资源接口"""
 
     @abstractmethod
-    async def try_resource(self, request: dict[str, Any]) - > str:
+    async def try_resource(self, request: dict[str, Any]) -> str:
         """
         尝试预留资源，返回预留ID
 
@@ -50,7 +50,7 @@ class TCCResource(ABC):
         pass
 
     @abstractmethod
-    async def confirm_resource(self, reservation_id: str) - > bool:
+    async def confirm_resource(self, reservation_id: str) -> bool:
         """
         确认资源预留
 
@@ -63,7 +63,7 @@ class TCCResource(ABC):
         pass
 
     @abstractmethod
-    async def cancel_resource(self, reservation_id: str) - > bool:
+    async def cancel_resource(self, reservation_id: str) -> bool:
         """
         取消资源预留
 
@@ -114,7 +114,7 @@ class TCCTransaction:
 class TCCCoordinator:
     """TCC事务协调器"""
 
-    def __init__(self) - > None:
+    def __init__(self) -> None:
         """TODO: 添加文档字符串"""
         self.resources: dict[str, TCCResource] = {}
         self.transactions: dict[str, TCCTransaction] = {}
@@ -133,12 +133,12 @@ class TCCCoordinator:
         self.resources[name] = resource
         logger.info(f"注册TCC资源: {name}")
 
-    async def begin_transaction(self) - > TCCTransaction:
+    async def begin_transaction(self) -> TCCTransaction:
         """开始新的TCC事务"""
         async with self._lock:
             transaction = TCCTransaction()
             self.transactions[transaction.transaction_id] = transaction
-            self.stats["total_transactions"] + = 1
+            self.stats["total_transactions"] += 1
 
             self._record_event(transaction, "transaction_started", {})
             logger.info(f"开始TCC事务: {transaction.transaction_id}")
@@ -156,7 +156,7 @@ class TCCCoordinator:
 
     async def execute_transaction(
         self, transaction_id: str, operations: list[TCCOperation] | None = None
-    ) - > bool:
+    ) -> bool:
         """
         执行TCC事务
 
@@ -194,7 +194,7 @@ class TCCCoordinator:
             # 事务成功
             transaction.status = TCCStatus.CONFIRMED
             transaction.completed_at = datetime.now()
-            self.stats["successful_transactions"] + = 1
+            self.stats["successful_transactions"] += 1
 
             self._record_event(
                 transaction,
@@ -213,12 +213,12 @@ class TCCCoordinator:
             # 异常，执行Cancel
             logger.error(f"TCC事务 {transaction_id} 执行失败: {e}")
             transaction.status = TCCStatus.FAILED
-            self.stats["failed_transactions"] + = 1
+            self.stats["failed_transactions"] += 1
 
             await self._cancel_phase(transaction)
             return False
 
-    async def _try_phase(self, transaction: TCCTransaction) - > bool:
+    async def _try_phase(self, transaction: TCCTransaction) -> bool:
         """Try阶段：尝试预留所有资源"""
         transaction.status = TCCStatus.TRYING
         self._record_event(transaction, "try_phase_started", {})
@@ -247,7 +247,7 @@ class TCCCoordinator:
 
         return True
 
-    async def _try_operation(self, operation: TCCOperation) - > bool:
+    async def _try_operation(self, operation: TCCOperation) -> bool:
         """执行单个Try操作"""
         resource = self.resources.get(operation.resource_name)
         if not resource:
@@ -289,7 +289,7 @@ class TCCCoordinator:
         operation.status = "try_failed"
         return False
 
-    async def _confirm_phase(self, transaction: TCCTransaction) - > bool:
+    async def _confirm_phase(self, transaction: TCCTransaction) -> bool:
         """Confirm阶段：确认所有预留的资源"""
         transaction.status = TCCStatus.CONFIRMING
         self._record_event(transaction, "confirm_phase_started", {})
@@ -321,7 +321,7 @@ class TCCCoordinator:
             )
             return False
 
-    async def _confirm_operation(self, operation: TCCOperation) - > bool:
+    async def _confirm_operation(self, operation: TCCOperation) -> bool:
         """执行单个Confirm操作"""
         if not operation.reservation_id:
             return False
@@ -351,7 +351,7 @@ class TCCCoordinator:
             operation.status = "confirm_failed"
             return False
 
-    async def _cancel_phase(self, transaction: TCCTransaction) - > bool:
+    async def _cancel_phase(self, transaction: TCCTransaction) -> bool:
         """Cancel阶段：取消所有预留的资源"""
         transaction.status = TCCStatus.CANCELLING
         self._record_event(transaction, "cancel_phase_started", {})
@@ -380,11 +380,11 @@ class TCCCoordinator:
 
         transaction.status = TCCStatus.CANCELLED
         transaction.completed_at = datetime.now()
-        self.stats["cancelled_transactions"] + = 1
+        self.stats["cancelled_transactions"] += 1
 
         return True
 
-    async def _cancel_operation(self, operation: TCCOperation) - > bool:
+    async def _cancel_operation(self, operation: TCCOperation) -> bool:
         """执行单个Cancel操作"""
         if not operation.reservation_id:
             return True
@@ -427,7 +427,7 @@ class TCCCoordinator:
         transaction.events.append(event)
         logger.debug(f"TCC事件: {event}")
 
-    def get_transaction_status(self, transaction_id: str) - > dict[str, Any] | None:
+    def get_transaction_status(self, transaction_id: str) -> dict[str, Any] | None:
         """获取事务状态"""
         transaction = self.transactions.get(transaction_id)
         if not transaction:
@@ -453,10 +453,10 @@ class TCCCoordinator:
             "events_count": len(transaction.events),
         }
 
-    def get_stats(self) - > dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """获取统计信息"""
         return {
-            * *self.stats,
+            ***self.stats,
             "active_transactions": len(
                 [
                     t
@@ -472,6 +472,6 @@ class TCCCoordinator:
 _global_coordinator = TCCCoordinator()
 
 
-def get_tcc_coordinator() - > TCCCoordinator:
+def get_tcc_coordinator() -> TCCCoordinator:
     """获取全局TCC协调器"""
     return _global_coordinator

@@ -4,7 +4,7 @@ from .linkerd_client import LinkerdClient, ServiceProfile, TrafficSplit
 from .mesh_manager import (
 from typing import Dict, List, Any, Optional, Union
 
-def main() - > None:
+def main() -> None:
     """主函数 - 自动生成的最小可用版本"""
     pass
 

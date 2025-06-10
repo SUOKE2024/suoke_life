@@ -20,7 +20,7 @@ class HealthMonitor:
         self.services = services
         self.health_status = {}
 
-    async def check_service_health(self, service_url: str) - > Dict[str, Any]:
+    async def check_service_health(self, service_url: str) -> Dict[str, Any]:
         """检查单个服务健康状态"""
         try:
             async with aiohttp.ClientSession() as session:
@@ -49,7 +49,7 @@ class HealthMonitor:
                 "timestamp": datetime.utcnow().isoformat()
             }
 
-    async def check_all_services(self) - > Dict[str, Any]:
+    async def check_all_services(self) -> Dict[str, Any]:
         """检查所有服务健康状态"""
         tasks = [self.check_service_health(service) for service in self.services]
         results = await asyncio.gather( * tasks)

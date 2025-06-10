@@ -48,12 +48,12 @@ class EventHandler(ABC):
     """事件处理器抽象基类"""
 
     @abstractmethod
-    async def handle(self, event: Event) - > bool:
+    async def handle(self, event: Event) -> bool:
         """处理事件"""
         pass
 
     @abstractmethod
-    def get_event_types(self) - > list[str]:
+    def get_event_types(self) -> list[str]:
         """获取处理的事件类型"""
         pass
 
@@ -97,7 +97,7 @@ class EventBus:
         for handler in self.subscribers.get(topic, []):
             threading.Thread(target = handler, args = (event,)).start()
 
-    async def start_consuming(self) - > None:
+    async def start_consuming(self) -> None:
         """开始消费事件"""
         if self.running:
             return
@@ -111,7 +111,7 @@ class EventBus:
 
         logger.info(f"Started consuming events for {len(self.handlers)} event types")
 
-    async def stop_consuming(self) - > None:
+    async def stop_consuming(self) -> None:
         """停止消费事件"""
         self.running = False
 
@@ -206,11 +206,11 @@ class DiagnosisEventHandler(EventHandler):
         self.health_data_service = health_data_service
         self.notification_service = notification_service
 
-    def get_event_types(self) - > list[str]:
+    def get_event_types(self) -> list[str]:
         """TODO: 添加文档字符串"""
         return [EventType.DIAGNOSIS_COMPLETED.value]
 
-    async def handle(self, event: Event) - > bool:
+    async def handle(self, event: Event) -> bool:
         """处理诊断完成事件"""
         try:
             diagnosis_data = event.data
@@ -241,11 +241,11 @@ class UserEventHandler(EventHandler):
         self.user_service = user_service
         self.email_service = email_service
 
-    def get_event_types(self) - > list[str]:
+    def get_event_types(self) -> list[str]:
         """TODO: 添加文档字符串"""
         return [EventType.USER_REGISTERED.value, EventType.USER_LOGIN.value]
 
-    async def handle(self, event: Event) - > bool:
+    async def handle(self, event: Event) -> bool:
         """处理用户事件"""
         try:
             if event.event_type == EventType.USER_REGISTERED.value:
@@ -259,7 +259,7 @@ class UserEventHandler(EventHandler):
             logger.error(f"Failed to handle user event: {e}")
             return False
 
-    async def _handle_user_registered(self, event: Event) - > bool:
+    async def _handle_user_registered(self, event: Event) -> bool:
         """处理用户注册事件"""
         user_data = event.data
         user_id = event.user_id
@@ -275,7 +275,7 @@ class UserEventHandler(EventHandler):
         logger.info(f"Processed user registration for {user_id}")
         return True
 
-    async def _handle_user_login(self, event: Event) - > bool:
+    async def _handle_user_login(self, event: Event) -> bool:
         """处理用户登录事件"""
         login_data = event.data
         user_id = event.user_id
@@ -300,11 +300,11 @@ class HealthRecordEventHandler(EventHandler):
         self.analytics_service = analytics_service
         self.recommendation_service = recommendation_service
 
-    def get_event_types(self) - > list[str]:
+    def get_event_types(self) -> list[str]:
         """TODO: 添加文档字符串"""
         return [EventType.HEALTH_RECORD_UPDATED.value]
 
-    async def handle(self, event: Event) - > bool:
+    async def handle(self, event: Event) -> bool:
         """处理健康记录更新事件"""
         try:
             record_data = event.data
@@ -350,11 +350,11 @@ class SystemAlertEventHandler(EventHandler):
         self.alert_service = alert_service
         self.monitoring_service = monitoring_service
 
-    def get_event_types(self) - > list[str]:
+    def get_event_types(self) -> list[str]:
         """TODO: 添加文档字符串"""
         return [EventType.SYSTEM_ALERT.value]
 
-    async def handle(self, event: Event) - > bool:
+    async def handle(self, event: Event) -> bool:
         """处理系统告警事件"""
         try:
             alert_data = event.data

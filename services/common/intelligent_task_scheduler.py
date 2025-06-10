@@ -74,14 +74,14 @@ class Task:
     execution_time: Optional[float] = None
     memory_usage: Optional[float] = None
 
-    def __post_init__(self) - > None:
+    def __post_init__(self) -> None:
         """TODO: 添加文档字符串"""
         if self.created_at is None:
             self.created_at = datetime.now()
 
     def __lt__(self, other):
         """优先级比较（用于优先队列）"""
-        if self.priority.value ! = other.priority.value:
+        if self.priority.value != other.priority.value:
             return self.priority.value < other.priority.value
         return self.created_at < other.created_at
 
@@ -99,7 +99,7 @@ class AgentInfo:
     last_heartbeat: datetime = None
     capabilities: List[str] = None
 
-    def __post_init__(self) - > None:
+    def __post_init__(self) -> None:
         """TODO: 添加文档字符串"""
         if self.last_heartbeat is None:
             self.last_heartbeat = datetime.now()
@@ -109,7 +109,7 @@ class AgentInfo:
 class LoadBalancer:
     """负载均衡器"""
 
-    def __init__(self) - > None:
+    def __init__(self) -> None:
         """TODO: 添加文档字符串"""
         self.agents: Dict[str, AgentInfo] = {}
         self.agent_metrics: Dict[str, Dict[str, float]] = defaultdict(dict)
@@ -147,7 +147,7 @@ class LoadBalancer:
                 total_requests = metrics.get('total_requests', 0) + 1
                 successful_requests = metrics.get('successful_requests', 0)
                 if success:
-                    successful_requests + = 1
+                    successful_requests += 1
 
                 metrics['total_requests'] = total_requests
                 metrics['successful_requests'] = successful_requests
@@ -157,7 +157,7 @@ class LoadBalancer:
                 agent.last_heartbeat = datetime.now()
 
     @jit(forceobj = True)
-    def _calculate_agent_score(self, agent: AgentInfo, task_priority: int) - > float:
+    def _calculate_agent_score(self, agent: AgentInfo, task_priority: int) -> float:
         """计算智能体评分（JIT优化）"""
         # 基础评分
         base_score = 100.0
@@ -173,13 +173,13 @@ class LoadBalancer:
         success_score = agent.success_rate * 25
 
         # 优先级匹配因子
-        priority_score = 25 if task_priority < = 2 else 15
+        priority_score = 25 if task_priority <= 2 else 15
 
         total_score = base_score + load_score + response_score + success_score + priority_score
         return total_score
 
     def select_best_agent(self, agent_type: AgentType,
-                        task_priority: TaskPriority) - > Optional[AgentInfo]:
+                        task_priority: TaskPriority) -> Optional[AgentInfo]:
         """选择最佳智能体"""
         with self.lock:
             available_agents = [
@@ -204,7 +204,7 @@ class LoadBalancer:
 
             return best_agent
 
-    def get_agent_stats(self) - > Dict[str, Any]:
+    def get_agent_stats(self) -> Dict[str, Any]:
         """获取智能体统计信息"""
         with self.lock:
             stats = {}
@@ -225,7 +225,7 @@ class LoadBalancer:
 class TaskQueue:
     """智能任务队列"""
 
-    def __init__(self) - > None:
+    def __init__(self) -> None:
         """TODO: 添加文档字符串"""
         self.priority_queues: Dict[TaskPriority, List[Task]] = {
             priority: [] for priority in TaskPriority
@@ -240,7 +240,7 @@ class TaskQueue:
             heapq.heappush(self.priority_queues[task.priority], task)
             logger.info(f"任务已添加到队列: {task.task_id} (优先级: {task.priority.name})")
 
-    def get_next_task(self, agent_type: AgentType) - > Optional[Task]:
+    def get_next_task(self, agent_type: AgentType) -> Optional[Task]:
         """获取下一个任务"""
         with self.lock:
             # 按优先级顺序检查队列
@@ -288,7 +288,7 @@ class TaskQueue:
 
                 # 检查是否需要重试
                 if task.retry_count < task.max_retries:
-                    task.retry_count + = 1
+                    task.retry_count += 1
                     task.status = TaskStatus.PENDING
                     task.started_at = None
                     self.add_task(task)
@@ -297,7 +297,7 @@ class TaskQueue:
                     self.completed_tasks[task_id] = task
                     logger.error(f"任务失败: {task_id} - {error_message}")
 
-    def get_queue_stats(self) - > Dict[str, Any]:
+    def get_queue_stats(self) -> Dict[str, Any]:
         """获取队列统计信息"""
         with self.lock:
             stats = {
@@ -335,7 +335,7 @@ class IntelligentTaskScheduler:
 
         logger.info("智能任务调度器初始化完成")
 
-    async def initialize(self) - > None:
+    async def initialize(self) -> None:
         """异步初始化"""
         if self.redis_url:
             self.redis_client = await aioredis.from_url(self.redis_url)
@@ -354,7 +354,7 @@ class IntelligentTaskScheduler:
 
     async def submit_task(self, task_type: str, agent_type: AgentType,
                         input_data: Dict[str, Any], priority: TaskPriority = TaskPriority.NORMAL,
-                        user_id: Optional[str] = None, timeout: float = 30.0) - > str:
+                        user_id: Optional[str] = None, timeout: float = 30.0) -> str:
         """提交任务"""
         task_id = str(uuid.uuid4())
 
@@ -378,10 +378,10 @@ class IntelligentTaskScheduler:
                 json.dumps(asdict(task), default = str)
             )
 
-        logger.info(f"任务已提交: {task_id} - > {agent_type.value}")
+        logger.info(f"任务已提交: {task_id} -> {agent_type.value}")
         return task_id
 
-    async def get_task_status(self, task_id: str) - > Optional[Dict[str, Any]]:
+    async def get_task_status(self, task_id: str) -> Optional[Dict[str, Any]]:
         """获取任务状态"""
         # 先检查内存中的任务
         if task_id in self.task_queue.running_tasks:
@@ -407,7 +407,7 @@ class IntelligentTaskScheduler:
 
         return None
 
-    async def start_scheduler(self) - > None:
+    async def start_scheduler(self) -> None:
         """启动调度器"""
         if self.is_running:
             logger.warning("调度器已在运行")
@@ -417,7 +417,7 @@ class IntelligentTaskScheduler:
         self.scheduler_task = asyncio.create_task(self._scheduler_loop())
         logger.info("智能任务调度器已启动")
 
-    async def stop_scheduler(self) - > None:
+    async def stop_scheduler(self) -> None:
         """停止调度器"""
         if not self.is_running:
             return
@@ -432,7 +432,7 @@ class IntelligentTaskScheduler:
 
         logger.info("智能任务调度器已停止")
 
-    async def _scheduler_loop(self) - > None:
+    async def _scheduler_loop(self) -> None:
         """调度器主循环"""
         logger.info("调度器主循环已启动")
 
@@ -472,7 +472,7 @@ class IntelligentTaskScheduler:
             return
 
         # 增加智能体负载
-        best_agent.current_load + = 1
+        best_agent.current_load += 1
 
         # 异步执行任务
         asyncio.create_task(self._execute_task(task, best_agent))
@@ -507,7 +507,7 @@ class IntelligentTaskScheduler:
             )
 
             # 更新统计
-            self.stats["total_tasks_processed"] + = 1
+            self.stats["total_tasks_processed"] += 1
 
         except Exception as e:
             execution_time = time.time() - start_time
@@ -523,13 +523,13 @@ class IntelligentTaskScheduler:
             )
 
             # 更新统计
-            self.stats["total_tasks_failed"] + = 1
+            self.stats["total_tasks_failed"] += 1
 
         finally:
             # 减少智能体负载
             agent.current_load = max(0, agent.current_load - 1)
 
-    async def _check_timeout_tasks(self) - > None:
+    async def _check_timeout_tasks(self) -> None:
         """检查超时任务"""
         current_time = datetime.now()
         timeout_tasks = []
@@ -546,7 +546,7 @@ class IntelligentTaskScheduler:
             self.task_queue.fail_task(task_id, "Task timeout")
             logger.warning(f"任务超时: {task_id}")
 
-    async def _update_stats(self) - > None:
+    async def _update_stats(self) -> None:
         """更新统计信息"""
         if self.stats["total_tasks_processed"] > 0:
             # 计算平均处理时间
@@ -556,13 +556,13 @@ class IntelligentTaskScheduler:
             with self.task_queue.lock:
                 for task in self.task_queue.completed_tasks.values():
                     if task.execution_time:
-                        total_time + = task.execution_time
-                        count + = 1
+                        total_time += task.execution_time
+                        count += 1
 
             if count > 0:
                 self.stats["avg_processing_time"] = total_time / count
 
-    def get_scheduler_stats(self) - > Dict[str, Any]:
+    def get_scheduler_stats(self) -> Dict[str, Any]:
         """获取调度器统计信息"""
         return {
             "scheduler_stats": self.stats,
@@ -582,7 +582,7 @@ async def initialize_scheduler(redis_url: Optional[str] = None):
     await scheduler.start_scheduler()
     return scheduler
 
-async def shutdown_scheduler() - > None:
+async def shutdown_scheduler() -> None:
     """关闭全局调度器"""
     global scheduler
     if scheduler:

@@ -76,14 +76,14 @@ class CircuitBreaker:
 
         logger.info(f"断路器初始化完成，配置: {config}")
 
-    async def call(self, func: Callable, * args, * *kwargs) - > Any:
+    async def call(self, func: Callable, *args, **kwargs) -> Any:
         """
         通过断路器调用函数
 
         Args:
             func: 要调用的函数
-            * args: 函数参数
-            * *kwargs: 函数关键字参数
+            *args: 函数参数
+            **kwargs: 函数关键字参数
 
         Returns:
             函数调用结果
@@ -93,13 +93,13 @@ class CircuitBreaker:
             Exception: 函数调用异常
         """
         async with self._lock:
-            self.stats["total_calls"] + = 1
+            self.stats["total_calls"] += 1
 
             # 检查断路器状态
             await self._check_state()
 
             if self.state == CircuitState.OPEN:
-                self.stats["circuit_open_count"] + = 1
+                self.stats["circuit_open_count"] += 1
                 raise CircuitBreakerOpenError(
                     f"断路器开启状态，下次尝试时间: {self.next_attempt_time}"
                 )
@@ -108,9 +108,9 @@ class CircuitBreaker:
         try:
             # 添加超时控制
             result = await asyncio.wait_for(
-                func( * args, * *kwargs)
+                func( *args, **kwargs)
                 if asyncio.iscoroutinefunction(func)
-                else func( * args, * *kwargs),
+                else func( *args, **kwargs),
                 timeout = self.config.timeout,
             )
 
@@ -132,7 +132,7 @@ class CircuitBreaker:
             raise
 
     @asynccontextmanager
-    async def protect(self) - > None:
+    async def protect(self) -> None:
         """
         上下文管理器方式使用断路器
 
@@ -141,11 +141,11 @@ class CircuitBreaker:
                 result = await some_function()
         """
         async with self._lock:
-            self.stats["total_calls"] + = 1
+            self.stats["total_calls"] += 1
             await self._check_state()
 
             if self.state == CircuitState.OPEN:
-                self.stats["circuit_open_count"] + = 1
+                self.stats["circuit_open_count"] += 1
                 raise CircuitBreakerOpenError("断路器开启状态")
 
         try:
@@ -158,25 +158,25 @@ class CircuitBreaker:
             # 非预期异常不计入失败统计
             raise
 
-    async def _check_state(self) - > None:
+    async def _check_state(self) -> None:
         """检查并更新断路器状态"""
         current_time = time.time()
 
         if self.state == CircuitState.OPEN:
             # 检查是否可以尝试恢复
-            if current_time > = self.next_attempt_time:
+            if current_time >= self.next_attempt_time:
                 await self._change_state(CircuitState.HALF_OPEN)
                 self.success_count = 0
                 logger.info("断路器进入半开状态，尝试恢复")
 
-    async def _on_success(self) - > None:
+    async def _on_success(self) -> None:
         """处理成功调用"""
         async with self._lock:
-            self.stats["successful_calls"] + = 1
+            self.stats["successful_calls"] += 1
 
             if self.state == CircuitState.HALF_OPEN:
-                self.success_count + = 1
-                if self.success_count > = self.config.success_threshold:
+                self.success_count += 1
+                if self.success_count >= self.config.success_threshold:
                     await self._change_state(CircuitState.CLOSED)
                     self.failure_count = 0
                     logger.info("断路器恢复到关闭状态")
@@ -184,16 +184,16 @@ class CircuitBreaker:
                 # 重置失败计数
                 self.failure_count = 0
 
-    async def _on_failure(self) - > None:
+    async def _on_failure(self) -> None:
         """处理失败调用"""
         async with self._lock:
-            self.stats["failed_calls"] + = 1
-            self.failure_count + = 1
+            self.stats["failed_calls"] += 1
+            self.failure_count += 1
             self.last_failure_time = time.time()
 
             if (
                 self.state in (CircuitState.CLOSED, CircuitState.HALF_OPEN)
-            ) and self.failure_count > = self.config.failure_threshold:
+            ) and self.failure_count >= self.config.failure_threshold:
                 await self._change_state(CircuitState.OPEN)
                 self.next_attempt_time = time.time() + self.config.recovery_timeout
                 logger.warning(f"断路器开启，失败次数: {self.failure_count}")
@@ -208,12 +208,12 @@ class CircuitBreaker:
             {"from": old_state.value, "to": new_state.value, "timestamp": time.time()}
         )
 
-        logger.info(f"断路器状态变化: {old_state.value} - > {new_state.value}")
+        logger.info(f"断路器状态变化: {old_state.value} -> {new_state.value}")
 
-    def get_stats(self) - > dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """获取统计信息"""
         return {
-            * *self.stats,
+            **self.stats,
             "current_state": self.state.value,
             "failure_count": self.failure_count,
             "success_count": self.success_count,
@@ -227,7 +227,7 @@ class CircuitBreaker:
             else None,
         }
 
-    async def reset(self) - > None:
+    async def reset(self) -> None:
         """重置断路器"""
         async with self._lock:
             self.state = CircuitState.CLOSED
@@ -251,14 +251,14 @@ class CircuitBreaker:
 class CircuitBreakerRegistry:
     """断路器注册表，管理多个断路器实例"""
 
-    def __init__(self) - > None:
+    def __init__(self) -> None:
         """TODO: 添加文档字符串"""
         self._breakers: dict[str, CircuitBreaker] = {}
         self._lock = asyncio.Lock()
 
     async def get_breaker(
         self, name: str, config: CircuitBreakerConfig | None = None
-    ) - > CircuitBreaker:
+    ) -> CircuitBreaker:
         """
         获取或创建断路器
 
@@ -285,11 +285,11 @@ class CircuitBreakerRegistry:
                 del self._breakers[name]
                 logger.info(f"移除断路器: {name}")
 
-    def list_breakers(self) - > dict[str, dict[str, Any]]:
+    def list_breakers(self) -> dict[str, dict[str, Any]]:
         """列出所有断路器及其状态"""
         return {name: breaker.get_stats() for name, breaker in self._breakers.items()}
 
-    async def reset_all(self) - > None:
+    async def reset_all(self) -> None:
         """重置所有断路器"""
         async with self._lock:
             for breaker in self._breakers.values():
@@ -303,6 +303,6 @@ _global_registry = CircuitBreakerRegistry()
 
 async def get_circuit_breaker(
     name: str, config: CircuitBreakerConfig | None = None
-) - > CircuitBreaker:
+) -> CircuitBreaker:
     """获取全局断路器实例"""
     return await _global_registry.get_breaker(name, config)

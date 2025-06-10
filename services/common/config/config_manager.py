@@ -56,7 +56,7 @@ class ConfigItem:
     version: int = 1
     timestamp: float = None
 
-    def __post_init__(self) - > None:
+    def __post_init__(self) -> None:
         """TODO: 添加文档字符串"""
         if self.timestamp is None:
             self.timestamp = time.time()
@@ -134,7 +134,7 @@ class ConfigManager:
         if enable_hot_reload:
             self.start_watching()
 
-    def load(self) - > None:
+    def load(self) -> None:
         """加载所有配置"""
         with self._lock:
             # 清空现有配置
@@ -148,16 +148,16 @@ class ConfigManager:
                 self._load_env_configs()
 
             # 增加版本号
-            self.version + = 1
+            self.version += 1
 
             logger.info(f"配置加载完成，版本: {self.version}")
 
-    def reload(self) - > None:
+    def reload(self) -> None:
         """重新加载配置"""
         logger.info("重新加载配置...")
         self.load()
 
-    def _load_file_configs(self) - > None:
+    def _load_file_configs(self) -> None:
         """加载文件配置"""
         if not self.config_dir.exists():
             logger.warning(f"配置目录不存在: {self.config_dir}")
@@ -189,7 +189,7 @@ class ConfigManager:
                 except Exception as e:
                     logger.error(f"加载配置文件失败 {file_path}: {e}")
 
-    def _load_file(self, file_path: Path, format_type: ConfigFormat) - > dict[str, Any]:
+    def _load_file(self, file_path: Path, format_type: ConfigFormat) -> dict[str, Any]:
         """加载单个配置文件"""
         with open(file_path, encoding = "utf - 8") as f:
             if format_type == ConfigFormat.JSON:
@@ -201,7 +201,7 @@ class ConfigManager:
             else:
                 raise ValueError(f"不支持的配置格式: {format_type}")
 
-    def _parse_properties(self, content: str) - > dict[str, Any]:
+    def _parse_properties(self, content: str) -> dict[str, Any]:
         """解析properties格式"""
         result = {}
         for line in content.splitlines():
@@ -211,7 +211,7 @@ class ConfigManager:
                 result[key.strip()] = value.strip()
         return result
 
-    def _load_env_configs(self) - > None:
+    def _load_env_configs(self) -> None:
         """加载环境变量配置"""
         prefix = f"{self.env_prefix}_"
 
@@ -232,7 +232,7 @@ class ConfigManager:
                     version = self.version,
                 )
 
-    def _parse_env_value(self, value: str) - > Any:
+    def _parse_env_value(self, value: str) -> Any:
         """解析环境变量值"""
         # 尝试解析为JSON
         try:
@@ -294,7 +294,7 @@ class ConfigManager:
                 version = self.version,
             )
 
-    def get(self, key: str, default: Any = None) - > Any:
+    def get(self, key: str, default: Any = None) -> Any:
         """获取配置值"""
         with self._lock:
             item = self._config.get(key)
@@ -302,7 +302,7 @@ class ConfigManager:
                 return item.value
             return default
 
-    def get_int(self, key: str, default: int = 0) - > int:
+    def get_int(self, key: str, default: int = 0) -> int:
         """获取整数配置"""
         value = self.get(key, default)
         try:
@@ -310,7 +310,7 @@ class ConfigManager:
         except (TypeError, ValueError):
             return default
 
-    def get_float(self, key: str, default: float = 0.0) - > float:
+    def get_float(self, key: str, default: float = 0.0) -> float:
         """获取浮点数配置"""
         value = self.get(key, default)
         try:
@@ -318,7 +318,7 @@ class ConfigManager:
         except (TypeError, ValueError):
             return default
 
-    def get_bool(self, key: str, default: bool = False) - > bool:
+    def get_bool(self, key: str, default: bool = False) -> bool:
         """获取布尔配置"""
         value = self.get(key, default)
         if isinstance(value, bool):
@@ -327,7 +327,7 @@ class ConfigManager:
             return value.lower() in ("true", "yes", "1", "on")
         return bool(value)
 
-    def get_list(self, key: str, default: list | None = None) - > list:
+    def get_list(self, key: str, default: list | None = None) -> list:
         """获取列表配置"""
         value = self.get(key, default or [])
         if isinstance(value, list):
@@ -336,7 +336,7 @@ class ConfigManager:
             return [v.strip() for v in value.split(",")]
         return default or []
 
-    def get_dict(self, key_prefix: str) - > dict[str, Any]:
+    def get_dict(self, key_prefix: str) -> dict[str, Any]:
         """获取字典配置（通过前缀）"""
         result = {}
         prefix = f"{key_prefix}."
@@ -364,16 +364,16 @@ class ConfigManager:
                 # TODO: 实现持久化逻辑
                 pass
 
-    def exists(self, key: str) - > bool:
+    def exists(self, key: str) -> bool:
         """检查配置是否存在"""
         return key in self._config
 
-    def get_all(self) - > dict[str, Any]:
+    def get_all(self) -> dict[str, Any]:
         """获取所有配置"""
         with self._lock:
             return {key: item.value for key, item in self._config.items()}
 
-    def get_by_source(self, source: ConfigSource) - > dict[str, Any]:
+    def get_by_source(self, source: ConfigSource) -> dict[str, Any]:
         """根据来源获取配置"""
         with self._lock:
             return {
@@ -382,7 +382,7 @@ class ConfigManager:
                 if item.source == source
             }
 
-    def start_watching(self) - > None:
+    def start_watching(self) -> None:
         """启动文件监视"""
         if self.observer is None:
             self.observer = Observer()
@@ -390,7 +390,7 @@ class ConfigManager:
             self.observer.start()
             logger.info(f"启动配置文件监视: {self.config_dir}")
 
-    def stop_watching(self) - > None:
+    def stop_watching(self) -> None:
         """停止文件监视"""
         if self.observer:
             self.observer.stop()
@@ -411,10 +411,10 @@ class ConfigManager:
 _managers: dict[str, ConfigManager] = {}
 
 
-def get_config_manager(service_name: str, * *kwargs) - > ConfigManager:
+def get_config_manager(service_name: str, **kwargs) -> ConfigManager:
     """获取或创建配置管理器"""
     if service_name not in _managers:
-        _managers[service_name] = ConfigManager(service_name, * *kwargs)
+        _managers[service_name] = ConfigManager(service_name, **kwargs)
 
     return _managers[service_name]
 
@@ -429,7 +429,7 @@ def config(key: str, default: Any = None):
 
     def decorator(func: Callable):
         """TODO: 添加文档字符串"""
-        def wrapper( * args, * *kwargs):
+        def wrapper( *args, **kwargs):
             """TODO: 添加文档字符串"""
             # 获取服务名（从模块名推断）
             service_name = func.__module__.split(".")[0]
@@ -439,7 +439,7 @@ def config(key: str, default: Any = None):
             config_value = manager.get(key, default)
             kwargs[key.replace(".", "_")] = config_value
 
-            return func( * args, * *kwargs)
+            return func( *args, **kwargs)
 
         return wrapper
 

@@ -43,7 +43,7 @@ class HealthAlert:
     resolved: bool = False
     resolved_at: float | None = None
 
-    def to_dict(self) - > dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """转换为字典"""
         return {
             "level": self.level.value,
@@ -59,7 +59,7 @@ class HealthAlert:
 class HealthMonitor:
     """健康监控器"""
 
-    def __init__(self) - > None:
+    def __init__(self) -> None:
         """TODO: 添加文档字符串"""
         self.health_checker = HealthChecker()
         self.config = {}
@@ -99,7 +99,7 @@ class HealthMonitor:
         """添加告警处理器"""
         self.alert_handlers.append(handler)
 
-    async def start_monitoring(self) - > None:
+    async def start_monitoring(self) -> None:
         """开始监控"""
         if self.monitoring:
             logger.warning("健康监控已在运行")
@@ -109,7 +109,7 @@ class HealthMonitor:
         self.monitor_task = asyncio.create_task(self._monitor_loop())
         logger.info("开始健康监控")
 
-    async def stop_monitoring(self) - > None:
+    async def stop_monitoring(self) -> None:
         """停止监控"""
         if not self.monitoring:
             return
@@ -122,7 +122,7 @@ class HealthMonitor:
 
         logger.info("停止健康监控")
 
-    async def _monitor_loop(self) - > None:
+    async def _monitor_loop(self) -> None:
         """监控循环"""
         consecutive_failures = {}
 
@@ -201,12 +201,12 @@ class HealthMonitor:
             consecutive_failures[component_name] = 0
 
         if status == "unhealthy":
-            consecutive_failures[component_name] + = 1
+            consecutive_failures[component_name] += 1
 
             # 检查连续失败次数
             if (
                 consecutive_failures[component_name]
-                > = self.alert_thresholds["consecutive_failures"]
+                >= self.alert_thresholds["consecutive_failures"]
             ):
                 await self._create_alert(
                     AlertLevel.ERROR,
@@ -298,7 +298,7 @@ class HealthMonitor:
                 f"解决告警 [{alert.level.value}] {alert.component}: {alert.message}"
             )
 
-    async def get_health_summary(self) - > dict[str, Any]:
+    async def get_health_summary(self) -> dict[str, Any]:
         """获取健康状态摘要"""
         if not self.health_history:
             return {"status": "unknown", "message": "暂无健康数据"}
@@ -311,7 +311,7 @@ class HealthMonitor:
             level = alert.level.value
             if level not in active_alerts_by_level:
                 active_alerts_by_level[level] = 0
-            active_alerts_by_level[level] + = 1
+            active_alerts_by_level[level] += 1
 
         # 计算健康趋势
         trend = self._calculate_health_trend()
@@ -329,7 +329,7 @@ class HealthMonitor:
             "last_check": latest_health.get("timestamp", 0),
         }
 
-    def _calculate_health_trend(self) - > str:
+    def _calculate_health_trend(self) -> str:
         """计算健康趋势"""
         if len(self.health_history) < 2:
             return "stable"
@@ -340,7 +340,7 @@ class HealthMonitor:
         healthy_count = len([h for h in recent_checks if h.get("status") == "healthy"])
         total_count = len(recent_checks)
 
-        if len(self.health_history) > = 20:
+        if len(self.health_history) >= 20:
             # 比较前10次和后10次
             previous_checks = self.health_history[ - 20: - 10]
             previous_healthy = len(
@@ -362,7 +362,7 @@ class HealthMonitor:
         level: AlertLevel | None = None,
         component: str | None = None,
         limit: int = 100,
-    ) - > list[dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """获取告警列表"""
         alerts = (
             list(self.active_alerts.values()) if active_only else self.alert_history
@@ -383,7 +383,7 @@ class HealthMonitor:
 
         return [alert.to_dict() for alert in alerts]
 
-    async def get_health_metrics(self) - > dict[str, Any]:
+    async def get_health_metrics(self) -> dict[str, Any]:
         """获取健康指标"""
         if not self.health_history:
             return {}
@@ -402,8 +402,8 @@ class HealthMonitor:
             for check_result in checks.values():
                 duration = check_result.get("duration_ms", 0)
                 if duration > 0:
-                    total_duration + = duration
-                    check_count + = 1
+                    total_duration += duration
+                    check_count += 1
 
         avg_response_time = total_duration / check_count if check_count > 0 else 0
 
@@ -418,7 +418,7 @@ class HealthMonitor:
             else 0,
         }
 
-    async def health_check(self) - > dict[str, Any]:
+    async def health_check(self) -> dict[str, Any]:
         """监控器自身健康检查"""
         return {
             "status": "healthy" if self.monitoring else "stopped",
@@ -428,7 +428,7 @@ class HealthMonitor:
             "alert_handlers": len(self.alert_handlers),
         }
 
-    async def shutdown(self) - > None:
+    async def shutdown(self) -> None:
         """关闭监控器"""
         await self.stop_monitoring()
         await self.health_checker.shutdown()

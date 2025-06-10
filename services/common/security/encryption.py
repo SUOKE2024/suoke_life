@@ -37,7 +37,7 @@ class EncryptionService:
 
         self.cipher = Fernet(self.master_key)
 
-    def encrypt(self, data: str) - > str:
+    def encrypt(self, data: str) -> str:
         """
         加密数据
 
@@ -50,7 +50,7 @@ class EncryptionService:
         encrypted = self.cipher.encrypt(data.encode())
         return base64.urlsafe_b64encode(encrypted).decode()
 
-    def decrypt(self, encrypted_data: str) - > str:
+    def decrypt(self, encrypted_data: str) -> str:
         """
         解密数据
 
@@ -65,12 +65,12 @@ class EncryptionService:
         return decrypted.decode()
 
     @staticmethod
-    def generate_key() - > str:
+    def generate_key() -> str:
         """生成新的加密密钥"""
         return Fernet.generate_key().decode()
 
     @staticmethod
-    def derive_key(password: str, salt: bytes) - > bytes:
+    def derive_key(password: str, salt: bytes) -> bytes:
         """
         从密码派生密钥
 
@@ -91,7 +91,7 @@ class EncryptionService:
         return key
 
 
-def hash_password(password: str) - > str:
+def hash_password(password: str) -> str:
     """
     哈希密码
 
@@ -107,7 +107,7 @@ def hash_password(password: str) - > str:
     return hashed.decode("utf - 8")
 
 
-def verify_password(password: str, hashed_password: str) - > bool:
+def verify_password(password: str, hashed_password: str) -> bool:
     """
     验证密码
 
@@ -124,7 +124,7 @@ def verify_password(password: str, hashed_password: str) - > bool:
         return False
 
 
-def generate_secure_token(length: int = 32) - > str:
+def generate_secure_token(length: int = 32) -> str:
     """
     生成安全令牌
 
@@ -137,12 +137,12 @@ def generate_secure_token(length: int = 32) - > str:
     return secrets.token_urlsafe(length)
 
 
-def generate_api_key() - > str:
+def generate_api_key() -> str:
     """生成API密钥"""
     return f"sk_{secrets.token_urlsafe(32)}"
 
 
-def hash_data(data: str, algorithm: str = "sha256") - > str:
+def hash_data(data: str, algorithm: str = "sha256") -> str:
     """
     哈希数据
 
@@ -163,7 +163,7 @@ def hash_data(data: str, algorithm: str = "sha256") - > str:
         raise ValueError(f"不支持的哈希算法: {algorithm}")
 
 
-def validate_password_strength(password: str) - > tuple[bool, list[str]]:
+def validate_password_strength(password: str) -> tuple[bool, list[str]]:
     """
     验证密码强度
 
@@ -187,7 +187,7 @@ def validate_password_strength(password: str) - > tuple[bool, list[str]]:
     if not any(c.isdigit() for c in password):
         errors.append("密码必须包含至少一个数字")
 
-    special_chars = "!@#$%^& * ()_ + - = []{}|;:,.<>?"
+    special_chars = "!@#$%^& * ()_ + -= []{}|;:,.<>?"
     if not any(c in special_chars for c in password):
         errors.append("密码必须包含至少一个特殊字符")
 
@@ -198,7 +198,7 @@ def validate_password_strength(password: str) - > tuple[bool, list[str]]:
 _encryption_service = None
 
 
-def get_encryption_service(master_key: str | None = None) - > EncryptionService:
+def get_encryption_service(master_key: str | None = None) -> EncryptionService:
     """获取加密服务实例"""
     global _encryption_service
     if _encryption_service is None:
@@ -207,11 +207,11 @@ def get_encryption_service(master_key: str | None = None) - > EncryptionService:
 
 
 # 便捷函数
-def encrypt_data(data: str) - > str:
+def encrypt_data(data: str) -> str:
     """加密数据"""
     return get_encryption_service().encrypt(data)
 
 
-def decrypt_data(encrypted_data: str) - > str:
+def decrypt_data(encrypted_data: str) -> str:
     """解密数据"""
     return get_encryption_service().decrypt(encrypted_data)

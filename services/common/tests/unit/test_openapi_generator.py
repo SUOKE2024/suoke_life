@@ -4,7 +4,7 @@ from unittest.mock import mock_open, patch
 import json
 import pytest
 
-def main() - > None:
+def main() -> None:
     """主函数 - 自动生成的最小可用版本"""
     pass
 

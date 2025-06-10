@@ -54,7 +54,7 @@ class SagaStep:
     attempts: int = 0
 
     @property
-    def execution_time(self) - > float:
+    def execution_time(self) -> float:
         """执行时间"""
         if self.start_time and self.end_time:
             return self.end_time - self.start_time
@@ -74,7 +74,7 @@ class SagaContext:
         """设置上下文数据"""
         self.data[key] = value
 
-    def get(self, key: str, default: Any = None) - > Any:
+    def get(self, key: str, default: Any = None) -> Any:
         """获取上下文数据"""
         return self.data.get(key, default)
 
@@ -108,19 +108,19 @@ class SagaManager:
 
         logger.info(f"创建Saga事务: {self.saga_id}")
 
-    def add_step(self, step: SagaStep) - > "SagaManager":
+    def add_step(self, step: SagaStep) -> "SagaManager":
         """添加Saga步骤"""
         self.steps.append(step)
         self._record_event("step_added", {"step_name": step.name})
         return self
 
-    def add_steps(self, steps: list[SagaStep]) - > "SagaManager":
+    def add_steps(self, steps: list[SagaStep]) -> "SagaManager":
         """批量添加步骤"""
         for step in steps:
             self.add_step(step)
         return self
 
-    async def execute(self) - > bool:
+    async def execute(self) -> bool:
         """执行Saga事务"""
         self.status = SagaStatus.RUNNING
         self.start_time = time.time()
@@ -169,7 +169,7 @@ class SagaManager:
             if self.persist_state:
                 await self._persist_state()
 
-    async def _execute_step(self, step: SagaStep) - > bool:
+    async def _execute_step(self, step: SagaStep) -> bool:
         """执行单个步骤"""
         step.status = "running"
         step.start_time = time.time()
@@ -237,7 +237,7 @@ class SagaManager:
 
         return False
 
-    async def _compensate(self) - > None:
+    async def _compensate(self) -> None:
         """执行补偿事务"""
         self.status = SagaStatus.COMPENSATING
         self._record_event(
@@ -292,12 +292,12 @@ class SagaManager:
         # 可以在这里发送事件到事件总线
         logger.debug(f"Saga事件: {event}")
 
-    async def _persist_state(self) - > None:
+    async def _persist_state(self) -> None:
         """持久化状态（需要实现具体的存储逻辑）"""
         # 这里可以将状态保存到数据库或其他持久化存储
         pass
 
-    def get_status(self) - > dict[str, Any]:
+    def get_status(self) -> dict[str, Any]:
         """获取Saga状态"""
         return {
             "saga_id": self.saga_id,
@@ -325,7 +325,7 @@ class SagaManager:
 class SagaOrchestrator:
     """Saga编排器，管理多个Saga实例"""
 
-    def __init__(self) - > None:
+    def __init__(self) -> None:
         """TODO: 添加文档字符串"""
         self.sagas: dict[str, SagaManager] = {}
         self.completed_sagas: list[str] = []
@@ -333,18 +333,18 @@ class SagaOrchestrator:
 
     async def create_saga(
         self, saga_id: str | None = None, context: SagaContext | None = None
-    ) - > SagaManager:
+    ) -> SagaManager:
         """创建新的Saga"""
         async with self._lock:
             saga = SagaManager(saga_id, context)
             self.sagas[saga.saga_id] = saga
             return saga
 
-    async def get_saga(self, saga_id: str) - > SagaManager | None:
+    async def get_saga(self, saga_id: str) -> SagaManager | None:
         """获取Saga实例"""
         return self.sagas.get(saga_id)
 
-    async def execute_saga(self, saga_id: str) - > bool:
+    async def execute_saga(self, saga_id: str) -> bool:
         """执行指定的Saga"""
         saga = await self.get_saga(saga_id)
         if not saga:
@@ -360,11 +360,11 @@ class SagaOrchestrator:
 
         return result
 
-    def get_active_sagas(self) - > list[dict[str, Any]]:
+    def get_active_sagas(self) -> list[dict[str, Any]]:
         """获取活跃的Saga列表"""
         return [saga.get_status() for saga in self.sagas.values()]
 
-    def get_stats(self) - > dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """获取统计信息"""
         status_counts = {}
         for saga in self.sagas.values():
@@ -382,6 +382,6 @@ class SagaOrchestrator:
 _global_orchestrator = SagaOrchestrator()
 
 
-async def get_orchestrator() - > SagaOrchestrator:
+async def get_orchestrator() -> SagaOrchestrator:
     """获取全局Saga编排器"""
     return _global_orchestrator

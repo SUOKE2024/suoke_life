@@ -22,14 +22,14 @@ class Role:
         self.name = name
         self.permissions = set(permissions)
 
-    def has_permission(self, permission: Permission) - > bool:
+    def has_permission(self, permission: Permission) -> bool:
         """检查是否有权限"""
         return permission in self.permissions
 
 class RBACManager:
     """基于角色的访问控制管理器"""
 
-    def __init__(self) - > None:
+    def __init__(self) -> None:
         """TODO: 添加文档字符串"""
         self.roles: Dict[str, Role] = {}
         self.user_roles: Dict[str, Set[str]] = {}
@@ -37,7 +37,7 @@ class RBACManager:
         # 初始化默认角色
         self._init_default_roles()
 
-    def _init_default_roles(self) - > None:
+    def _init_default_roles(self) -> None:
         """初始化默认角色"""
         self.roles["admin"] = Role("admin", [Permission.READ, Permission.WRITE, Permission.DELETE, Permission.ADMIN])
         self.roles["user"] = Role("user", [Permission.READ])
@@ -49,7 +49,7 @@ class RBACManager:
             self.user_roles[user_id] = set()
         self.user_roles[user_id].add(role_name)
 
-    def check_permission(self, user_id: str, permission: Permission) - > bool:
+    def check_permission(self, user_id: str, permission: Permission) -> bool:
         """检查用户权限"""
         if user_id not in self.user_roles:
             return False

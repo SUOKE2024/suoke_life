@@ -72,7 +72,7 @@ class HybridTask:
     memory_usage: Optional[float] = None
     worker_id: Optional[str] = None
 
-    def __post_init__(self) - > None:
+    def __post_init__(self) -> None:
         """TODO: 添加文档字符串"""
         if self.created_at is None:
             self.created_at = datetime.now()
@@ -90,7 +90,7 @@ class WorkerNode:
     last_heartbeat: datetime = None
     status: str = "active"
 
-    def __post_init__(self) - > None:
+    def __post_init__(self) -> None:
         """TODO: 添加文档字符串"""
         if self.last_heartbeat is None:
             self.last_heartbeat = datetime.now()
@@ -117,7 +117,7 @@ class LocalProcessor:
 
         logger.info(f"本地处理器初始化，最大工作线程: {self.max_workers}")
 
-    async def process_task_async(self, task: HybridTask) - > Dict[str, Any]:
+    async def process_task_async(self, task: HybridTask) -> Dict[str, Any]:
         """异步处理任务"""
         start_time = time.time()
         task.started_at = datetime.now()
@@ -125,7 +125,7 @@ class LocalProcessor:
         try:
             with self.lock:
                 self.active_tasks[task.task_id] = task
-                self.stats['total_tasks'] + = 1
+                self.stats['total_tasks'] += 1
 
             # 根据任务类型选择处理方式
             if task.task_type == TaskType.IO_INTENSIVE:
@@ -143,7 +143,7 @@ class LocalProcessor:
             task.result = result
 
             with self.lock:
-                self.stats['completed_tasks'] + = 1
+                self.stats['completed_tasks'] += 1
                 self._update_avg_execution_time(task.execution_time)
 
             logger.info(f"任务完成: {task.task_id}, 耗时: {task.execution_time:.2f}s")
@@ -152,14 +152,14 @@ class LocalProcessor:
         except Exception as e:
             task.error_message = str(e)
             with self.lock:
-                self.stats['failed_tasks'] + = 1
+                self.stats['failed_tasks'] += 1
             logger.error(f"任务失败: {task.task_id}, 错误: {e}")
             raise
         finally:
             with self.lock:
                 self.active_tasks.pop(task.task_id, None)
 
-    def process_task_sync(self, task: HybridTask) - > Dict[str, Any]:
+    def process_task_sync(self, task: HybridTask) -> Dict[str, Any]:
         """同步处理任务"""
         start_time = time.time()
         task.started_at = datetime.now()
@@ -167,7 +167,7 @@ class LocalProcessor:
         try:
             with self.lock:
                 self.active_tasks[task.task_id] = task
-                self.stats['total_tasks'] + = 1
+                self.stats['total_tasks'] += 1
 
             # 根据任务类型选择处理方式
             if task.task_type == TaskType.IO_INTENSIVE:
@@ -185,7 +185,7 @@ class LocalProcessor:
             task.result = result
 
             with self.lock:
-                self.stats['completed_tasks'] + = 1
+                self.stats['completed_tasks'] += 1
                 self._update_avg_execution_time(task.execution_time)
 
             logger.info(f"任务完成: {task.task_id}, 耗时: {task.execution_time:.2f}s")
@@ -194,18 +194,18 @@ class LocalProcessor:
         except Exception as e:
             task.error_message = str(e)
             with self.lock:
-                self.stats['failed_tasks'] + = 1
+                self.stats['failed_tasks'] += 1
             logger.error(f"任务失败: {task.task_id}, 错误: {e}")
             raise
         finally:
             with self.lock:
                 self.active_tasks.pop(task.task_id, None)
 
-    async def _process_io_intensive_async(self, task: HybridTask) - > Dict[str, Any]:
+    async def _process_io_intensive_async(self, task: HybridTask) -> Dict[str, Any]:
         """异步处理I / O密集型任务"""
         loop = asyncio.get_event_loop()
 
-        def io_work() - > None:
+        def io_work() -> None:
             """TODO: 添加文档字符串"""
             # 模拟I / O操作
             time.sleep(0.1)  # 模拟文件读写或网络请求
@@ -219,7 +219,7 @@ class LocalProcessor:
         result = await loop.run_in_executor(self.thread_pool, io_work)
         return result
 
-    def _process_io_intensive_sync(self, task: HybridTask) - > Dict[str, Any]:
+    def _process_io_intensive_sync(self, task: HybridTask) -> Dict[str, Any]:
         """同步处理I / O密集型任务"""
         # 模拟I / O操作
         time.sleep(0.1)
@@ -230,11 +230,11 @@ class LocalProcessor:
             'timestamp': datetime.now().isoformat()
         }
 
-    async def _process_cpu_intensive_async(self, task: HybridTask) - > Dict[str, Any]:
+    async def _process_cpu_intensive_async(self, task: HybridTask) -> Dict[str, Any]:
         """异步处理CPU密集型任务"""
         loop = asyncio.get_event_loop()
 
-        def cpu_work() - > None:
+        def cpu_work() -> None:
             """TODO: 添加文档字符串"""
             # 模拟CPU密集型计算
             data = np.random.rand(1000, 1000)
@@ -250,7 +250,7 @@ class LocalProcessor:
         result = await loop.run_in_executor(self.process_pool, cpu_work)
         return result
 
-    def _process_cpu_intensive_sync(self, task: HybridTask) - > Dict[str, Any]:
+    def _process_cpu_intensive_sync(self, task: HybridTask) -> Dict[str, Any]:
         """同步处理CPU密集型任务"""
         # 模拟CPU密集型计算
         data = np.random.rand(1000, 1000)
@@ -263,11 +263,11 @@ class LocalProcessor:
             'timestamp': datetime.now().isoformat()
         }
 
-    async def _process_memory_intensive_async(self, task: HybridTask) - > Dict[str, Any]:
+    async def _process_memory_intensive_async(self, task: HybridTask) -> Dict[str, Any]:
         """异步处理内存密集型任务"""
         loop = asyncio.get_event_loop()
 
-        def memory_work() - > None:
+        def memory_work() -> None:
             """TODO: 添加文档字符串"""
             # 模拟内存密集型操作
             large_data = [np.random.rand(100, 100) for _ in range(100)]
@@ -283,7 +283,7 @@ class LocalProcessor:
         result = await loop.run_in_executor(self.thread_pool, memory_work)
         return result
 
-    def _process_memory_intensive_sync(self, task: HybridTask) - > Dict[str, Any]:
+    def _process_memory_intensive_sync(self, task: HybridTask) -> Dict[str, Any]:
         """同步处理内存密集型任务"""
         # 模拟内存密集型操作
         large_data = [np.random.rand(100, 100) for _ in range(100)]
@@ -296,7 +296,7 @@ class LocalProcessor:
             'timestamp': datetime.now().isoformat()
         }
 
-    async def _process_mixed_async(self, task: HybridTask) - > Dict[str, Any]:
+    async def _process_mixed_async(self, task: HybridTask) -> Dict[str, Any]:
         """异步处理混合型任务"""
         # 组合多种处理方式
         io_result = await self._process_io_intensive_async(task)
@@ -310,7 +310,7 @@ class LocalProcessor:
             'timestamp': datetime.now().isoformat()
         }
 
-    def _process_mixed_sync(self, task: HybridTask) - > Dict[str, Any]:
+    def _process_mixed_sync(self, task: HybridTask) -> Dict[str, Any]:
         """同步处理混合型任务"""
         # 组合多种处理方式
         io_result = self._process_io_intensive_sync(task)
@@ -333,17 +333,17 @@ class LocalProcessor:
                 self.stats['avg_execution_time'] * 0.8 + execution_time * 0.2
             )
 
-    def get_stats(self) - > Dict[str, Any]:
+    def get_stats(self) -> Dict[str, Any]:
         """获取处理器统计信息"""
         with self.lock:
             return {
-                * *self.stats,
+                ***self.stats,
                 'active_tasks': len(self.active_tasks),
                 'thread_pool_size': self.thread_pool._max_workers,
                 'process_pool_size': self.process_pool._max_workers
             }
 
-    def shutdown(self) - > None:
+    def shutdown(self) -> None:
         """关闭处理器"""
         self.thread_pool.shutdown(wait = True)
         self.process_pool.shutdown(wait = True)
@@ -371,7 +371,7 @@ class DistributedProcessor:
 
         logger.info("分布式处理器初始化")
 
-    async def initialize(self) - > None:
+    async def initialize(self) -> None:
         """初始化Redis连接"""
         try:
             self.redis_client = aioredis.from_url(self.redis_url)
@@ -394,7 +394,7 @@ class DistributedProcessor:
                 del self.worker_nodes[node_id]
                 logger.info(f"工作节点已注销: {node_id}")
 
-    async def process_task_distributed(self, task: HybridTask) - > Dict[str, Any]:
+    async def process_task_distributed(self, task: HybridTask) -> Dict[str, Any]:
         """分布式处理任务"""
         if not self.redis_client:
             raise RuntimeError("Redis未连接，无法进行分布式处理")
@@ -403,7 +403,7 @@ class DistributedProcessor:
 
         try:
             with self.lock:
-                self.stats['total_distributed_tasks'] + = 1
+                self.stats['total_distributed_tasks'] += 1
 
             # 选择最佳工作节点
             worker_node = self._select_best_worker(task.task_type)
@@ -432,17 +432,17 @@ class DistributedProcessor:
             self._update_network_latency(network_latency)
 
             with self.lock:
-                self.stats['completed_distributed_tasks'] + = 1
+                self.stats['completed_distributed_tasks'] += 1
 
             return result
 
         except Exception as e:
             with self.lock:
-                self.stats['failed_distributed_tasks'] + = 1
+                self.stats['failed_distributed_tasks'] += 1
             logger.error(f"分布式任务失败: {task.task_id}, 错误: {e}")
             raise
 
-    def _select_best_worker(self, task_type: TaskType) - > Optional[WorkerNode]:
+    def _select_best_worker(self, task_type: TaskType) -> Optional[WorkerNode]:
         """选择最佳工作节点"""
         with self.lock:
             available_workers = [
@@ -460,10 +460,10 @@ class DistributedProcessor:
                             key = lambda w: (w.current_load / w.max_capacity,
                                         w.avg_response_time))
 
-            best_worker.current_load + = 1
+            best_worker.current_load += 1
             return best_worker
 
-    async def _wait_for_result(self, task_id: str, timeout: float) - > Dict[str, Any]:
+    async def _wait_for_result(self, task_id: str, timeout: float) -> Dict[str, Any]:
         """等待任务结果"""
         start_time = time.time()
 
@@ -500,11 +500,11 @@ class DistributedProcessor:
                 self.stats['avg_network_latency'] * 0.8 + latency * 0.2
             )
 
-    def get_stats(self) - > Dict[str, Any]:
+    def get_stats(self) -> Dict[str, Any]:
         """获取分布式处理器统计信息"""
         with self.lock:
             return {
-                * *self.stats,
+                ***self.stats,
                 'worker_nodes': len(self.worker_nodes),
                 'active_workers': len([w for w in self.worker_nodes.values()
                                     if w.status == "active"])
@@ -513,7 +513,7 @@ class DistributedProcessor:
 class TaskRouter:
     """任务路由器"""
 
-    def __init__(self) - > None:
+    def __init__(self) -> None:
         """TODO: 添加文档字符串"""
         self.routing_rules: Dict[TaskType, ProcessingMode] = {
             TaskType.CPU_INTENSIVE: ProcessingMode.SYNC_LOCAL,
@@ -531,7 +531,7 @@ class TaskRouter:
 
         logger.info("任务路由器初始化")
 
-    def route_task(self, task: HybridTask) - > ProcessingMode:
+    def route_task(self, task: HybridTask) -> ProcessingMode:
         """路由任务到合适的处理模式"""
         # 获取系统负载
         cpu_percent = psutil.cpu_percent(interval = 0.1)
@@ -558,7 +558,7 @@ class TaskRouter:
         self.routing_rules.update(new_rules)
         logger.info("路由规则已更新")
 
-    def get_routing_stats(self) - > Dict[str, Any]:
+    def get_routing_stats(self) -> Dict[str, Any]:
         """获取路由统计信息"""
         cpu_percent = psutil.cpu_percent()
         memory_percent = psutil.virtual_memory().percent
@@ -584,7 +584,7 @@ class PerformanceMonitor:
 
         logger.info("性能监控器初始化")
 
-    async def start_monitoring(self) - > None:
+    async def start_monitoring(self) -> None:
         """开始监控"""
         if self.is_monitoring:
             return
@@ -593,7 +593,7 @@ class PerformanceMonitor:
         self.monitor_task = asyncio.create_task(self._monitoring_loop())
         logger.info("性能监控已启动")
 
-    async def stop_monitoring(self) - > None:
+    async def stop_monitoring(self) -> None:
         """停止监控"""
         if not self.is_monitoring:
             return
@@ -608,7 +608,7 @@ class PerformanceMonitor:
 
         logger.info("性能监控已停止")
 
-    async def _monitoring_loop(self) - > None:
+    async def _monitoring_loop(self) -> None:
         """监控循环"""
         while self.is_monitoring:
             try:
@@ -621,7 +621,7 @@ class PerformanceMonitor:
                 logger.error(f"监控错误: {e}")
                 await asyncio.sleep(1)
 
-    def _collect_metrics(self) - > Dict[str, Any]:
+    def _collect_metrics(self) -> Dict[str, Any]:
         """收集系统指标"""
         cpu_percent = psutil.cpu_percent()
         memory = psutil.virtual_memory()
@@ -631,20 +631,20 @@ class PerformanceMonitor:
             'timestamp': datetime.now().isoformat(),
             'cpu_percent': cpu_percent,
             'memory_percent': memory.percent,
-            'memory_available_gb': memory.available / (1024 * *3),
+            'memory_available_gb': memory.available / (1024 ***3),
             'disk_percent': disk.percent,
-            'disk_free_gb': disk.free / (1024 * *3)
+            'disk_free_gb': disk.free / (1024 ***3)
         }
 
-    def get_current_metrics(self) - > Dict[str, Any]:
+    def get_current_metrics(self) -> Dict[str, Any]:
         """获取当前指标"""
         return self._collect_metrics()
 
-    def get_metrics_history(self, limit: int = 100) - > List[Dict[str, Any]]:
+    def get_metrics_history(self, limit: int = 100) -> List[Dict[str, Any]]:
         """获取指标历史"""
         return list(self.metrics_history)[ - limit:]
 
-    def get_performance_summary(self) - > Dict[str, Any]:
+    def get_performance_summary(self) -> Dict[str, Any]:
         """获取性能摘要"""
         if not self.metrics_history:
             return {}
@@ -686,7 +686,7 @@ class HybridArchitecture:
 
         logger.info("混合架构初始化完成")
 
-    async def initialize(self) - > None:
+    async def initialize(self) -> None:
         """初始化架构"""
         await self.distributed_processor.initialize()
         await self.performance_monitor.start_monitoring()
@@ -695,7 +695,7 @@ class HybridArchitecture:
     async def submit_task(self, task_type: TaskType, input_data: Dict[str, Any],
                         priority: Priority = Priority.NORMAL,
                         timeout: float = 30.0,
-                        preferred_mode: Optional[ProcessingMode] = None) - > str:
+                        preferred_mode: Optional[ProcessingMode] = None) -> str:
         """提交任务"""
         task_id = str(uuid.uuid4())
 
@@ -719,7 +719,7 @@ class HybridArchitecture:
 
         with self.lock:
             self.active_tasks[task_id] = task
-            self.stats['total_tasks'] + = 1
+            self.stats['total_tasks'] += 1
 
         # 异步处理任务
         asyncio.create_task(self._process_task(task))
@@ -733,18 +733,18 @@ class HybridArchitecture:
             if task.processing_mode == ProcessingMode.SYNC_LOCAL:
                 result = self.local_processor.process_task_sync(task)
                 with self.lock:
-                    self.stats['local_tasks'] + = 1
+                    self.stats['local_tasks'] += 1
 
             elif task.processing_mode == ProcessingMode.ASYNC_LOCAL:
                 result = await self.local_processor.process_task_async(task)
                 with self.lock:
-                    self.stats['local_tasks'] + = 1
+                    self.stats['local_tasks'] += 1
 
             elif task.processing_mode in [ProcessingMode.SYNC_DISTRIBUTED,
                                         ProcessingMode.ASYNC_DISTRIBUTED]:
                 result = await self.distributed_processor.process_task_distributed(task)
                 with self.lock:
-                    self.stats['distributed_tasks'] + = 1
+                    self.stats['distributed_tasks'] += 1
 
             elif task.processing_mode == ProcessingMode.HYBRID:
                 # 混合模式：根据系统负载动态选择
@@ -752,14 +752,14 @@ class HybridArchitecture:
                 if cpu_percent > 80:
                     result = await self.distributed_processor.process_task_distributed(task)
                     with self.lock:
-                        self.stats['distributed_tasks'] + = 1
+                        self.stats['distributed_tasks'] += 1
                 else:
                     result = await self.local_processor.process_task_async(task)
                     with self.lock:
-                        self.stats['local_tasks'] + = 1
+                        self.stats['local_tasks'] += 1
 
                 with self.lock:
-                    self.stats['hybrid_tasks'] + = 1
+                    self.stats['hybrid_tasks'] += 1
 
             # 更新平均任务时间
             if task.execution_time:
@@ -771,7 +771,7 @@ class HybridArchitecture:
             with self.lock:
                 self.active_tasks.pop(task.task_id, None)
 
-    async def get_task_status(self, task_id: str) - > Optional[Dict[str, Any]]:
+    async def get_task_status(self, task_id: str) -> Optional[Dict[str, Any]]:
         """获取任务状态"""
         with self.lock:
             task = self.active_tasks.get(task_id)
@@ -788,7 +788,7 @@ class HybridArchitecture:
                 self.stats['avg_task_time'] * 0.8 + execution_time * 0.2
             )
 
-    def get_architecture_stats(self) - > Dict[str, Any]:
+    def get_architecture_stats(self) -> Dict[str, Any]:
         """获取架构统计信息"""
         with self.lock:
             return {
@@ -800,7 +800,7 @@ class HybridArchitecture:
                 'active_tasks': len(self.active_tasks)
             }
 
-    async def shutdown(self) - > None:
+    async def shutdown(self) -> None:
         """关闭架构"""
         await self.performance_monitor.stop_monitoring()
         self.local_processor.shutdown()
@@ -811,7 +811,7 @@ _hybrid_architecture: Optional[HybridArchitecture] = None
 
 async def initialize_hybrid_architecture(redis_url: Optional[str] = None,
                                     max_local_workers: Optional[int] = None,
-                                    max_memory_gb: float = 4.0) - > HybridArchitecture:
+                                    max_memory_gb: float = 4.0) -> HybridArchitecture:
     """初始化混合架构"""
     global _hybrid_architecture
 
@@ -825,11 +825,11 @@ async def initialize_hybrid_architecture(redis_url: Optional[str] = None,
 
     return _hybrid_architecture
 
-async def get_hybrid_architecture() - > Optional[HybridArchitecture]:
+async def get_hybrid_architecture() -> Optional[HybridArchitecture]:
     """获取混合架构实例"""
     return _hybrid_architecture
 
-async def shutdown_hybrid_architecture() - > None:
+async def shutdown_hybrid_architecture() -> None:
     """关闭混合架构"""
     global _hybrid_architecture
 

@@ -42,14 +42,14 @@ class Message:
     offset: int | None = None
     format: MessageFormat = MessageFormat.JSON
 
-    def __post_init__(self) - > None:
+    def __post_init__(self) -> None:
         """TODO: 添加文档字符串"""
         if self.timestamp is None:
             self.timestamp = datetime.now()
         if self.headers is None:
             self.headers = {}
 
-    def serialize(self) - > bytes:
+    def serialize(self) -> bytes:
         """序列化消息"""
         if self.format == MessageFormat.JSON:
             if isinstance(self.value, dict | list):
@@ -69,7 +69,7 @@ class Message:
     @classmethod
     def deserialize(
         cls, data: bytes, format: MessageFormat = MessageFormat.JSON
-    ) - > Any:
+    ) -> Any:
         """反序列化消息"""
         if format == MessageFormat.JSON:
             return json.loads(data.decode("utf - 8"))
@@ -92,7 +92,7 @@ class ProducerConfig:
     max_in_flight_requests: int = 5
     enable_idempotence: bool = True
 
-    def to_dict(self) - > dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """转换为字典"""
         return {
             "client_id": self.client_id,
@@ -119,7 +119,7 @@ class ConsumerConfig:
     session_timeout_ms: int = 30000
     heartbeat_interval_ms: int = 3000
 
-    def to_dict(self) - > dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """转换为字典"""
         return {
             "group_id": self.group_id,
@@ -137,7 +137,7 @@ class MessageHandler(ABC):
     """消息处理器抽象基类"""
 
     @abstractmethod
-    async def handle(self, message: Message) - > bool:
+    async def handle(self, message: Message) -> bool:
         """
         处理消息
 
@@ -158,12 +158,12 @@ class MessageQueue(ABC):
     """消息队列抽象基类"""
 
     @abstractmethod
-    async def connect(self) - > None:
+    async def connect(self) -> None:
         """连接到消息队列"""
         pass
 
     @abstractmethod
-    async def disconnect(self) - > None:
+    async def disconnect(self) -> None:
         """断开连接"""
         pass
 
@@ -180,12 +180,12 @@ class MessageQueue(ABC):
         pass
 
     @abstractmethod
-    async def list_topics(self) - > list[str]:
+    async def list_topics(self) -> list[str]:
         """列出所有主题"""
         pass
 
     @abstractmethod
-    async def send(self, message: Message) - > bool:
+    async def send(self, message: Message) -> bool:
         """
         发送消息
 
@@ -198,7 +198,7 @@ class MessageQueue(ABC):
         pass
 
     @abstractmethod
-    async def send_batch(self, messages: list[Message]) - > list[bool]:
+    async def send_batch(self, messages: list[Message]) -> list[bool]:
         """
         批量发送消息
 
@@ -232,7 +232,7 @@ class MessageQueue(ABC):
         pass
 
     @abstractmethod
-    async def consume(self, timeout: float = 1.0) - > Message | None:
+    async def consume(self, timeout: float = 1.0) -> Message | None:
         """
         消费单条消息
 
@@ -247,7 +247,7 @@ class MessageQueue(ABC):
     @abstractmethod
     async def consume_batch(
         self, max_messages: int = 10, timeout: float = 1.0
-    ) - > list[Message]:
+    ) -> list[Message]:
         """
         批量消费消息
 
@@ -329,11 +329,11 @@ def register_message_queue(name: str, queue: MessageQueue):
     logger.info(f"注册消息队列: {name}")
 
 
-def get_message_queue(name: str) - > MessageQueue | None:
+def get_message_queue(name: str) -> MessageQueue | None:
     """获取消息队列实例"""
     return _queues.get(name)
 
 
-def list_message_queues() - > list[str]:
+def list_message_queues() -> list[str]:
     """列出所有已注册的消息队列"""
     return list(_queues.keys())

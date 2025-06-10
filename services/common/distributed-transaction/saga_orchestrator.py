@@ -91,7 +91,7 @@ class SagaOrchestrator:
         self.service_clients[service_name] = client
         logger.info(f"Registered service client: {service_name}")
 
-    async def start_saga(self, saga: SagaTransaction) - > str:
+    async def start_saga(self, saga: SagaTransaction) -> str:
         """启动Saga事务"""
         try:
             saga.saga_id = str(uuid.uuid4())
@@ -148,7 +148,7 @@ class SagaOrchestrator:
             if saga.saga_id in self.running_sagas:
                 del self.running_sagas[saga.saga_id]
 
-    async def _execute_step(self, saga: SagaTransaction, step: SagaStep) - > bool:
+    async def _execute_step(self, saga: SagaTransaction, step: SagaStep) -> bool:
         """执行单个步骤"""
         step.status = StepStatus.RUNNING
         step.started_at = datetime.utcnow()
@@ -162,7 +162,7 @@ class SagaOrchestrator:
 
                 # 准备输入数据（包含上下文）
                 input_data = {
-                    * *step.input_data,
+                    ***step.input_data,
                     "saga_id": saga.saga_id,
                     "step_id": step.step_id,
                     "context": saga.context or {},
@@ -192,7 +192,7 @@ class SagaOrchestrator:
             except TimeoutError:
                 logger.warning(f"Step timeout: {step.step_id} (attempt {attempt + 1})")
                 if attempt < step.retry_count:
-                    await asyncio.sleep(2 * *attempt)  # 指数退避
+                    await asyncio.sleep(2 ***attempt)  # 指数退避
                     continue
                 else:
                     step.status = StepStatus.FAILED
@@ -204,7 +204,7 @@ class SagaOrchestrator:
                     f"Step failed: {step.step_id} (attempt {attempt + 1}), error: {e}"
                 )
                 if attempt < step.retry_count:
-                    await asyncio.sleep(2 * *attempt)
+                    await asyncio.sleep(2 ***attempt)
                     continue
                 else:
                     step.status = StepStatus.FAILED
@@ -296,7 +296,7 @@ class SagaOrchestrator:
         except Exception as e:
             logger.error(f"Failed to save saga state: {saga.saga_id}, error: {e}")
 
-    async def get_saga_status(self, saga_id: str) - > SagaTransaction | None:
+    async def get_saga_status(self, saga_id: str) -> SagaTransaction | None:
         """获取Saga状态"""
         try:
             data = await self.redis.get(f"saga:{saga_id}")
@@ -321,15 +321,15 @@ class SagaOrchestrator:
 
             # 重建SagaTransaction对象
             saga_data["status"] = SagaStatus(saga_data["status"])
-            saga_data["steps"] = [SagaStep( * *step) for step in saga_data["steps"]]
+            saga_data["steps"] = [SagaStep( ***step) for step in saga_data["steps"]]
 
-            return SagaTransaction( * *saga_data)
+            return SagaTransaction( ***saga_data)
 
         except Exception as e:
             logger.error(f"Failed to get saga status: {saga_id}, error: {e}")
             return None
 
-    async def cancel_saga(self, saga_id: str) - > bool:
+    async def cancel_saga(self, saga_id: str) -> bool:
         """取消Saga事务"""
         try:
             # 取消运行中的任务
@@ -353,7 +353,7 @@ class SagaOrchestrator:
             logger.error(f"Failed to cancel saga {saga_id}: {e}")
             return False
 
-    async def retry_saga(self, saga_id: str) - > bool:
+    async def retry_saga(self, saga_id: str) -> bool:
         """重试失败的Saga事务"""
         try:
             saga = await self.get_saga_status(saga_id)
@@ -387,7 +387,7 @@ class SagaOrchestrator:
             logger.error(f"Failed to retry saga {saga_id}: {e}")
             return False
 
-    def get_running_sagas(self) - > list[str]:
+    def get_running_sagas(self) -> list[str]:
         """获取正在运行的Saga列表"""
         return list(self.running_sagas.keys())
 
@@ -429,7 +429,7 @@ class HealthDiagnosisSaga:
 
     async def create_diagnosis_saga(
         self, user_id: str, diagnosis_data: dict[str, Any]
-    ) - > str:
+    ) -> str:
         """创建诊断Saga"""
         steps = [
             SagaStep(
@@ -493,7 +493,7 @@ class UserRegistrationSaga:
         """TODO: 添加文档字符串"""
         self.orchestrator = orchestrator
 
-    async def create_registration_saga(self, user_data: dict[str, Any]) - > str:
+    async def create_registration_saga(self, user_data: dict[str, Any]) -> str:
         """创建用户注册Saga"""
         steps = [
             SagaStep(

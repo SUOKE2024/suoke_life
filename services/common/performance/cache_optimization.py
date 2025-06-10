@@ -60,24 +60,24 @@ class CacheStats:
     evictions: int = 0
 
     @property
-    def hit_rate(self) - > float:
+    def hit_rate(self) -> float:
         """TODO: 添加文档字符串"""
         total = self.hits + self.misses
         return self.hits / total if total > 0 else 0.0
 
-    def l1_hit(self) - > None:
+    def l1_hit(self) -> None:
         """TODO: 添加文档字符串"""
-        self.hits + = 1
+        self.hits += 1
         cache_hits.labels(cache_level = "l1", cache_name = "multi_level").inc()
 
-    def l2_hit(self) - > None:
+    def l2_hit(self) -> None:
         """TODO: 添加文档字符串"""
-        self.hits + = 1
+        self.hits += 1
         cache_hits.labels(cache_level = "l2", cache_name = "multi_level").inc()
 
-    def miss(self) - > None:
+    def miss(self) -> None:
         """TODO: 添加文档字符串"""
-        self.misses + = 1
+        self.misses += 1
         cache_misses.labels(cache_name = "multi_level").inc()
 
 
@@ -90,15 +90,15 @@ class LRUCache:
         self.cache = OrderedDict()
         self.stats = {"hits": 0, "misses": 0, "evictions": 0}
 
-    def get(self, key: str) - > Any | None:
+    def get(self, key: str) -> Any | None:
         """获取缓存值"""
         if key in self.cache:
             # 移到末尾（最近使用）
             self.cache.move_to_end(key)
-            self.stats["hits"] + = 1
+            self.stats["hits"] += 1
             return self.cache[key]["value"]
 
-        self.stats["misses"] + = 1
+        self.stats["misses"] += 1
         return None
 
     def set(self, key: str, value: Any, ttl: int | None = None):
@@ -106,11 +106,11 @@ class LRUCache:
         current_time = time.time()
 
         # 检查是否需要驱逐
-        if key not in self.cache and len(self.cache) > = self.capacity:
+        if key not in self.cache and len(self.cache) >= self.capacity:
             # 驱逐最旧的项
             oldest_key = next(iter(self.cache))
             del self.cache[oldest_key]
-            self.stats["evictions"] + = 1
+            self.stats["evictions"] += 1
 
         self.cache[key] = {
             "value": value,
@@ -121,18 +121,18 @@ class LRUCache:
         # 移到末尾
         self.cache.move_to_end(key)
 
-    def delete(self, key: str) - > bool:
+    def delete(self, key: str) -> bool:
         """删除缓存项"""
         if key in self.cache:
             del self.cache[key]
             return True
         return False
 
-    def clear(self) - > None:
+    def clear(self) -> None:
         """清空缓存"""
         self.cache.clear()
 
-    def _evict_expired(self) - > None:
+    def _evict_expired(self) -> None:
         """驱逐过期项"""
         current_time = time.time()
         expired_keys = []
@@ -143,7 +143,7 @@ class LRUCache:
 
         for key in expired_keys:
             del self.cache[key]
-            self.stats["evictions"] + = 1
+            self.stats["evictions"] += 1
 
 
 class MultiLevelCache:
@@ -174,18 +174,18 @@ class MultiLevelCache:
 
         logger.info(f"多级缓存系统初始化: {cache_name}")
 
-    async def start(self) - > None:
+    async def start(self) -> None:
         """启动缓存系统"""
         self._cleanup_task = asyncio.create_task(self._cleanup_loop())
 
-    async def stop(self) - > None:
+    async def stop(self) -> None:
         """停止缓存系统"""
         if self._cleanup_task:
             self._cleanup_task.cancel()
             with contextlib.suppress(asyncio.CancelledError):
                 await self._cleanup_task
 
-    async def _cleanup_loop(self) - > None:
+    async def _cleanup_loop(self) -> None:
         """定期清理过期项"""
         while True:
             try:
@@ -197,7 +197,7 @@ class MultiLevelCache:
                 logger.error(f"缓存清理错误: {e}")
 
     @cache_operations.labels(operation = "get", cache_name = "multi_level").time()
-    async def get(self, key: str) - > Any | None:
+    async def get(self, key: str) -> Any | None:
         """获取缓存值"""
         # L1 查找
         value = self.l1_cache.get(key)
@@ -235,7 +235,7 @@ class MultiLevelCache:
             except Exception as e:
                 logger.error(f"L2缓存写入错误: {e}")
 
-    async def delete(self, key: str) - > bool:
+    async def delete(self, key: str) -> bool:
         """删除缓存值"""
         # 删除 L1
         l1_deleted = self.l1_cache.delete(key)
@@ -250,7 +250,7 @@ class MultiLevelCache:
 
         return l1_deleted or l2_deleted
 
-    async def clear(self) - > None:
+    async def clear(self) -> None:
         """清空所有缓存"""
         # 清空 L1
         self.l1_cache.clear()
@@ -265,7 +265,7 @@ class MultiLevelCache:
         def decorator(func: Callable):
             """TODO: 添加文档字符串"""
             @wraps(func)
-            async def wrapper( * args, * *kwargs):
+            async def wrapper( *args, **kwargs):
                 # 生成缓存键
                 cache_key = self._generate_key(func.__name__, args, kwargs, key_prefix)
 
@@ -276,9 +276,9 @@ class MultiLevelCache:
 
                 # 执行函数
                 if asyncio.iscoroutinefunction(func):
-                    result = await func( * args, * *kwargs)
+                    result = await func( *args, **kwargs)
                 else:
-                    result = func( * args, * *kwargs)
+                    result = func( *args, **kwargs)
 
                 # 写入缓存
                 await self.set(cache_key, result, ttl)
@@ -291,7 +291,7 @@ class MultiLevelCache:
 
     def _generate_key(
         self, func_name: str, args: tuple, kwargs: dict, prefix: str = ""
-    ) - > str:
+    ) -> str:
         """生成缓存键"""
         key_data = {"func": func_name, "args": args, "kwargs": kwargs}
         key_str = json.dumps(key_data, sort_keys = True)
@@ -301,7 +301,7 @@ class MultiLevelCache:
             return f"{prefix}:{hash_key}"
         return hash_key
 
-    def get_stats(self) - > dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """获取缓存统计"""
         return {
             "hit_rate": self.stats.hit_rate,
@@ -322,7 +322,7 @@ class MultiLevelCache:
 class CacheWarmer:
     """缓存预热器"""
 
-    def __init__(self) - > None:
+    def __init__(self) -> None:
         """TODO: 添加文档字符串"""
         self.warmup_tasks: list[Callable] = []
         self.warmup_data: dict[str, Any] = {}
@@ -385,10 +385,10 @@ class CacheInvalidator:
 _cache_registry: dict[str, MultiLevelCache] = {}
 
 
-async def get_cache(name: str = "default", * *kwargs) - > MultiLevelCache:
+async def get_cache(name: str = "default", **kwargs) -> MultiLevelCache:
     """获取或创建缓存实例"""
     if name not in _cache_registry:
-        _cache_registry[name] = MultiLevelCache(cache_name = name, * *kwargs)
+        _cache_registry[name] = MultiLevelCache(cache_name = name, **kwargs)
         await _cache_registry[name].start()
 
     return _cache_registry[name]

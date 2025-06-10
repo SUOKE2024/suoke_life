@@ -13,24 +13,24 @@ class InputValidator:
     """输入验证器"""
 
     @staticmethod
-    def validate_email(email: str) - > bool:
+    def validate_email(email: str) -> bool:
         """验证邮箱格式"""
         pattern = r'^[a - zA - Z0 - 9._% + -] + @[a - zA - Z0 - 9. - ] + \.[a - zA - Z]{2,}$'
         return bool(re.match(pattern, email))
 
     @staticmethod
-    def validate_phone(phone: str) - > bool:
+    def validate_phone(phone: str) -> bool:
         """验证手机号格式"""
         pattern = r'^1[3 - 9]\d{9}$'
         return bool(re.match(pattern, phone))
 
     @staticmethod
-    def sanitize_html(text: str) - > str:
+    def sanitize_html(text: str) -> str:
         """清理HTML内容"""
         return html.escape(text)
 
     @staticmethod
-    def validate_sql_injection(text: str) - > bool:
+    def validate_sql_injection(text: str) -> bool:
         """检查SQL注入"""
         dangerous_patterns = [
             r'union\s + select',
@@ -49,7 +49,7 @@ class InputValidator:
         return True
 
     @staticmethod
-    def validate_xss(text: str) - > bool:
+    def validate_xss(text: str) -> bool:
         """检查XSS攻击"""
         dangerous_patterns = [
             r'<script',
@@ -66,7 +66,7 @@ class InputValidator:
         return True
 
     @classmethod
-    def validate_input(cls, data: Dict[str, Any]) - > Dict[str, Any]:
+    def validate_input(cls, data: Dict[str, Any]) -> Dict[str, Any]:
         """验证输入数据"""
         errors = []
 

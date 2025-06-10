@@ -3,7 +3,7 @@ from .saga_manager import (
 from .tcc_coordinator import (
 from typing import Dict, List, Any, Optional, Union
 
-def main() - > None:
+def main() -> None:
     """主函数 - 自动生成的最小可用版本"""
     pass
 

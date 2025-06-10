@@ -45,7 +45,7 @@ class HealthCheckResult:
     timestamp: float = field(default_factory = time.time)
     duration_ms: float = 0.0
 
-    def to_dict(self) - > dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """转换为字典"""
         return {
             "name": self.name,
@@ -60,7 +60,7 @@ class HealthCheckResult:
 class HealthChecker:
     """健康检查器"""
 
-    def __init__(self) - > None:
+    def __init__(self) -> None:
         """TODO: 添加文档字符串"""
         self.checks: dict[str, Callable] = {}
         self.config = {}
@@ -76,7 +76,7 @@ class HealthChecker:
         self.initialized = True
         logger.info("健康检查器初始化完成")
 
-    async def _register_default_checks(self) - > None:
+    async def _register_default_checks(self) -> None:
         """注册默认健康检查项"""
         # 系统资源检查
         self.register_check("system_cpu", self._check_cpu_usage)
@@ -122,7 +122,7 @@ class HealthChecker:
 
     async def check_health(
         self, check_names: list[str] | None = None
-    ) - > dict[str, HealthCheckResult]:
+    ) -> dict[str, HealthCheckResult]:
         """执行健康检查"""
         if not self.initialized:
             raise RuntimeError("健康检查器未初始化")
@@ -147,7 +147,7 @@ class HealthChecker:
 
         return results
 
-    async def _run_single_check(self, check_name: str) - > HealthCheckResult:
+    async def _run_single_check(self, check_name: str) -> HealthCheckResult:
         """运行单个健康检查"""
         start_time = time.time()
 
@@ -176,7 +176,7 @@ class HealthChecker:
                 duration_ms = (time.time() - start_time) * 1000,
             )
 
-    async def _check_cpu_usage(self) - > HealthCheckResult:
+    async def _check_cpu_usage(self) -> HealthCheckResult:
         """检查CPU使用率"""
         try:
             cpu_percent = psutil.cpu_percent(interval = 1)
@@ -207,7 +207,7 @@ class HealthChecker:
                 message = f"CPU检查失败: {e!s}",
             )
 
-    async def _check_memory_usage(self) - > HealthCheckResult:
+    async def _check_memory_usage(self) -> HealthCheckResult:
         """检查内存使用率"""
         try:
             memory = psutil.virtual_memory()
@@ -227,9 +227,9 @@ class HealthChecker:
                 details = {
                     "memory_percent": memory.percent,
                     "threshold": threshold,
-                    "total_gb": round(memory.total / (1024 * *3), 2),
-                    "available_gb": round(memory.available / (1024 * *3), 2),
-                    "used_gb": round(memory.used / (1024 * *3), 2),
+                    "total_gb": round(memory.total / (1024 ***3), 2),
+                    "available_gb": round(memory.available / (1024 ***3), 2),
+                    "used_gb": round(memory.used / (1024 ***3), 2),
                 },
             )
 
@@ -240,7 +240,7 @@ class HealthChecker:
                 message = f"内存检查失败: {e!s}",
             )
 
-    async def _check_disk_usage(self) - > HealthCheckResult:
+    async def _check_disk_usage(self) -> HealthCheckResult:
         """检查磁盘使用率"""
         try:
             disk = psutil.disk_usage(" / ")
@@ -261,9 +261,9 @@ class HealthChecker:
                 details = {
                     "disk_percent": round(disk_percent, 1),
                     "threshold": threshold,
-                    "total_gb": round(disk.total / (1024 * *3), 2),
-                    "free_gb": round(disk.free / (1024 * *3), 2),
-                    "used_gb": round(disk.used / (1024 * *3), 2),
+                    "total_gb": round(disk.total / (1024 ***3), 2),
+                    "free_gb": round(disk.free / (1024 ***3), 2),
+                    "used_gb": round(disk.used / (1024 ***3), 2),
                 },
             )
 
@@ -274,7 +274,7 @@ class HealthChecker:
                 message = f"磁盘检查失败: {e!s}",
             )
 
-    async def _check_postgresql(self, config: dict[str, Any]) - > HealthCheckResult:
+    async def _check_postgresql(self, config: dict[str, Any]) -> HealthCheckResult:
         """检查PostgreSQL连接"""
         try:
             url = config.get("url", "postgresql: / /localhost:5432 / postgres")
@@ -300,7 +300,7 @@ class HealthChecker:
                 message = f"PostgreSQL连接失败: {e!s}",
             )
 
-    async def _check_mongodb(self, config: dict[str, Any]) - > HealthCheckResult:
+    async def _check_mongodb(self, config: dict[str, Any]) -> HealthCheckResult:
         """检查MongoDB连接"""
         try:
             url = config.get("url", "mongodb: / /localhost:27017")
@@ -323,7 +323,7 @@ class HealthChecker:
                 message = f"MongoDB连接失败: {e!s}",
             )
 
-    async def _check_redis(self, config: dict[str, Any]) - > HealthCheckResult:
+    async def _check_redis(self, config: dict[str, Any]) -> HealthCheckResult:
         """检查Redis连接"""
         try:
             host = config.get("host", "localhost")
@@ -347,7 +347,7 @@ class HealthChecker:
                 message = f"Redis连接失败: {e!s}",
             )
 
-    async def _check_http_service(self, config: dict[str, Any]) - > HealthCheckResult:
+    async def _check_http_service(self, config: dict[str, Any]) -> HealthCheckResult:
         """检查HTTP服务"""
         try:
             url = config.get("url", "http: / /localhost:8080 / health")
@@ -385,7 +385,7 @@ class HealthChecker:
 
     async def get_overall_status(
         self, check_results: dict[str, HealthCheckResult]
-    ) - > HealthStatus:
+    ) -> HealthStatus:
         """获取整体健康状态"""
         if not check_results:
             return HealthStatus.UNKNOWN
@@ -401,7 +401,7 @@ class HealthChecker:
         else:
             return HealthStatus.UNKNOWN
 
-    async def health_check(self) - > dict[str, Any]:
+    async def health_check(self) -> dict[str, Any]:
         """执行完整健康检查并返回结果"""
         check_results = await self.check_health()
         overall_status = await self.get_overall_status(check_results)
@@ -438,7 +438,7 @@ class HealthChecker:
             },
         }
 
-    async def shutdown(self) - > None:
+    async def shutdown(self) -> None:
         """关闭健康检查器"""
         self.checks.clear()
         self.initialized = False

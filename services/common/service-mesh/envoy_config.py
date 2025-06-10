@@ -90,7 +90,7 @@ class ClusterConfig:
             "max_ejection_percent": max_ejection_percent,
         }
 
-    def to_envoy_config(self) - > dict[str, Any]:
+    def to_envoy_config(self) -> dict[str, Any]:
         """转换为Envoy配置"""
         config = {
             "name": self.name,
@@ -115,7 +115,7 @@ class ClusterConfig:
                 "name": "envoy.transport_sockets.tls",
                 "typed_config": {
                     "@type": "type.googleapis.com / envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext",
-                    * *self.tls_context,
+                    ***self.tls_context,
                 },
             }
 
@@ -187,7 +187,7 @@ class ListenerConfig:
 
         self.filter_chains.append(filter_chain)
 
-    def to_envoy_config(self) - > dict[str, Any]:
+    def to_envoy_config(self) -> dict[str, Any]:
         """转换为Envoy配置"""
         return {
             "name": self.name,
@@ -238,7 +238,7 @@ class RouteConfig:
                 vh["routes"].append(route)
                 break
 
-    def to_envoy_config(self) - > dict[str, Any]:
+    def to_envoy_config(self) -> dict[str, Any]:
         """转换为Envoy配置"""
         return {"name": self.name, "virtual_hosts": self.virtual_hosts}
 
@@ -246,7 +246,7 @@ class RouteConfig:
 class EnvoyConfigManager:
     """Envoy配置管理器"""
 
-    def __init__(self) - > None:
+    def __init__(self) -> None:
         """TODO: 添加文档字符串"""
         self.clusters: dict[str, ClusterConfig] = {}
         self.listeners: dict[str, ListenerConfig] = {}
@@ -267,7 +267,7 @@ class EnvoyConfigManager:
         self.routes[route.name] = route
         logger.info(f"添加Envoy路由: {route.name}")
 
-    def generate_config(self) - > dict[str, Any]:
+    def generate_config(self) -> dict[str, Any]:
         """生成完整的Envoy配置"""
         config = {
             "static_resources": {
@@ -287,12 +287,12 @@ class EnvoyConfigManager:
 
         return config
 
-    def generate_json_config(self, indent: int = 2) - > str:
+    def generate_json_config(self, indent: int = 2) -> str:
         """生成JSON格式的配置"""
         config = self.generate_config()
         return json.dumps(config, indent = indent)
 
-    def generate_yaml_config(self) - > str:
+    def generate_yaml_config(self) -> str:
         """生成YAML格式的配置"""
         config = self.generate_config()
         return yaml.dump(config, default_flow_style = False)
@@ -316,7 +316,7 @@ class EnvoyConfigManager:
         service_name: str,
         hosts: list[tuple],  # [(address, port), ...]
         health_check_path: str = " / health",
-    ) - > ClusterConfig:
+    ) -> ClusterConfig:
         """创建健康服务配置（索克生活平台专用）"""
         cluster = ClusterConfig(
             name = f"{service_name} - cluster", type = "STRICT_DNS", lb_policy = "ROUND_ROBIN"
@@ -344,7 +344,7 @@ class EnvoyConfigManager:
         stable_cluster: str,
         canary_cluster: str,
         canary_weight: int = 10,
-    ) - > RouteConfig:
+    ) -> RouteConfig:
         """创建金丝雀路由配置（索克生活平台专用）"""
         route = RouteConfig(name = f"{service_name} - route")
 
@@ -368,7 +368,7 @@ class EnvoyConfigManager:
 
     def create_rate_limit_filter(
         self, requests_per_second: int = 100, burst_size: int = 200
-    ) - > dict[str, Any]:
+    ) -> dict[str, Any]:
         """创建限流过滤器配置"""
         return {
             "name": "envoy.filters.http.local_ratelimit",

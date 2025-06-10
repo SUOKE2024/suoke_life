@@ -40,7 +40,7 @@ class SharedMemoryBlock:
     is_locked: bool = False
     owner_pid: int = None
 
-    def __post_init__(self) - > None:
+    def __post_init__(self) -> None:
         """TODO: 添加文档字符串"""
         if self.owner_pid is None:
             self.owner_pid = multiprocessing.current_process().pid
@@ -57,7 +57,7 @@ class ProcessingTask:
     priority: int = 1
     timeout: float = 300.0
 
-    def __post_init__(self) - > None:
+    def __post_init__(self) -> None:
         """TODO: 添加文档字符串"""
         if not hasattr(self, 'created_at') or self.created_at is None:
             self.created_at = datetime.now()
@@ -80,7 +80,7 @@ class SharedMemoryManager:
         logger.info(f"共享内存管理器初始化，最大内存: {max_memory_gb}GB")
 
     def create_shared_array(self, block_id: str, shape: Tuple[int, ...],
-                        dtype: np.dtype = np.float32) - > np.ndarray:
+                        dtype: np.dtype = np.float32) -> np.ndarray:
         """创建共享内存数组"""
         with self.lock:
             if block_id in self.blocks:
@@ -116,13 +116,13 @@ class SharedMemoryManager:
 
             self.blocks[block_id] = block_info
             self.shared_memories[block_id] = shm
-            self.total_allocated + = size
+            self.total_allocated += size
             self.peak_usage = max(self.peak_usage, self.total_allocated)
 
             logger.info(f"创建共享内存块: {block_id}, 大小: {size} 字节, 形状: {shape}")
             return array
 
-    def get_shared_array(self, block_id: str) - > Optional[np.ndarray]:
+    def get_shared_array(self, block_id: str) -> Optional[np.ndarray]:
         """获取共享内存数组"""
         with self.lock:
             if block_id not in self.blocks:
@@ -132,7 +132,7 @@ class SharedMemoryManager:
 
             # 更新访问信息
             block_info.last_accessed = datetime.now()
-            block_info.access_count + = 1
+            block_info.access_count += 1
 
             # 获取共享内存
             if block_id in self.shared_memories:
@@ -171,12 +171,12 @@ class SharedMemoryManager:
                 del self.shared_memories[block_id]
 
             # 更新统计
-            self.total_allocated - = block_info.size
+            self.total_allocated -= block_info.size
             del self.blocks[block_id]
 
             logger.info(f"删除共享内存块: {block_id}")
 
-    def _cleanup_unused_blocks(self) - > None:
+    def _cleanup_unused_blocks(self) -> None:
         """清理未使用的内存块"""
         current_time = datetime.now()
         blocks_to_delete = []
@@ -205,7 +205,7 @@ class SharedMemoryManager:
                 if block_id in self.blocks:
                     self.blocks[block_id].is_locked = False
 
-    def get_memory_stats(self) - > Dict[str, Any]:
+    def get_memory_stats(self) -> Dict[str, Any]:
         """获取内存使用统计"""
         with self.lock:
             return {
@@ -243,7 +243,7 @@ class BigDataProcessor:
         logger.info(f"大数据处理器初始化，工作进程数: {self.max_workers}")
 
     @jit(nopython = True, parallel = True)
-    def _jit_matrix_operations(self, data: np.ndarray, operation: str) - > np.ndarray:
+    def _jit_matrix_operations(self, data: np.ndarray, operation: str) -> np.ndarray:
         """JIT优化的矩阵运算"""
         if operation == "normalize":
             # 标准化
@@ -251,7 +251,7 @@ class BigDataProcessor:
             std = np.std(data)
             return (data - mean) / std if std > 0 else data
         elif operation == "square":
-            return data * * 2
+            return data *** 2
         elif operation == "sqrt":
             return np.sqrt(np.abs(data))
         else:
@@ -259,7 +259,7 @@ class BigDataProcessor:
 
     async def process_health_data_batch(self, input_block_id: str,
                                     output_block_id: str,
-                                    operation: str = "normalize") - > str:
+                                    operation: str = "normalize") -> str:
         """批量处理健康数据"""
         task_id = str(uuid.uuid4())
 
@@ -312,7 +312,7 @@ class BigDataProcessor:
 
     async def process_tcm_syndrome_analysis(self, symptoms_block_id: str,
                                         weights_block_id: str,
-                                        result_block_id: str) - > str:
+                                        result_block_id: str) -> str:
         """中医证候分析处理"""
         task_id = str(uuid.uuid4())
 
@@ -365,7 +365,7 @@ class BigDataProcessor:
 
     @jit(nopython = True)
     def _calculate_syndrome_scores(self, symptoms: np.ndarray,
-                                weights: np.ndarray) - > np.ndarray:
+                                weights: np.ndarray) -> np.ndarray:
         """计算证候评分（JIT优化）"""
         # 加权症状评分
         weighted_symptoms = symptoms * weights
@@ -386,7 +386,7 @@ class BigDataProcessor:
 
     async def process_nutrition_optimization(self, user_data_block_id: str,
                                         nutrition_db_block_id: str,
-                                        result_block_id: str) - > str:
+                                        result_block_id: str) -> str:
         """营养优化处理"""
         task_id = str(uuid.uuid4())
 
@@ -439,7 +439,7 @@ class BigDataProcessor:
 
     @jit(nopython = True)
     def _optimize_nutrition(self, user_data: np.ndarray,
-                        nutrition_db: np.ndarray) - > np.ndarray:
+                        nutrition_db: np.ndarray) -> np.ndarray:
         """营养优化算法（JIT优化）"""
         # 用户需求向量（蛋白质、碳水化合物、脂肪、维生素等）
         user_needs = user_data[:8]  # 假设前8个是营养需求
@@ -460,7 +460,7 @@ class BigDataProcessor:
 
         return food_scores
 
-    def get_processing_stats(self) - > Dict[str, Any]:
+    def get_processing_stats(self) -> Dict[str, Any]:
         """获取处理统计信息"""
         with self.lock:
             return {
@@ -498,7 +498,7 @@ class SharedMemoryDataPipeline:
 
     async def execute_pipeline(self, pipeline_name: str,
                             input_data: np.ndarray,
-                            pipeline_params: Dict[str, Any] = None) - > str:
+                            pipeline_params: Dict[str, Any] = None) -> str:
         """执行数据处理管道"""
         if pipeline_name not in self.pipelines:
             raise ValueError(f"未知的数据管道: {pipeline_name}")
@@ -529,10 +529,10 @@ class SharedMemoryDataPipeline:
 
             current_block_id = step_output_id
 
-        logger.info(f"数据管道执行完成: {pipeline_name} - > {current_block_id}")
+        logger.info(f"数据管道执行完成: {pipeline_name} -> {current_block_id}")
         return current_block_id
 
-    async def health_data_analysis_pipeline(self, health_data: np.ndarray) - > str:
+    async def health_data_analysis_pipeline(self, health_data: np.ndarray) -> str:
         """健康数据分析管道"""
         async def normalize_step(input_id: str, output_id: str, params: Dict):
             await self.processor.process_health_data_batch(
@@ -553,7 +553,7 @@ class SharedMemoryDataPipeline:
         # 执行管道
         return await self.execute_pipeline("health_analysis", health_data)
 
-    def cleanup_all(self) - > None:
+    def cleanup_all(self) -> None:
         """清理所有共享内存"""
         for block_id in list(self.memory_manager.blocks.keys()):
             self.memory_manager.delete_shared_array(block_id)
@@ -571,7 +571,7 @@ async def initialize_shared_memory_system(max_memory_gb: float = 4.0,
     logger.info("共享内存系统初始化完成")
     return shared_memory_pipeline
 
-def cleanup_shared_memory_system() - > None:
+def cleanup_shared_memory_system() -> None:
     """清理共享内存系统"""
     global shared_memory_pipeline
     if shared_memory_pipeline:

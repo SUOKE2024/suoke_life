@@ -49,14 +49,14 @@ class AsyncBatcher:
             "processing_errors": 0,
         }
 
-    async def start(self) - > None:
+    async def start(self) -> None:
         """启动批处理器"""
         if not self._process_task:
             self._stopped = False
             self._process_task = asyncio.create_task(self._process_loop())
             logger.info("异步批处理器已启动")
 
-    async def stop(self) - > None:
+    async def stop(self) -> None:
         """停止批处理器"""
         self._stopped = True
         if self._process_task:
@@ -69,21 +69,21 @@ class AsyncBatcher:
 
         logger.info("异步批处理器已停止")
 
-    async def add_item(self, item: Any) - > Any:
+    async def add_item(self, item: Any) -> Any:
         """添加项目到批处理队列"""
         future = asyncio.Future()
 
         async with self._lock:
             self.pending_items.append((item, future))
 
-            if len(self.pending_items) > = self.batch_size:
+            if len(self.pending_items) >= self.batch_size:
                 # 立即处理满批次
                 await self._process_batch()
 
         # 等待结果
         return await future
 
-    async def _process_loop(self) - > None:
+    async def _process_loop(self) -> None:
         """处理循环"""
         while not self._stopped:
             try:
@@ -95,9 +95,9 @@ class AsyncBatcher:
 
             except Exception as e:
                 logger.error(f"批处理循环错误: {e}")
-                self.stats["processing_errors"] + = 1
+                self.stats["processing_errors"] += 1
 
-    async def _process_batch(self) - > None:
+    async def _process_batch(self) -> None:
         """处理批次"""
         if not self.pending_items:
             return
@@ -120,8 +120,8 @@ class AsyncBatcher:
                     future.set_result(result)
 
             # 更新统计
-            self.stats["total_batches"] + = 1
-            self.stats["total_items"] + = len(batch_items)
+            self.stats["total_batches"] += 1
+            self.stats["total_items"] += len(batch_items)
             self.stats["average_batch_size"] = (
                 self.stats["total_items"] / self.stats["total_batches"]
             )
@@ -132,13 +132,13 @@ class AsyncBatcher:
                 if not future.done():
                     future.set_exception(e)
 
-            self.stats["processing_errors"] + = 1
+            self.stats["processing_errors"] += 1
             logger.error(f"批处理失败: {e}")
 
-    def get_stats(self) - > dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """获取统计信息"""
         return {
-            * *self.stats,
+            ***self.stats,
             "pending_items": len(self.pending_items),
             "is_running": self._process_task is not None,
         }
@@ -156,7 +156,7 @@ class ConnectionPoolConfig:
 class ConnectionPoolManager:
     """统一管理各种连接池"""
 
-    def __init__(self) - > None:
+    def __init__(self) -> None:
         """TODO: 添加文档字符串"""
         self.redis_pool: aioredis.Redis | None = None
         self.pg_pool: asyncpg.Pool | None = None
@@ -179,7 +179,7 @@ class ConnectionPoolManager:
             # Redis 连接池
             if "redis" in config:
                 redis_config = config["redis"]
-                pool_config = ConnectionPoolConfig( * *redis_config.get("pool", {}))
+                pool_config = ConnectionPoolConfig( ***redis_config.get("pool", {}))
                 self._pools_config["redis"] = pool_config
 
                 self.redis_pool = await aioredis.create_redis_pool(
@@ -193,7 +193,7 @@ class ConnectionPoolManager:
             # PostgreSQL 连接池
             if "postgres" in config:
                 pg_config = config["postgres"]
-                pool_config = ConnectionPoolConfig( * *pg_config.get("pool", {}))
+                pool_config = ConnectionPoolConfig( ***pg_config.get("pool", {}))
                 self._pools_config["postgres"] = pool_config
 
                 self.pg_pool = await asyncpg.create_pool(
@@ -209,7 +209,7 @@ class ConnectionPoolManager:
             # MySQL 连接池
             if "mysql" in config:
                 mysql_config = config["mysql"]
-                pool_config = ConnectionPoolConfig( * *mysql_config.get("pool", {}))
+                pool_config = ConnectionPoolConfig( ***mysql_config.get("pool", {}))
                 self._pools_config["mysql"] = pool_config
 
                 self.mysql_pool = await create_mysql_pool(
@@ -243,63 +243,63 @@ class ConnectionPoolManager:
             raise
 
     @asynccontextmanager
-    async def get_redis(self) - > None:
+    async def get_redis(self) -> None:
         """获取 Redis 连接"""
         if not self.redis_pool:
             raise RuntimeError("Redis连接池未初始化")
 
         try:
-            self.stats["redis"]["acquired"] + = 1
+            self.stats["redis"]["acquired"] += 1
             async with self.redis_pool.get() as conn:
                 yield conn
         except Exception:
-            self.stats["redis"]["errors"] + = 1
+            self.stats["redis"]["errors"] += 1
             raise
         finally:
-            self.stats["redis"]["released"] + = 1
+            self.stats["redis"]["released"] += 1
 
     @asynccontextmanager
-    async def get_postgres(self) - > None:
+    async def get_postgres(self) -> None:
         """获取 PostgreSQL 连接"""
         if not self.pg_pool:
             raise RuntimeError("PostgreSQL连接池未初始化")
 
         try:
-            self.stats["postgres"]["acquired"] + = 1
+            self.stats["postgres"]["acquired"] += 1
             async with self.pg_pool.acquire() as conn:
                 yield conn
         except Exception:
-            self.stats["postgres"]["errors"] + = 1
+            self.stats["postgres"]["errors"] += 1
             raise
         finally:
-            self.stats["postgres"]["released"] + = 1
+            self.stats["postgres"]["released"] += 1
 
     @asynccontextmanager
-    async def get_mysql(self) - > None:
+    async def get_mysql(self) -> None:
         """获取 MySQL 连接"""
         if not self.mysql_pool:
             raise RuntimeError("MySQL连接池未初始化")
 
         try:
-            self.stats["mysql"]["acquired"] + = 1
+            self.stats["mysql"]["acquired"] += 1
             async with self.mysql_pool.acquire() as conn:
                 async with conn.cursor() as cursor:
                     yield cursor
         except Exception:
-            self.stats["mysql"]["errors"] + = 1
+            self.stats["mysql"]["errors"] += 1
             raise
         finally:
-            self.stats["mysql"]["released"] + = 1
+            self.stats["mysql"]["released"] += 1
 
-    def get_mongodb(self) - > motor.motor_asyncio.AsyncIOMotorDatabase:
+    def get_mongodb(self) -> motor.motor_asyncio.AsyncIOMotorDatabase:
         """获取 MongoDB 数据库实例"""
         if not self.mongo_client:
             raise RuntimeError("MongoDB客户端未初始化")
 
-        self.stats["mongodb"]["acquired"] + = 1
+        self.stats["mongodb"]["acquired"] += 1
         return self.mongo_client.get_database()
 
-    async def close_all(self) - > None:
+    async def close_all(self) -> None:
         """关闭所有连接池"""
         if self.redis_pool:
             self.redis_pool.close()
@@ -321,7 +321,7 @@ class ConnectionPoolManager:
 
         self.initialized = False
 
-    def get_stats(self) - > dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """获取连接池统计信息"""
         stats = dict(self.stats)
 
@@ -332,7 +332,7 @@ class ConnectionPoolManager:
 
         return stats
 
-    async def health_check(self) - > dict[str, Any]:
+    async def health_check(self) -> dict[str, Any]:
         """健康检查"""
         health = {"status": "healthy", "pools": {}}
 
@@ -380,7 +380,7 @@ class ConnectionPoolManager:
 # 全局连接池管理器
 _global_pool_manager = ConnectionPoolManager()
 
-async def get_pool_manager() - > ConnectionPoolManager:
+async def get_pool_manager() -> ConnectionPoolManager:
     """获取全局连接池管理器"""
     return _global_pool_manager
 
@@ -399,7 +399,7 @@ def batch_process(batch_size: int = 100, timeout: float = 0.1):
         batcher = AsyncBatcher(func, batch_size, timeout)
 
         @wraps(func)
-        async def wrapper(item: Any) - > Any:
+        async def wrapper(item: Any) -> Any:
             # 确保批处理器已启动
             if not batcher._process_task:
                 await batcher.start()

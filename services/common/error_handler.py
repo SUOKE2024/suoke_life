@@ -20,7 +20,7 @@ class GlobalErrorHandler:
         context: Optional[Dict[str, Any]] = None,
         user_id: Optional[str] = None,
         request_id: Optional[str] = None
-    ) - > Dict[str, Any]:
+    ) -> Dict[str, Any]:
         """处理错误"""
 
         error_info = {
@@ -76,7 +76,7 @@ class ErrorRecovery:
     """错误恢复机制"""
 
     @staticmethod
-    def recover_from_database_error(error: Exception) - > bool:
+    def recover_from_database_error(error: Exception) -> bool:
         """从数据库错误中恢复"""
         try:
             # 尝试重新连接数据库
@@ -88,7 +88,7 @@ class ErrorRecovery:
             return False
 
     @staticmethod
-    def recover_from_network_error(error: Exception) - > bool:
+    def recover_from_network_error(error: Exception) -> bool:
         """从网络错误中恢复"""
         try:
             # 尝试重新建立网络连接

@@ -127,7 +127,7 @@ class ServiceMeshManager:
         self.security_policies: dict[str, SecurityPolicy] = {}
         self.canary_deployments: dict[str, CanaryDeployment] = {}
 
-    async def initialize(self) - > None:
+    async def initialize(self) -> None:
         """初始化服务网格"""
         try:
             logger.info(f"初始化{self.mesh_type.value}服务网格...")
@@ -146,7 +146,7 @@ class ServiceMeshManager:
             logger.error(f"服务网格初始化失败: {e}")
             raise
 
-    async def _initialize_istio(self) - > None:
+    async def _initialize_istio(self) -> None:
         """初始化Istio"""
         # 创建默认网关
         if self.config.ingress_gateway:
@@ -168,17 +168,17 @@ class ServiceMeshManager:
 
             await self.client.create_gateway(gateway)
 
-    async def _initialize_linkerd(self) - > None:
+    async def _initialize_linkerd(self) -> None:
         """初始化Linkerd"""
         # Linkerd的初始化逻辑
         pass
 
-    async def _initialize_envoy(self) - > None:
+    async def _initialize_envoy(self) -> None:
         """初始化Envoy"""
         # Envoy的初始化逻辑
         pass
 
-    async def apply_traffic_policy(self, policy: TrafficPolicy) - > bool:
+    async def apply_traffic_policy(self, policy: TrafficPolicy) -> bool:
         """应用流量策略"""
         try:
             self.traffic_policies[policy.name] = policy
@@ -196,7 +196,7 @@ class ServiceMeshManager:
             logger.error(f"应用流量策略失败: {e}")
             return False
 
-    async def _apply_istio_traffic_policy(self, policy: TrafficPolicy) - > bool:
+    async def _apply_istio_traffic_policy(self, policy: TrafficPolicy) -> bool:
         """应用Istio流量策略"""
         # 创建DestinationRule
         destination_rule = DestinationRule(
@@ -219,21 +219,21 @@ class ServiceMeshManager:
 
         # 设置熔断器
         if policy.circuit_breaker_config:
-            destination_rule.set_circuit_breaker( * *policy.circuit_breaker_config)
+            destination_rule.set_circuit_breaker( ***policy.circuit_breaker_config)
 
         return await self.client.create_destination_rule(destination_rule)
 
-    async def _apply_linkerd_traffic_policy(self, policy: TrafficPolicy) - > bool:
+    async def _apply_linkerd_traffic_policy(self, policy: TrafficPolicy) -> bool:
         """应用Linkerd流量策略"""
         # Linkerd流量策略实现
         return True
 
-    async def _apply_envoy_traffic_policy(self, policy: TrafficPolicy) - > bool:
+    async def _apply_envoy_traffic_policy(self, policy: TrafficPolicy) -> bool:
         """应用Envoy流量策略"""
         # Envoy流量策略实现
         return True
 
-    async def apply_security_policy(self, policy: SecurityPolicy) - > bool:
+    async def apply_security_policy(self, policy: SecurityPolicy) -> bool:
         """应用安全策略"""
         try:
             self.security_policies[policy.name] = policy
@@ -251,21 +251,21 @@ class ServiceMeshManager:
             logger.error(f"应用安全策略失败: {e}")
             return False
 
-    async def _apply_istio_security_policy(self, policy: SecurityPolicy) - > bool:
+    async def _apply_istio_security_policy(self, policy: SecurityPolicy) -> bool:
         """应用Istio安全策略"""
         # 这里需要创建Istio的安全相关资源
         # 如PeerAuthentication、AuthorizationPolicy等
         return True
 
-    async def _apply_linkerd_security_policy(self, policy: SecurityPolicy) - > bool:
+    async def _apply_linkerd_security_policy(self, policy: SecurityPolicy) -> bool:
         """应用Linkerd安全策略"""
         return True
 
-    async def _apply_envoy_security_policy(self, policy: SecurityPolicy) - > bool:
+    async def _apply_envoy_security_policy(self, policy: SecurityPolicy) -> bool:
         """应用Envoy安全策略"""
         return True
 
-    async def create_canary_deployment(self, canary: CanaryDeployment) - > bool:
+    async def create_canary_deployment(self, canary: CanaryDeployment) -> bool:
         """创建金丝雀部署"""
         try:
             self.canary_deployments[canary.name] = canary
@@ -283,7 +283,7 @@ class ServiceMeshManager:
             logger.error(f"创建金丝雀部署失败: {e}")
             return False
 
-    async def _create_istio_canary(self, canary: CanaryDeployment) - > bool:
+    async def _create_istio_canary(self, canary: CanaryDeployment) -> bool:
         """创建Istio金丝雀部署"""
         virtual_service, destination_rule = self.client.create_canary_deployment(
             service_name = canary.service_name,
@@ -299,7 +299,7 @@ class ServiceMeshManager:
 
         return success1 and success2
 
-    async def _create_linkerd_canary(self, canary: CanaryDeployment) - > bool:
+    async def _create_linkerd_canary(self, canary: CanaryDeployment) -> bool:
         """创建Linkerd金丝雀部署"""
         # 使用TrafficSplit实现金丝雀部署
         traffic_split = TrafficSplit(
@@ -318,11 +318,11 @@ class ServiceMeshManager:
 
         return await self.client.create_traffic_split(traffic_split)
 
-    async def _create_envoy_canary(self, canary: CanaryDeployment) - > bool:
+    async def _create_envoy_canary(self, canary: CanaryDeployment) -> bool:
         """创建Envoy金丝雀部署"""
         return True
 
-    async def update_canary_weight(self, canary_name: str, new_weight: int) - > bool:
+    async def update_canary_weight(self, canary_name: str, new_weight: int) -> bool:
         """更新金丝雀部署权重"""
         try:
             if canary_name not in self.canary_deployments:
@@ -345,7 +345,7 @@ class ServiceMeshManager:
             logger.error(f"更新金丝雀权重失败: {e}")
             return False
 
-    async def _update_istio_canary_weight(self, canary: CanaryDeployment) - > bool:
+    async def _update_istio_canary_weight(self, canary: CanaryDeployment) -> bool:
         """更新Istio金丝雀权重"""
         # 获取现有的VirtualService并更新权重
         vs_name = f"{canary.service_name} - virtual"
@@ -375,15 +375,15 @@ class ServiceMeshManager:
 
         return False
 
-    async def _update_linkerd_canary_weight(self, canary: CanaryDeployment) - > bool:
+    async def _update_linkerd_canary_weight(self, canary: CanaryDeployment) -> bool:
         """更新Linkerd金丝雀权重"""
         return True
 
-    async def _update_envoy_canary_weight(self, canary: CanaryDeployment) - > bool:
+    async def _update_envoy_canary_weight(self, canary: CanaryDeployment) -> bool:
         """更新Envoy金丝雀权重"""
         return True
 
-    async def promote_canary(self, canary_name: str) - > bool:
+    async def promote_canary(self, canary_name: str) -> bool:
         """提升金丝雀版本为稳定版本"""
         try:
             if canary_name not in self.canary_deployments:
@@ -403,7 +403,7 @@ class ServiceMeshManager:
             logger.error(f"提升金丝雀部署失败: {e}")
             return False
 
-    async def rollback_canary(self, canary_name: str) - > bool:
+    async def rollback_canary(self, canary_name: str) -> bool:
         """回滚金丝雀部署"""
         try:
             if canary_name not in self.canary_deployments:
@@ -422,7 +422,7 @@ class ServiceMeshManager:
             logger.error(f"回滚金丝雀部署失败: {e}")
             return False
 
-    async def get_mesh_status(self) - > dict[str, Any]:
+    async def get_mesh_status(self) -> dict[str, Any]:
         """获取服务网格状态"""
         return {
             "mesh_type": self.mesh_type.value,
@@ -441,7 +441,7 @@ class ServiceMeshManager:
         timeout: str = "5s",
         interval: str = "10s",
         unhealthy_threshold: int = 3,
-    ) - > TrafficPolicy:
+    ) -> TrafficPolicy:
         """创建健康检查策略（索克生活平台专用）"""
         return TrafficPolicy(
             name = f"{service_name} - health - check",
@@ -460,7 +460,7 @@ class ServiceMeshManager:
         namespace: str = "default",
         requests_per_second: int = 100,
         burst_size: int = 200,
-    ) - > TrafficPolicy:
+    ) -> TrafficPolicy:
         """创建限流策略（索克生活平台专用）"""
         return TrafficPolicy(
             name = f"{service_name} - rate - limit",
@@ -483,14 +483,14 @@ def register_mesh_manager(name: str, manager: ServiceMeshManager):
     logger.info(f"注册服务网格管理器: {name}")
 
 
-def get_mesh_manager(name: str) - > ServiceMeshManager | None:
+def get_mesh_manager(name: str) -> ServiceMeshManager | None:
     """获取服务网格管理器"""
     return _mesh_managers.get(name)
 
 
 def create_default_mesh_manager(
     mesh_type: MeshType = MeshType.ISTIO, namespace: str = "suoke - system"
-) - > ServiceMeshManager:
+) -> ServiceMeshManager:
     """创建默认的服务网格管理器"""
     config = MeshConfig(
         mesh_type = mesh_type,

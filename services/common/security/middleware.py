@@ -36,11 +36,11 @@ def rate_limit(max_requests: int = 100, window: int = 3600):
     def decorator(f):
         """TODO: 添加文档字符串"""
         @wraps(f)
-        def decorated_function( * args, * *kwargs):
+        def decorated_function( *args, **kwargs):
             """TODO: 添加文档字符串"""
             # 实现速率限制逻辑
             client_ip = request.remote_addr
             # 这里应该实现基于Redis的速率限制
-            return f( * args, * *kwargs)
+            return f( *args, **kwargs)
         return decorated_function
     return decorator

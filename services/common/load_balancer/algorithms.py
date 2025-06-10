@@ -20,7 +20,7 @@ import time
 class RoundRobinBalancer(LoadBalancingAlgorithm):
     """轮询负载均衡算法"""
 
-    def __init__(self) - > None:
+    def __init__(self) -> None:
         """TODO: 添加文档字符串"""
         self.current_index = 0
         self.lock = asyncio.Lock()
@@ -33,21 +33,21 @@ class RoundRobinBalancer(LoadBalancingAlgorithm):
         self,
         endpoints: list[ServiceEndpoint],
         client_info: dict[str, Any] | None = None,
-    ) - > ServiceEndpoint | None:
+    ) -> ServiceEndpoint | None:
         """轮询选择端点"""
         if not endpoints:
             return None
 
         async with self.lock:
             endpoint = endpoints[self.current_index % len(endpoints)]
-            self.current_index + = 1
+            self.current_index += 1
             return endpoint
 
 
 class WeightedRoundRobinBalancer(LoadBalancingAlgorithm):
     """加权轮询负载均衡算法"""
 
-    def __init__(self) - > None:
+    def __init__(self) -> None:
         """TODO: 添加文档字符串"""
         self.current_weights = {}
         self.lock = asyncio.Lock()
@@ -60,7 +60,7 @@ class WeightedRoundRobinBalancer(LoadBalancingAlgorithm):
         self,
         endpoints: list[ServiceEndpoint],
         client_info: dict[str, Any] | None = None,
-    ) - > ServiceEndpoint | None:
+    ) -> ServiceEndpoint | None:
         """加权轮询选择端点"""
         if not endpoints:
             return None
@@ -74,7 +74,7 @@ class WeightedRoundRobinBalancer(LoadBalancingAlgorithm):
                 addr = endpoint.address
                 if addr not in self.current_weights:
                     self.current_weights[addr] = 0
-                self.current_weights[addr] + = endpoint.weight
+                self.current_weights[addr] += endpoint.weight
 
             # 选择权重最高的端点
             selected_endpoint = max(
@@ -82,7 +82,7 @@ class WeightedRoundRobinBalancer(LoadBalancingAlgorithm):
             )
 
             # 减少选中端点的权重
-            self.current_weights[selected_endpoint.address] - = total_weight
+            self.current_weights[selected_endpoint.address] -= total_weight
 
             return selected_endpoint
 
@@ -98,7 +98,7 @@ class LeastConnectionsBalancer(LoadBalancingAlgorithm):
         self,
         endpoints: list[ServiceEndpoint],
         client_info: dict[str, Any] | None = None,
-    ) - > ServiceEndpoint | None:
+    ) -> ServiceEndpoint | None:
         """选择连接数最少的端点"""
         if not endpoints:
             return None
@@ -118,7 +118,7 @@ class IPHashBalancer(LoadBalancingAlgorithm):
         self,
         endpoints: list[ServiceEndpoint],
         client_info: dict[str, Any] | None = None,
-    ) - > ServiceEndpoint | None:
+    ) -> ServiceEndpoint | None:
         """基于客户端IP哈希选择端点"""
         if not endpoints:
             return None
@@ -146,7 +146,7 @@ class RandomBalancer(LoadBalancingAlgorithm):
         self,
         endpoints: list[ServiceEndpoint],
         client_info: dict[str, Any] | None = None,
-    ) - > ServiceEndpoint | None:
+    ) -> ServiceEndpoint | None:
         """随机选择端点"""
         if not endpoints:
             return None
@@ -157,7 +157,7 @@ class RandomBalancer(LoadBalancingAlgorithm):
 class ConsistentHashBalancer(LoadBalancingAlgorithm):
     """一致性哈希负载均衡算法"""
 
-    def __init__(self) - > None:
+    def __init__(self) -> None:
         """TODO: 添加文档字符串"""
         self.hash_ring = {}
         self.virtual_nodes = 150  # 虚拟节点数量
@@ -166,7 +166,7 @@ class ConsistentHashBalancer(LoadBalancingAlgorithm):
         """初始化算法"""
         self.virtual_nodes = config.get("virtual_nodes", 150)
 
-    def _hash(self, key: str) - > int:
+    def _hash(self, key: str) -> int:
         """计算哈希值"""
         return int(hashlib.md5(key.encode()).hexdigest(), 16)
 
@@ -184,7 +184,7 @@ class ConsistentHashBalancer(LoadBalancingAlgorithm):
         self,
         endpoints: list[ServiceEndpoint],
         client_info: dict[str, Any] | None = None,
-    ) - > ServiceEndpoint | None:
+    ) -> ServiceEndpoint | None:
         """一致性哈希选择端点"""
         if not endpoints:
             return None
@@ -210,7 +210,7 @@ class ConsistentHashBalancer(LoadBalancingAlgorithm):
         # 找到第一个大于等于客户端哈希值的节点
         sorted_hashes = sorted(self.hash_ring.keys())
         for hash_value in sorted_hashes:
-            if hash_value > = client_hash:
+            if hash_value >= client_hash:
                 return self.hash_ring[hash_value]
 
         # 如果没找到，返回第一个节点（环形结构）

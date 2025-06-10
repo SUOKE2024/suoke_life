@@ -30,7 +30,7 @@ class ServiceHealth:
     alerts: list[HealthAlert] = field(default_factory = list)
     metadata: dict[str, Any] = field(default_factory = dict)
 
-    def to_dict(self) - > dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """转换为字典"""
         return {
             "service_name": self.service_name,
@@ -45,7 +45,7 @@ class ServiceHealth:
 class HealthAggregator:
     """健康聚合器"""
 
-    def __init__(self) - > None:
+    def __init__(self) -> None:
         """TODO: 添加文档字符串"""
         self.services: dict[str, ServiceHealth] = {}
         self.config = {}
@@ -142,7 +142,7 @@ class HealthAggregator:
 
         logger.debug(f"添加服务 {service_name} 告警: {alert.message}")
 
-    async def get_overall_health(self) - > dict[str, Any]:
+    async def get_overall_health(self) -> dict[str, Any]:
         """获取整体健康状态"""
         if not self.services:
             return {
@@ -188,7 +188,7 @@ class HealthAggregator:
             "dependencies": self._analyze_dependencies(),
         }
 
-    async def _calculate_overall_status(self) - > HealthStatus:
+    async def _calculate_overall_status(self) -> HealthStatus:
         """计算整体健康状态"""
         if not self.services:
             return HealthStatus.UNKNOWN
@@ -213,7 +213,7 @@ class HealthAggregator:
 
             # 计算加权得分
             weight = self.service_weights.get(service.service_name, 1.0)
-            total_weight + = weight
+            total_weight += weight
 
             if status == HealthStatus.HEALTHY:
                 score = 1.0
@@ -233,14 +233,14 @@ class HealthAggregator:
             overall_score = 0.0
 
         # 根据得分确定状态
-        if overall_score > = 0.8:
+        if overall_score >= 0.8:
             return HealthStatus.HEALTHY
-        elif overall_score > = 0.5 or overall_score > 0:
+        elif overall_score >= 0.5 or overall_score > 0:
             return HealthStatus.DEGRADED
         else:
             return HealthStatus.UNHEALTHY
 
-    def _analyze_dependencies(self) - > dict[str, Any]:
+    def _analyze_dependencies(self) -> dict[str, Any]:
         """分析服务依赖关系"""
         dependency_health = {}
 
@@ -278,7 +278,7 @@ class HealthAggregator:
 
         return dependency_health
 
-    async def get_service_health(self, service_name: str) - > dict[str, Any] | None:
+    async def get_service_health(self, service_name: str) -> dict[str, Any] | None:
         """获取特定服务的健康状态"""
         if service_name not in self.services:
             return None
@@ -295,7 +295,7 @@ class HealthAggregator:
                     dependency_status[dep_name] = "unknown"
 
         return {
-            * *service.to_dict(),
+            ***service.to_dict(),
             "dependencies": dependency_status,
             "weight": self.service_weights.get(service_name, 1.0),
             "is_critical": service_name
@@ -304,7 +304,7 @@ class HealthAggregator:
 
     async def get_services_by_status(
         self, status: HealthStatus
-    ) - > list[dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """获取指定状态的服务列表"""
         services = []
 
@@ -314,7 +314,7 @@ class HealthAggregator:
 
         return services
 
-    async def get_critical_issues(self) - > dict[str, Any]:
+    async def get_critical_issues(self) -> dict[str, Any]:
         """获取关键问题"""
         critical_services = set(self.aggregation_rules.get("critical_services", []))
         issues = {
@@ -391,7 +391,7 @@ class HealthAggregator:
 
         return issues
 
-    async def get_health_trends(self, time_window: int = 3600) - > dict[str, Any]:
+    async def get_health_trends(self, time_window: int = 3600) -> dict[str, Any]:
         """获取健康趋势（需要历史数据支持）"""
         # 这里可以扩展为从时序数据库获取历史数据
         # 目前返回当前状态快照
@@ -411,7 +411,7 @@ class HealthAggregator:
             "overall_trend": "stable",  # 可以基于历史数据计算
         }
 
-    async def health_check(self) - > dict[str, Any]:
+    async def health_check(self) -> dict[str, Any]:
         """聚合器自身健康检查"""
         return {
             "status": "healthy",
@@ -420,7 +420,7 @@ class HealthAggregator:
             "service_weights_configured": len(self.service_weights),
         }
 
-    async def shutdown(self) - > None:
+    async def shutdown(self) -> None:
         """关闭聚合器"""
         self.services.clear()
         self.dependencies.clear()

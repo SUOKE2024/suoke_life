@@ -20,11 +20,11 @@ class PerformanceMonitor:
     def monitor_execution_time(func):
         """监控函数执行时间"""
         @wraps(func)
-        def wrapper( * args, * *kwargs):
+        def wrapper( *args, **kwargs):
             """TODO: 添加文档字符串"""
             start_time = time.time()
             try:
-                result = func( * args, * *kwargs)
+                result = func( *args, **kwargs)
                 execution_time = time.time() - start_time
 
                 # 记录执行时间
@@ -42,7 +42,7 @@ class PerformanceMonitor:
         return wrapper
 
     @staticmethod
-    def get_system_metrics() - > Dict[str, Any]:
+    def get_system_metrics() -> Dict[str, Any]:
         """获取系统指标"""
         return {
             "cpu_percent": psutil.cpu_percent(interval = 1),
@@ -55,12 +55,12 @@ class PerformanceMonitor:
     def monitor_memory_usage(func):
         """监控内存使用"""
         @wraps(func)
-        def wrapper( * args, * *kwargs):
+        def wrapper( *args, **kwargs):
             """TODO: 添加文档字符串"""
             process = psutil.Process()
             memory_before = process.memory_info().rss / 1024 / 1024  # MB
 
-            result = func( * args, * *kwargs)
+            result = func( *args, **kwargs)
 
             memory_after = process.memory_info().rss / 1024 / 1024  # MB
             memory_diff = memory_after - memory_before

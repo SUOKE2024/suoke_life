@@ -53,7 +53,7 @@ class APIParameter:
     schema: dict[str, Any] = field(default_factory = dict)
     example: Any = None
 
-    def to_openapi(self) - > dict[str, Any]:
+    def to_openapi(self) -> dict[str, Any]:
         """转换为OpenAPI格式"""
         param = {
             "name": self.name,
@@ -80,7 +80,7 @@ class APIResponse:
     example: Any = None
     headers: dict[str, dict[str, Any]] = field(default_factory = dict)
 
-    def to_openapi(self) - > dict[str, Any]:
+    def to_openapi(self) -> dict[str, Any]:
         """转换为OpenAPI格式"""
         response = {"description": self.description}
 
@@ -114,10 +114,10 @@ class APISchema:
         description: str = "",
         required: bool = False,
         example: Any = None,
-        * *kwargs,
+        **kwargs,
     ):
         """添加属性"""
-        prop = {"type": prop_type, "description": description, * *kwargs}
+        prop = {"type": prop_type, "description": description, **kwargs}
 
         if example is not None:
             prop["example"] = example
@@ -127,7 +127,7 @@ class APISchema:
         if required:
             self.required.append(name)
 
-    def to_openapi(self) - > dict[str, Any]:
+    def to_openapi(self) -> dict[str, Any]:
         """转换为OpenAPI格式"""
         schema = {
             "type": self.type,
@@ -188,7 +188,7 @@ class APIEndpoint:
             "content": content,
         }
 
-    def to_openapi(self) - > dict[str, Any]:
+    def to_openapi(self) -> dict[str, Any]:
         """转换为OpenAPI格式"""
         operation = {
             "summary": self.summary,
@@ -247,10 +247,10 @@ class OpenAPIGenerator:
         logger.info(f"添加数据模型: {schema.name}")
 
     def add_security_scheme(
-        self, name: str, scheme_type: str, description: str = "", * *kwargs
+        self, name: str, scheme_type: str, description: str = "", **kwargs
     ):
         """添加安全方案"""
-        scheme = {"type": scheme_type, "description": description, * *kwargs}
+        scheme = {"type": scheme_type, "description": description, **kwargs}
 
         self.security_schemes[name] = scheme
         logger.info(f"添加安全方案: {name}")
@@ -290,7 +290,7 @@ class OpenAPIGenerator:
         self.security_schemes[name] = scheme
         logger.info(f"添加安全方案: {name}")
 
-    def generate_openapi_spec(self) - > dict[str, Any]:
+    def generate_openapi_spec(self) -> dict[str, Any]:
         """生成OpenAPI规范"""
         # 基本信息
         spec = {
@@ -335,12 +335,12 @@ class OpenAPIGenerator:
 
         return spec
 
-    def generate_json(self, indent: int = 2) - > str:
+    def generate_json(self, indent: int = 2) -> str:
         """生成JSON格式的文档"""
         spec = self.generate_openapi_spec()
         return json.dumps(spec, indent = indent, ensure_ascii = False)
 
-    def generate_yaml(self) - > str:
+    def generate_yaml(self) -> str:
         """生成YAML格式的文档"""
         spec = self.generate_openapi_spec()
         return yaml.dump(spec, default_flow_style = False, allow_unicode = True)
@@ -367,7 +367,7 @@ class OpenAPIGenerator:
         summary: str = "",
         description: str = "",
         tags: list[str] | None = None,
-    ) - > APIEndpoint:
+    ) -> APIEndpoint:
         """从函数自动生成API端点"""
         if not summary:
             summary = func.__name__.replace("_", " ").title()
@@ -391,7 +391,7 @@ class OpenAPIGenerator:
 
             # 确定参数类型
             param_type = "string"
-            if param.annotation ! = inspect.Parameter.empty:
+            if param.annotation != inspect.Parameter.empty:
                 if param.annotation == int:
                     param_type = "integer"
                 elif param.annotation == float:
@@ -418,7 +418,7 @@ class OpenAPIGenerator:
 
         return endpoint
 
-    def create_health_check_schema(self) - > APISchema:
+    def create_health_check_schema(self) -> APISchema:
         """创建健康检查数据模型（索克生活平台专用）"""
         schema = APISchema(name = "HealthCheck", description = "健康检查响应")
 
@@ -431,7 +431,7 @@ class OpenAPIGenerator:
 
         return schema
 
-    def create_user_schema(self) - > APISchema:
+    def create_user_schema(self) -> APISchema:
         """创建用户数据模型（索克生活平台专用）"""
         schema = APISchema(name = "User", description = "用户信息")
 
@@ -444,7 +444,7 @@ class OpenAPIGenerator:
 
         return schema
 
-    def create_health_metric_schema(self) - > APISchema:
+    def create_health_metric_schema(self) -> APISchema:
         """创建健康指标数据模型（索克生活平台专用）"""
         schema = APISchema(name = "HealthMetric", description = "健康指标")
 
@@ -471,12 +471,12 @@ def register_openapi_generator(name: str, generator: OpenAPIGenerator):
     logger.info(f"注册OpenAPI生成器: {name}")
 
 
-def get_openapi_generator(name: str) - > OpenAPIGenerator | None:
+def get_openapi_generator(name: str) -> OpenAPIGenerator | None:
     """获取OpenAPI生成器"""
     return _generators.get(name)
 
 
-def create_default_generator(service_name: str) - > OpenAPIGenerator:
+def create_default_generator(service_name: str) -> OpenAPIGenerator:
     """创建默认的OpenAPI生成器"""
     generator = OpenAPIGenerator(
         title = f"{service_name} API",

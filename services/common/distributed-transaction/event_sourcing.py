@@ -34,7 +34,7 @@ class Event:
     timestamp: datetime = field(default_factory = datetime.now)
     version: int = 1
 
-    def to_dict(self) - > dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """转换为字典"""
         return {
             "event_id": self.event_id,
@@ -48,25 +48,25 @@ class Event:
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) - > "Event":
+    def from_dict(cls, data: dict[str, Any]) -> "Event":
         """从字典创建"""
         data = data.copy()
         data["timestamp"] = datetime.fromisoformat(data["timestamp"])
-        return cls( * *data)
+        return cls( ***data)
 
 
 class EventStore(ABC):
     """事件存储抽象接口"""
 
     @abstractmethod
-    async def append_event(self, event: Event) - > None:
+    async def append_event(self, event: Event) -> None:
         """追加事件"""
         pass
 
     @abstractmethod
     async def get_events(
         self, aggregate_id: str, from_version: int = 0, to_version: int | None = None
-    ) - > list[Event]:
+    ) -> list[Event]:
         """获取聚合的事件历史"""
         pass
 
@@ -76,19 +76,19 @@ class EventStore(ABC):
         event_type: str,
         limit: int = 100,
         after_timestamp: datetime | None = None,
-    ) - > list[Event]:
+    ) -> list[Event]:
         """根据类型获取事件"""
         pass
 
     @abstractmethod
-    async def get_snapshot(self, aggregate_id: str) - > dict[str, Any] | None:
+    async def get_snapshot(self, aggregate_id: str) -> dict[str, Any] | None:
         """获取快照"""
         pass
 
     @abstractmethod
     async def save_snapshot(
         self, aggregate_id: str, snapshot: dict[str, Any], version: int
-    ) - > None:
+    ) -> None:
         """保存快照"""
         pass
 
@@ -96,13 +96,13 @@ class EventStore(ABC):
 class InMemoryEventStore(EventStore):
     """内存事件存储（用于测试）"""
 
-    def __init__(self) - > None:
+    def __init__(self) -> None:
         """TODO: 添加文档字符串"""
         self.events: list[Event] = []
         self.snapshots: dict[str, dict[str, Any]] = {}
         self._lock = asyncio.Lock()
 
-    async def append_event(self, event: Event) - > None:
+    async def append_event(self, event: Event) -> None:
         """追加事件"""
         async with self._lock:
             self.events.append(event)
@@ -110,7 +110,7 @@ class InMemoryEventStore(EventStore):
 
     async def get_events(
         self, aggregate_id: str, from_version: int = 0, to_version: int | None = None
-    ) - > list[Event]:
+    ) -> list[Event]:
         """获取聚合的事件历史"""
         async with self._lock:
             events = [
@@ -120,7 +120,7 @@ class InMemoryEventStore(EventStore):
             ]
 
             if to_version is not None:
-                events = [e for e in events if e.version < = to_version]
+                events = [e for e in events if e.version <= to_version]
 
             return sorted(events, key = lambda e: e.version)
 
@@ -129,7 +129,7 @@ class InMemoryEventStore(EventStore):
         event_type: str,
         limit: int = 100,
         after_timestamp: datetime | None = None,
-    ) - > list[Event]:
+    ) -> list[Event]:
         """根据类型获取事件"""
         async with self._lock:
             events = [e for e in self.events if e.event_type == event_type]
@@ -139,13 +139,13 @@ class InMemoryEventStore(EventStore):
 
             return sorted(events, key = lambda e: e.timestamp)[:limit]
 
-    async def get_snapshot(self, aggregate_id: str) - > dict[str, Any] | None:
+    async def get_snapshot(self, aggregate_id: str) -> dict[str, Any] | None:
         """获取快照"""
         return self.snapshots.get(aggregate_id)
 
     async def save_snapshot(
         self, aggregate_id: str, snapshot: dict[str, Any], version: int
-    ) - > None:
+    ) -> None:
         """保存快照"""
         async with self._lock:
             self.snapshots[aggregate_id] = {
@@ -193,12 +193,12 @@ class AggregateRoot(ABC):
         # 添加到未提交事件列表
         self.uncommitted_events.append(event)
 
-    def mark_events_as_committed(self) - > None:
+    def mark_events_as_committed(self) -> None:
         """标记事件已提交"""
         self.uncommitted_events.clear()
 
     @abstractmethod
-    def get_snapshot(self) - > dict[str, Any]:
+    def get_snapshot(self) -> dict[str, Any]:
         """获取聚合快照"""
         pass
 
@@ -211,7 +211,7 @@ class AggregateRoot(ABC):
 class EventBus:
     """事件总线"""
 
-    def __init__(self) - > None:
+    def __init__(self) -> None:
         """TODO: 添加文档字符串"""
         self.handlers: dict[str, list[Callable]] = {}
         self._lock = asyncio.Lock()
@@ -253,7 +253,7 @@ class EventBus:
                         f"事件处理器错误: {handlers[i].__name__}, 错误: {result}"
                     )
 
-    def get_stats(self) - > dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """获取统计信息"""
         return {
             "subscribed_events": list(self.handlers.keys()),
@@ -298,7 +298,7 @@ class EventSourcingRepository:
 
     async def load(
         self, aggregate_type: type[AggregateRoot], aggregate_id: str
-    ) - > AggregateRoot | None:
+    ) -> AggregateRoot | None:
         """加载聚合"""
         # 尝试从快照加载
         snapshot = await self.event_store.get_snapshot(aggregate_id)
@@ -342,7 +342,7 @@ class EventProjection(ABC):
 class ReadModelProjection(EventProjection):
     """读模型投影"""
 
-    def __init__(self) - > None:
+    def __init__(self) -> None:
         """TODO: 添加文档字符串"""
         self.read_models: dict[str, dict[str, Any]] = {}
         self._lock = asyncio.Lock()
@@ -365,11 +365,11 @@ class ReadModelProjection(EventProjection):
             for event in events:
                 await self.handle_event(event)
 
-    async def get_read_model(self, model_id: str) - > dict[str, Any] | None:
+    async def get_read_model(self, model_id: str) -> dict[str, Any] | None:
         """获取读模型"""
         return self.read_models.get(model_id)
 
-    async def query(self, criteria: dict[str, Any]) - > list[dict[str, Any]]:
+    async def query(self, criteria: dict[str, Any]) -> list[dict[str, Any]]:
         """查询读模型"""
         results = []
 
@@ -387,11 +387,11 @@ _event_store = InMemoryEventStore()
 _event_bus = EventBus()
 
 
-def get_event_store() - > EventStore:
+def get_event_store() -> EventStore:
     """获取事件存储"""
     return _event_store
 
 
-def get_event_bus() - > EventBus:
+def get_event_bus() -> EventBus:
     """获取事件总线"""
     return _event_bus

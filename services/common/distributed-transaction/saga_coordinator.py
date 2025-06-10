@@ -92,7 +92,7 @@ class SagaCoordinator:
 
     def __init__(self,
                 redis_url: str = "redis: / /localhost:6379",
-                db_url: str = "sqlite: / / / saga_transactions.db"):
+                db_url: str = "sqlite: // / saga_transactions.db"):
         self.redis_url = redis_url
         self.db_url = db_url
         self.redis_client = None
@@ -102,7 +102,7 @@ class SagaCoordinator:
         self.running_transactions = {}
         self._running = False
 
-    async def start(self) - > None:
+    async def start(self) -> None:
         """启动协调器"""
         # 初始化Redis连接
         self.redis_client = await aioredis.from_url(self.redis_url)
@@ -121,7 +121,7 @@ class SagaCoordinator:
 
         logger.info("Saga coordinator started")
 
-    async def stop(self) - > None:
+    async def stop(self) -> None:
         """停止协调器"""
         self._running = False
 
@@ -141,7 +141,7 @@ class SagaCoordinator:
     async def start_saga(self,
                         saga_id: str,
                         steps: List[SagaStep],
-                        timeout: int = 300) - > str:
+                        timeout: int = 300) -> str:
         """启动Saga事务"""
 
         transaction_id = saga_id or str(uuid.uuid4())
@@ -242,7 +242,7 @@ class SagaCoordinator:
             if transaction_id in self.running_transactions:
                 del self.running_transactions[transaction_id]
 
-    def _build_dependency_graph(self, steps: List[SagaStep]) - > Dict[str, List[str]]:
+    def _build_dependency_graph(self, steps: List[SagaStep]) -> Dict[str, List[str]]:
         """构建依赖图"""
         graph = {}
         for step in steps:
@@ -331,7 +331,7 @@ class SagaCoordinator:
 
                 if attempt < step.retry_count:
                     logger.warning(f"Step {step.step_id} failed (attempt {attempt + 1}), retrying: {e}")
-                    await asyncio.sleep(2 * * attempt)  # 指数退避
+                    await asyncio.sleep(2 *** attempt)  # 指数退避
                 else:
                     step_exec.status = StepStatus.FAILED
                     step_exec.end_time = datetime.utcnow()
@@ -342,7 +342,7 @@ class SagaCoordinator:
         # 更新执行日志
         await self._update_execution_log(transaction_id, execution_state)
 
-    async def _call_service_action(self, client: Any, action: str, payload: Dict[str, Any]) - > Dict[str, Any]:
+    async def _call_service_action(self, client: Any, action: str, payload: Dict[str, Any]) -> Dict[str, Any]:
         """调用服务操作"""
         # 这里需要根据实际的服务客户端接口来实现
         # 假设客户端有一个通用的call方法
@@ -350,7 +350,7 @@ class SagaCoordinator:
             return await client.call(action, payload)
         elif hasattr(client, action):
             method = getattr(client, action)
-            return await method( * *payload)
+            return await method( ***payload)
         else:
             raise ValueError(f"Service client does not support action: {action}")
 
@@ -381,7 +381,7 @@ class SagaCoordinator:
         execution_state = self.running_transactions[transaction_id]
         step_exec = execution_state["steps"][step.step_id]
 
-        if step_exec.status ! = StepStatus.COMPLETED:
+        if step_exec.status != StepStatus.COMPLETED:
             return  # 只补偿已完成的步骤
 
         step_exec.status = StepStatus.COMPENSATING
@@ -393,7 +393,7 @@ class SagaCoordinator:
 
             # 构建补偿载荷（包含原始结果）
             compensation_payload = {
-                * *step.payload,
+                ***step.payload,
                 "original_result": step_exec.result
             }
 
@@ -453,7 +453,7 @@ class SagaCoordinator:
             transaction.updated_at = datetime.utcnow()
             self.db_session.commit()
 
-    async def _recovery_loop(self) - > None:
+    async def _recovery_loop(self) -> None:
         """恢复循环，处理中断的事务"""
         while self._running:
             try:
@@ -533,7 +533,7 @@ class SagaCoordinator:
         except Exception as e:
             logger.error(f"Failed to recover transaction {transaction.transaction_id}: {e}")
 
-    async def _timeout_check_loop(self) - > None:
+    async def _timeout_check_loop(self) -> None:
         """超时检查循环"""
         while self._running:
             try:
@@ -583,7 +583,7 @@ class SagaCoordinator:
                 logger.error(f"Error in timeout check loop: {e}")
                 await asyncio.sleep(5)
 
-    async def get_transaction_status(self, transaction_id: str) - > Optional[Dict]:
+    async def get_transaction_status(self, transaction_id: str) -> Optional[Dict]:
         """获取事务状态"""
         transaction = self.db_session.query(SagaTransaction).filter_by(
             transaction_id = transaction_id
@@ -606,7 +606,7 @@ class SagaCoordinator:
 
         return result
 
-    async def cancel_transaction(self, transaction_id: str) - > bool:
+    async def cancel_transaction(self, transaction_id: str) -> bool:
         """取消事务"""
         if transaction_id in self.running_transactions:
             execution_state = self.running_transactions[transaction_id]
@@ -644,7 +644,7 @@ _saga_coordinator = None
 
 
 def get_saga_coordinator(redis_url: str = "redis: / /localhost:6379",
-                        db_url: str = "sqlite: / / / saga_transactions.db") - > SagaCoordinator:
+                        db_url: str = "sqlite: // / saga_transactions.db") -> SagaCoordinator:
     """获取Saga协调器单例"""
     global _saga_coordinator
     if _saga_coordinator is None:
@@ -653,7 +653,7 @@ def get_saga_coordinator(redis_url: str = "redis: / /localhost:6379",
 
 
 # 使用示例
-async def main() - > None:
+async def main() -> None:
     """示例用法"""
 
     # 模拟服务客户端
@@ -663,7 +663,7 @@ async def main() - > None:
             """TODO: 添加文档字符串"""
             self.service_name = service_name
 
-        async def call(self, action: str, payload: Dict[str, Any]) - > Dict[str, Any]:
+        async def call(self, action: str, payload: Dict[str, Any]) -> Dict[str, Any]:
             print(f"[{self.service_name}] Executing {action} with payload: {payload}")
             await asyncio.sleep(1)  # 模拟网络延迟
             return {"success": True, "result": f"{action}_result"}
