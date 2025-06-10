@@ -28,7 +28,7 @@ class UserService(BaseService[User]):
         """TODO: 添加文档字符串"""
         super().__init__(User, db)
 
-    def get_user_by_id(self, user_id: str) - > Optional[User]:
+    def get_user_by_id(self, user_id: str) -> Optional[User]:
         """根据用户ID获取用户"""
         try:
             return self.db.query(User).filter(User.id == user_id).first()
@@ -36,7 +36,7 @@ class UserService(BaseService[User]):
             logger.error(f"获取用户失败: {e}")
             return None
 
-    def get_user_by_username(self, username: str) - > Optional[User]:
+    def get_user_by_username(self, username: str) -> Optional[User]:
         """根据用户名获取用户"""
         try:
             return self.db.query(User).filter(User.username == username).first()
@@ -44,7 +44,7 @@ class UserService(BaseService[User]):
             logger.error(f"根据用户名获取用户失败: {e}")
             return None
 
-    def get_user_by_email(self, email: str) - > Optional[User]:
+    def get_user_by_email(self, email: str) -> Optional[User]:
         """根据邮箱获取用户"""
         try:
             return self.db.query(User).filter(User.email == email).first()
@@ -52,7 +52,7 @@ class UserService(BaseService[User]):
             logger.error(f"根据邮箱获取用户失败: {e}")
             return None
 
-    def authenticate_user(self, username: str, password: str) - > Optional[User]:
+    def authenticate_user(self, username: str, password: str) -> Optional[User]:
         """验证用户凭据"""
         try:
             # 尝试用户名登录
@@ -83,7 +83,7 @@ class UserService(BaseService[User]):
         phone: Optional[str] = None,
         password: Optional[str] = None,
         profile: Optional[Dict[str, Any]] = None
-    ) - > Optional[User]:
+    ) -> Optional[User]:
         """创建新用户"""
         try:
             # 检查用户名是否已存在
@@ -133,7 +133,7 @@ class UserService(BaseService[User]):
         self,
         user_id: str,
         update_data: Dict[str, Any]
-    ) - > Optional[User]:
+    ) -> Optional[User]:
         """更新用户信息"""
         try:
             user = self.get_user_by_id(user_id)
@@ -159,7 +159,7 @@ class UserService(BaseService[User]):
             logger.error(f"更新用户信息失败: {e}")
             return None
 
-    def update_user_password(self, user_id: str, new_password: str) - > bool:
+    def update_user_password(self, user_id: str, new_password: str) -> bool:
         """更新用户密码"""
         try:
             user = self.get_user_by_id(user_id)
@@ -186,7 +186,7 @@ class UserService(BaseService[User]):
             logger.error(f"更新用户密码失败: {e}")
             return False
 
-    def deactivate_user(self, user_id: str) - > bool:
+    def deactivate_user(self, user_id: str) -> bool:
         """停用用户"""
         try:
             user = self.get_user_by_id(user_id)
@@ -206,7 +206,7 @@ class UserService(BaseService[User]):
             logger.error(f"停用用户失败: {e}")
             return False
 
-    def activate_user(self, user_id: str) - > bool:
+    def activate_user(self, user_id: str) -> bool:
         """激活用户"""
         try:
             user = self.get_user_by_id(user_id)
@@ -226,7 +226,7 @@ class UserService(BaseService[User]):
             logger.error(f"激活用户失败: {e}")
             return False
 
-    def delete_user(self, user_id: str) - > bool:
+    def delete_user(self, user_id: str) -> bool:
         """删除用户"""
         try:
             user = self.get_user_by_id(user_id)
@@ -244,7 +244,7 @@ class UserService(BaseService[User]):
             logger.error(f"删除用户失败: {e}")
             return False
 
-    def get_user_profile(self, user_id: str) - > Optional[Dict[str, Any]]:
+    def get_user_profile(self, user_id: str) -> Optional[Dict[str, Any]]:
         """获取用户档案"""
         try:
             user = self.get_user_by_id(user_id)
@@ -270,7 +270,7 @@ class UserService(BaseService[User]):
         self,
         user_id: str,
         profile_data: Dict[str, Any]
-    ) - > bool:
+    ) -> bool:
         """更新用户档案"""
         try:
             user = self.get_user_by_id(user_id)
@@ -298,7 +298,7 @@ class UserService(BaseService[User]):
         self,
         user_id: str,
         platform_id: str
-    ) - > UserPlatformAuth | None:
+    ) -> UserPlatformAuth | None:
         """获取用户平台授权信息"""
         return (
             self.db.query(UserPlatformAuth)
@@ -317,7 +317,7 @@ class UserService(BaseService[User]):
         refresh_token: str = None,
         token_expires_at = None,
         auth_metadata: dict = None
-    ) - > UserPlatformAuth:
+    ) -> UserPlatformAuth:
         """创建或更新用户平台授权"""
         auth = await self.get_user_platform_auth(user_id, platform_id)
 
@@ -349,7 +349,7 @@ class UserService(BaseService[User]):
 
         return auth
 
-    async def get_user_platforms(self, user_id: str) - > list[UserPlatformAuth]:
+    async def get_user_platforms(self, user_id: str) -> list[UserPlatformAuth]:
         """获取用户已授权的平台列表"""
         return (
             self.db.query(UserPlatformAuth)

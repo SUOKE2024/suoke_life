@@ -208,9 +208,9 @@ def load_config_from_file(config_file: str) -> SuokeEventConfig:
     try:
         with open(config_file, 'r', encoding='utf-8') as f:
             if config_file.endswith('.json'):
-                config_data = json.load(f)
+                json.load(f)
             elif config_file.endswith(('.yml', '.yaml')):
-                config_data = yaml.safe_load(f)
+                yaml.safe_load(f)
             else:
                 raise ValueError(f"不支持的配置文件格式: {config_file}")
         

@@ -83,7 +83,7 @@ class Maze(BaseModel):
 
     @field_validator("nodes")
     @classmethod
-    def validate_nodes_size(cls, v: list[list[MazeNode]], info: Any) - > list[list[MazeNode]]:
+    def validate_nodes_size(cls, v: list[list[MazeNode]], info: Any) -> list[list[MazeNode]]:
         """验证节点矩阵大小"""
         # 在 Pydantic v2 中，我们需要从 info.data 获取其他字段的值
         size = info.data.get("size", 0) if info.data else 0
@@ -93,7 +93,7 @@ class Maze(BaseModel):
 
     @field_validator("start_position", "end_position")
     @classmethod
-    def validate_position(cls, v: tuple[int, int], info: Any) - > tuple[int, int]:
+    def validate_position(cls, v: tuple[int, int], info: Any) -> tuple[int, int]:
         """验证位置坐标"""
         size = info.data.get("size", 0) if info.data else 0
         x, y = v
@@ -101,19 +101,19 @@ class Maze(BaseModel):
             raise ValueError(f"Position must be within maze bounds (0, 0) to ({size - 1}, {size - 1})")
         return v
 
-    def get_node(self, x: int, y: int) - > MazeNode | None:
+    def get_node(self, x: int, y: int) -> MazeNode | None:
         """获取指定位置的节点"""
         if 0 < = x < self.size and 0 < = y < self.size:
             return self.nodes[y][x]
         return None
 
-    def set_node(self, x: int, y: int, node: MazeNode) - > None:
+    def set_node(self, x: int, y: int, node: MazeNode) -> None:
         """设置指定位置的节点"""
         if 0 < = x < self.size and 0 < = y < self.size:
             self.nodes[y][x] = node
             self.updated_at = datetime.now(UTC)
 
-    def get_neighbors(self, x: int, y: int) - > list[MazeNode]:
+    def get_neighbors(self, x: int, y: int) -> list[MazeNode]:
         """获取相邻节点"""
         neighbors = []
         for dx, dy in [(0, 1), (1, 0), (0, - 1), ( - 1, 0)]:
@@ -174,7 +174,7 @@ class MazeProgress(BaseModel):
 
     model_config = {"use_enum_values": True}
 
-    def add_visited_node(self, x: int, y: int) - > None:
+    def add_visited_node(self, x: int, y: int) -> None:
         """添加已访问节点"""
         position = (x, y)
         if position not in self.visited_nodes:
@@ -182,7 +182,7 @@ class MazeProgress(BaseModel):
             self.steps_count + = 1
             self.updated_at = datetime.now(UTC)
 
-    def complete_maze(self) - > None:
+    def complete_maze(self) -> None:
         """完成迷宫"""
         self.status = ProgressStatus.COMPLETED
         self.end_time = datetime.now(UTC)
@@ -190,12 +190,12 @@ class MazeProgress(BaseModel):
             self.total_time = (self.end_time - self.start_time).total_seconds()
         self.updated_at = datetime.now(UTC)
 
-    def abandon_maze(self) - > None:
+    def abandon_maze(self) -> None:
         """放弃迷宫"""
         self.status = ProgressStatus.ABANDONED
         self.updated_at = datetime.now(UTC)
 
-    def calculate_score(self) - > int:
+    def calculate_score(self) -> int:
         """计算得分"""
         base_score = len(self.visited_nodes) * 10
         knowledge_bonus = len(self.knowledge_gained) * 50

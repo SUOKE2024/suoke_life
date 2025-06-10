@@ -22,12 +22,12 @@ class TestIntegrationService:
     """Integration Service 测试类"""
 
     @pytest.fixture
-    def client(self) - > None:
+    def client(self) -> None:
         """HTTP客户端"""
         return httpx.AsyncClient(base_url = BASE_URL)
 
     @pytest.fixture
-    def auth_headers(self) - > None:
+    def auth_headers(self) -> None:
         """认证头"""
         return {"Authorization": f"Bearer {TEST_TOKEN}"}
 
@@ -84,7 +84,7 @@ class TestIntegrationService:
             assert "data" in data
             assert isinstance(data["data"], list)
 
-async def test_basic_functionality() - > None:
+async def test_basic_functionality() -> None:
     """基本功能测试"""
     print("开始测试 Integration Service...")
 
@@ -127,7 +127,7 @@ async def test_basic_functionality() - > None:
         except Exception as e:
             print(f"✗ 平台列表异常: {str(e)}")
 
-def run_tests() - > None:
+def run_tests() -> None:
     """运行测试"""
     print(" = " * 50)
     print("Integration Service 测试")

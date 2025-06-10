@@ -4,7 +4,6 @@ Alembic环境配置
 """
 
 import asyncio
-import logging
 from logging.config import fileConfig
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection

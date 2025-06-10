@@ -5,9 +5,7 @@ health-data-service 全面单元测试
 """
 
 import pytest
-import asyncio
-from unittest.mock import Mock, patch, AsyncMock
-from typing import Dict, Any
+from unittest.mock import Mock
 
 class TestHealthdataserviceService:
     """全面的health-data-service服务测试"""

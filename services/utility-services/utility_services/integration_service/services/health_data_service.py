@@ -28,7 +28,7 @@ class HealthDataService(BaseService[HealthData]):
         """TODO: 添加文档字符串"""
         super().__init__(HealthData, db)
 
-    def get_health_data_by_id(self, data_id: int) - > Optional[HealthData]:
+    def get_health_data_by_id(self, data_id: int) -> Optional[HealthData]:
         """根据ID获取健康数据"""
         try:
             return self.db.query(HealthData).filter(HealthData.id == data_id).first()
@@ -45,7 +45,7 @@ class HealthDataService(BaseService[HealthData]):
         data_type: Optional[HealthDataType] = None,
         start_date: Optional[date] = None,
         end_date: Optional[date] = None
-    ) - > List[HealthData]:
+    ) -> List[HealthData]:
         """获取用户健康数据列表"""
         try:
             query = self.db.query(HealthData).filter(HealthData.user_id == user_id)
@@ -83,7 +83,7 @@ class HealthDataService(BaseService[HealthData]):
         unit: Optional[str] = None,
         extra_data: Optional[Dict[str, Any]] = None,
         source_id: Optional[str] = None
-    ) - > Optional[HealthData]:
+    ) -> Optional[HealthData]:
         """创建健康数据记录"""
         try:
             health_data = HealthData(
@@ -115,7 +115,7 @@ class HealthDataService(BaseService[HealthData]):
         user_id: str,
         platform_id: str,
         data_list: List[Dict[str, Any]]
-    ) - > int:
+    ) -> int:
         """批量创建健康数据记录"""
         try:
             created_count = 0
@@ -160,7 +160,7 @@ class HealthDataService(BaseService[HealthData]):
         self,
         data_id: int,
         update_data: Dict[str, Any]
-    ) - > Optional[HealthData]:
+    ) -> Optional[HealthData]:
         """更新健康数据记录"""
         try:
             health_data = self.get_health_data_by_id(data_id)
@@ -186,7 +186,7 @@ class HealthDataService(BaseService[HealthData]):
             logger.error(f"更新健康数据失败: {e}")
             return None
 
-    def delete_health_data(self, data_id: int) - > bool:
+    def delete_health_data(self, data_id: int) -> bool:
         """删除健康数据记录"""
         try:
             health_data = self.get_health_data_by_id(data_id)
@@ -210,7 +210,7 @@ class HealthDataService(BaseService[HealthData]):
         platform_id: Optional[str] = None,
         start_date: Optional[date] = None,
         end_date: Optional[date] = None
-    ) - > Dict[str, Any]:
+    ) -> Dict[str, Any]:
         """获取用户健康数据统计"""
         try:
             query = self.db.query(HealthData).filter(HealthData.user_id == user_id)
@@ -301,7 +301,7 @@ class HealthDataService(BaseService[HealthData]):
         start_date: Optional[date] = None,
         end_date: Optional[date] = None,
         data_types: Optional[List[HealthDataType]] = None
-    ) - > Dict[str, Any]:
+    ) -> Dict[str, Any]:
         """从平台同步健康数据"""
         try:
             # 这里应该调用具体平台的API来获取数据
@@ -345,7 +345,7 @@ class HealthDataService(BaseService[HealthData]):
         user_id: str,
         data_type: HealthDataType,
         platform_id: Optional[str] = None
-    ) - > Optional[HealthData]:
+    ) -> Optional[HealthData]:
         """获取指定类型的最新健康数据"""
         try:
             query = self.db.query(HealthData).filter(
@@ -370,7 +370,7 @@ class HealthDataService(BaseService[HealthData]):
         data_type: HealthDataType,
         days: int = 30,
         platform_id: Optional[str] = None
-    ) - > List[Dict[str, Any]]:
+    ) -> List[Dict[str, Any]]:
         """获取健康数据趋势"""
         try:
             end_date = datetime.utcnow()

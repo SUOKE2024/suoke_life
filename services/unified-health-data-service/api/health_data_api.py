@@ -3,18 +3,14 @@
 提供健康数据的RESTful API服务
 """
 
-import asyncio
 import logging
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
+from typing import Any, List, Optional
 from fastapi import APIRouter, HTTPException, Depends, Query, Path
-from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
 from ..unified_health_data_service.health_data_service.models.health_data import (
-    HealthDataCreate, VitalSignsCreate, DiagnosticDataCreate, TCMDataCreate,
-    HealthDataResponse, VitalSignsResponse, DiagnosticDataResponse,
-    HealthTrendAnalysis, HealthReport
+    HealthDataCreate, VitalSignsCreate, DiagnosticDataCreate, TCMDataCreate
 )
 from ..unified_health_data_service.health_data_service.services.health_data_service import HealthDataService
 
@@ -91,7 +87,7 @@ async def get_health_data(
     """查询健康数据"""
     try:
         # 计算偏移量
-        offset = (page - 1) * size
+        (page - 1) * size
         
         # 查询数据
         results = await service.query_health_data(

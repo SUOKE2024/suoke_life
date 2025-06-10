@@ -27,7 +27,7 @@ def handle_external_health_data(event: dict):
 # 事件总线初始化
 event_bus = EventBus(backend = 'kafka', config = {})
 
-def register_event_handlers() - > None:
+def register_event_handlers() -> None:
     """TODO: 添加文档字符串"""
     event_bus.subscribe('external.healthdata.sync', handle_external_health_data)
     print("[IntegrationService] 已注册外部健康数据事件处理器")

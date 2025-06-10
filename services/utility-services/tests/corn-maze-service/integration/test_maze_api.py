@@ -88,12 +88,12 @@ class TestMazeAPIIntegration(unittest.TestCase):
         cls.server.stop(0)
         logger.info("测试服务器已关闭")
 
-    def setUp(self) - > None:
+    def setUp(self) -> None:
         """每个测试前的准备工作"""
         self.user_id = str(uuid.uuid4())
 
     @pytest.mark.asyncio
-    async def test_create_maze(self) - > None:
+    async def test_create_maze(self) -> None:
         """测试创建迷宫"""
         # 创建迷宫请求
         request = pb2.CreateMazeRequest(
@@ -124,7 +124,7 @@ class TestMazeAPIIntegration(unittest.TestCase):
         self.maze_id = response.maze.maze_id
 
     @pytest.mark.asyncio
-    async def test_get_maze(self) - > None:
+    async def test_get_maze(self) -> None:
         """测试获取迷宫"""
         # 首先创建一个迷宫
         create_request = pb2.CreateMazeRequest(
@@ -153,7 +153,7 @@ class TestMazeAPIIntegration(unittest.TestCase):
         self.assertEqual(get_response.maze.difficulty, 2)
 
     @pytest.mark.asyncio
-    async def test_get_nonexistent_maze(self) - > None:
+    async def test_get_nonexistent_maze(self) -> None:
         """测试获取不存在的迷宫"""
         request = pb2.GetMazeRequest(
             maze_id = "nonexistent - maze - id"
@@ -165,7 +165,7 @@ class TestMazeAPIIntegration(unittest.TestCase):
         self.assertEqual(response.error_message, "未找到指定的迷宫")
 
     @pytest.mark.asyncio
-    async def test_get_user_mazes(self) - > None:
+    async def test_get_user_mazes(self) -> None:
         """测试获取用户的迷宫列表"""
         # 为用户创建多个迷宫
         maze_types = ["health_path", "nutrition_garden", "tcm_journey"]
@@ -197,7 +197,7 @@ class TestMazeAPIIntegration(unittest.TestCase):
             self.assertIn(maze_type, maze_types_found)
 
     @pytest.mark.asyncio
-    async def test_search_mazes(self) - > None:
+    async def test_search_mazes(self) -> None:
         """测试搜索迷宫"""
         # 创建一些公开迷宫
         public_maze_types = ["health_path", "tcm_journey"]
@@ -236,7 +236,7 @@ class TestMazeAPIIntegration(unittest.TestCase):
         self.assertGreaterEqual(len(health_mazes), 1)
 
     @pytest.mark.asyncio
-    async def test_update_maze(self) - > None:
+    async def test_update_maze(self) -> None:
         """测试更新迷宫"""
         # 首先创建一个迷宫
         create_request = pb2.CreateMazeRequest(
@@ -272,7 +272,7 @@ class TestMazeAPIIntegration(unittest.TestCase):
         self.assertEqual(get_response.maze.is_public, True)
 
     @pytest.mark.asyncio
-    async def test_delete_maze(self) - > None:
+    async def test_delete_maze(self) -> None:
         """测试删除迷宫"""
         # 首先创建一个迷宫
         create_request = pb2.CreateMazeRequest(
@@ -304,7 +304,7 @@ class TestMazeAPIIntegration(unittest.TestCase):
         self.assertEqual(get_response.success, False)
 
     @pytest.mark.asyncio
-    async def test_update_user_progress(self) - > None:
+    async def test_update_user_progress(self) -> None:
         """测试更新用户进度"""
         # 首先创建一个迷宫
         create_request = pb2.CreateMazeRequest(
@@ -348,7 +348,7 @@ class TestMazeAPIIntegration(unittest.TestCase):
         self.assertEqual(len(get_progress_response.progress.visited_nodes), 2)
 
     @pytest.mark.asyncio
-    async def test_complete_maze(self) - > None:
+    async def test_complete_maze(self) -> None:
         """测试完成迷宫"""
         # 首先创建一个迷宫
         create_request = pb2.CreateMazeRequest(

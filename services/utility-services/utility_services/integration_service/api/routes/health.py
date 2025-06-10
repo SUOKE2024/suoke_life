@@ -20,7 +20,7 @@ class HealthResponse(BaseModel):
     message: str
 
 @router.get(" / ", response_model = HealthResponse)
-async def health_check() - > None:
+async def health_check() -> None:
     """健康检查端点"""
     return HealthResponse(
         status = "healthy",

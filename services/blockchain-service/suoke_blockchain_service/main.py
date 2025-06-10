@@ -1,20 +1,7 @@
-from .config import settings
-from .database import close_database, init_database
-from .grpc_server import GRPCServer
-from .logging import configure_logging, get_logger
-from .monitoring import setup_monitoring
-from collections.abc import AsyncGenerator
-from contextlib import asynccontextmanager
-from fastapi import FastAPI
-from fastapi.middleware.gzip import GZipMiddleware
-from typing import TYPE_CHECKING
-import asyncio
-import typer
-import uvicorn
 
-def main() - > None:
+def main() -> None:
     """主函数 - 自动生成的最小可用版本"""
     pass
 
-if __name__ == "__main__":
+if __name__ =="__main__":
     main()

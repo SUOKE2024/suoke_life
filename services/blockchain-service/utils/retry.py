@@ -18,16 +18,16 @@ def retry(
     exceptions: Tuple[Type[Exception], ...] = (Exception,)
 ):
     """重试装饰器"""
-    def decorator(func: Callable) - > Callable:
+    def decorator(func: Callable) -> Callable:
         """TODO: 添加文档字符串"""
         @wraps(func)
-        def wrapper( * args, * *kwargs) - > Any:
+        def wrapper( *args, **kwargs) -> Any:
             """TODO: 添加文档字符串"""
             last_exception = None
 
             for attempt in range(max_attempts):
                 try:
-                    return func( * args, * *kwargs)
+                    return func( *args, **kwargs)
                 except exceptions as e:
                     last_exception = e
                     if attempt == max_attempts - 1:
@@ -51,33 +51,33 @@ class CircuitBreaker:
         self.timeout = timeout
         self.failure_count = 0
         self.last_failure_time = None
-        self.state = "CLOSED"  # CLOSED, OPEN, HALF_OPEN
+        self.state ="CLOSED"  # CLOSED, OPEN, HALF_OPEN
 
-    def call(self, func: Callable, * args, * *kwargs) - > Any:
+    def call(self, func: Callable, *args, **kwargs) -> Any:
         """执行函数调用"""
-        if self.state == "OPEN":
+        if self.state =="OPEN":
             if time.time() - self.last_failure_time > self.timeout:
-                self.state = "HALF_OPEN"
+                self.state ="HALF_OPEN"
             else:
                 raise Exception("熔断器开启，拒绝请求")
 
         try:
-            result = func( * args, * *kwargs)
+            result = func( *args, **kwargs)
             self._on_success()
             return result
         except Exception as e:
             self._on_failure()
             raise
 
-    def _on_success(self) - > None:
+    def _on_success(self) -> None:
         """成功回调"""
         self.failure_count = 0
-        self.state = "CLOSED"
+        self.state ="CLOSED"
 
-    def _on_failure(self) - > None:
+    def _on_failure(self) -> None:
         """失败回调"""
-        self.failure_count + = 1
+        self.failure_count += 1
         self.last_failure_time = time.time()
 
-        if self.failure_count > = self.failure_threshold:
-            self.state = "OPEN"
+        if self.failure_count >= self.failure_threshold:
+            self.state ="OPEN"

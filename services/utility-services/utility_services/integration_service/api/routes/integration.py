@@ -20,7 +20,7 @@ class ServiceResponse(BaseModel):
     data: dict = {}
 
 @router.get(" / ", response_model = ServiceResponse)
-async def get_service_info() - > None:
+async def get_service_info() -> None:
     """获取服务信息"""
     return ServiceResponse(
         message = "integration - service is running",

@@ -51,7 +51,7 @@ class HealthData(BaseModel):
     user = relationship("User", back_populates = "health_data")
     platform = relationship("Platform", back_populates = "health_data")
 
-    def __repr__(self) - > str:
+    def __repr__(self) -> str:
         """TODO: 添加文档字符串"""
         return f"<HealthData(user_id = {self.user_id}, type = {self.data_type}, value = {self.value})>"
     class Meta:

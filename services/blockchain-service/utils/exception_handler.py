@@ -3,11 +3,9 @@ exception_handler - 索克生活项目模块
 """
 
 from datetime import datetime
-from typing import Dict, Any
 import logging
 import traceback
-
-
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +13,7 @@ class GlobalExceptionHandler:
     """全局异常处理器"""
 
     @staticmethod
-    def handle_exception(exc: Exception, context: Dict[str, Any] = None) - > Dict[str, Any]:
+    def handle_exception(exc: Exception, context: dict[str, Any] | None = None) -> dict[str, Any]:
         """处理异常"""
         error_info = {
             "error_type": type(exc).__name__,

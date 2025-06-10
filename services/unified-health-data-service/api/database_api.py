@@ -3,12 +3,10 @@
 提供数据库操作的RESTful API服务
 """
 
-import asyncio
 import logging
 from datetime import datetime
-from typing import Any, Dict, List, Optional
-from fastapi import APIRouter, HTTPException, Depends, Query, Path, Body
-from fastapi.responses import JSONResponse
+from typing import Any, Dict, Optional
+from fastapi import APIRouter, HTTPException, Depends, Query, Body
 from pydantic import BaseModel, Field
 
 from ..unified_health_data_service.health_data_service.core.database import DatabaseService

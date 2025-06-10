@@ -53,7 +53,7 @@ class Settings(BaseSettings):
         case_sensitive = False
 
 
-def load_config_from_yaml(config_path: str = "config / config.yaml") - > dict:
+def load_config_from_yaml(config_path: str = "config / config.yaml") -> dict:
     """从 YAML 文件加载配置"""
     config_file = Path(config_path)
     if config_file.exists():

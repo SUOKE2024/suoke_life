@@ -22,7 +22,7 @@ import unittest
 class TestHybridRetriever(unittest.TestCase):
     """混合检索器单元测试类"""
 
-    def setUp(self) - > None:
+    def setUp(self) -> None:
         """设置测试环境"""
         self.mock_vector_db = AsyncMock()
         self.mock_embedding_service = AsyncMock()
@@ -66,7 +66,7 @@ class TestHybridRetriever(unittest.TestCase):
         self.mock_vector_db.search.return_value = self.mock_documents
 
     @pytest.mark.asyncio
-    async def test_retrieve_with_cache_hit(self) - > None:
+    async def test_retrieve_with_cache_hit(self) -> None:
         """测试缓存命中情况下的检索"""
         # 设置缓存命中
         self.mock_cache_service.get.return_value = self.mock_documents
@@ -84,7 +84,7 @@ class TestHybridRetriever(unittest.TestCase):
         self.mock_vector_db.search.assert_not_called()
 
     @pytest.mark.asyncio
-    async def test_retrieve_with_cache_miss(self) - > None:
+    async def test_retrieve_with_cache_miss(self) -> None:
         """测试缓存未命中情况下的检索"""
         # 设置缓存未命中
         self.mock_cache_service.get.return_value = None
@@ -103,7 +103,7 @@ class TestHybridRetriever(unittest.TestCase):
         self.mock_cache_service.set.assert_called_once()
 
     @pytest.mark.asyncio
-    async def test_retrieve_with_metadata_filter(self) - > None:
+    async def test_retrieve_with_metadata_filter(self) -> None:
         """测试带元数据过滤的检索"""
         # 设置缓存未命中
         self.mock_cache_service.get.return_value = None
@@ -119,7 +119,7 @@ class TestHybridRetriever(unittest.TestCase):
         self.assertEqual(kwargs.get("metadata_filter"), metadata_filter)
 
     @pytest.mark.asyncio
-    async def test_retrieve_with_custom_topk(self) - > None:
+    async def test_retrieve_with_custom_topk(self) -> None:
         """测试自定义top_k参数的检索"""
         # 设置缓存未命中
         self.mock_cache_service.get.return_value = None
@@ -135,7 +135,7 @@ class TestHybridRetriever(unittest.TestCase):
         self.assertEqual(kwargs.get("top_k"), custom_top_k)
 
     @pytest.mark.asyncio
-    async def test_retrieve_with_collection_names(self) - > None:
+    async def test_retrieve_with_collection_names(self) -> None:
         """测试指定集合名称的检索"""
         # 设置缓存未命中
         self.mock_cache_service.get.return_value = None
@@ -151,7 +151,7 @@ class TestHybridRetriever(unittest.TestCase):
         self.assertEqual(kwargs.get("collection_names"), collection_names)
 
     @pytest.mark.asyncio
-    async def test_retrieve_with_score_threshold(self) - > None:
+    async def test_retrieve_with_score_threshold(self) -> None:
         """测试结果分数阈值过滤"""
         # 设置缓存未命中
         self.mock_cache_service.get.return_value = None
@@ -174,11 +174,11 @@ class TestHybridRetriever(unittest.TestCase):
         result = await self.retriever.retrieve(query, score_threshold = threshold)
 
         # 验证结果只包含满足阈值的文档
-        self.assertEqual(len(result), 3)  # 只有3个文档分数> = 0.7
-        self.assertTrue(all(doc.score > = threshold for doc in result))
+        self.assertEqual(len(result), 3)  # 只有3个文档分数>= 0.7
+        self.assertTrue(all(doc.score >= threshold for doc in result))
 
     @pytest.mark.asyncio
-    async def test_hybrid_retrieval_strategy(self) - > None:
+    async def test_hybrid_retrieval_strategy(self) -> None:
         """测试混合检索策略"""
         # 设置缓存未命中
         self.mock_cache_service.get.return_value = None
@@ -194,7 +194,7 @@ class TestHybridRetriever(unittest.TestCase):
         self.assertEqual(len(result), len(self.mock_documents))
 
     @pytest.mark.asyncio
-    async def test_error_handling(self) - > None:
+    async def test_error_handling(self) -> None:
         """测试错误处理"""
         # 设置缓存未命中
         self.mock_cache_service.get.return_value = None
@@ -210,7 +210,7 @@ class TestHybridRetriever(unittest.TestCase):
         self.assertEqual(result, [])
 
     @pytest.mark.asyncio
-    async def test_close_method(self) - > None:
+    async def test_close_method(self) -> None:
         """测试关闭方法"""
         await self.retriever.close()
         # 验证依赖组件的关闭方法被调用

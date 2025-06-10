@@ -1,11 +1,10 @@
-from typing import Dict, List, Any, Optional, Union
-
 """
 conftest_simple - 索克生活项目模块
 """
 
-from unittest.mock import AsyncMock, MagicMock
 import asyncio
+from unittest.mock import AsyncMock, MagicMock
+
 import pytest
 
 """
@@ -15,9 +14,8 @@ import pytest
 """
 
 
-
-@pytest.fixture(scope = "session")
-def event_loop() - > None:
+@pytest.fixture(scope="session")
+def event_loop():
     """创建事件循环"""
     loop = asyncio.new_event_loop()
     yield loop
@@ -25,7 +23,7 @@ def event_loop() - > None:
 
 
 @pytest.fixture
-def mock_blockchain_service() - > None:
+def mock_blockchain_service():
     """Mock区块链服务"""
     service = MagicMock()
     service.encryption_service = AsyncMock()
@@ -36,10 +34,10 @@ def mock_blockchain_service() - > None:
 
 
 @pytest.fixture
-def sample_health_data() - > None:
+def sample_health_data():
     """示例健康数据"""
     return {
         "heart_rate": 72,
         "blood_pressure": {"systolic": 120, "diastolic": 80},
-        "timestamp": "2024 - 01 - 01T10:00:00Z"
+        "timestamp": "2024-01-01T10:00:00Z"
     }

@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # 配置asyncio事件循环
 @pytest.fixture(scope = "session")
-def event_loop() - > None:
+def event_loop() -> None:
     """创建事件循环"""
     loop = asyncio.get_event_loop_policy().new_event_loop()
     yield loop
@@ -28,7 +28,7 @@ def event_loop() - > None:
 
 # 模拟设置
 @pytest.fixture
-def mock_settings() - > None:
+def mock_settings() -> None:
     """创建模拟设置"""
     settings = MagicMock()
     settings.server.host = "localhost"

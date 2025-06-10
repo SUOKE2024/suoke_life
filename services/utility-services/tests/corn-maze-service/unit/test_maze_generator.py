@@ -21,13 +21,13 @@ import unittest
 class TestMazeGenerator(unittest.TestCase):
     """测试迷宫生成器"""
 
-    def setUp(self) - > None:
+    def setUp(self) -> None:
         """测试前准备"""
         self.generator = MazeGenerator()
         self.user_id = "test - user - 123"
 
     @pytest.mark.asyncio
-    async def test_generate_maze_health_path(self) - > None:
+    async def test_generate_maze_health_path(self) -> None:
         """测试生成健康路径迷宫"""
         maze = await self.generator.generate_maze(
             self.user_id,
@@ -52,7 +52,7 @@ class TestMazeGenerator(unittest.TestCase):
         self.assertGreaterEqual(len(maze.challenges), 2)
 
     @pytest.mark.asyncio
-    async def test_generate_maze_nutrition_garden(self) - > None:
+    async def test_generate_maze_nutrition_garden(self) -> None:
         """测试生成营养花园迷宫"""
         maze = await self.generator.generate_maze(
             self.user_id,
@@ -75,7 +75,7 @@ class TestMazeGenerator(unittest.TestCase):
         self.assertIn("营养花园", maze.description)
 
     @pytest.mark.asyncio
-    async def test_generate_maze_tcm_journey(self) - > None:
+    async def test_generate_maze_tcm_journey(self) -> None:
         """测试生成中医之旅迷宫"""
         maze = await self.generator.generate_maze(
             self.user_id,
@@ -98,7 +98,7 @@ class TestMazeGenerator(unittest.TestCase):
         self.assertIn("中医之旅", maze.description)
 
     @pytest.mark.asyncio
-    async def test_generate_maze_balanced_life(self) - > None:
+    async def test_generate_maze_balanced_life(self) -> None:
         """测试生成平衡生活迷宫"""
         maze = await self.generator.generate_maze(
             self.user_id,
@@ -121,7 +121,7 @@ class TestMazeGenerator(unittest.TestCase):
         self.assertIn("平衡生活", maze.description)
 
     @pytest.mark.asyncio
-    async def test_invalid_maze_type(self) - > None:
+    async def test_invalid_maze_type(self) -> None:
         """测试无效的迷宫类型"""
         with self.assertRaises(ValueError):
             await self.generator.generate_maze(
@@ -131,7 +131,7 @@ class TestMazeGenerator(unittest.TestCase):
             )
 
     @pytest.mark.asyncio
-    async def test_maze_path_connectivity(self) - > None:
+    async def test_maze_path_connectivity(self) -> None:
         """测试迷宫路径连通性"""
         maze = await self.generator.generate_maze(
             self.user_id,
@@ -175,7 +175,7 @@ class TestMazeGenerator(unittest.TestCase):
         self.assertTrue(visited[maze.size_y - 1][maze.size_x - 1], "无法从起点到达终点")
 
     @pytest.mark.asyncio
-    async def test_knowledge_nodes_positions(self) - > None:
+    async def test_knowledge_nodes_positions(self) -> None:
         """测试知识节点位置的有效性"""
         maze = await self.generator.generate_maze(
             self.user_id,
@@ -191,7 +191,7 @@ class TestMazeGenerator(unittest.TestCase):
             self.assertLess(node.position["y"], maze.size_y)
 
     @pytest.mark.asyncio
-    async def test_challenge_positions(self) - > None:
+    async def test_challenge_positions(self) -> None:
         """测试挑战位置的有效性"""
         maze = await self.generator.generate_maze(
             self.user_id,
@@ -207,7 +207,7 @@ class TestMazeGenerator(unittest.TestCase):
             self.assertLess(challenge.position["y"], maze.size_y)
 
     @pytest.mark.asyncio
-    async def test_difficulty_affects_maze_structure(self) - > None:
+    async def test_difficulty_affects_maze_structure(self) -> None:
         """测试难度如何影响迷宫结构"""
         # 生成不同难度的迷宫
         easy_maze = await self.generator.generate_maze(

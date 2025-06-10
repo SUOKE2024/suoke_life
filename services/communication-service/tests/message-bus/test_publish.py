@@ -31,31 +31,31 @@ logger = logging.getLogger(__name__)
 class MockTopicRepository(TopicRepository):
     """模拟的主题存储库"""
 
-    def __init__(self) - > None:
+    def __init__(self) -> None:
         """初始化模拟存储库"""
         self.topics = {}
 
-    async def save_topic(self, topic: Topic) - > bool:
+    async def save_topic(self, topic: Topic) -> bool:
         """保存主题"""
         self.topics[topic.name] = topic
         return True
 
-    async def get_topic(self, name: str) - > Topic:
+    async def get_topic(self, name: str) -> Topic:
         """获取主题"""
         return self.topics.get(name)
 
-    async def topic_exists(self, name: str) - > bool:
+    async def topic_exists(self, name: str) -> bool:
         """检查主题是否存在"""
         return name in self.topics
 
-    async def delete_topic(self, name: str) - > bool:
+    async def delete_topic(self, name: str) -> bool:
         """删除主题"""
         if name in self.topics:
             del self.topics[name]
             return True
         return False
 
-    async def list_topics(self, page_size: int = 100, page_token: str = None) - > tuple:
+    async def list_topics(self, page_size: int = 100, page_token: str = None) -> tuple:
         """获取主题列表"""
         topics = list(self.topics.values())
         return topics, None, len(topics)
@@ -63,11 +63,11 @@ class MockTopicRepository(TopicRepository):
 class MockMessageRepository(MessageRepository):
     """模拟的消息存储库"""
 
-    def __init__(self) - > None:
+    def __init__(self) -> None:
         """初始化模拟存储库"""
         self.messages = {}
 
-    async def save_message(self, message: Message) - > bool:
+    async def save_message(self, message: Message) -> bool:
         """保存消息"""
         topic = message.topic
         if topic not in self.messages:
@@ -75,7 +75,7 @@ class MockMessageRepository(MessageRepository):
         self.messages[topic].append(message)
         return True
 
-    async def get_message(self, topic: str, message_id: str) - > Message:
+    async def get_message(self, topic: str, message_id: str) -> Message:
         """获取指定消息"""
         if topic in self.messages:
             for msg in self.messages[topic]:
@@ -90,7 +90,7 @@ class MockMessageRepository(MessageRepository):
         filter_attributes: Dict[str, str] = None,
         start_time: int = None,
         end_time: int = None
-    ) - > List[Message]:
+    ) -> List[Message]:
         """获取主题消息列表"""
         if topic not in self.messages:
             return []
@@ -116,7 +116,7 @@ class MockMessageRepository(MessageRepository):
                     continue
 
             result.append(msg)
-            if len(result) > = max_count:
+            if len(result) >= max_count:
                 break
 
         return result
@@ -124,7 +124,7 @@ class MockMessageRepository(MessageRepository):
 class MessagePublishTest(unittest.TestCase):
     """消息发布测试类"""
 
-    def setUp(self) - > None:
+    def setUp(self) -> None:
         """测试准备"""
         self.topic_repo = MockTopicRepository()
         self.message_repo = MockMessageRepository()
@@ -141,12 +141,12 @@ class MessagePublishTest(unittest.TestCase):
         # 创建测试主题
         self.loop.run_until_complete(self._create_test_topics())
 
-    def tearDown(self) - > None:
+    def tearDown(self) -> None:
         """测试清理"""
         # 关闭事件循环
         self.loop.close()
 
-    async def _create_test_topics(self) - > None:
+    async def _create_test_topics(self) -> None:
         """创建测试主题"""
         # 创建测试主题
         test_topics = [
@@ -171,14 +171,14 @@ class MessagePublishTest(unittest.TestCase):
         """消息回调"""
         self.received_messages.append(message)
 
-    def test_publish_message(self) - > None:
+    def test_publish_message(self) -> None:
         """测试发布消息"""
         # 测试发布消息
         message_payload = {"event": "test_event", "data": {"key": "value"}}
         message_attributes = {"priority": "high", "source": "test"}
 
         # 运行测试
-        async def run_test() - > None:
+        async def run_test() -> None:
             # 发布消息
             message = await self.message_service.publish_message(
                 topic = "test.events",
@@ -207,10 +207,10 @@ class MessagePublishTest(unittest.TestCase):
 
         self.loop.run_until_complete(run_test())
 
-    def test_subscribe_and_publish(self) - > None:
+    def test_subscribe_and_publish(self) -> None:
         """测试订阅和发布消息"""
         # 测试发布消息并订阅
-        async def run_test() - > None:
+        async def run_test() -> None:
             # 订阅主题
             subscription_id = await self.message_service.subscribe(
                 topic = "test.notifications",
@@ -251,9 +251,9 @@ class MessagePublishTest(unittest.TestCase):
 
         self.loop.run_until_complete(run_test())
 
-    def test_publish_to_nonexistent_topic(self) - > None:
+    def test_publish_to_nonexistent_topic(self) -> None:
         """测试发布到不存在的主题"""
-        async def run_test() - > None:
+        async def run_test() -> None:
             # 尝试发布到不存在的主题
             with self.assertRaises(ValueError):
                 await self.message_service.publish_message(

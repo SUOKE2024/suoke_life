@@ -24,7 +24,7 @@ class BaseModel(Base):
     created_at = Column(DateTime, default = func.now(), nullable = False)
     updated_at = Column(DateTime, default = func.now(), onupdate = func.now(), nullable = False)
 
-    def to_dict(self) - > dict:
+    def to_dict(self) -> dict:
         """转换为字典"""
         return {
             column.name: getattr(self, column.name)

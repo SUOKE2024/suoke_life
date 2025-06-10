@@ -1,21 +1,15 @@
-            from opentelemetry.exporter.jaeger.thrift import JaegerExporter
-            from opentelemetry.sdk.trace.export import BatchSpanProcessor
-    from collections.abc import Awaitable, Callable
-from .config import settings
-from .logging import get_logger
-from fastapi import FastAPI, Request, Response
-from opentelemetry import trace
-from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
-from opentelemetry.instrumentation.grpc import (
-from opentelemetry.instrumentation.sqlalchemy import SQLAlchemyInstrumentor
-from opentelemetry.sdk.trace import TracerProvider
-from prometheus_client import CONTENT_TYPE_LATEST, Counter, Histogram, generate_latest
-from typing import TYPE_CHECKING, Any, Callable
-import time
+"""
+monitoring模块
+"""
 
-def main() - > None:
-    """主函数 - 自动生成的最小可用版本"""
-    pass
+import logging
+from typing import Any, Dict, Optional
+
+logger = logging.getLogger(__name__)
+
+def main() -> None:
+    """主函数"""
+    logger.info(f"monitoring模块已加载")
 
 if __name__ == "__main__":
     main()

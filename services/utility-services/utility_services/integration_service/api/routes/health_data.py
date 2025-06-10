@@ -79,7 +79,7 @@ class HealthDataStatsResponse(BaseModel):
 
 
 @router.get(" / types", summary = "获取支持的数据类型")
-async def get_supported_data_types() - > Dict[str, Any]:
+async def get_supported_data_types() -> Dict[str, Any]:
     """
     获取系统支持的健康数据类型列表
     """
@@ -105,7 +105,7 @@ async def get_health_data(
     limit: int = Query(100, ge = 1, le = 1000, description = "返回的记录数"),
     current_user: TokenData = Depends(verify_token),
     db: Session = Depends(get_db)
-) - > List[HealthDataResponse]:
+) -> List[HealthDataResponse]:
     """获取当前用户的健康数据列表"""
     try:
         health_data_service = HealthDataService(db)
@@ -145,7 +145,7 @@ async def get_health_data_detail(
     data_id: int,
     current_user: TokenData = Depends(verify_token),
     db: Session = Depends(get_db)
-) - > HealthDataResponse:
+) -> HealthDataResponse:
     """
     获取指定健康数据的详细信息
 
@@ -196,7 +196,7 @@ async def create_health_data(
     health_data: HealthDataCreateRequest,
     current_user: TokenData = Depends(verify_token),
     db: Session = Depends(get_db)
-) - > HealthDataResponse:
+) -> HealthDataResponse:
     """
     创建新的健康数据记录
 
@@ -248,7 +248,7 @@ async def create_health_data_batch(
     batch_data: HealthDataBatchCreateRequest,
     current_user: TokenData = Depends(verify_token),
     db: Session = Depends(get_db)
-) - > Dict[str, Any]:
+) -> Dict[str, Any]:
     """
     批量创建健康数据记录
 
@@ -285,7 +285,7 @@ async def update_health_data(
     update_data: HealthDataUpdateRequest,
     current_user: TokenData = Depends(verify_token),
     db: Session = Depends(get_db)
-) - > HealthDataResponse:
+) -> HealthDataResponse:
     """
     更新健康数据记录
 
@@ -342,7 +342,7 @@ async def delete_health_data(
     data_id: int,
     current_user: TokenData = Depends(verify_token),
     db: Session = Depends(get_db)
-) - > Dict[str, str]:
+) -> Dict[str, str]:
     """
     删除健康数据记录
 
@@ -386,7 +386,7 @@ async def sync_health_data(
     sync_request: HealthDataSyncRequest,
     current_user: TokenData = Depends(verify_token),
     db: Session = Depends(get_db)
-) - > Dict[str, Any]:
+) -> Dict[str, Any]:
     """
     从指定平台同步健康数据
 
@@ -425,7 +425,7 @@ async def get_health_data_stats(
     end_date: Optional[date] = Query(None, description = "结束日期"),
     current_user: TokenData = Depends(verify_token),
     db: Session = Depends(get_db)
-) - > HealthDataStatsResponse:
+) -> HealthDataStatsResponse:
     """
     获取用户健康数据统计信息
 

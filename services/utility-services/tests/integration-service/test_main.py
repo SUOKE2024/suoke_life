@@ -15,7 +15,7 @@ import pytest
 
 
 @pytest.fixture
-def client() - > None:
+def client() -> None:
     """测试客户端"""
     app = create_app()
     return TestClient(app)

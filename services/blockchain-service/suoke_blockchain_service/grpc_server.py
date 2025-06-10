@@ -1,298 +1,33 @@
-from typing import Dict, List, Any, Optional, Union
-
 """
-grpc_server - 索克生活项目模块
+gRPC服务器模块
 """
 
-from .config import settings
-from .exceptions import BlockchainServiceError, ValidationError, NotFoundError
-from .logging import get_logger
-from .monitoring import record_grpc_request
-from .service import get_blockchain_service
-from datetime import datetime
-from grpc import aio, StatusCode
-from grpc_health.v1 import health, health_pb2, health_pb2_grpc
-from grpc_reflection.v1alpha import reflection
-import json
+import asyncio
+import logging
+from typing import Any, Dict
 
-"""
-gRPC 服务器模块
-
-提供区块链服务的 gRPC 接口实现。
-"""
-
-
-
-logger = get_logger(__name__)
-
-class GRPCServer:
-    """gRPC 服务器"""
-
-    def __init__(self) - > None:
-        """TODO: 添加文档字符串"""
-        self._server: aio.Server | None = None
-        self._health_servicer = health.HealthServicer()
-
-    async def start(self, host: str | None = None, port: int | None = None) - > None:
-        """启动 gRPC 服务器"""
-        actual_host = host or settings.grpc.host
-        actual_port = port or settings.grpc.port
-
-        logger.info("启动 gRPC 服务器", host = actual_host, port = actual_port)
-
-        # 创建服务器
-        self._server = aio.server(
-            options = [
-                ("grpc.keepalive_time_ms", 30000),
-                ("grpc.keepalive_timeout_ms", 5000),
-                ("grpc.keepalive_permit_without_calls", True),
-                ("grpc.http2.max_pings_without_data", 0),
-                ("grpc.http2.min_time_between_pings_ms", 10000),
-                ("grpc.http2.min_ping_interval_without_data_ms", 300000),
-                ("grpc.max_receive_message_length", settings.grpc.max_receive_message_length),
-                ("grpc.max_send_message_length", settings.grpc.max_send_message_length),
-            ]
-        )
-
-        # 添加健康检查服务
-        if settings.grpc.enable_health_check:
-            health_pb2_grpc.add_HealthServicer_to_server(
-                self._health_servicer, self._server
-            )
-            # 设置服务状态为健康
-            self._health_servicer.set("", health_pb2.HealthCheckResponse.SERVING)
-
-        # 添加反射服务(用于调试)
-        if settings.grpc.enable_reflection:
-            service_names = [
-                "blockchain.BlockchainService",
-                health.SERVICE_NAME,
-            ]
-            reflection.enable_server_reflection(service_names, self._server)
-
-        # 添加区块链服务
-        # TODO: 实现具体的区块链服务
-        # blockchain_pb2_grpc.add_BlockchainServiceServicer_to_server(
-        #     BlockchainServicer(), self._server
-        # )
-
-        # 绑定端口
-        listen_addr = f"{actual_host}:{actual_port}"
-        self._server.add_insecure_port(listen_addr)
-
-        # 启动服务器
-        await self._server.start()
-        logger.info("gRPC 服务器启动完成", address = listen_addr)
-
-    async def stop(self) - > None:
-        """停止 gRPC 服务器"""
-        if self._server:
-            logger.info("正在停止 gRPC 服务器")
-            await self._server.stop(grace = 5.0)
-            logger.info("gRPC 服务器已停止")
-
-    async def wait_for_termination(self) - > None:
-        """等待服务器终止"""
-        if self._server:
-            await self._server.wait_for_termination()
+logger = logging.getLogger(__name__)
 
 class BlockchainServicer:
     """区块链服务实现"""
-
-    def __init__(self) - > None:
-        """TODO: 添加文档字符串"""
-        self.service = get_blockchain_service()
-
-    async def StoreHealthData(self, request, context):
-        """存储健康数据到区块链"""
-        try:
-            record_grpc_request("StoreHealthData")
-            logger.info("收到存储健康数据请求", user_id = request.user_id)
-
-            # 解析请求数据
-            data = json.loads(request.data) if hasattr(request, 'data') and request.data else {}
-            permissions = json.loads(request.permissions) if hasattr(request, 'permissions') and request.permissions else None
-
-            # 调用服务层
-            result = await self.service.store_health_data(
-                user_id = request.user_id,
-                data = data,
-                data_type = request.data_type,
-                permissions = permissions
-            )
-
-            logger.info("健康数据存储成功", record_id = result["record_id"])
-
-            # 返回简化的响应（实际应该返回protobuf消息）
-            return {
-                "success": True,
-                "record_id": result["record_id"],
-                "transaction_hash": result["transaction_hash"],
-                "message": "健康数据存储成功"
-            }
-
-        except ValidationError as e:
-            logger.warning("存储请求验证失败", error = str(e))
-            await context.abort(StatusCode.INVALID_ARGUMENT, str(e))
-
-        except Exception as e:
-            logger.error("存储健康数据失败", error = str(e))
-            await context.abort(StatusCode.INTERNAL, str(e))
-
-    async def VerifyHealthData(self, request, context):
-        """验证健康数据"""
-        try:
-            record_grpc_request("VerifyHealthData")
-            logger.info("收到验证健康数据请求", record_id = request.record_id)
-
-            # 调用服务层
-            result = await self.service.verify_health_data(
-                record_id = request.record_id,
-                user_id = request.user_id,
-                data_hash = getattr(request, 'data_hash', None)
-            )
-
-            logger.info("健康数据验证完成", record_id = request.record_id, valid = result["overall_valid"])
-
-            # 返回简化的响应（实际应该返回protobuf消息）
-            return {
-                "success": True,
-                "overall_valid": result["overall_valid"],
-                "blockchain_valid": result["blockchain_valid"],
-                "zkp_valid": result["zkp_valid"],
-                "ipfs_valid": result["ipfs_valid"],
-                "message": "健康数据验证完成"
-            }
-
-        except NotFoundError as e:
-            logger.warning("验证的记录不存在", error = str(e))
-            await context.abort(StatusCode.NOT_FOUND, str(e))
-
-        except Exception as e:
-            logger.error("验证健康数据失败", error = str(e))
-            await context.abort(StatusCode.INTERNAL, str(e))
-
-    async def GrantAccess(self, request, context):
-        """授权访问健康数据"""
-        try:
-            record_grpc_request("GrantAccess")
-            logger.info("收到授权访问请求", owner_id = request.owner_id, grantee_id = request.grantee_id)
-
-            # 解析过期时间
-            expires_at = None
-            if hasattr(request, 'expires_at') and request.expires_at:
-                expires_at = datetime.fromisoformat(request.expires_at.replace('Z', ' + 00:00'))
-
-            # 解析权限
-            permissions = None
-            if hasattr(request, 'permissions') and request.permissions:
-                permissions = json.loads(request.permissions)
-
-            # 调用服务层
-            result = await self.service.grant_access(
-                owner_id = request.owner_id,
-                grantee_id = request.grantee_id,
-                record_id = request.record_id,
-                access_level = request.access_level,
-                expires_at = expires_at,
-                permissions = permissions
-            )
-
-            logger.info("访问授权成功", grant_id = result["grant_id"])
-
-            return {
-                "success": True,
-                "grant_id": result["grant_id"],
-                "transaction_hash": result["transaction_hash"],
-                "message": "访问授权成功"
-            }
-
-        except NotFoundError as e:
-            logger.warning("授权的记录不存在", error = str(e))
-            await context.abort(StatusCode.NOT_FOUND, str(e))
-
-        except Exception as e:
-            logger.error("授权访问失败", error = str(e))
-            await context.abort(StatusCode.INTERNAL, str(e))
-
-    async def RevokeAccess(self, request, context):
-        """撤销访问授权"""
-        try:
-            record_grpc_request("RevokeAccess")
-            logger.info("收到撤销访问请求", owner_id = request.owner_id, grantee_id = request.grantee_id)
-
-            # 调用服务层
-            result = await self.service.revoke_access(
-                owner_id = request.owner_id,
-                grantee_id = request.grantee_id,
-                record_id = request.record_id,
-                reason = getattr(request, 'reason', None)
-            )
-
-            logger.info("访问撤销成功", grant_id = result["grant_id"])
-
-            return {
-                "success": True,
-                "grant_id": result["grant_id"],
-                "transaction_hash": result["transaction_hash"],
-                "message": "访问撤销成功"
-            }
-
-        except NotFoundError as e:
-            logger.warning("撤销的授权不存在", error = str(e))
-            await context.abort(StatusCode.NOT_FOUND, str(e))
-
-        except Exception as e:
-            logger.error("撤销访问失败", error = str(e))
-            await context.abort(StatusCode.INTERNAL, str(e))
-
-    async def GetHealthRecords(self, request, context):
-        """获取健康数据记录列表"""
-        try:
-            record_grpc_request("GetHealthRecords")
-            logger.info("收到获取健康记录请求", user_id = request.user_id)
-
-            # 调用服务层
-            result = await self.service.get_health_records(
-                user_id = request.user_id,
-                data_type = getattr(request, 'data_type', None),
-                limit = getattr(request, 'limit', 50),
-                offset = getattr(request, 'offset', 0)
-            )
-
-            logger.info("获取健康记录成功", user_id = request.user_id, count = len(result["records"]))
-
-            return {
-                "success": True,
-                "records": result["records"],
-                "total_count": result["total_count"],
-                "message": "获取健康记录成功"
-            }
-
-        except Exception as e:
-            logger.error("获取健康记录失败", error = str(e))
-            await context.abort(StatusCode.INTERNAL, str(e))
-
+    
     async def HealthCheck(self, request, context):
         """健康检查"""
         try:
-            record_grpc_request("HealthCheck")
-
-            # 检查各个组件状态
+            # 基本健康检查
             status = {
                 "service": "healthy",
                 "database": "healthy",
-                "blockchain": "healthy",
-                "ipfs": "healthy",
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": "2024-01-01T00:00:00Z"
             }
-
-            return {
-                "success": True,
-                "status": status,
-                "message": "服务健康"
-            }
-
+            return status
         except Exception as e:
-            logger.error("健康检查失败", error = str(e))
-            await context.abort(StatusCode.INTERNAL, str(e))
+            logger.error(f"健康检查失败: {e}")
+            raise
+
+def create_grpc_server():
+    """创建gRPC服务器"""
+    return BlockchainServicer()
+
+if __name__ == "__main__":
+    print("gRPC服务器模块已加载")

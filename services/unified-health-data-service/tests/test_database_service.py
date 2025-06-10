@@ -6,7 +6,7 @@
 import pytest
 import asyncio
 import datetime
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, patch
 
 from unified_health_data_service.health_data_service.core.database import DatabaseService
 

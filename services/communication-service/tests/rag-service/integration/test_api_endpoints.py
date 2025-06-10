@@ -23,7 +23,7 @@ RAG服务API集成测试
 # 导入应用创建模块（需要根据实际项目结构调整）
 
 @pytest.fixture
-async def test_client() - > TestClient:
+async def test_client() -> TestClient:
     """创建测试客户端"""
     # 模拟配置
     os.environ["ENV"] = "test"

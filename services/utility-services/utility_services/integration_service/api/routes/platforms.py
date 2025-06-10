@@ -80,7 +80,7 @@ async def get_platforms(
     enabled_only: bool = Query(False, description = "仅返回启用的平台"),
     current_user: TokenData = Depends(verify_token),
     db: Session = Depends(get_db)
-) - > List[PlatformResponse]:
+) -> List[PlatformResponse]:
     """
     获取平台列表
 
@@ -124,7 +124,7 @@ async def get_platform(
     platform_id: str,
     current_user: TokenData = Depends(verify_token),
     db: Session = Depends(get_db)
-) - > PlatformResponse:
+) -> PlatformResponse:
     """
     获取指定平台的详细信息
 
@@ -167,7 +167,7 @@ async def create_platform(
     platform_data: PlatformCreateRequest,
     current_user: TokenData = Depends(verify_token),
     db: Session = Depends(get_db)
-) - > PlatformResponse:
+) -> PlatformResponse:
     """
     创建新平台
 
@@ -226,7 +226,7 @@ async def update_platform(
     platform_data: PlatformUpdateRequest,
     current_user: TokenData = Depends(verify_token),
     db: Session = Depends(get_db)
-) - > PlatformResponse:
+) -> PlatformResponse:
     """
     更新平台信息
 
@@ -275,7 +275,7 @@ async def delete_platform(
     platform_id: str,
     current_user: TokenData = Depends(verify_token),
     db: Session = Depends(get_db)
-) - > Dict[str, str]:
+) -> Dict[str, str]:
     """
     删除平台
 
@@ -312,7 +312,7 @@ async def get_platform_configs(
     platform_id: str,
     current_user: TokenData = Depends(verify_token),
     db: Session = Depends(get_db)
-) - > List[PlatformConfigResponse]:
+) -> List[PlatformConfigResponse]:
     """
     获取平台配置列表
 
@@ -359,7 +359,7 @@ async def create_platform_config(
     config_data: PlatformConfigRequest,
     current_user: TokenData = Depends(verify_token),
     db: Session = Depends(get_db)
-) - > PlatformConfigResponse:
+) -> PlatformConfigResponse:
     """
     创建平台配置
 
@@ -416,7 +416,7 @@ async def update_platform_config(
     config_data: PlatformConfigRequest,
     current_user: TokenData = Depends(verify_token),
     db: Session = Depends(get_db)
-) - > PlatformConfigResponse:
+) -> PlatformConfigResponse:
     """
     更新平台配置
 
@@ -466,7 +466,7 @@ async def delete_platform_config(
     config_id: int,
     current_user: TokenData = Depends(verify_token),
     db: Session = Depends(get_db)
-) - > Dict[str, str]:
+) -> Dict[str, str]:
     """
     删除平台配置
 

@@ -43,7 +43,7 @@ class Token(BaseModel):
     refresh_token: Optional[str] = None
 
 
-def verify_password(plain_password: str, hashed_password: str) - > bool:
+def verify_password(plain_password: str, hashed_password: str) -> bool:
     """验证密码"""
     try:
         return pwd_context.verify(plain_password, hashed_password)
@@ -52,7 +52,7 @@ def verify_password(plain_password: str, hashed_password: str) - > bool:
         return False
 
 
-def get_password_hash(password: str) - > str:
+def get_password_hash(password: str) -> str:
     """获取密码哈希"""
     try:
         return pwd_context.hash(password)
@@ -64,7 +64,7 @@ def get_password_hash(password: str) - > str:
 def create_access_token(
     data: Dict[str, Any],
     expires_delta: Optional[timedelta] = None
-) - > str:
+) -> str:
     """创建访问令牌"""
     to_encode = data.copy()
 
@@ -90,7 +90,7 @@ def create_access_token(
 def create_refresh_token(
     data: Dict[str, Any],
     expires_delta: Optional[timedelta] = None
-) - > str:
+) -> str:
     """创建刷新令牌"""
     to_encode = data.copy()
 
@@ -113,7 +113,7 @@ def create_refresh_token(
         raise
 
 
-def verify_token(token: str) - > TokenData:
+def verify_token(token: str) -> TokenData:
     """验证令牌"""
     credentials_exception = HTTPException(
         status_code = status.HTTP_401_UNAUTHORIZED,
@@ -150,7 +150,7 @@ def verify_token(token: str) - > TokenData:
         raise credentials_exception
 
 
-def verify_refresh_token(token: str) - > TokenData:
+def verify_refresh_token(token: str) -> TokenData:
     """验证刷新令牌"""
     credentials_exception = HTTPException(
         status_code = status.HTTP_401_UNAUTHORIZED,
@@ -189,7 +189,7 @@ def verify_refresh_token(token: str) - > TokenData:
         raise credentials_exception
 
 
-def create_token_pair(user_id: str, username: str, scopes: list[str] = None) - > Token:
+def create_token_pair(user_id: str, username: str, scopes: list[str] = None) -> Token:
     """创建令牌对（访问令牌和刷新令牌）"""
     if scopes is None:
         scopes = []
@@ -220,7 +220,7 @@ class OAuth2PasswordBearerWithCookie:
         self.scheme_name = scheme_name or self.__class__.__name__
         self.auto_error = auto_error
 
-    async def __call__(self, request) - > Optional[str]:
+    async def __call__(self, request) -> Optional[str]:
         """从请求中提取令牌"""
         authorization: str = request.headers.get("Authorization")
         scheme, param = None, None
@@ -249,7 +249,7 @@ class OAuth2PasswordBearerWithCookie:
 oauth2_scheme = OAuth2PasswordBearerWithCookie(tokenUrl = " / auth / token")
 
 
-def generate_api_key(user_id: str, platform_id: str) - > str:
+def generate_api_key(user_id: str, platform_id: str) -> str:
     """生成API密钥"""
     data = {
         "user_id": user_id,
@@ -270,7 +270,7 @@ def generate_api_key(user_id: str, platform_id: str) - > str:
         raise
 
 
-def verify_api_key(api_key: str) - > Dict[str, Any]:
+def verify_api_key(api_key: str) -> Dict[str, Any]:
     """验证API密钥"""
     try:
         payload = jwt.decode(
@@ -295,7 +295,7 @@ def verify_api_key(api_key: str) - > Dict[str, Any]:
         )
 
 
-def encrypt_sensitive_data(data: str) - > str:
+def encrypt_sensitive_data(data: str) -> str:
     """加密敏感数据"""
     # 这里可以使用更强的加密算法，如AES
     # 为了简化，这里使用JWT
@@ -311,7 +311,7 @@ def encrypt_sensitive_data(data: str) - > str:
         raise
 
 
-def decrypt_sensitive_data(encrypted_data: str) - > str:
+def decrypt_sensitive_data(encrypted_data: str) -> str:
     """解密敏感数据"""
     try:
         payload = jwt.decode(

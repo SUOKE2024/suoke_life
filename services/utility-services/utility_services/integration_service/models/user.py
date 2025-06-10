@@ -31,7 +31,7 @@ class User(BaseModel):
     health_data = relationship("HealthData", back_populates = "user")
     platform_auths = relationship("UserPlatformAuth", back_populates = "user")
 
-    def __repr__(self) - > str:
+    def __repr__(self) -> str:
         """TODO: 添加文档字符串"""
         return f"<User(id = {self.id}, username = {self.username})>"
 
@@ -66,6 +66,6 @@ class UserPlatformAuth(BaseModel):
     user = relationship("User", back_populates = "platform_auths")
     platform = relationship("Platform", back_populates = "user_auths")
 
-    def __repr__(self) - > str:
+    def __repr__(self) -> str:
         """TODO: 添加文档字符串"""
         return f"<UserPlatformAuth(user_id = {self.user_id}, platform_id = {self.platform_id})>"

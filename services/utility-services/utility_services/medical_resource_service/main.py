@@ -12,7 +12,7 @@ medical - resource - service 主入口文件
 """
 
 
-def main() - > None:
+def main() -> None:
     """主函数"""
     app = create_app()
     uvicorn.run(

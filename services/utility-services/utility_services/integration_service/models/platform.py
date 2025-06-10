@@ -32,7 +32,7 @@ class Platform(BaseModel):
     health_data = relationship("HealthData", back_populates = "platform")
     user_auths = relationship("UserPlatformAuth", back_populates = "platform")
 
-    def __repr__(self) - > str:
+    def __repr__(self) -> str:
         """TODO: 添加文档字符串"""
         return f"<Platform(id = {self.id}, name = {self.name})>"
 
@@ -61,6 +61,6 @@ class PlatformConfig(BaseModel):
     is_encrypted = Column(Boolean, default = False, nullable = False)
     description = Column(String(200), nullable = True)
 
-    def __repr__(self) - > str:
+    def __repr__(self) -> str:
         """TODO: 添加文档字符串"""
         return f"<PlatformConfig(platform_id = {self.platform_id}, key = {self.config_key})>"

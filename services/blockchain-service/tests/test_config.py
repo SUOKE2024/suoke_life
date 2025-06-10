@@ -1,12 +1,7 @@
-    import os
-from pydantic import ValidationError
-from suoke_blockchain_service.config import Settings
-from typing import Dict, List, Any, Optional, Union
-import pytest
 
-def main() - > None:
+def main() -> None:
     """主函数 - 自动生成的最小可用版本"""
-    pass
+pass
 
 if __name__ == "__main__":
     main()

@@ -123,7 +123,7 @@ class Settings(BaseSettings):
 
     @field_validator("environment")
     @classmethod
-    def validate_environment(cls, v: str) - > str:
+    def validate_environment(cls, v: str) -> str:
         """验证环境配置"""
         allowed_envs = {"development", "testing", "staging", "production"}
         if v.lower() not in allowed_envs:
@@ -132,7 +132,7 @@ class Settings(BaseSettings):
 
     @field_validator("monitoring")
     @classmethod
-    def validate_monitoring_log_level(cls, v: MonitoringConfig) - > MonitoringConfig:
+    def validate_monitoring_log_level(cls, v: MonitoringConfig) -> MonitoringConfig:
         """验证日志级别"""
         allowed_levels = {"DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"}
         if v.log_level.upper() not in allowed_levels:
@@ -140,23 +140,23 @@ class Settings(BaseSettings):
         v.log_level = v.log_level.upper()
         return v
 
-    def get_database_url(self) - > str:
+    def get_database_url(self) -> str:
         """获取数据库连接URL"""
         return self.database.url
 
-    def get_redis_url(self) - > str:
+    def get_redis_url(self) -> str:
         """获取Redis连接URL"""
         return self.redis.url
 
-    def is_production(self) - > bool:
+    def is_production(self) -> bool:
         """是否为生产环境"""
         return self.environment == "production"
 
-    def is_development(self) - > bool:
+    def is_development(self) -> bool:
         """是否为开发环境"""
         return self.environment == "development"
 
-    def get_log_config(self) - > dict[str, Any]:
+    def get_log_config(self) -> dict[str, Any]:
         """获取日志配置"""
         return {
             "version": 1,
@@ -205,6 +205,6 @@ class Settings(BaseSettings):
         }
 
 @lru_cache
-def get_settings() - > Settings:
+def get_settings() -> Settings:
     """获取应用设置单例"""
     return Settings()

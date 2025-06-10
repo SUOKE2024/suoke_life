@@ -24,7 +24,7 @@ OpenAI生成器单元测试
 class TestOpenAIGenerator(unittest.TestCase):
     """OpenAI生成器单元测试类"""
 
-    def setUp(self) - > None:
+    def setUp(self) -> None:
         """设置测试环境"""
         self.mock_openai_client = MagicMock()
         self.mock_cache_service = AsyncMock()
@@ -97,7 +97,7 @@ class TestOpenAIGenerator(unittest.TestCase):
         )
 
     @pytest.mark.asyncio
-    async def test_generate_with_cache_hit(self) - > None:
+    async def test_generate_with_cache_hit(self) -> None:
         """测试缓存命中情况下的生成"""
         # 设置缓存命中
         mock_result = GenerateResult(
@@ -128,7 +128,7 @@ class TestOpenAIGenerator(unittest.TestCase):
         self.mock_openai_client.chat.completions.create.assert_not_called()
 
     @pytest.mark.asyncio
-    async def test_generate_with_cache_miss(self) - > None:
+    async def test_generate_with_cache_miss(self) -> None:
         """测试缓存未命中情况下的生成"""
         # 设置缓存未命中
         self.mock_cache_service.get.return_value = None
@@ -148,7 +148,7 @@ class TestOpenAIGenerator(unittest.TestCase):
         self.mock_cache_service.set.assert_called_once()
 
     @pytest.mark.asyncio
-    async def test_generate_with_custom_system_prompt(self) - > None:
+    async def test_generate_with_custom_system_prompt(self) -> None:
         """测试自定义系统提示的生成"""
         # 设置缓存未命中
         self.mock_cache_service.get.return_value = None
@@ -169,7 +169,7 @@ class TestOpenAIGenerator(unittest.TestCase):
         self.assertIn(custom_prompt, system_messages[0].get("content", ""))
 
     @pytest.mark.asyncio
-    async def test_generate_with_custom_parameters(self) - > None:
+    async def test_generate_with_custom_parameters(self) -> None:
         """测试自定义生成参数的生成"""
         # 设置缓存未命中
         self.mock_cache_service.get.return_value = None
@@ -195,7 +195,7 @@ class TestOpenAIGenerator(unittest.TestCase):
         self.assertEqual(kwargs.get("max_tokens"), 500)
 
     @pytest.mark.asyncio
-    async def test_error_handling(self) - > None:
+    async def test_error_handling(self) -> None:
         """测试错误处理"""
         # 设置缓存未命中
         self.mock_cache_service.get.return_value = None
@@ -212,7 +212,7 @@ class TestOpenAIGenerator(unittest.TestCase):
         self.assertEqual(len(result.references), 0)
 
     @pytest.mark.asyncio
-    async def test_context_formatting(self) - > None:
+    async def test_context_formatting(self) -> None:
         """测试上下文格式化"""
         # 设置缓存未命中
         self.mock_cache_service.get.return_value = None
@@ -236,7 +236,7 @@ class TestOpenAIGenerator(unittest.TestCase):
             self.assertIn(doc.content, user_content)
 
     @pytest.mark.asyncio
-    async def test_stream_generate(self) - > None:
+    async def test_stream_generate(self) -> None:
         """测试流式生成"""
         # 设置缓存未命中
         self.mock_cache_service.get.return_value = None
@@ -268,7 +268,7 @@ class TestOpenAIGenerator(unittest.TestCase):
         self.assertEqual(chunks[2], "一部分")
 
     @pytest.mark.asyncio
-    async def test_close_method(self) - > None:
+    async def test_close_method(self) -> None:
         """测试关闭方法"""
         await self.generator.close()
         # 验证资源释放

@@ -59,7 +59,7 @@ class TestCornMazeService(unittest.TestCase):
         cls.channel.close()
         cls.server.stop(0)
 
-    def test_create_and_get_maze(self) - > None:
+    def test_create_and_get_maze(self) -> None:
         """测试创建和获取迷宫"""
         # 生成唯一用户ID
         user_id = f"test_user_{uuid.uuid4()}"
@@ -103,7 +103,7 @@ class TestCornMazeService(unittest.TestCase):
         self.assertEqual(get_response.difficulty, 2)
         self.assertEqual(len(get_response.cells), len(response.cells))
 
-    def test_move_in_maze(self) - > None:
+    def test_move_in_maze(self) -> None:
         """测试在迷宫中移动"""
         # 生成唯一用户ID
         user_id = f"test_user_{uuid.uuid4()}"
@@ -158,7 +158,7 @@ class TestCornMazeService(unittest.TestCase):
         self.assertIsNotNone(move_response.new_position)
         self.assertIsNotNone(move_response.message)
 
-    def test_get_user_progress(self) - > None:
+    def test_get_user_progress(self) -> None:
         """测试获取用户进度"""
         # 生成唯一用户ID
         user_id = f"test_user_{uuid.uuid4()}"
@@ -199,7 +199,7 @@ class TestCornMazeService(unittest.TestCase):
             maze_response.start_position.y
         )
 
-    def test_list_maze_templates(self) - > None:
+    def test_list_maze_templates(self) -> None:
         """测试列出迷宫模板"""
         # 请求
         request = corn_maze_pb2.ListMazeTemplatesRequest(
@@ -217,7 +217,7 @@ class TestCornMazeService(unittest.TestCase):
         # 注意：这个测试假设系统中已有预设的模板
         # 如果模板是动态生成的，可能需要先创建模板再验证
 
-    def test_get_knowledge_node(self) - > None:
+    def test_get_knowledge_node(self) -> None:
         """测试获取知识节点"""
         # 首先创建迷宫以获取包含的知识节点
         user_id = f"test_user_{uuid.uuid4()}"

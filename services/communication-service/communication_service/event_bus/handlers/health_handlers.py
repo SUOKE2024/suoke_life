@@ -4,9 +4,8 @@
 """
 
 import asyncio
-import json
-from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
+from datetime import datetime
+from typing import Any, Dict
 
 import structlog
 from ..core.event_bus import Event, SuokeEventBus

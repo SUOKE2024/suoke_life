@@ -2,15 +2,16 @@
 demo_blockchain_service - 索克生活项目模块
 """
 
+import asyncio
 from datetime import datetime, timedelta
+import json
+from typing import Any
+import uuid
+
 from suoke_blockchain_service.config import settings
-from suoke_blockchain_service.database import init_database, close_database
+from suoke_blockchain_service.database import close_database, init_database
 from suoke_blockchain_service.logging import configure_logging, get_logger
 from suoke_blockchain_service.service import get_blockchain_service
-from typing import Dict, Any
-import asyncio
-import json
-import uuid
 
 #! / usr / bin / env python3
 """
@@ -27,13 +28,13 @@ logger = get_logger(__name__)
 class BlockchainServiceDemo:
     """区块链服务演示类"""
 
-    def __init__(self) - > None:
+    def __init__(self) -> None:
         """TODO: 添加文档字符串"""
         self.service = get_blockchain_service()
         self.demo_user_id = "demo - user - " + str(uuid.uuid4())[:8]
         self.demo_grantee_id = "demo - grantee - " + str(uuid.uuid4())[:8]
 
-    async def demo_health_data_storage(self) - > Dict[str, Any]:
+    async def demo_health_data_storage(self) -> dict[str, Any]:
         """演示健康数据存储功能"""
         print("\n === 演示1: 健康数据存储 === ")
 
@@ -83,7 +84,7 @@ class BlockchainServiceDemo:
                 }
             )
 
-            print(f"✅ 存储成功!")
+            print("✅ 存储成功!")
             print(f"📝 记录ID: {result['record_id']}")
             print(f"🔗 交易ID: {result['transaction_id']}")
             print(f"🔒 数据哈希: {result['data_hash'][:16]}...")
@@ -93,10 +94,10 @@ class BlockchainServiceDemo:
             return result
 
         except Exception as e:
-            print(f"❌ 存储失败: {str(e)}")
+            print(f"❌ 存储失败: {e!s}")
             return {}
 
-    async def demo_health_data_verification(self, record_id: str) - > Dict[str, Any]:
+    async def demo_health_data_verification(self, record_id: str) -> dict[str, Any]:
         """演示健康数据验证功能"""
         print("\n === 演示2: 健康数据验证 === ")
 
@@ -109,7 +110,7 @@ class BlockchainServiceDemo:
                 user_id = self.demo_user_id
             )
 
-            print(f"📊 验证结果:")
+            print("📊 验证结果:")
             print(f"  🔗 区块链验证: {'✅ 通过' if result['blockchain_valid'] else '❌ 失败'}")
             print(f"  🔐 零知识证明: {'✅ 通过' if result['zkp_valid'] else '❌ 失败'}")
             print(f"  🌐 IPFS完整性: {'✅ 通过' if result['ipfs_valid'] else '❌ 失败'}")
@@ -119,10 +120,10 @@ class BlockchainServiceDemo:
             return result
 
         except Exception as e:
-            print(f"❌ 验证失败: {str(e)}")
+            print(f"❌ 验证失败: {e!s}")
             return {}
 
-    async def demo_access_control(self, record_id: str) - > Dict[str, Any]:
+    async def demo_access_control(self, record_id: str) -> dict[str, Any]:
         """演示访问控制功能"""
         print("\n === 演示3: 访问控制 === ")
 
@@ -145,7 +146,7 @@ class BlockchainServiceDemo:
                 }
             )
 
-            print(f"✅ 授权成功!")
+            print("✅ 授权成功!")
             print(f"🆔 授权ID: {grant_result['grant_id']}")
             print(f"🔗 交易哈希: {grant_result.get('transaction_hash', 'N / A')}")
             print(f"📅 过期时间: {grant_result['expires_at']}")
@@ -174,7 +175,7 @@ class BlockchainServiceDemo:
                 reason = "演示完成"
             )
 
-            print(f"✅ 撤销成功!")
+            print("✅ 撤销成功!")
             print(f"🆔 授权ID: {revoke_result['grant_id']}")
             print(f"📅 撤销时间: {revoke_result['revoked_at']}")
             print(f"📝 撤销原因: {revoke_result['reason']}")
@@ -186,10 +187,10 @@ class BlockchainServiceDemo:
             }
 
         except Exception as e:
-            print(f"❌ 访问控制操作失败: {str(e)}")
+            print(f"❌ 访问控制操作失败: {e!s}")
             return {}
 
-    async def demo_data_query(self) - > Dict[str, Any]:
+    async def demo_data_query(self) -> dict[str, Any]:
         """演示数据查询功能"""
         print("\n === 演示4: 数据查询 === ")
 
@@ -204,12 +205,12 @@ class BlockchainServiceDemo:
                 offset = 0
             )
 
-            print(f"📊 查询结果:")
+            print("📊 查询结果:")
             print(f"  📝 总记录数: {records['total_count']}")
             print(f"  📄 当前页记录: {len(records['records'])}")
             print(f"  📖 是否有更多: {records['has_more']}")
 
-            for i, record in enumerate(records['records'], 1):
+            for i, record in enumerate(records["records"], 1):
                 print(f"\n  📋 记录 {i}:")
                 print(f"    🆔 ID: {record['id']}")
                 print(f"    📊 数据类型: {record['data_type']}")
@@ -221,10 +222,10 @@ class BlockchainServiceDemo:
             return records
 
         except Exception as e:
-            print(f"❌ 查询失败: {str(e)}")
+            print(f"❌ 查询失败: {e!s}")
             return {}
 
-    async def run_demo(self) - > None:
+    async def run_demo(self) -> None:
         """运行完整演示"""
         print("🚀 开始 Blockchain Service 功能演示")
         print(" = " * 50)
@@ -236,7 +237,7 @@ class BlockchainServiceDemo:
                 print("❌ 数据存储演示失败，终止演示")
                 return
 
-            record_id = storage_result['record_id']
+            record_id = storage_result["record_id"]
 
             # 演示2: 数据验证
             await self.demo_health_data_verification(record_id)
@@ -258,15 +259,15 @@ class BlockchainServiceDemo:
             print("✅ 零知识证明 - 隐私保护的数据验证")
 
         except Exception as e:
-            print(f"\n❌ 演示过程中发生错误: {str(e)}")
+            print(f"\n❌ 演示过程中发生错误: {e!s}")
             logger.exception("演示失败")
 
-async def main() - > None:
+async def main() -> None:
     """主函数"""
     # 配置日志
     configure_logging()
 
-    print(f"🔧 配置信息:")
+    print("🔧 配置信息:")
     print(f"  📱 应用名称: {settings.app_name}")
     print(f"  🔧 环境: {settings.environment}")
     print(f"  🐛 调试模式: {settings.debug}")
@@ -285,7 +286,7 @@ async def main() - > None:
         await demo.run_demo()
 
     except Exception as e:
-        print(f"\n❌ 初始化失败: {str(e)}")
+        print(f"\n❌ 初始化失败: {e!s}")
         logger.exception("初始化失败")
     finally:
         # 清理资源

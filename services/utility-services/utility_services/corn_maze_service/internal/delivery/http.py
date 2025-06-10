@@ -12,7 +12,7 @@ from typing import Any
 from uuid import uuid4
 import logging
 
-def main() - > None:
+def main() -> None:
     """主函数 - 自动生成的最小可用版本"""
     pass
 

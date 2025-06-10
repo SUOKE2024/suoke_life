@@ -48,7 +48,7 @@ class ZKPCircuit:
         self.circuit_type = circuit_type
         self.setup_params = self._generate_setup_params()
 
-    def _generate_setup_params(self) - > Dict[str, Any]:
+    def _generate_setup_params(self) -> Dict[str, Any]:
         """生成电路设置参数"""
         return {
             'circuit_id': f"zkp_{self.circuit_type}_{secrets.token_hex(8)}",
@@ -58,7 +58,7 @@ class ZKPCircuit:
         }
 
     def generate_proof(self, private_inputs: Dict[str, Any],
-                    public_inputs: Dict[str, Any]) - > Dict[str, Any]:
+                    public_inputs: Dict[str, Any]) -> Dict[str, Any]:
         """生成零知识证明"""
         try:
             # 模拟zk - SNARK证明生成
@@ -75,7 +75,7 @@ class ZKPCircuit:
             raise
 
     def _compute_witness(self, private_inputs: Dict[str, Any],
-                        public_inputs: Dict[str, Any]) - > List[int]:
+                        public_inputs: Dict[str, Any]) -> List[int]:
         """计算见证值"""
         # 根据电路类型计算见证
         if self.circuit_type == 'range_proof':
@@ -88,7 +88,7 @@ class ZKPCircuit:
             raise ValueError(f"不支持的电路类型: {self.circuit_type}")
 
     def _compute_range_witness(self, private_inputs: Dict[str, Any],
-                            public_inputs: Dict[str, Any]) - > List[int]:
+                            public_inputs: Dict[str, Any]) -> List[int]:
         """计算范围证明见证"""
         value = private_inputs.get('value', 0)
         min_val = public_inputs.get('min_value', 0)
@@ -109,7 +109,7 @@ class ZKPCircuit:
         return witness
 
     def _compute_membership_witness(self, private_inputs: Dict[str, Any],
-                                public_inputs: Dict[str, Any]) - > List[int]:
+                                public_inputs: Dict[str, Any]) -> List[int]:
         """计算成员证明见证"""
         value = private_inputs.get('value')
         valid_set = public_inputs.get('valid_set', [])
@@ -129,7 +129,7 @@ class ZKPCircuit:
         return witness
 
     def _compute_equality_witness(self, private_inputs: Dict[str, Any],
-                                public_inputs: Dict[str, Any]) - > List[int]:
+                                public_inputs: Dict[str, Any]) -> List[int]:
         """计算相等证明见证"""
         value1 = private_inputs.get('value1')
         value2 = private_inputs.get('value2')
@@ -148,7 +148,7 @@ class ZKPCircuit:
         return witness
 
     def _generate_snark_proof(self, witness: List[int],
-                            public_inputs: Dict[str, Any]) - > Dict[str, Any]:
+                            public_inputs: Dict[str, Any]) -> Dict[str, Any]:
         """生成SNARK证明"""
         # 模拟Groth16证明结构
         proof = {
@@ -164,14 +164,14 @@ class ZKPCircuit:
 class ZKPManager:
     """零知识证明管理器"""
 
-    def __init__(self) - > None:
+    def __init__(self) -> None:
         """TODO: 添加文档字符串"""
         self.circuits: Dict[str, ZKPCircuit] = {}
         self.proofs: Dict[str, ZKProof] = {}
         self.verification_cache: Dict[str, bool] = {}
         self._initialize_circuits()
 
-    def _initialize_circuits(self) - > None:
+    def _initialize_circuits(self) -> None:
         """初始化证明电路"""
         circuit_types = ['range_proof', 'membership_proof', 'equality_proof']
         for circuit_type in circuit_types:
@@ -179,7 +179,7 @@ class ZKPManager:
 
         logger.info(f"初始化了 {len(circuit_types)} 个ZKP电路")
 
-    async def generate_health_data_proof(self, claim: HealthDataClaim) - > ZKProof:
+    async def generate_health_data_proof(self, claim: HealthDataClaim) -> ZKProof:
         """为健康数据生成零知识证明"""
         try:
             # 根据声明类型选择电路
@@ -214,7 +214,7 @@ class ZKPManager:
             logger.error(f"生成健康数据证明失败: {e}")
             raise
 
-    def _prepare_proof_inputs(self, claim: HealthDataClaim) - > Tuple[Dict[str, Any], Dict[str, Any]]:
+    def _prepare_proof_inputs(self, claim: HealthDataClaim) -> Tuple[Dict[str, Any], Dict[str, Any]]:
         """准备证明输入"""
         if claim.claim_type == 'range_proof':
             return self._prepare_range_proof_inputs(claim)
@@ -225,7 +225,7 @@ class ZKPManager:
         else:
             raise ValueError(f"不支持的证明类型: {claim.claim_type}")
 
-    def _prepare_range_proof_inputs(self, claim: HealthDataClaim) - > Tuple[Dict[str, Any], Dict[str, Any]]:
+    def _prepare_range_proof_inputs(self, claim: HealthDataClaim) -> Tuple[Dict[str, Any], Dict[str, Any]]:
         """准备范围证明输入"""
         # 从元数据中提取范围信息
         value = claim.metadata.get('value', 0)
@@ -241,7 +241,7 @@ class ZKPManager:
 
         return private_inputs, public_inputs
 
-    def _prepare_membership_proof_inputs(self, claim: HealthDataClaim) - > Tuple[Dict[str, Any], Dict[str, Any]]:
+    def _prepare_membership_proof_inputs(self, claim: HealthDataClaim) -> Tuple[Dict[str, Any], Dict[str, Any]]:
         """准备成员证明输入"""
         value = claim.metadata.get('value')
         valid_set = claim.metadata.get('valid_set', [])
@@ -254,7 +254,7 @@ class ZKPManager:
 
         return private_inputs, public_inputs
 
-    def _prepare_equality_proof_inputs(self, claim: HealthDataClaim) - > Tuple[Dict[str, Any], Dict[str, Any]]:
+    def _prepare_equality_proof_inputs(self, claim: HealthDataClaim) -> Tuple[Dict[str, Any], Dict[str, Any]]:
         """准备相等证明输入"""
         value1 = claim.metadata.get('value1')
         value2 = claim.metadata.get('value2')
@@ -267,7 +267,7 @@ class ZKPManager:
 
         return private_inputs, public_inputs
 
-    def _generate_statement(self, claim: HealthDataClaim) - > str:
+    def _generate_statement(self, claim: HealthDataClaim) -> str:
         """生成证明陈述"""
         statements = {
             'range_proof': f"用户 {claim.user_id} 的 {claim.data_type} 数据在指定范围内",
@@ -277,7 +277,7 @@ class ZKPManager:
 
         return statements.get(claim.claim_type, f"用户 {claim.user_id} 的 {claim.data_type} 数据满足条件")
 
-    async def verify_proof(self, proof_id: str) - > bool:
+    async def verify_proof(self, proof_id: str) -> bool:
         """验证零知识证明"""
         try:
             # 检查缓存
@@ -302,14 +302,14 @@ class ZKPManager:
             # 缓存结果
             self.verification_cache[proof_id] = is_valid
 
-            logger.info(f"证明验证结果: {proof_id} - > {is_valid}")
+            logger.info(f"证明验证结果: {proof_id} -> {is_valid}")
             return is_valid
 
         except Exception as e:
             logger.error(f"验证证明失败: {e}")
             return False
 
-    async def _verify_snark_proof(self, proof: ZKProof) - > bool:
+    async def _verify_snark_proof(self, proof: ZKProof) -> bool:
         """验证SNARK证明"""
         try:
             # 模拟证明验证过程
@@ -338,7 +338,7 @@ class ZKPManager:
             logger.error(f"SNARK证明验证失败: {e}")
             return False
 
-    async def batch_verify_proofs(self, proof_ids: List[str]) - > Dict[str, bool]:
+    async def batch_verify_proofs(self, proof_ids: List[str]) -> Dict[str, bool]:
         """批量验证证明"""
         results = {}
 
@@ -356,7 +356,7 @@ class ZKPManager:
         logger.info(f"批量验证了 {len(proof_ids)} 个证明")
         return results
 
-    def get_proof_info(self, proof_id: str) - > Optional[Dict[str, Any]]:
+    def get_proof_info(self, proof_id: str) -> Optional[Dict[str, Any]]:
         """获取证明信息"""
         proof = self.proofs.get(proof_id)
         if not proof:
@@ -372,7 +372,7 @@ class ZKPManager:
             'public_inputs_count': len(proof.public_inputs)
         }
 
-    def cleanup_expired_proofs(self) - > None:
+    def cleanup_expired_proofs(self) -> None:
         """清理过期证明"""
         current_time = datetime.utcnow()
         expired_proofs = [
@@ -386,7 +386,7 @@ class ZKPManager:
 
         logger.info(f"清理了 {len(expired_proofs)} 个过期证明")
 
-    def get_statistics(self) - > Dict[str, Any]:
+    def get_statistics(self) -> Dict[str, Any]:
         """获取ZKP统计信息"""
         total_proofs = len(self.proofs)
         valid_proofs = sum(1 for proof in self.proofs.values() if proof.is_valid)

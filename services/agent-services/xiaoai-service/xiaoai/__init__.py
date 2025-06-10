@@ -1,11 +1,11 @@
-from typing import TYPE_CHECKING, Any, Optional
 import logging
+from typing import TYPE_CHECKING, Any, Optional
 
 try:
     from .agent.agent_manager import AgentManager
     from .service.xiaoai_service_impl import XiaoaiServiceImpl
 except ImportError:
-    # 如果导入失败，使用占位符
+    # 如果导入失败,使用占位符
     AgentManager = None
     XiaoaiServiceImpl = None
 

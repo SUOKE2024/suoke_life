@@ -89,12 +89,12 @@ class PrivacyPolicy:
 class EncryptionManager:
     """加密管理器"""
 
-    def __init__(self) - > None:
+    def __init__(self) -> None:
         """TODO: 添加文档字符串"""
         self.master_key = self._generate_master_key()
         self.user_keys: Dict[str, bytes] = {}
 
-    def _generate_master_key(self) - > bytes:
+    def _generate_master_key(self) -> bytes:
         """生成主密钥"""
         # 在生产环境中，应该从安全的密钥管理服务获取
         password = os.environ.get('MASTER_PASSWORD', 'suoke_health_master_key_2024').encode()
@@ -108,7 +108,7 @@ class EncryptionManager:
         )
         return base64.urlsafe_b64encode(kdf.derive(password))
 
-    def get_user_key(self, user_id: str) - > bytes:
+    def get_user_key(self, user_id: str) -> bytes:
         """获取用户专用密钥"""
         if user_id not in self.user_keys:
             # 基于用户ID和主密钥生成用户专用密钥
@@ -123,7 +123,7 @@ class EncryptionManager:
 
         return self.user_keys[user_id]
 
-    def encrypt_data(self, data: Dict[str, Any], user_id: str) - > str:
+    def encrypt_data(self, data: Dict[str, Any], user_id: str) -> str:
         """加密健康数据"""
         try:
             user_key = self.get_user_key(user_id)
@@ -141,7 +141,7 @@ class EncryptionManager:
             logger.error(f"数据加密失败: {e}")
             raise
 
-    def decrypt_data(self, encrypted_data: str, user_id: str) - > Dict[str, Any]:
+    def decrypt_data(self, encrypted_data: str, user_id: str) -> Dict[str, Any]:
         """解密健康数据"""
         try:
             user_key = self.get_user_key(user_id)
@@ -162,13 +162,13 @@ class EncryptionManager:
 class BlockchainIntegration:
     """区块链集成"""
 
-    def __init__(self) - > None:
+    def __init__(self) -> None:
         """TODO: 添加文档字符串"""
         self.contract_address = "0x1234567890abcdef"  # 智能合约地址
         self.web3_provider = None  # Web3提供者
 
     async def store_data_hash(self, record_id: str, data_hash: str,
-                            user_id: str) - > str:
+                            user_id: str) -> str:
         """在区块链上存储数据哈希"""
         try:
             # 模拟区块链交易
@@ -193,7 +193,7 @@ class BlockchainIntegration:
             raise
 
     async def verify_data_integrity(self, tx_hash: str,
-                                expected_hash: str) - > bool:
+                                expected_hash: str) -> bool:
         """验证数据完整性"""
         try:
             # 模拟从区块链查询数据
@@ -209,12 +209,12 @@ class BlockchainIntegration:
 class IPFSIntegration:
     """IPFS集成"""
 
-    def __init__(self) - > None:
+    def __init__(self) -> None:
         """TODO: 添加文档字符串"""
-        self.ipfs_gateway = "https: / /ipfs.io / ipfs / "
-        self.local_node = "http: / /localhost:5001"
+        self.ipfs_gateway = "https: //ipfs.io / ipfs / "
+        self.local_node = "http: //localhost:5001"
 
-    async def store_encrypted_data(self, encrypted_data: str) - > str:
+    async def store_encrypted_data(self, encrypted_data: str) -> str:
         """在IPFS上存储加密数据"""
         try:
             # 模拟IPFS存储
@@ -231,7 +231,7 @@ class IPFSIntegration:
             logger.error(f"IPFS存储失败: {e}")
             raise
 
-    async def retrieve_encrypted_data(self, ipfs_hash: str) - > str:
+    async def retrieve_encrypted_data(self, ipfs_hash: str) -> str:
         """从IPFS检索加密数据"""
         try:
             # 模拟IPFS检索
@@ -248,7 +248,7 @@ class IPFSIntegration:
 class EnhancedHealthDataManager:
     """增强的健康数据管理器"""
 
-    def __init__(self) - > None:
+    def __init__(self) -> None:
         """TODO: 添加文档字符串"""
         self.encryption_manager = EncryptionManager()
         self.blockchain = BlockchainIntegration()
@@ -260,7 +260,7 @@ class EnhancedHealthDataManager:
 
     async def store_health_data(self, user_id: str, data_type: str,
                             health_data: Dict[str, Any],
-                            privacy_level: str = 'high') - > HealthDataRecord:
+                            privacy_level: str = 'high') -> HealthDataRecord:
         """存储健康数据"""
         try:
             # 生成记录ID
@@ -331,7 +331,7 @@ class EnhancedHealthDataManager:
 
     async def _generate_privacy_proof(self, user_id: str, data_type: str,
                                     health_data: Dict[str, Any],
-                                    data_hash: str) - > str:
+                                    data_hash: str) -> str:
         """生成隐私保护证明"""
         try:
             # 根据数据类型确定证明类型
@@ -375,7 +375,7 @@ class EnhancedHealthDataManager:
             return None
 
     async def retrieve_health_data(self, record_id: str,
-                                requester_id: str) - > Optional[Dict[str, Any]]:
+                                requester_id: str) -> Optional[Dict[str, Any]]:
         """检索健康数据"""
         try:
             # 检查记录是否存在
@@ -386,7 +386,7 @@ class EnhancedHealthDataManager:
 
             # 检查访问权限
             if not await self._check_access_permission(record, requester_id):
-                logger.warning(f"访问权限不足: {requester_id} - > {record_id}")
+                logger.warning(f"访问权限不足: {requester_id} -> {record_id}")
                 return None
 
             # 验证数据完整性
@@ -414,7 +414,7 @@ class EnhancedHealthDataManager:
             return None
 
     async def _check_access_permission(self, record: HealthDataRecord,
-                                    requester_id: str) - > bool:
+                                    requester_id: str) -> bool:
         """检查访问权限"""
         # 数据所有者总是有权限
         if requester_id == record.user_id:
@@ -434,7 +434,7 @@ class EnhancedHealthDataManager:
 
         return False
 
-    async def _verify_data_integrity(self, record: HealthDataRecord) - > bool:
+    async def _verify_data_integrity(self, record: HealthDataRecord) -> bool:
         """验证数据完整性"""
         try:
             # 验证区块链存储的哈希
@@ -455,7 +455,7 @@ class EnhancedHealthDataManager:
 
     async def request_data_access(self, requester_id: str, data_owner_id: str,
                                 record_ids: List[str], purpose: str,
-                                duration_hours: int = 24) - > DataAccessRequest:
+                                duration_hours: int = 24) -> DataAccessRequest:
         """请求数据访问"""
         try:
             request_id = f"dar_{hashlib.sha256(f'{requester_id}_{data_owner_id}_{datetime.utcnow()}'.encode()).hexdigest()[:16]}"
@@ -490,7 +490,7 @@ class EnhancedHealthDataManager:
             raise
 
     async def approve_access_request(self, request_id: str,
-                                    approver_id: str) - > bool:
+                                    approver_id: str) -> bool:
         """批准访问请求"""
         try:
             request = self.access_requests.get(request_id)
@@ -499,7 +499,7 @@ class EnhancedHealthDataManager:
 
             # 检查批准者权限
             if approver_id ! = request.data_owner_id:
-                logger.warning(f"无权批准请求: {approver_id} - > {request_id}")
+                logger.warning(f"无权批准请求: {approver_id} -> {request_id}")
                 return False
 
             # 检查请求是否过期
@@ -539,7 +539,7 @@ class EnhancedHealthDataManager:
         if len(self.audit_log) > 10000:
             self.audit_log = self.audit_log[ - 5000:]
 
-    def get_user_data_summary(self, user_id: str) - > Dict[str, Any]:
+    def get_user_data_summary(self, user_id: str) -> Dict[str, Any]:
         """获取用户数据摘要"""
         user_records = [r for r in self.records.values() if r.user_id == user_id]
 
@@ -565,7 +565,7 @@ class EnhancedHealthDataManager:
             'last_updated': max([r.updated_at for r in user_records]).isoformat() if user_records else None
         }
 
-    def get_system_statistics(self) - > Dict[str, Any]:
+    def get_system_statistics(self) -> Dict[str, Any]:
         """获取系统统计信息"""
         total_records = len(self.records)
         zkp_protected = sum(1 for r in self.records.values() if r.zkp_proof_id)

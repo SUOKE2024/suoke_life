@@ -27,7 +27,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.resolve()))
 class TestMazeGenerator(unittest.TestCase):
     """迷宫生成器测试类"""
 
-    def setUp(self) - > None:
+    def setUp(self) -> None:
         """测试前准备"""
         self.generator = MazeGenerator()
         self.generator.knowledge_repo = AsyncMock()
@@ -39,7 +39,7 @@ class TestMazeGenerator(unittest.TestCase):
         self.test_difficulty = 3
         self.test_health_attributes = {"体质": "气虚体质", "季节": "春季"}
 
-    def test_generate_maze_grid(self) - > None:
+    def test_generate_maze_grid(self) -> None:
         """测试迷宫网格生成"""
         random.seed(42)  # 设置随机种子以确保结果可重现
 
@@ -108,7 +108,7 @@ class TestMazeGenerator(unittest.TestCase):
         mock_challenges.assert_called_once()
         mock_assign.assert_called_once()
 
-    async def test_get_knowledge_nodes(self) - > None:
+    async def test_get_knowledge_nodes(self) -> None:
         """测试获取知识节点"""
         # 创建测试知识节点
         test_nodes = [
@@ -148,7 +148,7 @@ class TestMazeGenerator(unittest.TestCase):
         # 验证知识库搜索被正确调用
         self.generator.knowledge_repo.search_knowledge.assert_called_once()
 
-    def test_generate_challenges(self) - > None:
+    def test_generate_challenges(self) -> None:
         """测试生成挑战"""
         random.seed(42)  # 设置随机种子以确保结果可重现
 
@@ -172,7 +172,7 @@ class TestMazeGenerator(unittest.TestCase):
             # 验证难度级别正确设置
             self.assertEqual(challenge["difficulty_level"], str(self.test_difficulty))
 
-    def test_assign_content_to_maze(self) - > None:
+    def test_assign_content_to_maze(self) -> None:
         """测试将内容分配到迷宫"""
         # 准备测试数据
         cells = [

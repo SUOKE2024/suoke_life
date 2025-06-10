@@ -24,7 +24,7 @@ import pytest
 logging.disable(logging.CRITICAL)
 
 @pytest.fixture
-def mock_repository() - > None:
+def mock_repository() -> None:
     """创建消息存储库的模拟对象"""
     repository = AsyncMock(spec = MessageRepository)
 
@@ -107,7 +107,7 @@ def mock_repository() - > None:
     return repository
 
 @pytest.fixture
-def mock_settings() - > None:
+def mock_settings() -> None:
     """创建应用程序配置的模拟对象"""
     settings = MagicMock()
     settings.messages.default_ttl_hours = 24

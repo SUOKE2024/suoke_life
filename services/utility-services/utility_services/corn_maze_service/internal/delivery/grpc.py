@@ -29,7 +29,7 @@ class CornMazeServicer(corn_maze_pb2_grpc.CornMazeServiceServicer):
         self,
         request: corn_maze_pb2.CreateMazeRequest,
         context: grpc.aio.ServicerContext
-    ) - > corn_maze_pb2.MazeResponse:
+    ) -> corn_maze_pb2.MazeResponse:
         """创建迷宫"""
         logger.info("gRPC CreateMaze called: user_id = %s, type = %s",
                 request.user_id, request.maze_type)
@@ -49,7 +49,7 @@ class CornMazeServicer(corn_maze_pb2_grpc.CornMazeServiceServicer):
         self,
         request: corn_maze_pb2.GetMazeRequest,
         context: grpc.aio.ServicerContext
-    ) - > corn_maze_pb2.MazeResponse:
+    ) -> corn_maze_pb2.MazeResponse:
         """获取迷宫"""
         logger.info("gRPC GetMaze called: maze_id = %s", request.maze_id)
 
@@ -66,7 +66,7 @@ class CornMazeServicer(corn_maze_pb2_grpc.CornMazeServiceServicer):
         self,
         request: corn_maze_pb2.MoveRequest,
         context: grpc.aio.ServicerContext
-    ) - > corn_maze_pb2.MoveResponse:
+    ) -> corn_maze_pb2.MoveResponse:
         """在迷宫中移动"""
         logger.info("gRPC MoveInMaze called: maze_id = %s, direction = %d",
                 request.maze_id, request.direction)
@@ -83,7 +83,7 @@ class CornMazeServicer(corn_maze_pb2_grpc.CornMazeServiceServicer):
         self,
         request: corn_maze_pb2.UserProgressRequest,
         context: grpc.aio.ServicerContext
-    ) - > corn_maze_pb2.UserProgressResponse:
+    ) -> corn_maze_pb2.UserProgressResponse:
         """获取用户进度"""
         logger.info("gRPC GetUserProgress called: user_id = %s, maze_id = %s",
                 request.user_id, request.maze_id)
@@ -101,7 +101,7 @@ class CornMazeServicer(corn_maze_pb2_grpc.CornMazeServiceServicer):
         self,
         request: corn_maze_pb2.ListMazeTemplatesRequest,
         context: grpc.aio.ServicerContext
-    ) - > corn_maze_pb2.ListMazeTemplatesResponse:
+    ) -> corn_maze_pb2.ListMazeTemplatesResponse:
         """列出迷宫模板"""
         logger.info("gRPC ListMazeTemplates called")
 
@@ -125,7 +125,7 @@ class CornMazeServicer(corn_maze_pb2_grpc.CornMazeServiceServicer):
         self,
         request: corn_maze_pb2.KnowledgeNodeRequest,
         context: grpc.aio.ServicerContext
-    ) - > corn_maze_pb2.KnowledgeNodeResponse:
+    ) -> corn_maze_pb2.KnowledgeNodeResponse:
         """获取知识节点"""
         logger.info("gRPC GetKnowledgeNode called: node_id = %s", request.node_id)
 
@@ -138,7 +138,7 @@ class CornMazeServicer(corn_maze_pb2_grpc.CornMazeServiceServicer):
         )
 
 
-async def create_grpc_server(settings = None) - > aio.Server:
+async def create_grpc_server(settings = None) -> aio.Server:
     """创建 gRPC 服务器"""
     if settings is None:
         settings = get_settings()

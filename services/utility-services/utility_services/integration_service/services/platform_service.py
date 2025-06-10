@@ -23,15 +23,15 @@ class PlatformService(BaseService[Platform]):
         """TODO: 添加文档字符串"""
         super().__init__(Platform, db)
 
-    async def get_by_name(self, name: str) - > Platform | None:
+    async def get_by_name(self, name: str) -> Platform | None:
         """根据名称获取平台"""
         return self.db.query(self.model).filter(self.model.name == name).first()
 
-    async def get_enabled_platforms(self) - > list[Platform]:
+    async def get_enabled_platforms(self) -> list[Platform]:
         """获取启用的平台列表"""
         return self.db.query(self.model).filter(self.model.is_enabled).prefetch_related().all()[:1000]  # 限制查询结果数量
 
-    async def get_platform_config(self, platform_id: str, config_key: str) - > PlatformConfig | None:
+    async def get_platform_config(self, platform_id: str, config_key: str) -> PlatformConfig | None:
         """获取平台配置"""
         return (
             self.db.query(PlatformConfig)
@@ -49,7 +49,7 @@ class PlatformService(BaseService[Platform]):
         config_value: str,
         is_encrypted: bool = False,
         description: str = None
-    ) - > PlatformConfig:
+    ) -> PlatformConfig:
         """设置平台配置"""
         config = await self.get_platform_config(platform_id, config_key)
 

@@ -1,14 +1,15 @@
-from datetime import datetime
-from enum import Enum as PyEnum
-from sqlalchemy import (
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
-from sqlalchemy.sql import func
-from typing import Optional, Dict, Any
+"""
+models模块
+"""
 
-def main() - > None:
-    """主函数 - 自动生成的最小可用版本"""
-    pass
+import logging
+from typing import Any, Dict, Optional
+
+logger = logging.getLogger(__name__)
+
+def main() -> None:
+    """主函数"""
+    logger.info(f"models模块已加载")
 
 if __name__ == "__main__":
     main()

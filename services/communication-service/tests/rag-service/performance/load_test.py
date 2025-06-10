@@ -79,16 +79,16 @@ class LoadTester:
             "立春养生应该注意什么?"
         ]
 
-    async def setup(self) - > None:
+    async def setup(self) -> None:
         """设置会话"""
         self.session = aiohttp.ClientSession()
 
-    async def teardown(self) - > None:
+    async def teardown(self) -> None:
         """清理会话"""
         if self.session:
             await self.session.close()
 
-    async def send_retrieve_request(self) - > TestResult:
+    async def send_retrieve_request(self) -> TestResult:
         """发送检索请求"""
         query = random.choice(self.test_queries)
         url = f"{self.base_url} / api / v1 / retrieve"
@@ -133,7 +133,7 @@ class LoadTester:
                 error = str(e)
             )
 
-    async def send_query_request(self) - > TestResult:
+    async def send_query_request(self) -> TestResult:
         """发送查询请求"""
         query = random.choice(self.test_queries)
         url = f"{self.base_url} / api / v1 / query"
@@ -178,7 +178,7 @@ class LoadTester:
                 error = str(e)
             )
 
-    async def send_health_request(self) - > TestResult:
+    async def send_health_request(self) -> TestResult:
         """发送健康检查请求"""
         url = f"{self.base_url} / health"
 
@@ -251,7 +251,7 @@ class LoadTester:
 
         logger.info(f"User {user_id} finished")
 
-    async def run(self) - > None:
+    async def run(self) -> None:
         """执行负载测试"""
         await self.setup()
 
@@ -281,7 +281,7 @@ class LoadTester:
 
         logger.info("Load test completed")
 
-    def generate_report(self) - > None:
+    def generate_report(self) -> None:
         """生成测试报告"""
         if not self.results:
             logger.error("No test results to generate report from")
@@ -357,7 +357,7 @@ class LoadTester:
         plt.savefig("load_test_results.png")
         logger.info("Charts saved to load_test_results.png")
 
-def parse_args() - > None:
+def parse_args() -> None:
     """解析命令行参数"""
     parser = argparse.ArgumentParser(description = "RAG服务负载测试")
     parser.add_argument(" - -url", type = str, default = "http: / /localhost:8000", help = "服务基础URL")
@@ -367,7 +367,7 @@ def parse_args() - > None:
 
     return parser.parse_args()
 
-async def main() - > None:
+async def main() -> None:
     """主函数"""
     args = parse_args()
 

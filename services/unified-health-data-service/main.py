@@ -8,7 +8,6 @@ import asyncio
 import signal
 import sys
 import logging
-from typing import Dict, Any
 from unified_health_data_service import UnifiedHealthDataService
 
 # 配置日志

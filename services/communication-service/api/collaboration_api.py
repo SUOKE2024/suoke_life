@@ -3,7 +3,7 @@
 提供智能体协同管理的REST API
 """
 
-from fastapi import APIRouter, HTTPException, Depends, BackgroundTasks
+from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import JSONResponse
 from typing import Dict, List, Any, Optional
 from pydantic import BaseModel, Field
@@ -11,7 +11,7 @@ from datetime import datetime
 import logging
 
 from ..communication_service.event_bus.orchestration.agent_orchestrator import (
-    AgentCollaborationManager, CollaborationState
+    AgentCollaborationManager
 )
 from ..communication_service.event_bus.core.event_bus import SuokeEventBus
 from ..communication_service.event_bus.core.agent_event_types import COLLABORATION_SCENARIOS

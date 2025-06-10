@@ -1,18 +1,18 @@
-from typing import Dict, List, Any, Optional, Union
 
 """
 main - 索克生活项目模块
 """
 
-from blockchain_service.api.main import create_app
 import uvicorn
+
+from blockchain_service.api.main import create_app
 
 """
 blockchain - service 主入口文件
 """
 
 
-def main() - > None:
+def main() -> None:
     """主函数"""
     app = create_app()
     uvicorn.run(

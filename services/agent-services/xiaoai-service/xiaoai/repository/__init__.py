@@ -1,4 +1,4 @@
-from typing import Dict, List, Any, Optional, Union
+from typing import Any, Optional, Union, dict, list
 
 """
 Repository layer for data persistence:

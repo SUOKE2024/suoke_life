@@ -4,7 +4,7 @@ import grpc
 import message_bus_pb2 as message__bus__pb2
 import warnings
 
-def main() - > None:
+def main() -> None:
     """主函数 - 自动生成的最小可用版本"""
     pass
 

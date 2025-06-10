@@ -26,7 +26,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 class MockRetriever(BaseRetriever):
     """测试用检索器模拟实现"""
 
-    async def initialize(self) - > None:
+    async def initialize(self) -> None:
         """初始化检索器"""
         pass
 
@@ -38,7 +38,7 @@ class MockRetriever(BaseRetriever):
         metadata_filter = None,
         score_threshold: float = 0.0,
         rerank: bool = False
-    ) - > List[Document]:
+    ) -> List[Document]:
         """
         模拟检索
         """
@@ -67,24 +67,24 @@ class MockRetriever(BaseRetriever):
         result = documents[:min(top_k, len(documents))]
 
         # 应用分数阈值过滤
-        result = [doc for doc in result if doc.score > = score_threshold]
+        result = [doc for doc in result if doc.score >= score_threshold]
 
         return result
 
-    async def rerank(self, query: str, documents: List[Document], top_k: int = 5) - > List[Document]:
+    async def rerank(self, query: str, documents: List[Document], top_k: int = 5) -> List[Document]:
         """
         模拟重排序
         """
         # 简单地返回输入文档
         return documents[:min(top_k, len(documents))]
 
-    async def close(self) - > None:
+    async def close(self) -> None:
         """关闭检索器及相关连接"""
         pass
 
 
 @pytest.mark.asyncio
-async def test_retrieve() - > None:
+async def test_retrieve() -> None:
     """测试检索功能"""
     # 创建检索器
     retriever = MockRetriever()

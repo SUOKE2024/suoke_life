@@ -18,13 +18,13 @@ import structlog
 
 
 
-def add_correlation_id(_logger: Any, _method_name: str, event_dict: EventDict) - > EventDict:
+def add_correlation_id(_logger: Any, _method_name: str, event_dict: EventDict) -> EventDict:
     """添加关联ID到日志事件"""
     # 这里可以从上下文中获取请求ID或追踪ID
     # event_dict["correlation_id"] = get_correlation_id()
     return event_dict
 
-def add_service_info(_logger: Any, _method_name: str, event_dict: EventDict) - > EventDict:
+def add_service_info(_logger: Any, _method_name: str, event_dict: EventDict) -> EventDict:
     """添加服务信息到日志事件"""
     settings = get_settings()
     event_dict["service"] = settings.app_name
@@ -32,7 +32,7 @@ def add_service_info(_logger: Any, _method_name: str, event_dict: EventDict) - >
     event_dict["environment"] = settings.environment
     return event_dict
 
-def setup_logging() - > None:
+def setup_logging() -> None:
     """设置结构化日志"""
     settings = get_settings()
 
@@ -70,6 +70,6 @@ def setup_logging() - > None:
         cache_logger_on_first_use = True,
     )
 
-def get_logger(name: str) - > Any:
+def get_logger(name: str) -> Any:
     """获取结构化日志记录器"""
     return structlog.get_logger(name)

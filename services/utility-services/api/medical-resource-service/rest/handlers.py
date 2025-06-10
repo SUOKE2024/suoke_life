@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field
 from typing import Any, Dict, List, Optional
 import logging
 
-def main() - > None:
+def main() -> None:
     """主函数 - 自动生成的最小可用版本"""
     pass
 

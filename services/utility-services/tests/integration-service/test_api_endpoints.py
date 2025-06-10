@@ -22,7 +22,7 @@ os.environ["SECRET_KEY"] = "test - secret - key"
 
 
 @pytest.fixture
-def client() - > None:
+def client() -> None:
     """创建测试客户端"""
     app = create_app()
     with TestClient(app) as test_client:
@@ -30,7 +30,7 @@ def client() - > None:
 
 
 @pytest.fixture
-def auth_headers() - > None:
+def auth_headers() -> None:
     """认证头"""
     return {"Authorization": "Bearer test - token"}
 
