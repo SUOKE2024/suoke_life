@@ -31,7 +31,7 @@ google-auth-oauthlib==1.1.0
 fitbit==0.3.1
 
 # 小米运动 API (第三方)
-xiaomi-miio==0.5.12
+python-miio==0.5.12
 
 # 华为健康 API (模拟)
 huawei-health-sdk==1.0.0
