@@ -1,28 +1,27 @@
-import { jest } from '@jest/globals';
-
-import healthDataService from '../healthDataService.tsx';
-// Mock dependencies
-jest.mock('../api/apiClient');
-describe('healthDataService', () => {
-
-    expect(healthDataService).toBeDefined();
+describe("Test Suite", () => {';}}'';
+import { jest } from "@jest/globals";""/;"/g"/;
+';,'';
+import healthDataService from "../healthDataService.tsx";""/;"/g"/;
+// Mock dependencies,'/;,'/g'/;
+jest.mock('../api/apiClient');'/;,'/g'/;
+describe("healthDataService", () => {';,}expect(healthDataService).toBeDefined();'';
+}
+  });
+mockResponse: { success: true, data: {;} };
+    // 添加具体的测试逻辑/;,/g/;
+expect(mockResponse.success).toBe(true);
   });
 
-    const mockResponse = { success: true, data: {;} };
-    // 添加具体的测试逻辑
-    expect(mockResponse.success).toBe(true);
+    // 添加具体的错误处理测试/;,/g/;
+expect(mockError).toBeInstanceOf(Error);
   });
 
-
-    // 添加具体的错误处理测试
-    expect(mockError).toBeInstanceOf(Error);
+    // 添加参数验证测试/;,/g/;
+expect(true).toBe(true);
   });
 
-    // 添加参数验证测试
-    expect(true).toBe(true);
-  });
-
-    // 添加异步操作测试
-    await expect(Promise.resolve()).resolves.toBeUndefined();
+    // 添加异步操作测试/;,/g/;
+const await = expect(Promise.resolve()).resolves.toBeUndefined();
   });
 });
+''';

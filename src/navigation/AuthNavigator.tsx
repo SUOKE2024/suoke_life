@@ -1,46 +1,42 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React from 'react';
-import {;
-  AuthStackParamList,
-  ForgotPasswordScreen,
-  LoginScreen,
-  RegisterScreen,
-  WelcomeScreen
-} from '../screens/auth';
-
+import { createNativeStackNavigator } from "@react-navigation/native-stack";""/;,"/g"/;
+import React from "react";";
+import {;,}AuthStackParamList,;
+ForgotPasswordScreen,;
+LoginScreen,;
+RegisterScreen,";"";
+}
+  WelcomeScreen'}'';'';
+} from "../screens/auth";""/;,"/g"/;
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
-
-export const AuthNavigator: React.FC = () => {
-  return (
-    <AuthStack.Navigator;
-      initialRouteName="Welcome"
-      screenOptions={
-        headerShown: false;
-        animation: 'slide_from_right';
-        gestureEnabled: true;
-        gestureDirection: 'horizontal'
+export const AuthNavigator: React.FC = () => {';,}return (<AuthStack.Navigator;'  />/;,)initialRouteName="Welcome"";,"/g"/;
+screenOptions={";,}headerShown: false,";,"";
+animation: 'slide_from_right';','';
+gestureEnabled: true,';'';
+}
+        const gestureDirection = 'horizontal'}'';'';
       ;}}
-    >
-      <AuthStack.Screen;
-        name="Welcome"
-        component={WelcomeScreen}
-        options={ animation: 'fade' ;}}
-      />
-      <AuthStack.Screen;
-        name="Login"
-        component={LoginScreen}
-        options={ animation: 'slide_from_bottom' ;}}
-      />
-      <AuthStack.Screen;
-        name="Register"
-        component={RegisterScreen}
-        options={ animation: 'slide_from_right' ;}}
-      />
-      <AuthStack.Screen;
-        name="ForgotPassword"
-        component={ForgotPasswordScreen}
-        options={ animation: 'slide_from_right' ;}}
-      />
-    </AuthStack.Navigator>
+    >';'';
+      <AuthStack.Screen;'  />/;,'/g'/;
+name="Welcome";
+component={WelcomeScreen}";,"";
+options={ animation: 'fade' ;}}';'';
+      />'/;'/g'/;
+      <AuthStack.Screen;'  />/;,'/g'/;
+name="Login";
+component={LoginScreen}";,"";
+options={ animation: 'slide_from_bottom' ;}}';'';
+      />'/;'/g'/;
+      <AuthStack.Screen;'  />/;,'/g'/;
+name="Register";
+component={RegisterScreen}";,"";
+options={ animation: 'slide_from_right' ;}}';'';
+      />'/;'/g'/;
+      <AuthStack.Screen;'  />/;,'/g'/;
+name="ForgotPassword";
+component={ForgotPasswordScreen}";,"";
+options={ animation: 'slide_from_right' ;}}')'';'';
+      />)/;/g/;
+    </AuthStack.Navigator>)/;/g/;
   );
-};
+};';'';
+''';

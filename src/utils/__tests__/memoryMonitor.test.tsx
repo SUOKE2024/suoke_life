@@ -1,58 +1,32 @@
-
-import React from "react";
-// Mock store for testing
-const mockStore = configureStore({reducer: {
-    // Add your reducers here
+describe("Test Suite", () => {"";}';,'';
+import React from "react";"";"";
+// Mock store for testing,/;,/g/;
+const  mockStore = configureStore({reducer: {);}    // Add your reducers here)/;/g/;
+}
   ;});};);
-const renderWithProvider = (component: React.ReactElement) => {return render(;)
+const renderWithProvider = (component: React.ReactElement) => {return render(;);}}
     <Provider store={mockStore}>;
       {component});
-    </Provid;e;r;>
+    </Provid;e;r;>/;/g/;
   ;);
-});
-describe("memoryMonitor", () => { {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-  it("should render without crashing, () => { {", () => {
-    renderWithProvider(<memoryMonitor />);
-    expect(screen.getByTestId("memorymonitor");).toBeTruthy();
-  });
-  it("should display correct initial state", () => {
-    renderWithProvider(<memoryMonitor />);
-    // Add specific assertions for initial state
-expect(screen.getByTestId("memorymonitor)).toBeTruthy();"
-  });
-  it("should handle user interactions correctly", async (); => {
-    renderWithProvider(<memoryMonitor />);
-    // Example: Test button press
-const button = screen.getByRole(button";);"
-    fireEvent.press(button);
-    await waitFor(() => {
-      // Add assertions for interaction results
-expect(screen.getByTestId("memorymonitor)).toBeTruthy();"
+});";,"";
+describe("memoryMonitor", () => {{";,}beforeEach(() => {jest.clearAllMocks();}}"";
+  });";,"";
+it("should render without crashing, () => {{", () => {";,}renderWithProvider(<memoryMonitor  />);"/;,"/g"/;
+expect(screen.getByTestId("memorymonitor");).toBeTruthy();";"";
+}
+  });";,"";
+it("should display correct initial state", () => {";,}renderWithProvider(<memoryMonitor  />);/;"/g"/;
+    // Add specific assertions for initial state,"/;,"/g"/;
+expect(screen.getByTestId("memorymonitor)).toBeTruthy();"";"";
+}
+  });";,"";
+it("should handle user interactions correctly", async (); => {";,}renderWithProvider(<memoryMonitor  />);/;"/g"/;
+    // Example: Test button press,"/;,"/g"/;
+const button = screen.getByRole(button";);";
+fireEvent.press(button);
+const await = waitFor(() => {// Add assertions for interaction results,"/;,}expect(screen.getByTestId("memorymonitor)).toBeTruthy();"";"/g"/;
+}
     });
-  });
-  it("should handle props correctly", () => {
-    const testProps =  {/*  Add test props here *;/
-    ;};
-    renderWithProvider(<memoryMonitor {...testProps} />);
-    // Add assertions for prop handling
-expect(screen.getByTestId(memorymonitor")).toBeTruthy();"
-  });
-  it("should handle error states gracefully, () => { {", () => {
-    // Test error scenarios
-renderWithProvider(<memoryMonitor />);
-    // Add error state assertions
-expect(screen.getByTestId("memorymonitor")).toBeTruthy();
-  });
-  // Performance test
-it("should render efficiently", () => {
-    const startTime = performance.now();
-    renderWithProvider(<memoryMonitor />);
-    const endTime = performance.now();
-    // Component should render within reasonable time (100ms)
-    expect(endTime - startTime).toBeLessThan(100);
-  });
-});
-});});});});});
+  });";,"";
+it("should handle props correctly", () => {";,}const testProps =  {/* " *//"/g"/}

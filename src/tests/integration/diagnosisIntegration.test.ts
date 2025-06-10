@@ -1,281 +1,250 @@
-import { localAIService } from '../../services/localAIService';
-import { diagnosisCacheManager } from '../../services/diagnosisCacheManager';
-
-  beforeAll(async () => {
-    // 初始化所有服务
-    await localAIService.initialize();
-    await performanceOptimizer.initialize();
-    await diagnosisCacheManager.initialize();
+describe("Test Suite", () => {';}}'';
+import { localAIService } from "../../services/localAIService";""/;,"/g"/;
+import { diagnosisCacheManager } from "../../services/diagnosisCacheManager";""/;,"/g"/;
+beforeAll(async () => {// 初始化所有服务/;,}const await = localAIService.initialize();,/g/;
+const await = performanceOptimizer.initialize();
+const await = diagnosisCacheManager.initialize();
+}
   });
-  afterAll(async () => {
-    // 清理资源
-    await localAIService.clearModelCache();
-    await performanceOptimizer.clearAllCaches();
-    await diagnosisCacheManager.clearCache();
+afterAll(async () => {// 清理资源/;,}const await = localAIService.clearModelCache();,/g/;
+const await = performanceOptimizer.clearAllCaches();
+const await = diagnosisCacheManager.clearCache();
+}
   });
-
-
-      const modelStatus = localAIService.getModelStatus();
-      expect(Object.keys(modelStatus)).toContain('tcm_symptom_classifier');
-      expect(Object.keys(modelStatus)).toContain('constitution_analyzer');
-      expect(Object.keys(modelStatus)).toContain('pulse_pattern_recognizer');
+const modelStatus = localAIService.getModelStatus();';,'';
+expect(Object.keys(modelStatus)).toContain('tcm_symptom_classifier');';,'';
+expect(Object.keys(modelStatus)).toContain('constitution_analyzer');';,'';
+expect(Object.keys(modelStatus)).toContain('pulse_pattern_recognizer');';'';
     });
-
-
-      const result = await localAIService.classifySymptoms(symptoms);
-      expect(result.confidence).toBeGreaterThan(0.8);
-      expect(result.result.classifications).toHaveLength(3);
-      expect(result.processingTime).toBeLessThan(1000);
-      expect(result.modelUsed).toBe('tcm_symptom_classifier');
+const result = await localAIService.classifySymptoms(symptoms);
+expect(result.confidence).toBeGreaterThan(0.8);
+expect(result.result.classifications).toHaveLength(3);
+expect(result.processingTime).toBeLessThan(1000);';,'';
+expect(result.modelUsed).toBe('tcm_symptom_classifier');';'';
     });
-
 
       };
-      const result = await localAIService.analyzeConstitution(userData);
-      expect(result.confidence).toBeGreaterThan(0.8);
-      expect(result.result.primaryConstitution).toBeDefined();
-      expect(result.result.recommendations).toBeInstanceOf(Array);
-      expect(result.processingTime).toBeLessThan(500);
+const result = await localAIService.analyzeConstitution(userData);
+expect(result.confidence).toBeGreaterThan(0.8);
+expect(result.result.primaryConstitution).toBeDefined();
+expect(result.result.recommendations).toBeInstanceOf(Array);
+expect(result.processingTime).toBeLessThan(500);
     });
-
-      const pulseData = {pressure: 0.5,frequency: 75,smoothness: 0.7;
+pulseData: {pressure: 0.5,frequency: 75,smoothness: 0.7;}}
       };
-      const result = await localAIService.recognizePulse(pulseData);
-      expect(result.confidence).toBeGreaterThan(0.8);
-      expect(result.result.patterns).toBeInstanceOf(Array);
-      expect(result.processingTime).toBeLessThan(300);
+const result = await localAIService.recognizePulse(pulseData);
+expect(result.confidence).toBeGreaterThan(0.8);
+expect(result.result.patterns).toBeInstanceOf(Array);
+expect(result.processingTime).toBeLessThan(300);
     });
   });
-
-
-      const metrics = performanceOptimizer.getPerformanceMetrics();
-      expect(metrics).toHaveProperty('renderTime');
-      expect(metrics).toHaveProperty('memoryUsage');
-      expect(metrics).toHaveProperty('networkLatency');
-      expect(metrics).toHaveProperty('cacheHitRate');
-      expect(metrics).toHaveProperty('errorRate');
+const metrics = performanceOptimizer.getPerformanceMetrics();';,'';
+expect(metrics).toHaveProperty('renderTime');';,'';
+expect(metrics).toHaveProperty('memoryUsage');';,'';
+expect(metrics).toHaveProperty('networkLatency');';,'';
+expect(metrics).toHaveProperty('cacheHitRate');';,'';
+expect(metrics).toHaveProperty('errorRate');';'';
     });
-
-      const imageUri = 'https://example.com/test-image.jpg';
-      const optimizedUri = await performanceOptimizer.optimizeImage(imageUri, {quality: 0.8,maxWidth: 800,maxHeight: 600;)
-      });
-      expect(optimizedUri).toContain('w=800');
-      expect(optimizedUri).toContain('h=600');
-      expect(optimizedUri).toContain('q=80');
+';,'';
+const imageUri = 'https: //example.com/test-image.jpg';'/;,'/g,'/;
+  optimizedUri: await performanceOptimizer.optimizeImage(imageUri, {)quality: 0.8,maxWidth: 800,maxHeight: 600;);}}
+      });';,'';
+expect(optimizedUri).toContain('w=800');';,'';
+expect(optimizedUri).toContain('h=600');';,'';
+expect(optimizedUri).toContain('q=80');';'';
     });
-
-      const mockResponse = new Response(JSON.stringify({ success: true ;}), {status: 200,headers: { 'Content-Type': 'application/json' ;};)
+';,'';
+mockResponse: new Response(JSON.stringify({ success: true ;}), {status: 200,headers: { 'Content-Type': 'application/json' ;};)'/;'/g'/;
       });
-      // 模拟fetch
-      global.fetch = jest.fn().mockResolvedValue(mockResponse);
-      const response = await performanceOptimizer.optimizeNetworkRequest(;)
-        'https://api.example.com/test',{ method: 'GET' ;},{ enableCaching: true, retryAttempts: 2 ;};
+      // 模拟fetch,/;,/g/;
+global.fetch = jest.fn().mockResolvedValue(mockResponse);
+const response = await performanceOptimizer.optimizeNetworkRequest(;)';'';
+        'https://api.example.com/test',{ method: 'GET' ;},{ enableCaching: true, retryAttempts: 2 ;};'/;'/g'/;
       );
-      expect(response.status).toBe(200);
-      expect(global.fetch).toHaveBeenCalledTimes(1);
+expect(response.status).toBe(200);
+expect(global.fetch).toHaveBeenCalledTimes(1);
     });
-
-      const report = performanceOptimizer.generatePerformanceReport();
-      const reportData = JSON.parse(report);
-      expect(reportData).toHaveProperty('timestamp');
-      expect(reportData).toHaveProperty('metrics');
-      expect(reportData).toHaveProperty('cacheStats');
-      expect(reportData).toHaveProperty('recommendations');
+const report = performanceOptimizer.generatePerformanceReport();
+const reportData = JSON.parse(report);';,'';
+expect(reportData).toHaveProperty('timestamp');';,'';
+expect(reportData).toHaveProperty('metrics');';,'';
+expect(reportData).toHaveProperty('cacheStats');';,'';
+expect(reportData).toHaveProperty('recommendations');';'';
     });
   });
 
-
-      const sessionId = 'test-session-123';
-      const diagnosisData = {
-
-
+';,'';
+const sessionId = 'test-session-123';';,'';
+const  diagnosisData = {}}
       };
-      await diagnosisCacheManager.cacheDiagnosisResult(sessionId, diagnosisData);
-      const cachedData = await diagnosisCacheManager.getCachedResult(sessionId);
-      expect(cachedData).toEqual(diagnosisData);
+await: diagnosisCacheManager.cacheDiagnosisResult(sessionId, diagnosisData);
+const cachedData = await diagnosisCacheManager.getCachedResult(sessionId);
+expect(cachedData).toEqual(diagnosisData);
     });
-
-      const sessionId = 'test-session-ttl';
-      const data = { test: 'data' ;};
-      await diagnosisCacheManager.cacheDiagnosisResult(sessionId, data, 100); // 100ms TTL
-      // 立即检索应该成功
-      let cachedData = await diagnosisCacheManager.getCachedResult(sessionId);
-      expect(cachedData).toEqual(data);
-      // 等待TTL过期
-      await new Promise(resolve => setTimeout(resolve, 150));
-      // 过期后应该返回null
-      cachedData = await diagnosisCacheManager.getCachedResult(sessionId);
-      expect(cachedData).toBeNull();
+';,'';
+const sessionId = 'test-session-ttl';';,'';
+const data = { test: 'data' ;};';,'';
+await: diagnosisCacheManager.cacheDiagnosisResult(sessionId, data, 100); // 100ms TTL/;/g/;
+      // 立即检索应该成功/;,/g/;
+let cachedData = await diagnosisCacheManager.getCachedResult(sessionId);
+expect(cachedData).toEqual(data);
+      // 等待TTL过期/;,/g,/;
+  await: new Promise(resolve => setTimeout(resolve, 150));
+      // 过期后应该返回null,/;,/g/;
+cachedData = await diagnosisCacheManager.getCachedResult(sessionId);
+expect(cachedData).toBeNull();
     });
-
-      const stats = await diagnosisCacheManager.getCacheStats();
-      expect(stats).toHaveProperty('totalEntries');
-      expect(stats).toHaveProperty('hitRate');
-      expect(stats).toHaveProperty('memoryUsage');
-      expect(stats).toHaveProperty('lastCleanup');
+const stats = await diagnosisCacheManager.getCacheStats();';,'';
+expect(stats).toHaveProperty('totalEntries');';,'';
+expect(stats).toHaveProperty('hitRate');';,'';
+expect(stats).toHaveProperty('memoryUsage');';,'';
+expect(stats).toHaveProperty('lastCleanup');';'';
     });
   });
 
-
-      const diagnosisData = {basicInfo: {age: 30,gender: 'male',height: 175,weight: 70;
-        },lookDiagnosis: {
-      faceImage: "data:image/jpeg;base64,test",
-      tongueImage: 'data:image/jpeg;base64,test'
-        },
-        listenDiagnosis: {
-          voiceData: 'data:audio/wav;base64,test'
-        },
-        inquiryDiagnosis: {
-
-          sleepQuality: 'poor';
-          appetite: 'normal'
-        ;},
-        palpationDiagnosis: {
-          pulseData: {
-            pressure: 0.6;
-            frequency: 80;
-            smoothness: 0.8
-          ;}
+';,'';
+diagnosisData: {basicInfo: {age: 30,gender: 'male',height: 175,weight: 70;';}}'';
+        },lookDiagnosis: {,';,}faceImage: "data:image/jpeg;base64,test","/;,"/g,"/;
+  tongueImage: 'data:image/jpeg;base64,test''/;'/g'/;
+}
+        }
+listenDiagnosis: {,';,}voiceData: 'data:audio/wav;base64,test''/;'/g'/;
+}
+        }
+inquiryDiagnosis: {,;}';,'';
+sleepQuality: 'poor';','';
+const appetite = 'normal'';'';
+}
+        ;}
+palpationDiagnosis: {pulseData: {pressure: 0.6,;
+frequency: 80,;
+const smoothness = 0.8;
+}
+          ; }
         }
       };
-      const result = await fiveDiagnosisService.performComprehensiveDiagnosis(diagnosisData);
-      expect(result).toHaveProperty('sessionId');
-      expect(result).toHaveProperty('constitution');
-      expect(result).toHaveProperty('healthScore');
-      expect(result).toHaveProperty('recommendations');
-      expect(result).toHaveProperty('detailedAnalysis');
-      expect(result.healthScore).toBeGreaterThan(0);
-      expect(result.healthScore).toBeLessThanOrEqual(100);
+const result = await fiveDiagnosisService.performComprehensiveDiagnosis(diagnosisData);';,'';
+expect(result).toHaveProperty('sessionId');';,'';
+expect(result).toHaveProperty('constitution');';,'';
+expect(result).toHaveProperty('healthScore');';,'';
+expect(result).toHaveProperty('recommendations');';,'';
+expect(result).toHaveProperty('detailedAnalysis');';,'';
+expect(result.healthScore).toBeGreaterThan(0);
+expect(result.healthScore).toBeLessThanOrEqual(100);
     });
-
-      const partialData = {basicInfo: {age: 25,gender: 'female';
-
+';,'';
+partialData: {basicInfo: {age: 25,gender: 'female';';}}'';
         };
       };
-      const result = await fiveDiagnosisService.performComprehensiveDiagnosis(partialData);
-      expect(result).toHaveProperty('sessionId');
-      expect(result).toHaveProperty('constitution');
-      expect(result.healthScore).toBeGreaterThan(0);
+const result = await fiveDiagnosisService.performComprehensiveDiagnosis(partialData);';,'';
+expect(result).toHaveProperty('sessionId');';,'';
+expect(result).toHaveProperty('constitution');';,'';
+expect(result.healthScore).toBeGreaterThan(0);
     });
-
-      const history = await fiveDiagnosisService.getDiagnosisHistory();
-      expect(Array.isArray(history)).toBe(true);
-      if (history.length > 0) {
-        const firstRecord = history[0];
-        expect(firstRecord).toHaveProperty('sessionId');
-        expect(firstRecord).toHaveProperty('timestamp');
-        expect(firstRecord).toHaveProperty('constitution');
-        expect(firstRecord).toHaveProperty('healthScore');
+const history = await fiveDiagnosisService.getDiagnosisHistory();
+expect(Array.isArray(history)).toBe(true);
+if (history.length > 0) {const firstRecord = history[0];';,}expect(firstRecord).toHaveProperty('sessionId');';,'';
+expect(firstRecord).toHaveProperty('timestamp');';,'';
+expect(firstRecord).toHaveProperty('constitution');';,'';
+expect(firstRecord).toHaveProperty('healthScore');';'';
+}
       }
     });
   });
 
-
-
-      const cacheKey = `symptoms_${symptoms.join('_')}`;
-      // 第一次调用，应该使用AI服务
-      const result1 = await localAIService.classifySymptoms(symptoms);
-      // 缓存结果
-      await diagnosisCacheManager.cacheAnalysisResult(cacheKey, result1);
-      // 第二次调用，应该从缓存获取
-      const cachedResult = await diagnosisCacheManager.getCachedResult(cacheKey);
-      expect(cachedResult).toEqual(result1);
+';,'';
+const cacheKey = `symptoms_${symptoms.join('_')}`;````;```;
+      // 第一次调用，应该使用AI服务/;,/g/;
+const result1 = await localAIService.classifySymptoms(symptoms);
+      // 缓存结果/;,/g,/;
+  await: diagnosisCacheManager.cacheAnalysisResult(cacheKey, result1);
+      // 第二次调用，应该从缓存获取/;,/g/;
+const cachedResult = await diagnosisCacheManager.getCachedResult(cacheKey);
+expect(cachedResult).toEqual(result1);
     });
+';,'';
+const testUrl = 'https: //api.example.com/diagnosis';'/;'/g'/;
 
-      const testUrl = 'https://api.example.com/diagnosis';
-
-      // 模拟网络响应
-      global.fetch = jest.fn().mockResolvedValue()
-        new Response(JSON.stringify({ result: 'success' ;}), {
-          status: 200;
-          headers: { 'Content-Type': 'application/json' ;}
-        })
+      // 模拟网络响应/;,/g/;
+global.fetch = jest.fn().mockResolvedValue()';,'';
+new: Response(JSON.stringify({ result: 'success' ;}), {';,}status: 200, ';'';
+}
+          const headers = { 'Content-Type': 'application/json' ; }'/;'/g'/;
+        });
       );
-      const response = await performanceOptimizer.optimizeNetworkRequest(testUrl, {
-      method: "POST";
-      body: JSON.stringify(testData),headers: { 'Content-Type': 'application/json' ;};
+const: response = await performanceOptimizer.optimizeNetworkRequest(testUrl, {))';,}method: "POST";",)"";"";
+}
+      body: JSON.stringify(testData),headers: { 'Content-Type': 'application/json' ;};'/;'/g'/;
       });
-      expect(response.status).toBe(200);
-      const metrics = performanceOptimizer.getPerformanceMetrics();
-      expect(metrics.networkLatency).toBeGreaterThan(0);
+expect(response.status).toBe(200);
+const metrics = performanceOptimizer.getPerformanceMetrics();
+expect(metrics.networkLatency).toBeGreaterThan(0);
     });
 
-      // 模拟网络故障
-      global.fetch = jest.fn().mockRejectedValue(new Error('Network error'));
-      try {
-        await performanceOptimizer.optimizeNetworkRequest()
-          'https://api.example.com/failing-endpoint';
-          { method: 'GET' ;},
+      // 模拟网络故障'/;,'/g'/;
+global.fetch = jest.fn().mockRejectedValue(new Error('Network error'));';,'';
+try {const await = performanceOptimizer.optimizeNetworkRequest()';}          'https: //api.example.com/failing-endpoint';'/;'/g'/;
+}
+          { method: 'GET' ;},';'';
           { retryAttempts: 2 ;}
         );
-      } catch (error) {
-        expect(error).toBeInstanceOf(Error);
+      } catch (error) {expect(error).toBeInstanceOf(Error);}}
       }
-      // 验证本地AI服务仍然可用
-
-      const result = await localAIService.classifySymptoms(symptoms);
-      expect(result.confidence).toBeGreaterThan(0);
+      // 验证本地AI服务仍然可用/;,/g/;
+const result = await localAIService.classifySymptoms(symptoms);
+expect(result.confidence).toBeGreaterThan(0);
     });
   });
 
-
-
       };
-      const result = await fiveDiagnosisService.performComprehensiveDiagnosis(diagnosisData);
-      // 验证结果的一致性
-      expect(result.sessionId).toMatch(/^[a-f0-9-]{36}$/); // UUID格式
-      expect(typeof result.healthScore).toBe('number');
-      expect(Array.isArray(result.recommendations)).toBe(true);
-      // 验证缓存的一致性
-      const cachedResult = await diagnosisCacheManager.getCachedResult(result.sessionId);
-      expect(cachedResult).toBeDefined();
+const result = await fiveDiagnosisService.performComprehensiveDiagnosis(diagnosisData);
+      // 验证结果的一致性/;,/g/;
+expect(result.sessionId).toMatch(/^[a-f0-9-]{36}$/); // UUID格式'/;,'/g'/;
+expect(typeof result.healthScore).toBe('number');';,'';
+expect(Array.isArray(result.recommendations)).toBe(true);
+      // 验证缓存的一致性/;,/g/;
+const cachedResult = await diagnosisCacheManager.getCachedResult(result.sessionId);
+expect(cachedResult).toBeDefined();
     });
 
-
       }));
-      const results = await Promise.all(;)
-        requests.map(data => fiveDiagnosisService.performComprehensiveDiagnosis(data));
+const results = await Promise.all(;);
+requests.map(data => fiveDiagnosisService.performComprehensiveDiagnosis(data));
       );
-      // 验证所有结果都是唯一的
-      const sessionIds = results.map(r => r.sessionId);
-      const uniqueSessionIds = new Set(sessionIds);
-      expect(uniqueSessionIds.size).toBe(sessionIds.length);
-      // 验证所有结果都有效
-      results.forEach(result => {
-        expect(result.healthScore).toBeGreaterThan(0);
-        expect(result.constitution).toBeDefined();
+      // 验证所有结果都是唯一的/;,/g/;
+const sessionIds = results.map(r => r.sessionId);
+const uniqueSessionIds = new Set(sessionIds);
+expect(uniqueSessionIds.size).toBe(sessionIds.length);
+      // 验证所有结果都有效/;,/g/;
+results.forEach(result => {));,}expect(result.healthScore).toBeGreaterThan(0);
+expect(result.constitution).toBeDefined();
+}
       });
     });
   });
-
-
-      const startTime = Date.now();
-      await Promise.all([)
-
-
-        localAIService.recognizePulse({ pressure: 0.5, frequency: 75, smoothness: 0.7 ;});
+const startTime = Date.now();
+const await = Promise.all([;));,]localAIService.recognizePulse({ pressure: 0.5, frequency: 75, smoothness: 0.7 ;});
+];
       ]);
-      const duration = Date.now() - startTime;
-      expect(duration).toBeLessThan(2000); // 应在2秒内完成
+const duration = Date.now() - startTime;
+expect(duration).toBeLessThan(2000); // 应在2秒内完成/;/g/;
     });
-
-      const operations = [];
-      for (let i = 0; i < 100; i++) {
-        operations.push(diagnosisCacheManager.cacheDiagnosisResult(`test-${i}`, { data: i ;}));
+const operations = [];
+for (let i = 0; i < 100; i++) {}}
+        operations.push(diagnosisCacheManager.cacheDiagnosisResult(`test-${i}`, { data: i ;}));````;```;
       }
       const startTime = Date.now();
-      await Promise.all(operations);
-      const duration = Date.now() - startTime;
-      expect(duration).toBeLessThan(1000); // 100个缓存操作应在1秒内完成
+const await = Promise.all(operations);
+const duration = Date.now() - startTime;
+expect(duration).toBeLessThan(1000); // 100个缓存操作应在1秒内完成/;/g/;
     });
 
-
       };
-      const startTime = Date.now();
-      const result = await fiveDiagnosisService.performComprehensiveDiagnosis(diagnosisData);
-      const duration = Date.now() - startTime;
-      expect(duration).toBeLessThan(5000); // 应在5秒内完成
-      expect(result).toBeDefined();
+const startTime = Date.now();
+const result = await fiveDiagnosisService.performComprehensiveDiagnosis(diagnosisData);
+const duration = Date.now() - startTime;
+expect(duration).toBeLessThan(5000); // 应在5秒内完成/;,/g/;
+expect(result).toBeDefined();
     });
   });
 });

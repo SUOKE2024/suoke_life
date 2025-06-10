@@ -7,6 +7,7 @@
 ## 智能体介绍
 
 ### 🤖 小艾 (XiaoaiAgent)
+
 - **角色**: 健康助手 & 首页聊天频道版主
 - **专长**: 中医四诊合参、健康分析、语音交互、无障碍服务
 - **主要功能**:
@@ -17,6 +18,7 @@
   - 无障碍服务
 
 ### 🛒 小克 (XiaokeAgent)
+
 - **角色**: SUOKE频道版主
 - **专长**: 服务订阅、农产品预制、供应链管理、商业化服务
 - **主要功能**:
@@ -28,6 +30,7 @@
   - 支付处理
 
 ### 📚 老克 (LaokeAgent)
+
 - **角色**: 探索频道版主
 - **专长**: 知识传播、培训、博物馆导览、玉米迷宫NPC
 - **主要功能**:
@@ -38,6 +41,7 @@
   - 专家咨询匹配
 
 ### 💝 索儿 (SoerAgent)
+
 - **角色**: LIFE频道版主
 - **专长**: 生活健康管理、陪伴服务、数据整合分析
 - **主要功能**:
@@ -77,22 +81,22 @@ await soer.initialize();
 ```typescript
 // 与小艾聊天
 const response = await xiaoai.processMessage('你好，我想了解我的健康状况', {
-  userId: 'user123'
+  userId: 'user123',
 });
 
 // 小克服务推荐
 const services = await xiaoke.processMessage('我需要预约医生', {
-  userId: 'user123'
+  userId: 'user123',
 });
 
 // 老克知识搜索
 const knowledge = await laoke.processMessage('我想学习中医基础知识', {
-  userId: 'user123'
+  userId: 'user123',
 });
 
 // 索儿生活管理
 const lifestyle = await soer.processMessage('帮我制定健康计划', {
-  userId: 'user123'
+  userId: 'user123',
 });
 ```
 
@@ -100,7 +104,7 @@ const lifestyle = await soer.processMessage('帮我制定健康计划', {
 
 ```typescript
 // 获取智能体基本信息
-console.log(xiaoai.getName());        // "小艾"
+console.log(xiaoai.getName()); // "小艾"
 console.log(xiaoai.getDescription()); // "健康助手 & 首页聊天频道版主"
 console.log(xiaoai.getCapabilities()); // ["chat", "voice_interaction", ...]
 
@@ -115,7 +119,7 @@ console.log(status.status); // "healthy"
 
 ```typescript
 // 协作场景示例：用户健康咨询
-const userQuery = "我最近感觉疲劳，想要全面的健康管理方案";
+const userQuery = '我最近感觉疲劳，想要全面的健康管理方案';
 const userId = 'user123';
 
 // 1. 小艾进行健康分析
@@ -123,21 +127,20 @@ const healthAnalysis = await xiaoai.processMessage(userQuery, { userId });
 
 // 2. 小克推荐相关服务
 const serviceRecommendation = await xiaoke.processMessage(
-  `基于健康分析结果推荐服务: ${JSON.stringify(healthAnalysis.data)}`, 
+  `基于健康分析结果推荐服务: ${JSON.stringify(healthAnalysis.data)}`,
   { userId }
 );
 
 // 3. 老克提供知识支持
 const knowledgeSupport = await laoke.processMessage(
-  '提供关于疲劳管理的中医知识', 
+  '提供关于疲劳管理的中医知识',
   { userId }
 );
 
 // 4. 索儿制定生活方式计划
-const lifestylePlan = await soer.processMessage(
-  '制定改善疲劳的生活方式计划', 
-  { userId }
-);
+const lifestylePlan = await soer.processMessage('制定改善疲劳的生活方式计划', {
+  userId,
+});
 ```
 
 ## 测试系统
@@ -164,6 +167,7 @@ npx ts-node src/agents/test-agents.ts
 ## 智能体能力
 
 ### 小艾能力
+
 - `chat` - 聊天对话
 - `voice_interaction` - 语音交互
 - `four_diagnosis` - 中医四诊
@@ -177,6 +181,7 @@ npx ts-node src/agents/test-agents.ts
 - `algorithmic_diagnosis` - 算法诊断
 
 ### 小克能力
+
 - `service_recommendation` - 服务推荐
 - `doctor_matching` - 医生匹配
 - `product_management` - 产品管理
@@ -190,6 +195,7 @@ npx ts-node src/agents/test-agents.ts
 - `logistics_management` - 物流管理
 
 ### 老克能力
+
 - `knowledge_management` - 知识管理
 - `education` - 教育培训
 - `content_curation` - 内容策展
@@ -203,6 +209,7 @@ npx ts-node src/agents/test-agents.ts
 - `maze_game_guidance` - 迷宫游戏引导
 
 ### 索儿能力
+
 - `lifestyle_management` - 生活方式管理
 - `emotional_support` - 情感支持
 - `habit_tracking` - 习惯跟踪
@@ -259,4 +266,4 @@ npx ts-node src/agents/test-agents.ts
 
 ## 许可证
 
-本项目遵循 MIT 许可证。详见 LICENSE 文件。 
+本项目遵循 MIT 许可证。详见 LICENSE 文件。

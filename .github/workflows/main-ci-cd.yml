@@ -1,0 +1,535 @@
+name: 索克生活 - 主要CI/CD流水线
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: '部署环境'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+        - staging
+        - production
+      skip_tests:
+        description: '跳过测试'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+  NODE_VERSION: '18'
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  # ===== 代码质量检查 =====
+  code-quality:
+    name: 代码质量检查
+    runs-on: ubuntu-latest
+    outputs:
+      quality-passed: ${{ steps.quality-check.outputs.passed }}
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: 设置 Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: 设置 Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: 安装依赖
+      run: |
+        npm ci
+        pip install -r requirements.txt
+        pip install flake8 mypy black isort bandit safety
+
+    - name: 代码格式检查
+      run: |
+        npm run format:check
+        black --check --diff .
+        isort --check-only --diff .
+
+    - name: 语法检查
+      run: |
+        npm run lint
+        flake8 services/ --max-line-length=88 --extend-ignore=E203,W503
+        mypy services/ --ignore-missing-imports
+
+    - name: 类型检查
+      run: npm run type-check
+
+    - name: 代码质量评分
+      id: quality-check
+      run: |
+        npm run quality-check
+        echo "passed=true" >> $GITHUB_OUTPUT
+
+  # ===== 前端测试 =====
+  frontend-tests:
+    name: 前端测试
+    runs-on: ubuntu-latest
+    needs: code-quality
+    if: ${{ !inputs.skip_tests }}
+    
+    strategy:
+      matrix:
+        test-type: [unit, integration, e2e]
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+
+    - name: 设置 Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: 安装依赖
+      run: npm ci
+
+    - name: 运行单元测试
+      if: matrix.test-type == 'unit'
+      run: |
+        npm run test:unit -- --coverage --watchAll=false
+        npm run test:coverage
+
+    - name: 运行集成测试
+      if: matrix.test-type == 'integration'
+      run: npm run test:integration
+
+    - name: 运行E2E测试
+      if: matrix.test-type == 'e2e'
+      run: |
+        npm run test:e2e:simple
+        npm run test:quality
+
+    - name: 上传测试覆盖率
+      if: matrix.test-type == 'unit'
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage/lcov.info
+        flags: frontend
+
+  # ===== 后端测试 =====
+  backend-tests:
+    name: 后端测试
+    runs-on: ubuntu-latest
+    needs: code-quality
+    if: ${{ !inputs.skip_tests }}
+    
+    strategy:
+      matrix:
+        service: 
+          - api-gateway
+          - user-management-service
+          - unified-health-data-service
+          - blockchain-service
+          - communication-service
+          - agent-services/xiaoai-service
+          - agent-services/xiaoke-service
+          - agent-services/laoke-service
+          - agent-services/soer-service
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: suoke_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      
+      redis:
+        image: redis:7
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+
+    - name: 设置 Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: 安装 UV
+      run: |
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+        echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
+    - name: 安装依赖
+      run: |
+        cd services/${{ matrix.service }}
+        if [ -f "pyproject.toml" ]; then
+          uv sync --dev
+        else
+          pip install -r requirements.txt
+          pip install pytest pytest-cov pytest-asyncio
+        fi
+
+    - name: 运行测试
+      env:
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/suoke_test
+        REDIS_URL: redis://localhost:6379/0
+        ENVIRONMENT: test
+      run: |
+        cd services/${{ matrix.service }}
+        if [ -f "pyproject.toml" ]; then
+          uv run pytest tests/ --cov=. --cov-report=xml --cov-report=html
+        else
+          python -m pytest tests/ --cov=. --cov-report=xml
+        fi
+
+    - name: 上传测试覆盖率
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./services/${{ matrix.service }}/coverage.xml
+        flags: backend-${{ matrix.service }}
+
+  # ===== 安全扫描 =====
+  security-scan:
+    name: 安全扫描
+    runs-on: ubuntu-latest
+    needs: code-quality
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+
+    - name: 设置 Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: 安装安全扫描工具
+      run: |
+        pip install safety bandit semgrep
+        npm install -g audit-ci
+
+    - name: Python 依赖安全扫描
+      run: |
+        safety check --json --output safety-report.json || true
+        bandit -r services/ -f json -o bandit-report.json || true
+
+    - name: Node.js 依赖安全扫描
+      run: |
+        npm audit --audit-level moderate --json > npm-audit.json || true
+        audit-ci --moderate || true
+
+    - name: 代码安全扫描 (Semgrep)
+      run: |
+        semgrep --config=auto --json --output=semgrep-report.json . || true
+
+    - name: 上传安全扫描结果
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: security-reports
+        path: |
+          safety-report.json
+          bandit-report.json
+          npm-audit.json
+          semgrep-report.json
+
+  # ===== 构建Docker镜像 =====
+  build-images:
+    name: 构建Docker镜像
+    runs-on: ubuntu-latest
+    needs: [frontend-tests, backend-tests, security-scan]
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+    
+    strategy:
+      matrix:
+        service:
+          - api-gateway
+          - user-management-service
+          - unified-health-data-service
+          - blockchain-service
+          - communication-service
+          - agent-services/xiaoai-service
+          - agent-services/xiaoke-service
+          - agent-services/laoke-service
+          - agent-services/soer-service
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+
+    - name: 设置 Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: 登录容器注册表
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: 提取元数据
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/${{ matrix.service }}
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=sha,prefix={{branch}}-
+          type=raw,value=latest,enable={{is_default_branch}}
+
+    - name: 构建和推送镜像
+      uses: docker/build-push-action@v5
+      with:
+        context: ./services/${{ matrix.service }}
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        platforms: linux/amd64,linux/arm64
+
+  # ===== 容器安全扫描 =====
+  container-security:
+    name: 容器安全扫描
+    runs-on: ubuntu-latest
+    needs: build-images
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    strategy:
+      matrix:
+        service:
+          - api-gateway
+          - user-management-service
+          - unified-health-data-service
+    
+    steps:
+    - name: 运行 Trivy 容器扫描
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/${{ matrix.service }}:latest
+        format: 'sarif'
+        output: 'trivy-${{ matrix.service }}.sarif'
+
+    - name: 上传 Trivy 扫描结果
+      uses: github/codeql-action/upload-sarif@v2
+      if: always()
+      with:
+        sarif_file: 'trivy-${{ matrix.service }}.sarif'
+
+  # ===== 部署到测试环境 =====
+  deploy-staging:
+    name: 部署到测试环境
+    runs-on: ubuntu-latest
+    needs: [build-images, container-security]
+    if: github.ref == 'refs/heads/develop' || (github.event_name == 'workflow_dispatch' && inputs.environment == 'staging')
+    environment: staging
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+
+    - name: 设置 kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: 'latest'
+
+    - name: 配置 kubeconfig
+      run: |
+        mkdir -p ~/.kube
+        echo "${{ secrets.KUBE_CONFIG_STAGING }}" | base64 -d > ~/.kube/config
+
+    - name: 部署到 Kubernetes
+      run: |
+        # 更新镜像标签
+        export IMAGE_TAG=${{ github.sha }}
+        export ENVIRONMENT=staging
+        
+        # 应用配置
+        envsubst < k8s/staging/configmap.yaml | kubectl apply -f -
+        envsubst < k8s/staging/secrets.yaml | kubectl apply -f -
+        
+        # 部署服务
+        for service in api-gateway user-management-service unified-health-data-service; do
+          envsubst < k8s/staging/${service}-deployment.yaml | kubectl apply -f -
+          kubectl rollout status deployment/${service} -n suoke-staging --timeout=300s
+        done
+
+    - name: 运行烟雾测试
+      run: |
+        sleep 60
+        kubectl get pods -n suoke-staging
+        
+        # 健康检查
+        API_GATEWAY_URL=$(kubectl get service api-gateway -n suoke-staging -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+        curl -f http://${API_GATEWAY_URL}/health || exit 1
+
+  # ===== 性能测试 =====
+  performance-tests:
+    name: 性能测试
+    runs-on: ubuntu-latest
+    needs: deploy-staging
+    if: github.ref == 'refs/heads/develop'
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+
+    - name: 安装 K6
+      run: |
+        sudo gpg -k
+        sudo gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+        echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+        sudo apt-get update
+        sudo apt-get install k6
+
+    - name: 运行性能测试
+      run: |
+        k6 run tests/performance/load-test.js --out json=performance-results.json
+
+    - name: 上传性能测试结果
+      uses: actions/upload-artifact@v3
+      with:
+        name: performance-results
+        path: performance-results.json
+
+  # ===== 部署到生产环境 =====
+  deploy-production:
+    name: 部署到生产环境
+    runs-on: ubuntu-latest
+    needs: [build-images, container-security, performance-tests]
+    if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && inputs.environment == 'production')
+    environment: production
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+
+    - name: 设置 kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: 'latest'
+
+    - name: 配置 kubeconfig
+      run: |
+        mkdir -p ~/.kube
+        echo "${{ secrets.KUBE_CONFIG_PRODUCTION }}" | base64 -d > ~/.kube/config
+
+    - name: 蓝绿部署
+      run: |
+        export IMAGE_TAG=${{ github.sha }}
+        export ENVIRONMENT=production
+        
+        # 部署到绿色环境
+        for service in api-gateway user-management-service unified-health-data-service; do
+          # 更新部署配置
+          envsubst < k8s/production/${service}-deployment.yaml | kubectl apply -f -
+          
+          # 等待部署完成
+          kubectl rollout status deployment/${service}-green -n suoke-production --timeout=600s
+          
+          # 健康检查
+          kubectl wait --for=condition=ready pod -l app=${service},version=green -n suoke-production --timeout=300s
+        done
+        
+        # 切换流量到绿色环境
+        kubectl patch service api-gateway -n suoke-production -p '{"spec":{"selector":{"version":"green"}}}'
+        
+        # 验证部署
+        sleep 30
+        API_GATEWAY_URL=$(kubectl get service api-gateway -n suoke-production -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+        curl -f http://${API_GATEWAY_URL}/health || exit 1
+
+    - name: 清理旧版本
+      run: |
+        # 删除蓝色环境的旧部署
+        kubectl delete deployment api-gateway-blue user-management-service-blue unified-health-data-service-blue -n suoke-production --ignore-not-found=true
+
+  # ===== 通知 =====
+  notify:
+    name: 通知
+    runs-on: ubuntu-latest
+    needs: [deploy-production, deploy-staging]
+    if: always()
+    
+    steps:
+    - name: 发送成功通知
+      if: ${{ needs.deploy-production.result == 'success' || needs.deploy-staging.result == 'success' }}
+      uses: 8398a7/action-slack@v3
+      with:
+        status: success
+        channel: '#suoke-ci-cd'
+        webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+        fields: repo,message,commit,author,action,eventName,ref,workflow
+        text: |
+          ✅ 索克生活部署成功！
+          分支: ${{ github.ref }}
+          提交: ${{ github.sha }}
+          环境: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
+
+    - name: 发送失败通知
+      if: ${{ needs.deploy-production.result == 'failure' || needs.deploy-staging.result == 'failure' }}
+      uses: 8398a7/action-slack@v3
+      with:
+        status: failure
+        channel: '#suoke-ci-cd'
+        webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+        fields: repo,message,commit,author,action,eventName,ref,workflow
+        text: |
+          ❌ 索克生活部署失败！
+          分支: ${{ github.ref }}
+          提交: ${{ github.sha }}
+          请检查日志并修复问题。
+
+  # ===== 清理 =====
+  cleanup:
+    name: 清理资源
+    runs-on: ubuntu-latest
+    needs: [notify]
+    if: always()
+    
+    steps:
+    - name: 清理旧的工件
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            run_id: context.runId,
+          });
+          
+          // 保留最近10个工件，删除其他的
+          const oldArtifacts = artifacts.data.artifacts.slice(10);
+          for (const artifact of oldArtifacts) {
+            await github.rest.actions.deleteArtifact({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              artifact_id: artifact.id,
+            });
+          } 

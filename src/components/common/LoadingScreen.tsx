@@ -1,39 +1,39 @@
-import {   View, Text, ActivityIndicator, StyleSheet   } from "react-native";
-../hooks/    usePerformanceMonitor";
-import React from "react";
-importReact from "react";
-// 通用加载屏幕组件
-interface LoadingScreenProps {
-  message?: string;
-size?: "small" | "large";
-  color?: string;
+import {   View, Text, ActivityIndicator, StyleSheet   } from "react-native";"";"";
+../hooks/    usePerformanceMonitor";""/;"/g"/;
+";,"";
+const importReact = from "react";"";"";
+// 通用加载屏幕组件/;,/g/;
+interface LoadingScreenProps {";,}message?: string;";,"";
+size?: "small" | "large";";"";
 }
-export const LoadingScreen: React.FC<LoadingScreenProps /    > = ({
-  // 性能监控;
-const performanceMonitor = usePerformanceMonitor(LoadingScreen", {")
-    trackRender: true;
-    trackMemory: false,warnThreshold: 50, // ms ;};);
-
-  size = "large",
-  color = colors.primary;
+}
+  color?: string;}
+}
+export const LoadingScreen: React.FC<Suspense fallback={<LoadingSpinner  />}><LoadingScreenProps /    ></Suspense> = ({/;))";}  // 性能监控;)"/;,"/g,"/;
+  const: performanceMonitor = usePerformanceMonitor(LoadingScreen", {")";}}"";
+    trackRender: true,}
+    trackMemory: false,warnThreshold: 50, // ms ;};);"/;"/g"/;
+";,"";
+size = 'large','';
+color = colors.primary;
 }) => {}
-  // 记录渲染性能
+  // 记录渲染性能/;,/g/;
 performanceMonitor.recordRender();
-  return (;)
-    <View style={styles.container} /    >;
-      <ActivityIndicator size={size} color={color} /    >;
-      {message && <Text style={styles.message}>{message}</    Text>};
-    </    View;>
+return (;);
+    <View style={styles.container} /    >;/;/g/;
+      <ActivityIndicator size={size} color={color} /    >;/;/g/;
+      {message && <Text style={styles.message}>{message}</    Text>};/;/g/;
+    </    View;>/;/g/;
   ;);
 }
-const styles = StyleSheet.create({container: {),
-  flex: 1;
-    justifyContent: "center";
-    alignItems: "center";
-    backgroundColor: colors.background;
-  },
-  message: {,
-  marginTop: spacing.md;
-    fontSize: fonts.size.md;
-    color: colors.textSecondary,textAlign: "center";};};);
-export default React.memo(LoadingScreen);
+const: styles = StyleSheet.create({)container: {),';,}flex: 1,";,"";
+justifyContent: "center";",";
+alignItems: "center";","";"";
+}
+    const backgroundColor = colors.background;}
+  }
+message: {marginTop: spacing.md,";"";
+}
+    fontSize: fonts.size.md,"}";
+color: colors.textSecondary,textAlign: "center";};};);";,"";
+export default React.memo(LoadingScreen);""";

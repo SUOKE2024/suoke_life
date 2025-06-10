@@ -1,6 +1,7 @@
-// BenchmarkCreator
-// 自动修复的文件
-
-export default class BenchmarkCreator {
-  // TODO: 实现具体功能
+// BenchmarkCreator/;/g/;
+// 自动修复的文件/;,/g/;
+export default class BenchmarkCreator {}}
 }
+  // TODO: 实现具体功能}/;/g/;
+};
+;

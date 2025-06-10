@@ -1,22 +1,8 @@
-import App from '../App.tsx';
-describe('App', () => {
-
-    expect(App).toBeDefined();
-  });
-
-    // 添加正常输入测试
-    expect(true).toBe(true);
-  });
-
-    // 添加边界情况测试
-    expect(true).toBe(true);
-  });
-
-    // 添加异常输入测试
-    expect(true).toBe(true);
-  });
-
-    // 添加类型检查测试
-    expect(true).toBe(true);
+import React from 'react';'';,';
+import { render, screen } from '@testing-library/react-native';''/;,''/g'/;
+import App from '../App';''/;,''/g'/;
+describe('App', () => {'';,}it('renders correctly', () => {'';,}render(<App  />);/;,''/g'/;
+expect(screen.getByText('索克生活')).toBeTruthy();'';';
+}
   });
 });

@@ -1,473 +1,458 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import {import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../store';
-import {import { KnowledgeSearchBar } from '../../components/health/KnowledgeSearchBar';
-import { ConstitutionCard } from '../../components/health/ConstitutionCard';
-import { KnowledgeQuery, KnowledgeResult } from '../../services/medKnowledgeService';
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  RefreshControl,
-  TouchableOpacity,
-  Alert,
-  SafeAreaView,
-  StatusBar;
-} from 'react-native';
-  fetchConstitutions,
-  fetchSymptoms,
-  fetchAcupoints,
-  fetchHerbs,
-  fetchSyndromes,
-  searchKnowledge,
-  checkServiceHealth,
-  selectConstitutions,
-  selectLoading,
-  selectErrors,
-  selectServiceHealth,
-  selectSearchResults,
-  addToSearchHistory,
-  clearError;
-} from '../../store/slices/medKnowledgeSlice';
-interface TabItem {
-  key: string;
-  title: string;
-  icon: string;
+import React, { useState, useEffect, useCallback } from "react";";
+import {import { useDispatch, useSelector } from "react-redux";";
+import { AppDispatch, RootState } from "../../store";""/;,"/g"/;
+import {import { KnowledgeSearchBar } from "../../components/health/KnowledgeSearchBar";""/;,"/g"/;
+import { ConstitutionCard } from "../../components/health/ConstitutionCard";""/;,"/g"/;
+import { KnowledgeQuery, KnowledgeResult } from "../../services/medKnowledgeService";""/;,"/g"/;
+View,;
+Text,;
+StyleSheet,;
+ScrollView,;
+RefreshControl,;
+TouchableOpacity,;
+Alert,;
+SafeAreaView,";,"";
+StatusBar;';'';
+} from "react-native";";
+fetchConstitutions,;
+fetchSymptoms,;
+fetchAcupoints,;
+fetchHerbs,;
+fetchSyndromes,;
+searchKnowledge,;
+checkServiceHealth,;
+selectConstitutions,;
+selectLoading,;
+selectErrors,;
+selectServiceHealth,;
+selectSearchResults,;
+addToSearchHistory,';,'';
+clearError;';'';
+} from "../../store/slices/medKnowledgeSlice";""/;,"/g"/;
+interface TabItem {key: string}title: string,;
 }
-export const MedKnowledgeScreen: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const constitutions = useSelector(selectConstitutions);
-  const loading = useSelector(selectLoading);
-  const errors = useSelector(selectErrors);
-  const serviceHealth = useSelector(selectServiceHealth);
-  const searchResults = useSelector(selectSearchResults);
-  const [activeTab, setActiveTab] = useState('constitution');
-  const [refreshing, setRefreshing] = useState(false);
-  const tabs: TabItem[] = [
-    {
-      key: "constitution";
+}
+  const icon = string;}
+}
+export const MedKnowledgeScreen: React.FC = () => {;,}const dispatch = useDispatch<AppDispatch>();
+const constitutions = useSelector(selectConstitutions);
+const loading = useSelector(selectLoading);
+const errors = useSelector(selectErrors);
+const serviceHealth = useSelector(selectServiceHealth);';,'';
+const searchResults = useSelector(selectSearchResults);';,'';
+const [activeTab, setActiveTab] = useState('constitution');';,'';
+const [refreshing, setRefreshing] = useState(false);
+const  tabs: TabItem[] = [;]';'';
+    {';,}const key = "constitution";";"";
+";"";
+    {";,}const key = "symptom";";"";
+";"";
+    {";,}const key = "acupoint";";"";
+";"";
+    {";,}const key = "herb";";"";
+";"";
+    {";,}const key = "syndrome";";"";
+";"";
+    {";,}const key = "search";";"";
 
-    {
-      key: "symptom";
-
-    {
-      key: "acupoint";
-
-    {
-      key: "herb";
-
-    {
-      key: "syndrome";
-
-    {
-      key: "search";
-
+];
   ];
-  // 初始化数据加载
-  useEffect() => {
-    initializeData();
-  }, [])  // 检查是否需要添加依赖项;
-  // 检查服务健康状态
-  useEffect() => {
-    const checkHealth = async () => {try {await dispatch(checkServiceHealth()).unwrap();
-      } catch (error) {
-        console.warn('Service health check failed:', error);
+  // 初始化数据加载/;,/g/;
+useEffect() => {}}
+    initializeData();}
+  }, [])  // 检查是否需要添加依赖项;/;/g/;
+  // 检查服务健康状态/;,/g/;
+useEffect() => {}}
+    const checkHealth = async () => {try {await dispatch(checkServiceHealth()).unwrap();}";"";
+      } catch (error) {";}}"";
+        console.warn('Service health check failed:', error);'}'';'';
       }
     };
-    checkHealth();
-    // 每5分钟检查一次服务健康状态
-    const interval = setInterval(checkHealth, 5 * 60 * 1000);
-    return () => clearInterval(interval);
+checkHealth();
+    // 每5分钟检查一次服务健康状态/;,/g,/;
+  interval: setInterval(checkHealth, 5 * 60 * 1000);
+return () => clearInterval(interval);
   }, [dispatch]);
-  const initializeData = useCallback(async () => {try {// 并行加载基础数据;)
-      await Promise.allSettled([;)
-        dispatch(fetchConstitutions()).unwrap(),dispatch(fetchSymptoms()).unwrap(),dispatch(fetchAcupoints()).unwrap(),dispatch(fetchHerbs()).unwrap(),dispatch(fetchSyndromes()).unwrap();
-      ]);
-    } catch (error) {
-      console.error('Failed to initialize data:', error);
+const initializeData = useCallback(async () => {try {// 并行加载基础数据;)/;,}const await = Promise.allSettled([;););,]dispatch(fetchConstitutions()).unwrap(),dispatch(fetchSymptoms()).unwrap(),dispatch(fetchAcupoints()).unwrap(),dispatch(fetchHerbs()).unwrap(),dispatch(fetchSyndromes()).unwrap();/g/;
+}
+];
+      ]);}';'';
+    } catch (error) {';}}'';
+      console.error('Failed to initialize data:', error);'}'';'';
     }
   }, [dispatch]);
-  const handleRefresh = useCallback(async () => {setRefreshing(true);)
-    try {
-      await initializeData();
-    } finally {
-      setRefreshing(false);
+const handleRefresh = useCallback(async () => {setRefreshing(true););,}try {}}
+      const await = initializeData();}
+    } finally {}}
+      setRefreshing(false);}
     }
   }, [initializeData]);
-  const handleSearch = useCallback(async (query: KnowledgeQuery) => {try {// 添加到搜索历史;)
-      dispatch(addToSearchHistory(query.query));
-      // 执行搜索
-      await dispatch(searchKnowledge(query)).unwrap();
-      // 切换到搜索结果标签
-      setActiveTab('search');
-    } catch (error) {
-
+const handleSearch = useCallback(async (query: KnowledgeQuery) => {try {// 添加到搜索历史;)/;,}dispatch(addToSearchHistory(query.query));/g/;
+      // 执行搜索/;,/g/;
+const await = dispatch(searchKnowledge(query)).unwrap();';'';
+      // 切换到搜索结果标签'/;'/g'/;
+}
+      setActiveTab('search');'}'';'';
+    } catch (error) {}}
+}
     }
-  }, [dispatch]);
-  const handleConstitutionPress = useCallback(constitution: any) => {// 导航到体质详情页面;
-    console.log('Navigate to constitution detail:', constitution.id);
+  }, [dispatch]);';,'';
+const handleConstitutionPress = useCallback(constitution: any) => {// 导航到体质详情页面;'/;}}'/g'/;
+    console.log('Navigate to constitution detail:', constitution.id);'}'';'';
   }, []);
-  const handleErrorRetry = useCallback(errorType: keyof typeof errors) => {dispatch(clearError(errorType));
-    switch (errorType) {
-      case 'constitutions':
-        dispatch(fetchConstitutions());
-        break;
-      case 'symptoms':
-        dispatch(fetchSymptoms());
-        break;
-      case 'acupoints':
-        dispatch(fetchAcupoints());
-        break;
-      case 'herbs':
-        dispatch(fetchHerbs());
-        break;
-      case 'syndromes':
-        dispatch(fetchSyndromes());
-        break;
-    }
-  }, [dispatch]);
-  const renderServiceStatus = () => {if (serviceHealth.status === 'unhealthy') {return (;)
+const handleErrorRetry = useCallback(errorType: keyof typeof errors) => {dispatch(clearError(errorType));';,}switch (errorType) {';,}case 'constitutions': ';,'';
+dispatch(fetchConstitutions());';,'';
+break;';,'';
+case 'symptoms': ';,'';
+dispatch(fetchSymptoms());';,'';
+break;';,'';
+case 'acupoints': ';,'';
+dispatch(fetchAcupoints());';,'';
+break;';,'';
+case 'herbs': ';,'';
+dispatch(fetchHerbs());';,'';
+break;';,'';
+case 'syndromes': ';,'';
+dispatch(fetchSyndromes());
+}
+        break;}
+    }';'';
+  }, [dispatch]);';,'';
+const renderServiceStatus = () => {if (serviceHealth.status === 'unhealthy') {return (;)'}'';'';
         <View style={styles.serviceStatusContainer}>;
           <View style={styles.serviceStatusBanner}>;
             <Text style={styles.serviceStatusText}>;
 
-            </Text>;
-          </View>;
-        </View>;
+            </Text>;/;/g/;
+          </View>;/;/g/;
+        </View>;/;/g/;
       );
     }
-    return null;
-  };
-  const renderTabContent = () => {switch (activeTab) {case 'constitution':return renderConstitutionTab();
-      case 'symptom':
-        return renderSymptomTab();
-      case 'acupoint':
-        return renderAcupointTab();
-      case 'herb':
-        return renderHerbTab();
-      case 'syndrome':
-        return renderSyndromeTab();
-      case 'search':
-        return renderSearchTab();
-      default:
-        return null;
+    return null;';'';
+  };';,'';
+const renderTabContent = () => {switch (activeTab) {case 'constitution':return renderConstitutionTab();';,}case 'symptom': ';,'';
+return renderSymptomTab();';,'';
+case 'acupoint': ';,'';
+return renderAcupointTab();';,'';
+case 'herb': ';,'';
+return renderHerbTab();';,'';
+case 'syndrome': ';,'';
+return renderSyndromeTab();';,'';
+case 'search': ';,'';
+return renderSearchTab();
+default: ;
+}
+        return null;}
     }
   };
-  const renderConstitutionTab = () => {if (loading.constitutions) {return (;)
+const renderConstitutionTab = () => {if (loading.constitutions) {return (;)}
         <View style={styles.loadingContainer}>;
-          <Text style={styles.loadingText}>正在加载体质信息...</Text>;
-        </View>;
+          <Text style={styles.loadingText}>正在加载体质信息...</Text>;/;/g/;
+        </View>;/;/g/;
       );
     }
-    if (errors.constitutions) {
-      return (;)
+    if (errors.constitutions) {}}
+      return (;)}
         <View style={styles.errorContainer}>;
-          <Text style={styles.errorText}>{errors.constitutions}</Text>;
-          <TouchableOpacity;
-            style={styles.retryButton};
-            onPress={() => handleErrorRetry('constitutions')};
+          <Text style={styles.errorText}>{errors.constitutions}</Text>;/;/g/;
+          <TouchableOpacity;'  />/;,'/g'/;
+style={styles.retryButton};';,'';
+onPress={() => handleErrorRetry('constitutions')};';'';
           >;
-            <Text style={styles.retryButtonText}>重试</Text>;
-          </TouchableOpacity>;
-        </View>;
+            <Text style={styles.retryButtonText}>重试</Text>;/;/g/;
+          </TouchableOpacity>;/;/g/;
+        </View>;/;/g/;
       );
     }
-    return (
-  <ScrollView;
-        style={styles.tabContent}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+    return (<ScrollView;  />/;,)style={styles.tabContent}/g/;
+        refreshControl={}
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh}  />/;/g/;
         }
-      >
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>中医体质类型</Text>
-          <Text style={styles.sectionSubtitle}>
-
-          </Text>
-        </View>;
-        {constitutions.map(constitution) => (;)
-          <ConstitutionCard;
-            key={constitution.id};
-            constitution={constitution};
-            onPress={() => handleConstitutionPress(constitution)};
-          />;
+      >;
+        <View style={styles.sectionHeader}>;
+          <Text style={styles.sectionTitle}>中医体质类型</Text>/;/g/;
+          <Text style={styles.sectionSubtitle}>;
+);
+          </Text>)/;/g/;
+        </View>;)/;/g/;
+        {constitutions.map(constitution) => (;);}}
+          <ConstitutionCard;}  />/;,/g/;
+key={constitution.id};
+constitution={constitution};
+onPress={() => handleConstitutionPress(constitution)};
+          />;/;/g/;
         ))};
-        {constitutions.length === 0 && (;)
+        {constitutions.length === 0 && (;)}
           <View style={styles.emptyContainer}>;
-            <Text style={styles.emptyText}>暂无体质信息</Text>;
-          </View>;
+            <Text style={styles.emptyText}>暂无体质信息</Text>;/;/g/;
+          </View>;/;/g/;
         )};
-      </ScrollView>;
+      </ScrollView>;/;/g/;
     );
   };
-  const renderSymptomTab = () => {return (;)
+const renderSymptomTab = () => {return (;)}
       <View style={styles.tabContent}>;
-        <Text style={styles.comingSoonText}>症状管理功能即将上线</Text>;
-      </View>;
+        <Text style={styles.comingSoonText}>症状管理功能即将上线</Text>;/;/g/;
+      </View>;/;/g/;
     );
   };
-  const renderAcupointTab = () => {return (;)
+const renderAcupointTab = () => {return (;)}
       <View style={styles.tabContent}>;
-        <Text style={styles.comingSoonText}>穴位信息功能即将上线</Text>;
-      </View>;
+        <Text style={styles.comingSoonText}>穴位信息功能即将上线</Text>;/;/g/;
+      </View>;/;/g/;
     );
   };
-  const renderHerbTab = () => {return (;)
+const renderHerbTab = () => {return (;)}
       <View style={styles.tabContent}>;
-        <Text style={styles.comingSoonText}>中药信息功能即将上线</Text>;
-      </View>;
+        <Text style={styles.comingSoonText}>中药信息功能即将上线</Text>;/;/g/;
+      </View>;/;/g/;
     );
   };
-  const renderSyndromeTab = () => {return (;)
+const renderSyndromeTab = () => {return (;)}
       <View style={styles.tabContent}>;
-        <Text style={styles.comingSoonText}>证型分析功能即将上线</Text>;
-      </View>;
+        <Text style={styles.comingSoonText}>证型分析功能即将上线</Text>;/;/g/;
+      </View>;/;/g/;
     );
   };
-  const renderSearchTab = () => {
-    return (
-  <ScrollView style={styles.tabContent}>
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>搜索结果</Text>
-          {searchResults.length > 0  && <Text style={styles.sectionSubtitle}>
-
-            </Text>
+const  renderSearchTab = () => {}
+    return (<ScrollView style={styles.tabContent}>;)        <View style={styles.sectionHeader}>;
+          <Text style={styles.sectionTitle}>搜索结果</Text>/;/g/;
+          {searchResults.length > 0  && <Text style={styles.sectionSubtitle}>);
+);
+            </Text>)/;/g/;
           )}
-        </View>
+        </View>/;/g/;
         {loading.search  && <View style={styles.loadingContainer}>;
-            <Text style={styles.loadingText}>正在搜索...</Text>;
-          </View>;
+            <Text style={styles.loadingText}>正在搜索...</Text>;/;/g/;
+          </View>;/;/g/;
         )};
-        {errors.search && (;)
+        {errors.search && (;)}
           <View style={styles.errorContainer}>;
-            <Text style={styles.errorText}>{errors.search}</Text>;
-          </View>;
+            <Text style={styles.errorText}>{errors.search}</Text>;/;/g/;
+          </View>;/;/g/;
         )};
-        {searchResults.map(result) => (;)
+        {searchResults.map(result) => (;)}
           <View key={result.id} style={styles.searchResultCard}>;
-            <Text style={styles.searchResultTitle}>{result.title}</Text>;
+            <Text style={styles.searchResultTitle}>{result.title}</Text>;/;/g/;
             <Text style={styles.searchResultContent} numberOfLines={3}>;
               {result.content};
-            </Text>;
+            </Text>;/;/g/;
             <View style={styles.searchResultMeta}>;
-              <Text style={styles.searchResultType}>{result.type}</Text>;
+              <Text style={styles.searchResultType}>{result.type}</Text>;/;/g/;
               <Text style={styles.searchResultRelevance}>;
                 相关度: {Math.round(result.relevance * 100)}%;
-              </Text>;
-            </View>;
-          </View>;
+              </Text>;/;/g/;
+            </View>;/;/g/;
+          </View>;/;/g/;
         ))};
-        {searchResults.length === 0 && !loading.search && !errors.search && (;)
+        {searchResults.length === 0 && !loading.search && !errors.search && (;)}
           <View style={styles.emptyContainer}>;
-            <Text style={styles.emptyText}>请使用上方搜索栏查找医疗知识</Text>;
-          </View>;
+            <Text style={styles.emptyText}>请使用上方搜索栏查找医疗知识</Text>;/;/g/;
+          </View>;/;/g/;
         )};
-      </ScrollView>;
+      </ScrollView>;/;/g/;
     );
-  };
-  return (
-  <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
-      {// 服务状态提示}
+  };';,'';
+return (<SafeAreaView style={styles.container}>')'';'';
+      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF"  />")""/;"/g"/;
+      {// 服务状态提示})/;/g/;
       {renderServiceStatus()}
-      {// 搜索栏}
-      <KnowledgeSearchBar;
-        onSearch={handleSearch}
+      {// 搜索栏}/;/g/;
+      <KnowledgeSearchBar;  />/;,/g/;
+onSearch={handleSearch}
         loading={loading.search}
 
-      />
-      {// 标签栏}
-      <View style={styles.tabBar}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <View style={styles.tabList}>
-            {tabs.map(tab) => ()
-              <TouchableOpacity;
-                key={tab.key}
-                style={[
-                  styles.tab,
-                  activeTab === tab.key && styles.activeTab;
+      />/;/g/;
+      {// 标签栏}/;/g/;
+      <View style={styles.tabBar}>;
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>;
+          <View style={styles.tabList}>;
+            {tabs.map(tab) => ();}}
+              <TouchableOpacity;}  />/;,/g/;
+key={tab.key}
+                style={[;,]styles.tab,;}}
+                  activeTab === tab.key && styles.activeTab;}
+];
                 ]}}
                 onPress={() => setActiveTab(tab.key)}
-              >
-                <Text style={styles.tabIcon}>{tab.icon}</Text>
-                <Text;
-                  style={[
-                    styles.tabText,
-                    activeTab === tab.key && styles.activeTabText;
+              >;
+                <Text style={styles.tabIcon}>{tab.icon}</Text>/;/g/;
+                <Text;  />/;,/g/;
+style={[;,]styles.tabText,;}}
+                    activeTab === tab.key && styles.activeTabText;}
+];
                   ]}};
                 >;
                   {tab.title};
-                </Text>;
-              </TouchableOpacity>;
+                </Text>;/;/g/;
+              </TouchableOpacity>;/;/g/;
             ))};
-          </View>;
-        </ScrollView>;
-      </View>;
-      {// 内容区域};
+          </View>;/;/g/;
+        </ScrollView>;/;/g/;
+      </View>;/;/g/;
+      {// 内容区域};/;/g/;
       <View style={styles.content}>;
         {renderTabContent()};
-      </View>;
-    </SafeAreaView>;
+      </View>;/;/g/;
+    </SafeAreaView>;/;/g/;
   );
 };
-const styles = StyleSheet.create({
-  container: {,
-  flex: 1;
-    backgroundColor: '#F8F9FA'
-  ;},
-  serviceStatusContainer: {,
-  backgroundColor: '#FFF3CD';
-    paddingHorizontal: 16;
-    paddingVertical: 8;
-  },
-  serviceStatusBanner: {,
-  flexDirection: 'row';
-    alignItems: 'center'
-  ;},
-  serviceStatusText: {,
-  fontSize: 14;
-    color: '#856404';
-    flex: 1;
-  },
-  tabBar: {,
-  backgroundColor: '#FFFFFF';
-    borderBottomWidth: 1;
-    borderBottomColor: '#E0E0E0'
-  ;},
-  tabList: {,
-  flexDirection: 'row';
-    paddingHorizontal: 16;
-    paddingVertical: 12;
-    gap: 8;
-  },
-  tab: {,
-  flexDirection: 'row';
-    alignItems: 'center';
-    paddingHorizontal: 16;
-    paddingVertical: 8;
-    borderRadius: 20;
-    backgroundColor: '#F5F5F5';
-    marginRight: 8;
-  },
-  activeTab: {,
-  backgroundColor: '#007AFF'
-  ;},
-  tabIcon: {,
-  fontSize: 16;
-    marginRight: 6;
-  },
-  tabText: {,
-  fontSize: 14;
-    color: '#666666';
-    fontWeight: '500'
-  ;},
-  activeTabText: {,
-  color: '#FFFFFF'
-  ;},
-  content: {,
-  flex: 1;
-  },
-  tabContent: {,
-  flex: 1;
-  },
-  sectionHeader: {,
-  paddingHorizontal: 16;
-    paddingVertical: 16;
-    backgroundColor: '#FFFFFF';
-    borderBottomWidth: 1;
-    borderBottomColor: '#F0F0F0'
-  ;},
-  sectionTitle: {,
-  fontSize: 20;
-    fontWeight: 'bold';
-    color: '#333333';
-    marginBottom: 4;
-  },
-  sectionSubtitle: {,
-  fontSize: 14;
-    color: '#666666'
-  ;},
-  loadingContainer: {,
-  flex: 1;
-    justifyContent: 'center';
-    alignItems: 'center';
-    paddingVertical: 40;
-  },
-  loadingText: {,
-  fontSize: 16;
-    color: '#666666'
-  ;},
-  errorContainer: {,
-  flex: 1;
-    justifyContent: 'center';
-    alignItems: 'center';
-    paddingVertical: 40;
-    paddingHorizontal: 32;
-  },
-  errorText: {,
-  fontSize: 16;
-    color: '#F44336';
-    textAlign: 'center';
-    marginBottom: 16;
-  },
-  retryButton: {,
-  backgroundColor: '#007AFF';
-    paddingHorizontal: 24;
-    paddingVertical: 12;
-    borderRadius: 8;
-  },
-  retryButtonText: {,
-  color: '#FFFFFF';
-    fontSize: 16;
-    fontWeight: '600'
-  ;},
-  emptyContainer: {,
-  flex: 1;
-    justifyContent: 'center';
-    alignItems: 'center';
-    paddingVertical: 40;
-  },
-  emptyText: {,
-  fontSize: 16;
-    color: '#999999';
-    textAlign: 'center'
-  ;},
-  comingSoonText: {,
-  fontSize: 16;
-    color: '#999999';
-    textAlign: 'center';
-    marginTop: 40;
-  },
-  searchResultCard: {,
-  backgroundColor: '#FFFFFF';
-    marginHorizontal: 16;
-    marginVertical: 8;
-    padding: 16;
-    borderRadius: 12;
-    shadowColor: '#000';
-    shadowOffset: {,
-  width: 0;
-      height: 2;
-    },
-    shadowOpacity: 0.1;
-    shadowRadius: 3.84;
-    elevation: 5;
-  },
-  searchResultTitle: {,
-  fontSize: 16;
-    fontWeight: 'bold';
-    color: '#333333';
-    marginBottom: 8;
-  },
-  searchResultContent: {,
-  fontSize: 14;
-    color: '#666666';
-    lineHeight: 20;
-    marginBottom: 12;
-  },
-  searchResultMeta: {,
-  flexDirection: 'row',justifyContent: 'space-between',alignItems: 'center';
-  },searchResultType: {fontSize: 12,color: '#007AFF',backgroundColor: '#E3F2FD',paddingHorizontal: 8,paddingVertical: 4,borderRadius: 12;
-  },searchResultRelevance: {fontSize: 12,color: '#999999';
-  };
+const  styles = StyleSheet.create({)container: {,";,}flex: 1,";"";
+}
+    const backgroundColor = '#F8F9FA'}'';'';
+  ;},';,'';
+serviceStatusContainer: {,';,}backgroundColor: '#FFF3CD';','';
+paddingHorizontal: 16,;
+}
+    const paddingVertical = 8;}
+  },';,'';
+serviceStatusBanner: {,';,}flexDirection: 'row';','';'';
+}
+    const alignItems = 'center'}'';'';
+  ;}
+serviceStatusText: {,';,}fontSize: 14,';,'';
+color: '#856404';','';'';
+}
+    const flex = 1;}
+  },';,'';
+tabBar: {,';,}backgroundColor: '#FFFFFF';','';
+borderBottomWidth: 1,';'';
+}
+    const borderBottomColor = '#E0E0E0'}'';'';
+  ;},';,'';
+tabList: {,';,}flexDirection: 'row';','';
+paddingHorizontal: 16,;
+paddingVertical: 12,;
+}
+    const gap = 8;}
+  },';,'';
+tab: {,';,}flexDirection: 'row';','';
+alignItems: 'center';','';
+paddingHorizontal: 16,;
+paddingVertical: 8,';,'';
+borderRadius: 20,';,'';
+backgroundColor: '#F5F5F5';','';'';
+}
+    const marginRight = 8;}
+  },';,'';
+activeTab: {,';}}'';
+  const backgroundColor = '#007AFF'}'';'';
+  ;}
+tabIcon: {fontSize: 16,;
+}
+    const marginRight = 6;}
+  }
+tabText: {,';,}fontSize: 14,';,'';
+color: '#666666';','';'';
+}
+    const fontWeight = '500'}'';'';
+  ;},';,'';
+activeTabText: {,';}}'';
+  const color = '#FFFFFF'}'';'';
+  ;}
+content: {,;}}
+  const flex = 1;}
+  }
+tabContent: {,;}}
+  const flex = 1;}
+  }
+sectionHeader: {paddingHorizontal: 16,';,'';
+paddingVertical: 16,';,'';
+backgroundColor: '#FFFFFF';','';
+borderBottomWidth: 1,';'';
+}
+    const borderBottomColor = '#F0F0F0'}'';'';
+  ;}
+sectionTitle: {,';,}fontSize: 20,';,'';
+fontWeight: 'bold';','';
+color: '#333333';','';'';
+}
+    const marginBottom = 4;}
+  }
+sectionSubtitle: {,';,}fontSize: 14,';'';
+}
+    const color = '#666666'}'';'';
+  ;}
+loadingContainer: {,';,}flex: 1,';,'';
+justifyContent: 'center';','';
+alignItems: 'center';','';'';
+}
+    const paddingVertical = 40;}
+  }
+loadingText: {,';,}fontSize: 16,';'';
+}
+    const color = '#666666'}'';'';
+  ;}
+errorContainer: {,';,}flex: 1,';,'';
+justifyContent: 'center';','';
+alignItems: 'center';','';
+paddingVertical: 40,;
+}
+    const paddingHorizontal = 32;}
+  }
+errorText: {,';,}fontSize: 16,';,'';
+color: '#F44336';','';
+textAlign: 'center';','';'';
+}
+    const marginBottom = 16;}
+  },';,'';
+retryButton: {,';,}backgroundColor: '#007AFF';','';
+paddingHorizontal: 24,;
+paddingVertical: 12,;
+}
+    const borderRadius = 8;}
+  },';,'';
+retryButtonText: {,';,}color: '#FFFFFF';','';
+fontSize: 16,';'';
+}
+    const fontWeight = '600'}'';'';
+  ;}
+emptyContainer: {,';,}flex: 1,';,'';
+justifyContent: 'center';','';
+alignItems: 'center';','';'';
+}
+    const paddingVertical = 40;}
+  }
+emptyText: {,';,}fontSize: 16,';,'';
+color: '#999999';','';'';
+}
+    const textAlign = 'center'}'';'';
+  ;}
+comingSoonText: {,';,}fontSize: 16,';,'';
+color: '#999999';','';
+textAlign: 'center';','';'';
+}
+    const marginTop = 40;}
+  },';,'';
+searchResultCard: {,';,}backgroundColor: '#FFFFFF';','';
+marginHorizontal: 16,;
+marginVertical: 8,;
+padding: 16,';,'';
+borderRadius: 12,';,'';
+shadowColor: '#000';','';
+shadowOffset: {width: 0,;
+}
+      const height = 2;}
+    }
+shadowOpacity: 0.1,;
+shadowRadius: 3.84,;
+const elevation = 5;
+  }
+searchResultTitle: {,';,}fontSize: 16,';,'';
+fontWeight: 'bold';','';
+color: '#333333';','';'';
+}
+    const marginBottom = 8;}
+  }
+searchResultContent: {,';,}fontSize: 14,';,'';
+color: '#666666';','';
+lineHeight: 20,;
+}
+    const marginBottom = 12;}
+  },';,'';
+searchResultMeta: {,';}}'';
+  flexDirection: 'row',justifyContent: 'space-between',alignItems: 'center';'}'';'';
+  },searchResultType: {fontSize: 12,color: '#007AFF',backgroundColor: '#E3F2FD',paddingHorizontal: 8,paddingVertical: 4,borderRadius: 12;')}'';'';
+  },searchResultRelevance: {fontSize: 12,color: '#999999';')}'';'';
+  };)';'';
 });

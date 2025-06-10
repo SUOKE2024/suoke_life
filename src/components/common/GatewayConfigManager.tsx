@@ -1,6 +1,7 @@
-// GatewayConfigManager
-// 自动修复的文件
-
-export default class GatewayConfigManager {
-  // TODO: 实现具体功能
+// GatewayConfigManager/;/g/;
+// 自动修复的文件/;,/g/;
+export default class GatewayConfigManager {}}
 }
+  // TODO: 实现具体功能}/;/g/;
+};
+;

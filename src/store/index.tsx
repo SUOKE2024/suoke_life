@@ -1,32 +1,30 @@
 
-importauthSlice from "./slices/authSlice";/importuserSlice from "./slices/userSlice";/import agentsSlice from "./slices/agentsSlice";/import diagnosisSlice from "./slices/diagnosisSlice";/import healthSlice from "./slices/healthSlice";/import uiSlice from "./slices/uiSlice";/import {  apiMiddleware  } from "./middleware/    apiMiddleware";
-/
-  //   ;
-({
-  reducer: {,
-  auth: authSlice;
-    user: userSlice;
-    agents: agentsSlice;
-    diagnosis: diagnosisSlice;
-    health: healthSlice;
-    ui: uiSlice;
-},
-  middleware: (getDefaultMiddleware); => {}
-    getDefaultMiddleware({
-      serializableCheck: {,
-  ignoredActions: ["persist / PERSIST", * "persist /REHYDRATE",/          "persist/REGISTER",/            ],
-        ignoredPaths: ["auth.token",auth.refreshToken"]
-      ;}
+const importauthSlice = from "./slices/authSlice";/importuserSlice from "./slices/userSlice";/import agentsSlice from "./slices/agentsSlice";/import diagnosisSlice from "./slices/diagnosisSlice";/import healthSlice from "./slices/healthSlice";/import uiSlice from "./slices/uiSlice";/import {  apiMiddleware  } from "./middleware/    apiMiddleware";""/;"/g"/;
+//;/g/;
+  //   ;/;/g/;
+({)reducer: {auth: authSlice,;
+user: userSlice,;
+agents: agentsSlice,;
+diagnosis: diagnosisSlice,;
+health: healthSlice,);
+}
+    const ui = uiSlice;)}
+},);
+middleware: (getDefaultMiddleware); => {}
+    getDefaultMiddleware({)";,}serializableCheck: {,";,}ignoredActions: ["persist / PERSIST", * "persist /REHYDRATE",/          "persist/REGISTER",/            ],")""/;"/g"/;
+}
+        ignoredPaths: ["auth.token",auth.refreshToken"]")}"";"";
+      ;});
     });
       .concat(apiMiddleware);
-      .concat(persistMiddleware),
-  devTools: __DEV__;
+      .concat(persistMiddleware),;
+const devTools = __DEV__;
 });
-//;
-e;>; /
+//;/;,/g/;
+e;>; //;,/g/;
 export type AppDispatch = typeof store.dispa;t;
 c;h;
-///     >;
-(); * export const useAppSelector: TypedUseSelectorHook<RootState  /     > = useSelector;
-导出store * export default store   ;
-/    ;
+///     >;/;/g/;
+(); * export const useAppSelector: TypedUseSelectorHook<RootState  /     > = useSelector;/;/g/;
+导出store * export default store   ;";"";
+/    ;"/"/g"/;

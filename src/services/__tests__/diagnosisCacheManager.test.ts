@@ -1,28 +1,27 @@
-import { jest } from '@jest/globals';
-
-import diagnosisCacheManager from '../diagnosisCacheManager.ts';
-// Mock dependencies
-jest.mock('../api/apiClient');
-describe('diagnosisCacheManager', () => {
-
-    expect(diagnosisCacheManager).toBeDefined();
+describe("Test Suite", () => {';}}'';
+import { jest } from "@jest/globals";""/;"/g"/;
+';,'';
+import diagnosisCacheManager from "../diagnosisCacheManager.ts";""/;"/g"/;
+// Mock dependencies,'/;,'/g'/;
+jest.mock('../api/apiClient');'/;,'/g'/;
+describe("diagnosisCacheManager", () => {';,}expect(diagnosisCacheManager).toBeDefined();'';
+}
+  });
+mockResponse: { success: true, data: {;} };
+    // 添加具体的测试逻辑/;,/g/;
+expect(mockResponse.success).toBe(true);
   });
 
-    const mockResponse = { success: true, data: {;} };
-    // 添加具体的测试逻辑
-    expect(mockResponse.success).toBe(true);
+    // 添加具体的错误处理测试/;,/g/;
+expect(mockError).toBeInstanceOf(Error);
   });
 
-
-    // 添加具体的错误处理测试
-    expect(mockError).toBeInstanceOf(Error);
+    // 添加参数验证测试/;,/g/;
+expect(true).toBe(true);
   });
 
-    // 添加参数验证测试
-    expect(true).toBe(true);
-  });
-
-    // 添加异步操作测试
-    await expect(Promise.resolve()).resolves.toBeUndefined();
+    // 添加异步操作测试/;,/g/;
+const await = expect(Promise.resolve()).resolves.toBeUndefined();
   });
 });
+''';

@@ -9,22 +9,18 @@
   "summary": "Boost provides free peer-reviewed portable C++ source libraries.",
   "authors": "Rene Rivera",
   "source": {
-    "git": "https://github.com/react-native-community/boost-for-react-native",
-    "tag": "v1.84.0"
+    "git": "/Users/songxu/Developer/suoke_life/node_modules/react-native/third-party-podspecs/."
   },
   "platforms": {
     "ios": "15.1"
   },
   "requires_arc": false,
-  "source_files": "boost/**/*.{hpp,cpp}",
-  "module_name": "boost",
-  "header_dir": "boost",
-  "preserve_paths": "boost",
-  "header_mappings_dir": "boost/boost",
-  "resource_bundles": {
-    "boost_privacy": "boost/PrivacyInfo.xcprivacy"
-  },
-  "pod_target_xcconfig": {
-    "GCC_WARN_INHIBIT_ALL_WARNINGS": "YES"
-  }
+  "source_files": "**/*.h",
+  "header_mappings_dir": ".",
+  "preserve_paths": [
+    "boost/**/*.h",
+    "boost/**/*.hpp",
+    "boost/**/*.ipp"
+  ],
+  "prepare_command": "mkdir -p boost\necho \"#ifndef BOOST_VERSION_HPP\" > boost/version.hpp\necho \"#define BOOST_VERSION_HPP\" >> boost/version.hpp\necho \"#define BOOST_VERSION 108400\" >> boost/version.hpp\necho \"#define BOOST_LIB_VERSION \"1_84\"\" >> boost/version.hpp\necho \"#endif\" >> boost/version.hpp"
 }

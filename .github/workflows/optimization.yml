@@ -1,0 +1,72 @@
+name: 索克生活 - 持续优化
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  code-quality:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: 代码质量检查
+      run: |
+        npm run lint
+        npm run type-check
+    
+    - name: 安全检查
+      run: npm audit --audit-level moderate
+    
+    - name: 测试覆盖率
+      run: npm test -- --coverage --watchAll=false
+    
+    - name: 构建验证
+      run: npm run build
+    
+    - name: 性能基准测试
+      run: npm run test:performance
+    
+    - name: 上传覆盖率报告
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage/lcov.info
+
+  optimization:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: 运行综合优化
+      run: node scripts/comprehensive-optimization.js
+    
+    - name: 提交优化结果
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add .
+        git diff --staged --quiet || git commit -m "自动优化: 代码质量和性能提升"
+        git push

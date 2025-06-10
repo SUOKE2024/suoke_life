@@ -1,918 +1,723 @@
-import { EventEmitter } from 'events';
-import { AgentBase } from '../base/AgentBase';
+import { EventEmitter } from "events";";
+import { AgentBase } from "../base/AgentBase";""/;"/g"/;
 
-/**
- * 任务状态枚举
- */
-export enum TaskStatus {
-  PENDING = 'pending',
-  IN_PROGRESS = 'in_progress',
-  COMPLETED = 'completed',
-  FAILED = 'failed',
-  CANCELLED = 'cancelled',
+/* 举 *//;/g/;
+ */"/;,"/g"/;
+export enum TaskStatus {';,}PENDING = 'pending',';,'';
+IN_PROGRESS = 'in_progress',';,'';
+COMPLETED = 'completed',';,'';
+FAILED = 'failed',';'';
+}
+}
+  CANCELLED = 'cancelled',}'';'';
 }
 
-/**
- * 任务优先级枚举
- */
-export enum TaskPriority {
-  LOW = 'low',
-  MEDIUM = 'medium',
-  HIGH = 'high',
-  CRITICAL = 'critical',
+/* 举 *//;/g/;
+ */'/;,'/g'/;
+export enum TaskPriority {';,}LOW = 'low',';,'';
+MEDIUM = 'medium',';,'';
+HIGH = 'high',';'';
+}
+}
+  CRITICAL = 'critical',}'';'';
 }
 
-/**
- * 协作任务接口
- */
-export interface CollaborationTask {
-  id: string;
-  healthContext: any;
-  requiredCapabilities: string[];
-  priority: TaskPriority;
-  status: TaskStatus;
-  createdAt: Date;
-  assignedAgents: string[];
-  result: any;
-  updatedAt?: Date;
-  completedAt?: Date;
+/* 口 *//;/g/;
+ *//;,/g/;
+export interface CollaborationTask {id: string}healthContext: any,;
+requiredCapabilities: string[],;
+priority: TaskPriority,;
+status: TaskStatus,;
+createdAt: Date,;
+assignedAgents: string[],;
+const result = any;
+updatedAt?: Date;
+}
+}
+  completedAt?: Date;}
 }
 
-/**
- * 协作会话接口
- */
-export interface CollaborationSession {
-  id: string;
-  taskId: string;
-  participants: string[];
-  startTime: Date;
-  endTime?: Date;
-  status: 'active' | 'completed' | 'failed' | 'cancelled';
-  decisions: CollaborationDecision[];
-  consensusReached: boolean;
-  metadata?: Record<string; any>;
+/* 口 *//;/g/;
+ *//;,/g/;
+export interface CollaborationSession {id: string}taskId: string,;
+participants: string[],;
+const startTime = Date;';,'';
+endTime?: Date;';,'';
+status: 'active' | 'completed' | 'failed' | 'cancelled';','';
+decisions: CollaborationDecision[],;
+const consensusReached = boolean;
+}
+}
+  metadata?: Record<string; any>;}
 }
 
-/**
- * 协作决策接口
- */
-export interface CollaborationDecision {
-  id: string;
-  sessionId: string;
-  agentId: string;
-  decision: string;
-  confidence: number;
-  reasoning: string[];
-  timestamp: Date;
-  supportingData?: any;
+/* 口 *//;/g/;
+ *//;,/g/;
+export interface CollaborationDecision {id: string}sessionId: string,;
+agentId: string,;
+decision: string,;
+confidence: number,;
+reasoning: string[],;
+const timestamp = Date;
+}
+}
+  supportingData?: any;}
 }
 
-/**
- * 智能体信息接口
- */
-export interface AgentInfo {
-  id: string;
-  name: string;
-  capabilities: string[];
-  priority: TaskPriority;
-  status: string;
-  load?: number;
-  responseTime?: number;
+/* 口 *//;/g/;
+ *//;,/g/;
+export interface AgentInfo {id: string}name: string,;
+capabilities: string[],;
+priority: TaskPriority,;
+const status = string;
+load?: number;
+}
+}
+  responseTime?: number;}
 }
 
-/**
- * 智能体协同决策框架
- * 实现小艾、小克、老克、索儿四个智能体的分布式自主协作
- */
-export class AgentCollaborationFramework extends EventEmitter {
-  private agents: Map<string, AgentInfo> = new Map();
-  private agentInstances: Map<string, AgentBase> = new Map();
-  private taskQueue: CollaborationTask[] = [];
-  private activeCollaborations: Map<string, CollaborationSession> = new Map();
-  private isInitialized: boolean = false;
-
-  constructor() {
-    super();
-    this.setMaxListeners(50); // 增加监听器限制
+/* 作 *//;/g/;
+ *//;,/g/;
+export class AgentCollaborationFramework extends EventEmitter {;,}private agents: Map<string, AgentInfo> = new Map();
+private agentInstances: Map<string, AgentBase> = new Map();
+private taskQueue: CollaborationTask[] = [];
+private activeCollaborations: Map<string, CollaborationSession> = new Map();
+private isInitialized: boolean = false;
+constructor() {super();}}
+    this.setMaxListeners(50); // 增加监听器限制}/;/g/;
   }
 
-  /**
-   * 初始化协作框架
-   */
-  async initialize(): Promise<void> {
-    try {
-
-      await this.initializeAgents();
-      this.isInitialized = true;
-
-    } catch (error) {
-
-      throw error;
+  /* 架 *//;/g/;
+   *//;,/g/;
+const async = initialize(): Promise<void> {try {}      const await = this.initializeAgents();
+this.isInitialized = true;
+}
+}
+    } catch (error) {}}
+      const throw = error;}
     }
   }
 
-  /**
-   * 初始化四个核心智能体
-   */
-  private async initializeAgents(): Promise<void> {
-    // 小艾 - AI健康助手，负责用户交互和初步健康评估
-    this.registerAgent('xiaoai', {
-      id: 'xiaoai';
-
-      capabilities: [
-        'user_interaction';
-        'health_assessment',
-        'symptom_analysis',
-      ],
-      priority: TaskPriority.HIGH;
-      status: 'active';
+  /* 体 *//;/g/;
+   *//;,/g/;
+private async initializeAgents(): Promise<void> {';}    // 小艾 - AI健康助手，负责用户交互和初步健康评估'/;,'/g'/;
+this.registerAgent('xiaoai', {';,)id: 'xiaoai';','';}';,'';
+const capabilities = [;]';'';
+        'user_interaction';';'';
+        'health_assessment',';'';
+        'symptom_analysis',';'';
+];
+      ],)';,'';
+priority: TaskPriority.HIGH,)';'';
+}
+      const status = 'active';')'}'';'';
     });
-
-    // 小克 - 专业诊断智能体，负责中医辨证和现代医学诊断
-    this.registerAgent('xiaoke', {
-      id: 'xiaoke';
-
-      capabilities: [
-        'tcm_diagnosis';
-        'modern_diagnosis',
-        'syndrome_differentiation',
-      ],
-      priority: TaskPriority.CRITICAL;
-      status: 'active';
+';'';
+    // 小克 - 专业诊断智能体，负责中医辨证和现代医学诊断'/;,'/g'/;
+this.registerAgent('xiaoke', {)';,}id: 'xiaoke';','';'';
+';,'';
+const capabilities = [;]';'';
+        'tcm_diagnosis';';'';
+        'modern_diagnosis',';'';
+        'syndrome_differentiation',';'';
+];
+      ],)';,'';
+priority: TaskPriority.CRITICAL,)';'';
+}
+      const status = 'active';')'}'';'';
     });
-
-    // 老克 - 资深健康顾问，负责治疗方案制定和健康管理
-    this.registerAgent('laoke', {
-      id: 'laoke';
-
-      capabilities: [
-        'treatment_planning';
-        'health_management',
-        'lifestyle_guidance',
-      ],
-      priority: TaskPriority.HIGH;
-      status: 'active';
+';'';
+    // 老克 - 资深健康顾问，负责治疗方案制定和健康管理'/;,'/g'/;
+this.registerAgent('laoke', {)';,}id: 'laoke';','';'';
+';,'';
+const capabilities = [;]';'';
+        'treatment_planning';';'';
+        'health_management',';'';
+        'lifestyle_guidance',';'';
+];
+      ],)';,'';
+priority: TaskPriority.HIGH,)';'';
+}
+      const status = 'active';')'}'';'';
     });
-
-    // 索儿 - 生活服务智能体，负责食农结合和山水养生服务
-    this.registerAgent('soer', {
-      id: 'soer';
-
-      capabilities: [
-        'lifestyle_services';
-        'food_agriculture',
-        'wellness_tourism',
-      ],
-      priority: TaskPriority.MEDIUM;
-      status: 'active';
+';'';
+    // 索儿 - 生活服务智能体，负责食农结合和山水养生服务'/;,'/g'/;
+this.registerAgent('soer', {)';,}id: 'soer';','';'';
+';,'';
+const capabilities = [;]';'';
+        'lifestyle_services';';'';
+        'food_agriculture',';'';
+        'wellness_tourism',';'';
+];
+      ],)';,'';
+priority: TaskPriority.MEDIUM,)';'';
+}
+      const status = 'active';')'}'';'';
     });
   }
 
-  /**
-   * 注册智能体
-   */
-  registerAgent(id: string, agentInfo: AgentInfo): void {
-    this.agents.set(id, agentInfo);
-    this.emit('agent_registered', { agentId: id, agentInfo ;});
+  /* 体 *//;/g/;
+   *//;,/g/;
+registerAgent(id: string, agentInfo: AgentInfo): void {';}}'';
+    this.agents.set(id, agentInfo);'}'';
+this.emit('agent_registered', { agentId: id, agentInfo ;});';'';
 
   }
 
-  /**
-   * 注册智能体实例
-   */
-  registerAgentInstance(id: string, instance: AgentBase): void {
-    this.agentInstances.set(id, instance);
-
+  /* 例 *//;/g/;
+   *//;,/g/;
+registerAgentInstance(id: string, instance: AgentBase): void {this.agentInstances.set(id, instance);}}
+}
   }
 
-  /**
-   * 创建协作任务
-   */
-  async createCollaborationTask(
-    healthContext: any;
-    requiredCapabilities: string[];
-    priority: TaskPriority = TaskPriority.MEDIUM
-  ): Promise<string> {
-    if (!this.isInitialized) {
-
+  /* 务 *//;/g/;
+   *//;,/g,/;
+  async: createCollaborationTask(healthContext: any,);
+requiredCapabilities: string[],);
+priority: TaskPriority = TaskPriority.MEDIUM);
+  ): Promise<string> {if (!this.isInitialized) {}}
+}
     ;}
 
     const taskId = this.generateTaskId();
-    const task: CollaborationTask = {
-      id: taskId;
-      healthContext,
-      requiredCapabilities,
-      priority,
-      status: TaskStatus.PENDING;
-      createdAt: new Date();
-      assignedAgents: [];
-      result: null;
+const: task: CollaborationTask = {const id = taskId;
+healthContext,;
+requiredCapabilities,;
+priority,;
+status: TaskStatus.PENDING,;
+createdAt: new Date(),;
+assignedAgents: [],;
+}
+      const result = null;}
     };
 
-    // 根据能力匹配智能体
-    const suitableAgents = this.findSuitableAgents(requiredCapabilities);
-    if (suitableAgents.length === 0) {
-
+    // 根据能力匹配智能体/;,/g/;
+const suitableAgents = this.findSuitableAgents(requiredCapabilities);
+if (suitableAgents.length === 0) {}}
+}
     }
 
     task.assignedAgents = suitableAgents;
-    this.taskQueue.push(task);
-
-    this.emit('task_created', task);
-    this.log(
-      'info',
-
+this.taskQueue.push(task);';'';
+';,'';
+this.emit('task_created', task);';,'';
+this.log('info',')'';'';
+);
     );
 
-    // 启动协作会话
-    await this.startCollaborationSession(task);
-    return taskId;
+    // 启动协作会话/;,/g/;
+const await = this.startCollaborationSession(task);
+return taskId;
   }
 
-  /**
-   * 启动协作会话
-   */
-  private async startCollaborationSession(
-    task: CollaborationTask
-  ): Promise<void> {
-    const sessionId = `session_${task.id;}`;
-    const session: CollaborationSession = {
-      id: sessionId;
-      taskId: task.id;
-      participants: task.assignedAgents;
-      startTime: new Date();
-      status: 'active';
-      decisions: [];
-      consensusReached: false;
+  /* 话 *//;/g/;
+   *//;,/g/;
+private async startCollaborationSession(task: CollaborationTask);
+  ): Promise<void> {}
+    const sessionId = `session_${task.id;}`;````;,```;
+const: session: CollaborationSession = {id: sessionId,;
+taskId: task.id,;
+participants: task.assignedAgents,';,'';
+startTime: new Date(),';,'';
+status: 'active';','';
+decisions: [],;
+}
+      const consensusReached = false;}
     };
+this.activeCollaborations.set(sessionId, session);
 
-    this.activeCollaborations.set(sessionId, session);
-
-
-    // 通知参与的智能体开始协作
-    for (const agentId of task.assignedAgents) {
-      const agentInfo = this.agents.get(agentId);
-      if (agentInfo) {
-        this.emit('collaboration_started', {
-          sessionId,
-          agentId,
-          task,
-          healthContext: task.healthContext;
+    // 通知参与的智能体开始协作/;,/g/;
+for (const agentId of task.assignedAgents) {;,}const agentInfo = this.agents.get(agentId);';,'';
+if (agentInfo) {';,}this.emit('collaboration_started', {';,)sessionId}agentId,);,'';
+task,);
+}
+          const healthContext = task.healthContext;)}
         });
       }
     }
 
-    // 启动协作决策流程
-    try {
-      await this.executeCollaborationFlow(session, task);
-    } catch (error) {
-
-      session.status = 'failed';
-      task.status = TaskStatus.FAILED;
+    // 启动协作决策流程/;,/g/;
+try {}}
+      await: this.executeCollaborationFlow(session, task);}
+    } catch (error) {';}';,'';
+session.status = 'failed';';'';
+}
+      task.status = TaskStatus.FAILED;}
     }
   }
 
-  /**
-   * 执行协作决策流程
-   */
-  private async executeCollaborationFlow(
-    session: CollaborationSession;
-    task: CollaborationTask
-  ): Promise<void> {
-    try {
-      task.status = TaskStatus.IN_PROGRESS;
-      task.updatedAt = new Date();
+  /* 程 *//;/g/;
+   *//;,/g/;
+private async executeCollaborationFlow(session: CollaborationSession,);
+const task = CollaborationTask);
+  ): Promise<void> {try {}      task.status = TaskStatus.IN_PROGRESS;
+task.updatedAt = new Date();
 
+      // 阶段1: 信息收集和初步分析（小艾主导）/;,/g,/;
+  analysisResults: await this.collectAnalysis(session, task);
 
-
-      // 阶段1: 信息收集和初步分析（小艾主导）
-      const analysisResults = await this.collectAnalysis(session, task);
-
-      // 阶段2: 协同诊断和辨证（小克主导）
-      const diagnosisResults = await this.performCollaborativeDiagnosis(
-        session;
-        analysisResults
+      // 阶段2: 协同诊断和辨证（小克主导）/;,/g/;
+const diagnosisResults = await this.performCollaborativeDiagnosis(session;);
+analysisResults);
       );
 
-      // 阶段3: 治疗方案制定（老克主导）
-      const treatmentPlan = await this.createTreatmentPlan(
-        session;
-        diagnosisResults
+      // 阶段3: 治疗方案制定（老克主导）/;,/g/;
+const treatmentPlan = await this.createTreatmentPlan(session;);
+diagnosisResults);
       );
 
-      // 阶段4: 生活方式指导（索儿主导）
-      const lifestyleGuidance = await this.generateLifestyleGuidance(
-        session;
-        treatmentPlan
+      // 阶段4: 生活方式指导（索儿主导）/;,/g/;
+const lifestyleGuidance = await this.generateLifestyleGuidance(session;);
+treatmentPlan);
       );
 
-      // 整合最终结果
-      task.result = {
-        analysis: analysisResults;
-        diagnosis: diagnosisResults;
-        treatment: treatmentPlan;
-        lifestyle: lifestyleGuidance;
-        confidence: this.calculateConfidence(session);
-        recommendations: this.generateRecommendations(session);
-        sessionId: session.id;
-        completedAt: new Date();
+      // 整合最终结果/;,/g/;
+task.result = {analysis: analysisResults}diagnosis: diagnosisResults,;
+treatment: treatmentPlan,;
+lifestyle: lifestyleGuidance,;
+confidence: this.calculateConfidence(session),;
+recommendations: this.generateRecommendations(session),;
+sessionId: session.id,;
+}
+        const completedAt = new Date();}
       };
+task.status = TaskStatus.COMPLETED;';,'';
+task.completedAt = new Date();';,'';
+session.status = 'completed';';,'';
+session.endTime = new Date();
+session.consensusReached = true;';'';
+';,'';
+this.emit('collaboration_completed', { session, task });';'';
 
-      task.status = TaskStatus.COMPLETED;
-      task.completedAt = new Date();
-      session.status = 'completed';
-      session.endTime = new Date();
-      session.consensusReached = true;
-
-      this.emit('collaboration_completed', { session, task });
-
-    } catch (error) {
-      task.status = TaskStatus.FAILED;
-      task.updatedAt = new Date();
-      session.status = 'failed';
-      session.endTime = new Date();
-
-      this.emit('collaboration_failed', { session, task, error });
-
-      throw error;
+    } catch (error) {task.status = TaskStatus.FAILED;';,}task.updatedAt = new Date();';,'';
+session.status = 'failed';';,'';
+session.endTime = new Date();';'';
+}
+'}'';
+this.emit('collaboration_failed', { session, task, error });';,'';
+const throw = error;
     }
   }
 
-  /**
-   * 信息收集和初步分析（小艾主导）
-   */
-  private async collectAnalysis(
-    session: CollaborationSession;
-    task: CollaborationTask
-  ): Promise<any> {
-
-
-    const xiaoaiAgent = this.agents.get('xiaoai');
-    if (!xiaoaiAgent) {
-
+  /* ） *//;/g/;
+   *//;,/g/;
+private async collectAnalysis(session: CollaborationSession,);
+const task = CollaborationTask);
+  ): Promise<any> {';}';,'';
+const xiaoaiAgent = this.agents.get('xiaoai');';,'';
+if (!xiaoaiAgent) {}}
+}
     }
-
-    // 模拟小艾进行用户交互和症状收集
-    const userInteraction = await this.invokeAgent(
-      'xiaoai',
-      'collect_symptoms',
-      {
-        healthContext: task.healthContext;
-        sessionId: session.id;
-      }
+';'';
+    // 模拟小艾进行用户交互和症状收集'/;,'/g,'/;
+  const: userInteraction = await this.invokeAgent('xiaoai',';)      'collect_symptoms',';'';
+      {healthContext: task.healthContext,);}}
+        const sessionId = session.id;)}
+      });
     );
-
-    // 模拟小艾进行初步健康评估
-    const healthAssessment = await this.invokeAgent('xiaoai', 'assess_health', {
-      symptoms: userInteraction.symptoms;
-      vitalSigns: task.healthContext.vitalSigns || {;},
+';'';
+    // 模拟小艾进行初步健康评估'/;,'/g,'/;
+  const: healthAssessment = await this.invokeAgent('xiaoai', 'assess_health', {)')'';}}'';
+      symptoms: userInteraction.symptoms,)}
+      vitalSigns: task.healthContext.vitalSigns || {;},);
     });
-
-    const result = {
-      userInteraction,
-      healthAssessment,
-      timestamp: new Date();
-      stage: 'analysis';
+const  result = {userInteraction}healthAssessment,';,'';
+timestamp: new Date(),';'';
+}
+      const stage = 'analysis';'}'';'';
     };
 
-    // 记录决策
-    this.recordDecision(
-      session,
-      'xiaoai',
+    // 记录决策'/;,'/g'/;
+this.recordDecision(session,';)      'xiaoai',';'';
 
-      0.9,
-
-      result
+      0.9,);
+);
+result);
     );
-
-    return result;
+return result;
   }
 
-  /**
-   * 协同诊断和辨证（小克主导，其他智能体协助）
-   */
-  private async performCollaborativeDiagnosis(
-    session: CollaborationSession;
-    analysisResults: any
-  ): Promise<any> {
-
-
-    // 小克进行中医辨证
-    const tcmDiagnosis = await this.invokeAgent('xiaoke', 'tcm_diagnosis', {
-      symptoms: analysisResults.userInteraction.symptoms;
-      constitution: analysisResults.healthAssessment.constitution;
+  /* ） *//;/g/;
+   *//;,/g/;
+private async performCollaborativeDiagnosis(session: CollaborationSession,);
+const analysisResults = any);
+  ): Promise<any> {';}    // 小克进行中医辨证'/;,'/g,'/;
+  const: tcmDiagnosis = await this.invokeAgent('xiaoke', 'tcm_diagnosis', {')'';,}symptoms: analysisResults.userInteraction.symptoms,);'';
+}
+      const constitution = analysisResults.healthAssessment.constitution;)}
     });
-
-    // 小克进行现代医学诊断
-    const modernDiagnosis = await this.invokeAgent(
-      'xiaoke',
-      'modern_diagnosis',
-      {
-        symptoms: analysisResults.userInteraction.symptoms;
-        labResults: analysisResults.healthAssessment.labResults;
-      }
+';'';
+    // 小克进行现代医学诊断'/;,'/g,'/;
+  const: modernDiagnosis = await this.invokeAgent('xiaoke',';)      'modern_diagnosis',';'';
+      {symptoms: analysisResults.userInteraction.symptoms,);}}
+        const labResults = analysisResults.healthAssessment.labResults;)}
+      });
     );
-
-    // 老克提供诊断建议
-    const seniorAdvice = await this.invokeAgent('laoke', 'review_diagnosis', {
-      tcmDiagnosis,
-      modernDiagnosis,
+';'';
+    // 老克提供诊断建议'/;,'/g,'/;
+  const: seniorAdvice = await this.invokeAgent('laoke', 'review_diagnosis', {)')'';,}tcmDiagnosis,);'';
+}
+      modernDiagnosis,)}
     });
-
-    const result = {
-      tcmDiagnosis,
-      modernDiagnosis,
-      seniorAdvice,
-      confidence: this.calculateDiagnosisConfidence([
-        tcmDiagnosis;
-        modernDiagnosis,
-        seniorAdvice,
-      ]),
-      timestamp: new Date();
-      stage: 'diagnosis';
+const  result = {tcmDiagnosis}modernDiagnosis,;
+seniorAdvice,;
+const confidence = this.calculateDiagnosisConfidence([;,)tcmDiagnosis;);,]modernDiagnosis,);
+seniorAdvice,);
+];
+      ]),';,'';
+timestamp: new Date(),';'';
+}
+      const stage = 'diagnosis';'}'';'';
     };
 
-    // 记录决策
-    this.recordDecision(
-      session,
-      'xiaoke',
+    // 记录决策'/;,'/g'/;
+this.recordDecision(session,';)      'xiaoke',';'';
 
-      0.85,
-
-      result
+      0.85,);
+);
+result);
     );
-
-    return result;
+return result;
   }
 
-  /**
-   * 治疗方案制定（老克主导）
-   */
-  private async createTreatmentPlan(
-    session: CollaborationSession;
-    diagnosisResults: any
-  ): Promise<any> {
-
-
-    const treatmentPlan = await this.invokeAgent(
-      'laoke',
-      'create_treatment_plan',
-      {
-        diagnosis: diagnosisResults;
-        patientProfile: session.participants;
-      }
+  /* ） *//;/g/;
+   *//;,/g/;
+private async createTreatmentPlan(session: CollaborationSession,);
+const diagnosisResults = any);
+  ): Promise<any> {';}';,'';
+const: treatmentPlan = await this.invokeAgent('laoke',';)      'create_treatment_plan',';'';
+      {diagnosis: diagnosisResults,);}}
+        const patientProfile = session.participants;)}
+      });
     );
-
-    // 小克验证治疗方案的医学合理性
-    const medicalValidation = await this.invokeAgent(
-      'xiaoke',
-      'validate_treatment',
-      {
-        treatmentPlan,
-      }
+';'';
+    // 小克验证治疗方案的医学合理性'/;,'/g,'/;
+  const: medicalValidation = await this.invokeAgent('xiaoke',';)      'validate_treatment',';'';
+      {);}}
+        treatmentPlan,)}
+      });
     );
-
-    const result = {
-      plan: treatmentPlan;
-      validation: medicalValidation;
-      timestamp: new Date();
-      stage: 'treatment';
+const  result = {plan: treatmentPlan}validation: medicalValidation,';,'';
+timestamp: new Date(),';'';
+}
+      const stage = 'treatment';'}'';'';
     };
 
-    // 记录决策
-    this.recordDecision(
-      session,
-      'laoke',
+    // 记录决策'/;,'/g'/;
+this.recordDecision(session,';)      'laoke',';'';
 
-      0.88,
-
-      result
+      0.88,);
+);
+result);
     );
-
-    return result;
+return result;
   }
 
-  /**
-   * 生活方式指导（索儿主导）
-   */
-  private async generateLifestyleGuidance(
-    session: CollaborationSession;
-    treatmentPlan: any
-  ): Promise<any> {
-
-
-    const lifestyleGuidance = await this.invokeAgent(
-      'soer',
-      'create_lifestyle_plan',
-      {
-        treatmentPlan,
-        sessionId: session.id;
-      }
+  /* ） *//;/g/;
+   *//;,/g/;
+private async generateLifestyleGuidance(session: CollaborationSession,);
+const treatmentPlan = any);
+  ): Promise<any> {';}';,'';
+const: lifestyleGuidance = await this.invokeAgent('soer',';)      'create_lifestyle_plan',';'';
+      {treatmentPlan,);}}
+        const sessionId = session.id;)}
+      });
     );
-
-    const result = {
-      guidance: lifestyleGuidance;
-      timestamp: new Date();
-      stage: 'lifestyle';
+const  result = {guidance: lifestyleGuidance,';,}timestamp: new Date(),';'';
+}
+      const stage = 'lifestyle';'}'';'';
     };
 
-    // 记录决策
-    this.recordDecision(
-      session,
-      'soer',
+    // 记录决策'/;,'/g'/;
+this.recordDecision(session,';)      'soer',';'';
 
-      0.82,
-
-      result
+      0.82,);
+);
+result);
     );
-
-    return result;
+return result;
   }
 
-  /**
-   * 查找合适的智能体
-   */
-  private findSuitableAgents(requiredCapabilities: string[]): string[] {
-    const suitableAgents: string[] = [];
-
-    for (const [agentId, agentInfo] of this.agents) {
-      const hasRequiredCapabilities = requiredCapabilities.some((capability) =>
-        agentInfo.capabilities.includes(capability)
-      );
-
-      if (hasRequiredCapabilities && agentInfo.status === 'active') {
-        suitableAgents.push(agentId);
+  /* 体 *//;/g/;
+   *//;,/g/;
+private findSuitableAgents(requiredCapabilities: string[]): string[] {const suitableAgents: string[] = [];,}for (const [agentId, agentInfo] of this.agents) {;,}const  hasRequiredCapabilities = requiredCapabilities.some((capability) =>;
+agentInfo.capabilities.includes(capability);
+      );';'';
+';,'';
+if (hasRequiredCapabilities && agentInfo.status === 'active') {';}}'';
+        suitableAgents.push(agentId);}
       }
     }
 
-    // 按优先级排序
-    suitableAgents.sort((a, b) => {
-      const agentA = this.agents.get(a)!;
-      const agentB = this.agents.get(b)!;
-      const priorityOrder = { critical: 4, high: 3, medium: 2, low: 1 ;};
-      return priorityOrder[agentB.priority] - priorityOrder[agentA.priority];
+    // 按优先级排序/;,/g/;
+suitableAgents.sort((a, b) => {const agentA = this.agents.get(a)!;}}
+      const agentB = this.agents.get(b)!;}
+      priorityOrder: { critical: 4, high: 3, medium: 2, low: 1 ;};
+return priorityOrder[agentB.priority] - priorityOrder[agentA.priority];
     });
-
-    return suitableAgents;
+return suitableAgents;
   }
 
-  /**
-   * 调用智能体
-   */
-  private async invokeAgent(
-    agentId: string;
-    action: string;
-    params: any
-  ): Promise<any> {
-    const agentInfo = this.agents.get(agentId);
-    if (!agentInfo) {
-
+  /* 体 *//;/g/;
+   *//;,/g/;
+private async invokeAgent(agentId: string,);
+action: string,);
+const params = any);
+  ): Promise<any> {const agentInfo = this.agents.get(agentId);,}if (!agentInfo) {}}
+}
     }
 
     const agentInstance = this.agentInstances.get(agentId);
 
-    // 如果有实际的智能体实例，调用它
-    if (agentInstance) {
-      try {
-        // 这里应该调用实际的智能体方法
-        // 暂时返回模拟结果
-        return this.simulateAgentResponse(agentId, action, params);
-      } catch (error) {
-
-        throw error;
+    // 如果有实际的智能体实例，调用它/;,/g/;
+if (agentInstance) {try {}        // 这里应该调用实际的智能体方法/;/g/;
+        // 暂时返回模拟结果/;/g/;
+}
+        return this.simulateAgentResponse(agentId, action, params);}
+      } catch (error) {}}
+        const throw = error;}
       }
     }
 
-    // 模拟智能体调用
-    return this.simulateAgentResponse(agentId, action, params);
+    // 模拟智能体调用/;,/g/;
+return this.simulateAgentResponse(agentId, action, params);
   }
 
-  /**
-   * 模拟智能体响应
-   */
-  private simulateAgentResponse(
-    agentId: string;
-    action: string;
-    params: any
-  ): any {
-    const timestamp = new Date();
-    const baseResponse = {
-      agentId,
-      action,
-      timestamp,
-      params,
-      success: true;
+  /* 应 *//;/g/;
+   *//;,/g/;
+private simulateAgentResponse(agentId: string,);
+action: string,);
+const params = any);
+  ): any {const timestamp = new Date();,}const  baseResponse = {agentId}action,;
+timestamp,;
+params,;
+}
+      const success = true;}
     };
 
-    // 根据不同的智能体和动作返回不同的模拟结果
-    switch (agentId) {
-      case 'xiaoai':
-        return {
-          ...baseResponse,
-          result: this.simulateXiaoaiResponse(action, params),
+    // 根据不同的智能体和动作返回不同的模拟结果'/;,'/g'/;
+switch (agentId) {';,}case 'xiaoai': ';,'';
+return {...baseResponse,;}}
+          result: this.simulateXiaoaiResponse(action, params),}';'';
+        ;};';,'';
+case 'xiaoke': ';,'';
+return {...baseResponse,;}}
+          result: this.simulateXiaokeResponse(action, params),}';'';
+        ;};';,'';
+case 'laoke': ';,'';
+return {...baseResponse,;}}
+          result: this.simulateLaokeResponse(action, params),}';'';
+        ;};';,'';
+case 'soer': ';,'';
+return {...baseResponse,;}}
+          result: this.simulateSoerResponse(action, params),}
         ;};
-      case 'xiaoke':
-        return {
-          ...baseResponse,
-          result: this.simulateXiaokeResponse(action, params),
-        ;};
-      case 'laoke':
-        return {
-          ...baseResponse,
-          result: this.simulateLaokeResponse(action, params),
-        ;};
-      case 'soer':
-        return {
-          ...baseResponse,
-          result: this.simulateSoerResponse(action, params),
-        ;};
-      default:
-        return {
-          ...baseResponse,
-
+const default = return {...baseResponse,;}}
+}
         ;};
     }
   }
 
-  /**
-   * 模拟小艾的响应
-   */
-  private simulateXiaoaiResponse(action: string, params: any): any {
-    switch (action) {
-      case 'collect_symptoms':
-        return {
+  /* 应 *//;/g/;
+   *//;,/g/;
+private simulateXiaoaiResponse(action: string, params: any): any {';,}switch (action) {';,}case 'collect_symptoms': ';,'';
+return {}}
+}';'';
+        ;};';,'';
+case 'assess_health': ';,'';
+return {}}
+}
+        };
+const default = ;}
+  }
 
+  /* 应 *//;/g/;
+   *//;,/g/;
+private simulateXiaokeResponse(action: string, params: any): any {';,}switch (action) {';,}case 'tcm_diagnosis': ';,'';
+return {}}
+}';'';
+        ;};';,'';
+case 'modern_diagnosis': ';,'';
+return {}}
+}';'';
+        };';,'';
+case 'validate_treatment': ';,'';
+return {valid: true,;}}
+          const adjustments = [];}
+        };
+const default = ;}
+  }
 
+  /* 应 *//;/g/;
+   *//;,/g/;
+private simulateLaokeResponse(action: string, params: any): any {';,}switch (action) {';,}case 'review_diagnosis': ';,'';
+return {}}
+          const confidence = 0.85;}';'';
+        };';,'';
+case 'create_treatment_plan': ';,'';
+return {}}
+}
+        };
+const default = ;}
+  }
 
-
+  /* 应 *//;/g/;
+   *//;,/g/;
+private simulateSoerResponse(action: string, params: any): any {';,}switch (action) {';,}case 'create_lifestyle_plan': ';,'';
+return {}}
+}
         ;};
-      case 'assess_health':
-        return {
-
-
-
-
-        };
-      default:
-
-    ;}
+const default = ;}
   }
 
-  /**
-   * 模拟小克的响应
-   */
-  private simulateXiaokeResponse(action: string, params: any): any {
-    switch (action) {
-      case 'tcm_diagnosis':
-        return {
-
-
-
-
-        ;};
-      case 'modern_diagnosis':
-        return {
-
-
-
-
-        };
-      case 'validate_treatment':
-        return {
-          valid: true;
-
-
-          adjustments: [];
-        };
-      default:
-
-    ;}
-  }
-
-  /**
-   * 模拟老克的响应
-   */
-  private simulateLaokeResponse(action: string, params: any): any {
-    switch (action) {
-      case 'review_diagnosis':
-        return {
-
-
-          confidence: 0.85;
-        };
-      case 'create_treatment_plan':
-        return {
-
-
-
-
-        };
-      default:
-
-    ;}
-  }
-
-  /**
-   * 模拟索儿的响应
-   */
-  private simulateSoerResponse(action: string, params: any): any {
-    switch (action) {
-      case 'create_lifestyle_plan':
-        return {
-
-
-
-
-
-        ;};
-      default:
-
-    ;}
-  }
-
-  /**
-   * 记录协作决策
-   */
-  private recordDecision(
-    session: CollaborationSession;
-    agentId: string;
-    decision: string;
-    confidence: number;
-    reasoning: string[];
-    supportingData?: any
-  ): void {
-    const decisionRecord: CollaborationDecision = {
-      id: `decision_${Date.now();}_${Math.random().toString(36).substring(2, 8)}`,
-      sessionId: session.id;
-      agentId,
-      decision,
-      confidence,
-      reasoning,
-      timestamp: new Date();
-      supportingData,
+  /* 策 *//;/g/;
+   *//;,/g/;
+private recordDecision(session: CollaborationSession,;,)agentId: string,;
+decision: string,;
+confidence: number,);
+const reasoning = string[];);
+supportingData?: any);
+  ): void {}}
+    const: decisionRecord: CollaborationDecision = {,}
+      id: `decision_${Date.now();}_${Math.random().toString(36).substring(2, 8)}`,````;,```;
+const sessionId = session.id;
+agentId,;
+decision,;
+confidence,;
+reasoning,;
+const timestamp = new Date();
+supportingData,;
     };
-
-    session.decisions.push(decisionRecord);
-    this.emit('decision_recorded', decisionRecord);
+';,'';
+session.decisions.push(decisionRecord);';,'';
+this.emit('decision_recorded', decisionRecord);';'';
   }
 
-  /**
-   * 计算整体置信度
-   */
-  private calculateConfidence(session: CollaborationSession): number {
-    if (session.decisions.length === 0) return 0;
-
-    const totalConfidence = session.decisions.reduce(
-      (sum, decision) => sum + decision.confidence,
-      0
+  /* 度 *//;/g/;
+   *//;,/g/;
+private calculateConfidence(session: CollaborationSession): number {if (session.decisions.length === 0) return 0;,}const  totalConfidence = session.decisions.reduce();
+      (sum, decision) => sum + decision.confidence,;
+      0;
     );
-    return totalConfidence / session.decisions.length;
+}
+    return totalConfidence / session.decisions.length;}/;/g/;
   }
 
-  /**
-   * 计算诊断置信度
-   */
-  private calculateDiagnosisConfidence(diagnoses: any[]): number {
-    // 简化的诊断置信度计算
-    return 0.85 + Math.random() * 0.1;
+  /* 度 *//;/g/;
+   *//;,/g/;
+private calculateDiagnosisConfidence(diagnoses: any[]): number {// 简化的诊断置信度计算/;}}/g/;
+    return 0.85 + Math.random() * 0.1;}
   }
 
-  /**
-   * 生成建议
-   */
-  private generateRecommendations(session: CollaborationSession): string[] {
-    const recommendations = [
+  /* 议 *//;/g/;
+   *//;,/g/;
+private generateRecommendations(session: CollaborationSession): string[] {const  recommendations = [;]];}    ];
 
-
-
-
-
-    ];
-
-    // 根据会话中的决策生成更具体的建议
-    const specificRecommendations = session.decisions
-      .flatMap((decision) => decision.reasoning)
-      .filter((reason, index, array) => array.indexOf(reason) === index)
+    // 根据会话中的决策生成更具体的建议/;,/g/;
+const  specificRecommendations = session.decisions;
+      .flatMap((decision) => decision.reasoning);
+      .filter((reason, index, array) => array.indexOf(reason) === index);
       .slice(0, 3);
 
-    return [...recommendations, ...specificRecommendations];
+}
+    return [...recommendations, ...specificRecommendations];}
   }
 
-  /**
-   * 生成任务ID
-   */
-  private generateTaskId(): string {
-    return `task_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
+  /* D *//;/g/;
+   *//;,/g/;
+private generateTaskId(): string {}
+    return `task_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;````;```;
   }
 
-  /**
-   * 获取任务状态
-   */
-  getTaskStatus(taskId: string): CollaborationTask | undefined {
-    return this.taskQueue.find((task) => task.id === taskId);
+  /* 态 *//;/g/;
+   *//;,/g/;
+getTaskStatus(taskId: string): CollaborationTask | undefined {}}
+    return this.taskQueue.find((task) => task.id === taskId);}
   }
 
-  /**
-   * 获取活跃协作会话
-   */
-  getActiveCollaborations(): Map<string, CollaborationSession> {
-    return new Map(this.activeCollaborations);
+  /* 话 *//;/g/;
+   *//;,/g/;
+getActiveCollaborations(): Map<string, CollaborationSession> {}}
+    return new Map(this.activeCollaborations);}
   }
 
-  /**
-   * 获取任务队列
-   */
-  getTaskQueue(): CollaborationTask[] {
-    return [...this.taskQueue];
+  /* 列 *//;/g/;
+   *//;,/g/;
+getTaskQueue(): CollaborationTask[] {}}
+    return [...this.taskQueue];}
   }
 
-  /**
-   * 获取智能体状态
-   */
-  getAgentStatus(): Map<string, AgentInfo> {
-    return new Map(this.agents);
+  /* 态 *//;/g/;
+   *//;,/g/;
+getAgentStatus(): Map<string, AgentInfo> {}}
+    return new Map(this.agents);}
   }
 
-  /**
-   * 获取协作统计信息
-   */
-  getCollaborationStats(): any {
-    const completedTasks = this.taskQueue.filter(
-      (task) => task.status === TaskStatus.COMPLETED
+  /* 息 *//;/g/;
+   *//;,/g/;
+getCollaborationStats(): any {const  completedTasks = this.taskQueue.filter();}      (task) => task.status === TaskStatus.COMPLETED;
     );
-    const failedTasks = this.taskQueue.filter(
-      (task) => task.status === TaskStatus.FAILED
+const  failedTasks = this.taskQueue.filter();
+      (task) => task.status === TaskStatus.FAILED;
     );
-    const activeSessions = Array.from(
-      this.activeCollaborations.values()
-    ).filter((session) => session.status === 'active');
-
-    return {
-      totalTasks: this.taskQueue.length;
-      completedTasks: completedTasks.length;
-      failedTasks: failedTasks.length;
-      activeSessions: activeSessions.length;
-      successRate:
-        this.taskQueue.length > 0
-          ? completedTasks.length / this.taskQueue.length
+const  activeSessions = Array.from()';,'';
+this.activeCollaborations.values()';'';
+    ).filter((session) => session.status === 'active');';,'';
+return {totalTasks: this.taskQueue.length}completedTasks: completedTasks.length,;
+failedTasks: failedTasks.length,;
+activeSessions: activeSessions.length,;
+const successRate = this.taskQueue.length > 0;
+          ? completedTasks.length / this.taskQueue.length/;/g/;
           : 0;
-      averageConfidence:
-        completedTasks.length > 0
-          ? completedTasks.reduce(
-              (sum, task) => sum + (task.result?.confidence || 0),
-              0
-            ) / completedTasks.length
-          : 0,
+const averageConfidence = completedTasks.length > 0;
+          ? completedTasks.reduce();
+              (sum, task) => sum + (task.result?.confidence || 0),;
+              0;
+            ) / completedTasks.length/;/g/;
+}
+          : 0,}
     ;};
   }
 
-  /**
-   * 关闭协作框架
-   */
-  async shutdown(): Promise<void> {
-
-
-    // 取消所有活跃的协作会话
-    for (const [sessionId, session] of this.activeCollaborations) {
-      if (session.status === 'active') {
-        session.status = 'cancelled';
-        session.endTime = new Date();
-        this.emit('collaboration_cancelled', { session });
+  /* 架 *//;/g/;
+   *//;,/g/;
+const async = shutdown(): Promise<void> {// 取消所有活跃的协作会话'/;,}for (const [sessionId, session] of this.activeCollaborations) {';,}if (session.status === 'active') {';,}session.status = 'cancelled';';'/g'/;
+}
+        session.endTime = new Date();'}'';
+this.emit('collaboration_cancelled', { session });';'';
       }
     }
 
-    // 清理资源
-    this.agents.clear();
-    this.agentInstances.clear();
-    this.taskQueue.length = 0;
-    this.activeCollaborations.clear();
-    this.removeAllListeners();
-    this.isInitialized = false;
-
+    // 清理资源/;,/g/;
+this.agents.clear();
+this.agentInstances.clear();
+this.taskQueue.length = 0;
+this.activeCollaborations.clear();
+this.removeAllListeners();
+this.isInitialized = false;
 
   }
 
-  /**
-   * 日志记录
-   */
-  private log(
-    level: 'info' | 'warn' | 'error';
-    message: string;
-    data?: any
-  ): void {
-    const timestamp = new Date().toISOString();
-    const logMessage = `[${timestamp}] [AgentCollaborationFramework] [${level.toUpperCase()}] ${message}`;
-
-    switch (level) {
-      case 'info':
-        console.log(logMessage, data || '');
-        break;
-      case 'warn':
-        console.warn(logMessage, data || '');
-        break;
-      case 'error':
-        console.error(logMessage, data || '');
-        break;
+  /* ' *//;'/g'/;
+   */'/;,'/g'/;
+private log(level: 'info' | 'warn' | 'error';',')'';
+const message = string;);
+data?: any);
+  ): void {}}
+    const timestamp = new Date().toISOString();}
+    const logMessage = `[${timestamp}] [AgentCollaborationFramework] [${level.toUpperCase()}] ${message}`;````;```;
+';,'';
+switch (level) {';,}case 'info': ';,'';
+console.log(logMessage, data || ');'';
+break;';,'';
+case 'warn': ';,'';
+console.warn(logMessage, data || ');'';
+break;';,'';
+case 'error': ';,'';
+console.error(logMessage, data || ');'';'';
+}
+        break;}
     }
   }
-}
+}';'';
+''';

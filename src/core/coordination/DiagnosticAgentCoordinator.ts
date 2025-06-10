@@ -1,266 +1,225 @@
-import { EventEmitter } from 'events';
-import { Logger } from '../monitoring/Logger';
-import { MetricsCollector } from '../monitoring/MetricsCollector';
-import { ErrorHandler } from '../error/ErrorHandler';
-export interface DiagnosticResult {
-  serviceType: 'calculation' | 'look' | 'listen' | 'inquiry' | 'palpation';
-  timestamp: number;
-  data: any;
-  confidence: number;
-  metadata: {
-  sessionId: string;
-  userId: string;
-  version: string;
+import { EventEmitter } from "events";";
+import { Logger } from "../monitoring/Logger";""/;,"/g"/;
+import { MetricsCollector } from "../monitoring/MetricsCollector";""/;,"/g"/;
+import { ErrorHandler } from "../error/ErrorHandler";""/;,"/g"/;
+export interface DiagnosticResult {';,}serviceType: 'calculation' | 'look' | 'listen' | 'inquiry' | 'palpation';','';
+timestamp: number,;
+data: any,;
+confidence: number,;
+metadata: {sessionId: string,;
+userId: string,;
+}
+}
+  const version = string;}
+};
+}';,'';
+export interface AgentResponse {';,}agentType: 'xiaoai' | 'xiaoke' | 'laoke' | 'soer';','';
+timestamp: number,;
+analysis: any,;
+recommendations: any[],;
+confidence: number,;
+metadata: {sessionId: string,;
+userId: string,;
+}
+}
+  const version = string;}
 };
 }
-export interface AgentResponse {
-  agentType: 'xiaoai' | 'xiaoke' | 'laoke' | 'soer';
-  timestamp: number;
-  analysis: any;
-  recommendations: any[];
-  confidence: number;
-  metadata: {
-  sessionId: string;
-  userId: string;
-  version: string;
-};
+export interface CoordinationSession {sessionId: string}userId: string,;
+startTime: number,;
+diagnosticResults: DiagnosticResult[],;
+const agentResponses = AgentResponse[];';,'';
+consensusResult?: any;';'';
 }
-export interface CoordinationSession {
-  sessionId: string;
-  userId: string;
-  startTime: number;
-  diagnosticResults: DiagnosticResult[];
-  agentResponses: AgentResponse[];
-  consensusResult?: any;
-  status: 'active' | 'completed' | 'failed';
 }
-export class DiagnosticAgentCoordinator extends EventEmitter {
-  private logger: Logger;
-  private metrics: MetricsCollector;
-  private errorHandler: ErrorHandler;
-  private activeSessions: Map<string, CoordinationSession>;
-  private consensusThreshold: number;
-  constructor() {
-    super();
-    this.logger = new Logger('DiagnosticAgentCoordinator');
-    this.metrics = new MetricsCollector();
-    this.errorHandler = new ErrorHandler();
-    this.activeSessions = new Map();
-    this.consensusThreshold = 0.75; // 75%一致性阈值
+  const status = 'active' | 'completed' | 'failed';'}'';'';
+}
+export class DiagnosticAgentCoordinator extends EventEmitter {;,}private logger: Logger;
+private metrics: MetricsCollector;
+private errorHandler: ErrorHandler;
+private activeSessions: Map<string, CoordinationSession>;
+private consensusThreshold: number;
+constructor() {';,}super();';,'';
+this.logger = new Logger('DiagnosticAgentCoordinator');';,'';
+this.metrics = new MetricsCollector();
+this.errorHandler = new ErrorHandler();
+this.activeSessions = new Map();
+}
+    this.consensusThreshold = 0.75; // 75%一致性阈值}/;/g/;
   }
-  /**
-  * 启动诊断-智能体协同会话
-  */
-  async startCoordinationSession(userId: string, sessionId?: string): Promise<string> {
-    try {
-      const id = sessionId || this.generateSessionId();
-      const session: CoordinationSession = {,
-  sessionId: id;
-        userId,
-        startTime: Date.now();
-        diagnosticResults: [];
-        agentResponses: [];
-        status: 'active'
+  /* 话 *//;/g/;
+  *//;,/g,/;
+  async: startCoordinationSession(userId: string, sessionId?: string): Promise<string> {try {}      const id = sessionId || this.generateSessionId();
+const: session: CoordinationSession = {const sessionId = id;
+userId,;
+startTime: Date.now(),;
+diagnosticResults: [],';,'';
+agentResponses: [],';'';
+}
+        const status = 'active'}'';'';
       ;};
-      this.activeSessions.set(id, session);
-
-      this.metrics.incrementCounter('coordination_sessions_started');
-      this.emit('sessionStarted', { sessionId: id, userId ;});
-      return id;
-    } catch (error) {
-      this.errorHandler.handleError(error, 'startCoordinationSession');
-      throw error;
+this.activeSessions.set(id, session);';'';
+';,'';
+this.metrics.incrementCounter('coordination_sessions_started');';,'';
+this.emit('sessionStarted', { sessionId: id, userId ;});';,'';
+return id;';'';
+    } catch (error) {';,}this.errorHandler.handleError(error, 'startCoordinationSession');';'';
+}
+      const throw = error;}
     }
   }
-  /**
-  * 接收诊断服务结果
-  */
-  async receiveDiagnosticResult(sessionId: string, result: DiagnosticResult): Promise<void> {
-    try {
-      const session = this.activeSessions.get(sessionId);
-      if (!session) {
-
+  /* 果 *//;/g/;
+  *//;,/g,/;
+  async: receiveDiagnosticResult(sessionId: string, result: DiagnosticResult): Promise<void> {try {}      const session = this.activeSessions.get(sessionId);
+if (!session) {}}
+}
       }
       session.diagnosticResults.push(result);
-
-        sessionId,
-        confidence: result.confidence;
-      });
-      this.metrics.incrementCounter('diagnostic_results_received', {
-        service: result.serviceType;
-      });
-      this.emit('diagnosticResultReceived', { sessionId, result });
-      // 检查是否可以触发智能体分析
-      await this.checkForAgentTrigger(sessionId);
-    } catch (error) {
-      this.errorHandler.handleError(error, 'receiveDiagnosticResult');
-      throw error;
+sessionId,;
+const confidence = result.confidence;';'';
+      });';,'';
+this.metrics.incrementCounter('diagnostic_results_received', {)')'';}}'';
+        const service = result.serviceType;)}';'';
+      });';,'';
+this.emit('diagnosticResultReceived', { sessionId, result });';'';
+      // 检查是否可以触发智能体分析/;,/g/;
+const await = this.checkForAgentTrigger(sessionId);';'';
+    } catch (error) {';,}this.errorHandler.handleError(error, 'receiveDiagnosticResult');';'';
+}
+      const throw = error;}
     }
   }
-  /**
-  * 接收智能体响应
-  */
-  async receiveAgentResponse(sessionId: string, response: AgentResponse): Promise<void> {
-    try {
-      const session = this.activeSessions.get(sessionId);
-      if (!session) {
-
+  /* 应 *//;/g/;
+  *//;,/g,/;
+  async: receiveAgentResponse(sessionId: string, response: AgentResponse): Promise<void> {try {}      const session = this.activeSessions.get(sessionId);
+if (!session) {}}
+}
       }
       session.agentResponses.push(response);
-
-        sessionId,
-        confidence: response.confidence;
-      });
-      this.metrics.incrementCounter('agent_responses_received', {
-        agent: response.agentType;
-      });
-      this.emit('agentResponseReceived', { sessionId, response });
-      // 检查是否可以生成共识结果
-      await this.checkForConsensus(sessionId);
-    } catch (error) {
-      this.errorHandler.handleError(error, 'receiveAgentResponse');
-      throw error;
+sessionId,;
+const confidence = response.confidence;';'';
+      });';,'';
+this.metrics.incrementCounter('agent_responses_received', {)')'';}}'';
+        const agent = response.agentType;)}';'';
+      });';,'';
+this.emit('agentResponseReceived', { sessionId, response });';'';
+      // 检查是否可以生成共识结果/;,/g/;
+const await = this.checkForConsensus(sessionId);';'';
+    } catch (error) {';,}this.errorHandler.handleError(error, 'receiveAgentResponse');';'';
+}
+      const throw = error;}
     }
   }
-  /**
-  * 检查是否触发智能体分析
-  */
-  private async checkForAgentTrigger(sessionId: string): Promise<void> {
-    const session = this.activeSessions.get(sessionId);
-    if (!session) {
-      return;
+  /* 析 *//;/g/;
+  *//;,/g/;
+private async checkForAgentTrigger(sessionId: string): Promise<void> {const session = this.activeSessions.get(sessionId);,}if (!session) {}}
+      return;}
     }
-    // 当收集到足够的诊断数据时，触发智能体分析
-    const diagnosticTypes = new Set(session.diagnosticResults.map(r => r.serviceType));
-    if (diagnosticTypes.size >= 3) {
-      // 至少3种诊断类型
-      this.emit('triggerAgentAnalysis', {
-        sessionId,
-        diagnosticResults: session.diagnosticResults;
+    // 当收集到足够的诊断数据时，触发智能体分析/;,/g/;
+const diagnosticTypes = new Set(session.diagnosticResults.map(r => r.serviceType));
+if (diagnosticTypes.size >= 3) {';}      // 至少3种诊断类型'/;,'/g'/;
+this.emit('triggerAgentAnalysis', {')'';,}sessionId,);'';
+}
+        const diagnosticResults = session.diagnosticResults;)}
       });
     }
   }
-  /**
-  * 检查智能体共识
-  */
-  private async checkForConsensus(sessionId: string): Promise<void> {
-    const session = this.activeSessions.get(sessionId);
-    if (!session) {
-      return;
+  /* 识 *//;/g/;
+  *//;,/g/;
+private async checkForConsensus(sessionId: string): Promise<void> {const session = this.activeSessions.get(sessionId);,}if (!session) {}}
+      return;}
     }
-    // 当收集到足够的智能体响应时，计算共识
-    if (session.agentResponses.length >= 2) {
-      // 至少2个智能体响应
-      const consensus = await this.calculateConsensus(session);
-      if (consensus.confidence >= this.consensusThreshold) {
-        session.consensusResult = consensus;
-        session.status = 'completed';
-
-          sessionId,
-          confidence: consensus.confidence;
-        });
-        this.metrics.incrementCounter('consensus_reached');
-        this.emit('consensusReached', {
-          sessionId,
-          consensus: consensus.result;
-          confidence: consensus.confidence;
+    // 当收集到足够的智能体响应时，计算共识/;,/g/;
+if (session.agentResponses.length >= 2) {// 至少2个智能体响应/;,}const consensus = await this.calculateConsensus(session);,/g/;
+if (consensus.confidence >= this.consensusThreshold) {';,}session.consensusResult = consensus;';,'';
+session.status = 'completed';';,'';
+sessionId,;
+}
+          const confidence = consensus.confidence;}';'';
+        });';,'';
+this.metrics.incrementCounter('consensus_reached');';,'';
+this.emit('consensusReached', {)';,}sessionId,);,'';
+consensus: consensus.result,);
+}
+          const confidence = consensus.confidence;)}
         });
       }
     }
   }
-  /**
-  * 计算智能体共识
-  */
-  private async calculateConsensus()
-    session: CoordinationSession;
-  ): Promise<{ result: any; confidence: number ;}> {
-    const responses = session.agentResponses;
-    // 简化的共识算法：基于置信度加权平均
-    let totalWeight = 0;
-    let weightedSum = 0;
+  /* 识 *//;/g/;
+  *//;,/g/;
+private async calculateConsensus();
+const session = CoordinationSession;
+  ): Promise<{ result: any; confidence: number ;}> {const responses = session.agentResponses;}    // 简化的共识算法：基于置信度加权平均/;,/g/;
+let totalWeight = 0;
+}
+    let weightedSum = 0;}
     const consensusData: any = {;};
-    responses.forEach(response => {
-      totalWeight += response.confidence;
-      weightedSum += response.confidence;
-      // 合并分析结果
-      if (response.analysis) {
-        Object.keys(response.analysis).forEach(key => {
-          if (!consensusData[key]) {
-            consensusData[key] = [];
+responses.forEach(response => {)totalWeight += response.confidence;);,}weightedSum += response.confidence;);
+      // 合并分析结果)/;,/g/;
+if (response.analysis) {Object.keys(response.analysis).forEach(key => {);,}if (!consensusData[key]) {}}
+            consensusData[key] = [];}
           }
-          consensusData[key].push({
-            value: response.analysis[key];
-            weight: response.confidence;
-            agent: response.agentType;
+          consensusData[key].push({)value: response.analysis[key],);,}weight: response.confidence,);
+}
+            const agent = response.agentType;)}
           });
         });
       }
     });
-    const confidence = totalWeight / responses.length;
-    // 生成最终共识结果
-    const finalResult: any = {;};
-    Object.keys(consensusData).forEach(key => {
-      const items = consensusData[key];
-      const weightedAvg =
-        items.reduce(sum: number, item: any) => sum + item.value * item.weight, 0) /;
-        items.reduce(sum: number, item: any) => sum + item.weight, 0);
-      finalResult[key] = {
-        value: weightedAvg;
-        sources: items.map(item: any) => item.agent);
-        confidence: items.reduce(sum: number, item: any) => sum + item.weight, 0) / items.length;
+const confidence = totalWeight / responses.length;/;/g/;
+    // 生成最终共识结果/;,/g/;
+const finalResult: any = {;};
+Object.keys(consensusData).forEach(key => {));,}const items = consensusData[key];);
+const  weightedAvg =);
+items.reduce(sum: number, item: any) => sum + item.value * item.weight, 0) /;/;,/g/;
+items.reduce(sum: number, item: any) => sum + item.weight, 0);
+finalResult[key] = {value: weightedAvg}sources: items.map(item: any) => item.agent),;
+}
+        confidence: items.reduce(sum: number, item: any) => sum + item.weight, 0) / items.length;}/;/g/;
       };
     });
-    return {result: finalResult,confidence;
+return {result: finalResult,confidence;}
     };
   }
-  /**
-  * 获取会话状态
-  */
-  getSessionStatus(sessionId: string): CoordinationSession | null {
-    return this.activeSessions.get(sessionId) || null;
+  /* 态 *//;/g/;
+  *//;,/g/;
+getSessionStatus(sessionId: string): CoordinationSession | null {}}
+    return this.activeSessions.get(sessionId) || null;}
   }
-  /**
-  * 结束协同会话
-  */
-  async endSession(sessionId: string): Promise<void> {
-    const session = this.activeSessions.get(sessionId);
-    if (session) {
-      session.status = 'completed';
-      this.activeSessions.delete(sessionId);
-
-      this.metrics.incrementCounter('coordination_sessions_ended');
-      this.emit('sessionEnded', { sessionId });
+  /* 话 *//;/g/;
+  *//;,/g/;
+const async = endSession(sessionId: string): Promise<void> {const session = this.activeSessions.get(sessionId);';,}if (session) {';,}session.status = 'completed';';,'';
+this.activeSessions.delete(sessionId);';'';
+';'';
+}
+      this.metrics.incrementCounter('coordination_sessions_ended');'}'';
+this.emit('sessionEnded', { sessionId });';'';
     }
   }
-  /**
-  * 生成会话ID;
-  */
-  private generateSessionId(): string {
-    return `coord_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  /* ; *//;/g/;
+  *//;,/g/;
+private generateSessionId(): string {}
+    return `coord_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;````;```;
   }
-  /**
-  * 获取活跃会话数量
-  */
-  getActiveSessionCount(): number {
-    return this.activeSessions.size;
+  /* 量 *//;/g/;
+  *//;,/g/;
+getActiveSessionCount(): number {}}
+    return this.activeSessions.size;}
   }
-  /**
-  * 清理过期会话
-  */
-  async cleanupExpiredSessions(maxAge: number = 3600000): Promise<void> {
-    const now = Date.now();
-    const expiredSessions: string[] = [];
-    for (const [sessionId, session] of this.activeSessions.entries()) {
-      if (now - session.startTime > maxAge) {
-        expiredSessions.push(sessionId);
+  /* 话 *//;/g/;
+  *//;,/g/;
+const async = cleanupExpiredSessions(maxAge: number = 3600000): Promise<void> {const now = Date.now();,}const expiredSessions: string[] = [];
+for (const [sessionId, session] of this.activeSessions.entries()) {if (now - session.startTime > maxAge) {}};
+expiredSessions.push(sessionId);}
       }
     }
-    for (const sessionId of expiredSessions) {
-      await this.endSession(sessionId);
+    for (const sessionId of expiredSessions) {}};
+const await = this.endSession(sessionId);}
     }
-    if (expiredSessions.length > 0) {
-
+    if (expiredSessions.length > 0) {}}
+}
     }
   }
-}
+}';,'';
 export default DiagnosticAgentCoordinator;

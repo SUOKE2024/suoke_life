@@ -1,652 +1,504 @@
-/**
- * 中医知识库
- * 提供五诊算法所需的中医理论知识支持
- * 包括经典理论、现代研究、临床数据等
- * @author 索克生活技术团队
- * @version 1.0.0
- */
-
-export interface KnowledgeBaseConfig {
-  version: string;
-  updateInterval: number;
-  sources: string[];
-  caching: {
-    enabled: boolean;
-    ttl: number;
-    maxSize: number;
+/* 0 *//;/g/;
+ *//;,/g/;
+export interface KnowledgeBaseConfig {version: string}updateInterval: number,;
+sources: string[],;
+caching: {enabled: boolean,;
+ttl: number,;
+}
+}
+    const maxSize = number;}
   };
 }
 
-export interface TCMConcept {
-  id: string;
-  name: string;
-  category: string;
-  description: string;
-  properties: Record<string, any>;
-  relationships: ConceptRelationship[];
-  sources: string[];
-  confidence: number;
+export interface TCMConcept {id: string}name: string,;
+category: string,;
+description: string,;
+properties: Record<string, any>;
+relationships: ConceptRelationship[],;
+sources: string[],;
+}
+}
+  const confidence = number;}
 }
 
-export interface ConceptRelationship {
-  type: 'belongs_to' | 'related_to' | 'opposite_to' | 'generates' | 'restricts';
-  target: string;
-  strength: number;
-  description: string;
+export interface ConceptRelationship {;,}type: 'belongs_to' | 'related_to' | 'opposite_to' | 'generates' | 'restricts';','';
+target: string,;
+strength: number,;
+}
+}
+  const description = string;}
 }
 
-export interface DiagnosisPattern {
-  id: string;
-  name: string;
-  category: string;
-  symptoms: string[];
-  signs: string[];
-  syndromes: string[];
-  treatments: string[];
-  confidence: number;
+export interface DiagnosisPattern {id: string}name: string,;
+category: string,;
+symptoms: string[],;
+signs: string[],;
+syndromes: string[],;
+treatments: string[],;
+}
+}
+  const confidence = number;}
 }
 
-export interface SyndromeInfo {
-  id: string;
-  name: string;
-  category: string;
-  description: string;
-  mainSymptoms: string[];
-  secondarySymptoms: string[];
-  tongueFeatures: string[];
-  pulseFeatures: string[];
-  treatments: TreatmentInfo[];
-  prognosis: string;
+export interface SyndromeInfo {id: string}name: string,;
+category: string,;
+description: string,;
+mainSymptoms: string[],;
+secondarySymptoms: string[],;
+tongueFeatures: string[],;
+pulseFeatures: string[],;
+treatments: TreatmentInfo[],;
+}
+}
+  const prognosis = string;}
+}
+';,'';
+export interface TreatmentInfo {';,}type: 'herbal' | 'acupuncture' | 'lifestyle' | 'diet';','';
+name: string,;
+const description = string;
+dosage?: string;
+duration?: string;
+contraindications: string[],;
+}
+}
+  const sideEffects = string[];}
 }
 
-export interface TreatmentInfo {
-  type: 'herbal' | 'acupuncture' | 'lifestyle' | 'diet';
-  name: string;
-  description: string;
-  dosage?: string;
-  duration?: string;
-  contraindications: string[];
-  sideEffects: string[];
+export interface ConstitutionType {id: string}name: string,;
+description: string,;
+characteristics: {physical: string[],;
+psychological: string[],;
 }
-
-export interface ConstitutionType {
-  id: string;
-  name: string;
-  description: string;
-  characteristics: {
-    physical: string[];
-    psychological: string[];
-    pathological: string[];
+}
+    const pathological = string[];}
   };
-  recommendations: {
-    diet: string[];
-    exercise: string[];
-    lifestyle: string[];
-    prevention: string[];
+recommendations: {diet: string[],;
+exercise: string[],;
+lifestyle: string[],;
+}
+    const prevention = string[];}
   };
 }
 
-/**
- * 中医知识库类
- */
-export class TCMKnowledgeBase {
-  private config: KnowledgeBaseConfig;
-  private concepts: Map<string, TCMConcept> = new Map();
-  private patterns: Map<string, DiagnosisPattern> = new Map();
-  private syndromes: Map<string, SyndromeInfo> = new Map();
-  private constitutions: Map<string, ConstitutionType> = new Map();
-  private cache: Map<string, any> = new Map();
-
-  constructor(config: Partial<KnowledgeBaseConfig> = {;}) {
-    this.config = {
-      version: '1.0.0';
-      updateInterval: 86400000, // 24小时
-
-      caching: {
-        enabled: true;
-        ttl: 3600000, // 1小时
-        maxSize: 1000
-      ;},
-      ...config
+/* 类 *//;/g/;
+ *//;,/g/;
+export class TCMKnowledgeBase {;,}private config: KnowledgeBaseConfig;
+private concepts: Map<string, TCMConcept> = new Map();
+private patterns: Map<string, DiagnosisPattern> = new Map();
+private syndromes: Map<string, SyndromeInfo> = new Map();
+private constitutions: Map<string, ConstitutionType> = new Map();
+private cache: Map<string, any> = new Map();
+}
+}
+}
+  constructor(config: Partial<KnowledgeBaseConfig> = {;}) {';,}this.config = {';,}version: '1.0.0';','';
+updateInterval: 86400000, // 24小时/;,/g,/;
+  caching: {enabled: true,;
+ttl: 3600000, // 1小时/;/g/;
+}
+        const maxSize = 1000}
+      ;}
+      ...config;
     };
-    this.initializeKnowledgeBase();
+this.initializeKnowledgeBase();
   }
 
-  /**
-   * 初始化知识库
-   */
-  private async initializeKnowledgeBase(): Promise<void> {
-    try {
-      await this.loadBasicConcepts();
-      await this.loadDiagnosisPatterns();
-      await this.loadSyndromeInfo();
-      await this.loadConstitutionTypes();
-
-    } catch (error) {
-
-      throw error;
+  /* 库 *//;/g/;
+   *//;,/g/;
+private async initializeKnowledgeBase(): Promise<void> {try {}      const await = this.loadBasicConcepts();
+const await = this.loadDiagnosisPatterns();
+const await = this.loadSyndromeInfo();
+const await = this.loadConstitutionTypes();
+}
+}
+    } catch (error) {}}
+      const throw = error;}
     }
   }
 
-  /**
-   * 加载基础概念
-   */
-  private async loadBasicConcepts(): Promise<void> {
-    // 五脏六腑
-    this.addConcept({
-      id: "heart";
-
-      category: 'organ';
-
-      properties: {
-
-
-
-
-
-      ;},
-      relationships: [
-        {
-          type: "related_to";
-          target: 'small_intestine';
-          strength: 1.0;
-
-        }
-      ],
-
-      confidence: 1.0
-    ;});
-
-    this.addConcept({
-      id: "liver";
-
-      category: 'organ';
-
-      properties: {
-
-
-
-
-
-      ;},
-      relationships: [
-        {
-          type: "related_to";
-          target: 'gallbladder';
-          strength: 1.0;
-
-        }
-      ],
-
-      confidence: 1.0
-    ;});
-
-    this.addConcept({
-      id: "spleen";
-
-      category: 'organ';
-
-      properties: {
-
-
-
-
-
-      ;},
-      relationships: [
-        {
-          type: "related_to";
-          target: 'stomach';
-          strength: 1.0;
-
-        }
-      ],
-
-      confidence: 1.0
-    ;});
-
-    // 气血津液
-    this.addConcept({
-      id: "qi";
-
-      category: 'substance';
-
-      properties: {
-
-
-      ;},
-      relationships: [
-        {
-          type: "related_to";
-          target: 'blood';
-          strength: 0.9;
-
-        }
-      ],
-
-      confidence: 1.0
-    ;});
-
-    this.addConcept({
-      id: "blood";
-
-      category: 'substance';
-
-      properties: {
-
-
-      ;},
-      relationships: [
-        {
-          type: "related_to";
-          target: 'qi';
-          strength: 0.9;
-
-        }
-      ],
-
-      confidence: 1.0
-    ;});
-
-    // 阴阳五行
-    this.addConcept({
-      id: "yin_yang";
-
-      category: 'theory';
-
-      properties: {
-
-
-      ;},
-      relationships: [];
-
-      confidence: 1.0
-    ;});
-  }
-
-  /**
-   * 加载诊断模式
-   */
-  private async loadDiagnosisPatterns(): Promise<void> {
-    // 舌象模式
-    this.addPattern({
-      id: "red_tongue_yellow_coating";
-
-      category: 'tongue';
-
-
-
-
-      confidence: 0.9
-    ;});
-
-    this.addPattern({
-      id: "pale_tongue_white_coating";
-
-      category: 'tongue';
-
-
-
-
-      confidence: 0.8
-    ;});
-
-    // 面色模式
-    this.addPattern({
-      id: "pale_complexion";
-
-      category: 'face';
-
-
-
-
-      confidence: 0.8
-    ;});
-
-    this.addPattern({
-      id: "red_complexion";
-
-      category: 'face';
-
-
-
-
-      confidence: 0.85
-    ;});
-  }
-
-  /**
-   * 加载证候信息
-   */
-  private async loadSyndromeInfo(): Promise<void> {
-    this.addSyndrome({
-      id: "qi_deficiency";
-
-      category: 'deficiency';
-
-
-
-
-
-      treatments: [
-        {
-          type: 'herbal';
-
-
-
-
-
-
-        }
-      ],
-
-    });
-
-    this.addSyndrome({
-      id: "blood_deficiency";
-
-      category: 'deficiency';
-
-
-
-
-
-      treatments: [
-        {
-          type: 'herbal';
-
-
-
-
-
-
-        }
-      ],
-
-    });
-
-    this.addSyndrome({
-      id: "spleen_qi_deficiency";
-
-      category: 'organ_deficiency';
-
-
-
-
-
-      treatments: [
-        {
-          type: 'herbal';
-
-
-
-
-
-
-        }
-      ],
-
-    });
-  }
-
-  /**
-   * 加载体质类型
-   */
-  private async loadConstitutionTypes(): Promise<void> {
-    this.addConstitution({
-      id: "qi_deficiency_constitution";
-
-
-      characteristics: {
-
-
-
-      ;},
-      recommendations: {
-
-
-
-
+  /* 念 *//;/g/;
+   *//;,/g/;
+private async loadBasicConcepts(): Promise<void> {// 五脏六腑'/;,}this.addConcept({';,)id: "heart";","";}";,"/g,"/;
+  category: 'organ';','';
+const properties = {}}
+}
       ;}
-    });
-
-    this.addConstitution({
-      id: "yang_deficiency_constitution";
-
-
-      characteristics: {
-
-
-
-      ;},
-      recommendations: {
-
-
-
-
+const relationships = [;]';'';
+        {';,}type: "related_to";",";
+target: 'small_intestine';','';
+const strength = 1.0;
+}
+}
+        }
+];
+      ],);
+);
+const confidence = 1.0);
+    ;});
+';,'';
+this.addConcept({)';,}id: "liver";","";"";
+";,"";
+category: 'organ';','';
+const properties = {}}
+}
       ;}
-    });
-
-    this.addConstitution({
-      id: "yin_deficiency_constitution";
-
-
-      characteristics: {
-
-
-
-      ;},
-      recommendations: {
-
-
-
-
+const relationships = [;]';'';
+        {';,}type: "related_to";",";
+target: 'gallbladder';','';
+const strength = 1.0;
+}
+}
+        }
+];
+      ],);
+);
+const confidence = 1.0);
+    ;});
+';,'';
+this.addConcept({)';,}id: "spleen";","";"";
+";,"";
+category: 'organ';','';
+const properties = {}}
+}
       ;}
+const relationships = [;]';'';
+        {';,}type: "related_to";",";
+target: 'stomach';','';
+const strength = 1.0;
+}
+}
+        }
+];
+      ],);
+);
+const confidence = 1.0);
+    ;});
+
+    // 气血津液'/;,'/g'/;
+this.addConcept({)';,}id: "qi";","";"";
+";,"";
+category: 'substance';','';
+const properties = {}}
+}
+      ;}
+const relationships = [;]';'';
+        {';,}type: "related_to";",";
+target: 'blood';','';
+const strength = 0.9;
+}
+}
+        }
+];
+      ],);
+);
+const confidence = 1.0);
+    ;});
+';,'';
+this.addConcept({)';,}id: "blood";","";"";
+";,"";
+category: 'substance';','';
+const properties = {}}
+}
+      ;}
+const relationships = [;]';'';
+        {';,}type: "related_to";",";
+target: 'qi';','';
+const strength = 0.9;
+}
+}
+        }
+];
+      ],);
+);
+const confidence = 1.0);
+    ;});
+
+    // 阴阳五行'/;,'/g'/;
+this.addConcept({)';,}id: "yin_yang";","";"";
+";,"";
+category: 'theory';','';
+const properties = {}}
+}
+      ;}
+relationships: [],);
+);
+const confidence = 1.0);
+    ;});
+  }
+
+  /* 式 *//;/g/;
+   *//;,/g/;
+private async loadDiagnosisPatterns(): Promise<void> {// 舌象模式'/;,}this.addPattern({';,)id: "red_tongue_yellow_coating";","";}";,"/g,"/;
+  category: 'tongue';','';'';
+
+);
+);
+}
+      const confidence = 0.9)}
+    ;});
+';,'';
+this.addPattern({)';,}id: "pale_tongue_white_coating";","";"";
+";,"";
+category: 'tongue';','';'';
+
+);
+);
+}
+      const confidence = 0.8)}
+    ;});
+
+    // 面色模式'/;,'/g'/;
+this.addPattern({)';,}id: "pale_complexion";","";"";
+";,"";
+category: 'face';','';'';
+
+);
+);
+}
+      const confidence = 0.8)}
+    ;});
+';,'';
+this.addPattern({)';,}id: "red_complexion";","";"";
+";,"";
+category: 'face';','';'';
+
+);
+);
+}
+      const confidence = 0.85)}
+    ;});
+  }
+
+  /* 息 *//;/g/;
+   *//;,/g/;
+private async loadSyndromeInfo(): Promise<void> {';,}this.addSyndrome({';,)id: "qi_deficiency";","";}";,"";
+category: 'deficiency';','';
+const treatments = [;]';'';
+        {';,}const type = 'herbal';';'';
+
+}
+}
+        });
+];
+      ],);
+);
+    });
+';,'';
+this.addSyndrome({)';,}id: "blood_deficiency";","";"";
+";,"";
+category: 'deficiency';','';
+const treatments = [;]';'';
+        {';,}const type = 'herbal';';'';
+
+}
+}
+        });
+];
+      ],);
+);
+    });
+';,'';
+this.addSyndrome({)';,}id: "spleen_qi_deficiency";","";"";
+";,"";
+category: 'organ_deficiency';','';
+const treatments = [;]';'';
+        {';,}const type = 'herbal';';'';
+
+}
+}
+        });
+];
+      ],);
+);
     });
   }
 
-  /**
-   * 添加概念
-   */
-  private addConcept(concept: TCMConcept): void {
-    this.concepts.set(concept.id, concept);
+  /* 型 *//;/g/;
+   *//;,/g/;
+private async loadConstitutionTypes(): Promise<void> {';,}this.addConstitution({';,)id: "qi_deficiency_constitution";","";,}const characteristics = {}}"";
+}
+      ;}
+const recommendations = {);}}
+)}
+      ;});
+    });
+";,"";
+this.addConstitution({)";,}id: "yang_deficiency_constitution";",";
+const characteristics = {}}
+}
+      ;}
+const recommendations = {);}}
+)}
+      ;});
+    });
+";,"";
+this.addConstitution({)";,}id: "yin_deficiency_constitution";",";
+const characteristics = {}}
+}
+      ;}
+const recommendations = {);}}
+)}
+      ;});
+    });
   }
 
-  /**
-   * 添加诊断模式
-   */
-  private addPattern(pattern: DiagnosisPattern): void {
-    this.patterns.set(pattern.id, pattern);
+  /* 念 *//;/g/;
+   *//;,/g/;
+private addConcept(concept: TCMConcept): void {}}
+    this.concepts.set(concept.id, concept);}
   }
 
-  /**
-   * 添加证候信息
-   */
-  private addSyndrome(syndrome: SyndromeInfo): void {
-    this.syndromes.set(syndrome.id, syndrome);
+  /* 式 *//;/g/;
+   *//;,/g/;
+private addPattern(pattern: DiagnosisPattern): void {}}
+    this.patterns.set(pattern.id, pattern);}
   }
 
-  /**
-   * 添加体质类型
-   */
-  private addConstitution(constitution: ConstitutionType): void {
-    this.constitutions.set(constitution.id, constitution);
+  /* 息 *//;/g/;
+   *//;,/g/;
+private addSyndrome(syndrome: SyndromeInfo): void {}}
+    this.syndromes.set(syndrome.id, syndrome);}
   }
 
-  /**
-   * 获取概念
-   */
-  public getConcept(id: string): TCMConcept | undefined {
-    return this.concepts.get(id);
+  /* 型 *//;/g/;
+   *//;,/g/;
+private addConstitution(constitution: ConstitutionType): void {}}
+    this.constitutions.set(constitution.id, constitution);}
   }
 
-  /**
-   * 获取所有概念
-   */
-  public getAllConcepts(category?: string): TCMConcept[] {
-    const concepts = Array.from(this.concepts.values());
-    if (category) {
-      return concepts.filter(concept => concept.category === category);
+  /* 念 *//;/g/;
+   *//;,/g/;
+const public = getConcept(id: string): TCMConcept | undefined {}}
+    return this.concepts.get(id);}
+  }
+
+  /* 念 *//;/g/;
+   *//;,/g/;
+const public = getAllConcepts(category?: string): TCMConcept[] {const concepts = Array.from(this.concepts.values());,}if (category) {}}
+      return concepts.filter(concept => concept.category === category);}
     }
     return concepts;
   }
 
-  /**
-   * 获取诊断模式
-   */
-  public getPattern(id: string): DiagnosisPattern | undefined {
-    return this.patterns.get(id);
+  /* 式 *//;/g/;
+   *//;,/g/;
+const public = getPattern(id: string): DiagnosisPattern | undefined {}}
+    return this.patterns.get(id);}
   }
 
-  /**
-   * 获取所有诊断模式
-   */
-  public getAllPatterns(category?: string): DiagnosisPattern[] {
-    const patterns = Array.from(this.patterns.values());
-    if (category) {
-      return patterns.filter(pattern => pattern.category === category);
+  /* 式 *//;/g/;
+   *//;,/g/;
+const public = getAllPatterns(category?: string): DiagnosisPattern[] {const patterns = Array.from(this.patterns.values());,}if (category) {}}
+      return patterns.filter(pattern => pattern.category === category);}
     }
     return patterns;
   }
 
-  /**
-   * 获取证候信息
-   */
-  public getSyndrome(id: string): SyndromeInfo | undefined {
-    return this.syndromes.get(id);
+  /* 息 *//;/g/;
+   *//;,/g/;
+const public = getSyndrome(id: string): SyndromeInfo | undefined {}}
+    return this.syndromes.get(id);}
   }
 
-  /**
-   * 获取所有证候
-   */
-  public getAllSyndromes(category?: string): SyndromeInfo[] {
-    const syndromes = Array.from(this.syndromes.values());
-    if (category) {
-      return syndromes.filter(syndrome => syndrome.category === category);
+  /* 候 *//;/g/;
+   *//;,/g/;
+const public = getAllSyndromes(category?: string): SyndromeInfo[] {const syndromes = Array.from(this.syndromes.values());,}if (category) {}}
+      return syndromes.filter(syndrome => syndrome.category === category);}
     }
     return syndromes;
   }
 
-  /**
-   * 获取体质类型
-   */
-  public getConstitution(id: string): ConstitutionType | undefined {
-    return this.constitutions.get(id);
+  /* 型 *//;/g/;
+   *//;,/g/;
+const public = getConstitution(id: string): ConstitutionType | undefined {}}
+    return this.constitutions.get(id);}
   }
 
-  /**
-   * 获取所有体质类型
-   */
-  public getAllConstitutions(): ConstitutionType[] {
-    return Array.from(this.constitutions.values());
+  /* 型 *//;/g/;
+   *//;,/g/;
+const public = getAllConstitutions(): ConstitutionType[] {}}
+    return Array.from(this.constitutions.values());}
   }
 
-  /**
-   * 获取相关概念
-   */
-  public getRelatedConcepts(conceptId: string): TCMConcept[] {
-    const concept = this.getConcept(conceptId);
-    if (!concept) return [];
-
-    const relatedIds = concept.relationships.map(rel => rel.target);
-    return relatedIds
-      .map(id => this.getConcept(id))
-      .filter(c => c !== undefined) as TCMConcept[];
+  /* 念 *//;/g/;
+   *//;,/g/;
+const public = getRelatedConcepts(conceptId: string): TCMConcept[] {const concept = this.getConcept(conceptId);,}if (!concept) return [];
+const relatedIds = concept.relationships.map(rel => rel.target);
+const return = relatedIds;
+      .map(id => this.getConcept(id));
+}
+      .filter(c => c !== undefined) as TCMConcept[];}
   }
 
-  /**
-   * 搜索概念
-   */
-  public searchConcepts(query: string): TCMConcept[] {
-    const lowerQuery = query.toLowerCase();
-    return Array.from(this.concepts.values()).filter(concept =>
-      concept.name.toLowerCase().includes(lowerQuery) ||
-      concept.description.toLowerCase().includes(lowerQuery)
-    );
+  /* 念 *//;/g/;
+   *//;,/g/;
+const public = searchConcepts(query: string): TCMConcept[] {const lowerQuery = query.toLowerCase();,}const return = Array.from(this.concepts.values()).filter(concept =>);
+concept.name.toLowerCase().includes(lowerQuery) ||;
+concept.description.toLowerCase().includes(lowerQuery);
+}
+    );}
   }
 
-  /**
-   * 获取治疗建议
-   */
-  public getTreatmentRecommendations(syndromeIds: string[]): TreatmentInfo[] {
-    const treatments: TreatmentInfo[] = [];
-    
-    syndromeIds.forEach(id => {
-      const syndrome = this.getSyndrome(id);
-      if (syndrome) {
-        treatments.push(...syndrome.treatments);
+  /* 议 *//;/g/;
+   *//;,/g/;
+const public = getTreatmentRecommendations(syndromeIds: string[]): TreatmentInfo[] {const treatments: TreatmentInfo[] = [];,}syndromeIds.forEach(id => {);,}const syndrome = this.getSyndrome(id);
+if (syndrome) {}}
+        treatments.push(...syndrome.treatments);}
       }
     });
-
-    return treatments;
+return treatments;
   }
 
-  /**
-   * 验证知识库
-   */
-  public validateKnowledgeBase(): { valid: boolean; errors: string[] ;} {
-    const errors: string[] = [];
-
-    // 检查概念关系的完整性
-    this.concepts.forEach(concept => {
-      concept.relationships.forEach(rel => {
-        if (!this.concepts.has(rel.target)) {
-
+  /* 库 *//;/g/;
+   *//;,/g/;
+const public = validateKnowledgeBase(): { valid: boolean; errors: string[] ;} {const errors: string[] = [];}    // 检查概念关系的完整性/;,/g/;
+this.concepts.forEach(concept => {);,}concept.relationships.forEach(rel => {);,}if (!this.concepts.has(rel.target)) {}}
+}
         }
       });
     });
 
-    // 检查证候的治疗信息
-    this.syndromes.forEach(syndrome => {
-      if (syndrome.treatments.length === 0) {
-
+    // 检查证候的治疗信息/;,/g/;
+this.syndromes.forEach(syndrome => {));,}if (syndrome.treatments.length === 0) {}}
+}
       }
     });
-
-    return {
-      valid: errors.length === 0;
-      errors
+return {valid: errors.length === 0;}}
+      errors}
     };
   }
 
-  /**
-   * 更新知识库
-   */
-  public async updateKnowledgeBase(): Promise<void> {
-    try {
-      // 这里可以实现从外部数据源更新知识库的逻辑
-
-    } catch (error) {
-
-      throw error;
+  /* 库 *//;/g/;
+   *//;,/g/;
+const public = async updateKnowledgeBase(): Promise<void> {try {}      // 这里可以实现从外部数据源更新知识库的逻辑/;/g/;
+}
+}
+    } catch (error) {}}
+      const throw = error;}
     }
   }
 
-  /**
-   * 获取统计信息
-   */
-  public getStatistics(): {
-    concepts: number;
-    patterns: number;
-    syndromes: number;
-    constitutions: number;
-    version: string;
-  } {
-    return {
-      concepts: this.concepts.size;
-      patterns: this.patterns.size;
-      syndromes: this.syndromes.size;
-      constitutions: this.constitutions.size;
-      version: this.config.version
+  /* 息 *//;/g/;
+   *//;,/g/;
+const public = getStatistics(): {concepts: number}patterns: number,;
+syndromes: number,;
+constitutions: number,;
+}
+    const version = string;}
+  } {return {}      concepts: this.concepts.size,;
+patterns: this.patterns.size,;
+syndromes: this.syndromes.size,;
+constitutions: this.constitutions.size,;
+}
+      const version = this.config.version}
     ;};
   }
 
-  /**
-   * 清理缓存
-   */
-  public clearCache(): void {
-    this.cache.clear();
+  /* 存 *//;/g/;
+   *//;,/g/;
+const public = clearCache(): void {}}
+    this.cache.clear();}
   }
 }
-
-export default TCMKnowledgeBase;
+";,"";
+export default TCMKnowledgeBase;""";

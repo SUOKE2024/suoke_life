@@ -1,3 +1,4 @@
+describe('Test Suite', () => {
 """
 EdgeAIInference.test - 索克生活项目模块
 """

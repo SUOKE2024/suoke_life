@@ -1,105 +1,91 @@
-/**
-* 性能监控服务
-* 监控API网关和应用的性能指标
-*/
-export interface PerformanceMetrics {
-  // API性能指标
-  apiResponseTime: number;
-  apiSuccessRate: number;
-  apiErrorRate: number;
-  apiThroughput: number;
-  // 网络性能指标
-  networkLatency: number;
-  networkBandwidth: number;
-  connectionQuality: 'excellent' | 'good' | 'fair' | 'poor';
-  // 应用性能指标
-  memoryUsage: number;
-  cpuUsage: number;
-  batteryLevel: number;
-  storageUsage: number;
-  // 用户体验指标
-  screenLoadTime: number;
-  interactionResponseTime: number;
-  errorCount: number;
-  crashCount: number;
+/* 标 *//;/g/;
+*//;,/g/;
+export interface PerformanceMetrics {// API性能指标/;,}apiResponseTime: number,;,/g,/;
+  apiSuccessRate: number,;
+apiErrorRate: number,;
+const apiThroughput = number;
+  // 网络性能指标/;,/g,/;
+  networkLatency: number,;
+networkBandwidth: number,;
+const connectionQuality = 'excellent' | 'good' | 'fair' | 'poor';';'';
+  // 应用性能指标/;,/g,/;
+  memoryUsage: number,;
+cpuUsage: number,;
+batteryLevel: number,;
+const storageUsage = number;
+  // 用户体验指标/;,/g,/;
+  screenLoadTime: number,;
+interactionResponseTime: number,;
+errorCount: number,;
 }
-export interface PerformanceAlert {
-  id: string;
-  type: 'warning' | 'error' | 'critical';
-  metric: keyof PerformanceMetrics;
-  value: number;
-  threshold: number;
-  message: string;
-  timestamp: Date;
-  resolved: boolean;
 }
-class PerformanceMonitor {
-  private metrics: PerformanceMetrics;
-  private alerts: PerformanceAlert[] = [];
-  private isMonitoring = false;
-  constructor() {
-    this.metrics = this.getInitialMetrics();
+  const crashCount = number;}
+}
+export interface PerformanceAlert {';,}id: string,';,'';
+type: 'warning' | 'error' | 'critical';','';
+metric: keyof PerformanceMetrics,;
+value: number,;
+threshold: number,;
+message: string,;
+timestamp: Date,;
+}
+}
+  const resolved = boolean;}
+}
+class PerformanceMonitor {private metrics: PerformanceMetrics;,}private alerts: PerformanceAlert[] = [];
+private isMonitoring = false;
+constructor() {}}
+}
+    this.metrics = this.getInitialMetrics();}
   }
-  /**
-  * 开始性能监控
-  */
-  startMonitoring(): void {
-    this.isMonitoring = true;
-
+  /* 控 *//;/g/;
+  *//;,/g/;
+startMonitoring(): void {this.isMonitoring = true;}}
+}
   }
-  /**
-  * 停止性能监控
-  */
-  stopMonitoring(): void {
-    this.isMonitoring = false;
-
+  /* 控 *//;/g/;
+  *//;,/g/;
+stopMonitoring(): void {this.isMonitoring = false;}}
+}
   }
-  /**
-  * 获取当前性能指标
-  */
-  getCurrentMetrics(): PerformanceMetrics {
+  /* 标 *//;/g/;
+  *//;,/g/;
+getCurrentMetrics(): PerformanceMetrics {}
     return { ...this.metrics };
   }
-  /**
-  * 记录API调用性能
-  */
-  recordApiCall(duration: number, success: boolean): void {
-    this.metrics.apiResponseTime = duration;
-    if (success) {
-      this.metrics.apiSuccessRate = Math.min(100, this.metrics.apiSuccessRate + 0.1);
-    } else {
-      this.metrics.apiErrorRate = Math.min(100, this.metrics.apiErrorRate + 0.1);
-      this.metrics.errorCount++;
+  /* 能 *//;/g/;
+  *//;,/g/;
+recordApiCall(duration: number, success: boolean): void {this.metrics.apiResponseTime = duration;,}if (success) {}}
+      this.metrics.apiSuccessRate = Math.min(100, this.metrics.apiSuccessRate + 0.1);}
+    } else {this.metrics.apiErrorRate = Math.min(100, this.metrics.apiErrorRate + 0.1);}}
+      this.metrics.errorCount++;}
     }
   }
-  /**
-  * 记录屏幕加载时间
-  */
-  recordScreenLoad(screenName: string, loadTime: number): void {
-    this.metrics.screenLoadTime = loadTime;
-
+  /* 间 *//;/g/;
+  *//;,/g/;
+recordScreenLoad(screenName: string, loadTime: number): void {this.metrics.screenLoadTime = loadTime;}}
+}
   }
-  private getInitialMetrics(): PerformanceMetrics {
-    return {
-      apiResponseTime: 0;
-      apiSuccessRate: 100;
-      apiErrorRate: 0;
-      apiThroughput: 0;
-      networkLatency: 0;
-      networkBandwidth: 0;
-      connectionQuality: 'good';
-      memoryUsage: 0;
-      cpuUsage: 0;
-      batteryLevel: 100;
-      storageUsage: 0;
-      screenLoadTime: 0;
-      interactionResponseTime: 0;
-      errorCount: 0;
-      crashCount: 0;
+  private getInitialMetrics(): PerformanceMetrics {return {}      apiResponseTime: 0,;
+apiSuccessRate: 100,;
+apiErrorRate: 0,;
+apiThroughput: 0,;
+networkLatency: 0,';,'';
+networkBandwidth: 0,';,'';
+connectionQuality: 'good';','';
+memoryUsage: 0,;
+cpuUsage: 0,;
+batteryLevel: 100,;
+storageUsage: 0,;
+screenLoadTime: 0,;
+interactionResponseTime: 0,;
+errorCount: 0,;
+}
+      const crashCount = 0;}
     };
   }
 }
-// 创建全局实例
+// 创建全局实例/;,/g/;
 export const performanceMonitor = new PerformanceMonitor();
-// 导出类型和实例
+// 导出类型和实例'/;,'/g'/;
 export default PerformanceMonitor;

@@ -1,142 +1,141 @@
 
-../../hooks";/../components";/    import React,{ useState, useMemo } from "react";
-  StyleSheet,
-  ScrollView,
-  RefreshControl,
-  { Dimensions } from ";react-native";
-  HealthTrendChart,
-  HealthPathwayVisualizer,
-  AgentEmotionFeedback,
-  { ResponsiveContainer } from "../../components";/    const { width   } = Dimensions.get("window;";);
-const cardWidth = useMemo(); => useMemo(); => useMemo(); => useMemo(;)
+../../hooks";/../components";/    import React,{ useState, useMemo } from "react";""/;,"/g"/;
+StyleSheet,;
+ScrollView,";,"";
+RefreshControl,";"";
+  { Dimensions } from ";react-native";";
+HealthTrendChart,;
+HealthPathwayVisualizer,";,"";
+AgentEmotionFeedback,";"";
+  { ResponsiveContainer } from "../../components";/    const { width   } = Dimensions.get("window;";);"/;,"/g"/;
+const cardWidth = useMemo(); => useMemo(); => useMemo(); => useMemo(;);
   (); => {}
-    useMemo(); => useMemo(); => (width - spacing.xl * 2 - spacing.md) / 2, []),/          []
-    ),
-  []
-), []);
-export const HealthDashboard: React.FC  = () => {;}
-  const performanceMonitor = usePerformanceMonitor("HealthDashboard', { "';)
-    trackRender: true,trackMemory: true,warnThreshold: 50;};);
-  const { healthData, loading, refreshData   } = useHealthData;(;);
-  const [selectedTab, setSelectedTab] = useState<string>("all;";);
-  const tabs: TabItem[] = [{,
-  id: "all";
+    useMemo(); => useMemo(); => (width - spacing.xl * 2 - spacing.md) / 2, []),/          []/;/g/;
+    ),;
+  [];
+), []);";,"";
+export const HealthDashboard: React.FC  = () => {;}";,"";
+performanceMonitor: usePerformanceMonitor("HealthDashboard', { "';)'}'';
+trackRender: true,trackMemory: true,warnThreshold: 50;};);';,'';
+const { healthData, loading, refreshData   } = useHealthData;(;);';,'';
+const [selectedTab, setSelectedTab] = useState<string>("all;";);";,"";
+const: tabs: TabItem[] = [;]{,";,}const id = "all";";"";
+";"";
+    {";,}const id = "vital";";"";
+";"";
+    {";,}const id = "activity";";"";
+";"";
+    {";,}const id = "sleep";";"";
 
-    {
-      id: "vital";
-
-    {
-      id: "activity";
-
-    {
-      id: "sleep";
-
-  ]
-  const getFilteredData = useMemo() => useMemo(); => useMemo(); => useCallback(); => {[]), [])))}
-    switch (selectedTab) {
-      case "vital":
-
-        )
-      case "activity":
-
-        )
-      case "sleep":
+}
+];
+  ]}
+  getFilteredData: useMemo() => useMemo(); => useMemo(); => useCallback(); => {[]), [])))}";,"";
+switch (selectedTab) {";,}case "vital": ";"";
+";"";
+        )";,"";
+case "activity": ";"";
+";"";
+        )";,"";
+case "sleep": ";"";
 
         );
-      default:
-        return healthDa;t;a;
+default: ;
+}
+        return healthDa;t;a;}
     }
   };
-  const filteredData = useMemo(); => useMemo(); => useMemo(); => getFilteredData(), []);));
-  const handleCardPress = useMemo() => useMemo(); => useMemo(); => useCallback(data: unknown); => {[]), []);))}
+filteredData: useMemo(); => useMemo(); => useMemo(); => getFilteredData(), []);));
+handleCardPress: useMemo() => useMemo(); => useMemo(); => useCallback(data: unknown); => {[]), []);))}
     }
-  performanceMonitor.recordRender();
-  return (;)
-    <ResponsiveContainer style={styles.container}>/      {///          <ScreenHeader,title="健康数据";
-
-        showBackButton={true};
-        rightIcon="chart-line";
-        onRightPress={() = /> {/              }};
-      />/      {///          <HealthPathwayVisualizer;
-currentStage={
-          selectedTab === "vital"
-            ? "inspection"
-            : selectedTab === "activity"
-            ? "regulation"
-            : "health-preservation"
+  performanceMonitor.recordRender();";,"";
+return (;)";"";
+    <ResponsiveContainer style={styles.container}>/      {/;}///          <ScreenHeader,title="健康数据";"  />/;"/g"/;
+}
+}";,"";
+showBackButton={true};";,"";
+rightIcon="chart-line";";,"";
+onRightPress={() = /> {/              }};/;/g/;
+      />/      {/;}///          <HealthPathwayVisualizer;"  />/;,"/g"/;
+currentStage={";,}selectedTab === "vital"";"";
+            ? "inspection"";"";
+            : selectedTab === "activity"";"";
+            ? "regulation"";"";
+}
+            : "health-preservation"}"";"";
         }
-        onStagePress={(stage: string) = /> {/           ;}}
-      />/      {///          <HealthTrendChart;
-title={
-          selectedTab === "vital"
+        onStagePress={(stage: string) = /> {/           ;}}/;/g/;
+      />/      {/;}///          <HealthTrendChart;"  />/;,"/g"/;
+title={";,}selectedTab === "vital"";"";
+";"";
+            : selectedTab === "activity"";"";
 
-            : selectedTab === "activity"
-
-
-        data={filteredData.map(d: unknow;n;) = /> ({ date: d.date, value: d.value;}))}/            unit={
-
-        } />/      {///          <AgentEmotionFeedback;
-onFeedback={(type: string) = /> {/           ;}}
-      />/      {///            <TabSelector;
+}
+}
+        data={filteredData.map(d: unknow;n;) = /> ({ date: d.date, value: d.value;}))}/            unit={/;}}/g/;
+}
+        } />/      {///          <AgentEmotionFeedback;}  />/;,/g/;
+onFeedback={(type: string) = /> {/           ;}}/;/g/;
+      />/      {///            <TabSelector;}  />/;,/g/;
 tabs={tabs}
           selectedTabId={selectedTab}
-          onTabPress={setSelectedTab} />/      </View>/          <ScrollView;
+          onTabPress={setSelectedTab} />/      </View>/          <ScrollView;  />/;,/g/;
 style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
-        refreshControl={
-          <RefreshControl;
+        refreshControl={}}
+          <RefreshControl;}  />/;,/g/;
 refreshing={loading}
             onRefresh={refreshData}
             colors={[colors.primary]}
-            tintColor={colors.primary} />/            }
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={styles.cardsContainer}>/              {filteredData.map(data: unknown, index: number) => ())
-            <HealthCard;
+            tintColor={colors.primary} />/            }/;,/g/;
+showsVerticalScrollIndicator={false}
+      >;
+        <View style={styles.cardsContainer}>/              {/;,}filteredData.map(data: unknown, index: number) => ());/g/;
+}
+            <HealthCard;}  />/;,/g/;
 key={data.id}
               data={data}
               onPress={handleCardPress}
-              style={[
-                  styles.card,
-                  { width: cardWidth;}},
-                  index % 2 === 0 ? styles.leftCard : styles.rightCard;
-                ] as any;
-              }
-              size="medium"
-              showTrend={true}
-              showDescription={false} />/              ))}
-        </View>/      </ScrollView>/    </ResponsiveContainer>/      );
+              style={}[;]}
+                  styles.card,}
+                  { width: cardWidth;}}
+index % 2 === 0 ? styles.leftCard : styles.rightCard;
+];
+                ] as any;";"";
+              }";,"";
+size="medium";
+showTrend={true}
+              showDescription={false} />/              ))}/;/g/;
+        </View>/      </ScrollView>/    </ResponsiveContainer>/      );/;/g/;
 };
-const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(;)
+const styles = useMemo(); => useMemo(); => useMemo(); => useMemo(;);
   (); => {}
     useMemo(); => {}
-        useMemo() => {
-            StyleSheet.create({
-              container: {,
-  flex: 1;
-                backgroundColor: colors.background;
-              },
-              tabContainer: {,
-  paddingHorizontal: spacing.md;
-                paddingVertical: spacing.sm;
-                backgroundColor: colors.surface;
-                borderBottomWidth: 1;
-                borderBottomColor: colors.border;
-              },
-              scrollView: { flex: 1  ;},
-              scrollContent: { paddingVertical: spacing.md  ;},
-              cardsContainer: {,
-  flexDirection: "row";
-                flexWrap: "wrap";
-                paddingHorizontal: spacing.md;
-              },
-              card: { marginBottom: spacing.md  ;},
-              leftCard: { marginRight: spacing.md  ;},
-              rightCard: { marginLeft: 0  ;}
-            }),
-          []
-        ),
-      []
-    ),
-  []
-), []);
+        useMemo() => {StyleSheet.create({)              container: {flex: 1,;
+}
+                const backgroundColor = colors.background;}
+              }
+tabContainer: {paddingHorizontal: spacing.md,;
+paddingVertical: spacing.sm,;
+backgroundColor: colors.surface,;
+borderBottomWidth: 1,;
+}
+                const borderBottomColor = colors.border;}
+              }
+scrollView: { flex: 1  ;}
+scrollContent: { paddingVertical: spacing.md  ;},";,"";
+cardsContainer: {,";,}flexDirection: "row";",";
+flexWrap: "wrap";","";"";
+}
+                const paddingHorizontal = spacing.md;}
+              }
+card: { marginBottom: spacing.md  ;},);
+leftCard: { marginRight: spacing.md  ;},);
+const rightCard = { marginLeft: 0  ;});
+            }),;
+          [];
+        ),;
+      [];
+    ),;
+  []";"";
+), []);""";

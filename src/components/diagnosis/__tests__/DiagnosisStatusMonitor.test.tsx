@@ -1,46 +1,40 @@
-import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react-native';
-import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
-import DiagnosisStatusMonitor from '../DiagnosisStatusMonitor.tsx';
-const mockStore = configureStore({
+describe("Test Suite", () => {';,}import React from "react";"";"";
+}
+import { render, screen, fireEvent, waitFor } from "@testing-library/react-native";""/;,"/g"/;
+import { Provider } from "react-redux";";
+import { configureStore } from "@reduxjs/toolkit";""/;,"/g"/;
+import DiagnosisStatusMonitor from "../DiagnosisStatusMonitor.tsx";""/;,"/g"/;
+const  mockStore = configureStore({));}}
   reducer: { root: (state = {;}) => state }
 });
-const renderWithProvider = (component: React.ReactElement) => {
-  return render(<Provider store={mockStore;}>{component}</Provider>);
-};
-describe('DiagnosisStatusMonitor', () => {
-
-    const { getByTestId } = renderWithProvider(<DiagnosisStatusMonitor />);
-    expect(getByTestId('diagnosisstatusmonitor')).toBeTruthy();
+const  renderWithProvider = (component: React.ReactElement) => {}}
+  return render(<Provider store={mockStore;}>{component}</Provider>);/;/g/;
+};';,'';
+describe("DiagnosisStatusMonitor", () => {';}}'';
+    const { getByTestId } = renderWithProvider(<DiagnosisStatusMonitor  />);'/;,'/g'/;
+expect(getByTestId('diagnosisstatusmonitor')).toBeTruthy();';'';
   });
-
-    const mockOnPress = jest.fn();
-    const { getByTestId } = renderWithProvider()
-      <DiagnosisStatusMonitor onPress={mockOnPress} />
-    );
-        fireEvent.press(getByTestId('diagnosisstatusmonitor'));
-    expect(mockOnPress).toHaveBeenCalled();
+const mockOnPress = jest.fn();
+const { getByTestId } = renderWithProvider();
+      <DiagnosisStatusMonitor onPress={mockOnPress}  />/;/g/;
+    );';,'';
+fireEvent.press(getByTestId('diagnosisstatusmonitor'));';,'';
+expect(mockOnPress).toHaveBeenCalled();
   });
-
-    const testProps = {
-
-
+const  testProps = {}}
     };
-        const { getByText } = renderWithProvider(<DiagnosisStatusMonitor {...testProps} />);
-    expect(getByText(testProps.title)).toBeTruthy();
-    expect(getByText(testProps.description)).toBeTruthy();
+const { getByText } = renderWithProvider(<DiagnosisStatusMonitor {...testProps}  />);/;,/g/;
+expect(getByText(testProps.title)).toBeTruthy();
+expect(getByText(testProps.description)).toBeTruthy();
   });
-
-    const { getByTestId } = renderWithProvider()
-      <DiagnosisStatusMonitor error="测试错误" />
-    );
-        expect(getByTestId('error-message')).toBeTruthy();
+const { getByTestId } = renderWithProvider()';'';
+      <DiagnosisStatusMonitor error="测试错误"  />"/;"/g"/;
+    );";,"";
+expect(getByTestId('error-message')).toBeTruthy();';'';
   });
-
-    const { getByTestId } = renderWithProvider()
-      <DiagnosisStatusMonitor loading={true} />
-    );
-        expect(getByTestId('loading-indicator')).toBeTruthy();
+const { getByTestId } = renderWithProvider();
+      <DiagnosisStatusMonitor loading={true}  />/;/g/;
+    );';,'';
+expect(getByTestId('loading-indicator')).toBeTruthy();';'';
   });
 });

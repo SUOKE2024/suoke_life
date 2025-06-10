@@ -15,26 +15,24 @@
 ### 基础组件
 
 #### Button - 按钮组件
+
 支持多种变体、尺寸和状态的按钮组件。
 
 ```tsx
 import { Button } from '../components/ui';
 
-<Button 
-  variant="primary" 
-  size="medium" 
-  title="确认" 
-  onPress={() => {}} 
-/>
+<Button variant="primary" size="medium" title="确认" onPress={() => {}} />;
 ```
 
 **属性:**
+
 - `variant`: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger'
 - `size`: 'small' | 'medium' | 'large'
 - `disabled`: boolean
 - `loading`: boolean
 
 #### Text - 文本组件
+
 语义化的文本组件，支持多种预设样式。
 
 ```tsx
@@ -45,11 +43,13 @@ import { Text } from '../components/ui';
 ```
 
 **属性:**
+
 - `variant`: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'body1' | 'body2' | 'caption' | 'overline'
 - `color`: string
 - `align`: 'left' | 'center' | 'right'
 
 #### Input - 输入框组件
+
 功能完整的输入框组件，支持多种类型和验证。
 
 ```tsx
@@ -62,10 +62,11 @@ import { Input } from '../components/ui';
   onChangeText={setValue}
   type="text"
   variant="outlined"
-/>
+/>;
 ```
 
 **属性:**
+
 - `type`: 'text' | 'password' | 'email' | 'number' | 'phone'
 - `variant`: 'outlined' | 'filled' | 'underlined'
 - `label`: string
@@ -73,6 +74,7 @@ import { Input } from '../components/ui';
 - `error`: boolean
 
 #### Card - 卡片组件
+
 灵活的卡片容器组件。
 
 ```tsx
@@ -80,14 +82,16 @@ import { Card } from '../components/ui';
 
 <Card variant="elevated" onPress={() => {}}>
   <Text>卡片内容</Text>
-</Card>
+</Card>;
 ```
 
 **属性:**
+
 - `variant`: 'elevated' | 'outlined' | 'filled' | 'flat'
 - `onPress`: function
 
 #### Container - 容器组件
+
 布局容器组件，支持flexbox属性。
 
 ```tsx
@@ -95,17 +99,18 @@ import { Container } from '../components/ui';
 
 <Container padding="lg" direction="row" justify="center">
   <Text>内容</Text>
-</Container>
+</Container>;
 ```
 
 #### Avatar - 头像组件
+
 支持图片、文字、占位符的头像组件。
 
 ```tsx
 import { Avatar } from '../components/ui';
 
-<Avatar 
-  size="medium" 
+<Avatar
+  size="medium"
   source={{ uri: 'https://example.com/avatar.jpg' }}
 />
 <Avatar size="large" name="张三" />
@@ -114,6 +119,7 @@ import { Avatar } from '../components/ui';
 ### 表单组件
 
 #### Switch - 开关组件
+
 用于切换状态的开关组件。
 
 ```tsx
@@ -124,10 +130,11 @@ import { Switch } from '../components/ui';
   onValueChange={setEnabled}
   label="启用通知"
   description="接收健康提醒和建议"
-/>
+/>;
 ```
 
 **属性:**
+
 - `value`: boolean
 - `onValueChange`: (value: boolean) => void
 - `size`: 'small' | 'medium' | 'large'
@@ -136,6 +143,7 @@ import { Switch } from '../components/ui';
 - `description`: string
 
 #### Checkbox - 复选框组件
+
 用于多选操作的复选框组件。
 
 ```tsx
@@ -146,10 +154,11 @@ import { Checkbox } from '../components/ui';
   onPress={setAgreed}
   label="同意用户协议"
   description="我已阅读并同意《用户服务协议》"
-/>
+/>;
 ```
 
 **属性:**
+
 - `checked`: boolean
 - `onPress`: (checked: boolean) => void
 - `size`: 'small' | 'medium' | 'large'
@@ -159,6 +168,7 @@ import { Checkbox } from '../components/ui';
 - `description`: string
 
 #### Radio - 单选框组件
+
 用于单选操作的单选框组件。
 
 ```tsx
@@ -169,10 +179,11 @@ import { Radio } from '../components/ui';
   onPress={() => setValue('option1')}
   label="选项一"
   description="这是第一个选项"
-/>
+/>;
 ```
 
 **属性:**
+
 - `selected`: boolean
 - `onPress`: () => void
 - `value`: string | number
@@ -182,6 +193,7 @@ import { Radio } from '../components/ui';
 - `description`: string
 
 #### Slider - 滑块组件
+
 用于数值选择的滑块组件。
 
 ```tsx
@@ -195,10 +207,11 @@ import { Slider } from '../components/ui';
   step={1}
   label="健康指数"
   showValue
-/>
+/>;
 ```
 
 **属性:**
+
 - `value`: number
 - `onValueChange`: (value: number) => void
 - `minimumValue`: number
@@ -210,6 +223,7 @@ import { Slider } from '../components/ui';
 ### 反馈组件
 
 #### Badge - 徽章组件
+
 用于显示数字、状态或标签的徽章组件。
 
 ```tsx
@@ -221,12 +235,14 @@ import { Badge } from '../components/ui';
 ```
 
 **属性:**
+
 - `variant`: 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'default'
 - `count`: number
 - `dot`: boolean
 - `children`: string
 
 #### Loading - 加载组件
+
 显示加载状态的组件。
 
 ```tsx
@@ -237,10 +253,12 @@ import { Loading } from '../components/ui';
 ```
 
 **属性:**
+
 - `text`: string
 - `overlay`: boolean
 
 #### Modal - 模态框组件
+
 模态对话框组件。
 
 ```tsx
@@ -253,10 +271,11 @@ import { Modal } from '../components/ui';
   position="center"
 >
   <Text>模态框内容</Text>
-</Modal>
+</Modal>;
 ```
 
 **属性:**
+
 - `visible`: boolean
 - `onClose`: () => void
 - `size`: 'small' | 'medium' | 'large' | 'fullscreen'
@@ -265,6 +284,7 @@ import { Modal } from '../components/ui';
 ### 特色组件
 
 #### AgentAvatar - 智能体头像
+
 为四个智能体（小艾、小克、老克、索儿）提供特色头像。
 
 ```tsx
@@ -275,6 +295,7 @@ import { AgentAvatar } from '../components/ui';
 ```
 
 **属性:**
+
 - `agent`: 'xiaoai' | 'xiaoke' | 'laoke' | 'soer'
 - `size`: 'small' | 'medium' | 'large'
 - `online`: boolean
@@ -282,6 +303,7 @@ import { AgentAvatar } from '../components/ui';
 ### 布局组件
 
 #### Divider - 分割线组件
+
 用于分隔内容的分割线组件。
 
 ```tsx
@@ -293,6 +315,7 @@ import { Divider } from '../components/ui';
 ```
 
 **属性:**
+
 - `orientation`: 'horizontal' | 'vertical'
 - `margin`: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 - `text`: string
@@ -310,11 +333,13 @@ import { Divider } from '../components/ui';
 ## 使用方式
 
 ### 单个导入
+
 ```tsx
 import { Button, Text, Input } from '../components/ui';
 ```
 
 ### 类型导入
+
 ```tsx
 import { ButtonProps, TextProps } from '../components/ui';
 ```
@@ -354,8 +379,9 @@ import { ButtonProps, TextProps } from '../components/ui';
 ## 版本历史
 
 ### v1.1.0 (当前版本)
+
 - ✅ 新增 Switch 开关组件
-- ✅ 新增 Checkbox 复选框组件  
+- ✅ 新增 Checkbox 复选框组件
 - ✅ 新增 Radio 单选框组件
 - ✅ 新增 Slider 滑块组件
 - ✅ 完善表单组件系列
@@ -363,10 +389,11 @@ import { ButtonProps, TextProps } from '../components/ui';
 - ✅ 更新 UIShowcase 展示页面
 
 ### v1.0.0
+
 - ✅ 基础组件: Button, Text, Input, Card, Container, Avatar
 - ✅ 反馈组件: Badge, Loading, Modal
 - ✅ 特色组件: AgentAvatar
 - ✅ 布局组件: Divider
 - ✅ 统一主题系统
 - ✅ TypeScript 支持
-- ✅ 单元测试框架 
+- ✅ 单元测试框架
