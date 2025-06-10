@@ -1,7 +1,7 @@
 # FastAPI 核心框架
 fastapi==0.104.1
 uvicorn[standard]==0.24.0
-pydantic==2.5.0
+pydantic==2.11.5
 pydantic-settings==2.1.0
 
 # Redis 缓存
@@ -16,7 +16,7 @@ requests==2.31.0
 # 数据库
 sqlalchemy==2.0.23
 alembic==1.13.1
-asyncpg==0.29.0
+asyncpg==0.30.0
 
 # 健康平台 SDK
 # Apple HealthKit (通过第三方库)
@@ -33,21 +33,22 @@ fitbit==0.3.1
 # 小米运动 API (第三方)
 python-miio==0.5.12
 
-# 华为健康 API (模拟)
-huawei-health-sdk==1.0.0
+# 华为健康 API (使用华为云SDK替代)
+# huawei-health-sdk==1.0.0  # 不存在的包，注释掉
+# 可以使用华为云SDK: huaweicloudsdkcore
 
-# 微信运动 API
-wechat-sdk==0.6.3
+# 微信运动 API (使用现代化的wechatpy替代过时的wechat-sdk)
+wechatpy==1.8.18
 
-# 支付宝运动 API
-alipay-sdk-python==3.7.1
+# 支付宝运动 API (更新到最新版本)
+alipay-sdk-python==3.7.603
 
 # 其他工具
 celery==5.3.4
 python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
 python-multipart==0.0.6
-email-validator==2.1.0
+email-validator==2.2.0
 
 # 监控和日志
 prometheus-client==0.19.0
@@ -58,7 +59,7 @@ sentry-sdk[fastapi]==1.38.0
 pytest==7.4.3
 pytest-asyncio==0.21.1
 pytest-cov==4.1.0
-httpx==0.25.2
+# httpx==0.25.2  # 重复依赖，已在上面定义
 
 # 开发工具
 black==23.11.0
@@ -67,4 +68,4 @@ flake8==6.1.0
 mypy==1.7.1
 
 # 环境配置
-python-dotenv==1.0.0 
+python-dotenv==1.0.0
