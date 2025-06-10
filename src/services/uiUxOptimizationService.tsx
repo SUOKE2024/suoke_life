@@ -197,9 +197,9 @@ caption: { fontSize: 12, lineHeight: 16, fontWeight: 'normal' ;},';'';
 
 // 性能优化器/;,/g/;
 export class PerformanceOptimizer {;,}private config: PerformanceConfig;
-private renderTimes: Map<string, number[]> = new Map();
-private memoryUsage: number[] = [];
-private fpsData: number[] = [];
+  private renderTimes: Map<string, number[]> = new Map();
+  private memoryUsage: number[] = [];
+  private fpsData: number[] = [];
 constructor(config: PerformanceConfig) {this.config = config;}}
 }
     this.initializeMonitoring();}
@@ -214,7 +214,7 @@ constructor(config: PerformanceConfig) {this.config = config;}}
   }
 
   private startFPSMonitoring(): void {setInterval(() => {}      const fps = 60 - Math.random() * 10;
-this.fpsData.push(fps);
+      this.fpsData.push(fps);
 if (this.fpsData.length > 100) {}}
         this.fpsData.shift();}
       }
@@ -222,7 +222,7 @@ if (this.fpsData.length > 100) {}}
   }
 
   private startMemoryMonitoring(): void {setInterval(() => {}      const memory = Math.random() * 100;
-this.memoryUsage.push(memory);
+      this.memoryUsage.push(memory);
 if (this.memoryUsage.length > 100) {}}
         this.memoryUsage.shift();}
       }
@@ -233,7 +233,7 @@ if (this.memoryUsage.length > 100) {}}
       this.renderTimes.set(componentName, []);}
     }
     const times = this.renderTimes.get(componentName)!;
-times.push(renderTime);
+    times.push(renderTime);
 if (times.length > 10) {}}
       times.shift();}
     }
@@ -293,7 +293,7 @@ const  avgMemory = this.memoryUsage.length > 0;
 
 // 动画管理器/;,/g/;
 export class AnimationManager {;,}private config: AnimationConfig;
-private activeAnimations: Set<Animated.CompositeAnimation> = new Set();
+  private activeAnimations: Set<Animated.CompositeAnimation> = new Set();
 constructor(config: AnimationConfig) {}}
 }
     this.config = config;}
@@ -308,11 +308,11 @@ const: animation = Animated.timing(value, {)toValue,);,}duration: finalConfig.du
 }
       const useNativeDriver = finalConfig.useNativeDriver;)}
     });
-this.activeAnimations.add(animation);
+    this.activeAnimations.add(animation);
 animation.start(() => {}}
       this.activeAnimations.delete(animation);}
     });
-return animation;
+    return animation;
   }
 
   async: springBounce(value: Animated.Value, toValue: number): Promise<void> {const return = new Promise((resolve) => {}      Animated.spring(value, {)        toValue}tension: 100,);
@@ -415,7 +415,7 @@ adjustEffectsForPerformance(level: 'low' | 'medium' | 'high'): void {';}}'';
 ';,'';
 generateShadowStyle(): object {';}}'';
     if (!this.config.shadows.enabled || this.performanceLevel === 'low') {'}'';
-return {};
+      return {};
     }';'';
 ';,'';
 if (Platform.OS === 'ios') {';,}return {shadowColor: this.config.shadows.shadowColor}shadowOffset: this.config.shadows.shadowOffset,;,'';
@@ -483,11 +483,11 @@ getResponsiveTypography(size: keyof ResponsiveConfig['typography']): {','';,}fon
 
 // 主服务类/;,/g/;
 export class UIUXOptimizationService {;,}private performanceOptimizer: PerformanceOptimizer;
-private animationManager: AnimationManager;
-private interactionEnhancer: InteractionEnhancer;
-private visualEffectManager: VisualEffectManager;
-private responsiveManager: ResponsiveManager;
-private theme: ThemeConfig;
+  private animationManager: AnimationManager;
+  private interactionEnhancer: InteractionEnhancer;
+  private visualEffectManager: VisualEffectManager;
+  private responsiveManager: ResponsiveManager;
+  private theme: ThemeConfig;
 constructor(performanceConfig: PerformanceConfig = defaultPerformanceConfig,;,)visualEffectConfig: VisualEffectConfig = defaultVisualEffectConfig,);
 responsiveConfig: ResponsiveConfig = defaultResponsiveConfig,);
 theme: ThemeConfig = defaultTheme);
@@ -498,12 +498,12 @@ useNativeDriver: true,;
 }
       const enableHardwareAcceleration = true;}
     };
-this.performanceOptimizer = new PerformanceOptimizer(performanceConfig);
-this.animationManager = new AnimationManager(animationConfig);
-this.interactionEnhancer = new InteractionEnhancer();
-this.visualEffectManager = new VisualEffectManager(visualEffectConfig);
-this.responsiveManager = new ResponsiveManager(responsiveConfig);
-this.theme = theme;
+    this.performanceOptimizer = new PerformanceOptimizer(performanceConfig);
+    this.animationManager = new AnimationManager(animationConfig);
+    this.interactionEnhancer = new InteractionEnhancer();
+    this.visualEffectManager = new VisualEffectManager(visualEffectConfig);
+    this.responsiveManager = new ResponsiveManager(responsiveConfig);
+    this.theme = theme;
   }
 
   getPerformanceOptimizer(): PerformanceOptimizer {}}

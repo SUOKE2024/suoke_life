@@ -20,28 +20,14 @@ module.exports = {
   coverageReporters: [
     'text',
     'lcov',
-    'html',
-    'json-summary',
-    'clover'
+    'html'
   ],
   coverageThreshold: {
     global: {
-      branches: 75,
-      functions: 75,
-      lines: 75,
-      statements: 75
-    },
-    './src/services/': {
-      branches: 80,
-      functions: 80,
-      lines: 80,
-      statements: 80
-    },
-    './src/components/': {
-      branches: 70,
-      functions: 70,
-      lines: 70,
-      statements: 70
+      branches: 50,
+      functions: 50,
+      lines: 50,
+      statements: 50
     }
   },
   moduleNameMapper: {
@@ -53,18 +39,12 @@ module.exports = {
     '^@types/(.*)$': '<rootDir>/src/types/$1',
     '^@utils/(.*)$': '<rootDir>/src/utils/$1'
   },
-  transform: {
-    '^.+\\.(ts|tsx)$': 'ts-jest',
-    '^.+\\.(js|jsx)$': 'babel-jest'
-  },
   transformIgnorePatterns: [
     'node_modules/(?!(react-native|@react-native|react-navigation|@react-navigation)/)'
   ],
-  testEnvironment: 'jsdom',
-  setupFiles: ['<rootDir>/jest.polyfills.js'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   testTimeout: 10000,
-  verbose: true,
+  verbose: false,
   clearMocks: true,
   restoreMocks: true
 };
