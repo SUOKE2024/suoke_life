@@ -24,22 +24,22 @@ class GatewayService:
     """gRPC 网关服务实现"""
 
     def __init__(self, settings: Settings):
-        """TODO: 添加文档字符串"""
-        self.settings = settings
-        self.service_registry: Optional[ServiceRegistry] = None
+"""TODO: 添加文档字符串"""
+self.settings = settings
+self.service_registry: Optional[ServiceRegistry] = None
 
-    async def initialize(self, service_registry: ServiceRegistry) - > None:
-        """初始化服务"""
-        self.service_registry = service_registry
-        logger.info("gRPC Gateway service initialized")
+    async def initialize(self, service_registry: ServiceRegistry) -> None:
+"""初始化服务"""
+self.service_registry = service_registry
+logger.info("gRPC Gateway service initialized")
 
-    async def ProxyRequest(self, request, context) - > None:
-        """
-        代理请求到后端服务
+    async def ProxyRequest(self, request, context) -> None:
+"""
+代理请求到后端服务
 
-        这是一个示例方法，实际实现需要根据 protobuf 定义
-        """
-        try:
+这是一个示例方法，实际实现需要根据 protobuf 定义
+"""
+try:
             # 获取请求信息
             service_name = request.service_name
             method = request.method
@@ -76,7 +76,7 @@ class GatewayService:
             #     body = response_body,
             # )
 
-        except Exception as e:
+except Exception as e:
             logger.error(
                 "gRPC proxy request failed",
                 service = service_name,
@@ -86,11 +86,11 @@ class GatewayService:
             context.set_code(grpc.StatusCode.INTERNAL)
             context.set_details(f"Internal error: {str(e)}")
 
-    async def ListServices(self, request, context) - > None:
-        """
-        列出所有可用服务
-        """
-        try:
+    async def ListServices(self, request, context) -> None:
+"""
+列出所有可用服务
+"""
+try:
             if not self.service_registry:
                 context.set_code(grpc.StatusCode.INTERNAL)
                 context.set_details("Service registry not initialized")
@@ -112,16 +112,16 @@ class GatewayService:
 
             # return ListServicesResponse(services = service_list)
 
-        except Exception as e:
+except Exception as e:
             logger.error("Failed to list services", error = str(e), exc_info = True)
             context.set_code(grpc.StatusCode.INTERNAL)
             context.set_details(f"Internal error: {str(e)}")
 
-    async def GetServiceHealth(self, request, context) - > None:
-        """
-        获取服务健康状态
-        """
-        try:
+    async def GetServiceHealth(self, request, context) -> None:
+"""
+获取服务健康状态
+"""
+try:
             service_name = request.service_name
 
             if not self.service_registry:
@@ -144,7 +144,7 @@ class GatewayService:
             #     health_ratio = health_info["health_ratio"],
             # )
 
-        except Exception as e:
+except Exception as e:
             logger.error(
                 "Failed to get service health",
                 service = service_name,
@@ -154,11 +154,11 @@ class GatewayService:
             context.set_code(grpc.StatusCode.INTERNAL)
             context.set_details(f"Internal error: {str(e)}")
 
-    async def StreamEvents(self, request, context) - > AsyncIterator:
-        """
-        流式事件推送
-        """
-        try:
+    async def StreamEvents(self, request, context) -> AsyncIterator:
+"""
+流式事件推送
+"""
+try:
             # 这是一个示例流式方法
             event_types = request.event_types
 
@@ -191,7 +191,7 @@ class GatewayService:
                     #     data = json.dumps(event["data"]),
                     # )
 
-                    counter + = 1
+                    counter += 1
                     await asyncio.sleep(5)  # 每5秒发送一个事件
 
                 except Exception as e:
@@ -200,7 +200,7 @@ class GatewayService:
 
             logger.info("Event stream ended")
 
-        except Exception as e:
+except Exception as e:
             logger.error("Failed to start event stream", error = str(e), exc_info = True)
             context.set_code(grpc.StatusCode.INTERNAL)
             context.set_details(f"Internal error: {str(e)}")

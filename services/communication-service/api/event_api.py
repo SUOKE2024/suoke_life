@@ -13,7 +13,9 @@ from pydantic import BaseModel, Field
 from ..communication_service.event_bus.core.event_bus import get_event_bus
 from ..communication_service.event_bus.core.event_store import get_event_store
 from ..communication_service.event_bus.core.event_types import (
-    AgentCollaborationEvents, HealthDataEvents, UserInteractionEvents
+    AgentCollaborationEvents,
+    HealthDataEvents,
+    UserInteractionEvents,
 )
 
 logger = structlog.get_logger(__name__)

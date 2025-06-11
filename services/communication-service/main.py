@@ -5,10 +5,11 @@
 """
 
 import asyncio
+import logging
 import signal
 import sys
-import logging
 from typing import Any
+
 from communication_service import CommunicationService
 
 # 配置日志

@@ -2,13 +2,13 @@
 device - 索克生活项目模块
 """
 
-from datetime import datetime
-from sqlalchemy import Column, String, DateTime, Boolean, JSON, ForeignKey
-from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import relationship
-from typing import Dict, Any, Optional
-from user_service.database import Base
 import uuid
+from datetime import datetime
+from typing import Any, Dict
+
+from sqlalchemy import JSON, Boolean, Column, DateTime, ForeignKey, String
+from sqlalchemy.orm import relationship
+from user_service.database import Base
 
 """用户设备数据模型"""
 
@@ -44,11 +44,11 @@ class UserDevice(Base):
     # 关系
     user = relationship("User", back_populates = "devices")
 
-    def __repr__(self) - > None:
+    def __repr__(self) -> None:
         """TODO: 添加文档字符串"""
         return f"<UserDevice(binding_id = {self.binding_id}, user_id = {self.user_id}, device_id = {self.device_id})>"
 
-    def to_dict(self) - > Dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         """转换为字典"""
         return {
             "binding_id": self.binding_id,

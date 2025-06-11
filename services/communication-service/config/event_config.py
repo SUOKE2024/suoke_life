@@ -3,9 +3,9 @@
 """
 
 import os
-from typing import Dict, Any, List
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any, Dict, List
 
 
 class EventPriority(Enum):
@@ -203,6 +203,7 @@ def get_config() -> SuokeEventConfig:
 def load_config_from_file(config_file: str) -> SuokeEventConfig:
     """从文件加载配置"""
     import json
+
     import yaml
     
     try:

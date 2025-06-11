@@ -1,201 +1,195 @@
-
-
-    type: "agent";",";
-agentType: "xiaoai";",";
-avatar: "🤖";",";
-unreadCount: 0,;
+    type: "agent,";
+agentType: "xiaoai,";
+avatar: "🤖,";
+unreadCount: 0,
 const isOnline = true;
-
-  },";"";
-  {";,}id: "xiaoke";","";"";
-";,"";
-type: "agent";",";
-agentType: "xiaoke";",";
-avatar: "👨‍⚕️";",";
-unreadCount: 1,;
+  },";
+  {"id: "xiaoke,
+;
+type: "agent,";
+agentType: "xiaoke,";
+avatar: "👨‍⚕️,";
+unreadCount: 1,
 const isOnline = true;
 }
 }
-  },";"";
-  {";,}id: "laoke";","";"";
-";,"";
-type: "agent";",";
-agentType: "laoke";",";
-avatar: "👴";",";
-unreadCount: 0,;
+  },";
+  {"id: "laoke,
+;
+type: "agent,";
+agentType: "laoke,";
+avatar: "👴,";
+unreadCount: 0,
 const isOnline = true;
 }
 }
-  },";"";
-  {";,}id: "soer";","";"";
-";,"";
-type: "agent";",";
-agentType: "soer";",";
-avatar: "👧";",";
-unreadCount: 2,;
+  },";
+  {"id: "soer,
+;
+type: "agent,";
+agentType: "soer,";
+avatar: "👧,";
+unreadCount: 2,
 const isOnline = true;
 }
 }
-  },";"";
-  {";,}id: "dr_wang";","";"";
-";,"";
-type: "doctor";",";
-avatar: "👩‍⚕️";",";
-unreadCount: 0,;
+  },";
+  {"id: "dr_wang,
+;
+type: "doctor,";
+avatar: "👩‍⚕️,";
+unreadCount: 0,
 const isOnline = false;
 }
 }
-  },";"";
-  {";,}id: "dr_li";","";"";
-";,"";
-type: "doctor";",";
-avatar: "🧑‍⚕️";",";
-unreadCount: 1,;
+  },";
+  {"id: "dr_li,
+;
+type: "doctor,";
+avatar: "🧑‍⚕️,";
+unreadCount: 1,
 const isOnline = true;
 }
 }
-  },";"";
-  {";,}id: "health_group";","";"";
-";,"";
-type: "group";",";
-avatar: "👥";",";
-unreadCount: 5,;
+  },";
+  {"id: "health_group,
+;
+type: "group,";
+avatar: "👥,";
+unreadCount: 5,
 const isOnline = true;
 }
 }
-  },";"";
-  {";,}id: "user_zhang";","";"";
-";,"";
-type: "user";",";
-avatar: "👤";",";
-unreadCount: 0,;
+  },";
+  {"id: "user_zhang,
+;
+type: "user,";
+avatar: "👤,";
+unreadCount: 0,
 const isOnline = false;
 }
 }
   }
 ];
-// 模拟联系人数据/;,/g/;
-export const MOCK_CONTACTS: Contact[] = [;];";"";
-  {";,}id: "xiaoai";","";"";
-";,"";
-type: "agent";",";
-agentType: "xiaoai";",";
-avatar: "🤖";",";
+// 模拟联系人数据/,/g/;
+export const MOCK_CONTACTS: Contact[] = [;];";
+  {"id: "xiaoai,
+;
+type: "agent,";
+agentType: "xiaoai,";
+avatar: "🤖,";
 const isOnline = true;
 }
 }
-  },";"";
-  {";,}id: "xiaoke";","";"";
-";,"";
-type: "agent";",";
-agentType: "xiaoke";",";
-avatar: "👨‍⚕️";",";
+  },";
+  {"id: "xiaoke,
+;
+type: "agent,";
+agentType: "xiaoke,";
+avatar: "👨‍⚕️,";
 const isOnline = true;
 }
 }
-  },";"";
-  {";,}id: "laoke";","";"";
-";,"";
-type: "agent";",";
-agentType: "laoke";",";
-avatar: "👴";",";
+  },";
+  {"id: "laoke,
+;
+type: "agent,";
+agentType: "laoke,";
+avatar: "👴,";
 const isOnline = true;
 }
 }
-  },";"";
-  {";,}id: "soer";","";"";
-";,"";
-type: "agent";",";
-agentType: "soer";",";
-avatar: "👧";",";
+  },";
+  {"id: "soer,
+;
+type: "agent,";
+agentType: "soer,";
+avatar: "👧,";
 const isOnline = true;
 }
 }
-  },";"";
-  {";,}id: "dr_wang";","";"";
-";,"";
-type: "doctor";",";
-avatar: "👩‍⚕️";",";
+  },";
+  {"id: "dr_wang,
+;
+type: "doctor,";
+avatar: "👩‍⚕️,";
 const isOnline = false;
-
 }
 }
-  },";"";
-  {";,}id: "dr_li";","";"";
-";,"";
-type: "doctor";",";
-avatar: "🧑‍⚕️";",";
+  },";
+  {"id: "dr_li,
+;
+type: "doctor,";
+avatar: "🧑‍⚕️,";
 const isOnline = true;
-
 }
 }
-  },";"";
-  {";,}id: "user_zhang";","";"";
-";,"";
-type: "user";",";
-avatar: "👤";",";
+  },";
+  {"id: "user_zhang,
+;
+type: "user,";
+avatar: "👤,";
 const isOnline = false;
 }
 }
   }
 ];
 ];
-// 模拟聊天消息数据/;,/g/;
-export const MOCK_MESSAGES: Record<string, ChatMessage[]> = {const xiaoai = [;]";}    {";,}id: "msg_1";",";
-channelId: "xiaoai";",";
-senderId: "xiaoai";","";"";
-";,"";
-senderAvatar: "🤖";","";"";
-";"";
+// 模拟聊天消息数据/,/g/;
+export const MOCK_MESSAGES: Record<string, ChatMessage[]> = {const xiaoai = [;]";}    {"id: "msg_1,";
+channelId: "xiaoai,";
+senderId: "xiaoai,
+;
+senderAvatar: "🤖,
+";
 }
-      timestamp: new Date().toISOString(),type: "text",isRead: true;"}"";"";
+      timestamp: new Date().toISOString(),type: "text",isRead: true;"
     }
 ];
-  ],;
-const xiaoke = [;]";"";
-    {";,}id: "msg_2";",";
-channelId: "xiaoke";",";
-senderId: "xiaoke";","";"";
-";,"";
-senderAvatar: "👨‍⚕️";","";"";
-";,"";
-timestamp: new Date(Date.now() - 5 * 60 * 1000).toISOString(),";,"";
-type: "text";","";"";
+  ],
+const xiaoke = [;]";
+    {"id: "msg_2,";
+channelId: "xiaoke,";
+senderId: "xiaoke,
+;
+senderAvatar: "👨‍⚕️,
+;
+timestamp: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
+type: "text,
 }
-      const isRead = false;}
+      const isRead = false}
     }
 ];
-  ],;
-const laoke = [;]";"";
-    {";,}id: "msg_3";",";
-channelId: "laoke";",";
-senderId: "laoke";","";"";
-";,"";
-senderAvatar: "👴";","";"";
-";,"";
-timestamp: new Date(Date.now() - 10 * 60 * 1000).toISOString(),";,"";
-type: "text";","";"";
+  ],
+const laoke = [;]";
+    {"id: "msg_3,";
+channelId: "laoke,";
+senderId: "laoke,
+;
+senderAvatar: "👴,
+;
+timestamp: new Date(Date.now() - 10 * 60 * 1000).toISOString(),
+type: "text,
 }
-      const isRead = true;}
+      const isRead = true}
     }
 ];
   ];
 };
-// 智能体配置/;,/g/;
-export const AGENT_CONFIGS = {xiaoai: {,";}";,"";
-avatar: "🤖";",";
-const color = "#007AFF";";"";
-
+// 智能体配置/,/g/;
+export const AGENT_CONFIGS = {xiaoai: {,";};
+avatar: "🤖,";
+const color = "#007AFF;"";
 }
 }
   }
-xiaoke: {,";}";,"";
-const avatar = "👨‍⚕️";";"";
+xiaoke: {,";};
+const avatar = "👨‍⚕️;"";
 }
 }
-  },laoke: {,;}}
+  },laoke: {,}
 }
-  ;},soer: {,;}}
+  ;},soer: {,}
 }
-  ;};";"";
+  ;};";
 } as const;""";

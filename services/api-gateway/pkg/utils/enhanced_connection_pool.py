@@ -1,4 +1,4 @@
-                        import random
+                    import random
 from aiohttp import ClientSession, ClientTimeout, TCPConnector
 from aiohttp.client_exceptions import ClientError, ClientTimeout as ClientTimeoutError
 from contextlib import asynccontextmanager
@@ -9,7 +9,7 @@ import asyncio
 import logging
 import time
 
-def main() - > None:
+def main() -> None:
     """主函数 - 自动生成的最小可用版本"""
     pass
 

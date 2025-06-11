@@ -2,15 +2,17 @@
 auth - 索克生活项目模块
 """
 
-from auth_service.models.base import BaseModel
+import uuid
 from datetime import datetime
 from enum import Enum
-from sqlalchemy import Boolean, DateTime, Enum as SQLEnum, String, Text, func
-from sqlalchemy import Table, Column, ForeignKey
+from typing import List, Optional
+
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, String, Table, Text, func
+from sqlalchemy import Enum as SQLEnum
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from typing import List, Optional
-import uuid
+
+from auth_service.models.base import BaseModel
 
 """认证相关数据模型"""
 
@@ -354,11 +356,11 @@ class RefreshToken(BaseModel):
         comment = "使用次数"
     )
 
-    def is_expired(self) - > bool:
+    def is_expired(self) -> bool:
         """检查令牌是否过期"""
         return datetime.utcnow() > self.expires_at
 
-    def is_valid(self) - > bool:
+    def is_valid(self) -> bool:
         """检查令牌是否有效"""
         return not self.is_revoked and not self.is_expired()
 

@@ -4,11 +4,10 @@
 整合了auth-service和user-service的功能
 """
 
-import asyncio
 import logging
 import sys
+from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
-from typing import AsyncGenerator
 
 import uvicorn
 from fastapi import FastAPI, Request
@@ -18,8 +17,6 @@ from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
 
 # 导入子服务模块
-from user_management_service.auth_service.main import app as auth_app
-from user_management_service.user_service.main import main as user_main
 from user_management_service.user_service.config import get_settings
 
 # 配置日志
@@ -123,7 +120,9 @@ def create_app() -> FastAPI:
         return {"status": "auth_service_ready", "version": "1.0.0"}
     
     # 用户管理相关路由
-    from user_management_service.user_service.api.router import api_router as user_router
+    from user_management_service.user_service.api.router import (
+        api_router as user_router,
+    )
     app.include_router(
         user_router,
         prefix="/api/v1",
@@ -155,7 +154,7 @@ def main():
     """主函数"""
     settings = get_settings()
     
-    logger.info(f"🌟 启动索克生活用户管理服务")
+    logger.info("🌟 启动索克生活用户管理服务")
     logger.info(f"📍 环境: {settings.environment}")
     logger.info(f"🔧 调试模式: {settings.debug}")
     

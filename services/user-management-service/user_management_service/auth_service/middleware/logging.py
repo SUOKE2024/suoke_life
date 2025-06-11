@@ -2,12 +2,13 @@
 logging - 索克生活项目模块
 """
 
-from fastapi import Request, Response
-from starlette.middleware.base import BaseHTTPMiddleware
-from typing import Callable
-import structlog
 import time
 import uuid
+from typing import Callable
+
+import structlog
+from fastapi import Request, Response
+from starlette.middleware.base import BaseHTTPMiddleware
 
 """日志中间件"""
 
@@ -19,7 +20,7 @@ logger = structlog.get_logger(__name__)
 class LoggingMiddleware(BaseHTTPMiddleware):
     """日志中间件"""
 
-    async def dispatch(self, request: Request, call_next: Callable) - > Response:
+    async def dispatch(self, request: Request, call_next: Callable) -> Response:
         """处理请求日志"""
         # 生成请求ID
         request_id = str(uuid.uuid4())
@@ -81,7 +82,7 @@ class LoggingMiddleware(BaseHTTPMiddleware):
 
             raise
 
-    def _get_client_ip(self, request: Request) - > str:
+    def _get_client_ip(self, request: Request) -> str:
         """获取客户端IP地址"""
         # 检查代理头部
         forwarded_for = request.headers.get("x - forwarded - for")

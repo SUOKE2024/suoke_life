@@ -1,126 +1,128 @@
-@react-native-async-storage/async-storage";/import NetInfo from "@react-native-community/netinfo";/    import CryptoJS from "crypto-js";""/;,"/g"/;
-import React from "react";";
-interface ApiResponse<T = any  /> {/;,}data: T;/    , success: boolean;/;/g/;
+@react-native-async-storage/async-storage"/    import CryptoJS from "crypto-js"
+import React from "react";
+interface ApiResponse<T = any  /> {/data: T;/    , success: boolean;
 }
-  message?: string;}
+  message?: string}
   code?: number}
-* / 支持智能重试、缓存、熔断器、离线队列等高级功能* * interface RetryConfig {/;,}maxAttempts: number, * //;,/g,/;
-  baseDelay: number,;
-maxDelay: number,;
+* / 支持智能重试、缓存、熔断器、离线队列等高级功能* * interface RetryConfig {
+/maxAttempts: number, * //,/g,/;
+  baseDelay: number,
+maxDelay: number,
 }
+  const backoffFactor = number}
 }
-  const backoffFactor = number;}
+interface CacheConfig {"
+ttl: number,"maxSize: number,";
 }
-interface CacheConfig {ttl: number,";,}maxSize: number,";"";
+  const strategy = "memory" | "storage" | "both};
 }
-}
-  const strategy = "memory" | "storage" | "both";"}"";"";
-}
-interface RequestQueue {id: string}method: string,;
+interface RequestQueue {id: string}method: string,
 const endpoint = string;
 data?: unknown;
 config?: unknown;
-timestamp: number,;
-retryCount: number,;
+  timestamp: number,
+retryCount: number,
 }
 }
-  const priority = number;}
+  const priority = number}
 }
-interface CircuitBreakerConfig {failureThreshold: number}recoveryTimeout: number,;
-}
-}
-  const monitoringPeriod = number;}
-}
-class CircuitBreaker {private failureCount = 0;";,}private lastFailureTime = 0;";"";
+interface CircuitBreakerConfig {failureThreshold: number}recoveryTimeout: number,
 }
 }
-private state: "CLOSED" | "OPEN" | "HALF_OPEN" = "CLOSED";"}";
-constructor(private config: CircuitBreakerConfig) {;}
-  canExecute(): boolean {";,}const now = Date.now;(;);";,"";
-if (this.state === "CLOSED") {";}}"";
-      return tr;u;e;"}"";"";
-    } else if (this.state === "OPEN") {";,}if (now - this.lastFailureTime > this.config.recoveryTimeout) {";,}this.state = "HALF_OPEN";";"";
+  const monitoringPeriod = number}
 }
-        return tr;u;e;}
+class CircuitBreaker {private failureCount = 0;"private lastFailureTime = 0;";
+}
+}
+private state: "CLOSED" | "OPEN" | "HALF_OPEN" = "CLOSED}";
+constructor(private config: CircuitBreakerConfig) {}
+  canExecute(): boolean {"const now = Date.now;(;);","
+if (this.state === "CLOSED") {";}}
+      return tr;u;e;"};
+    } else if (this.state === "OPEN") {"if (now - this.lastFailureTime > this.config.recoveryTimeout) {"this.state = "HALF_OPEN;"";
+}
+        return tr;u;e}
       }
       return fal;s;e;
-    } else {}}
-      return tru;e;}
+    } else {}
+      return tru;e}
     }
   }
-  recordSuccess(): void {";,}this.failureCount = 0;";"";
+  recordSuccess(): void {"this.failureCount = 0;";
 }
-this.state = "CLOSED";"}"";"";
+this.state = "CLOSED};
   }
-  recordFailure(): void {this.failureCount++;,}this.lastFailureTime = Date.now();";,"";
-if (this.failureCount >= this.config.failureThreshold) {";}}"";
-      this.state = "OPEN";"}"";"";
+  recordFailure(): void {this.failureCount++this.lastFailureTime = Date.now();","
+if (this.failureCount >= this.config.failureThreshold) {";}}
+      this.state = "OPEN};
     }
   }
-  getState(): string {}}
-    return this.sta;t;e;}
+  getState(): string {}
+    return this.sta;t;e}
   }
 }
-// 简化的事件发射器接口 * interface EventListener {/;}}/g/;
+// 简化的事件发射器接口 * interface EventListener {
+/;
+}/g/;
 }
-    (event: string, ...args: unknown[]): void;}
+    (event: string, ...args: unknown[]): void}
 }
-///;,/g/;
+//
 private eventListeners: Map<string, EventListener[]> = new Map();
-emit(event: string, ...args: unknown[]);: void  {const listeners = this.eventListeners.get(even;t;); || [];}}
-    listeners.forEach(listener); => listener(event, ...args););}
+emit(event: string, ...args: unknown[]);: void  {const listeners = this.eventListeners.get(even;t;); || []}
+    listeners.forEach(listener); => listener(event, ...args);)}
   }
-  on(event: string, listener: EventListener);: void  {if (!this.eventListeners.has(event);) {}}
-      this.eventListeners.set(event, []);}
+  on(event: string, listener: EventListener);: void  {if (!this.eventListeners.has(event);) {}
+      this.eventListeners.set(event, [])}
     }
     this.eventListeners.get(event);!.push(listener);
   }
-  off(event: string, listener: EventListener);: void  {const listeners = this.eventListeners.get(even;t;);,}if (listeners) {const index = listeners.indexOf(listene;r;);,}if (index > -1) {}}
-        listeners.splice(index, 1);}
+  off(event: string, listener: EventListener);: void  {const listeners = this.eventListeners.get(even;t;)if (listeners) {const index = listeners.indexOf(listene;r;)if (index > -1) {}
+        listeners.splice(index, 1)}
       }
     }
   }
 }
-class EnhancedApiClient extends EventEmitter {private cache = new Map<string, any>();,}private requestQueue: RequestQueue[] = [];
+class EnhancedApiClient extends EventEmitter {private cache = new Map<string, any>()private requestQueue: RequestQueue[] = [];
 private isOnline = true;
 private circuitBreakers = new Map<string, CircuitBreaker>();
-private retryConfig: RetryConfig = {maxAttempts: 3,;
-baseDelay: 1000,;
+private retryConfig: RetryConfig = {maxAttempts: 3,
+baseDelay: 1000,
 }
     maxDelay: 10000,}
-    const backoffFactor = 2;}
-  private cacheConfig: CacheConfig = {,";}}"";
-  ttl: 5 * 60 * 1000,  maxSize: 100,"}";
-const strategy = "both";}";,"";
-private circuitBreakerConfig: CircuitBreakerConfig = {failureThreshold: 5,;
-recoveryTimeout: 60000,  monitoringPeriod: 30000,  / 30秒* ///     constructor() {/;,}super();,/g/;
+    const backoffFactor = 2}
+  private cacheConfig: CacheConfig = {,";}}
+  ttl: 5 * 60 * 1000,  maxSize: 100,"}
+const strategy = "both";};
+private circuitBreakerConfig: CircuitBreakerConfig = {failureThreshold: 5,
+recoveryTimeout: 60000,  monitoringPeriod: 30000,  / 30秒* ///     constructor() {/super(),/g/;
 this.initNetworkListener();
 this.initQueueProcessor();
 }
-    this.initPerformanceMonitoring();}
+    this.initPerformanceMonitoring()}
   }
   private initNetworkListener(): void {}
     NetInfo.addEventListener(state); => {}
-      const wasOffline = !this.isOnli;n;e;";,"";
-this.isOnline = state.isConnected || false;";,"";
-this.emit("networkStatusChanged", { isOnline: this.isOnline;});";,"";
-if (wasOffline && this.isOnline) {}}
-        this.processQueue();}
+      const wasOffline = !this.isOnli;n;e;","
+this.isOnline = state.isConnected || false;","
+this.emit("networkStatusChanged", { isOnline: this.isOnline;});;
+if (wasOffline && this.isOnline) {}
+        this.processQueue()}
       }
     });
   }
-  private initQueueProcessor(): void {setInterval() => {";}  // 性能监控"/;,"/g,"/;
-  const: performanceMonitor = usePerformanceMonitor(enhancedApiClient", {")";,}trackRender: true,;"";
+  private initQueueProcessor(): void {setInterval() => {";}  // 性能监控"/,"/g,"/;
+  const: performanceMonitor = usePerformanceMonitor(enhancedApiClient", {")"trackRender: true,"";
 }
     trackMemory: false,}
-    warnThreshold: 100, // ms ;};);/;,/g/;
-if (this.isOnline && this.requestQueue.length > 0) {}}
-        this.processQueue();}
+    warnThreshold: 100, // ms ;};);
+if (this.isOnline && this.requestQueue.length > 0) {}
+        this.processQueue()}
       }
     }, 30000);  }
-  private initPerformanceMonitoring(): void {";,}setInterval() => {";,}this.emit("performanceReport", {")"";,}cacheSize: this.cache.size,);,"";
-queueSize: this.requestQueue.length;),;
-circuitBreakers: Array.from(this.circuitBreakers.entries()).map([key, cb]); => ({);}}
+  private initPerformanceMonitoring(): void {"setInterval() => {"this.emit("performanceReport", {")""cacheSize: this.cache.size,),"";
+queueSize: this.requestQueue.length;),
+circuitBreakers: Array.from(this.circuitBreakers.entries()).map([key, cb]); => ({)}
             endpoint: key,)}
             const state = cb.getState();});
         );
@@ -130,63 +132,63 @@ circuitBreakers: Array.from(this.circuitBreakers.entries()).map([key, cb]); => (
 const endpoint = string;
 data?: unknown;
 config?: unknown;
-  ): Promise<T>  {";,}cacheKey: this.generateCacheKey(method, endpoint, dat;a;);";,"";
-if (method === "GET") {";,}const cachedData = await this.getCachedResponse(cacheK;e;y;);";"";
+  ): Promise<T>  {"cacheKey: this.generateCacheKey(method, endpoint, dat;a;);","
+if (method === "GET") {"const cachedData = await this.getCachedResponse(cacheK;e;y;);";
 }
-      if (cachedData) {"}";
-this.emit("cacheHit", { endpoint, cacheKey });";,"";
+      if (cachedData) {"}
+this.emit("cacheHit", { endpoint, cacheKey });;
 return { success: true, data: cachedData, fromCache: tr;u;e ;} as any;
       }
     }
-    const circuitBreaker = this.getCircuitBreaker(endpoint;);";,"";
-if (!circuitBreaker.canExecute()) {"}";
-this.emit("circuitBreakerOpen", { endpoint });";,"";
+    const circuitBreaker = this.getCircuitBreaker(endpoint;);","
+if (!circuitBreaker.canExecute()) {"}
+this.emit("circuitBreakerOpen", { endpoint });","
 const throw = new Error(`Circuit brea;k;er is open for ${endpoint}`;);``"`;```;
-    }";,"";
-let lastError: Error = new Error("Unknown error");";,"";
-for (let attempt = ;1; attempt <= this.retryConfig.maxAttempts; attempt++) {try {}        const netInfo = await NetInfo.fetc;h;(;)";,"";
-if (!netInfo.isConnected) {";,}if (method !== "GET") {";}}"";
-            await: this.addToQueue(method, endpoint, data, config;);"}";
-return {success: false,queued: true,message: "Request queued for offline processing";} as a;n;y;";"";
-          }";,"";
-const throw = new Error("Network not available;";);";"";
+    }","
+let lastError: Error = new Error("Unknown error");","
+for (let attempt = ;1; attempt <= this.retryConfig.maxAttempts; attempt++) {try {}        const netInfo = await NetInfo.fetc;h;(;)","
+if (!netInfo.isConnected) {"if (method !== "GET") {";}}
+            await: this.addToQueue(method, endpoint, data, config;);"}
+return {success: false,queued: true,message: "Request queued for offline processing";} as a;n;y;
+          }","
+const throw = new Error("Network not available;";);";
         }
         const startTime = Date.now;
 response: await this.request(method, endpoint, data, con;f;i;g;);
-const responseTime = Date.now - startTime;";,"";
-circuitBreaker.recordSuccess();";,"";
-this.emit("requestSuccess", { endpoint, responseTime, attempt });";,"";
+const responseTime = Date.now - startTime;","
+circuitBreaker.recordSuccess();","
+this.emit("requestSuccess", { endpoint, responseTime, attempt });","
 if (method === "GET" && response.success) {";}}"";
-          await: this.cacheResponse(cacheKey, response.data;);}
+          await: this.cacheResponse(cacheKey, response.data;)}
         }
         return respon;s;e;
-      } catch (error) {lastError = error as Error;";,}circuitBreaker.recordFailure();";,"";
-this.emit("requestFailure", {";,)endpoint,);,}const error = lastError.message;);"";
+      } catch (error) {lastError = error as Error;"circuitBreaker.recordFailure();","
+this.emit("requestFailure", {",)endpoint,)const error = lastError.message;);"";
 }
           attempt;)}
         });
-if (!this.shouldRetry(error, attempt)) {}}
-          break;}
+if (!this.shouldRetry(error, attempt)) {}
+          break}
         }
         const delay = this.calculateDelay(attempt;);
         ``````;```;
         );
 const await = this.sleep(dela;y;);
-      }";"";
-    }";,"";
-if (method === "GET") {";}}"";
-      cachedData: await this.getCachedResponse(cacheKey, tr;u;e;)  if (cachedData) { /"}""/;,"/g"/;
-this.emit("staleDataReturned", { endpoint, cacheKey });";,"";
+      }
+    }","
+if (method === "GET") {";}}
+      cachedData: await this.getCachedResponse(cacheKey, tr;u;e;)  if (cachedData) { /"}""
+this.emit("staleDataReturned", { endpoint, cacheKey });;
 return { success: true, data: cachedData, stale: tr;u;e ;} as any;
       }
     }
     const throw = lastErr;o;r;
   }
   private getCircuitBreaker(endpoint: string);: CircuitBreaker  {if (!this.circuitBreakers.has(endpoint);) {}      this.circuitBreakers.set();
-endpoint,;
+endpoint,
 const new = CircuitBreaker(this.circuitBreakerConfig);
 }
-      );}
+      )}
     }
     return this.circuitBreakers.get(endpoin;t;);!;
   }
@@ -199,54 +201,54 @@ return CryptoJS.MD5(JSON.stringify(keyDat;a;);).toString();
   }
   private async getCachedResponse(cacheKey: string,);
 allowStale = false;
-  );: Promise<any>  {try {}      if (this.cache.has(cacheKey)) {const cached = this.cache.get(cacheKe;y;);,}if ();
+  );: Promise<any>  {try {}      if (this.cache.has(cacheKey)) {const cached = this.cache.get(cacheKe;y;)if ();
 allowStale ||;
 Date.now(); - cached.timestamp < this.cacheConfig.ttl;
-        ) {}}
-          return cached.da;t;a;}
-        } else {}}
-          this.cache.delete(cacheKey);}
+        ) {}
+          return cached.da;t;a}
+        } else {}
+          this.cache.delete(cacheKey)}
         }
-      }";,"";
-if ()";,"";
-this.cacheConfig.strategy === "storage" ||";,"";
-this.cacheConfig.strategy === "both"";"";
+      }","
+if ()","
+this.cacheConfig.strategy === "storage" ||","
+this.cacheConfig.strategy === "both;
       ) {}
-        const cachedStr = await AsyncStorage.getItem(`cache: ${cacheKey;}`;);````;,```;
-if (cachedStr) {const cached = JSON.parse(cachedSt;r;);,}if ();
+        const cachedStr = await AsyncStorage.getItem(`cache: ${cacheKey;}`;);````,```;
+if (cachedStr) {const cached = JSON.parse(cachedSt;r;)if ();
 allowStale ||;
 Date.now(); - cached.timestamp < this.cacheConfig.ttl;
-          ) {this.cache.set(cacheKey, cached);}}
-            return cached.da;t;a;}
+          ) {this.cache.set(cacheKey, cached)}
+            return cached.da;t;a}
           } else {}
             const await = AsyncStorage.removeItem(`cache: ${cacheKey;}`;);````;```;
           }
         }
       }
       return nu;l;l;
-    } catch (error) {}}
-      return nu;l;l;}
+    } catch (error) {}
+      return nu;l;l}
     }
   }
-  private async cacheResponse(cacheKey: string, data: unknown);: Promise<void>  {try {}}
+  private async cacheResponse(cacheKey: string, data: unknown);: Promise<void>  {try {}
       const: cached = {data,}
-        const timestamp = Date.now(;);}";,"";
-if ()";,"";
-this.cacheConfig.strategy === "memory" ||";,"";
-this.cacheConfig.strategy === "both"";"";
+        const timestamp = Date.now(;);}","
+if ()","
+this.cacheConfig.strategy === "memory" ||","
+this.cacheConfig.strategy === "both;
       ) {if (this.cache.size >= this.cacheConfig.maxSize) {}          const oldestKey = this.cache.keys().next().valu;e;
 }
-          this.cache.delete(oldestKey);}
+          this.cache.delete(oldestKey)}
         }
         this.cache.set(cacheKey, cached);
-      }";,"";
-if ()";,"";
-this.cacheConfig.strategy === "storage" ||";,"";
-this.cacheConfig.strategy === "both"";"";
+      }","
+if ()","
+this.cacheConfig.strategy === "storage" ||","
+this.cacheConfig.strategy === "both;
       ) {}
         await: AsyncStorage.setItem(`cache: ${cacheKey;}`, JSON.stringify(cached;);)``"`;```;
-      }";,"";
-this.emit("dataCached", { cacheKey, size: JSON.stringify(data).length ;});";"";
+      }","
+this.emit("dataCached", { cacheKey, size: JSON.stringify(data).length ;});";
     } catch (error) {}
       }
   }
@@ -254,69 +256,67 @@ this.emit("dataCached", { cacheKey, size: JSON.stringify(data).length ;});";"";
 const endpoint = string;
 data?: unknown;
 config?: unknown;
-  ): Promise<void>  {const queueItem: RequestQueue = {id: Date.now().toString();,}method,;
-endpoint,;
-data,;
-config,;
-timestamp: Date.now(),";"";
+  ): Promise<void>  {const queueItem: RequestQueue = {id: Date.now().toString()method,
+endpoint,
+data,
+config,"
+timestamp: Date.now(),";
 }
-      retryCount: 0,"}";
-priority: method === "POST" ? 1 : 0;}";,"";
+      retryCount: 0,"}
+priority: method === "POST" ? 1 : 0;};
 this.requestQueue.push(queueItem);
 this.requestQueue.sort(a, b) => {}
-      if (a.priority !== b.priority) {}}
-        return b.priority - a.priori;t;y;}
+      if (a.priority !== b.priority) {}
+        return b.priority - a.priori;t;y}
       }
       return a.timestamp - b.timesta;m;p;
-    });";,"";
-const await = AsyncStorage.setItem()";"";
-      "requestQueue",";,"";
-JSON.stringify(this.requestQueu;e;);";"";
-    )";,"";
-this.emit("requestQueued", { queueItem });";"";
+    });","
+const await = AsyncStorage.setItem()requestQueue",","
+JSON.stringify(this.requestQueu;e;);
+    )","
+this.emit("requestQueued", { queueItem });";
   }
-  private async processQueue(): Promise<void> {if (this.requestQueue.length === 0) {}}
-      return;}
+  private async processQueue(): Promise<void> {if (this.requestQueue.length === 0) {}
+      return}
     }
     const queueCopy = [...this.requestQueu;e;];
 this.requestQueue = [];
-for (const item of queueCopy) {try {";}};,"";
-await: this.request(item.method, item.endpoint, item.data, item.confi;g;);"}";
-this.emit("queuedRequestProcessed", { item, success: true;});";"";
-      } catch (error) {item.retryCount++;,}if (item.retryCount < this.retryConfig.maxAttempts) {";}}"";
-          this.requestQueue.push(item);"}";
-this.emit("queuedRequestRetry", { item, error });";"";
-        } else {"}";
-this.emit("queuedRequestFailed", { item, error });";"";
+for (const item of queueCopy) {try {";}};
+await: this.request(item.method, item.endpoint, item.data, item.confi;g;);"}
+this.emit("queuedRequestProcessed", { item, success: true;});
+      } catch (error) {item.retryCount++if (item.retryCount < this.retryConfig.maxAttempts) {";}}
+          this.requestQueue.push(item);"}
+this.emit("queuedRequestRetry", { item, error });
+        } else {"}
+this.emit("queuedRequestFailed", { item, error });";
         }
       }
-    }";,"";
-const await = AsyncStorage.setItem()";"";
-      "requestQueue",";,"";
+    }","
+const await = AsyncStorage.setItem()requestQueue",
 JSON.stringify(this.requestQueu;e;);
     );
   }
-  private shouldRetry(error: unknown, attempt: number);: boolean  {if (attempt >= this.retryConfig.maxAttempts) {}}
-      return fal;s;e;}
-    }";,"";
-if ()";,"";
-error.code === "NETWORK_ERROR" ||";"";
+  private shouldRetry(error: unknown, attempt: number);: boolean  {if (attempt >= this.retryConfig.maxAttempts) {}
+      return fal;s;e}
+    }","
+if ()","
+error.code === "NETWORK_ERROR" ||";
       (error.status >= 500 && error.status < 600);
-    ) {}}
-      return tr;u;e;}
+    ) {}
+      return tr;u;e}
     }
-    if (error.status === 429) {}}
-      return tru;e;}
+    if (error.status === 429) {}
+      return tru;e}
     }
     return fal;s;e;
   }
-  private calculateDelay(attempt: number);: number  {const  delay =;,}this.retryConfig.baseDelay *;
+  private calculateDelay(attempt: number);: number  {const  delay =this.retryConfig.baseDelay *;
 Math.pow(this.retryConfig.backoffFactor, attempt - ;1;);
 }
-    return Math.min(delay, this.retryConfig.maxDela;y;);}
+    return Math.min(delay, this.retryConfig.maxDela;y;)}
   }
-  private sleep(ms: number);: Promise<void>  {}}
-    return new Promise(resolv;e;); => setTimeout(resolve, ms););}
+  private sleep(ms: number);: Promise<void>  {}
+    return new Promise(resolv;e;); => setTimeout(resolve, ms);)}
   }
   private async request(method: string,);
 const endpoint = string;
@@ -324,9 +324,9 @@ data?: unknown;
 config?: unknown;
   ): Promise<any>  {";}    / 可以使用fetch或axios等* ///;"/;"/g"/;
 }
-      method,headers: {"Content-Type": "application/json",/        ...config?.headers;"}""/;"/g"/;
+      method,headers: {"Content-Type": "application/json",/        ...config?.headers;"}
       }
-body: data ? JSON.stringify(d;a;t;a;);: undefined,;
+body: data ? JSON.stringify(d;a;t;a;);: undefined,
       ...config;
     });
 if (!response.ok)  {}
@@ -334,19 +334,19 @@ if (!response.ok)  {}
     }
     return await response.js;o;n;
   }
-  const async = clearCache(): Promise<void> {this.cache.clear();,}try {";,}const keys = await AsyncStorage.getAllKe;y;s;";,"";
-const cacheKeys = keys.filter(key) => key.startsWith("cache: "););";,"";
-const await = AsyncStorage.multiRemove(cacheKey;s;);";"";
+  const async = clearCache(): Promise<void> {this.cache.clear()try {"const keys = await AsyncStorage.getAllKe;y;s;","
+const cacheKeys = keys.filter(key) => key.startsWith("cache: "););","
+const await = AsyncStorage.multiRemove(cacheKey;s;);";
 }
-      this.emit("cacheCleared");"}"";"";
+      this.emit("cacheCleared");"};
     } catch (error) {}
       }
   }
-  getCacheStats(): unknown {return {memorySize: this.cache.size,queueSize: this.requestQueue.length,circuitBreakers: Array.from(this.circuitBreakers.entries).map(;);}        ([key, cb]); => ({);}}
+  getCacheStats(): unknown {return {memorySize: this.cache.size,queueSize: this.requestQueue.length,circuitBreakers: Array.from(this.circuitBreakers.entries).map(;);}        ([key, cb]); => ({)}
           endpoint: key,)}
           const state = cb.getState();});
       );
     };
   }
-}";,"";
-export default EnhancedApiClient;""";
+}","
+export default EnhancedApiClient;""

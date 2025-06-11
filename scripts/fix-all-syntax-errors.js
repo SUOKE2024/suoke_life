@@ -44,8 +44,8 @@ function fixFile(filePath) {
     // 修复规则集合
     const fixes = [
       // 1. 修复接口属性分隔符
-      { pattern: /(\w+:\s*[^,;{}]+),(\s*\n)/g, replacement: '$1;$2' },
-      { pattern: /(\w+:\s*[^;{}]+);,/g, replacement: '$1;' },
+      { pattern: /(\w+:\s*[^,{}]+),(\s*\n)/g, replacement: '$1;$2' },
+      { pattern: /(\w+:\s*[^;{}]+),/g, replacement: '$1;' },
       
       // 2. 修复重复导入
       { pattern: /^(import\s+\{[^}]+\}\s+from\s+"[^"]+");\s*\n\1;/gm, replacement: '$1;' },
@@ -58,29 +58,29 @@ function fixFile(filePath) {
       { pattern: /import\s+\{[^}]+\}\s+from\s+"[^"]*\.\.\/[^"]*";\/[^"]*"/g, replacement: '' },
       
       // 5. 修复注释语法错误
-      { pattern: /\*\/\/\/\//g, replacement: '*/' },
-      { pattern: /\*\/\/\//g, replacement: '*/' },
+      { pattern: /\*\/\/\/\//g, replacement: '*/ },
+      { pattern: /\*\/\/\//g, replacement: '*/ },
       { pattern: /\/\*\*[\s\S]*?\*\/\/\//g, replacement: '' },
       
       // 6. 修复接口定义错误
-      { pattern: /export interface (\w+) \{\s*\}\s*(\w+:\s*)/g, replacement: 'export interface $1 {\n  $2' },
+      { pattern: /export interface (\w+) \{\s*\}\s*(\w+:\s*)/g, replacement: 'export interface $1 {\n  $2' },;
       
       // 7. 修复对象类型定义
-      { pattern: /(\w+):\s*\{([^}]*)\};,/g, replacement: '$1: {$2};' },
-      { pattern: /(\w+):\s*\{;,/g, replacement: '$1: {' },
+      { pattern: /(\w+):\s*\{([^}]*)\},/g, replacement: '$1: {$2' },
+      { pattern: /(\w+):\s*\{,/g, replacement: '$1: {' },
       
       // 8. 修复数组类型
-      { pattern: /(\w+):\s*(\w+)\[\];,/g, replacement: '$1: $2[];' },
+      { pattern: /(\w+):\s*(\w+)\[\],/g, replacement: '$1: $2[];' },
       
       // 9. 修复可选属性
-      { pattern: /(\w+)\?\s*:\s*([^;,}]+),/g, replacement: '$1?: $2;' },
+      { pattern: /(\w+)\?\s*:\s*([^]+),/g, replacement: '$1?: $2;' },
       
       // 10. 修复多余的逗号分号组合
-      { pattern: /,;/g, replacement: ';' },
-      { pattern: /;;+/g, replacement: ';' },
+      { pattern: /,/g, replacement:  },
+      { pattern: /;+/g, replacement:  },
       
       // 11. 修复类型联合定义
-      { pattern: /export type (\w+)\s*=\s*\|\s*'([^']+)';/g, replacement: "export type $1 = '$2'" },
+      { pattern: /export type (\w+)\s*=\s*\|\s*'([^']+)';/g, replacement: "export type $1 = '$2'" },;
       
       // 12. 修复中文注释导致的语法错误
       { pattern: /^[^\/\*\n]*[\u4e00-\u9fa5]+[^\/\*\n]*$/gm, replacement: '' },
@@ -109,7 +109,7 @@ function fixFile(filePath) {
     if (content.includes('placeholder') || content.includes('实现中医') || content.includes('整合五诊')) {
       // 如果文件内容严重损坏，创建基本的文件结构
       const fileName = path.basename(filePath, path.extname(filePath));
-      content = `// ${fileName}\n// 自动修复的文件\n\nexport default class ${fileName} {\n  // TODO: 实现具体功能\n}\n`;
+      content = `// ${fileName}\n
       fixed = true;
     }
 

@@ -87,7 +87,7 @@ class Maze(BaseModel):
         """验证节点矩阵大小"""
         # 在 Pydantic v2 中，我们需要从 info.data 获取其他字段的值
         size = info.data.get("size", 0) if info.data else 0
-        if len(v) ! = size or any(len(row) ! = size for row in v):
+        if len(v) != size or any(len(row) != size for row in v):
             raise ValueError(f"Nodes matrix must be {size}x{size}")
         return v
 
@@ -97,19 +97,19 @@ class Maze(BaseModel):
         """验证位置坐标"""
         size = info.data.get("size", 0) if info.data else 0
         x, y = v
-        if not (0 < = x < size and 0 < = y < size):
+        if not (0 <= x < size and 0 <= y < size):
             raise ValueError(f"Position must be within maze bounds (0, 0) to ({size - 1}, {size - 1})")
         return v
 
     def get_node(self, x: int, y: int) -> MazeNode | None:
         """获取指定位置的节点"""
-        if 0 < = x < self.size and 0 < = y < self.size:
+        if 0 <= x < self.size and 0 <= y < self.size:
             return self.nodes[y][x]
         return None
 
     def set_node(self, x: int, y: int, node: MazeNode) -> None:
         """设置指定位置的节点"""
-        if 0 < = x < self.size and 0 < = y < self.size:
+        if 0 <= x < self.size and 0 <= y < self.size:
             self.nodes[y][x] = node
             self.updated_at = datetime.now(UTC)
 
@@ -179,7 +179,7 @@ class MazeProgress(BaseModel):
         position = (x, y)
         if position not in self.visited_nodes:
             self.visited_nodes.append(position)
-            self.steps_count + = 1
+            self.steps_count += 1
             self.updated_at = datetime.now(UTC)
 
     def complete_maze(self) -> None:

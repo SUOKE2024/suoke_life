@@ -1,4 +1,4 @@
-from typing import Dict, List, Any, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 """
 api - gateway - 索克生活平台微服务

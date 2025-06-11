@@ -1,19 +1,18 @@
 #!/usr/bin/env node;
-const fs = require("fs);
-const path = require(")path");
-const glob = require(glob");
-
+const fs = require("fs");
+const path = require("path");
+const glob = require("glob");
 // 注释格式修复规则
 const commentFixRules = [
   // 修复多行注释格式错误
-  {
+  {"
     name: "多行注释转单行",
     pattern: /\/\*\*([^*]|\*(?!\/))*\*\//g,
     replacement: (match) => {
       // 提取注释内容
-const content = match
-        .replace(/\/\*\*|\*\// g, ")
-        .replace(/\*/g, ")
+const content = match"
+        .replace(/\/\*\*|\*\// g, ")"
+        .replace(/\*/g, ")"
         .replace(/\n/g, " ")
         .trim();
       if (content) {
@@ -23,43 +22,39 @@ const content = match
     }
   },
   // 修复单行注释格式错误
-  {
+  {"
     name: "单行注释格式错误,
     pattern: /\/\*([^*]|\*(?!\/))*\*\//g,
     replacement: (match) => {
       // 提取注释内容
-const content = match
-        .replace(/\/\*|\*\// g, ")
+const content = match"
+        .replace(/\/\*|\*\// g, ")"
         .replace(/\*/g, ")
         .trim();
       if (content) {
         return `// ${content}`
       }
-      return "// 
+      return "//
     }
   },
   // 修复空注释
-  {
+  {"
     name: "空注释修复",
-    pattern: /\/\*\s*\*\//g,
+    pattern: /\/\*\s*\*\//g,"
     replacement: //"
   }
 ]
-
-// 获取所有需要修复的文件
-const files = glob.sync("src/**/*.{ts,tsx,js,jsx}, {
+// 获取所有需要修复的文件"
+const files = glob.sync("src/**/*.{ts,tsx,js,jsx}, {"
   ignore: ["**/node_modules/**", **/dist/**", "**/*.d.ts];
 });
-
 let totalFixed = 0;
 let filesFixed = 0;
-
 files.forEach(filePath => {
-  try {
+  try {"
     let content = fs.readFileSync(filePath, "utf8");
     let originalContent = content;
     let fileFixCount = 0;
-
     // 应用注释修复规则
 commentFixRules.forEach(rule => {
       const beforeMatches = content.match(rule.pattern);
@@ -72,17 +67,14 @@ commentFixRules.forEach(rule => {
         }
       }
     });
-
     // 如果内容有变化，写入文件
-if (content !== originalContent) {
+if (content !== originalContent) {"
       fs.writeFileSync(filePath, content, utf8");
       `);
       totalFixed += fileFixCount;
       filesFixed++;
     }
-
   } catch (error) {
     `);
   }
 });
-

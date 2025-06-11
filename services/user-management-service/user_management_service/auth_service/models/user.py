@@ -2,14 +2,17 @@
 user - 索克生活项目模块
 """
 
-from auth_service.models.base import BaseModel
+import uuid
 from datetime import datetime
 from enum import Enum
-from sqlalchemy import Boolean, DateTime, Enum as SQLEnum, String, Text, func
+from typing import List, Optional
+
+from sqlalchemy import Boolean, DateTime, String, Text, func
+from sqlalchemy import Enum as SQLEnum
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from typing import List, Optional
-import uuid
+
+from auth_service.models.base import BaseModel
 
 """用户相关数据模型"""
 
@@ -149,13 +152,13 @@ class User(BaseModel):
         cascade = "all, delete - orphan"
     )
 
-    def is_locked(self) - > bool:
+    def is_locked(self) -> bool:
         """检查用户是否被锁定"""
         if self.locked_until is None:
             return False
         return datetime.utcnow() < self.locked_until
 
-    def is_active_user(self) - > bool:
+    def is_active_user(self) -> bool:
         """检查用户是否为活跃状态"""
         return (
             self.status == UserStatus.ACTIVE
@@ -352,10 +355,10 @@ class UserSession(BaseModel):
         back_populates = "sessions"
     )
 
-    def is_expired(self) - > bool:
+    def is_expired(self) -> bool:
         """检查会话是否过期"""
         return datetime.utcnow() > self.expires_at
 
-    def is_valid(self) - > bool:
+    def is_valid(self) -> bool:
         """检查会话是否有效"""
         return self.is_active and not self.is_expired()

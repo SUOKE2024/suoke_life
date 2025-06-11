@@ -1,56 +1,55 @@
-  Animated,;
-Easing,;
-Dimensions,;
-Platform,;
-LayoutAnimation,;
-  { UIManager } from "react-native";"";"";
-//"/;,"/g"/;
-Platform.OS === "android" &&";,"";
-UIManager.setLayoutAnimationEnabledExperimental) {}}
-  UIManager.setLayoutAnimationEnabledExperimental(true);}";"";
-}";,"";
-const { width: screenWidth, height: screenHeight;} = Dimensions.get("window";);";"";
-//   ;/;/g/;
-{//;,}FAST: 150,;,/g,/;
-  NORMAL: 300,;
+  Animated,
+Easing,
+Dimensions,
+Platform,
+LayoutAnimation,
+  { UIManager } from "react-native"
+//"
+Platform.OS === "android" &&;
+UIManager.setLayoutAnimationEnabledExperimental) {}
+  UIManager.setLayoutAnimationEnabledExperimental(true);}
+}","
+const { width: screenWidth, height: screenHeight;} = Dimensions.get("window";);";
+//   ;
+{//FAST: 150,,/g,/;
+  NORMAL: 300,
 }
   SLOW: 500,}
   const VERY_SLOW = 800;} as const;
 export const EASING = ;
-{LINEAR: Easing.linear}EASE: Easing.ease,;
-EASE_IN: Easing.in(Easing.ease),;
-EASE_OUT: Easing.out(Easing.ease),;
-EASE_IN_OUT: Easing.inOut(Easing.ease),;
-BOUNCE: Easing.bounce,;
-ELASTIC: Easing.elastic(1),;
-BACK: Easing.back(1.5),;
+{LINEAR: Easing.linear}EASE: Easing.ease,
+EASE_IN: Easing.in(Easing.ease),
+EASE_OUT: Easing.out(Easing.ease),
+EASE_IN_OUT: Easing.inOut(Easing.ease),
+BOUNCE: Easing.bounce,
+ELASTIC: Easing.elastic(1),
+BACK: Easing.back(1.5),
 }
-  BEZIER: Easing.bezier(0.25, 0.1, 0.25, 1);}
+  BEZIER: Easing.bezier(0.25, 0.1, 0.25, 1)}
 } as const;
-//;"/;,"/g"/;
-n;";"";
-  | "fadeOut"";"";
-  | "slideInLeft"";"";
-  | "slideInRight"";"";
-  | "slideInUp"";"";
-  | "slideInDown"";"";
-  | "slideOutLeft"";"";
-  | "slideOutRight"";"";
-  | "slideOutUp"";"";
-  | "slideOutDown"";"";
-  | "scaleIn"";"";
-  | "scaleOut"";"";
-  | "rotateIn"";"";
-  | "rotateOut"";"";
-  | "bounce"";"";
-  | "pulse"";"";
-  | "shake"";"";
-  | "flip"";"";
-  | "zoomIn"";"";
-  | "zoomOut";";"";
+//;
+n;
+  | "fadeOut;
+  | "slideInLeft;
+  | "slideInRight;
+  | "slideInUp;
+  | "slideInDown;
+  | "slideOutLeft;
+  | "slideOutRight;
+  | "slideOutUp;
+  | "slideOutDown;
+  | "scaleIn;
+  | "scaleOut;
+  | "rotateIn;
+  | "rotateOut;
+  | "bounce;
+  | "pulse;
+  | "shake;
+  | "flip;
+  | "zoomIn;
+  | "zoomOut;"";
 // 动画配置接口 * export interface AnimationConfig {/;};/g/;
-    ;
-/    ;/;,/g/;
+/    ;
 duration?: number;
 delay?: number;
 easing?: unknown;
@@ -58,55 +57,55 @@ useNativeDriver?: boolean;
 loop?: boolean;
 }
 }
-  iterations?: number;}
+  iterations?: number}
 }
-//   ;/;/g/;
-= 0): Animated.Value => {/    }/;,/g/;
+//   ;
+= 0): Animated.Value => {/    }
 return new Animated.Value(initialValu;e;);
 };
 export const createAnimatedValueXY = (initialValue: { x: numb;)}
-e;r, y: number;} = { x: 0, y: 0;};): Animated.ValueXY => {}
+e;r, y: number;} = { x: 0, y: 0;): Animated.ValueXY => {}
   return new Animated.ValueXY(initialValu;e;);
 };
-//  ;/;,/g/;
-e, /    ;/;,/g,/;
+//  ;
+e, /    ;/,/g,/;
   toValue: number,config: AnimationConfig = {;}): Animated.CompositeAnimation => {}
-  const {;,}duration = ANIMATION_DURATION.NORMAL,delay = 0,;
-easing = EASING.EASE_OUT,;
+  const {duration = ANIMATION_DURATION.NORMAL,delay = 0,
+easing = EASING.EASE_OUT,
 }
-    useNativeDriver = true;}
+    useNativeDriver = true}
     } = conf;i;g;
 return Animated.timing(animatedValue, {toValue,duration,delay,easing,useNativeDriver;};);
 };
-//  ;/;,/g/;
-e, /    ;/;,/g,/;
-  toValue: number,config: {tension?: number;,}friction?: number;
+//  ;
+e, /    ;/,/g,/;
+  toValue: number,config: {tension?: numberfriction?: number;
 speed?: number;
 }
-    bounciness?: number;}
+    bounciness?: number}
     useNativeDriver?: boolean} = {}): Animated.CompositeAnimation => {}
   const { tension = 40, friction = 7, useNativeDriver = true   } = conf;i;g;
 return Animated.spring(animatedValue, {toValue,tension,friction,useNativeDriver;};);
 };
-//   ;/;/g/;
-[;];): Animated.CompositeAnimation => {/    }/;,/g/;
+//   ;
+[;];): Animated.CompositeAnimation => {/    }
 return Animated.sequence(animation;s;);
 };
-//   ;/;/g/;
-[;];): Animated.CompositeAnimation => {/    }/;,/g/;
+//   ;
+[;];): Animated.CompositeAnimation => {/    }
 return Animated.parallel(animation;s;);
 };
-//   ;/;,/g/;
-r, /    ;/;,/g,/;
+//   ;
+r, /    ;/,/g,/;
   animations: Animated.CompositeAnimation[];): Animated.CompositeAnimation => {}
   return Animated.stagger(delay, animation;s;);
 };
-//   ;/;,/g/;
-n, /    ;/;,/g,/;
+//   ;
+n, /    ;/,/g,/;
   iterations: number = -1;): Animated.CompositeAnimation => {}
   return Animated.loop(animation, { iterations ;};);
 };
-//   ;/;/g/;
+//   ;
 {//;}}/g,/;
   fadeIn: (animatedValue: Animated.Value,)}
     config: AnimationConfig = {;}): Animated.CompositeAnimation => {}
@@ -158,20 +157,20 @@ animateValue(animatedValue, 1.2, {duration: 150,easing: EASING.EASE_OUT;}),anima
   }
 pulse: (animatedValue: Animated.Value,);
 config: AnimationConfig = {;}): Animated.CompositeAnimation => {}
-    const pulseAnimation = animateSequence([;););,]animateValue(animatedValue, 1.1, {));}}
+    const pulseAnimation = animateSequence([;);)]animateValue(animatedValue, 1.1, {))}
         duration: 300,)}
-        easing: EASING.EASE_OUT;}),;
+        easing: EASING.EASE_OUT;}),
 animateValue(animatedValue, 1, { duration: 300, easing: EASING.EASE_;I;N ;});
 ];
     ]);
 return config.loop ? animateLoop(pulseAnimatio;n;);: pulseAnimation}
 shake: (,);
-animatedValue: Animated.Value,;
+animatedValue: Animated.Value,
 config: AnimationConfig =  {;}): Animated.CompositeAnimation => {}
-    return animateSequence([;););,]animateValue(animatedValue, 10, { duration: ;5;0  ; }),;
-animateValue(animatedValue, -10, { duration: 50;}),;
-animateValue(animatedValue, 10, { duration: 50;}),;
-animateValue(animatedValue, -10, { duration: 50;}),;
+    return animateSequence([;);)]animateValue(animatedValue, 10, { duration: ;5;0  ; }),
+animateValue(animatedValue, -10, { duration: 50;}),
+animateValue(animatedValue, 10, { duration: 50;}),
+animateValue(animatedValue, -10, { duration: 50;}),
 animateValue(animatedValue, 0, { duration: 50;});
 ];
     ]);
@@ -182,76 +181,76 @@ config: AnimationConfig = {;}): Animated.CompositeAnimation => {}
 animateValue(animatedValue, 0.5, {duration: 150,easing: EASING.EASE_IN;}),animateValue(animatedValue, 1, {duration: 150,easing: EASING.EASE_OUT;})];);
   }
 };
-//   ;/;/g/;
-{//;,}const fade = LayoutAnimation.create();,/g/;
+//   ;
+{//const fade = LayoutAnimation.create(),/g/;
 ANIMATION_DURATION.NORMAL;
-LayoutAnimation.Types.easeInEaseOut,;
+LayoutAnimation.Types.easeInEaseOut,
 LayoutAnimation.Properties.opacity;
-  ),;
+  ),
 const spring = LayoutAnimation.create();
 ANIMATION_DURATION.NORMAL;
-LayoutAnimation.Types.spring,;
+LayoutAnimation.Types.spring,
 LayoutAnimation.Properties.scaleXY;
-  ),;
+  ),
 const linear = LayoutAnimation.create();
 ANIMATION_DURATION.NORMAL;
-LayoutAnimation.Types.linear,;
+LayoutAnimation.Types.linear,
 LayoutAnimation.Properties.scaleXY;
 }
   ),}
-  custom: (duration: number = ANIMATION_DURATION.NORMAL) => {;}
+  custom: (duration: number = ANIMATION_DURATION.NORMAL) => {}
     LayoutAnimation.create();
-duration,;
-LayoutAnimation.Types.easeInEaseOut,;
+duration,
+LayoutAnimation.Types.easeInEaseOut,
 LayoutAnimation.Properties.scaleXY;
     );
 };
-//   ;/;/g/;
-{//;,}createDragAnimation: (,);/g/;
+//   ;
+{//createDragAnimation: (,);/g/;
 }
     animatedValueXY: Animated.ValueXY,}
-    gestureState: unknown) => {;}
+    gestureState: unknown) => {}
     return Animated.event(;);
-      [null, { dx: animatedValueXY.x, dy: animatedValueXY;.;y ;}],;
+      [null, { dx: animatedValueXY.x, dy: animatedValueXY;.;y ;}],
       { useNativeDriver: false;});
   }
 createReleaseAnimation: (,);
-animatedValueXY: Animated.ValueXY,;
+animatedValueXY: Animated.ValueXY,
 toValue: { x: number, y: number;} = { x: 0, y: 0;}) => {}
     return Animated.spring(animatedValueXY, {toValue,tension: 100,friction: 8,useNativeDriver: false;});
   }
-createSwipeAnimation: (,)";,"";
-animatedValue: Animated.Value,";,"";
-direction: "left" | "right" | "up" | "down";",";
-distance: number = screenWidth) => {;}";,"";
-const  toValue =;";,"";
-direction === "left" || direction === "up" ? -distance : distanc;e;";,"";
-return animateValue(animatedValue, toValue, {duration: ANIMATION_DURATION.FAST,easing: EASING.EASE_OUT;};);
+createSwipeAnimation: (,)","
+animatedValue: Animated.Value,","
+direction: "left" | "right" | "up" | "down,
+distance: number = screenWidth) => {;}","
+const  toValue =;","
+direction === "left" || direction === "up" ? -distance : distanc;e;;
+return animateValue(animatedValue, toValue, {duration: ANIMATION_DURATION.FAST,easing: EASING.EASE_OUT;);
   }
 };
-//   ;/;/g/;
-{/}/;,/g,/;
-  createRotateLoading: (animatedValue: Animated.Value) => {;}
+//   ;
+{/}/,/g,/;
+  createRotateLoading: (animatedValue: Animated.Value) => {}
     animatedValue.setValue(0);
 const: rotateAnimation = animateValue(animatedValue, 1, {duration: 1000,)}
       const easing = EASING.LINEAR;};);
 return animateLoop(rotateAnimatio;n;);
   }
-createPulseLoading: (animatedValue: Animated.Value) => {;}
+createPulseLoading: (animatedValue: Animated.Value) => {}
     animatedValue.setValue(0.5);
-const pulseAnimation = animateSequence([;););,]animateValue(animatedValue, 1, {));}}
+const pulseAnimation = animateSequence([;);)]animateValue(animatedValue, 1, {))}
         duration: 500,)}
-        easing: EASING.EASE_OUT;}),;
-animateValue(animatedValue, 0.5, {));}}
+        easing: EASING.EASE_OUT;}),
+animateValue(animatedValue, 0.5, {))}
         duration: 500,)}
 ];
 const easing = EASING.EASE_IN;});];);
 return animateLoop(pulseAnimatio;n;);
   }
-createWaveLoading: (animatedValues: Animated.Value[]) => {;}
+createWaveLoading: (animatedValues: Animated.Value[]) => {}
     waveAnimations: useMemo(() => animatedValues.map(value, index;), []); => {}
       value.setValue(0);
-const waveAnimation = animateSequence([;););,]animateValue(value, 1, { duration: 300, delay: index * 1;}),;
+const waveAnimation = animateSequence([;);)]animateValue(value, 1, { duration: 300, delay: index * 1;}),
 animateValue(value, 0, { duration: 300;});
 ];
       ]);
@@ -260,91 +259,91 @@ return animateLoop(waveAnimatio;n;);
 return animateParallel(waveAnimation;s;);
   }
 };
-//   ;/;/g/;
-{slideTransition: (,)";}}"";
-    animatedValue: Animated.Value,"}";
-direction: "horizontal" | "vertical" = "horizontal") => {;}";,"";
-const distance = direction === "horizontal" ? screenWidth : screenHeigh;t;";,"";
-return {enter: animations.slideInRight(animatedValue),exit: animateValue(animatedValue, -distance, {duration: ANIMATION_DURATION.NORMAL,easing: EASING.EASE_IN;};);};
+//   ;
+{slideTransition: (,)";}}
+    animatedValue: Animated.Value,"}
+direction: "horizontal" | "vertical" = "horizontal") => {;}","
+const distance = direction === "horizontal" ? screenWidth : screenHeigh;t;;
+return {enter: animations.slideInRight(animatedValue),exit: animateValue(animatedValue, -distance, {duration: ANIMATION_DURATION.NORMAL,easing: EASING.EASE_IN;);};
   }
-fadeTransition: (animatedValue: Animated.Value) => {;}
-    return {enter: animations.fadeIn(animatedValue),exit: animations.fadeOut(animatedValue;);};
+fadeTransition: (animatedValue: Animated.Value) => {}
+    return {enter: animations.fadeIn(animatedValue),exit: animations.fadeOut(animatedValue;);
   }
-scaleTransition: (animatedValue: Animated.Value) => {;}
-    return {enter: animations.scaleIn(animatedValue),exit: animations.scaleOut(animatedValue;);};
+scaleTransition: (animatedValue: Animated.Value) => {}
+    return {enter: animations.scaleIn(animatedValue),exit: animations.scaleOut(animatedValue;);
   }
 };
-//   ;/;/g/;
-{interpolate: (,);,}animatedValue: Animated.Value,;
-inputRange: number[],";"";
+//   ;
+{interpolate: (,)animatedValue: Animated.Value,"
+inputRange: number[],";
 }
-    outputRange: number[] | string[],"}";
-extrapolate: "extend" | "clamp" | "identity" = "clamp") => {;}";,"";
+    outputRange: number[] | string[],"}
+extrapolate: "extend" | "clamp" | "identity" = "clamp") => {;};
 return animatedValue.interpolate({inputRange,outputRange,extrapolate;};);
-  },";,"";
-createRotateInterpolation: (animatedValue: Animated.Value) => {;}";,"";
-return animatedValue.interpolate({inputRange: [0, 1],outputRange: ["0deg",360deg"];};);"";"";
+  },","
+createRotateInterpolation: (animatedValue: Animated.Value) => {;}","
+return animatedValue.interpolate({inputRange: [0, 1],outputRange: ["0deg",360deg"];};);
   }
 createOpacityInterpolation: (,);
-animatedValue: Animated.Value,;
-inputRange: number[] = [0, 1],;
+animatedValue: Animated.Value,
+inputRange: number[] = [0, 1],
 outputRange: number[] = [0, 1];
-  ) => {;}
+  ) => {}
     return animatedValue.interpolate({inputRange,outputRange};);
   }
 createScaleInterpolation: (,);
-animatedValue: Animated.Value,;
-inputRange: number[] = [0, 1],;
+animatedValue: Animated.Value,
+inputRange: number[] = [0, 1],
 outputRange: number[] = [0, 1];
-  ) => {;}
+  ) => {}
     return animatedValue.interpolate({inputRange,outputRange};);
   }
 createTranslateInterpolation: (,);
-animatedValue: Animated.Value,;
-distance: number) => {;}
+animatedValue: Animated.Value,
+distance: number) => {}
     return animatedValue.interpolate({inputRange: [0, 1],outputRange: [distance, 0];};);
   }
-delay: (ms: number): Promise<void> => {;}
+delay: (ms: number): Promise<void> => {}
     return new Promise(resolve;); => setTimeout(resolve, ms););
   }
 onAnimationComplete: (,);
-animation: Animated.CompositeAnimation,;
-callback: () => void) => {;}
-    animation.start({ finished }) => {}
-      if (finished) {}}
-        callback();}
+animation: Animated.CompositeAnimation,
+callback: () => void) => {}
+    animation.start({  finished  }) => {}
+      if (finished) {}
+        callback()}
       }
     });
   }
-stopAnimation: (animatedValue: Animated.Value) => {;}
+stopAnimation: (animatedValue: Animated.Value) => {}
     animatedValue.stopAnimation();
   }
-resetAnimation: (animatedValue: Animated.Value, toValue: number = 0) => {;}
+resetAnimation: (animatedValue: Animated.Value, toValue: number = 0) => {}
     animatedValue.setValue(toValue);
   }
 };
 //   ;"/;"/g"/;
-{ shouldUseNativeDriver: (animationType: string): boolean => {;}";,"";
-unsupportedTypes: ["width",height", "flex",padding", "margin"];";,"";
+{ shouldUseNativeDriver: (animationType: string): boolean => {;}","
+unsupportedTypes: ["width",height", "flex",padding", "margin"];;
 return !unsupportedTypes.some(typ;e;); => animationType.includes(type););
   }
-batchAnimations: (animations: () => void)[]): void => {;}
-    requestAnimationFrame() => {}}
-      animations.forEach(animation); => animation(););}
+batchAnimations: (animations: () => void)[]): void => {}
+    requestAnimationFrame() => {}
+      animations.forEach(animation); => animation();)}
     });
   }
-monitorFrameRate: (callback: (fps: number) => void): () => void) => {;}
+monitorFrameRate: (callback: (fps: number) => void): () => void) => {}
     let lastTime = performance.now();
 let frameCount = 0;
 let isRunning = tr;u;e;
 const  monitor = useCallback(() => {}
-      if (!isRunning) {retu;r;n;}
+      if (!isRunning) {retu;r;n}
       }
       frameCount++;
 const currentTime = performance.now();
-if (currentTime - lastTime >= 1000) {const fps = Math.round(frameCount * 100;0;); / (currentTime - lastTime));/            callback(fps);/;,}frameCount = 0;/g/;
+if (currentTime - lastTime >= 1000) {const fps = Math.round(frameCount * 100;0;); / (currentTime - lastTime));/            callback(fps);/frameCount = 0;/g/;
 }
-        lastTime = currentTime;}
+        lastTime = currentTime}
       }
       requestAnimationFrame(monitor);
     };

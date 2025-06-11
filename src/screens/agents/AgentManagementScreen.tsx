@@ -1,545 +1,516 @@
-import { useNavigation } from "@react-navigation/native";""/;,"/g"/;
-import React, { useCallback, useState } from "react";";
-import {Alert}Dimensions,;
-Modal,;
-RefreshControl,;
-ScrollView,;
-StyleSheet,;
-Switch,;
-Text,;
-TouchableOpacity,";"";
+import { useNavigation } from "@react-navigation/native"
+import React, { useCallback, useState } from "react";
+import {Alert} fromimensions,
+Modal,
+RefreshControl,
+ScrollView,
+StyleSheet,
+Switch,
+Text,"
+TouchableOpacity,";
 }
-    View'}'';'';
-} from "react-native";";
-import Icon from "react-native-vector-icons/MaterialIcons";""/;"/g"/;
-';,'';
-const { width: screenWidth ;} = Dimensions.get('window');';,'';
-interface Agent {id: string}name: string,;
-displayName: string,;
-description: string,';,'';
-avatar: string,';,'';
-status: 'active' | 'inactive' | 'maintenance';','';
-capabilities: string[],;
-lastActive: string,;
-responseTime: number,;
-accuracy: number,;
-}
-}
-  const color = string;}
-}
-
-interface AgentConfig {personality: string}responseStyle: string,;
-knowledgeLevel: string,;
+    View'}
+} from "react-native;
+import Icon from "react-native-vector-icons/MaterialIcons"
+const { width: screenWidth ;} = Dimensions.get('window');
+interface Agent {id: string}name: string,
+displayName: string,
+description: string,
+avatar: string,'
+status: 'active' | 'inactive' | 'maintenance,'';
+capabilities: string[],
+lastActive: string,
+responseTime: number,
+accuracy: number,
 }
 }
-  const specialization = string[];}
+  const color = string}
 }
-
-/* 能 *//;/g/;
- *//;,/g/;
-const  AgentManagementScreen: React.FC = () => {const navigation = useNavigation();,}const [refreshing, setRefreshing] = useState(false);
+interface AgentConfig {personality: string}responseStyle: string,
+knowledgeLevel: string,
+}
+}
+  const specialization = string[]}
+}
+/* 能 */
+ */
+const  AgentManagementScreen: React.FC = () => {const navigation = useNavigation()const [refreshing, setRefreshing] = useState(false);
 const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
-const [configModalVisible, setConfigModalVisible] = useState(false);';,'';
-const [agentConfig, setAgentConfig] = useState<AgentConfig>({';,)personality: 'friendly';','';,}responseStyle: 'detailed';',')';,'';
-knowledgeLevel: 'expert';',')'';'';
+const [configModalVisible, setConfigModalVisible] = useState(false);
+const [agentConfig, setAgentConfig] = useState<AgentConfig>({',)personality: 'friendly,''responseStyle: 'detailed,')'
+knowledgeLevel: 'expert,')'
 }
     const specialization = [];)}
   });
-
-  // 模拟智能体数据/;,/g/;
-const [agents, setAgents] = useState<Agent[]>([;)';]    {';,}id: 'xiaoai';','';'';
-';'';
-';,'';
-avatar: '🤖';','';
-status: 'active';','';
-responseTime: 1.2,';,'';
-accuracy: 94.5,';'';
+  // 模拟智能体数据'
+const [agents, setAgents] = useState<Agent[]>([;)';]    {'id: 'xiaoai,'
+avatar: '🤖,'
+status: 'active,'';
+responseTime: 1.2,
+accuracy: 94.5,
 }
-      const color = '#4CAF50';'}'';'';
-    },';'';
-    {';,}id: 'xiaoke';','';'';
-';'';
-';,'';
-avatar: '🏥';','';
-status: 'active';','';
-responseTime: 2.1,';,'';
-accuracy: 91.8,';'';
+      const color = '#4CAF50}
+    },'
+    {'id: 'xiaoke,'
+avatar: '🏥,'
+status: 'active,'';
+responseTime: 2.1,
+accuracy: 91.8,
 }
-      const color = '#2196F3';'}'';'';
-    },';'';
-    {';,}id: 'laoke';','';'';
-';'';
-';,'';
-avatar: '👨‍⚕️';','';
-status: 'active';','';
-responseTime: 3.5,';,'';
-accuracy: 96.2,';'';
+      const color = '#2196F3}
+    },'
+    {'id: 'laoke,'
+avatar: '👨‍⚕️,'
+status: 'active,'';
+responseTime: 3.5,
+accuracy: 96.2,
 }
-      const color = '#FF9800';'}'';'';
-    },';'';
-    {';,}id: 'soer';','';'';
-';'';
-';,'';
-avatar: '📊';','';
-status: 'maintenance';','';
-responseTime: 1.8,';,'';
-accuracy: 89.3,')'';'';
+      const color = '#FF9800}
+    },'
+    {'id: 'soer,'
+avatar: '📊,'
+status: 'maintenance,'';
+responseTime: 1.8,'
+accuracy: 89.3,')'
 }
-      const color = '#9C27B0';')}'';'';
+      const color = '#9C27B0)}
     },);
 ];
   ]);
-const  onRefresh = useCallback(async () => {setRefreshing(true);}    // 模拟数据刷新/;,/g,/;
+const  onRefresh = useCallback(async () => {setRefreshing(true}    // 模拟数据刷新/,/g,/;
   await: new Promise(resolve => setTimeout(resolve, 1000));
 }
-    setRefreshing(false);}
+    setRefreshing(false)}
   }, []);
-const  toggleAgentStatus = (agentId: string) => {setAgents(prevAgents =>;,)prevAgents.map(agent =>;,)agent.id === agentId;}          ? {';}              ...agent,';'';
+const  toggleAgentStatus = (agentId: string) => {setAgents(prevAgents =>,)prevAgents.map(agent =>,)agent.id === agentId;}          ? {';}              ...agent,
 }
-              status: agent.status === 'active' ? 'inactive' : 'active';')}'';'';
+              status: agent.status === 'active' ? 'inactive' : 'active)}
             });
           : agent);
       );
     );
   };
-const  openAgentConfig = (agent: Agent) => {setSelectedAgent(agent);}}
-    setConfigModalVisible(true);}
+const  openAgentConfig = (agent: Agent) => {setSelectedAgent(agent)}
+    setConfigModalVisible(true)}
   };
-const  saveAgentConfig = () => {if (selectedAgent) {}}
-      setConfigModalVisible(false);}
+const  saveAgentConfig = () => {if (selectedAgent) {}
+      setConfigModalVisible(false)}
     }
   };
-const  getStatusColor = (status: string) => {';,}switch (status) {';,}case 'active': return '#4CAF50';';,'';
-case 'inactive': return '#9E9E9E';';,'';
-case 'maintenance': return '#FF9800';';'';
+const  getStatusColor = (status: string) => {'switch (status) {'case 'active': return '#4CAF50
+case 'inactive': return '#9E9E9E
+case 'maintenance': return '#FF9800';
 }
-      const default = return '#9E9E9E';'}'';'';
+      const default = return '#9E9E9E}
     }
   };
-const  getStatusText = (status: string) => {switch (status) {}}
+const  getStatusText = (status: string) => {switch (status) {}
 }
-    ;}
+    }
   };
 renderAgentCard: (agent: Agent) => (<View key={agent.id;} style={[styles.agentCard, { borderLeftColor: agent.color ;}]}>;)      <View style={styles.agentHeader}>;
         <View style={styles.agentInfo}>;
-          <Text style={styles.agentAvatar}>{agent.avatar}</Text>/;/g/;
+          <Text style={styles.agentAvatar}>{agent.avatar}</Text>
           <View style={styles.agentDetails}>;
-            <Text style={styles.agentName}>{agent.displayName}</Text>/;/g/;
-            <Text style={styles.agentDescription}>{agent.description}</Text>/;/g/;
-          </View>)/;/g/;
-        </View>)/;/g/;
+            <Text style={styles.agentName}>{agent.displayName}</Text>
+            <Text style={styles.agentDescription}>{agent.description}</Text>
+          </View>)
+        </View>)
         <View style={styles.agentStatus}>);
-          <View style={[styles.statusDot, { backgroundColor: getStatusColor(agent.status) ;}]}  />/;/g/;
+          <View style={[styles.statusDot, { backgroundColor: getStatusColor(agent.status) ;}]}  />
           <Text style={[styles.statusText, { color: getStatusColor(agent.status) ;}]}>;
             {getStatusText(agent.status)}
-          </Text>/;/g/;
-        </View>/;/g/;
-      </View>/;/g/;
-
+          </Text>
+        </View>
+      </View>
       <View style={styles.agentMetrics}>;
         <View style={styles.metric}>;
-          <Text style={styles.metricLabel}>响应时间</Text>/;/g/;
-          <Text style={styles.metricValue}>{agent.responseTime}s</Text>/;/g/;
-        </View>/;/g/;
+          <Text style={styles.metricLabel}>响应时间</Text>
+          <Text style={styles.metricValue}>{agent.responseTime}s</Text>
+        </View>
         <View style={styles.metric}>;
-          <Text style={styles.metricLabel}>准确率</Text>/;/g/;
-          <Text style={styles.metricValue}>{agent.accuracy}%</Text>/;/g/;
-        </View>/;/g/;
+          <Text style={styles.metricLabel}>准确率</Text>
+          <Text style={styles.metricValue}>{agent.accuracy}%</Text>
+        </View>
         <View style={styles.metric}>;
-          <Text style={styles.metricLabel}>最后活跃</Text>/;/g/;
-          <Text style={styles.metricValue}>{agent.lastActive}</Text>/;/g/;
-        </View>/;/g/;
-      </View>/;/g/;
-
+          <Text style={styles.metricLabel}>最后活跃</Text>
+          <Text style={styles.metricValue}>{agent.lastActive}</Text>
+        </View>
+      </View>
       <View style={styles.agentCapabilities}>;
-        <Text style={styles.capabilitiesTitle}>核心能力: </Text>/;/g/;
+        <Text style={styles.capabilitiesTitle}>核心能力: </Text>
         <View style={styles.capabilitiesList}>;
           {agent.capabilities.map((capability, index) => (<View key={index} style={styles.capabilityTag}>);
-              <Text style={styles.capabilityText}>{capability}</Text>)/;/g/;
-            </View>)/;/g/;
+              <Text style={styles.capabilityText}>{capability}</Text>)
+            </View>)
           ))}
-        </View>/;/g/;
-      </View>/;/g/;
-
+        </View>
+      </View>
       <View style={styles.agentActions}>;
-        <TouchableOpacity,'  />/;,'/g'/;
-style={styles.actionButton}';,'';
-onPress={() => navigation.navigate('AgentChat' as never, { agentId: agent.id, agentName: agent.name ;} as never)}';'';
-        >';'';
-          <Icon name="chat" size={16} color="#2196F3"  />"/;"/g"/;
-          <Text style={styles.actionButtonText}>对话</Text>/;/g/;
-        </TouchableOpacity>/;/g/;
-
-        <TouchableOpacity,  />/;,/g/;
+        <TouchableOpacity,'  />/,'/g'/;
 style={styles.actionButton}
-          onPress={() => openAgentConfig(agent)}";"";
-        >";"";
+onPress={() => navigation.navigate('AgentChat' as never, { agentId: agent.id, agentName: agent.name ;} as never)}
+        >'
+          <Icon name="chat" size={16} color="#2196F3"  />"/;"/g"/;
+          <Text style={styles.actionButtonText}>对话</Text>
+        </TouchableOpacity>
+        <TouchableOpacity,  />
+style={styles.actionButton}
+          onPress={() => openAgentConfig(agent)}
+        >
           <Icon name="settings" size={16} color="#FF9800"  />"/;"/g"/;
-          <Text style={styles.actionButtonText}>配置</Text>/;/g/;
-        </TouchableOpacity>/;/g/;
-
+          <Text style={styles.actionButtonText}>配置</Text>
+        </TouchableOpacity>
         <View style={styles.switchContainer}>;
           <Text style={styles.switchLabel}>启用</Text>"/;"/g"/;
-          <Switch,"  />/;,"/g"/;
-value={agent.status === 'active'}';,'';
-onValueChange={() => toggleAgentStatus(agent.id)}';,'';
-trackColor={{ false: '#767577', true: '#81b0ff' ;}}';,'';
-thumbColor={agent.status === 'active' ? '#2196F3' : '#f4f3f4'}';'';
-          />/;/g/;
-        </View>/;/g/;
-      </View>/;/g/;
-    </View>/;/g/;
+          <Switch,"  />"
+value={agent.status === 'active'}
+onValueChange={() => toggleAgentStatus(agent.id)}
+trackColor={{ false: '#767577', true: '#81b0ff' }
+thumbColor={agent.status === 'active' ? '#2196F3' : '#f4f3f4'}
+          />
+        </View>
+      </View>
+    </View>
   );
-const: renderConfigModal = () => (<Modal,'  />/;,)visible={configModalVisible}')'';,'/g'/;
-animationType="slide")";,"";
-presentationStyle="pageSheet")";,"";
+const: renderConfigModal = () => (<Modal,'  />/,)visible={configModalVisible}')'','/g'/;
+animationType="slide")","
+presentationStyle="pageSheet");
 onRequestClose={() => setConfigModalVisible(false)}
     >;
       <View style={styles.modalContainer}>;
-        <View style={styles.modalHeader}>";"";
-          <TouchableOpacity onPress={() => setConfigModalVisible(false)}>";"";
+        <View style={styles.modalHeader}>
+          <TouchableOpacity onPress={() => setConfigModalVisible(false)}>
             <Icon name="close" size={24} color="#666"  />"/;"/g"/;
-          </TouchableOpacity>/;/g/;
+          </TouchableOpacity>
           <Text style={styles.modalTitle}>;
-
-          </Text>/;/g/;
+          </Text>
           <TouchableOpacity onPress={saveAgentConfig}>;
-            <Text style={styles.saveButton}>保存</Text>/;/g/;
-          </TouchableOpacity>/;/g/;
-        </View>/;/g/;
-
+            <Text style={styles.saveButton}>保存</Text>
+          </TouchableOpacity>
+        </View>
         <ScrollView style={styles.modalContent}>;
           <View style={styles.configSection}>;
-            <Text style={styles.configLabel}>个性化设置</Text>/;/g/;
+            <Text style={styles.configLabel}>个性化设置</Text>
             <View style={styles.configOptions}>;
-
-                <TouchableOpacity,  />/;,/g/;
+                <TouchableOpacity,  />
 key={option}
-                  style={[;,]styles.configOption,;}}
+                  style={[]styles.configOption,}
                     agentConfig.personality === option && styles.selectedOption,}
 ];
                   ]}
-                  onPress={() => setAgentConfig({ ...agentConfig, personality: option ;})}
+                  onPress={() => setAgentConfig({  ...agentConfig, personality: option ; })}
                 >;
-                  <Text,  />/;,/g/;
-style={[;,]styles.configOptionText,;}}
+                  <Text,  />
+style={[]styles.configOptionText,}
                       agentConfig.personality === option && styles.selectedOptionText,}
 ];
                     ]}
                   >;
                     {option}
-                  </Text>/;/g/;
-                </TouchableOpacity>/;/g/;
+                  </Text>
+                </TouchableOpacity>
               ))}
-            </View>/;/g/;
-          </View>/;/g/;
-
+            </View>
+          </View>
           <View style={styles.configSection}>;
-            <Text style={styles.configLabel}>回复风格</Text>/;/g/;
+            <Text style={styles.configLabel}>回复风格</Text>
             <View style={styles.configOptions}>;
-
-                <TouchableOpacity,  />/;,/g/;
+                <TouchableOpacity,  />
 key={option}
-                  style={[;,]styles.configOption,;}}
+                  style={[]styles.configOption,}
                     agentConfig.responseStyle === option && styles.selectedOption,}
 ];
                   ]}
-                  onPress={() => setAgentConfig({ ...agentConfig, responseStyle: option ;})}
+                  onPress={() => setAgentConfig({  ...agentConfig, responseStyle: option ; })}
                 >;
-                  <Text,  />/;,/g/;
-style={[;,]styles.configOptionText,;}}
+                  <Text,  />
+style={[]styles.configOptionText,}
                       agentConfig.responseStyle === option && styles.selectedOptionText,}
 ];
                     ]}
                   >;
                     {option}
-                  </Text>/;/g/;
-                </TouchableOpacity>/;/g/;
+                  </Text>
+                </TouchableOpacity>
               ))}
-            </View>/;/g/;
-          </View>/;/g/;
-
+            </View>
+          </View>
           <View style={styles.configSection}>;
-            <Text style={styles.configLabel}>知识水平</Text>/;/g/;
+            <Text style={styles.configLabel}>知识水平</Text>
             <View style={styles.configOptions}>;
-
-                <TouchableOpacity,  />/;,/g/;
+                <TouchableOpacity,  />
 key={option}
-                  style={[;,]styles.configOption,;}}
+                  style={[]styles.configOption,}
                     agentConfig.knowledgeLevel === option && styles.selectedOption,}
 ];
                   ]}
-                  onPress={() => setAgentConfig({ ...agentConfig, knowledgeLevel: option ;})}
+                  onPress={() => setAgentConfig({  ...agentConfig, knowledgeLevel: option ; })}
                 >;
-                  <Text,  />/;,/g/;
-style={[;,]styles.configOptionText,;}}
+                  <Text,  />
+style={[]styles.configOptionText,}
                       agentConfig.knowledgeLevel === option && styles.selectedOptionText,}
 ];
                     ]}
                   >;
                     {option}
-                  </Text>/;/g/;
-                </TouchableOpacity>/;/g/;
+                  </Text>
+                </TouchableOpacity>
               ))}
-            </View>/;/g/;
-          </View>/;/g/;
-        </ScrollView>/;/g/;
-      </View>/;/g/;
-    </Modal>/;/g/;
+            </View>
+          </View>
+        </ScrollView>
+      </View>
+    </Modal>
   );
 return (<View style={styles.container}>);
-      <View style={styles.header}>)";"";
-        <TouchableOpacity onPress={() => navigation.goBack()}>";"";
+      <View style={styles.header}>)
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <Icon name="arrow-back" size={24} color="#333"  />"/;"/g"/;
-        </TouchableOpacity>/;/g/;
+        </TouchableOpacity>"
         <Text style={styles.headerTitle}>智能体管理</Text>"/;"/g"/;
-        <TouchableOpacity onPress={onRefresh}>";"";
+        <TouchableOpacity onPress={onRefresh}>
           <Icon name="refresh" size={24} color="#333"  />"/;"/g"/;
-        </TouchableOpacity>/;/g/;
-      </View>/;/g/;
-
-      <ScrollView,  />/;,/g/;
+        </TouchableOpacity>
+      </View>
+      <ScrollView,  />
 style={styles.scrollView}
         refreshControl={}
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh}  />/;/g/;
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh}  />
         }
         showsVerticalScrollIndicator={false}
       >;
         <View style={styles.summary}>;
           <Text style={styles.summaryText}>;
-
-          </Text>/;/g/;
-        </View>/;/g/;
-
+          </Text>
+        </View>
         <View style={styles.agentsList}>;
           {agents.map(renderAgentCard)}
-        </View>/;/g/;
-      </ScrollView>/;/g/;
-
+        </View>
+      </ScrollView>
       {renderConfigModal()}
-    </View>/;/g/;
+    </View>
   );
 };
-const  styles = StyleSheet.create({)container: {,";,}flex: 1,";"";
+const  styles = StyleSheet.create({)container: {,"flex: 1,";
 }
-    const backgroundColor = '#f5f5f5';'}'';'';
-  },';,'';
-header: {,';,}flexDirection: 'row';','';
-justifyContent: 'space-between';','';
-alignItems: 'center';','';
-paddingHorizontal: 20,';,'';
-paddingVertical: 16,';,'';
-backgroundColor: 'white';','';
-borderBottomWidth: 1,';'';
+    const backgroundColor = '#f5f5f5}
+  },'
+header: {,'flexDirection: 'row,'
+justifyContent: 'space-between,'
+alignItems: 'center,'';
+paddingHorizontal: 20,
+paddingVertical: 16,'
+backgroundColor: 'white,'';
+borderBottomWidth: 1,
 }
-    const borderBottomColor = '#e0e0e0';'}'';'';
+    const borderBottomColor = '#e0e0e0}
   }
-headerTitle: {,';,}fontSize: 20,';,'';
-fontWeight: 'bold';','';'';
+headerTitle: {,'fontSize: 20,'
+fontWeight: 'bold,'
 }
-    const color = '#333';'}'';'';
+    const color = '#333}
   }
-scrollView: {,;}}
-    const flex = 1;}
+scrollView: {,}
+    const flex = 1}
   }
-summary: {,';,}padding: 20,';,'';
-backgroundColor: 'white';','';'';
+summary: {,'padding: 20,'
+backgroundColor: 'white,'
 }
-    const marginBottom = 16;}
+    const marginBottom = 16}
   }
-summaryText: {,';,}fontSize: 16,';,'';
-color: '#666';','';'';
+summaryText: {,'fontSize: 16,'
+color: '#666,'
 }
-    const textAlign = 'center';'}'';'';
+    const textAlign = 'center}
   }
-agentsList: {,;}}
-    const paddingHorizontal = 20;}
-  },';,'';
-agentCard: {,';,}backgroundColor: 'white';','';
-borderRadius: 12,;
-padding: 16,;
-marginBottom: 16,';,'';
-borderLeftWidth: 4,';'';
+agentsList: {,}
+    const paddingHorizontal = 20}
+  },'
+agentCard: {,'backgroundColor: 'white,'';
+borderRadius: 12,
+padding: 16,
+marginBottom: 16,
+borderLeftWidth: 4,
 }
-    shadowColor: '#000';','}'';
-shadowOffset: { width: 0, height: 2 ;}
-shadowOpacity: 0.1,;
-shadowRadius: 4,;
+    shadowColor: '#000,'}'';
+shadowOffset: { width: 0, height: 2 }
+shadowOpacity: 0.1,
+shadowRadius: 4,
 const elevation = 3;
-  },';,'';
-agentHeader: {,';,}flexDirection: 'row';','';
-justifyContent: 'space-between';','';
-alignItems: 'flex-start';','';'';
+  },'
+agentHeader: {,'flexDirection: 'row,'
+justifyContent: 'space-between,'
+alignItems: 'flex-start,'
 }
-    const marginBottom = 16;}
-  },';,'';
-agentInfo: {,';,}flexDirection: 'row';','';'';
+    const marginBottom = 16}
+  },'
+agentInfo: {,'flexDirection: 'row,'
 }
-    const flex = 1;}
+    const flex = 1}
   }
-agentAvatar: {fontSize: 32,;
+agentAvatar: {fontSize: 32,
 }
-    const marginRight = 12;}
+    const marginRight = 12}
   }
-agentDetails: {,;}}
-    const flex = 1;}
+agentDetails: {,}
+    const flex = 1}
   }
-agentName: {,';,}fontSize: 18,';,'';
-fontWeight: 'bold';','';
-color: '#333';','';'';
+agentName: {,'fontSize: 18,'
+fontWeight: 'bold,'
+color: '#333,'
 }
-    const marginBottom = 4;}
+    const marginBottom = 4}
   }
-agentDescription: {,';,}fontSize: 14,';,'';
-color: '#666';','';'';
+agentDescription: {,'fontSize: 14,'
+color: '#666,'
 }
-    const lineHeight = 20;}
-  },';,'';
-agentStatus: {,';}}'';
-    const alignItems = 'flex-end';'}'';'';
+    const lineHeight = 20}
+  },'
+agentStatus: {,';}}
+    const alignItems = 'flex-end}
   }
-statusDot: {width: 8,;
-height: 8,;
-borderRadius: 4,;
+statusDot: {width: 8,
+height: 8,
+borderRadius: 4,
 }
-    const marginBottom = 4;}
+    const marginBottom = 4}
   }
-statusText: {,';,}fontSize: 12,';'';
+statusText: {,'fontSize: 12,
 }
-    const fontWeight = '500';'}'';'';
-  },';,'';
-agentMetrics: {,';,}flexDirection: 'row';','';
-justifyContent: 'space-between';','';
-marginBottom: 16,;
-paddingVertical: 12,;
-borderTopWidth: 1,';,'';
-borderBottomWidth: 1,';'';
+    const fontWeight = '500}
+  },'
+agentMetrics: {,'flexDirection: 'row,'
+justifyContent: 'space-between,'';
+marginBottom: 16,
+paddingVertical: 12,
+borderTopWidth: 1,
+borderBottomWidth: 1,
 }
-    const borderColor = '#f0f0f0';'}'';'';
-  },';,'';
-metric: {,';}}'';
-    const alignItems = 'center';'}'';'';
+    const borderColor = '#f0f0f0}
+  },'
+metric: {,';}}
+    const alignItems = 'center}
   }
-metricLabel: {,';,}fontSize: 12,';,'';
-color: '#666';','';'';
+metricLabel: {,'fontSize: 12,'
+color: '#666,'
 }
-    const marginBottom = 4;}
+    const marginBottom = 4}
   }
-metricValue: {,';,}fontSize: 14,';,'';
-fontWeight: 'bold';','';'';
+metricValue: {,'fontSize: 14,'
+fontWeight: 'bold,'
 }
-    const color = '#333';'}'';'';
+    const color = '#333}
   }
-agentCapabilities: {,;}}
-    const marginBottom = 16;}
+agentCapabilities: {,}
+    const marginBottom = 16}
   }
-capabilitiesTitle: {,';,}fontSize: 14,';,'';
-fontWeight: '600';','';
-color: '#333';','';'';
+capabilitiesTitle: {,'fontSize: 14,'
+fontWeight: '600,'
+color: '#333,'
 }
-    const marginBottom = 8;}
-  },';,'';
-capabilitiesList: {,';,}flexDirection: 'row';','';'';
+    const marginBottom = 8}
+  },'
+capabilitiesList: {,'flexDirection: 'row,'
 }
-    const flexWrap = 'wrap';'}'';'';
-  },';,'';
-capabilityTag: {,';,}backgroundColor: '#e3f2fd';','';
-borderRadius: 12,;
-paddingHorizontal: 8,;
-paddingVertical: 4,;
-marginRight: 8,;
+    const flexWrap = 'wrap}
+  },'
+capabilityTag: {,'backgroundColor: '#e3f2fd,'';
+borderRadius: 12,
+paddingHorizontal: 8,
+paddingVertical: 4,
+marginRight: 8,
 }
-    const marginBottom = 4;}
+    const marginBottom = 4}
   }
-capabilityText: {,';,}fontSize: 12,';'';
+capabilityText: {,'fontSize: 12,
 }
-    const color = '#1976d2';'}'';'';
-  },';,'';
-agentActions: {,';,}flexDirection: 'row';','';
-justifyContent: 'space-between';','';'';
+    const color = '#1976d2}
+  },'
+agentActions: {,'flexDirection: 'row,'
+justifyContent: 'space-between,'
 }
-    const alignItems = 'center';'}'';'';
-  },';,'';
-actionButton: {,';,}flexDirection: 'row';','';
-alignItems: 'center';','';
-paddingHorizontal: 12,;
-paddingVertical: 8,';,'';
-borderRadius: 8,';'';
+    const alignItems = 'center}
+  },'
+actionButton: {,'flexDirection: 'row,'
+alignItems: 'center,'';
+paddingHorizontal: 12,
+paddingVertical: 8,
+borderRadius: 8,
 }
-    const backgroundColor = '#f5f5f5';'}'';'';
+    const backgroundColor = '#f5f5f5}
   }
-actionButtonText: {,';,}fontSize: 14,';,'';
-color: '#333';','';'';
+actionButtonText: {,'fontSize: 14,'
+color: '#333,'
 }
-    const marginLeft = 4;}
-  },';,'';
-switchContainer: {,';,}flexDirection: 'row';','';'';
+    const marginLeft = 4}
+  },'
+switchContainer: {,'flexDirection: 'row,'
 }
-    const alignItems = 'center';'}'';'';
+    const alignItems = 'center}
   }
-switchLabel: {,';,}fontSize: 14,';,'';
-color: '#333';','';'';
+switchLabel: {,'fontSize: 14,'
+color: '#333,'
 }
-    const marginRight = 8;}
+    const marginRight = 8}
   }
-modalContainer: {,';,}flex: 1,';'';
+modalContainer: {,'flex: 1,
 }
-    const backgroundColor = 'white';'}'';'';
-  },';,'';
-modalHeader: {,';,}flexDirection: 'row';','';
-justifyContent: 'space-between';','';
-alignItems: 'center';','';
-paddingHorizontal: 20,;
-paddingVertical: 16,';,'';
-borderBottomWidth: 1,';'';
+    const backgroundColor = 'white}
+  },'
+modalHeader: {,'flexDirection: 'row,'
+justifyContent: 'space-between,'
+alignItems: 'center,'';
+paddingHorizontal: 20,
+paddingVertical: 16,
+borderBottomWidth: 1,
 }
-    const borderBottomColor = '#e0e0e0';'}'';'';
+    const borderBottomColor = '#e0e0e0}
   }
-modalTitle: {,';,}fontSize: 18,';,'';
-fontWeight: 'bold';','';'';
+modalTitle: {,'fontSize: 18,'
+fontWeight: 'bold,'
 }
-    const color = '#333';'}'';'';
+    const color = '#333}
   }
-saveButton: {,';,}fontSize: 16,';,'';
-color: '#2196F3';','';'';
+saveButton: {,'fontSize: 16,'
+color: '#2196F3,'
 }
-    const fontWeight = '600';'}'';'';
+    const fontWeight = '600}
   }
-modalContent: {flex: 1,;
+modalContent: {flex: 1,
 }
-    const padding = 20;}
+    const padding = 20}
   }
-configSection: {,;}}
-    const marginBottom = 24;}
+configSection: {,}
+    const marginBottom = 24}
   }
-configLabel: {,';,}fontSize: 16,';,'';
-fontWeight: '600';','';
-color: '#333';','';'';
+configLabel: {,'fontSize: 16,'
+fontWeight: '600,'
+color: '#333,'
 }
-    const marginBottom = 12;}
-  },';,'';
-configOptions: {,';,}flexDirection: 'row';','';'';
+    const marginBottom = 12}
+  },'
+configOptions: {,'flexDirection: 'row,'
 }
-    const flexWrap = 'wrap';'}'';'';
+    const flexWrap = 'wrap}
   }
-configOption: {paddingHorizontal: 16,;
-paddingVertical: 8,';,'';
-borderRadius: 20,';,'';
-backgroundColor: '#f5f5f5';','';
-marginRight: 8,;
+configOption: {paddingHorizontal: 16,
+paddingVertical: 8,
+borderRadius: 20,'
+backgroundColor: '#f5f5f5,'';
+marginRight: 8,
 }
-    const marginBottom = 8;}
-  },';,'';
-selectedOption: {,';}}'';
-    const backgroundColor = '#2196F3';'}'';'';
+    const marginBottom = 8}
+  },'
+selectedOption: {,';}}
+    const backgroundColor = '#2196F3}
   }
-configOptionText: {,';,}fontSize: 14,';'';
+configOptionText: {,'fontSize: 14,
 }
-    const color = '#333';'}'';'';
-  },';,'';
-selectedOptionText: {,')'';}}'';
-    const color = 'white';')}'';'';
+    const color = '#333}
+  },'
+selectedOptionText: {,')'';}}
+    const color = 'white)}
   },);
 });
-';,'';
-export default AgentManagementScreen; ''';
+export default AgentManagementScreen; ''

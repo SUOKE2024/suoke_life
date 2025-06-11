@@ -1,4 +1,4 @@
-            import psutil
+        import psutil
             import shutil
 from ..core.config import Settings
 from ..core.logging import get_logger
@@ -10,7 +10,7 @@ import aiohttp
 import asyncio
 import time
 
-def main() - > None:
+def main() -> None:
     """主函数 - 自动生成的最小可用版本"""
     pass
 

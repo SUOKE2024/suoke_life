@@ -2,20 +2,20 @@
 security_audit - 索克生活项目模块
 """
 
-from collections import defaultdict, deque
-from dataclasses import dataclass, asdict
-from datetime import datetime, timedelta
-from enum import Enum
-from fastapi import Request, Response
-from starlette.middleware.base import BaseHTTPMiddleware
-from typing import Dict, List, Optional, Any, Set
-import asyncio
 import hashlib
 import json
 import logging
 import re
-import redis.asyncio as redis
 import time
+from collections import defaultdict, deque
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Any, Dict, List, Optional
+
+import redis.asyncio as redis
+from fastapi import Request, Response
+from starlette.middleware.base import BaseHTTPMiddleware
 
 """
 用户服务安全审计日志中间件
@@ -80,7 +80,7 @@ class SecurityEvent:
 class ThreatDetector:
     """威胁检测器"""
 
-    def __init__(self) - > None:
+    def __init__(self) -> None:
         """TODO: 添加文档字符串"""
         # 恶意模式
         self.malicious_patterns = {
@@ -145,7 +145,7 @@ class ThreatDetector:
             " / api / v1 / export"
         }
 
-    def detect_threats(self, request: Request, request_body: str = "") - > List[str]:
+    def detect_threats(self, request: Request, request_body: str = "") -> List[str]:
         """检测威胁指标"""
         threats = []
 
@@ -168,7 +168,7 @@ class ThreatDetector:
 
         return list(set(threats))  # 去重
 
-    def _check_malicious_patterns(self, text: str) - > List[str]:
+    def _check_malicious_patterns(self, text: str) -> List[str]:
         """检查恶意模式"""
         threats = []
         text_lower = text.lower()
@@ -181,7 +181,7 @@ class ThreatDetector:
 
         return threats
 
-    def _check_headers(self, headers) - > List[str]:
+    def _check_headers(self, headers) -> List[str]:
         """检查可疑请求头"""
         threats = []
 
@@ -196,7 +196,7 @@ class ThreatDetector:
 
         return threats
 
-    def _check_user_agent(self, user_agent: str) - > List[str]:
+    def _check_user_agent(self, user_agent: str) -> List[str]:
         """检查用户代理"""
         threats = []
         ua_lower = user_agent.lower()
@@ -213,7 +213,7 @@ class ThreatDetector:
         endpoint: str,
         method: str,
         status_code: int
-    ) - > int:
+    ) -> int:
         """计算风险评分 (0 - 100)"""
         score = 0
 
@@ -231,19 +231,19 @@ class ThreatDetector:
         for threat in threats:
             for pattern, points in threat_scores.items():
                 if pattern in threat:
-                    score + = points
+                    score += points
 
         # 敏感端点加分
         if endpoint in self.sensitive_endpoints:
-            score + = 10
+            score += 10
 
         # 错误状态码加分
-        if status_code > = 400:
-            score + = 5
+        if status_code >= 400:
+            score += 5
 
         # 危险方法加分
         if method in ["DELETE", "PUT", "PATCH"]:
-            score + = 5
+            score += 5
 
         return min(score, 100)
 
@@ -282,7 +282,7 @@ class SecurityAuditor:
         session_id: Optional[str] = None,
         details: Optional[Dict[str, Any]] = None,
         request_body: str = ""
-    ) - > SecurityEvent:
+    ) -> SecurityEvent:
         """记录安全事件"""
 
         # 检测威胁
@@ -329,23 +329,23 @@ class SecurityAuditor:
 
         return event
 
-    def _determine_security_level(self, risk_score: int, threats: List[str]) - > SecurityLevel:
+    def _determine_security_level(self, risk_score: int, threats: List[str]) -> SecurityLevel:
         """确定安全级别"""
-        if risk_score > = 80 or any("injection" in threat for threat in threats):
+        if risk_score >= 80 or any("injection" in threat for threat in threats):
             return SecurityLevel.CRITICAL
-        elif risk_score > = 60 or any("suspicious" in threat for threat in threats):
+        elif risk_score >= 60 or any("suspicious" in threat for threat in threats):
             return SecurityLevel.HIGH
-        elif risk_score > = 30:
+        elif risk_score >= 30:
             return SecurityLevel.MEDIUM
         else:
             return SecurityLevel.LOW
 
-    def _generate_event_id(self) - > str:
+    def _generate_event_id(self) -> str:
         """生成事件ID"""
         timestamp = str(time.time())
         return hashlib.md5(timestamp.encode()).hexdigest()[:16]
 
-    def _get_client_ip(self, request: Request) - > str:
+    def _get_client_ip(self, request: Request) -> str:
         """获取客户端IP"""
         forwarded_for = request.headers.get("X - Forwarded - For")
         if forwarded_for:
@@ -435,12 +435,12 @@ class SecurityAuditor:
         # 获取时间窗口内的失败登录次数
         failed_attempts = 0
         for activity in self.ip_activity[ip_address]:
-            if (current_time - activity["timestamp"]) < = time_window:
+            if (current_time - activity["timestamp"]) <= time_window:
                 if activity["event_type"] == SecurityEventType.LOGIN_FAILURE:
-                    failed_attempts + = 1
+                    failed_attempts += 1
 
         # 如果超过阈值，记录暴力破解事件
-        if failed_attempts > = threshold["failed_attempts"]:
+        if failed_attempts >= threshold["failed_attempts"]:
             await self._create_attack_event(
                 SecurityEventType.BRUTE_FORCE_ATTACK,
                 ip_address,
@@ -450,14 +450,14 @@ class SecurityAuditor:
     async def _detect_anomalous_activity(self, event: SecurityEvent):
         """检测异常活动"""
         # 检测高风险评分的连续事件
-        if event.risk_score > = 70:
+        if event.risk_score >= 70:
             recent_high_risk = 0
             for activity in self.ip_activity[event.ip_address]:
-                if (event.timestamp - activity["timestamp"]).seconds < = 300:  # 5分钟内
-                    if activity["risk_score"] > = 70:
-                        recent_high_risk + = 1
+                if (event.timestamp - activity["timestamp"]).seconds <= 300:  # 5分钟内
+                    if activity["risk_score"] >= 70:
+                        recent_high_risk += 1
 
-            if recent_high_risk > = 3:
+            if recent_high_risk >= 3:
                 await self._create_attack_event(
                     SecurityEventType.SUSPICIOUS_ACTIVITY,
                     event.ip_address,
@@ -589,7 +589,7 @@ class SecurityAuditMiddleware(BaseHTTPMiddleware):
 
         return response
 
-    def _determine_event_type(self, request: Request, response: Response) - > SecurityEventType:
+    def _determine_event_type(self, request: Request, response: Response) -> SecurityEventType:
         """确定事件类型"""
         path = request.url.path
         method = request.method
@@ -617,7 +617,7 @@ class SecurityAuditMiddleware(BaseHTTPMiddleware):
         # 默认为可疑活动
         return SecurityEventType.SUSPICIOUS_ACTIVITY
 
-    def _extract_user_id(self, request: Request) - > Optional[str]:
+    def _extract_user_id(self, request: Request) -> Optional[str]:
         """提取用户ID"""
         # 从JWT token中提取
         auth_header = request.headers.get("Authorization")
@@ -628,7 +628,7 @@ class SecurityAuditMiddleware(BaseHTTPMiddleware):
 
         return None
 
-    def _extract_session_id(self, request: Request) - > Optional[str]:
+    def _extract_session_id(self, request: Request) -> Optional[str]:
         """提取会话ID"""
         # 从cookie或header中提取
         return request.headers.get("X - Session - ID")

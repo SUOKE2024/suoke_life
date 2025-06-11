@@ -15,10 +15,16 @@ from prometheus_client import start_http_server
 # 导入事件总线组件
 from ..event_bus.core.event_bus import SuokeEventBus, initialize_event_bus
 from ..event_bus.core.event_store import EventStore, initialize_event_store
-from ..event_bus.handlers.agent_handlers import AgentEventHandlers, AgentCollaborationOrchestrator
+from ..event_bus.handlers.agent_handlers import (
+    AgentCollaborationOrchestrator,
+    AgentEventHandlers,
+)
 from ..event_bus.handlers.health_handlers import HealthEventHandlers
 from ..event_bus.utils.event_router import (
-    SmartDataAccessRouter, CacheService, DatabaseService, DataConsistencyManager
+    CacheService,
+    DatabaseService,
+    DataConsistencyManager,
+    SmartDataAccessRouter,
 )
 
 # 配置结构化日志

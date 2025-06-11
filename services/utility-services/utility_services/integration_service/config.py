@@ -1,13 +1,13 @@
-from typing import Dict, List, Any, Optional, Union
 
 """
 config - 索克生活项目模块
 """
 
 from pathlib import Path
+
+import yaml
 from pydantic import Field
 from pydantic_settings import BaseSettings
-import yaml
 
 """
 配置管理模块

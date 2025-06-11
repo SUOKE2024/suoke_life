@@ -2,17 +2,16 @@
 认证配置和工具函数
 """
 
-import logging
-from datetime import datetime, timedelta
-from typing import Optional, Dict, Any, Union
-import secrets
 import hashlib
 import hmac
-import base64
+import logging
+import secrets
+from datetime import datetime, timedelta
+from typing import Any, Dict, Optional
 
+import pyotp
 from jose import JWTError, jwt
 from passlib.context import CryptContext
-import pyotp
 
 from .settings import get_settings
 
@@ -114,8 +113,8 @@ class PasswordManager:
     @staticmethod
     def generate_random_password(length: int = 12) -> str:
         """生成随机密码"""
-        import string
         import random
+        import string
         
         # 确保包含所有类型的字符
         chars = []

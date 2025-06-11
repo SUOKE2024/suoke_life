@@ -1,111 +1,106 @@
-import { Ionicons } from "@expo/vector-icons";""/;,"/g"/;
-import { LinearGradient } from "expo-linear-gradient";";
-import React, { useEffect, useState } from "react";";
-import {Alert}Dimensions,;
-ScrollView,;
-StyleSheet,;
-Text,;
-TouchableOpacity,";"";
+import { Ionicons } from "@expo/vector-icons"
+import {  LinearGradient  } from "expo-linear-gradient"
+import React, { useEffect, useState } from "react";
+import {Alert} fromimensions,
+ScrollView,
+StyleSheet,
+Text,"
+TouchableOpacity,";
 }
-    View'}'';'';
-} from "react-native";";
-import { SubscriptionService } from "../../services/business/SubscriptionService";""/;,"/g"/;
-import { PersonalizedPricing, SubscriptionTier } from "../../types/business";""/;"/g"/;
-';,'';
-const { width } = Dimensions.get('window');';,'';
-interface SubscriptionPlansScreenProps {userId: string}userProfile: any,;
+    View'}
+} from "react-native;
+import { SubscriptionService } from "../../services/business/SubscriptionService"
+import { PersonalizedPricing, SubscriptionTier } from "../../types/business"
+const { width } = Dimensions.get('window');
+interface SubscriptionPlansScreenProps {userId: string}userProfile: any,
 }
 }
-  onSubscribe: (tierId: string, pricing: PersonalizedPricing) => void;}
+  onSubscribe: (tierId: string, pricing: PersonalizedPricing) => void}
 }
-
-export const SubscriptionPlansScreen: React.FC<Suspense fallback={<LoadingSpinner  />}><SubscriptionPlansScreenProps></Suspense> = ({/;,)userId,);,}userProfile,);/g/;
+export const SubscriptionPlansScreen: React.FC<Suspense fallback={<LoadingSpinner  />}><SubscriptionPlansScreenProps></Suspense> = ({/,)userId,)userProfile,);/g/;
 }
   onSubscribe)};
-;}) => {const [subscriptionService] = useState(new SubscriptionService());}}
-  const [tiers, setTiers] = useState<SubscriptionTier[]>([]);}';,'';
-const [personalizedPricing, setPersonalizedPricing] = useState<{[key: string]: PersonalizedPricing;}>({});';,'';
-const [selectedPeriod, setSelectedPeriod] = useState<'monthly' | 'yearly'>('monthly');';,'';
+;}) => {const [subscriptionService] = useState(new SubscriptionService())}
+  const [tiers, setTiers] = useState<SubscriptionTier[]>([])}
+const [personalizedPricing, setPersonalizedPricing] = useState<{[key: string]: PersonalizedPricing;}>({});
+const [selectedPeriod, setSelectedPeriod] = useState<'monthly' | 'yearly'>('monthly');
 const [loading, setLoading] = useState(true);
-useEffect(() => {loadSubscriptionData();,}return () => {}}
-        // 清理函数}/;/g/;
+useEffect(() => {loadSubscriptionData()return () => {}
+        // 清理函数}
       };
     }, []);
 const  loadSubscriptionData = async () => {try {}      const allTiers = subscriptionService.getSubscriptionTiers();
 setTiers(allTiers);
-
 }
-      // 计算个性化定价}/;,/g/;
+      // 计算个性化定价}
 const pricingData: {[key: string]: PersonalizedPricing;} = {};
-for (const tier of allTiers) {try {;,}const: pricing = subscriptionService.calculatePersonalizedPricing(userId,);
+for (const tier of allTiers) {try {const: pricing = subscriptionService.calculatePersonalizedPricing(userId,);
 tier.id,);
 userProfile);
           );
 }
-          pricingData[tier.id] = pricing;}
+          pricingData[tier.id] = pricing}
         } catch (error) {}
           console.warn(`Failed to calculate pricing for ${tier.id}:`, error);````;```;
         }
       }
-      setPersonalizedPricing(pricingData);';'';
-    } catch (error) {';,}console.error('Failed to load subscription data:', error);';'';
+      setPersonalizedPricing(pricingData);
+    } catch (error) {'console.error('Failed to load subscription data:', error);
 }
 }
-    } finally {}}
-      setLoading(false);}
+    } finally {}
+      setLoading(false)}
     }
   };
-const  handleSubscribe = useCallback((tier: SubscriptionTier) => {const pricing = personalizedPricing[tier.id];,}if (pricing) {}}
-      onSubscribe(tier.id, pricing);}
-    } else {}}
+const  handleSubscribe = useCallback((tier: SubscriptionTier) => {const pricing = personalizedPricing[tier.id]if (pricing) {}
+      onSubscribe(tier.id, pricing)}
+    } else {}
 }
     }
   };
-const  getDisplayPrice = (tier: SubscriptionTier): number => {const pricing = personalizedPricing[tier.id];';,}if (pricing) {';,}const return = selectedPeriod === 'yearly' ';'';
-        ? pricing.finalPrice * 12 * (1 - (tier.price.discount || 0) / 100)/;/g/;
+const  getDisplayPrice = (tier: SubscriptionTier): number => {const pricing = personalizedPricing[tier.id];'if (pricing) {'const return = selectedPeriod === 'yearly'
+        ? pricing.finalPrice * 12 * (1 - (tier.price.discount || 0) / 100)
 }
-        : pricing.finalPrice;}';'';
-    }';,'';
-return selectedPeriod === 'yearly' ? tier.price.yearly : tier.price.monthly;';'';
+        : pricing.finalPrice}
+    }
+return selectedPeriod === 'yearly' ? tier.price.yearly : tier.price.monthly;
   };
-';,'';
-const  getOriginalPrice = (tier: SubscriptionTier): number => {';}}'';
-    return selectedPeriod === 'yearly' ? tier.price.yearly : tier.price.monthly;'}'';'';
+const  getOriginalPrice = (tier: SubscriptionTier): number => {';}}
+    return selectedPeriod === 'yearly' ? tier.price.yearly : tier.price.monthly;'}
   };
-const  getSavings = (tier: SubscriptionTier): number => {const pricing = personalizedPricing[tier.id];';,}if (pricing) {';,}const return = selectedPeriod === 'yearly' ';'';
+const  getSavings = (tier: SubscriptionTier): number => {const pricing = personalizedPricing[tier.id];'if (pricing) {'const return = selectedPeriod === 'yearly'
         ? pricing.basePrice * 12 - getDisplayPrice(tier);
 }
-        : pricing.basePrice - pricing.finalPrice;}
+        : pricing.basePrice - pricing.finalPrice}
     }
     return 0;
-  };';'';
-';,'';
-const  renderFeatureList = useCallback((features: SubscriptionTier['features']) => {'}'';
+  };
+const  renderFeatureList = useCallback((features: SubscriptionTier['features']) => {'}
 return features.slice(0, 4).map((feature, index) => (<View key={feature.id;} style={styles.featureItem}>';)        <Ionicons name="checkmark-circle" size={16} color="#4CAF50"  />"/;"/g"/;
-        <Text style={styles.featureText}>{feature.name}</Text>)/;/g/;
+        <Text style={styles.featureText}>{feature.name}</Text>)
         {feature.usage && ()}
           <Text style={styles.featureLimit}>);
-            ({feature.usage.limit}/{feature.usage.period})/;/g/;
-          </Text>/;/g/;
+            ({feature.usage.limit}/{feature.usage.period})
+          </Text>
         )}
-      </View>/;/g/;
+      </View>
     ));
   };
-const  renderPricingAdjustments = useCallback((tierId: string) => {const pricing = personalizedPricing[tierId];,}if (!pricing || pricing.adjustments.length === 0) return null;
+const  renderPricingAdjustments = useCallback((tierId: string) => {const pricing = personalizedPricing[tierId]if (!pricing || pricing.adjustments.length === 0) return null;
 }
 }
     return (<View style={styles.adjustmentsContainer}>);
-        <Text style={styles.adjustmentsTitle}>个性化优惠：</Text>)/;/g/;
+        <Text style={styles.adjustmentsTitle}>个性化优惠：</Text>)
         {pricing.adjustments.slice(0, 2).map((adjustment, index) => (<View key={index} style={styles.adjustmentItem}>;)            <Text style={styles.adjustmentText}>;
 );
-            </Text>)/;/g/;
-          </View>)/;/g/;
+            </Text>)
+          </View>)
         ))}
-      </View>/;/g/;
+      </View>
     );
   };
-";,"";
-const: renderSubscriptionCard = useCallback((tier: SubscriptionTier, index: number) => {";,}const isPopular = tier.level === 'premium';';,'';
+","
+const: renderSubscriptionCard = useCallback((tier: SubscriptionTier, index: number) => {"const isPopular = tier.level === 'premium';
 const displayPrice = getDisplayPrice(tier);
 const originalPrice = getOriginalPrice(tier);
 const savings = getSavings(tier);
@@ -113,335 +108,320 @@ const hasDiscount = savings > 0;
 }
 }
     return (<View key={tier.id} style={[styles.card, isPopular && styles.popularCard]}>;)        {isPopular && (})          <View style={styles.popularBadge}>);
-            <Text style={styles.popularText}>推荐</Text>)/;/g/;
-          </View>)/;/g/;
+            <Text style={styles.popularText}>推荐</Text>)
+          </View>)
         )}
-        ';'';
-        <LinearGradient,'  />/;,'/g'/;
-colors={isPopular ? ['#667eea', '#764ba2'] : ['#f7f7f7', '#ffffff']}';,'';
+        <LinearGradient,'  />/,'/g'/;
+colors={isPopular ? ['#667eea', '#764ba2'] : ['#f7f7f7', '#ffffff']}
 style={styles.cardGradient}
         >;
           <View style={styles.cardHeader}>;
             <Text style={[styles.tierName, isPopular && styles.popularTierName]}>;
               {tier.name}
-            </Text>/;/g/;
+            </Text>
             <View style={styles.priceContainer}>;
               {hasDiscount && (<Text style={[styles.originalPrice, isPopular && styles.popularOriginalPrice]}>);
                   ¥{originalPrice});
-                </Text>)/;/g/;
+                </Text>)
               )}
               <Text style={[styles.price, isPopular && styles.popularPrice]}>;
                 ¥{Math.round(displayPrice)}
               </Text>'/;'/g'/;
-              <Text style={[styles.period, isPopular && styles.popularPeriod]}>';'';
+              <Text style={[styles.period, isPopular && styles.popularPeriod]}>'
                 /{selectedPeriod === 'yearly' ? '年' : '月'}'/;'/g'/;
-              </Text>/;/g/;
-            </View>/;/g/;
+              </Text>
+            </View>
             {hasDiscount && (<Text style={[styles.savings, isPopular && styles.popularSavings]}>);
 );
-              </Text>)/;/g/;
+              </Text>)
             )}
-          </View>/;/g/;
-
+          </View>
           <View style={styles.featuresContainer}>;
             {renderFeatureList(tier.features)}
             {tier.features.length > 4 && (<Text style={[styles.moreFeatures, isPopular && styles.popularMoreFeatures]}>);
 );
-              </Text>)/;/g/;
+              </Text>)
             )}
-          </View>/;/g/;
-
+          </View>
           {renderPricingAdjustments(tier.id)}
-
-          <TouchableOpacity,  />/;,/g/;
+          <TouchableOpacity,  />
 style={[styles.subscribeButton, isPopular && styles.popularSubscribeButton]}
             onPress={() => handleSubscribe(tier)}
           >;
             <Text style={[styles.subscribeButtonText, isPopular && styles.popularSubscribeButtonText]}>;
-
-            </Text>/;/g/;
-          </TouchableOpacity>/;/g/;
-        </LinearGradient>/;/g/;
-      </View>/;/g/;
+            </Text>
+          </TouchableOpacity>
+        </LinearGradient>
+      </View>
     );
   };
 if (loading) {}
     return (<View style={styles.loadingContainer}>);
-        <Text>加载中...</Text>)/;/g/;
-      </View>)/;/g/;
+        <Text>加载中...</Text>)
+      </View>)
     );
   }
-
   return (<ScrollView style={styles.container} showsVerticalScrollIndicator={false}>;)      <View style={styles.header}>;
-        <Text style={styles.title}>选择适合您的订阅计划</Text>/;/g/;
-        <Text style={styles.subtitle}>解锁更多AI健康功能，享受个性化服务</Text>/;/g/;
-      </View>/;/g/;
-
-      <View style={styles.periodSelector}>)';'';
-        <TouchableOpacity,)'  />/;,'/g'/;
-style={[styles.periodButton, selectedPeriod === 'monthly' && styles.activePeriodButton]}')'';
-onPress={() => setSelectedPeriod('monthly')}';'';
-        >';'';
-          <Text style={[styles.periodButtonText, selectedPeriod === 'monthly' && styles.activePeriodButtonText]}>';'';
-
-          </Text>/;/g/;
+        <Text style={styles.title}>选择适合您的订阅计划</Text>
+        <Text style={styles.subtitle}>解锁更多AI健康功能，享受个性化服务</Text>
+      </View>
+      <View style={styles.periodSelector}>)'
+        <TouchableOpacity,)'  />/,'/g'/;
+style={[styles.periodButton, selectedPeriod === 'monthly' && styles.activePeriodButton]}')'
+onPress={() => setSelectedPeriod('monthly')}
+        >'
+          <Text style={[styles.periodButtonText, selectedPeriod === 'monthly' && styles.activePeriodButtonText]}>
+          </Text>'
         </TouchableOpacity>'/;'/g'/;
-        <TouchableOpacity,'  />/;,'/g'/;
-style={[styles.periodButton, selectedPeriod === 'yearly' && styles.activePeriodButton]}';,'';
-onPress={() => setSelectedPeriod('yearly')}';'';
-        >';'';
-          <Text style={[styles.periodButtonText, selectedPeriod === 'yearly' && styles.activePeriodButtonText]}>';'';
-
-          </Text>/;/g/;
+        <TouchableOpacity,'  />/,'/g'/;
+style={[styles.periodButton, selectedPeriod === 'yearly' && styles.activePeriodButton]}
+onPress={() => setSelectedPeriod('yearly')}
+        >'
+          <Text style={[styles.periodButtonText, selectedPeriod === 'yearly' && styles.activePeriodButtonText]}>
+          </Text>
           <View style={styles.discountBadge}>;
-            <Text style={styles.discountText}>省20%</Text>/;/g/;
-          </View>/;/g/;
-        </TouchableOpacity>/;/g/;
-      </View>/;/g/;
-
+            <Text style={styles.discountText}>省20%</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
       <View style={styles.cardsContainer}>;
         {tiers.map((tier, index) => renderSubscriptionCard(tier, index))}
-      </View>/;/g/;
-
+      </View>
       <View style={styles.footer}>;
         <Text style={styles.footerText}>;
-
-        </Text>/;/g/;
+        </Text>
         <Text style={styles.footerText}>;
-
-        </Text>/;/g/;
+        </Text>
         <Text style={styles.footerText}>;
-
-        </Text>/;/g/;
-      </View>/;/g/;
-    </ScrollView>/;/g/;
+        </Text>
+      </View>
+    </ScrollView>
   );
 };
-const  styles = StyleSheet.create({)container: {,';,}flex: 1,';'';
+const  styles = StyleSheet.create({)container: {,'flex: 1,
 }
-    const backgroundColor = '#f8f9fa';'}'';'';
+    const backgroundColor = '#f8f9fa}
   }
-loadingContainer: {,';,}flex: 1,';,'';
-justifyContent: 'center';','';'';
+loadingContainer: {,'flex: 1,'
+justifyContent: 'center,'
 }
-    const alignItems = 'center';'}'';'';
+    const alignItems = 'center}
   }
-header: {,';,}padding: 20,';'';
+header: {,'padding: 20,
 }
-    const alignItems = 'center';'}'';'';
+    const alignItems = 'center}
   }
-title: {,';,}fontSize: 24,';,'';
-fontWeight: 'bold';','';
-color: '#333';','';
-marginBottom: 8,';'';
+title: {,'fontSize: 24,'
+fontWeight: 'bold,'
+color: '#333,'';
+marginBottom: 8,
 }
-    const textAlign = 'center';'}'';'';
+    const textAlign = 'center}
   }
-subtitle: {,';,}fontSize: 16,';,'';
-color: '#666';','';
-textAlign: 'center';','';'';
+subtitle: {,'fontSize: 16,'
+color: '#666,'
+textAlign: 'center,'
 }
-    const lineHeight = 22;}
-  },';,'';
-periodSelector: {,';,}flexDirection: 'row';','';
-marginHorizontal: 20,';,'';
-marginBottom: 20,';,'';
-backgroundColor: '#e9ecef';','';
-borderRadius: 25,;
+    const lineHeight = 22}
+  },'
+periodSelector: {,'flexDirection: 'row,'';
+marginHorizontal: 20,
+marginBottom: 20,'
+backgroundColor: '#e9ecef,'';
+borderRadius: 25,
 }
-    const padding = 4;}
+    const padding = 4}
   }
-periodButton: {flex: 1,;
-paddingVertical: 12,;
-paddingHorizontal: 16,';,'';
-borderRadius: 20,';,'';
-alignItems: 'center';','';'';
+periodButton: {flex: 1,
+paddingVertical: 12,
+paddingHorizontal: 16,
+borderRadius: 20,'
+alignItems: 'center,'
 }
-    const position = 'relative';'}'';'';
-  },';,'';
-activePeriodButton: {,';}}'';
-    const backgroundColor = '#007AFF';'}'';'';
+    const position = 'relative}
+  },'
+activePeriodButton: {,';}}
+    const backgroundColor = '#007AFF}
   }
-periodButtonText: {,';,}fontSize: 14,';,'';
-fontWeight: '600';','';'';
+periodButtonText: {,'fontSize: 14,'
+fontWeight: '600,'
 }
-    const color = '#666';'}'';'';
-  },';,'';
-activePeriodButtonText: {,';}}'';
-    const color = '#fff';'}'';'';
-  },';,'';
-discountBadge: {,';,}position: 'absolute';','';
-top: -8,';,'';
-right: 8,';,'';
-backgroundColor: '#FF3B30';','';
-borderRadius: 8,;
-paddingHorizontal: 6,;
+    const color = '#666}
+  },'
+activePeriodButtonText: {,';}}
+    const color = '#fff}
+  },'
+discountBadge: {,'position: 'absolute,'';
+top: -8,
+right: 8,'
+backgroundColor: '#FF3B30,'';
+borderRadius: 8,
+paddingHorizontal: 6,
 }
-    const paddingVertical = 2;}
+    const paddingVertical = 2}
   }
-discountText: {,';,}fontSize: 10,';,'';
-color: '#fff';','';'';
+discountText: {,'fontSize: 10,'
+color: '#fff,'
 }
-    const fontWeight = 'bold';'}'';'';
+    const fontWeight = 'bold}
   }
-cardsContainer: {,;}}
-    const paddingHorizontal = 20;}
+cardsContainer: {,}
+    const paddingHorizontal = 20}
   }
-card: {marginBottom: 16,';,'';
-borderRadius: 16,';,'';
-overflow: 'hidden';','';
-elevation: 3,';'';
+card: {marginBottom: 16,
+borderRadius: 16,'
+overflow: 'hidden,'';
+elevation: 3,
 }
-    shadowColor: '#000';',}'';
-shadowOffset: { width: 0, height: 2 ;}
-shadowOpacity: 0.1,;
+    shadowColor: '#000,}'';
+shadowOffset: { width: 0, height: 2 }
+shadowOpacity: 0.1,
 const shadowRadius = 4;
   }
-popularCard: {,';,}borderWidth: 2,';'';
+popularCard: {,'borderWidth: 2,
 }
-    const borderColor = '#667eea';'}'';'';
-  },';,'';
-popularBadge: {,';,}position: 'absolute';','';
-top: 0,';,'';
-right: 0,';,'';
-backgroundColor: '#FF3B30';','';
-paddingHorizontal: 12,;
-paddingVertical: 4,;
-borderBottomLeftRadius: 8,;
+    const borderColor = '#667eea}
+  },'
+popularBadge: {,'position: 'absolute,'';
+top: 0,
+right: 0,'
+backgroundColor: '#FF3B30,'';
+paddingHorizontal: 12,
+paddingVertical: 4,
+borderBottomLeftRadius: 8,
 }
-    const zIndex = 1;}
-  },';,'';
-popularText: {,';,}color: '#fff';','';
-fontSize: 12,';'';
+    const zIndex = 1}
+  },'
+popularText: {,'color: '#fff,'';
+fontSize: 12,
 }
-    const fontWeight = 'bold';'}'';'';
+    const fontWeight = 'bold}
   }
-cardGradient: {,;}}
-    const padding = 20;}
-  },';,'';
-cardHeader: {,';,}alignItems: 'center';','';'';
+cardGradient: {,}
+    const padding = 20}
+  },'
+cardHeader: {,'alignItems: 'center,'
 }
-    const marginBottom = 20;}
+    const marginBottom = 20}
   }
-tierName: {,';,}fontSize: 20,';,'';
-fontWeight: 'bold';','';
-color: '#333';','';'';
+tierName: {,'fontSize: 20,'
+fontWeight: 'bold,'
+color: '#333,'
 }
-    const marginBottom = 8;}
-  },';,'';
-popularTierName: {,';}}'';
-    const color = '#fff';'}'';'';
-  },';,'';
-priceContainer: {,';,}flexDirection: 'row';','';
-alignItems: 'baseline';','';'';
+    const marginBottom = 8}
+  },'
+popularTierName: {,';}}
+    const color = '#fff}
+  },'
+priceContainer: {,'flexDirection: 'row,'
+alignItems: 'baseline,'
 }
-    const marginBottom = 4;}
+    const marginBottom = 4}
   }
-originalPrice: {,';,}fontSize: 16,';,'';
-color: '#999';','';
-textDecorationLine: 'line-through';','';'';
+originalPrice: {,'fontSize: 16,'
+color: '#999,'
+textDecorationLine: 'line-through,'
 }
-    const marginRight = 8;}
-  },';,'';
-popularOriginalPrice: {,';}}'';
-    const color = '#ddd';'}'';'';
+    const marginRight = 8}
+  },'
+popularOriginalPrice: {,';}}
+    const color = '#ddd}
   }
-price: {,';,}fontSize: 32,';,'';
-fontWeight: 'bold';','';'';
+price: {,'fontSize: 32,'
+fontWeight: 'bold,'
 }
-    const color = '#333';'}'';'';
-  },';,'';
-popularPrice: {,';}}'';
-    const color = '#fff';'}'';'';
+    const color = '#333}
+  },'
+popularPrice: {,';}}
+    const color = '#fff}
   }
-period: {,';,}fontSize: 16,';,'';
-color: '#666';','';'';
+period: {,'fontSize: 16,'
+color: '#666,'
 }
-    const marginLeft = 4;}
-  },';,'';
-popularPeriod: {,';}}'';
-    const color = '#ddd';'}'';'';
+    const marginLeft = 4}
+  },'
+popularPeriod: {,';}}
+    const color = '#ddd}
   }
-savings: {,';,}fontSize: 14,';,'';
-color: '#4CAF50';','';'';
+savings: {,'fontSize: 14,'
+color: '#4CAF50,'
 }
-    const fontWeight = '600';'}'';'';
-  },';,'';
-popularSavings: {,';}}'';
-    const color = '#90EE90';'}'';'';
+    const fontWeight = '600}
+  },'
+popularSavings: {,';}}
+    const color = '#90EE90}
   }
-featuresContainer: {,;}}
-    const marginBottom = 20;}
-  },';,'';
-featureItem: {,';,}flexDirection: 'row';','';
-alignItems: 'center';','';'';
+featuresContainer: {,}
+    const marginBottom = 20}
+  },'
+featureItem: {,'flexDirection: 'row,'
+alignItems: 'center,'
 }
-    const marginBottom = 8;}
+    const marginBottom = 8}
   }
-featureText: {,';,}fontSize: 14,';,'';
-color: '#333';','';
-marginLeft: 8,;
+featureText: {,'fontSize: 14,'
+color: '#333,'';
+marginLeft: 8,
 }
-    const flex = 1;}
+    const flex = 1}
   }
-featureLimit: {,';,}fontSize: 12,';,'';
-color: '#666';','';'';
+featureLimit: {,'fontSize: 12,'
+color: '#666,'
 }
-    const marginLeft = 4;}
+    const marginLeft = 4}
   }
-moreFeatures: {,';,}fontSize: 12,';,'';
-color: '#666';','';
-fontStyle: 'italic';','';'';
+moreFeatures: {,'fontSize: 12,'
+color: '#666,'
+fontStyle: 'italic,'
 }
-    const marginTop = 4;}
-  },';,'';
-popularMoreFeatures: {,';}}'';
-    const color = '#ddd';')}'';'';
-  },)';,'';
-adjustmentsContainer: {,)';,}backgroundColor: 'rgba(76, 175, 80, 0.1)',';,'';
-borderRadius: 8,;
-padding: 12,;
+    const marginTop = 4}
+  },'
+popularMoreFeatures: {,';}}
+    const color = '#ddd)}
+  },)'
+adjustmentsContainer: {,)'backgroundColor: 'rgba(76, 175, 80, 0.1)',
+borderRadius: 8,
+padding: 12,
 }
-    const marginBottom = 16;}
+    const marginBottom = 16}
   }
-adjustmentsTitle: {,';,}fontSize: 12,';,'';
-fontWeight: '600';','';
-color: '#4CAF50';','';'';
+adjustmentsTitle: {,'fontSize: 12,'
+fontWeight: '600,'
+color: '#4CAF50,'
 }
-    const marginBottom = 4;}
+    const marginBottom = 4}
   }
-adjustmentItem: {,;}}
-    const marginBottom = 2;}
+adjustmentItem: {,}
+    const marginBottom = 2}
   }
-adjustmentText: {,';,}fontSize: 11,';'';
+adjustmentText: {,'fontSize: 11,
 }
-    const color = '#4CAF50';'}'';'';
-  },';,'';
-subscribeButton: {,';,}backgroundColor: '#007AFF';','';
-borderRadius: 12,';,'';
-paddingVertical: 14,';'';
+    const color = '#4CAF50}
+  },'
+subscribeButton: {,'backgroundColor: '#007AFF,'';
+borderRadius: 12,
+paddingVertical: 14,
 }
-    const alignItems = 'center';'}'';'';
-  },';,'';
-popularSubscribeButton: {,';}}'';
-    const backgroundColor = '#fff';'}'';'';
+    const alignItems = 'center}
+  },'
+popularSubscribeButton: {,';}}
+    const backgroundColor = '#fff}
   }
-subscribeButtonText: {,';,}fontSize: 16,';,'';
-fontWeight: 'bold';','';'';
+subscribeButtonText: {,'fontSize: 16,'
+fontWeight: 'bold,'
 }
-    const color = '#fff';'}'';'';
-  },';,'';
-popularSubscribeButtonText: {,';}}'';
-    const color = '#667eea';'}'';'';
+    const color = '#fff}
+  },'
+popularSubscribeButtonText: {,';}}
+    const color = '#667eea}
   }
-footer: {,';,}padding: 20,';'';
+footer: {,'padding: 20,
 }
-    const alignItems = 'center';'}'';'';
+    const alignItems = 'center}
   }
-footerText: {,';,}fontSize: 12,';,'';
-color: '#666';','';
-marginBottom: 4,';'';
+footerText: {,'fontSize: 12,'
+color: '#666,'';
+marginBottom: 4,
 }
-    const textAlign = 'center';'}'';'';
-  },';'';
-}); ''';
+    const textAlign = 'center}
+  } }); ''

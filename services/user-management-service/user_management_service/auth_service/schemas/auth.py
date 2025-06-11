@@ -3,8 +3,9 @@ auth - 索克生活项目模块
 """
 
 import datetime
-from pydantic import BaseModel, EmailStr, Field
 from typing import Optional
+
+from pydantic import BaseModel, EmailStr, Field
 
 """认证相关的API数据传输对象"""
 

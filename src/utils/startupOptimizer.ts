@@ -1,14 +1,14 @@
-// 启动任务接口/;,/g/;
-export interface StartupTask {name: string}priority: number,;
-dependencies: string[],;
+// 启动任务接口
+export interface StartupTask {name: string}priority: number,
+dependencies: string[],
 execute: () => Promise<void>;
 timeout?: number;
 }
 }
   critical?: boolean;}
 }
-// 启动优化器类/;,/g/;
-export class StartupOptimizer {private static instance: StartupOptimizer;,}private tasks = new Map<string, StartupTask>();
+// 启动优化器类
+export class StartupOptimizer {private static instance: StartupOptimizer;}private tasks = new Map<string, StartupTask>();
 private completed = new Set<string>();
 private running = new Set<string>();
 private failed = new Set<string>();
@@ -21,15 +21,15 @@ private failed = new Set<string>();
     }
     return StartupOptimizer.instance;
   }
-  // 注册启动任务/;,/g/;
+  // 注册启动任务
 registerTask(task: StartupTask): void {}}
     this.tasks.set(task.name, task);}
   }
-  // 执行所有任务/;,/g/;
-const async = executeAll(): Promise<void> {const criticalTasks = Array.from(this.tasks.values()).filter(task => task.critical);,}const nonCriticalTasks = Array.from(this.tasks.values()).filter(task => !task.critical);
-    // 先执行关键任务/;,/g/;
+  // 执行所有任务
+const async = executeAll(): Promise<void> {const criticalTasks = Array.from(this.tasks.values()).filter(task => task.critical);}const nonCriticalTasks = Array.from(this.tasks.values()).filter(task => !task.critical);
+    // 先执行关键任务
 const await = this.executeBatch(criticalTasks);
-    // 延迟执行非关键任务/;,/g/;
+    // 延迟执行非关键任务
 if (nonCriticalTasks.length > 0) {}}
       setTimeout() => this.executeBatch(nonCriticalTasks), 100);}
     }
@@ -50,29 +50,29 @@ const await = this.executeTask(task);}
     }
     return task.dependencies.every(dep) => this.completed.has(dep));
   }
-  private async executeTask(task: StartupTask): Promise<void> {this.running.add(task.name);,}try {const startTime = Date.now();,}const await = task.execute();
+  private async executeTask(task: StartupTask): Promise<void> {this.running.add(task.name);}try {const startTime = Date.now();}const await = task.execute();
 const duration = Date.now() - startTime;
 this.metrics.set(task.name, duration);
 this.completed.add(task.name);
 }
       this.running.delete(task.name);}
-      } catch (error) {this.running.delete(task.name);,}this.failed.add(task.name);
+      } catch (error) {this.running.delete(task.name);}this.failed.add(task.name);
 }
       const throw = error;}
     }
   }
-  // 获取执行统计/;,/g/;
+  // 获取执行统计
 getMetrics(): Record<string, number> {}}
     return Object.fromEntries(this.metrics);}
   }
-  // 重置状态/;,/g/;
-reset(): void {this.tasks.clear();,}this.completed.clear();
+  // 重置状态
+reset(): void {this.tasks.clear();}this.completed.clear();
 this.running.clear();
 this.failed.clear();
 }
     this.metrics.clear();}
   }
 }
-// 导出单例实例/;,/g/;
+// 导出单例实例
 export const startupOptimizer = StartupOptimizer.getInstance();
 export default startupOptimizer;

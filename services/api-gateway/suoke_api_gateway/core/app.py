@@ -1,26 +1,17 @@
-    from .config import Settings
-from ..api.routes import api_router
-from ..middleware.auth import AuthMiddleware
-from ..middleware.logging import LoggingMiddleware
-from ..middleware.rate_limit import RateLimitMiddleware
-from ..middleware.security import SecurityMiddleware
-from ..middleware.tracing import TracingMiddleware
-from ..services.health import HealthService
-from ..services.metrics import MetricsService
-from ..services.service_registry import ServiceRegistry
-from .config import Settings, get_settings
-from .logging import get_logger, setup_logging
-from contextlib import asynccontextmanager
-from fastapi import FastAPI, Request, Response
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.gzip import GZipMiddleware
-from fastapi.middleware.trustedhost import TrustedHostMiddleware
-from fastapi.responses import JSONResponse
-from prometheus_client import make_asgi_app
-from typing import AsyncGenerator
+"""应用主模块"""
+from fastapi import FastAPI
 
-def main() - > None:
-    """主函数 - 自动生成的最小可用版本"""
+from .config import get_settings
+
+
+def create_app() -> FastAPI:
+    """创建FastAPI应用"""
+    settings = get_settings()
+    app = FastAPI(title=settings.app_name, version=settings.app_version)
+    return app
+
+def main() -> None:
+    """主函数"""
     pass
 
 if __name__ == "__main__":

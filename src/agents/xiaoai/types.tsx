@@ -1,79 +1,80 @@
-import React from "react";";
+import React from "react"
 wav" | "mp3" | "aac" | "opus",";
-sampleRate: number,;
-duration: number,";,"";
-const channels = number;";,"";
-quality?: "low" | "medium" | "high";";,"";
+sampleRate: number,"
+duration: number,","
+const channels = number;","
+quality?: "low" | "medium" | "high,"";
 metadata?: AudioMetadata}
-export interface ImageData {";,}data: ArrayBuffer | string,";,"";
-format: "jpg" | "png" | "webp" | "raw",width: number,height: number;";,"";
-quality?: number;";,"";
-metadata?: ImageMetadata;";"";
+export interface ImageData {";
+"data: ArrayBuffer | string,","
+format: "jpg" | "png" | "webp" | "raw",width: number,height: number;","
+quality?: number;","
+metadata?: ImageMetadata;";
 }
+  type?: "face" | "tongue" | "body" | "other"};
 }
-  type?: "face" | "tongue" | "body" | "other"}"";"";
+export interface VideoData {";
+"data: ArrayBuffer | string,","
+format: "mp4" | "webm" | "avi,";
+width: number,
+height: number,"
+duration: number,","
+const frameRate = number;","
+quality?: "low" | "medium" | "high;"";
 }
-export interface VideoData {";,}data: ArrayBuffer | string,";,"";
-format: "mp4" | "webm" | "avi";",";
-width: number,;
-height: number,;
-duration: number,";,"";
-const frameRate = number;";,"";
-quality?: "low" | "medium" | "high";";"";
-}
-}
-  metadata?: VideoMetadata;}
-}";,"";
-export interface PalpationData {";,}id: string,type: "pulse" | "abdominal" | "skin" | "acupoint" | "other",sensorData: unknown;";,"";
+  metadata?: VideoMetadata}
+};
+export interface PalpationData {";
+"id: string,type: "pulse" | "abdominal" | "skin" | "acupoint" | "other",sensorData: unknown;;
 pressure?: number;
 temperature?: number;
 const duration = number;
 location?: string;
-metadata?: {const timestamp = number;,}deviceId?: string;
+metadata?: {const timestamp = numberdeviceId?: string;
 }
-}
-    calibration?: unknown;}
+    calibration?: unknown}
 };
 }
-// 用户相关类型 * export interface UserProfile {/;,}id: string,;,/g,/;
-  basicInfo: BasicUserInfo,;
+// 用户相关类型 * export interface UserProfile {;
+/id: string,,/g,/;
+  basicInfo: BasicUserInfo,
 healthProfile: HealthProfile,preferences: UserPreferences,medicalHistory: MedicalHistoryItem[];
 constitution?: ConstitutionResult;
 accessibilityNeeds?: AccessibilityNeeds;
 }
-}
-  culturalBackground?: CulturalBackground;}
-}";,"";
-export interface BasicUserInfo {";,}name: string,age: number,gender: "male" | "female" | "other";";,"";
+  culturalBackground?: CulturalBackground}
+};
+export interface BasicUserInfo {";
+"name: string,age: number,gender: "male" | "female" | "other,"";
 height?: number;
 weight?: number;
 location?: Location;
 timezone?: string;
 const language = string;
 }
-}
-  dialects?: string[];}
+  dialects?: string[]}
 }
 export interface HealthProfile {chronicConditions: string[]}allergies: string[],;
-medications: Medication[],;
-vitalSigns: VitalSigns,;
-constitution: ConstitutionType,;
-riskFactors: RiskFactor[],;
+medications: Medication[],
+vitalSigns: VitalSigns,
+constitution: ConstitutionType,
+riskFactors: RiskFactor[],
 }
 }
-  const healthGoals = HealthGoal[];}
-}";,"";
-export interface UserPreferences {";,}communicationStyle: "formal" | "casual" | "medical" | "friendly";",";
-language: string,";,"";
-voicePreferences: VoiceProfile,";,"";
-privacyLevel: "low" | "medium" | "high";",";
-notificationPreferences: NotificationPreferences,;
-accessibilityPreferences: AccessibilityPreferences,;
+  const healthGoals = HealthGoal[]}
+};
+export interface UserPreferences {";
+"communicationStyle: "formal" | "casual" | "medical" | "friendly,
+language: string,","
+voicePreferences: VoiceProfile,","
+privacyLevel: "low" | "medium" | "high,";
+notificationPreferences: NotificationPreferences,
+accessibilityPreferences: AccessibilityPreferences,
 }
+  const culturalPreferences = CulturalPreferences}
 }
-  const culturalPreferences = CulturalPreferences;}
-}
-// 聊天相关类型 * export interface ChatContext {/;,}userId: string,;,/g,/;
+// 聊天相关类型 * export interface ChatContext {;
+/userId: string,,/g,/;
   sessionId: string,conversationHistory: ChatMessage[],userProfile: UserProfile;
 currentSymptoms?: string[];
 healthContext?: HealthContext;
@@ -82,16 +83,16 @@ language?: string;
 dialect?: string;
 emotionalState?: EmotionalState;
 }
+  environmentContext?: EnvironmentContext}
 }
-  environmentContext?: EnvironmentContext;}
+export interface ChatMessage {";
+"id: string,","
+role: "user" | "assistant",content: string,timestamp: number;";
 }
-export interface ChatMessage {";,}id: string,";,"";
-role: "user" | "assistant",content: string,timestamp: number;";"";
+  metadata?: unknown}
 }
-}
-  metadata?: unknown;}
-}
-export interface ChatResponse {;,}const text = string;
+export interface ChatResponse {;
+const text = string;
 audioUrl?: string;
 suggestions?: string[];
 actions?: ChatAction[];
@@ -100,15 +101,14 @@ diagnosticRecommendations?: DiagnosticRecommendation[];
 healthInsights?: HealthInsight[];
 accessibilitySupport?: AccessibilitySupport;
 }
+  emotionalSupport?: EmotionalSupport}
 }
-  emotionalSupport?: EmotionalSupport;}
+export interface ChatAction {;
+type: string,label: string;
 }
-export interface ChatAction {;,}type: string,label: string;
+  data?: unknown}
 }
-}
-  data?: unknown;}
-}
-// 语音相关类型 * export interface VoiceResponse {/;};,/g,/;
+// 语音相关类型 * export interface VoiceResponse {/;},/g,/;
   transcription: string,   ;
 confidence: number,language: string;
 dialect?: string;
@@ -116,104 +116,101 @@ emotionalTone?: EmotionalTone;
 healthIndicators?: VoiceHealthIndicators;
 }
 }
-  const response = ChatResponse;}
-}";,"";
-export interface VoiceProfile {";,}gender: "male" | "female" | "neutral";",";
-age: "child" | "adult" | "elderly";",";
-tone: "warm" | "professional" | "friendly" | "calm",speed: "slow" | "normal" | "fast",language: string;";"";
+  const response = ChatResponse}
+};
+export interface VoiceProfile {";
+"gender: "male" | "female" | "neutral,
+age: "child" | "adult" | "elderly,
+tone: "warm" | "professional" | "friendly" | "calm",speed: "slow" | "normal" | "fast",language: string;";
 }
+  dialect?: string}
 }
-  dialect?: string;}
-}
-export interface VoiceHealthIndicators {;,}stressLevel?: number;
+export interface VoiceHealthIndicators {;
+stressLevel?: number;
 fatigueLevel?: number;
 respiratoryHealth?: string;
 emotionalState?: string;
 }
-}
-  voiceQuality?: string;}
+  voiceQuality?: string}
 }
 // 四诊结果集合 * export interface FourDiagnosisResults {/;};/g/;
-    ;
-/    ;/;,/g/;
+/    ;
 inquiry?: InquiryResult;
 look?: LookResult;
 listen?: ListenResult;
 palpation?: PalpationResult;
 }
 }
-  integrated?: IntegratedDiagnosis;}
+  integrated?: IntegratedDiagnosis}
 }
 // 中医诊断相关类型 * export interface LookResult {/;};/g/;
-    ;
-/    ;/;,/g/;
+/    ;
 faceAnalysis?: FaceAnalysis;
 tongueAnalysis?: TongueAnalysis;
 bodyAnalysis?: BodyAnalysis;
-overallAssessment: string,;
-confidence: number,;
-recommendations: string[],;
+  overallAssessment: string,
+confidence: number,
+recommendations: string[],
 }
 }
-  const tcmFindings = TCMFindings;}
+  const tcmFindings = TCMFindings}
 }
 export interface FaceAnalysis {complexion: string}colorAnalysis: ColorAnalysis,;
 }
 }
-  facialFeatures: FacialFeatures,emotionalState: string,healthIndicators: string[];}
+  facialFeatures: FacialFeatures,emotionalState: string,healthIndicators: string[]}
 }
 export interface TongueAnalysis {tongueBody: TongueBodyAnalysis}tongueCoating: TongueCoatingAnalysis,;
-tongueShape: TongueShapeAnalysis,;
-tongueMovement: TongueMovementAnalysis,;
+tongueShape: TongueShapeAnalysis,
+tongueMovement: TongueMovementAnalysis,
 }
 }
-  const overallCondition = string;}
+  const overallCondition = string}
 }
 export interface BodyAnalysis {posture: string}movement: string,;
-vitality: string,;
+vitality: string,
 }
 }
-  skinCondition: string,overallHealth: string;}
+  skinCondition: string,overallHealth: string}
 };
-export interface ListenResult {;,}const voiceAnalysis = VoiceAnalysis;
+export interface ListenResult {;
+const voiceAnalysis = VoiceAnalysis;
 breathingPattern?: BreathingAnalysis;
 coughAnalysis?: CoughAnalysis;
 heartSounds?: HeartSoundAnalysis;
-overallAssessment: string,;
-confidence: number,;
+  overallAssessment: string,
+confidence: number,
 }
-}
-  const tcmFindings = TCMFindings;}
+  const tcmFindings = TCMFindings}
 }
 export interface InquiryResult {symptoms: SymptomAnalysis[]}constitutionType: ConstitutionType,;
-healthConcerns: HealthConcern[],;
+healthConcerns: HealthConcern[],
 riskFactors: RiskFactor[],recommendations: string[],followUpQuestions: string[];
 }
 }
-  tcmSyndrome?: TCMSyndrome;}
+  tcmSyndrome?: TCMSyndrome}
 }
 export interface PalpationResult {pulseAnalysis: PulseAnalysis}pressurePoints: PressurePointAnalysis[],;
-overallAssessment: string,;
-confidence: number,;
+overallAssessment: string,
+confidence: number,
 }
 }
-  const tcmFindings = TCMFindings;}
+  const tcmFindings = TCMFindings}
 }
 export interface IntegratedDiagnosis {lookFindings: LookResult}listenFindings: ListenResult,;
-inquiryFindings: InquiryResult,;
+inquiryFindings: InquiryResult,
 palpationFindings: PalpationResult,integratedAssessment: string,tcmDiagnosis: TCMDiagnosis;
 westernMedicineCorrelation?: WesternMedicineCorrelation;
-treatmentPrinciples: string[],;
-recommendedTreatments: Treatment[],;
-lifestyleRecommendations: LifestyleRecommendation[],;
-followUpPlan: FollowUpPlan,;
+  treatmentPrinciples: string[],
+recommendedTreatments: Treatment[],
+lifestyleRecommendations: LifestyleRecommendation[],
+followUpPlan: FollowUpPlan,
 }
 }
-  const confidence = number;}
+  const confidence = number}
 }
 // 健康数据相关类型 * export interface HealthDataInput {/;};/g/;
-    ;
-/    ;/;,/g/;
+/    ;
 vitalSigns?: VitalSigns;
 symptoms?: string[];
 lifestyle?: LifestyleData;
@@ -222,130 +219,130 @@ labResults?: LabResult[];
 deviceData?: DeviceData[];
 }
 }
-  environmentalData?: EnvironmentalData;}
+  environmentalData?: EnvironmentalData}
 }
 export interface HealthAnalysis {summary: string}insights: HealthInsight[],;
-riskAssessment: RiskAssessment,;
+riskAssessment: RiskAssessment,
 trends: HealthTrend[],recommendations: HealthRecommendation[],alerts: HealthAlert[];
 }
 }
-  tcmAssessment?: TCMHealthAssessment;}
+  tcmAssessment?: TCMHealthAssessment}
 }
 export interface HealthTrends {timeRange: TimeRange}trends: HealthTrend[],;
-patterns: HealthPattern[],;
-predictions: HealthPrediction[],;
+patterns: HealthPattern[],
+predictions: HealthPrediction[],
 }
 }
-  const recommendations = string[];}
-}";,"";
-export interface HealthRecommendation {";,}const category = | "diet"| "exercise"| "lifestyle";";"";
-    | "medical"";"";
-    | "tcm"";"";
-    | "mental_health";
-title: string,";,"";
-description: string,priority: "low" | "medium" | "high" | "urgent",timeframe: string;";,"";
+  const recommendations = string[]}
+};
+export interface HealthRecommendation {";
+"const category = | "diet"| "exercise"| "lifestyle;
+    | "medical;
+    | "tcm;
+    | "mental_health
+title: string,","
+description: string,priority: "low" | "medium" | "high" | "urgent",timeframe: string;;
 evidence?: string;
 tcmRationale?: string;
 }
+  implementation?: ImplementationGuide}
 }
-  implementation?: ImplementationGuide;}
-}";"";
-// 无障碍服务相关类型 * export interface AccessibilityFeature {/;}";,"/g"/;
-const type = "visual" | "auditory" | "motor" | "cognitive" | "speech";";"";
-/"/;,"/g"/;
-subtype?: string;";"";
+// 无障碍服务相关类型 * export interface AccessibilityFeature {/;}","/g"/;
+const type = "visual" | "auditory" | "motor" | "cognitive" | "speech;
+/"
+subtype?: string;";
 }
 }
-  severity: "mild" | "moderate" | "severe",preferences: AccessibilityPreferences;"}"";"";
+  severity: "mild" | "moderate" | "severe",preferences: AccessibilityPreferences;
 };
-export interface NavigationGuidance {;,}const instructions = string[];
+export interface NavigationGuidance {;
+const instructions = string[];
 audioGuidance?: string;
 hapticFeedback?: HapticPattern[];
 visualCues?: VisualCue[];
 }
+  landmarks?: Landmark[]}
 }
-  landmarks?: Landmark[];}
+export interface SignLanguageResult {;
+recognizedSigns: RecognizedSign[],confidence: number,translation: string;
 }
-export interface SignLanguageResult {;,}recognizedSigns: RecognizedSign[],confidence: number,translation: string;
+  response?: ChatResponse}
 }
+export interface InterfaceAdaptation {;
+visualAdaptations: VisualAdaptation[],
 }
-  response?: ChatResponse;}
+  audioAdaptations: AudioAdaptation[],interactionAdaptations: InteractionAdaptation[],contentAdaptations: ContentAdaptation[]}
 }
-export interface InterfaceAdaptation {visualAdaptations: VisualAdaptation[],;}}
+// 体质评估相关类型 * export interface ConstitutionAssessmentData {;
+/physicalCharacteristics: PhysicalCharacteristics,,/g,/;
+  psychologicalTraits: PsychologicalTraits,
+lifestyle: LifestyleData,
+symptoms: string[],
+medicalHistory: MedicalHistoryItem[],
 }
-  audioAdaptations: AudioAdaptation[],interactionAdaptations: InteractionAdaptation[],contentAdaptations: ContentAdaptation[];}
-}
-// 体质评估相关类型 * export interface ConstitutionAssessmentData {/;,}physicalCharacteristics: PhysicalCharacteristics,;,/g,/;
-  psychologicalTraits: PsychologicalTraits,;
-lifestyle: LifestyleData,;
-symptoms: string[],;
-medicalHistory: MedicalHistoryItem[],;
-}
-}
-  const environmentalFactors = EnvironmentalFactors;}
+  const environmentalFactors = EnvironmentalFactors}
 }
 export interface ConstitutionResult {primaryConstitution: ConstitutionType}secondaryConstitutions: ConstitutionType[],;
-constitutionScore: ConstitutionScore,;
-characteristics: string[],;
-strengths: string[],;
+constitutionScore: ConstitutionScore,
+characteristics: string[],
+strengths: string[],
 }
 }
-  weaknesses: string[],recommendations: ConstitutionRecommendation[],seasonalGuidance: SeasonalGuidance[];}
+  weaknesses: string[],recommendations: ConstitutionRecommendation[],seasonalGuidance: SeasonalGuidance[]}
 }
 export interface CalculationResult {diagnosis: string}confidence: number,;
-reasoning: string[],;
-differentialDiagnosis: string[],;
-treatmentPrinciples: string[],;
-prescriptionRecommendations: PrescriptionRecommendation[],;
+reasoning: string[],
+differentialDiagnosis: string[],
+treatmentPrinciples: string[],
+prescriptionRecommendations: PrescriptionRecommendation[],
 }
 }
-  const prognosisAssessment = PrognosisAssessment;}
+  const prognosisAssessment = PrognosisAssessment}
 }
-// 智能体协作相关类型 * export interface AgentTask {/;}";,"/g,"/;
-  taskId: string,";,"";
-type: "diagnosis" | "recommendation" | "education" | "service" | "lifestyle";",";
-priority: "low" | "medium" | "high" | "urgent";",";
-requiredAgents: AgentType[],;
-data: unknown,;
+// 智能体协作相关类型 * export interface AgentTask {/;}","/g,"/;
+  taskId: string,","
+type: "diagnosis" | "recommendation" | "education" | "service" | "lifestyle,
+priority: "low" | "medium" | "high" | "urgent,";
+requiredAgents: AgentType[],
+data: unknown,
 const context = TaskContext;
 }
 }
-  deadline?: Date;}
+  deadline?: Date}
 }
-export interface AgentCoordinationResult {";,}taskId: string,";,"";
-status: "pending" | "in_progress" | "completed" | "failed";",";
+export interface AgentCoordinationResult {";
+"taskId: string,","
+status: "pending" | "in_progress" | "completed" | "failed,";
 const results = AgentTaskResult[];
 aggregatedResult?: unknown;
 }
-}
-  recommendations?: string[]}";"";
-}";,"";
-export type AgentType = "xiaoai" | "xiaoke" | "laoke" | "so;e;";";,"";
-r;";"";
-// 其他支持类型 * export interface PersonalityTraits {/;}";,"/g,"/;
-  style: "caring" | "professional" | "friendly" | "authoritative";",";
-tone: "warm" | "neutral" | "energetic" | "calm";",";
-expertise: "health" | "medical" | "wellness" | "general";",";
-patience: "low" | "medium" | "high";",";
-empathy: "low" | "medium" | "high";","";"";
-}
-}
-  const culturalSensitivity = "low" | "medium" | "high";"}"";"";
-}";,"";
-export interface AgentHealthStatus {";,}status: "healthy" | "degraded" | "error";",";
-uptime: number,;
-responseTime: number,;
-accuracy: number,;
-lastUpdate: Date,;
-activeConnections: number,;
-memoryUsage: number,;
+  recommendations?: string[]}
+}","
+export type AgentType = "xiaoai" | "xiaoke" | "laoke" | "so;e;
+r;
+// 其他支持类型 * export interface PersonalityTraits {/;}","/g,"/;
+  style: "caring" | "professional" | "friendly" | "authoritative,
+tone: "warm" | "neutral" | "energetic" | "calm,
+expertise: "health" | "medical" | "wellness" | "general,
+patience: "low" | "medium" | "high,
+empathy: "low" | "medium" | "high,
 }
 }
-  const errors = AgentError[];}
+  const culturalSensitivity = "low" | "medium" | "high};
+};
+export interface AgentHealthStatus {";
+"status: "healthy" | "degraded" | "error,";
+uptime: number,
+responseTime: number,
+accuracy: number,
+lastUpdate: Date,
+activeConnections: number,
+memoryUsage: number,
+}
+  const errors = AgentError[]}
 }
 // 中医相关类型 * export interface TCMFindings {/;};/g/;
-    ;
-/    ;/;,/g/;
+/    ;
 syndrome?: string;
 pattern?: string;
 organSystems?: string[];
@@ -353,416 +350,416 @@ pathogenesis?: string;
 treatmentPrinciple?: string;
 }
 }
-  prognosis?: string;}
+  prognosis?: string}
 }
 export interface TCMDiagnosis {mainSyndrome: string}secondarySyndromes: string[],;
-organSystems: string[],;
-pathogenesis: string,;
-treatmentPrinciples: string[],;
+organSystems: string[],
+pathogenesis: string,
+treatmentPrinciples: string[],
 }
 }
-  prognosis: string,confidence: number;}";"";
-};";,"";
-export type ConstitutionType = | "balanced"  | "qi_deficiency"  / 气虚质*  阳虚质*  阴虚质*  痰湿质*  湿热质*  血瘀质*  气郁质* // | "special_diathesi;";"/;,"/g"/;
-s";  * / 特禀质* ///     ""/;"/g"/;
-// 错误处理 * export interface AgentError {/;}";,"/g,"/;
-  code: string,";,"";
-message: string,timestamp: Date,severity: "low" | "medium" | "high" | "critical";";"";
+  prognosis: string,confidence: number;}
+};","
+export type ConstitutionType = | "balanced"  | "qi_deficiency"  / 气虚质*  阳虚质*  阴虚质*  痰湿质*  湿热质*  血瘀质*  气郁质* // | "special_diathesi;
+s";  * / 特禀质* ///     "
+// 错误处理 * export interface AgentError {/;}","/g,"/;
+  code: string,","
+message: string,timestamp: Date,severity: "low" | "medium" | "high" | "critical;"";
 }
 }
-  context?: unknown;}
+  context?: unknown}
 }
-// 时间相关 * export interface TimeRange {/;,}start: Date,";,"/g"/;
-const end = Date;";"";
+// 时间相关 * export interface TimeRange {";
+/start: Date,","/g"/;
+const end = Date;";
 }
+  granularity?: "hour" | "day" | "week" | "month" | "year"};
 }
-  granularity?: "hour" | "day" | "week" | "month" | "year"}"";"";
-}
-// 小艾智能体接口 * export interface XiaoaiAgent {/;}/;/;,/g/;
-chat(message: string, context: ChatContext): Promise<ChatResponse  /     >;/;,/g/;
+// 小艾智能体接口 * export interface XiaoaiAgent {/;}/;
+chat(message: string, context: ChatContext): Promise<ChatResponse  /     >;
 processVoiceInput();
 audioData: AudioData,language?: string;dialect?: string;
-  ): Promise<VoiceResponse /    >;/;,/g/;
+  ): Promise<VoiceResponse /    >;
 synthesizeVoice();
 const text = string;
 language?: string;
 voice?: VoiceProfile;
-  );: Promise<AudioData /    >/;,/g/;
-performLookDiagnosis()";,"";
-imageData: ImageData,";,"";
-const type = "face" | "tongue" | "body"): Promise<LookResult /    >;"/;,"/g"/;
-performListenDiagnosis()";,"";
-audioData: AudioData,";,"";
-const type = "voice" | "cough" | "breathing" | "other");: Promise<ListenResult /    >;"/;,"/g"/;
+  );: Promise<AudioData /    >"
+performLookDiagnosis()","
+imageData: ImageData,","
+const type = "face" | "tongue" | "body"): Promise<LookResult /    >;
+performListenDiagnosis()","
+audioData: AudioData,","
+const type = "voice" | "cough" | "breathing" | "other");: Promise<ListenResult /    >;
 performInquiryDiagnosis();
 const userId = string;
 symptoms?: string[];
-  );: Promise<InquiryResult /    >;/;,/g/;
-performPalpationDiagnosis(data: PalpationData);: Promise<PalpationResult /    >;/;,/g/;
+  );: Promise<InquiryResult /    >;
+performPalpationDiagnosis(data: PalpationData);: Promise<PalpationResult /    >;
 integrateFourDiagnosis();
-const results = FourDiagnosisResults);: Promise<IntegratedDiagnosis /    >;/;,/g/;
-analyzeHealthData(data: HealthDataInput): Promise<HealthAnalysis  /     >;/;,/g/;
+const results = FourDiagnosisResults);: Promise<IntegratedDiagnosis /    >;
+analyzeHealthData(data: HealthDataInput): Promise<HealthAnalysis  /     >;
 generateHealthRecommendations();
-const profile = UserProfile);: Promise<HealthRecommendation[] /    >;/;,/g/;
+const profile = UserProfile);: Promise<HealthRecommendation[] /    >;
 trackHealthTrends();
-userId: string,;
-const timeRange = TimeRange);: Promise<HealthTrends /    >;/;,/g/;
-createMedicalRecord(data: MedicalRecordInput): Promise<MedicalRecord  /     >;/;,/g/;
+userId: string,
+const timeRange = TimeRange);: Promise<HealthTrends /    >;
+createMedicalRecord(data: MedicalRecordInput): Promise<MedicalRecord  /     >;
 updateMedicalRecord();
-recordId: string,;
-updates: Partial<MedicalRecord  />);: Promise<MedicalRecord  />;/      getMedicalHistory(, )/;,/g/;
+recordId: string,
+updates: Partial<MedicalRecord  />);: Promise<MedicalRecord  />;/      getMedicalHistory(, )
 const userId = string;);
 filters?: MedicalHistoryFilters;);
-  );: Promise<MedicalRecord[] /    >;/;,/g/;
-generateHealthReport(userId: string, type: ReportType);: Promise<HealthReport /    >;/;,/g/;
+  );: Promise<MedicalRecord[] /    >;
+generateHealthReport(userId: string, type: ReportType);: Promise<HealthReport /    >;
 enableAccessibilityFeature(feature: AccessibilityFeature): Promise<void>;
 provideNavigationAssistance();
-const context = NavigationContext);: Promise<NavigationGuidance /    >;/;,/g/;
-recognizeSignLanguage(videoData: VideoData);: Promise<SignLanguageResult /    >;/;,/g/;
+const context = NavigationContext);: Promise<NavigationGuidance /    >;
+recognizeSignLanguage(videoData: VideoData);: Promise<SignLanguageResult /    >;
 adaptInterfaceForDisability();
-const disability = DisabilityType);: Promise<InterfaceAdaptation /    >;/;,/g/;
-provideElderlyFriendlyInterface(): Promise<ElderlyInterfaceConfig /    >;/;,/g/;
+const disability = DisabilityType);: Promise<InterfaceAdaptation /    >;
+provideElderlyFriendlyInterface(): Promise<ElderlyInterfaceConfig /    >;
 assessConstitution();
-const data = ConstitutionAssessmentData): Promise<ConstitutionResult /    >;/;,/g/;
+const data = ConstitutionAssessmentData): Promise<ConstitutionResult /    >;
 performCalculationDiagnosis();
-symptoms: string[],;
-const context = DiagnosisContext);: Promise<CalculationResult /    >;/;,/g/;
+symptoms: string[],
+const context = DiagnosisContext);: Promise<CalculationResult /    >;
 generateTreatmentPlan();
-diagnosis: IntegratedDiagnosis,;
-const userProfile = UserProfile);: Promise<TreatmentPlan /    >;/;,/g/;
-coordinateWithOtherAgents(task: AgentTask): Promise<AgentCoordinationResult  /     >;/;,/g/;
+diagnosis: IntegratedDiagnosis,
+const userProfile = UserProfile);: Promise<TreatmentPlan /    >;
+coordinateWithOtherAgents(task: AgentTask): Promise<AgentCoordinationResult  /     >;
 shareUserContext();
-targetAgent: AgentType,;
+targetAgent: AgentType,
 const context = SharedContext);: Promise<void>;
 setPersonality(traits: PersonalityTraits): void;
 getPersonality(): PersonalityTraits;
-getHealthStatus(): Promise<AgentHealthStatus  /     >/;/g/;
+getHealthStatus(): Promise<AgentHealthStatus  /     >
 }
 }
   cleanup(userId: string);: Promise<void>}
 }
-// 占位符类型定义 - 需要在其他文件中完整定义 * export interface AudioMetadata {/;}/;/;/g/;
+// 占位符类型定义 - 需要在其他文件中完整定义 * export interface AudioMetadata {/;}/;
 }
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface ImageMetadata {;}}
+export interface ImageMetadata {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface VideoMetadata {;}}
+export interface VideoMetadata {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface HealthContext {;}}
+export interface HealthContext {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface AccessibilityNeeds {;}}
+export interface AccessibilityNeeds {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface EmotionalState {;}}
+export interface EmotionalState {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface EnvironmentContext {;}}
+export interface EnvironmentContext {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface DiagnosticRecommendation {;}}
+export interface DiagnosticRecommendation {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface HealthInsight {;}}
+export interface HealthInsight {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface AccessibilitySupport {;}}
+export interface AccessibilitySupport {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface EmotionalSupport {;}}
+export interface EmotionalSupport {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface EmotionalTone {;}}
+export interface EmotionalTone {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface ColorAnalysis {;}}
+export interface ColorAnalysis {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface FacialFeatures {;}}
+export interface FacialFeatures {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface TongueBodyAnalysis {;}}
+export interface TongueBodyAnalysis {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface TongueCoatingAnalysis {;}}
+export interface TongueCoatingAnalysis {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface TongueShapeAnalysis {;}}
+export interface TongueShapeAnalysis {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface TongueMovementAnalysis {;}}
+export interface TongueMovementAnalysis {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface VoiceAnalysis {;}}
+export interface VoiceAnalysis {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface BreathingAnalysis {;}}
+export interface BreathingAnalysis {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface CoughAnalysis {;}}
+export interface CoughAnalysis {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface HeartSoundAnalysis {;}}
+export interface HeartSoundAnalysis {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface SymptomAnalysis {;}}
+export interface SymptomAnalysis {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface HealthConcern {;}}
+export interface HealthConcern {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface RiskFactor {;}}
+export interface RiskFactor {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface TCMSyndrome {;}}
+export interface TCMSyndrome {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface PulseAnalysis {;}}
+export interface PulseAnalysis {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface PressurePointAnalysis {;}}
+export interface PressurePointAnalysis {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface WesternMedicineCorrelation {;}}
+export interface WesternMedicineCorrelation {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface Treatment {;}}
+export interface Treatment {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface LifestyleRecommendation {;}}
+export interface LifestyleRecommendation {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface FollowUpPlan {;}}
+export interface FollowUpPlan {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface VitalSigns {;}}
+export interface VitalSigns {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface LifestyleData {;}}
+export interface LifestyleData {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface MedicalHistoryItem {;}}
+export interface MedicalHistoryItem {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface LabResult {;}}
+export interface LabResult {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface DeviceData {;}}
+export interface DeviceData {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface EnvironmentalData {;}}
+export interface EnvironmentalData {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface RiskAssessment {;}}
+export interface RiskAssessment {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface HealthTrend {;}}
+export interface HealthTrend {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface HealthAlert {;}}
+export interface HealthAlert {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface TCMHealthAssessment {;}}
+export interface TCMHealthAssessment {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface HealthPattern {;}}
+export interface HealthPattern {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface HealthPrediction {;}}
+export interface HealthPrediction {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface ImplementationGuide {;}}
+export interface ImplementationGuide {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface AccessibilityPreferences {;}}
+export interface AccessibilityPreferences {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface HapticPattern {;}}
+export interface HapticPattern {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface VisualCue {;}}
+export interface VisualCue {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface Landmark {;}}
+export interface Landmark {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface RecognizedSign {;}}
+export interface RecognizedSign {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface VisualAdaptation {;}}
+export interface VisualAdaptation {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface AudioAdaptation {;}}
+export interface AudioAdaptation {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface InteractionAdaptation {;}}
+export interface InteractionAdaptation {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface ContentAdaptation {;}}
+export interface ContentAdaptation {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface PhysicalCharacteristics {;}}
+export interface PhysicalCharacteristics {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface PsychologicalTraits {;}}
+export interface PsychologicalTraits {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface EnvironmentalFactors {;}}
+export interface EnvironmentalFactors {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface ConstitutionScore {;}}
+export interface ConstitutionScore {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface ConstitutionRecommendation {;}}
+export interface ConstitutionRecommendation {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface SeasonalGuidance {;}}
+export interface SeasonalGuidance {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface PrescriptionRecommendation {;}}
+export interface PrescriptionRecommendation {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface PrognosisAssessment {;}}
+export interface PrognosisAssessment {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface TaskContext {;}}
+export interface TaskContext {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface AgentTaskResult {;}}
+export interface AgentTaskResult {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface Location {;}}
+export interface Location {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface Medication {;}}
+export interface Medication {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface HealthGoal {;}}
+export interface HealthGoal {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface NotificationPreferences {;}}
+export interface NotificationPreferences {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface CulturalPreferences {;}}
+export interface CulturalPreferences {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface CulturalBackground {;}}
+export interface CulturalBackground {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface MedicalRecord {;}}
+export interface MedicalRecord {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface MedicalRecordInput {;}}
+export interface MedicalRecordInput {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface MedicalHistoryFilters {;}}
+export interface MedicalHistoryFilters {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface ReportType {;}}
+export interface ReportType {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface HealthReport {;}}
+export interface HealthReport {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface NavigationContext {;}}
+export interface NavigationContext {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface DisabilityType {;}}
+export interface DisabilityType {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface ElderlyInterfaceConfig {;}}
+export interface ElderlyInterfaceConfig {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface DiagnosisContext {;}}
+export interface DiagnosisContext {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface TreatmentPlan {;}}
+export interface TreatmentPlan {;
 }
-  [key: string]: unknown;}
+  [key: string]: unknown}
 }
-export interface SharedContext {;}}
+export interface SharedContext {;
 }
-  [key: string]: unknown;}";"";
-};""";
+  [key: string]: unknown;}
+};""

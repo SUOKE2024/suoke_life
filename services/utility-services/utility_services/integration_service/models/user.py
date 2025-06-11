@@ -1,12 +1,12 @@
-from typing import Dict, List, Any, Optional, Union
 
 """
 user - 索克生活项目模块
 """
 
-from .base import BaseModel
 from sqlalchemy import JSON, Boolean, Column, DateTime, ForeignKey, String
 from sqlalchemy.orm import relationship
+
+from .base import BaseModel
 
 """
 用户模型

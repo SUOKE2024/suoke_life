@@ -1,6 +1,6 @@
-            from urllib.parse import parse_qs
+        from urllib.parse import parse_qs
             from urllib.parse import urlencode
-        import re
+import re
 from ..core.logging import get_logger
 from abc import ABC, abstractmethod
 from enum import Enum
@@ -13,7 +13,7 @@ import gzip
 import json
 import zlib
 
-def main() - > None:
+def main() -> None:
     """主函数 - 自动生成的最小可用版本"""
     pass
 

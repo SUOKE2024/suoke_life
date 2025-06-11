@@ -2,10 +2,11 @@
 security - 索克生活项目模块
 """
 
+from typing import Callable
+
+import structlog
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
-from typing import Callable
-import structlog
 
 """安全中间件"""
 
@@ -16,7 +17,7 @@ logger = structlog.get_logger(__name__)
 class SecurityMiddleware(BaseHTTPMiddleware):
     """安全中间件"""
 
-    async def dispatch(self, request: Request, call_next: Callable) - > Response:
+    async def dispatch(self, request: Request, call_next: Callable) -> Response:
         """处理安全相关功能"""
 
         # 处理请求
@@ -27,7 +28,7 @@ class SecurityMiddleware(BaseHTTPMiddleware):
 
         return response
 
-    def _add_security_headers(self, response: Response) - > None:
+    def _add_security_headers(self, response: Response) -> None:
         """添加安全头部"""
 
         # 防止点击劫持

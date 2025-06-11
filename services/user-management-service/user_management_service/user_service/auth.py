@@ -3,14 +3,15 @@ auth - 索克生活项目模块
 """
 
 from datetime import datetime, timedelta
-from fastapi import HTTPException, status, Depends, Request
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from functools import wraps
-from typing import Optional, Dict, Any
-from user_service.config import get_settings
+from typing import Any, Dict, Optional
+
 import httpx
 import jwt
 import structlog
+from fastapi import Depends, HTTPException, Request, status
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from user_service.config import get_settings
 
 """用户服务认证模块"""
 
@@ -23,7 +24,7 @@ security = HTTPBearer()
 class AuthService:
     """认证服务客户端"""
 
-    def __init__(self) - > None:
+    def __init__(self) -> None:
         """TODO: 添加文档字符串"""
         self.settings = get_settings()
         self.auth_service_url = self.settings.auth.auth_service_url
@@ -31,7 +32,7 @@ class AuthService:
         self.jwt_algorithm = self.settings.auth.jwt_algorithm
         self._token_cache = {}  # 简单的令牌缓存
 
-    async def verify_token(self, token: str) - > Optional[Dict[str, Any]]:
+    async def verify_token(self, token: str) -> Optional[Dict[str, Any]]:
         """验证JWT令牌"""
         try:
             # 首先尝试本地验证
@@ -58,7 +59,7 @@ class AuthService:
             logger.error("Token verification failed", error = str(e))
             return None
 
-    async def verify_token_with_auth_service(self, token: str) - > Optional[Dict[str, Any]]:
+    async def verify_token_with_auth_service(self, token: str) -> Optional[Dict[str, Any]]:
         """通过认证服务验证令牌"""
         try:
             # 检查缓存
@@ -96,7 +97,7 @@ class AuthService:
             logger.error("Failed to verify token with auth service", error = str(e))
             return None
 
-    async def get_current_user(self, token: str) - > Optional[Dict[str, Any]]:
+    async def get_current_user(self, token: str) -> Optional[Dict[str, Any]]:
         """获取当前用户信息"""
         # 首先尝试本地验证
         payload = await self.verify_token(token)
@@ -125,7 +126,7 @@ class AuthService:
 _auth_service: Optional[AuthService] = None
 
 
-def get_auth_service() - > AuthService:
+def get_auth_service() -> AuthService:
     """获取认证服务实例"""
     global _auth_service
     if not _auth_service:
@@ -135,7 +136,7 @@ def get_auth_service() - > AuthService:
 
 async def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(security)
-) - > Dict[str, Any]:
+) -> Dict[str, Any]:
     """获取当前用户（依赖注入）"""
     auth_service = get_auth_service()
     user = await auth_service.get_current_user(credentials.credentials)
@@ -152,7 +153,7 @@ async def get_current_user(
 
 async def get_current_active_user(
     current_user: Dict[str, Any] = Depends(get_current_user)
-) - > Dict[str, Any]:
+) -> Dict[str, Any]:
     """获取当前活跃用户"""
     if not current_user.get("is_verified"):
         raise HTTPException(
@@ -165,7 +166,7 @@ async def get_current_active_user(
 
 async def get_current_superuser(
     current_user: Dict[str, Any] = Depends(get_current_user)
-) - > Dict[str, Any]:
+) -> Dict[str, Any]:
     """获取当前超级用户"""
     if not current_user.get("is_superuser"):
         raise HTTPException(
@@ -179,7 +180,7 @@ async def get_current_superuser(
 def require_auth(func):
     """认证装饰器"""
     @wraps(func)
-    async def wrapper( * args, * *kwargs):
+    async def wrapper( * args, **kwargs):
         # 从kwargs中获取request对象
         request = kwargs.get('request') or (args[0] if args and hasattr(args[0], 'headers') else None)
 
@@ -212,7 +213,7 @@ def require_auth(func):
         # 将用户信息添加到kwargs
         kwargs['current_user'] = user
 
-        return await func( * args, * *kwargs)
+        return await func( * args, **kwargs)
 
     return wrapper
 
@@ -220,9 +221,9 @@ def require_auth(func):
 def require_superuser(func):
     """超级用户权限装饰器"""
     @wraps(func)
-    async def wrapper( * args, * *kwargs):
+    async def wrapper( * args, **kwargs):
         # 首先进行认证
-        await require_auth(func)( * args, * *kwargs)
+        await require_auth(func)( * args, **kwargs)
 
         current_user = kwargs.get('current_user')
         if not current_user or not current_user.get("is_superuser"):
@@ -231,7 +232,7 @@ def require_superuser(func):
                 detail = "权限不足"
             )
 
-        return await func( * args, * *kwargs)
+        return await func( * args, **kwargs)
 
     return wrapper
 
@@ -266,6 +267,6 @@ class AuthMiddleware:
         await self.app(scope, receive, send)
 
 
-def get_user_from_request(request: Request) - > Optional[Dict[str, Any]]:
+def get_user_from_request(request: Request) -> Optional[Dict[str, Any]]:
     """从请求中获取用户信息"""
     return getattr(request.scope, "user", None)

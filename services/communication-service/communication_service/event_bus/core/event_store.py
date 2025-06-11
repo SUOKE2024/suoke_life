@@ -9,6 +9,7 @@ from typing import Any, Dict, List, Optional
 
 import asyncpg
 import structlog
+
 from .event_bus import Event
 
 logger = structlog.get_logger(__name__)

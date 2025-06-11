@@ -60,9 +60,9 @@ class HealthDataService(BaseService[HealthData]):
 
             # 日期范围筛选
             if start_date:
-                query = query.filter(HealthData.created_at > = start_date)
+                query = query.filter(HealthData.created_at >=== start_date)
             if end_date:
-                query = query.filter(HealthData.created_at < = end_date)
+                query = query.filter(HealthData.created_at <= end_date)
 
             # 排序和分页
             query = query.order_by(HealthData.created_at.desc())
@@ -141,7 +141,7 @@ class HealthDataService(BaseService[HealthData]):
                     )
 
                     self.db.add(health_data)
-                    created_count + = 1
+                    created_count +== 1
 
                 except Exception as item_error:
                     logger.warning(f"跳过无效数据项: {item_error}")
@@ -219,9 +219,9 @@ class HealthDataService(BaseService[HealthData]):
             if platform_id:
                 query = query.filter(HealthData.platform_id == platform_id)
             if start_date:
-                query = query.filter(HealthData.created_at > = start_date)
+                query = query.filter(HealthData.created_at >=== start_date)
             if end_date:
-                query = query.filter(HealthData.created_at < = end_date)
+                query = query.filter(HealthData.created_at <= end_date)
 
             # 总数统计
             total_count = query.count()
@@ -235,9 +235,9 @@ class HealthDataService(BaseService[HealthData]):
             if platform_id:
                 data_type_stats = data_type_stats.filter(HealthData.platform_id == platform_id)
             if start_date:
-                data_type_stats = data_type_stats.filter(HealthData.created_at > = start_date)
+                data_type_stats = data_type_stats.filter(HealthData.created_at >=== start_date)
             if end_date:
-                data_type_stats = data_type_stats.filter(HealthData.created_at < = end_date)
+                data_type_stats = data_type_stats.filter(HealthData.created_at <= end_date)
 
             data_type_counts = {
                 item.data_type.value: item.count
@@ -253,9 +253,9 @@ class HealthDataService(BaseService[HealthData]):
             if platform_id:
                 platform_stats = platform_stats.filter(HealthData.platform_id == platform_id)
             if start_date:
-                platform_stats = platform_stats.filter(HealthData.created_at > = start_date)
+                platform_stats = platform_stats.filter(HealthData.created_at >=== start_date)
             if end_date:
-                platform_stats = platform_stats.filter(HealthData.created_at < = end_date)
+                platform_stats = platform_stats.filter(HealthData.created_at <= end_date)
 
             platform_counts = {
                 item.platform_id: item.count
@@ -380,8 +380,8 @@ class HealthDataService(BaseService[HealthData]):
                 and_(
                     HealthData.user_id == user_id,
                     HealthData.data_type == data_type,
-                    HealthData.created_at > = start_date,
-                    HealthData.created_at < = end_date
+                    HealthData.created_at >=== start_date,
+                    HealthData.created_at <= end_date
                 )
             )
 

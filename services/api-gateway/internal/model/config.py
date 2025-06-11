@@ -2,8 +2,8 @@
 config - 索克生活项目模块
 """
 
+
 from pydantic import BaseModel, Field, field_validator
-from typing import Dict, List, Optional, Set, Union
 
 #! / usr / bin / env python
 # - * - coding: utf - 8 - * -
@@ -22,9 +22,9 @@ class RouteConfig(BaseModel):
     name: str
     prefix: str
     service: str
-    methods: List[str] = Field(default_factory = lambda: ["GET", "POST", "PUT", "DELETE", "PATCH"])
+    methods: list[str] = Field(default_factory = lambda: ["GET", "POST", "PUT", "DELETE", "PATCH"])
     strip_prefix: bool = True
-    rewrite_path: Optional[str] = None
+    rewrite_path: str | None = None
     timeout: float = 30.0
     retry: int = 0
     auth_required: bool = True
@@ -56,8 +56,8 @@ class ServiceConfig(BaseModel):
     """
     name: str
     version: str = "v1"
-    endpoints: List[ServiceEndpointConfig]
-    health_check: Optional[ServiceHealthCheckConfig] = None
+    endpoints: list[ServiceEndpointConfig]
+    health_check: ServiceHealthCheckConfig | None = None
 
 
 class ServiceDiscoveryConfig(BaseModel):
@@ -68,10 +68,10 @@ class ServiceDiscoveryConfig(BaseModel):
     refresh_interval: int = 30  # 秒
 
     # 静态服务列表
-    services: Dict[str, ServiceConfig] = Field(default_factory = dict)
+    services: dict[str, ServiceConfig] = Field(default_factory = dict)
 
     # Consul配置
-    consul_host: Optional[str] = None
+    consul_host: str | None = None
     consul_port: int = 8500
 
     # Kubernetes配置
@@ -97,7 +97,7 @@ class AuthConfig(BaseModel):
     认证配置
     """
     enabled: bool = True
-    public_paths: List[str] = Field(default_factory = list)
+    public_paths: list[str] = Field(default_factory = list)
     jwt: JwtConfig
 
 
@@ -116,9 +116,9 @@ class CorsConfig(BaseModel):
     CORS配置
     """
     enabled: bool = True
-    allow_origins: List[str] = Field(default_factory = lambda: [" * "])
-    allow_methods: List[str] = Field(default_factory = lambda: [" * "])
-    allow_headers: List[str] = Field(default_factory = lambda: [" * "])
+    allow_origins: list[str] = Field(default_factory = lambda: [" * "])
+    allow_methods: list[str] = Field(default_factory = lambda: [" * "])
+    allow_headers: list[str] = Field(default_factory = lambda: [" * "])
     allow_credentials: bool = False
     max_age: int = 600  # 10分钟
 
@@ -131,8 +131,8 @@ class CacheConfig(BaseModel):
     type: str = "memory"  # memory, redis
     ttl: int = 60  # 秒
     max_size: int = 1000  # 内存缓存最大条目数
-    redis_url: Optional[str] = None  # Redis连接URL
-    include_headers: List[str] = Field(default_factory = list)  # 要包含在缓存键中的请求头
+    redis_url: str | None = None  # Redis连接URL
+    include_headers: list[str] = Field(default_factory = list)  # 要包含在缓存键中的请求头
 
 
 class CircuitBreakerConfig(BaseModel):
@@ -152,7 +152,7 @@ class RetryConfig(BaseModel):
     enabled: bool = False
     max_retries: int = 3
     retry_delay: float = 0.5  # 重试延迟（秒）
-    retry_status_codes: List[int] = Field(default_factory = lambda: [500, 502, 503, 504])
+    retry_status_codes: list[int] = Field(default_factory = lambda: [500, 502, 503, 504])
 
 
 class LoadBalancerConfig(BaseModel):
@@ -171,7 +171,7 @@ class LoggingConfig(BaseModel):
     level: str = "INFO"
     format: str = "json"  # json, text
     output: str = "stdout"  # stdout, file
-    file_path: Optional[str] = None
+    file_path: str | None = None
     max_file_size: int = 10  # MB
     backup_count: int = 5
 
@@ -182,7 +182,7 @@ class ObservabilityConfig(BaseModel):
     """
     tracing_enabled: bool = False
     tracing_exporter: str = "jaeger"
-    tracing_endpoint: Optional[str] = None
+    tracing_endpoint: str | None = None
     metrics_enabled: bool = True
     metrics_endpoint: str = " / metrics"
     health_endpoint: str = " / health"
@@ -192,10 +192,10 @@ class MiddlewareConfig(BaseModel):
     """
     中间件配置
     """
-    auth: Optional[AuthConfig] = None
-    rate_limit: Optional[RateLimitConfig] = None
-    cors: Optional[CorsConfig] = None
-    trusted_hosts: Optional[List[str]] = None
+    auth: AuthConfig | None = None
+    rate_limit: RateLimitConfig | None = None
+    cors: CorsConfig | None = None
+    trusted_hosts: list[str] | None = None
 
 
 class RestServerConfig(BaseModel):
@@ -228,7 +228,7 @@ class GatewayConfig(BaseModel):
     server: ServerConfig = Field(default_factory = ServerConfig)
 
     # 路由配置
-    routes: List[RouteConfig] = Field(default_factory = list)
+    routes: list[RouteConfig] = Field(default_factory = list)
 
     # 服务发现
     service_discovery: ServiceDiscoveryConfig = Field(default_factory = ServiceDiscoveryConfig)
@@ -257,7 +257,7 @@ class GatewayConfig(BaseModel):
     @field_validator("middleware", mode = "before")
     @classmethod
     def set_default_middleware(cls, v):
-        """TODO: 添加文档字符串"""
-        if v is None:
+"""TODO: 添加文档字符串"""
+if v is None:
             return MiddlewareConfig()
-        return v
+return v

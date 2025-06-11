@@ -5,16 +5,20 @@
 
 import asyncio
 import logging
-from typing import Dict, List, Any, Optional
-from datetime import datetime, timedelta
 from dataclasses import dataclass, field
+from datetime import datetime, timedelta
 from enum import Enum
+from typing import Any, Dict, List, Optional
 
-from ..core.event_bus import SuokeEventBus
 from ..core.agent_event_types import (
-    XiaoaiEvents, XiaokeEvents, LaokeEvents, SoerEvents,
-    AgentCollaborationEvents, COLLABORATION_SCENARIOS
+    COLLABORATION_SCENARIOS,
+    AgentCollaborationEvents,
+    LaokeEvents,
+    SoerEvents,
+    XiaoaiEvents,
+    XiaokeEvents,
 )
+from ..core.event_bus import SuokeEventBus
 
 
 class CollaborationState(Enum):

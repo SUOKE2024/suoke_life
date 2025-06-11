@@ -1,145 +1,127 @@
-import {AgentCapability}AgentContext,;
-AgentResponse,;
+import {AgentCapability} fromgentContext,
+AgentResponse,
 }
   AgentType,};
-} from "../types";""/;"/g"/;
-
-/* 口 *//;/g/;
- *//;,/g/;
-export abstract class AgentBase {;,}const protected = agentType: AgentType;
+} from "../types";
+/* 口 */
+ */
+export abstract class AgentBase {const protected = agentType: AgentType;
 const protected = name: string;
 const protected = description: string;
-const protected = capabilities: AgentCapability[];";,"";
-const protected = isInitialized: boolean = false;';,'';
-const protected = version: string = '1.0.0';';,'';
-constructor() {';,}this.agentType = AgentType.XIAOAI; // 默认值，子类会覆盖'/;,'/g'/;
-this.name = ';'';
-this.description = ';'';'';
+const protected = capabilities: AgentCapability[];;
+const protected = isInitialized: boolean = false;
+const protected = version: string = '1.0.0
+constructor() {'this.agentType = AgentType.XIAOAI; // 默认值，子类会覆盖'/,'/g'/;
+this.name = '
+this.description = '';
 }
 }
-    this.capabilities = [];}
+    this.capabilities = []}
   }
-
-  /* 体 *//;/g/;
-   *//;,/g/;
+  /* 体 */
+   */
 const abstract = initialize(): Promise<void>;
-
-  /* 息 *//;/g/;
-   *//;,/g,/;
+  /* 息 */
+   *//,/g,/;
   abstract: processMessage(message: string,);
 const context = AgentContext);
   ): Promise<AgentResponse>;
-
-  /* 态 *//;/g/;
-   *//;,/g/;
+  /* 态 */
+   */
 const abstract = getHealthStatus(): Promise<any>;
-
-  /* 体 *//;/g/;
-   *//;,/g/;
+  /* 体 */
+   */
 const abstract = shutdown(): Promise<void>;
-
-  /* 称 *//;/g/;
-   *//;,/g/;
-getName(): string {}}
-    return this.name;}
+  /* 称 */
+   */
+getName(): string {}
+    return this.name}
   }
-
-  /* 述 *//;/g/;
-   *//;,/g/;
-getDescription(): string {}}
-    return this.description;}
+  /* 述 */
+   */
+getDescription(): string {}
+    return this.description}
   }
-
-  /* 表 *//;/g/;
-   *//;,/g/;
-getCapabilities(): AgentCapability[] {}}
-    return [...this.capabilities];}
+  /* 表 */
+   */
+getCapabilities(): AgentCapability[] {}
+    return [...this.capabilities]}
   }
-
-  /* 型 *//;/g/;
-   *//;,/g/;
-getAgentType(): AgentType {}}
-    return this.agentType;}
+  /* 型 */
+   */
+getAgentType(): AgentType {}
+    return this.agentType}
   }
-
-  /* 化 *//;/g/;
-   *//;,/g/;
-isReady(): boolean {}}
-    return this.isInitialized;}
+  /* 化 */
+   */
+isReady(): boolean {}
+    return this.isInitialized}
   }
-
-  /* 息 *//;/g/;
-   *//;,/g/;
-getVersion(): string {}}
-    return this.version;}
+  /* 息 */
+   */
+getVersion(): string {}
+    return this.version}
   }
-
-  /* 力 *//;/g/;
-   *//;,/g/;
-hasCapability(capability: AgentCapability): boolean {}}
-    return this.capabilities.includes(capability);}
+  /* 力 */
+   */
+hasCapability(capability: AgentCapability): boolean {}
+    return this.capabilities.includes(capability)}
   }
-
-  /* 文 *//;/g/;
-   */'/;,'/g'/;
-const protected = validateContext(context: AgentContext): boolean {';}}'';
-    return context && typeof context.userId === 'string';'}'';'';
+  /* 文 */
+   *//,'/g'/;
+const protected = validateContext(context: AgentContext): boolean {';}}
+    return context && typeof context.userId === 'string}
   }
-
-  /* D *//;/g/;
-   *//;,/g/;
+  /* D */
+   */
 const protected = generateResponseId(): string {}
     return `${this.agentType}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;````;```;
   }
-
   /* ' *//;'/g'/;
-   */'/;,'/g,'/;
-  protected: log(level: 'info' | 'warn' | 'error';',')'';
+   *//,'/g,'/;
+  protected: log(level: 'info' | 'warn' | 'error,')'';
 const message = string;);
 data?: any);
-  ): void {}}
-    const timestamp = new Date().toISOString();}
+  ): void {}
+    const timestamp = new Date().toISOString()}
     const logMessage = `[${timestamp}] [${this.agentType}] [${level.toUpperCase()}] ${message}`;````;```;
-';,'';
-switch (level) {';,}case 'info': ';,'';
+switch (level) {'case 'info': '
 console.log(logMessage, data || ');'';
-break;';,'';
-case 'warn': ';,'';
+break;
+case 'warn': '
 console.warn(logMessage, data || ');'';
-break;';,'';
-case 'error': ';,'';
-console.error(logMessage, data || ');'';'';
+break;
+case 'error': '
+console.error(logMessage, data || ');
 }
-        break;}
+        break}
     }
   }
-
-  /* 应 *//;/g/;
-   *//;,/g/;
+  /* 应 */
+   */
 const protected = createErrorResponse(message: string;);
 error?: any;);
 context?: AgentContext);
-  ): AgentResponse {return {}      success: false,;
-response: message,;
-error: error?.message || error,;
-timestamp: new Date(),;
+  ): AgentResponse {return {}      success: false,
+response: message,
+error: error?.message || error,
+timestamp: new Date(),
 }
-      const agentId = this.agentType;}
+      const agentId = this.agentType}
     };
   }
-
-  /* 应 *//;/g/;
-   *//;,/g/;
-const protected = createSuccessResponse(message: string;,)data?: any;);
+  /* 应 */
+   */
+const protected = createSuccessResponse(message: string,)data?: any;);
 context?: AgentContext;);
 metadata?: any);
-  ): AgentResponse {return {}      success: true,;
+  ): AgentResponse {return {}      success: true,
 const response = message;
-data,;
-timestamp: new Date(),;
+data,
+timestamp: new Date(),
 }
-      const agentId = this.agentType;}
+      const agentId = this.agentType}
     };
   }
-}';'';
-''';
+}
+''

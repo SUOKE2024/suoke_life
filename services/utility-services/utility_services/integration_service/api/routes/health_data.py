@@ -2,16 +2,18 @@
 health_data - 索克生活项目模块
 """
 
-from ...core.database import get_db
-from ...core.security import verify_token, TokenData
-from ...models.health_data import HealthData, HealthDataType
-from ...services.health_data_service import HealthDataService
-from datetime import datetime, date
-from fastapi import APIRouter, Depends, HTTPException, status, Query
-from pydantic import BaseModel, Field
-from sqlalchemy.orm import Session
-from typing import Any, Dict, List, Optional
 import logging
+from datetime import date
+from typing import Any, Dict, List, Optional
+
+from fastapi import APIRouter, Depends, HTTPException, Query, status
+from pydantic import BaseModel
+from sqlalchemy.orm import Session
+
+from ...core.database import get_db
+from ...core.security import TokenData, verify_token
+from ...models.health_data import HealthDataType
+from ...services.health_data_service import HealthDataService
 
 """
 健康数据相关的API路由
@@ -162,7 +164,7 @@ async def get_health_data_detail(
             )
 
         # 验证数据所有权
-        if health_data.user_id ! = current_user.user_id:
+        if health_data.user_id != current_user.user_id:
             raise HTTPException(
                 status_code = status.HTTP_403_FORBIDDEN,
                 detail = "无权访问此健康数据"
@@ -302,7 +304,7 @@ async def update_health_data(
                 detail = "健康数据不存在"
             )
 
-        if health_data.user_id ! = current_user.user_id:
+        if health_data.user_id != current_user.user_id:
             raise HTTPException(
                 status_code = status.HTTP_403_FORBIDDEN,
                 detail = "无权修改此健康数据"
@@ -359,7 +361,7 @@ async def delete_health_data(
                 detail = "健康数据不存在"
             )
 
-        if health_data.user_id ! = current_user.user_id:
+        if health_data.user_id != current_user.user_id:
             raise HTTPException(
                 status_code = status.HTTP_403_FORBIDDEN,
                 detail = "无权删除此健康数据"
@@ -443,7 +445,7 @@ async def get_health_data_stats(
             end_date = end_date
         )
 
-        return HealthDataStatsResponse( * *stats)
+        return HealthDataStatsResponse(**stats)
 
     except Exception as e:
         logger.error(f"获取健康数据统计失败: {e}")

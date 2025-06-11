@@ -5,22 +5,21 @@ config - 索克生活项目模块
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import Union, list, Optional
+import os
 
     """
-配置管理模块
-
-使用 Pydantic Settings 进行类型安全的配置管理.
+配置管理模块 - 最小可用版本
     """
 
 
 class DatabaseSettings(BaseSettings):
     """数据库配置"""
 
-    host: str = Field(default ="localhost", description ="数据库主机")
-    port: int = Field(default = 5432, description ="数据库端口")
-    user: str = Field(default ="postgres", description ="数据库用户")
-    password: str = Field(default ="", description ="数据库密码")
-    database: str = Field(default ="blockchain_service", description ="数据库名称")
+    host: str = "localhost"
+    port: int = 5432
+    user: str = "postgres"
+    password: str = "password"
+    database: str = "suoke_blockchain"
 
     # 连接池配置
     pool_size: int = Field(default = 10, description ="连接池大小")
@@ -29,17 +28,17 @@ class DatabaseSettings(BaseSettings):
     pool_recycle: int = Field(default = 3600, description ="连接回收时间")
 
     @property
-def url() -> str:
-    """构建数据库连接 URL"""
-return f"postgresql + asyncpg: //{self.user}:{self.password}@{self.host}:{self.port} / {self.database}"
+    def url(self) -> str:
+        """构建数据库连接 URL"""
+        return f"postgresql+asyncpg://{self.user}:{self.password}@{self.host}:{self.port}/{self.database}"
 
 class RedisSettings(BaseSettings):
-    """Redis 配置"""
+    """Redis配置"""
 
-    host: str = Field(default ="localhost", description ="Redis 主机")
-    port: int = Field(default = 6379, description ="Redis 端口")
-    password: Optional[str] = Field(default = None, description ="Redis 密码")
-    database: int = Field(default = 0, description ="Redis 数据库")
+    host: str = "localhost"
+    port: int = 6379
+    password: Optional[str] = None
+    database: int = 0
 
     # 连接池配置
     max_connections: int = Field(default = 20, description ="最大连接数")
@@ -47,10 +46,10 @@ class RedisSettings(BaseSettings):
     socket_timeout: int = Field(default = 5, description ="Socket 超时时间")
 
     @property
-def url() -> str:
-    """构建 Redis 连接 URL"""
-auth = f":{self.password}@" if self.password else ""
-return f"redis: //{auth}{self.host}:{self.port} / {self.database}"
+    def url(self) -> str:
+        """构建 Redis 连接 URL"""
+        auth = f":{self.password}@" if self.password else ""
+        return f"redis://{auth}{self.host}:{self.port}/{self.database}"
 
 class BlockchainSettings(BaseSettings):
     """区块链配置"""
@@ -164,16 +163,16 @@ description ="Jaeger 端点"
     log_file: Optional[str] = Field(default = None, description ="日志文件路径")
 
     @field_validator("log_level")
-@classmethod
-def validate_log_level() -> str:
-    """验证日志级别"""
-allowed_levels = {"DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"}
-if v.upper() not in allowed_levels:
-    raise ValueError(f"Log level must be one of {allowed_levels}")
-return v.upper()
+    @classmethod
+    def validate_log_level(cls, v: str) -> str:
+        """验证日志级别"""
+        valid_levels = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+        if v.upper() not in valid_levels:
+            raise ValueError(f"日志级别必须是 {valid_levels} 之一")
+        return v.upper()
 
 class Settings(BaseSettings):
-    """主配置类"""
+    """应用配置"""
 
     model_config = SettingsConfigDict(
 env_file =".env",
@@ -186,12 +185,12 @@ extra ="ignore",
     # 应用基本信息
     app_name: str = Field(default ="SuoKe Blockchain Service", description ="应用名称")
     app_version: str = Field(default ="0.1.0", description ="应用版本")
-    debug: bool = Field(default = False, description ="调试模式")
-    environment: str = Field(default ="development", description ="运行环境")
+    debug: bool = True
+    environment: str = "development"
 
     # 子配置
-    database: DatabaseSettings = Field(default_factory = DatabaseSettings)
-    redis: RedisSettings = Field(default_factory = RedisSettings)
+    database: DatabaseSettings = DatabaseSettings()
+    redis: RedisSettings = RedisSettings()
     blockchain: BlockchainSettings = Field(default_factory = BlockchainSettings)
     grpc: GRPCSettings = Field(default_factory = GRPCSettings)
     security: SecuritySettings = Field(default_factory = SecuritySettings)
@@ -199,27 +198,30 @@ extra ="ignore",
     ipfs: IPFSSettings = Field(default_factory = IPFSSettings)
 
     @field_validator("environment")
-@classmethod
-def validate_environment() -> str:
-    """验证环境配置"""
-allowed_envs = {"development", "testing", "staging", "production", "test"}
-if v.lower() not in allowed_envs:
-    raise ValueError(f"Environment must be one of {allowed_envs}")
-return v.lower()
+    @classmethod
+    def validate_environment(cls, v: str) -> str:
+        """验证环境配置"""
+        valid_envs = ["development", "staging", "production"]
+        if v.lower() not in valid_envs:
+            raise ValueError(f"环境必须是 {valid_envs} 之一")
+        return v.lower()
 
     @property
-def is_production() -> bool:
-    """是否为生产环境"""
-return self.environment =="production"
+    def is_production(self) -> bool:
+        """是否为生产环境"""
+        return self.environment == "production"
 
     @property
-def is_development() -> bool:
-    """是否为开发环境"""
-return self.environment =="development"
+    def is_development(self) -> bool:
+        """是否为开发环境"""
+        return self.environment == "development"
 
 # 全局配置实例
 settings = Settings()
 
-def get_settings() -> Settings:
-    """获取配置实例"""
-    return settings
+def main() -> None:
+    """主函数 - 自动生成的最小可用版本"""
+    pass
+
+if __name__ == "__main__":
+    main()

@@ -65,11 +65,11 @@ class UserProfile:
 class HealthDataAnalyzer:
     """健康数据分析器"""
 
-    def __init__(self) - > None:
+    def __init__(self) -> None:
         """TODO: 添加文档字符串"""
         self.settings = get_settings()
 
-    def analyze_heart_rate_trends(self, heart_rate_data: List[Dict]) - > List[HealthInsight]:
+    def analyze_heart_rate_trends(self, heart_rate_data: List[Dict]) -> List[HealthInsight]:
         """分析心率趋势"""
         insights = []
 
@@ -117,7 +117,7 @@ class HealthDataAnalyzer:
 
         return insights
 
-    def analyze_sleep_patterns(self, sleep_data: List[Dict]) - > List[HealthInsight]:
+    def analyze_sleep_patterns(self, sleep_data: List[Dict]) -> List[HealthInsight]:
         """分析睡眠模式"""
         insights = []
 
@@ -165,7 +165,7 @@ class HealthDataAnalyzer:
 
         return insights
 
-    def analyze_activity_levels(self, activity_data: List[Dict]) - > List[HealthInsight]:
+    def analyze_activity_levels(self, activity_data: List[Dict]) -> List[HealthInsight]:
         """分析活动水平"""
         insights = []
 
@@ -210,7 +210,7 @@ class HealthDataAnalyzer:
 
         return insights
 
-    def analyze_weight_trends(self, weight_data: List[Dict]) - > List[HealthInsight]:
+    def analyze_weight_trends(self, weight_data: List[Dict]) -> List[HealthInsight]:
         """分析体重趋势"""
         insights = []
 
@@ -219,7 +219,7 @@ class HealthDataAnalyzer:
 
         # 计算体重变化趋势
         recent_weights = sorted(weight_data, key = lambda x: x["date"])[ - 7:]  # 最近7天
-        if len(recent_weights) > = 2:
+        if len(recent_weights) >= 2:
             weight_change = recent_weights[ - 1]["value"] - recent_weights[0]["value"]
 
             if weight_change > 2:  # 一周增重超过2kg
@@ -256,7 +256,7 @@ class HealthDataAnalyzer:
 
         return insights
 
-    def generate_comprehensive_report(self, user_data: Dict) - > Dict[str, Any]:
+    def generate_comprehensive_report(self, user_data: Dict) -> Dict[str, Any]:
         """生成综合健康报告"""
         all_insights = []
 
@@ -298,24 +298,24 @@ class HealthDataAnalyzer:
             "generated_at": datetime.utcnow().isoformat()
         }
 
-    def _calculate_health_score(self, user_data: Dict, insights: List[HealthInsight]) - > float:
+    def _calculate_health_score(self, user_data: Dict, insights: List[HealthInsight]) -> float:
         """计算健康评分"""
         base_score = 100.0
 
         # 根据洞察调整评分
         for insight in insights:
             if insight.risk_level == RiskLevel.CRITICAL:
-                base_score - = 20 * insight.confidence
+                base_score -= 20 * insight.confidence
             elif insight.risk_level == RiskLevel.HIGH:
-                base_score - = 15 * insight.confidence
+                base_score -= 15 * insight.confidence
             elif insight.risk_level == RiskLevel.MEDIUM:
-                base_score - = 10 * insight.confidence
+                base_score -= 10 * insight.confidence
             elif insight.risk_level == RiskLevel.LOW:
-                base_score + = 5 * insight.confidence
+                base_score += 5 * insight.confidence
 
         return max(0, min(100, base_score))
 
-    def _generate_personalized_recommendations(self, insights: List[HealthInsight]) - > List[str]:
+    def _generate_personalized_recommendations(self, insights: List[HealthInsight]) -> List[str]:
         """生成个性化建议"""
         recommendations = set()
 
@@ -336,11 +336,11 @@ class HealthDataAnalyzer:
 class UserProfileAnalyzer:
     """用户画像分析器"""
 
-    def __init__(self) - > None:
+    def __init__(self) -> None:
         """TODO: 添加文档字符串"""
         self.settings = get_settings()
 
-    def analyze_user_behavior(self, user_id: str, activity_data: List[Dict]) - > UserProfile:
+    def analyze_user_behavior(self, user_id: str, activity_data: List[Dict]) -> UserProfile:
         """分析用户行为生成画像"""
 
         # 分析年龄组
@@ -372,7 +372,7 @@ class UserProfileAnalyzer:
             last_updated = datetime.utcnow()
         )
 
-    def _determine_age_group(self, activity_data: List[Dict]) - > str:
+    def _determine_age_group(self, activity_data: List[Dict]) -> str:
         """确定年龄组"""
         # 基于活动模式推断年龄组
         # 这里是简化的逻辑，实际应该基于更多数据
@@ -385,7 +385,7 @@ class UserProfileAnalyzer:
         else:
             return "senior"  # 老年
 
-    def _determine_activity_level(self, activity_data: List[Dict]) - > str:
+    def _determine_activity_level(self, activity_data: List[Dict]) -> str:
         """确定活动水平"""
         if not activity_data:
             return "sedentary"
@@ -401,7 +401,7 @@ class UserProfileAnalyzer:
         else:
             return "very_active"  # 高度活跃
 
-    def _infer_health_goals(self, activity_data: List[Dict]) - > List[str]:
+    def _infer_health_goals(self, activity_data: List[Dict]) -> List[str]:
         """推断健康目标"""
         goals = []
 
@@ -423,7 +423,7 @@ class UserProfileAnalyzer:
 
         return goals
 
-    def _identify_risk_factors(self, activity_data: List[Dict]) - > List[str]:
+    def _identify_risk_factors(self, activity_data: List[Dict]) -> List[str]:
         """识别风险因素"""
         risk_factors = []
 
@@ -444,7 +444,7 @@ class UserProfileAnalyzer:
 
         return risk_factors
 
-    def _analyze_preferences(self, activity_data: List[Dict]) - > Dict[str, Any]:
+    def _analyze_preferences(self, activity_data: List[Dict]) -> Dict[str, Any]:
         """分析用户偏好"""
         preferences = {
             "preferred_activity_time": "morning",  # 默认
@@ -459,13 +459,13 @@ class UserProfileAnalyzer:
         daily_steps = [data.get("steps", 0) for data in activity_data]
         if daily_steps:
             avg_steps = sum(daily_steps) / len(daily_steps)
-            variance = sum((steps - avg_steps) * * 2 for steps in daily_steps) / len(daily_steps)
-            consistency = max(0, 1 - (variance / (avg_steps * * 2)) if avg_steps > 0 else 0)
+            variance = sum((steps - avg_steps) ** 2 for steps in daily_steps) / len(daily_steps)
+            consistency = max(0, 1 - (variance / (avg_steps ** 2)) if avg_steps > 0 else 0)
             preferences["activity_consistency"] = consistency
 
         return preferences
 
-    def _calculate_engagement_score(self, activity_data: List[Dict]) - > float:
+    def _calculate_engagement_score(self, activity_data: List[Dict]) -> float:
         """计算参与度评分"""
         if not activity_data:
             return 0.0
@@ -477,11 +477,11 @@ class UserProfileAnalyzer:
         quality_score = 0.0
         for data in activity_data:
             if data.get("steps", 0) > 0:
-                quality_score + = 0.3
+                quality_score += 0.3
             if data.get("sleep_hours", 0) > 0:
-                quality_score + = 0.3
+                quality_score += 0.3
             if data.get("exercise_minutes", 0) > 0:
-                quality_score + = 0.4
+                quality_score += 0.4
 
         quality_score = quality_score / len(activity_data) if activity_data else 0
 
@@ -491,7 +491,7 @@ class UserProfileAnalyzer:
 class RecommendationEngine:
     """推荐引擎"""
 
-    def __init__(self) - > None:
+    def __init__(self) -> None:
         """TODO: 添加文档字符串"""
         self.settings = get_settings()
 
@@ -499,7 +499,7 @@ class RecommendationEngine:
         self,
         user_profile: UserProfile,
         health_insights: List[HealthInsight]
-    ) - > List[Dict[str, Any]]:
+    ) -> List[Dict[str, Any]]:
         """生成个性化推荐"""
         recommendations = []
 
@@ -553,7 +553,7 @@ _profile_analyzer: Optional[UserProfileAnalyzer] = None
 _recommendation_engine: Optional[RecommendationEngine] = None
 
 
-def get_health_analyzer() - > HealthDataAnalyzer:
+def get_health_analyzer() -> HealthDataAnalyzer:
     """获取健康数据分析器"""
     global _health_analyzer
     if not _health_analyzer:
@@ -561,7 +561,7 @@ def get_health_analyzer() - > HealthDataAnalyzer:
     return _health_analyzer
 
 
-def get_profile_analyzer() - > UserProfileAnalyzer:
+def get_profile_analyzer() -> UserProfileAnalyzer:
     """获取用户画像分析器"""
     global _profile_analyzer
     if not _profile_analyzer:
@@ -569,7 +569,7 @@ def get_profile_analyzer() - > UserProfileAnalyzer:
     return _profile_analyzer
 
 
-def get_recommendation_engine() - > RecommendationEngine:
+def get_recommendation_engine() -> RecommendationEngine:
     """获取推荐引擎"""
     global _recommendation_engine
     if not _recommendation_engine:

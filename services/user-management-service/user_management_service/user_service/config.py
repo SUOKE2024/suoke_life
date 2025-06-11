@@ -3,9 +3,10 @@ config - 索克生活项目模块
 """
 
 from functools import lru_cache
+from typing import List, Optional
+
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from typing import Optional, List
 
 """用户服务配置"""
 
@@ -32,14 +33,14 @@ class DatabaseSettings(BaseSettings):
     echo_pool: bool = Field(default = False, description = "是否打印连接池日志")
 
     @property
-    def url(self) - > str:
+    def url(self) -> str:
         """获取数据库连接URL"""
-        return f"postgresql + asyncpg: / /{self.user}:{self.password}@{self.host}:{self.port} / {self.name}"
+        return f"postgresql + asyncpg: //{self.user}:{self.password}@{self.host}:{self.port} / {self.name}"
 
     @property
-    def sync_url(self) - > str:
+    def sync_url(self) -> str:
         """获取同步数据库连接URL"""
-        return f"postgresql: / /{self.user}:{self.password}@{self.host}:{self.port} / {self.name}"
+        return f"postgresql: //{self.user}:{self.password}@{self.host}:{self.port} / {self.name}"
 
 
 class RedisSettings(BaseSettings):
@@ -52,11 +53,11 @@ class RedisSettings(BaseSettings):
     max_connections: int = Field(default = 20, description = "最大连接数")
 
     @property
-    def url(self) - > str:
+    def url(self) -> str:
         """获取Redis连接URL"""
         if self.password:
-            return f"redis: / /:{self.password}@{self.host}:{self.port} / {self.db}"
-        return f"redis: / /{self.host}:{self.port} / {self.db}"
+            return f"redis: //:{self.password}@{self.host}:{self.port} / {self.db}"
+        return f"redis: //{self.host}:{self.port} / {self.db}"
 
 
 class CacheSettings(BaseSettings):
@@ -72,7 +73,7 @@ class CacheSettings(BaseSettings):
 class AuthSettings(BaseSettings):
     """认证配置"""
 
-    auth_service_url: str = Field(default = "http: / /localhost:8000", description = "认证服务URL")
+    auth_service_url: str = Field(default = "http: //localhost:8000", description = "认证服务URL")
     jwt_secret_key: str = Field(description = "JWT密钥")
     jwt_algorithm: str = Field(default = "HS256", description = "JWT算法")
     token_cache_ttl: int = Field(default = 300, description = "令牌缓存时间(秒)")
@@ -150,7 +151,7 @@ class Settings(BaseSettings):
 
     @field_validator("environment")
     @classmethod
-    def validate_environment(cls, v: str) - > str:
+    def validate_environment(cls, v: str) -> str:
         """验证环境配置"""
         allowed = ["development", "testing", "staging", "production"]
         if v not in allowed:
@@ -158,22 +159,22 @@ class Settings(BaseSettings):
         return v
 
     @property
-    def is_development(self) - > bool:
+    def is_development(self) -> bool:
         """是否为开发环境"""
         return self.environment == "development"
 
     @property
-    def is_production(self) - > bool:
+    def is_production(self) -> bool:
         """是否为生产环境"""
         return self.environment == "production"
 
     @property
-    def is_testing(self) - > bool:
+    def is_testing(self) -> bool:
         """是否为测试环境"""
         return self.environment == "testing"
 
 
 @lru_cache()
-def get_settings() - > Settings:
+def get_settings() -> Settings:
     """获取应用配置单例"""
     return Settings()

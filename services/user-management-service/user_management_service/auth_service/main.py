@@ -1,4 +1,3 @@
-from typing import Dict, List, Any, Optional, Union
 
 """
 main - 索克生活项目模块

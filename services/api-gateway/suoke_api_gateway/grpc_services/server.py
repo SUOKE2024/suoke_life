@@ -2,13 +2,14 @@
 server - 索克生活项目模块
 """
 
+import asyncio
+import signal
+
+from grpc import aio
+
 from ..core.config import Settings
 from ..core.logging import get_logger
 from .gateway_service import GatewayService
-from grpc import aio
-from typing import Optional
-import asyncio
-import signal
 
 """
 gRPC 服务器
@@ -25,18 +26,18 @@ class GRPCServer:
     """gRPC 服务器"""
 
     def __init__(self, settings: Settings):
-        """TODO: 添加文档字符串"""
-        self.settings = settings
-        self.server: Optional[aio.Server] = None
-        self.gateway_service: Optional[GatewayService] = None
+"""TODO: 添加文档字符串"""
+self.settings = settings
+self.server: aio.Server | None = None
+self.gateway_service: GatewayService | None = None
 
-    async def start(self) - > None:
-        """启动 gRPC 服务器"""
-        if not self.settings.grpc.enabled:
+    async def start(self) -> None:
+"""启动 gRPC 服务器"""
+if not self.settings.grpc.enabled:
             logger.info("gRPC server is disabled")
             return
 
-        try:
+try:
             # 创建服务器
             self.server = aio.server()
 
@@ -61,13 +62,13 @@ class GRPCServer:
                 port = self.settings.grpc.port,
             )
 
-        except Exception as e:
+except Exception as e:
             logger.error("Failed to start gRPC server", error = str(e))
             raise
 
-    async def stop(self) - > None:
-        """停止 gRPC 服务器"""
-        if self.server:
+    async def stop(self) -> None:
+"""停止 gRPC 服务器"""
+if self.server:
             logger.info("Stopping gRPC server...")
 
             # 停止接受新连接
@@ -78,29 +79,29 @@ class GRPCServer:
 
             logger.info("gRPC server stopped")
 
-    async def wait_for_termination(self) - > None:
-        """等待服务器终止"""
-        if self.server:
+    async def wait_for_termination(self) -> None:
+"""等待服务器终止"""
+if self.server:
             await self.server.wait_for_termination()
 
-async def run_grpc_server(settings: Settings) - > None:
+async def run_grpc_server(settings: Settings) -> None:
     """运行 gRPC 服务器"""
     server = GRPCServer(settings)
 
     # 设置信号处理
-    def signal_handler() - > None:
-        """TODO: 添加文档字符串"""
-        logger.info("Received shutdown signal")
-        asyncio.create_task(server.stop())
+    def signal_handler() -> None:
+"""TODO: 添加文档字符串"""
+logger.info("Received shutdown signal")
+asyncio.create_task(server.stop())
 
     # 注册信号处理器
     for sig in [signal.SIGTERM, signal.SIGINT]:
-        signal.signal(sig, lambda s, f: signal_handler())
+signal.signal(sig, lambda s, f: signal_handler())
 
     try:
-        await server.start()
-        await server.wait_for_termination()
+await server.start()
+await server.wait_for_termination()
     except KeyboardInterrupt:
-        logger.info("Received keyboard interrupt")
+logger.info("Received keyboard interrupt")
     finally:
-        await server.stop()
+await server.stop()

@@ -2,12 +2,13 @@
 database - 索克生活项目模块
 """
 
-from sqlalchemy import MetaData
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
-from sqlalchemy.orm import DeclarativeBase
-from typing import AsyncGenerator
-from user_service.config import get_settings
 import logging
+from collections.abc import AsyncGenerator
+
+from sqlalchemy import MetaData
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.orm import DeclarativeBase
+from user_service.config import get_settings
 
 """数据库连接管理"""
 
@@ -33,7 +34,7 @@ class Base(DeclarativeBase):
     )
 
 
-async def init_database() - > None:
+async def init_database() -> None:
     """初始化数据库连接"""
     global engine, async_session_maker
 
@@ -65,7 +66,7 @@ async def init_database() - > None:
         raise
 
 
-async def close_database() - > None:
+async def close_database() -> None:
     """关闭数据库连接"""
     global engine
 
@@ -77,7 +78,7 @@ async def close_database() - > None:
             logger.error(f"关闭数据库连接时出错: {e}")
 
 
-async def get_db_session() - > AsyncGenerator[AsyncSession, None]:
+async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
     """获取数据库会话"""
     if not async_session_maker:
         raise RuntimeError("数据库未初始化")
@@ -93,7 +94,7 @@ async def get_db_session() - > AsyncGenerator[AsyncSession, None]:
             await session.close()
 
 
-async def create_tables() - > None:
+async def create_tables() -> None:
     """创建数据库表"""
     if not engine:
         raise RuntimeError("数据库引擎未初始化")
@@ -107,7 +108,7 @@ async def create_tables() - > None:
         raise
 
 
-async def drop_tables() - > None:
+async def drop_tables() -> None:
     """删除数据库表"""
     if not engine:
         raise RuntimeError("数据库引擎未初始化")

@@ -1,24 +1,26 @@
-react";";
-export interface Agent {id: string,";,}name: string,";,"";
+react;
+export interface Agent {
+id: string,"name: string,","";
 type: xiaoai" | "xiaoke | "laoke" | soer;",";
-status: "online | "offline" | busy";",";
-capabilities: string[],;
+status: "online | "offline" | busy,";
+capabilities: string[],
+
+}
+  const lastActive = Date}
+}
+export interface AgentTask {id: string}agentId: string,","";
+type: string,","";
+status: "pending | "running" | completed" | "failed;",","";
+priority: "low" | medium" | "high;",
 }
 }
-  const lastActive = Date;}
+  const createdAt = Date}
 }
-export interface AgentTask {id: string}agentId: string,";,"";
-type: string,";,"";
-status: "pending | "running" | completed" | "failed;",";,"";
-priority: "low" | medium" | "high;","";"";
+export interface AgentIntegrationHubProps {
+"onAgentSelect?: (agent: Agent) => void;";
+
 }
-}
-  const createdAt = Date;}
-}
-export interface AgentIntegrationHubProps {";,}onAgentSelect?: (agent: Agent) => void;";"";
-}
-}
-  onTaskCreate?: (task: Omit<AgentTask; "id" | createdAt">) => void;"}"";"";
+  onTaskCreate?: (task: Omit<AgentTask; "id" | createdAt">) => void;"
 }
 /* " *//;"/g"/;
   */"/"/g"/;

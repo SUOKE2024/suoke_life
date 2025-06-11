@@ -1,123 +1,114 @@
 #!/usr/bin/env node;
-const fs = require("fs);
-const path = require(")path");
-
+const fs = require("fs");
+const path = require("path");
 // 需要修复的文件和行号映射
-const targetFiles = {
-  "src/components/ui/AccessibilityPanel.tsx: [30, 40],
-  "src/components/ui/Button.tsx": [105, 128, 153, 194, 213],
-  src/components/ui/Card.tsx": [4, 39],
-  "src/components/ui/Modal.tsx: [107],
-  "src/components/ui/PerformanceMonitor.tsx": [17, 24, 44],
-  src/components/ui/RTLView.tsx": [130, 145, 159],
-  "src/components/ui/Slider.tsx: [187],
-  "src/components/ui/Text.tsx": [7, 78, 185, 214],
-  src/components/ui/UserExperienceEnhancer.tsx": [30, 42],
-  "src/contexts/ThemeContext.tsx: [143],
-  "src/core/ConfigurationManager.tsx": [5],
-  src/core/DIContainer.tsx": [27],
-  "src/i18n/config.tsx: [28, 256],
-  "src/i18n/i18nManager.tsx": [18, 99],
-  src/infrastructure/config/EnvironmentManager.tsx": [391, 394, 423],
-  "src/screens/BrandColorDemo.tsx: [68],
-  "src/screens/auth/RegisterScreen.tsx": [265],
-  src/screens/auth/WelcomeScreen.tsx": [114],
-  "src/screens/components/ColorPreview.tsx: [72],
-  "src/screens/components/SearchBar.tsx": [80],
-  src/screens/components/UIShowcase.tsx": [19],
-  "src/screens/demo/AdvancedFeaturesDemo.tsx: [23],
-  "src/screens/demo/AgentCollaborationDemoScreen.tsx": [140, 144],
-  src/screens/demo/ApiIntegrationDemo.tsx": [172],
-  "src/screens/demo/FiveDiagnosisAgentIntegrationScreen.tsx: [339],
-  "src/screens/life/HealthDashboardEnhanced.tsx": [194],
-  src/screens/life/components/AdvancedHealthDashboard.tsx": [236],
-  "src/screens/profile/ProfileScreen.tsx: [12, 23, 30, 38, 46, 458, 467],
-  "src/screens/suoke/components/SystemMonitorDashboard.tsx": [146, 212],
-  src/screens/suoke/components/XiaoaiChatInterface.tsx": [76, 192],
-  "src/services/ApiIntegrationService.tsx: [4, 9, 21, 30, 38, 57, 67, 82, 97, 102, 122, 129, 170, 257],
-  "src/services/IntegratedApiService.tsx": [4, 9, 21, 30, 38, 57, 67, 82, 131, 162, 252],
-  src/services/accessibilityService.tsx": [11, 64, 80, 253],
-  "src/services/advancedAnalyticsService.tsx: [73, 159],
-  "src/services/agentService.tsx": [3, 15, 20, 123],
-  src/services/apiClient.tsx": [17],
-  "src/services/ecoServicesApi.tsx: [210, 238],
-  "src/services/enhancedApiClient.tsx": [7],
-  src/services/graphql/client.tsx": [35],
-  "src/services/logisticsService.tsx: [53, 96],
-  "src/services/medicalApiService.tsx": [25, 39, 85, 202, 445],
-  src/services/offline/offlineManager.tsx": [30],
-  "src/services/paymentService.tsx: [47, 57],
-  "src/services/realTimeSync.tsx": [3],
-  src/services/uiUxOptimizationService.tsx": [682],
-  "src/services/websocket/websocketManager.tsx: [44],
-  "src/setupTests.ts": [93],
-  src/store/middleware/apiMiddleware.ts": [27],
-  "src/store/middleware/persistMiddleware.ts: [12],
-  "src/store/slices/diagnosisSlice.tsx": [93, 112],
-  src/types/core.tsx": [30, 58, 63],
-  "src/utils/agentCollaborationSystem.tsx: [415],
-  "src/utils/animations.ts": [260, 279, 286, 298, 321, 326, 343, 373, 386, 389, 394, 398, 403],
-  src/utils/blockchainHealthData.tsx": [9, 35, 239, 255, 441, 539, 542],
-  "src/utils/errorHandler.ts: [9],
-  "src/utils/monitoringSystem.tsx": [504],
-  src/utils/nativeModules.tsx": [5],
-  "src/utils/performanceOptimizer.tsx: [30, 559],
-  "src/utils/performanceReporter.tsx": [88],
-  src/utils/responsive.tsx": [86, 90, 92, 98, 102, 106, 109, 111, 175, 178, 184, 193, 203, 210, 223, 232, 236, 243, 246, 254, 259, 266, 273, 283],
-  "src/utils/securityManager.tsx: [242, 433, 444, 475],
-  "src/utils/smartCacheStrategy.tsx": [8, 20, 88, 118],
+const targetFiles = {"
+  "src/components/ui/AccessibilityPanel.tsx: [30, 40],"
+  "src/components/ui/Button.tsx": [105, 128, 153, 194, 213],"
+  src/components/ui/Card.tsx": [4, 39],"
+  "src/components/ui/Modal.tsx: [107],"
+  "src/components/ui/PerformanceMonitor.tsx": [17, 24, 44],"
+  src/components/ui/RTLView.tsx": [130, 145, 159],"
+  "src/components/ui/Slider.tsx: [187],"
+  "src/components/ui/Text.tsx": [7, 78, 185, 214],"
+  src/components/ui/UserExperienceEnhancer.tsx": [30, 42],"
+  "src/contexts/ThemeContext.tsx: [143],"
+  "src/core/ConfigurationManager.tsx": [5],"
+  src/core/DIContainer.tsx": [27],"
+  "src/i18n/config.tsx: [28, 256],"
+  "src/i18n/i18nManager.tsx": [18, 99],"
+  src/infrastructure/config/EnvironmentManager.tsx": [391, 394, 423],"
+  "src/screens/BrandColorDemo.tsx: [68],"
+  "src/screens/auth/RegisterScreen.tsx": [265],"
+  src/screens/auth/WelcomeScreen.tsx": [114],"
+  "src/screens/components/ColorPreview.tsx: [72],"
+  "src/screens/components/SearchBar.tsx": [80],"
+  src/screens/components/UIShowcase.tsx": [19],"
+  "src/screens/demo/AdvancedFeaturesDemo.tsx: [23],"
+  "src/screens/demo/AgentCollaborationDemoScreen.tsx": [140, 144],"
+  src/screens/demo/ApiIntegrationDemo.tsx": [172],"
+  "src/screens/demo/FiveDiagnosisAgentIntegrationScreen.tsx: [339],"
+  "src/screens/life/HealthDashboardEnhanced.tsx": [194],"
+  src/screens/life/components/AdvancedHealthDashboard.tsx": [236],"
+  "src/screens/profile/ProfileScreen.tsx: [12, 23, 30, 38, 46, 458, 467],"
+  "src/screens/suoke/components/SystemMonitorDashboard.tsx": [146, 212],"
+  src/screens/suoke/components/XiaoaiChatInterface.tsx": [76, 192],"
+  "src/services/ApiIntegrationService.tsx: [4, 9, 21, 30, 38, 57, 67, 82, 97, 102, 122, 129, 170, 257],"
+  "src/services/IntegratedApiService.tsx": [4, 9, 21, 30, 38, 57, 67, 82, 131, 162, 252],"
+  src/services/accessibilityService.tsx": [11, 64, 80, 253],"
+  "src/services/advancedAnalyticsService.tsx: [73, 159],"
+  "src/services/agentService.tsx": [3, 15, 20, 123],"
+  src/services/apiClient.tsx": [17],"
+  "src/services/ecoServicesApi.tsx: [210, 238],"
+  "src/services/enhancedApiClient.tsx": [7],"
+  src/services/graphql/client.tsx": [35],"
+  "src/services/logisticsService.tsx: [53, 96],"
+  "src/services/medicalApiService.tsx": [25, 39, 85, 202, 445],"
+  src/services/offline/offlineManager.tsx": [30],"
+  "src/services/paymentService.tsx: [47, 57],"
+  "src/services/realTimeSync.tsx": [3],"
+  src/services/uiUxOptimizationService.tsx": [682],"
+  "src/services/websocket/websocketManager.tsx: [44],"
+  "src/setupTests.ts": [93],"
+  src/store/middleware/apiMiddleware.ts": [27],"
+  "src/store/middleware/persistMiddleware.ts: [12],"
+  "src/store/slices/diagnosisSlice.tsx": [93, 112],"
+  src/types/core.tsx": [30, 58, 63],"
+  "src/utils/agentCollaborationSystem.tsx: [415],"
+  "src/utils/animations.ts": [260, 279, 286, 298, 321, 326, 343, 373, 386, 389, 394, 398, 403],"
+  src/utils/blockchainHealthData.tsx": [9, 35, 239, 255, 441, 539, 542],"
+  "src/utils/errorHandler.ts: [9],"
+  "src/utils/monitoringSystem.tsx": [504],"
+  src/utils/nativeModules.tsx": [5],"
+  "src/utils/performanceOptimizer.tsx: [30, 559],"
+  "src/utils/performanceReporter.tsx": [88],"
+  src/utils/responsive.tsx": [86, 90, 92, 98, 102, 106, 109, 111, 175, 178, 184, 193, 203, 210, 223, 232, 236, 243, 246, 254, 259, 266, 273, 283],"
+  "src/utils/securityManager.tsx: [242, 433, 444, 475],"
+  "src/utils/smartCacheStrategy.tsx": [8, 20, 88, 118],"
   src/utils/stateOptimizer.ts": [52];
 };
-
 // 修复单个文件的函数
 function fixFileTargeted(filePath, errorLines) {
   if (!fs.existsSync(filePath)) {
     return 0;
   }
-
-  try {
-    const content = fs.readFileSync(filePath, "utf8);
+  try {"
+    const content = fs.readFileSync(filePath, "utf8);"
     const lines = content.split("\n");
     let fixCount = 0;
     let hasChanges = false;
-
     // 修复指定行的错误
 errorLines.forEach(lineNumber => {
       const index = lineNumber - 1; // 转换为0基索引
 if (index >= 0 && index < lines.length) {
         const line = lines[index];
         const trimmedLine = line.trim();
-
-        // 跳过空行和注释行
+        // 跳过空行和注释行"
 if (!trimmedLine || trimmedLine.startsWith(/* "  */) || trimmedLine.startsWith("/*)) {
           return
         }
-
         // 检查是否是对象属性定义（更精确的匹配）
         const propertyMatch = line.match(/^(\s*)([a-zA-Z_$][a-zA-Z0-9_$]*)\s*:\s*([^,{}\[\]\n]+?)(\s*)$/);
         if (propertyMatch) {
-          const [, indent, prop, value, trailing] = propertyMatch;
+          const [ indent, prop, value, trailing] = propertyMatch;
           const trimmedValue = value.trim();
-
           // 检查下一行是否是同级属性或对象结束
 const nextLine = lines[index + 1];
           if (nextLine) {
             const nextTrimmed = nextLine.trim();
             const nextPropertyMatch = nextLine.match(/^(\s*)([a-zA-Z_$][a-zA-Z0-9_$]*)\s*:/);
             const nextCloseBrace = nextTrimmed.match(/^[}\]]/);
-
-            // 如果下一行是同级属性且当前行没有逗号
+            // 如果下一行是同级属性且当前行没有逗号"
 if (nextPropertyMatch && !trimmedValue.endsWith(",") && !trimmedValue.endsWith(;")) {
               const currentIndent = indent.length;
               const nextIndent = nextPropertyMatch[1].length;
-
               if (currentIndent === nextIndent) {
                 lines[index] = `${indent}${prop}: ${trimmedValue},`;
                 fixCount++;
                 hasChanges = true;
                 }
             }
-            // 如果下一行是对象结束且当前行有逗号，移除逗号
+            // 如果下一行是对象结束且当前行有逗号，移除逗号"
 else if (nextCloseBrace && trimmedValue.endsWith(")) {
               const valueWithoutComma = trimmedValue.slice(0, -1);
               lines[index] = `${indent}${prop}: ${valueWithoutComma}`;
@@ -126,24 +117,20 @@ else if (nextCloseBrace && trimmedValue.endsWith(")) {
               }
           }
         }
-
         // 检查是否是接口属性定义
 const interfaceMatch = line.match(/^(\s*)([a-zA-Z_$][a-zA-Z0-9_$]*)\s*(\??):\s*([^,{}\[\]\n;]+?)(\s*)$/);
         if (interfaceMatch) {
-          const [, indent, prop, optional, type, trailing] = interfaceMatch;
+          const [ indent, prop, optional, type, trailing] = interfaceMatch;
           const trimmedType = type.trim();
-
           // 检查下一行
 const nextLine = lines[index + 1];
           if (nextLine) {
             const nextTrimmed = nextLine.trim();
             const nextInterfaceMatch = nextLine.match(/^(\s*)([a-zA-Z_$][a-zA-Z0-9_$]*)\s*(\??):/);
-            const nextCloseBrace = nextTrimmed.match(/^[}\]]/);
-
+            const nextCloseBrace = nextTrimmed.match(/^[}\]]/);"
             if (nextInterfaceMatch && !trimmedType.endsWith(",") && !trimmedType.endsWith(;")) {
               const currentIndent = indent.length;
               const nextIndent = nextInterfaceMatch[1].length;
-
               if (currentIndent === nextIndent) {
                 lines[index] = `${indent}${prop}${optional}: ${trimmedType};`;
                 fixCount++;
@@ -154,40 +141,33 @@ const nextLine = lines[index + 1];
         }
       }
     });
-
     // 如果有变化，写入文件
-if (hasChanges) {
-      const fixedContent = lines.join("\n);
+if (hasChanges) {"
+      const fixedContent = lines.join("\n);"
       fs.writeFileSync(filePath, fixedContent, "utf8");
       `);
       return fixCount;
     } else {
       `);
     }
-
     return 0;
   } catch (error) {
     return 0;
   }
 }
-
 let totalFixCount = 0;
 let fixedFileCount = 0;
 let processedFileCount = 0;
-
 .length} 个目标文件\n`);
-
 // 修复目标文件
 Object.entries(targetFiles).forEach(([filePath, errorLines]) => {
   }`);
-
   const fixCount = fixFileTargeted(filePath, errorLines);
   processedFileCount++;
-
   if (fixCount > 0) {
     totalFixCount += fixCount;
     fixedFileCount++;
   }
 });
-
 * 100).toFixed(1)}%`);
+"

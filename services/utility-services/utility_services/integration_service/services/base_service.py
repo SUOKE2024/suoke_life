@@ -2,9 +2,10 @@
 base_service - 索克生活项目模块
 """
 
+from typing import Generic, TypeVar
+
 from sqlalchemy.ext.declarative import DeclarativeMeta
 from sqlalchemy.orm import Session
-from typing import Generic, TypeVar
 
 """
 基础服务类

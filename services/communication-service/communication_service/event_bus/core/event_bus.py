@@ -6,13 +6,13 @@
 import asyncio
 import json
 import os
+from dataclasses import asdict, dataclass
 from datetime import datetime
 from typing import Any, Callable, Dict, List, Optional, Set
 from uuid import uuid4
 
 import aioredis
 import structlog
-from dataclasses import dataclass, asdict
 
 logger = structlog.get_logger(__name__)
 

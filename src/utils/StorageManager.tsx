@@ -1,12 +1,11 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";""/;"/g"/;
-
-// 存储管理器 - 索克生活APP - 性能优化/;,/g/;
+import AsyncStorage from "@react-native-async-storage/async-storage"/;"/g"/;
+// 存储管理器 - 索克生活APP - 性能优化
 interface StorageItem {data: unknown}const timestamp = number;
 }
 }
   ttl?: number;}
 }
-export class StorageManager {;,}private static instance: StorageManager;
+export class StorageManager {;}private static instance: StorageManager;
 static getInstance(): StorageManager {if (!StorageManager.instance) {}}
 }
       StorageManager.instance = new StorageManager();}
@@ -23,7 +22,7 @@ await: AsyncStorage.setItem(key, JSON.stringify(item));
   const async = get<T>(key: string): Promise<T | null> {try {}      const itemStr = await AsyncStorage.getItem(key);
 if (!itemStr) return null;
 const item: StorageItem = JSON.parse(itemStr);
-      // 检查是否过期/;,/g/;
+      // 检查是否过期
 if (item.ttl && Date.now() - item.timestamp > item.ttl) {const await = this.remove(key);}}
         return null;}
       }
@@ -41,10 +40,10 @@ if (item.ttl && Date.now() - item.timestamp > item.ttl) {const await = this.remo
   const async = getAllKeys(): Promise<string[]> {const keys = await AsyncStorage.getAllKeys();}}
     return [...keys];}
   }
-  // 清理过期数据/;,/g/;
-const async = cleanup(): Promise<void> {const keys = await this.getAllKeys();,}const now = Date.now();
-for (const key of keys) {try {;,}const itemStr = await AsyncStorage.getItem(key);
-if (itemStr) {const item: StorageItem = JSON.parse(itemStr);,}if (item.ttl && now - item.timestamp > item.ttl) {}}
+  // 清理过期数据
+const async = cleanup(): Promise<void> {const keys = await this.getAllKeys();}const now = Date.now();
+for (const key of keys) {try {;}const itemStr = await AsyncStorage.getItem(key);
+if (itemStr) {const item: StorageItem = JSON.parse(itemStr);}if (item.ttl && now - item.timestamp > item.ttl) {}}
             const await = this.remove(key);}
           }
         }
@@ -54,5 +53,5 @@ if (itemStr) {const item: StorageItem = JSON.parse(itemStr);,}if (item.ttl && no
     }
   }
 }
-export const storageManager = StorageManager.getInstance();";"";
+export const storageManager = StorageManager.getInstance();";
 ''';

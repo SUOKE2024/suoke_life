@@ -15,7 +15,7 @@ function getCurrentTopErrorFiles() {
         const errorCount = parseInt(match[1]);
         const filePath = match[2].trim();
         if (errorCount > 300) { // 只处理错误数量超过300的文件
-          files.push({ path: filePath, errors: errorCount });
+          files.push({  path: filePath, errors: errorCount  });
         }
       }
     }

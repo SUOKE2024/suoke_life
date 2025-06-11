@@ -3,8 +3,9 @@ settings - 索克生活项目模块
 """
 
 from functools import lru_cache
-from pydantic import BaseSettings, Field, validator
 from typing import List, Optional
+
+from pydantic import BaseSettings, Field, validator
 
 """
 应用配置管理
@@ -16,7 +17,7 @@ class DatabaseSettings(BaseSettings):
 
     # SQLite配置
     sqlite_url: str = Field(
-        default = "sqlite + aiosqlite: / / / . / data / user_service.db",
+        default = "sqlite + aiosqlite: // / . / data / user_service.db",
         env = "DATABASE_SQLITE_URL"
     )
 
@@ -37,11 +38,11 @@ class DatabaseSettings(BaseSettings):
     use_postgres: bool = Field(default = False, env = "USE_POSTGRES")
 
     @property
-    def database_url(self) - > str:
+    def database_url(self) -> str:
         """获取数据库连接URL"""
         if self.use_postgres:
             return (
-                f"postgresql + asyncpg: / /{self.postgres_user}:{self.postgres_password}"
+                f"postgresql + asyncpg: //{self.postgres_user}:{self.postgres_password}"
                 f"@{self.postgres_host}:{self.postgres_port} / {self.postgres_db}"
             )
         return self.sqlite_url
@@ -68,10 +69,10 @@ class RedisSettings(BaseSettings):
     enabled: bool = Field(default = True, env = "REDIS_ENABLED")
 
     @property
-    def redis_url(self) - > str:
+    def redis_url(self) -> str:
         """获取Redis连接URL"""
         auth = f":{self.password}@" if self.password else ""
-        return f"redis: / /{auth}{self.host}:{self.port} / {self.db}"
+        return f"redis: //{auth}{self.host}:{self.port} / {self.db}"
 
     class Config:
         """TODO: 添加文档字符串"""
@@ -196,7 +197,7 @@ class AppSettings(BaseSettings):
 
     # CORS配置
     cors_origins: List[str] = Field(
-        default = ["http: / /localhost:3000", "http: / /localhost:8080"],
+        default = ["http: //localhost:3000", "http: //localhost:8080"],
         env = "CORS_ORIGINS"
     )
     cors_allow_credentials: bool = Field(default = True, env = "CORS_ALLOW_CREDENTIALS")
@@ -223,12 +224,12 @@ class AppSettings(BaseSettings):
         return v
 
     @property
-    def is_development(self) - > bool:
+    def is_development(self) -> bool:
         """TODO: 添加文档字符串"""
         return self.environment == "development"
 
     @property
-    def is_production(self) - > bool:
+    def is_production(self) -> bool:
         """TODO: 添加文档字符串"""
         return self.environment == "production"
 
@@ -254,7 +255,7 @@ class Settings(BaseSettings):
         case_sensitive = False
 
 @lru_cache()
-def get_settings() - > Settings:
+def get_settings() -> Settings:
     """获取配置实例（单例模式）"""
     return Settings()
 

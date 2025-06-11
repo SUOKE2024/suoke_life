@@ -1,4 +1,4 @@
-export class Logger {;,}private context: string;
+export class Logger {;}private context: string;
 constructor(context: string) {}}
 }
     this.context = context;}

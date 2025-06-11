@@ -1,11 +1,11 @@
-from typing import Dict, List, Any, Optional, Union
 
 """
 event_handlers - 索克生活项目模块
 """
 
-from .health_data_service import HealthDataIntegrationService
 from services.common.messaging.event_bus import EventBus
+
+from .health_data_service import HealthDataIntegrationService
 
 # - * - coding: utf - 8 - * -
 """

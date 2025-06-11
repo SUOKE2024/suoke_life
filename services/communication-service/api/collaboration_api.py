@@ -3,18 +3,21 @@
 提供智能体协同管理的REST API
 """
 
-from fastapi import APIRouter, HTTPException, Depends
-from fastapi.responses import JSONResponse
-from typing import Dict, List, Any, Optional
-from pydantic import BaseModel, Field
-from datetime import datetime
 import logging
+from datetime import datetime
+from typing import Any, Dict, List, Optional
 
-from ..communication_service.event_bus.orchestration.agent_orchestrator import (
-    AgentCollaborationManager
+from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel, Field
+
+from ..communication_service.event_bus.core.agent_event_types import (
+    COLLABORATION_SCENARIOS,
 )
 from ..communication_service.event_bus.core.event_bus import SuokeEventBus
-from ..communication_service.event_bus.core.agent_event_types import COLLABORATION_SCENARIOS
+from ..communication_service.event_bus.orchestration.agent_orchestrator import (
+    AgentCollaborationManager,
+)
 
 
 # Pydantic模型定义
@@ -261,7 +264,9 @@ async def initiate_agent_handoff(
     """发起智能体交接"""
     try:
         # 发布智能体交接事件
-        from ..communication_service.event_bus.core.agent_event_types import AgentCollaborationEvents
+        from ..communication_service.event_bus.core.agent_event_types import (
+            AgentCollaborationEvents,
+        )
         
         await manager.orchestrator.event_bus.publish(
             AgentCollaborationEvents.AGENT_HANDOFF_INITIATED,

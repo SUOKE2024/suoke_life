@@ -2,12 +2,13 @@
 rate_limit - 索克生活项目模块
 """
 
-from collections import defaultdict, deque
-from fastapi import Request, Response, HTTPException
-from starlette.middleware.base import BaseHTTPMiddleware
-from typing import Dict, Tuple
 import logging
 import time
+from collections import defaultdict, deque
+from typing import Dict
+
+from fastapi import HTTPException, Request, Response
+from starlette.middleware.base import BaseHTTPMiddleware
 
 """限流中间件"""
 
@@ -36,7 +37,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         self.cleanup_interval = 300  # 5分钟
         self.last_cleanup = time.time()
 
-    async def dispatch(self, request: Request, call_next) - > Response:
+    async def dispatch(self, request: Request, call_next) -> Response:
         """处理请求限流"""
 
         # 获取客户端标识
@@ -85,7 +86,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
 
         return response
 
-    def _get_client_id(self, request: Request) - > str:
+    def _get_client_id(self, request: Request) -> str:
         """获取客户端标识"""
 
         # 优先使用用户ID（如果已认证）
@@ -97,7 +98,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         client_ip = self._get_client_ip(request)
         return f"ip:{client_ip}"
 
-    def _get_client_ip(self, request: Request) - > str:
+    def _get_client_ip(self, request: Request) -> str:
         """获取客户端IP地址"""
 
         # 检查代理头
@@ -114,7 +115,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
 
         return "unknown"
 
-    def _get_limit_key(self, request: Request) - > str:
+    def _get_limit_key(self, request: Request) -> str:
         """获取限流规则键"""
 
         path = request.url.path.lower()
@@ -129,7 +130,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
 
         return "default"
 
-    def _is_rate_limited(self, client_id: str, max_requests: int, window_seconds: int) - > bool:
+    def _is_rate_limited(self, client_id: str, max_requests: int, window_seconds: int) -> bool:
         """检查是否触发限流"""
 
         current_time = time.time()
@@ -143,14 +144,14 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
             requests.popleft()
 
         # 检查是否超过限制
-        return len(requests) > = max_requests
+        return len(requests) >= max_requests
 
-    def _record_request(self, client_id: str) - > None:
+    def _record_request(self, client_id: str) -> None:
         """记录请求"""
         current_time = time.time()
         self.client_requests[client_id].append(current_time)
 
-    def _cleanup_expired_records(self) - > None:
+    def _cleanup_expired_records(self) -> None:
         """清理过期记录"""
 
         current_time = time.time()

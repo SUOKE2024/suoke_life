@@ -2,12 +2,13 @@
 health - 索克生活项目模块
 """
 
-from datetime import datetime
-from sqlalchemy import Column, String, DateTime, Float, JSON, ForeignKey
-from sqlalchemy.orm import relationship
-from typing import Dict, Any, Optional
-from user_service.database import Base
 import uuid
+from datetime import datetime
+from typing import Any, Dict
+
+from sqlalchemy import JSON, Column, DateTime, Float, ForeignKey, String
+from sqlalchemy.orm import relationship
+from user_service.database import Base
 
 """健康数据模型"""
 
@@ -36,11 +37,11 @@ class HealthSummary(Base):
     # 关系
     user = relationship("User", back_populates = "health_summary")
 
-    def __repr__(self) - > None:
+    def __repr__(self) -> None:
         """TODO: 添加文档字符串"""
         return f"<HealthSummary(summary_id = {self.summary_id}, user_id = {self.user_id}, health_score = {self.health_score})>"
 
-    def to_dict(self) - > Dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         """转换为字典"""
         return {
             "summary_id": self.summary_id,
@@ -80,11 +81,11 @@ class HealthDataPoint(Base):
     # 关系
     user = relationship("User", back_populates = "health_data")
 
-    def __repr__(self) - > None:
+    def __repr__(self) -> None:
         """TODO: 添加文档字符串"""
         return f"<HealthDataPoint(data_point_id = {self.data_point_id}, user_id = {self.user_id}, metric_type = {self.metric_type}, value = {self.value})>"
 
-    def to_dict(self) - > Dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         """转换为字典"""
         return {
             "data_point_id": self.data_point_id,
@@ -129,11 +130,11 @@ class HealthGoal(Base):
     # 关系
     user = relationship("User", back_populates = "health_goals")
 
-    def __repr__(self) - > None:
+    def __repr__(self) -> None:
         """TODO: 添加文档字符串"""
         return f"<HealthGoal(goal_id = {self.goal_id}, user_id = {self.user_id}, goal_type = {self.goal_type})>"
 
-    def to_dict(self) - > Dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         """转换为字典"""
         return {
             "goal_id": self.goal_id,

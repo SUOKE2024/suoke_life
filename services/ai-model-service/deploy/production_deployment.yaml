@@ -1,0 +1,374 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: suoke-ai-models
+  labels:
+    app: suoke-life
+    tier: ai-models
+    environment: production
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-model-service
+  namespace: suoke-ai-models
+  labels:
+    app: ai-model-service
+    version: v1.0.0
+    tier: ai-models
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: ai-model-service
+  template:
+    metadata:
+      labels:
+        app: ai-model-service
+        version: v1.0.0
+    spec:
+      containers:
+      - name: ai-model-service
+        image: suoke-life/ai-model-service:v1.0.0
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 50051
+          name: grpc
+        env:
+        - name: ENVIRONMENT
+          value: "production"
+        - name: LOG_LEVEL
+          value: "INFO"
+        - name: MODEL_CACHE_SIZE
+          value: "1000"
+        - name: MAX_CONCURRENT_REQUESTS
+          value: "100"
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: ai-model-secrets
+              key: redis-url
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: ai-model-secrets
+              key: database-url
+        - name: MODEL_STORAGE_PATH
+          value: "/app/models"
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "1000m"
+          limits:
+            memory: "4Gi"
+            cpu: "2000m"
+        volumeMounts:
+        - name: model-storage
+          mountPath: /app/models
+        - name: config-volume
+          mountPath: /app/config
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 2
+      volumes:
+      - name: model-storage
+        persistentVolumeClaim:
+          claimName: ai-model-storage
+      - name: config-volume
+        configMap:
+          name: ai-model-config
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ai-model-service
+  namespace: suoke-ai-models
+  labels:
+    app: ai-model-service
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  - port: 50051
+    targetPort: 50051
+    protocol: TCP
+    name: grpc
+  selector:
+    app: ai-model-service
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ai-model-service-lb
+  namespace: suoke-ai-models
+  labels:
+    app: ai-model-service
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  - port: 50051
+    targetPort: 50051
+    protocol: TCP
+    name: grpc
+  selector:
+    app: ai-model-service
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ai-model-storage
+  namespace: suoke-ai-models
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 50Gi
+  storageClassName: fast-ssd
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ai-model-config
+  namespace: suoke-ai-models
+data:
+  config.yaml: |
+    server:
+      host: "0.0.0.0"
+      port: 8080
+      grpc_port: 50051
+      
+    models:
+      ensemble:
+        enabled: true
+        accuracy_threshold: 0.94
+        confidence_threshold: 0.85
+        cache_ttl: 3600
+        
+      neural_network:
+        enabled: true
+        batch_size: 64
+        max_sequence_length: 512
+        device: "cuda"
+        
+      gradient_boosting:
+        enabled: true
+        n_estimators: 300
+        learning_rate: 0.08
+        max_depth: 8
+        
+      random_forest:
+        enabled: true
+        n_estimators: 200
+        max_depth: 12
+        n_jobs: -1
+        
+    consensus:
+      algorithms:
+        - weighted_voting
+        - confidence_based
+        - bayesian_fusion
+        - adaptive_ensemble
+      default_algorithm: "adaptive_ensemble"
+      min_confidence: 0.8
+      
+    cache:
+      redis:
+        enabled: true
+        ttl: 1800
+        max_memory: "1gb"
+        
+    monitoring:
+      metrics:
+        enabled: true
+        port: 9090
+      logging:
+        level: "INFO"
+        format: "json"
+        
+    performance:
+      max_workers: 10
+      request_timeout: 30
+      batch_processing: true
+      
+    health_checks:
+      enabled: true
+      interval: 10
+      timeout: 5
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ai-model-secrets
+  namespace: suoke-ai-models
+type: Opaque
+data:
+  redis-url: cmVkaXM6Ly9yZWRpcy1jbHVzdGVyOjYzNzk=  # redis://redis-cluster:6379
+  database-url: cG9zdGdyZXNxbDovL3VzZXI6cGFzc0BkYi1jbHVzdGVyOjU0MzIvYWlfbW9kZWxz  # postgresql://user:pass@db-cluster:5432/ai_models
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ai-model-service-hpa
+  namespace: suoke-ai-models
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: ai-model-service
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 15
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 10
+        periodSeconds: 60
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ai-model-service-ingress
+  namespace: suoke-ai-models
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    nginx.ingress.kubernetes.io/rate-limit-window: "1m"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+  - hosts:
+    - ai-models.suoke-life.com
+    secretName: ai-models-tls
+  rules:
+  - host: ai-models.suoke-life.com
+    http:
+      paths:
+      - path: /api/v1/models
+        pathType: Prefix
+        backend:
+          service:
+            name: ai-model-service
+            port:
+              number: 80
+
+---
+apiVersion: v1
+kind: ServiceMonitor
+metadata:
+  name: ai-model-service-monitor
+  namespace: suoke-ai-models
+  labels:
+    app: ai-model-service
+spec:
+  selector:
+    matchLabels:
+      app: ai-model-service
+  endpoints:
+  - port: metrics
+    interval: 30s
+    path: /metrics
+
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: ai-model-service-pdb
+  namespace: suoke-ai-models
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: ai-model-service
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ai-model-service-sa
+  namespace: suoke-ai-models
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: ai-model-service-role
+  namespace: suoke-ai-models
+rules:
+- apiGroups: [""]
+  resources: ["configmaps", "secrets"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list", "watch"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: ai-model-service-rolebinding
+  namespace: suoke-ai-models
+subjects:
+- kind: ServiceAccount
+  name: ai-model-service-sa
+  namespace: suoke-ai-models
+roleRef:
+  kind: Role
+  name: ai-model-service-role
+  apiGroup: rbac.authorization.k8s.io 

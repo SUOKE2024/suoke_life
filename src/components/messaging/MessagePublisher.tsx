@@ -1,7 +1,7 @@
-// MessagePublisher/;/g/;
-// 自动修复的文件/;,/g/;
-export default class MessagePublisher {}}
+// MessagePublisher
+export default class MessagePublisher {
+  // TODO: 实现具体功能
 }
-  // TODO: 实现具体功能}/;/g/;
+}
+  // TODO: 实现具体功能}
 };
-;

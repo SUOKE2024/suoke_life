@@ -1,13 +1,11 @@
-        from .config import get_settings
-from .config import Settings
-from pathlib import Path
-from typing import Any, Dict, Optional
+"""日志配置模块"""
 import logging
-import structlog
 
-def main() - > None:
-    """主函数 - 自动生成的最小可用版本"""
-    pass
 
-if __name__ == "__main__":
-    main()
+def get_logger(name: str) -> logging.Logger:
+    """获取日志记录器"""
+    return logging.getLogger(name)
+
+def setup_logging() -> None:
+    """设置日志配置"""
+    logging.basicConfig(level=logging.INFO)

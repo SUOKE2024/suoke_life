@@ -1,19 +1,16 @@
 const fs = require('fs');
 const path = require('path');
-
 // 修复计数器
 let fixCount = 0;
 let fileCount = 0;
-
 // 特定文件修复规则
 const specificFixes = {
   'src/App.tsx': (content) => {
     return content
-      .replace(/import.*from\s+['"`][^'"`]*$/gm, (match) => match + "';")
+      .replace(/import.*from\s+['"`][^'"`]*$/gm, (match) => match + ")
       .replace(/(['"`])([^'"`\n]*?)$/gm, '$1$2$1')
       .replace(/export\s+default\s+([^;]+)$/gm, 'export default $1;');
   },
-  
   'src/__mocks__/react-native-device-info.js': (content) => {
     return `module.exports = {
   getUniqueId: () => 'test-device-id',
@@ -83,11 +80,10 @@ const specificFixes = {
   syncUniqueId: () => Promise.resolve('test-sync-id'),
 };`;
   },
-  
   'src/__mocks__/react-native-permissions.js': (content) => {
     return `const PERMISSIONS = {
-  IOS: {
-    CAMERA: 'ios.permission.CAMERA',
+  IOS: {,
+  CAMERA: 'ios.permission.CAMERA',
     MICROPHONE: 'ios.permission.MICROPHONE',
     PHOTO_LIBRARY: 'ios.permission.PHOTO_LIBRARY',
     LOCATION_WHEN_IN_USE: 'ios.permission.LOCATION_WHEN_IN_USE',
@@ -100,8 +96,8 @@ const specificFixes = {
     NOTIFICATIONS: 'ios.permission.NOTIFICATIONS',
     APP_TRACKING_TRANSPARENCY: 'ios.permission.APP_TRACKING_TRANSPARENCY',
   },
-  ANDROID: {
-    CAMERA: 'android.permission.CAMERA',
+  ANDROID: {,
+  CAMERA: 'android.permission.CAMERA',
     RECORD_AUDIO: 'android.permission.RECORD_AUDIO',
     READ_EXTERNAL_STORAGE: 'android.permission.READ_EXTERNAL_STORAGE',
     WRITE_EXTERNAL_STORAGE: 'android.permission.WRITE_EXTERNAL_STORAGE',
@@ -117,7 +113,6 @@ const specificFixes = {
     POST_NOTIFICATIONS: 'android.permission.POST_NOTIFICATIONS',
   },
 };
-
 const RESULTS = {
   UNAVAILABLE: 'unavailable',
   DENIED: 'denied',
@@ -125,7 +120,6 @@ const RESULTS = {
   GRANTED: 'granted',
   BLOCKED: 'blocked',
 };
-
 const check = jest.fn(() => Promise.resolve(RESULTS.GRANTED));
 const request = jest.fn(() => Promise.resolve(RESULTS.GRANTED));
 const requestMultiple = jest.fn(() => Promise.resolve({}));
@@ -133,7 +127,6 @@ const checkMultiple = jest.fn(() => Promise.resolve({}));
 const openSettings = jest.fn(() => Promise.resolve());
 const checkNotifications = jest.fn(() => Promise.resolve({ status: RESULTS.GRANTED, settings: {} }));
 const requestNotifications = jest.fn(() => Promise.resolve({ status: RESULTS.GRANTED, settings: {} }));
-
 module.exports = {
   PERMISSIONS,
   RESULTS,
@@ -146,11 +139,9 @@ module.exports = {
   requestNotifications,
 };`;
   },
-  
   'src/__mocks__/react-native-vector-icons.js': (content) => {
     return `import React from 'react';
 import { Text } from 'react-native';
-
 const createIconSet = () => {
   return function Icon(props) {
     return React.createElement(Text, {
@@ -159,17 +150,14 @@ const createIconSet = () => {
     }, props.name || 'icon');
   };
 };
-
 const createIconSetFromFontello = createIconSet;
 const createIconSetFromIcoMoon = createIconSet;
-
 export default createIconSet();
-export {
+export {;
   createIconSet,
   createIconSetFromFontello,
   createIconSetFromIcoMoon,
 };
-
 // 导出常用图标库
 export const AntDesign = createIconSet();
 export const Entypo = createIconSet();
@@ -187,7 +175,6 @@ export const Zocial = createIconSet();
 export const SimpleLineIcons = createIconSet();`;
   }
 };
-
 // 通用修复模式
 const generalFixes = [
   // 修复未终止的字符串字面量
@@ -196,35 +183,30 @@ const generalFixes = [
     replacement: '$1$2$1',
     description: '修复未终止的字符串字面量'
   },
-  
   // 修复缺少分号的导入语句
   {
     pattern: /import\s+([^;]+)$/gm,
     replacement: 'import $1;',
     description: '修复导入语句缺少分号'
   },
-  
   // 修复缺少分号的导出语句
   {
     pattern: /export\s+([^;]+)$/gm,
     replacement: 'export $1;',
     description: '修复导出语句缺少分号'
   },
-  
   // 修复测试文件的导入
   {
     pattern: /import.*from\s+['"`]@testing-library\/react-native['"`]$/gm,
-    replacement: "import { render, fireEvent } from '@testing-library/react-native';",
+    replacement: "import { render, fireEvent } from "@testing-library/react-native,"
     description: '修复测试库导入'
   },
-  
   // 修复React导入
   {
     pattern: /import\s+React\s+from\s+['"`]react['"`]$/gm,
-    replacement: "import React from 'react';",
+    replacement: "import React from "react,"
     description: '修复React导入'
   },
-  
   // 修复未闭合的JSX标签
   {
     pattern: /<(\w+)([^>]*?)$/gm,
@@ -232,22 +214,18 @@ const generalFixes = [
     description: '修复JSX标签'
   }
 ];
-
 function fixFile(filePath) {
   try {
     let content = fs.readFileSync(filePath, 'utf8');
     const originalContent = content;
     let localFixCount = 0;
-    
     // 获取相对路径用于匹配特定修复规则
     const relativePath = path.relative(process.cwd(), filePath);
-    
     // 应用特定文件修复规则
     if (specificFixes[relativePath]) {
       content = specificFixes[relativePath](content);
       localFixCount += 10; // 估算修复数
     }
-    
     // 应用通用修复模式
     generalFixes.forEach(({ pattern, replacement, description }) => {
       const matches = content.match(pattern);
@@ -256,7 +234,6 @@ function fixFile(filePath) {
         localFixCount += matches.length;
       }
     });
-    
     // 如果内容有变化，写回文件
     if (content !== originalContent) {
       fs.writeFileSync(filePath, content, 'utf8');
@@ -264,12 +241,10 @@ function fixFile(filePath) {
       fixCount += localFixCount;
       console.log(`✅ 修复文件: ${relativePath} (${localFixCount} 个修复)`);
     }
-    
   } catch (error) {
     console.error(`❌ 修复文件失败: ${filePath}`, error.message);
   }
 }
-
 // 需要修复的特定文件列表
 const filesToFix = [
   'src/App.tsx',
@@ -288,10 +263,8 @@ const filesToFix = [
   'src/__tests__/components/HomeScreen.test.tsx',
   'src/__tests__/e2e/agent-collaboration.test.tsx'
 ];
-
 console.log('🚀 开始最终关键修复...');
 console.log('='.repeat(50));
-
 // 修复特定文件
 filesToFix.forEach(file => {
   const fullPath = path.join(process.cwd(), file);
@@ -301,7 +274,6 @@ filesToFix.forEach(file => {
     console.log(`⚠️  文件不存在: ${file}`);
   }
 });
-
 console.log('='.repeat(50));
 console.log(`✅ 最终关键修复完成!`);
 console.log(`📊 统计信息:`);

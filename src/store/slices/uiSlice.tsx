@@ -1,23 +1,22 @@
-
-";"";
-// 初始状态"/;,"/g,"/;
-  const: initialState: UIState = {,";,}theme: "light";",";
-language: "zh";",";
-notifications: [],;
+";
+// 初始状态"/;"/g,"/;
+  const: initialState: UIState = {,";}theme: "light,";
+language: "zh,";
+notifications: [],
 }
   const loading = false;}
-}";"";
-// 创建slice;"/;,"/g,"/;
+}";
+// 创建slice;"/;"/g,"/;
   const: uiSlice = createSlice({)name: "ui",)";}}"";
   initialState,"}";
-reducers: {setTheme: (state, action: PayloadAction<"light" | "dark";>;); => {}";,"";
-state.theme = action.payload;";"";
-    },";,"";
-setLanguage: (state, action: PayloadAction<"zh" | "en">) => {;}";,"";
+reducers: {setTheme: (state, action: PayloadAction<"light" | "dark";>;); => {}";"";
+state.theme = action.payload;";
+    },";"";
+setLanguage: (state, action: PayloadAction<"zh" | "en">) => {;}";"";
 state.language = action.payload;
     }
-const addNotification = ()";,"";
-state;";,"";
+const addNotification = ()";"";
+state;";"";
 action: PayloadAction<Omit<Notification, "id" /    >>"/;"/g"/;
     ) => {;}
       const: notification: Notification = {...action.payload,}
@@ -48,40 +47,40 @@ setLoading: (state, action: PayloadAction<boolean>) => {;}
       state.loading = action.payload;
     }
 showSuccessNotification: (state, action: PayloadAction<string>) => {;}
-      const: notification: Notification = {id: Date.now().toString(),;}";,"";
-message: action.payload,";,"";
-type: "success";",";
-timestamp: new Date().toISOString(),;
+      const: notification: Notification = {id: Date.now().toString(),}";"";
+message: action.payload,";"";
+type: "success,";
+timestamp: new Date().toISOString(),
 }
         const read = false;}
       };
 state.notifications.unshift(notification);
     }
 showErrorNotification: (state, action: PayloadAction<string>) => {;}
-      const: notification: Notification = {id: Date.now().toString(),;}";,"";
-message: action.payload,";,"";
-type: "error";",";
-timestamp: new Date().toISOString(),;
+      const: notification: Notification = {id: Date.now().toString(),}";"";
+message: action.payload,";"";
+type: "error,";
+timestamp: new Date().toISOString(),
 }
         const read = false;}
       };
 state.notifications.unshift(notification);
     }
 showWarningNotification: (state, action: PayloadAction<string>) => {;}
-      const: notification: Notification = {id: Date.now().toString(),;}";,"";
-message: action.payload,";,"";
-type: "warning";",";
-timestamp: new Date().toISOString(),;
+      const: notification: Notification = {id: Date.now().toString(),}";"";
+message: action.payload,";"";
+type: "warning,";
+timestamp: new Date().toISOString(),
 }
         const read = false;}
       };
 state.notifications.unshift(notification);
     }
 showInfoNotification: (state, action: PayloadAction<string>) => {;}
-      const: notification: Notification = {id: Date.now().toString(),;}";,"";
-message: action.payload,";,"";
-type: "info";",";
-timestamp: new Date().toISOString(),;
+      const: notification: Notification = {id: Date.now().toString(),}";"";
+message: action.payload,";"";
+type: "info,";
+timestamp: new Date().toISOString(),
 }
         const read = false;}
       };
@@ -89,21 +88,21 @@ state.notifications.unshift(notification);
     }
   }
 });
-// 导出actions;/;,/g/;
-export const {setTheme}setLanguage,;
-addNotification,;
-removeNotification,;
-markNotificationAsRead,;
-markAllNotificationsAsRead,;
-clearNotifications,;
-setLoading,;
-showSuccessNotification,;
-showErrorNotification,;
-showWarningNotification,;
+// 导出actions;
+export const {setTheme}setLanguage,
+addNotification,
+removeNotification,
+markNotificationAsRead,
+markAllNotificationsAsRead,
+clearNotifications,
+setLoading,
+showSuccessNotification,
+showErrorNotification,
+showWarningNotification,
 }
   showInfoNotification;}
   } = uiSlice.actio;n;s;
-// 选择器/;,/g/;
+// 选择器
 export const selectUI = (state: { ui: UIState ;}) => state.;
 u;i;
 export const selectTheme = (state: { ui: UIState ;}) => state.ui.the;
@@ -121,5 +120,5 @@ export const selectUnreadNotificationsCount = (state: { ui: UIState ;}) ;
 state.ui.notifications.filter(n); => !n.read).length;
 export const selectUILoading = (state: { ui: UIState ;}) => state.ui.loadi;
 n;g;
-// 导出reducer;"/;,"/g"/;
+// 导出reducer;"/;"/g"/;
 export default uiSlice.reducer;""";

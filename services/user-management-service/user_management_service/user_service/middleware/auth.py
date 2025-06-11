@@ -2,14 +2,15 @@
 auth - 索克生活项目模块
 """
 
-from fastapi import Request, Response
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from starlette.middleware.base import BaseHTTPMiddleware
+import logging
 from typing import Optional
+
+import jwt
+from fastapi import Request
+from fastapi.security import HTTPBearer
+from starlette.middleware.base import BaseHTTPMiddleware
 from user_service.config import get_settings
 from user_service.core.exceptions import AuthenticationError
-import jwt
-import logging
 
 """认证中间件"""
 
@@ -67,11 +68,11 @@ class AuthMiddleware(BaseHTTPMiddleware):
         response = await call_next(request)
         return response
 
-    def _is_public_path(self, path: str) - > bool:
+    def _is_public_path(self, path: str) -> bool:
         """检查是否为公开路径"""
         return any(path.startswith(public_path) for public_path in self.public_paths)
 
-    async def _authenticate_request(self, request: Request) - > Optional[dict]:
+    async def _authenticate_request(self, request: Request) -> Optional[dict]:
         """认证请求"""
 
         # 从Authorization头获取令牌

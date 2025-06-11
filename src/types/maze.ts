@@ -2,7 +2,7 @@
 export interface MazeConfig {}
   width: number;
   height: number;
-  difficulty: 'easy' | 'medium' | 'hard';'';
+  difficulty: 'easy' | 'medium' | 'hard
 }
 
 export interface MazeCell {}
@@ -13,13 +13,13 @@ export interface MazeCell {}
     right: boolean;
     bottom: boolean;
     left: boolean;
-  };
+  
   visited: boolean;
 }
 
 export interface MazeState {}
   cells: MazeCell[][];
-  playerPosition: { x: number; y: number };
-  goalPosition: { x: number; y: number };
+  playerPosition: { x: number; y: number 
+  goalPosition: { x: number; y: number 
   completed: boolean;
 }

@@ -1,48 +1,46 @@
-';,'';
-import { useCallback, useEffect } from "react";";
-import { useDispatch, useSelector } from "react-redux";";
-import { AppDispatch } from "../store";""/;,"/g"/;
-import {// Actions;/;,}searchMedicalResources,;,/g/;
-getMedicalResourceDetails,;
-bookAppointment,;
-getUserAppointments,;
-getNearbyResources,;
-checkServiceHealth,;
-setSelectedResource,;
-setSelectedAppointment,;
-updateSearchQuery,;
-updateFilters,;
-addToSearchHistory,;
-clearSearchHistory,;
-toggleFilters,;
-toggleMap,;
-setViewMode,;
-clearError,;
-clearAllErrors,;
-resetState,;
-  // Selectors;/;,/g/;
-selectMedicalResources,;
-selectSearchResults,;
-selectSelectedResource,;
-selectNearbyResources,;
-selectAppointments,;
-selectSelectedAppointment,;
-selectSearchQuery,;
-selectFilters,;
-selectSearchHistory,;
-selectLoading,;
-selectErrors,;
-selectUI,;
-selectPagination,;
-selectServiceHealth,;
-  // Types;/;,/g/;
-MedicalResource,;
-Appointment,;
-SearchQuery,";"";
-}
-  ResourceFilters;'}'';'';
-} from "../store/slices/medicalResourceSlice";""/;,"/g"/;
-export const useMedicalResource = () => {const dispatch = useDispatch<AppDispatch>();}  // Selectors;/;,/g/;
+import {  useCallback, useEffect  } from "react"
+import {  useDispatch, useSelector  } from "react-redux"
+import { AppDispatch } from "../store"
+import {// Actions;/searchMedicalResources,,/g/;
+getMedicalResourceDetails,
+bookAppointment,
+getUserAppointments,
+getNearbyResources,
+checkServiceHealth,
+setSelectedResource,
+setSelectedAppointment,
+updateSearchQuery,
+updateFilters,
+addToSearchHistory,
+clearSearchHistory,
+toggleFilters,
+toggleMap,
+setViewMode,
+clearError,
+clearAllErrors,
+resetState,
+  // Selectors;
+selectMedicalResources,
+selectSearchResults,
+selectSelectedResource,
+selectNearbyResources,
+selectAppointments,
+selectSelectedAppointment,
+selectSearchQuery,
+selectFilters,
+selectSearchHistory,
+selectLoading,
+selectErrors,
+selectUI,
+selectPagination,
+selectServiceHealth,
+  // Types;
+MedicalResource,
+Appointment,"
+SearchQuery,";
+} fromesourceFilters;'}
+} from "../store/slices/medicalResourceSlice"
+export const useMedicalResource = () => {const dispatch = useDispatch<AppDispatch>(}  // Selectors;
 const resources = useSelector(selectMedicalResources);
 const searchResults = useSelector(selectSearchResults);
 const selectedResource = useSelector(selectSelectedResource);
@@ -57,174 +55,172 @@ const errors = useSelector(selectErrors);
 const ui = useSelector(selectUI);
 const pagination = useSelector(selectPagination);
 const serviceHealth = useSelector(selectServiceHealth);
-  // Actions;/;/g/;
+  // Actions;
 }
-  const search = useCallback(query: SearchQuery) => {if (query.keyword) {dispatch(addToSearchHistory(query.keyword));}
+  const search = useCallback(query: SearchQuery) => {if (query.keyword) {dispatch(addToSearchHistory(query.keyword))}
     }
     return dispatch(searchMedicalResources(query));
   }, [dispatch]);
-const getResourceDetails = useCallback(resourceId: string) => {return dispatch(getMedicalResourceDetails(resourceId));}';'';
-  }, [dispatch]);';,'';
-createAppointment: useCallback(appointmentData: Omit<Appointment, 'id' | 'status'>) => {return dispatch(bookAppointment(appointmentData));'}'';'';
+const getResourceDetails = useCallback(resourceId: string) => {return dispatch(getMedicalResourceDetails(resourceId))}
   }, [dispatch]);
-const getAppointments = useCallback(userId: string) => {return dispatch(getUserAppointments(userId));}
+createAppointment: useCallback(appointmentData: Omit<Appointment, 'id' | 'status'>) => {return dispatch(bookAppointment(appointmentData));'}
   }, [dispatch]);
-const findNearbyResources = useCallback(location: { lat: number; lng: number; radius?: number }) => {}}
-    return dispatch(getNearbyResources(location));}
+const getAppointments = useCallback(userId: string) => {return dispatch(getUserAppointments(userId))}
   }, [dispatch]);
-const healthCheck = useCallback() => {return dispatch(checkServiceHealth());}
+const findNearbyResources = useCallback(location: { lat: number; lng: number; radius?: number }) => {}
+    return dispatch(getNearbyResources(location))}
   }, [dispatch]);
-const selectResource = useCallback(resource: MedicalResource | null) => {dispatch(setSelectedResource(resource));}
+const healthCheck = useCallback() => {return dispatch(checkServiceHealth())}
   }, [dispatch]);
-const selectAppointment = useCallback(appointment: Appointment | null) => {dispatch(setSelectedAppointment(appointment));}
+const selectResource = useCallback(resource: MedicalResource | null) => {dispatch(setSelectedResource(resource))}
   }, [dispatch]);
-const updateQuery = useCallback(query: Partial<SearchQuery>) => {dispatch(updateSearchQuery(query));}
+const selectAppointment = useCallback(appointment: Appointment | null) => {dispatch(setSelectedAppointment(appointment))}
   }, [dispatch]);
-const updateResourceFilters = useCallback(newFilters: Partial<ResourceFilters>) => {dispatch(updateFilters(newFilters));}
+const updateQuery = useCallback(query: Partial<SearchQuery>) => {dispatch(updateSearchQuery(query))}
   }, [dispatch]);
-const clearHistory = useCallback() => {dispatch(clearSearchHistory());}
+const updateResourceFilters = useCallback(newFilters: Partial<ResourceFilters>) => {dispatch(updateFilters(newFilters))}
   }, [dispatch]);
-const toggleFiltersPanel = useCallback() => {dispatch(toggleFilters());}
+const clearHistory = useCallback() => {dispatch(clearSearchHistory())}
   }, [dispatch]);
-const toggleMapView = useCallback() => {dispatch(toggleMap());}';'';
-  }, [dispatch]);';,'';
-const changeViewMode = useCallback(mode: 'list' | 'grid' | 'map') => {dispatch(setViewMode(mode));'}'';'';
+const toggleFiltersPanel = useCallback() => {dispatch(toggleFilters())}
   }, [dispatch]);
-const clearSpecificError = useCallback(errorType: keyof typeof errors) => {dispatch(clearError(errorType));}
+const toggleMapView = useCallback() => {dispatch(toggleMap())}
+  }, [dispatch]);
+const changeViewMode = useCallback(mode: 'list' | 'grid' | 'map') => {dispatch(setViewMode(mode));'}
+  }, [dispatch]);
+const clearSpecificError = useCallback(errorType: keyof typeof errors) => {dispatch(clearError(errorType))}
   }, [dispatch, errors]);
-const clearErrors = useCallback() => {dispatch(clearAllErrors());}
+const clearErrors = useCallback() => {dispatch(clearAllErrors())}
   }, [dispatch]);
-const reset = useCallback() => {dispatch(resetState());}
+const reset = useCallback() => {dispatch(resetState())}
   }, [dispatch]);
-  // 便捷方法/;,/g,/;
+  // 便捷方法/,/g,/;
   searchByKeyword: useCallback(keyword: string, additionalFilters?: Partial<ResourceFilters>) => {const query: SearchQuery = {keyword;filters: { ...filters, ...additionalFilters ;},page: 1,limit: 20;
-    };
 return search(query);
   }, [search, filters]);
-searchByLocation: useCallback(location: { lat: number; lng: number; radius?: number }, resourceType?: string[]) => {const: query: SearchQuery = {filters: {location: {lat: location.lat,;
-lng: location.lng,;
+searchByLocation: useCallback(location: { lat: number; lng: number; radius?: number }, resourceType?: string[]) => {const: query: SearchQuery = {filters: {location: {lat: location.lat,
+lng: location.lng,
 }
-          radius: location.radius || 5000, // 默认5km;}/;/g/;
+          radius: location.radius || 5000, // 默认5km;}
         }
 const type = resourceType;
       }
-page: 1,;
+page: 1,
 const limit = 20;
     };
 return search(query);
   }, [search]);
 searchByType: useCallback(type: string[], additionalFilters?: Partial<ResourceFilters>) => {const query: SearchQuery = {filters: { ...filters; type, ...additionalFilters },page: 1,limit: 20;
-    };
 return search(query);
   }, [search, filters]);
-loadMoreResults: useCallback() => {if (pagination.hasMore && !loading.search) {const nextPageQuery: SearchQuery = {...searchQuery,page: pagination.currentPage + 1;}
+loadMoreResults: useCallback() => {if (pagination.hasMore && !loading.search) {const nextPageQuery: SearchQuery = {...searchQuery,page: pagination.currentPage + 1}
       };
 return search(nextPageQuery);
     }
   }, [search, searchQuery, pagination, loading.search]);
-refreshResults: useCallback() => {const refreshQuery: SearchQuery = {...searchQuery,page: 1;}
+refreshResults: useCallback() => {const refreshQuery: SearchQuery = {...searchQuery,page: 1}
     };
 return search(refreshQuery);
   }, [search, searchQuery]);
-  // 预约相关便捷方法'/;,'/g,'/;
-  quickBookAppointment: useCallback(resourceId: string,resourceName: string,userId: string,serviceType: string,scheduledTime: string,duration: number = 30,notes?: string;)';'';
-  ) => {const appointmentData: Omit<Appointment, 'id' | 'status'> = {resourceId,resourceName,userId,serviceType,scheduledTime,duration,notes;'}'';'';
+  // 预约相关便捷方法'/,'/g,'/;
+  quickBookAppointment: useCallback(resourceId: string,resourceName: string,userId: string,serviceType: string,scheduledTime: string,duration: number = 30,notes?: string;)'
+  ) => {const appointmentData: Omit<Appointment, 'id' | 'status'> = {resourceId,resourceName,userId,serviceType,scheduledTime,duration,notes;'}
     };
-return createAppointment(appointmentData);';'';
-  }, [createAppointment]);';,'';
+return createAppointment(appointmentData);
+  }, [createAppointment]);
 cancelAppointment: useCallback(async (appointmentId: string) => {try {const response = await fetch(`/api/v1/medical-resources/appointments/${appointmentId;}`, {method: 'DELETE';))'}''/`;`/g`/`;
       });
-if (!response.ok) {}}
+if (!response.ok) {}
 }
-      }';'';
-      // 重新获取预约列表'/;,'/g'/;
-const currentUser = '; // 这里需要从用户状态获取''/;,'/g'/;
-if (currentUser) {}}
-        getAppointments(currentUser);}
+      }
+      // 重新获取预约列表'/,'/g'/;
+const currentUser = '; // 这里需要从用户状态获取''/,'/g'/;
+if (currentUser) {}
+        getAppointments(currentUser)}
       }
       return true;
-    } catch (error) {}}
-      return false;}
+    } catch (error) {}
+      return false}
     }
   }, [getAppointments]);
-  // 筛选相关便捷方法/;,/g/;
-const filterByRating = useCallback(minRating: number) => {updateResourceFilters({ rating: minRating ;});
+  // 筛选相关便捷方法
+const filterByRating = useCallback(minRating: number) => {updateResourceFilters({  rating: minRating ; });
   }, [updateResourceFilters]);
-filterByPriceRange: useCallback(min: number, max: number) => {updateResourceFilters({ priceRange: { min, max ;} });';'';
-  }, [updateResourceFilters]);';,'';
-const filterByAvailability = useCallback(availability: 'now' | 'today' | 'week') => {updateResourceFilters({ availability ;});';'';
-  }, [updateResourceFilters]);';,'';
-const sortResults = useCallback(sortBy: 'distance' | 'rating' | 'price' | 'availability') => {updateResourceFilters({ sortBy ;});';'';
+filterByPriceRange: useCallback(min: number, max: number) => {updateResourceFilters({ priceRange: { min, max ;} });
+  }, [updateResourceFilters]);
+const filterByAvailability = useCallback(availability: 'now' | 'today' | 'week') => {updateResourceFilters({  availability ; });
+  }, [updateResourceFilters]);
+const sortResults = useCallback(sortBy: 'distance' | 'rating' | 'price' | 'availability') => {updateResourceFilters({  sortBy ; });
   }, [updateResourceFilters]);
 const clearFilters = useCallback() => {updateResourceFilters({});
   }, [updateResourceFilters]);
-  // 自动健康检查/;,/g/;
-useEffect() => {}}
-    const checkInterval = setInterval() => {healthCheck();}
-    }, 5 * 60 * 1000); // 每5分钟检查一次/;/g/;
-    // 初始检查/;,/g/;
+  // 自动健康检查
+useEffect() => {}
+    const checkInterval = setInterval() => {healthCheck()}
+    }, 5 * 60 * 1000); // 每5分钟检查一次
+    // 初始检查
 healthCheck();
 return () => clearInterval(checkInterval);
   }, [healthCheck]);
-  // 计算派生状态/;,/g/;
+  // 计算派生状态
 const hasResults = searchResults.length > 0;
 const hasNearbyResources = nearbyResources.length > 0;
 const hasAppointments = appointments.length > 0;
-const hasErrors = Object.values(errors).some(error => error !== null);';,'';
-const isLoading = Object.values(loading).some(isLoading => isLoading);';,'';
-const isHealthy = serviceHealth.status === 'healthy';';,'';
-const upcomingAppointments = appointments.filter(;)';,'';
-appointment => appointment.status === 'confirmed' && ;';,'';
+const hasErrors = Object.values(errors).some(error => error !== null);
+const isLoading = Object.values(loading).some(isLoading => isLoading);
+const isHealthy = serviceHealth.status === 'healthy';
+const upcomingAppointments = appointments.filter(;)'
+appointment => appointment.status === 'confirmed' && ;
 const new = Date(appointment.scheduledTime) > new Date();
-  );';,'';
-const pastAppointments = appointments.filter(;)';,'';
-appointment => appointment.status === 'completed' || ;';,'';
+  );
+const pastAppointments = appointments.filter(;)'
+appointment => appointment.status === 'completed' || ;
 const new = Date(appointment.scheduledTime) < new Date();
   );
-return {// 数据/;,}resources,;,/g/;
-searchResults,;
-selectedResource,;
-nearbyResources,;
-appointments,;
-selectedAppointment,;
-searchQuery,;
-filters,;
-searchHistory,;
-    // 状态/;,/g/;
-loading,;
-errors,;
-ui,;
-pagination,;
-serviceHealth,;
-    // 派生状态/;,/g/;
-hasResults,;
-hasNearbyResources,;
-hasAppointments,;
-hasErrors,;
-isLoading,;
-isHealthy,;
-upcomingAppointments,;
-pastAppointments,;
-    // 基础操作/;,/g/;
-search,;
-getResourceDetails,;
-createAppointment,;
-getAppointments,;
-findNearbyResources,;
-healthCheck,;
-selectResource,;
-selectAppointment,;
-updateQuery,;
-updateResourceFilters,;
-clearHistory,;
-toggleFiltersPanel,;
-toggleMapView,;
-changeViewMode,;
-clearSpecificError,;
+return {// 数据/resources,,/g/;
+searchResults,
+selectedResource,
+nearbyResources,
+appointments,
+selectedAppointment,
+searchQuery,
+filters,
+searchHistory,
+    // 状态
+loading,
+errors,
+ui,
+pagination,
+serviceHealth,
+    // 派生状态
+hasResults,
+hasNearbyResources,
+hasAppointments,
+hasErrors,
+isLoading,
+isHealthy,
+upcomingAppointments,
+pastAppointments,
+    // 基础操作
+search,
+getResourceDetails,
+createAppointment,
+getAppointments,
+findNearbyResources,
+healthCheck,
+selectResource,
+selectAppointment,
+updateQuery,
+updateResourceFilters,
+clearHistory,
+toggleFiltersPanel,
+toggleMapView,
+changeViewMode,
+clearSpecificError,
 clearErrors,reset;
-    // 便捷方法;/;/g/;
+    // 便捷方法;
 }
-    searchByKeyword,searchByLocation,searchByType,loadMoreResults,refreshResults,quickBookAppointment,cancelAppointment,filterByRating,filterByPriceRange,filterByAvailability,sortResults,clearFilters;}
+    searchByKeyword,searchByLocation,searchByType,loadMoreResults,refreshResults,quickBookAppointment,cancelAppointment,filterByRating,filterByPriceRange,filterByAvailability,sortResults,clearFilters}
   };
-};';,'';
+};
 export default React.memo(useMedicalResource);

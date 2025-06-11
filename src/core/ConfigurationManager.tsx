@@ -1,11 +1,11 @@
-import React from "react";"";"";
-// 配置管理器   索克生活APP - 架构优化/;,/g/;
-interface AppConfig {api: {baseUrl: string}timeout: number,;
+import React from "react";
+// 配置管理器   索克生活APP - 架构优化
+interface AppConfig {api: {baseUrl: string}timeout: number,
 }
 }
   const retryAttempts = number;}
 };
-agents: {xiaoai: {,;}}
+agents: {xiaoai: {,}}
   enabled: boolean,}
       const model = string;};
 xiaoke: { enabled: boolean,}
@@ -15,16 +15,16 @@ laoke: { enabled: boolean,}
 soer: { enabled: boolean,}
       const model = string;};
   };
-features: {fiveDiagnosis: boolean,;}}
+features: {fiveDiagnosis: boolean,}}
     blockchain: boolean,}
     const offlineMode = boolean;};
-performance: {enableMemoryMonitoring: boolean,;}}
+performance: {enableMemoryMonitoring: boolean,}}
     enablePerformanceTracking: boolean,}
     const maxCacheSize = number;};
 security: { enableEncryption: boolean,}
     const tokenExpiration = number;};
 }
-class ConfigurationManager {private static instance: ConfigurationManager;,}private config: AppConfig;
+class ConfigurationManager {private static instance: ConfigurationManager;}private config: AppConfig;
 private constructor() {this.config = this.loadDefaultConfig();}}
 }
     this.loadEnvironmentConfig();}
@@ -34,14 +34,14 @@ private constructor() {this.config = this.loadDefaultConfig();}}
     }
     return ConfigurationManager.instance;
   }
-  get<K extends keyof AppConfig  />(key: K): AppConfig[K]  {/        return this.config[key];}/;/g/;
+  get<K extends keyof AppConfig  />(key: K): AppConfig[K]  {/        return this.config[key];}
   }
-  set<K extends keyof AppConfig  />(key: K, value: AppConfig[K]): void  {/        this.config[key] = value;}/;/g/;
-  }";,"";
-getNestedValue(path: string);: unknown  {";}}"";
-    return path.split(".").reduce(obj, key); => obj?.[key], this.config);"}"";"";
-  }";,"";
-setNestedValue(path: string, value: unknown): void  {";,}const keys = path.split(".;";);";"";
+  set<K extends keyof AppConfig  />(key: K, value: AppConfig[K]): void  {/        this.config[key] = value;}
+  }";
+getNestedValue(path: string);: unknown  {";}}
+    return path.split(".").reduce(obj, key); => obj?.[key], this.config);"}
+  }";
+setNestedValue(path: string, value: unknown): void  {";}const keys = path.split(".;";);";
 }
     const lastKey = keys.pop!;}
     target: keys.reduce(obj, key); => {}
@@ -50,18 +50,18 @@ return obj[key];
     }, this.config as any);
 target[lastKey] = value;
   }
-  private loadDefaultConfig(): AppConfig {return {";,}api: {,";}}"";
+  private loadDefaultConfig(): AppConfig {return {";}api: {,";}}
   baseUrl: "https: timeout: 10000;","}";
 retryAttempts: 3;}
-agents: {xiaoai: {,";}}"";
-  enabled: true,"}";
-model: "gpt-4";},";,"";
-xiaoke: {,";}}"";
-  enabled: true,"}";
-model: "gpt-4";},";,"";
-laoke: {,";}}"";
-  enabled: true,"}";
-model: "gpt-4";},soer: {enabled: true,model: "gpt-4";};";"";
+agents: {xiaoai: {,";}}
+  enabled: true,"}
+model: "gpt-4";},";
+xiaoke: {,";}}
+  enabled: true,"}
+model: "gpt-4";},";
+laoke: {,";}}
+  enabled: true,"}
+model: "gpt-4";},soer: {enabled: true,model: "gpt-4";};";
       },features: {fiveDiagnosis: true,blockchain: true,offlineMode: false;},performance: {enableMemoryMonitoring: true,enablePerformanceTracking: true,maxCacheSize: 100 * 1024 * 1024;},security: {enableEncryption: true,tokenExpiration: 24 * 60 * 60 * 1000;};};
   }
   private loadEnvironmentConfig(): void {if (process.env.API_BASE_URL) {}}
@@ -72,5 +72,5 @@ model: "gpt-4";},soer: {enabled: true,model: "gpt-4";};";"";
     }
     }
 }
-export default ConfigurationManager;";,"";
-export type { AppConfig };""";
+export default ConfigurationManager;";
+export type { AppConfig };""

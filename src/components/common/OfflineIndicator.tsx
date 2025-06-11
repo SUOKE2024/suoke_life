@@ -1,390 +1,386 @@
-import React, { useState, useEffect } from "react";";
-import { View, Text, StyleSheet, TouchableOpacity, Animated } from "react-native";";
-import Icon from "react-native-vector-icons/MaterialIcons";""/;,"/g"/;
-import { offlineService, getSyncStatus, addSyncListener, SyncStatus } from "../../services/offlineService";""/;,"/g"/;
-import { GATEWAY_FEATURES } from "../../constants/config";""/;,"/g"/;
-interface OfflineIndicatorProps {style?: any;,}showDetails?: boolean;
+import React, { useState, useEffect } from "react"
+import {  View, Text, StyleSheet, TouchableOpacity, Animated  } from "react-native"
+import Icon from "react-native-vector-icons/MaterialIcons"
+import { offlineService, getSyncStatus, addSyncListener, SyncStatus } from "../../services/offlineService"
+import { GATEWAY_FEATURES } from "../../constants/config"
+interface OfflineIndicatorProps {
+style?: anyshowDetails?: boolean;
 }
+  onPress?: () => void}
 }
-  onPress?: () => void;}
-}
-export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({));,}style,);
+export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({))style,);
 }
   showDetails = false,)};
-onPress;}) => {const [syncStatus, setSyncStatus] = useState<SyncStatus>(getSyncStatus());,}const [fadeAnim] = useState(new Animated.Value(0));
+onPress;}) => {const [syncStatus, setSyncStatus] = useState<SyncStatus>(getSyncStatus())const [fadeAnim] = useState(new Animated.Value(0));
 const [slideAnim] = useState(new Animated.Value(-100));
-useEffect() => {// 监听同步状态变化/;,}const  unsubscribe = addSyncListener(status) => {}}/g/;
-      setSyncStatus(status);}
+useEffect() => {// 监听同步状态变化/const  unsubscribe = addSyncListener(status) => {}}/g/;
+      setSyncStatus(status)}
     });
 return unsubscribe;
   }, []);
-useEffect() => {// 当离线时显示指示器/;,}if (!syncStatus.isOnline || syncStatus.pendingOperations > 0) {Animated.parallel([;));,]Animated.timing(fadeAnim, {);,}toValue: 1,);/g/;
+useEffect() => {// 当离线时显示指示器/if (!syncStatus.isOnline || syncStatus.pendingOperations > 0) {Animated.parallel([;))]Animated.timing(fadeAnim, {)toValue: 1,);/g/;
 }
           duration: 300;),}
-          useNativeDriver: true;}),;
-Animated.timing(slideAnim, {));,}toValue: 0,);
+          useNativeDriver: true;}),
+Animated.timing(slideAnim, {))toValue: 0,);
 }
           duration: 300;),}
 ];
 const useNativeDriver = true;})]).start();
-    } else {Animated.parallel([;));,]Animated.timing(fadeAnim, {);,}toValue: 0,);
+    } else {Animated.parallel([;))]Animated.timing(fadeAnim, {)toValue: 0,);
 }
           duration: 300;),}
-          useNativeDriver: true;}),;
-Animated.timing(slideAnim, {));,}toValue: -100,);
+          useNativeDriver: true;}),
+Animated.timing(slideAnim, {))toValue: -100,);
 }
           duration: 300;),}
 ];
 const useNativeDriver = true;})]).start();
     }
   }, [syncStatus.isOnline, syncStatus.pendingOperations, fadeAnim, slideAnim]);
-  // 如果没有启用离线功能，不显示指示器/;,/g/;
-if (!GATEWAY_FEATURES.ENABLE_OFFLINE) {}}
-    return null;}
+  // 如果没有启用离线功能，不显示指示器
+if (!GATEWAY_FEATURES.ENABLE_OFFLINE) {}
+    return null}
   }
-  // 如果在线且没有待处理操作，不显示指示器/;,/g/;
-if (syncStatus.isOnline && syncStatus.pendingOperations === 0) {}}
-    return null;}
-  }";,"";
-const  getStatusColor = useCallback(() => {';,}if (!syncStatus.isOnline) return '#f44336'; // 红色 - 离线'/;,'/g'/;
-if (syncStatus.syncInProgress) return '#ff9800'; // 橙色 - 同步中'/;,'/g'/;
+  // 如果在线且没有待处理操作，不显示指示器
+if (syncStatus.isOnline && syncStatus.pendingOperations === 0) {}
+    return null}
+  }","
+const  getStatusColor = useCallback(() => {'if (!syncStatus.isOnline) return '#f44336'; // 红色 - 离线'/,'/g'/;
+if (syncStatus.syncInProgress) return '#ff9800'; // 橙色 - 同步中'/,'/g'/;
 if (syncStatus.pendingOperations > 0) return '#2196F3'; // 蓝色 - 有待处理操作'/;'/g'/;
 }
     return '#4CAF50'; // 绿色 - 正常'}''/;'/g'/;
   };
-const  getStatusText = useCallback(() => {}}
+const  getStatusText = useCallback(() => {}
 }
-  };';,'';
-const  getStatusIcon = useCallback(() => {';,}if (!syncStatus.isOnline) return 'cloud-off';';,'';
-if (syncStatus.syncInProgress) return 'sync';';,'';
-if (syncStatus.pendingOperations > 0) return 'cloud-queue';';'';
-}
-    return 'cloud-done';'}'';'';
   };
-const  handlePress = useCallback(() => {if (onPress) {}}
-      onPress();}
+const  getStatusIcon = useCallback(() => {'if (!syncStatus.isOnline) return 'cloud-off
+if (syncStatus.syncInProgress) return 'sync
+if (syncStatus.pendingOperations > 0) return 'cloud-queue';
+}
+    return 'cloud-done}
+  };
+const  handlePress = useCallback(() => {if (onPress) {}
+      onPress()}
     } else if (syncStatus.isOnline && syncStatus.pendingOperations > 0) {// 手动触发同步/;}}/g/;
-      offlineService.forcSync().catch(console.error);}
+      offlineService.forcSync().catch(console.error)}
     }
   };
-const renderBasicIndicator = () => (<Animated.View;)  />/;,/g/;
-style={[;]);}}
+const renderBasicIndicator = () => (<Animated.View;)  />
+style={[;])}
         styles.basicIndicator,)}
-        { backgroundColor: getStatusColor() ;}}
-        {}}
+        { backgroundColor: getStatusColor() }
+        {}
           opacity: fadeAnim,}
 ];
 transform: [{ translateY: slideAnim ;}]}
 style]}
     >;
-      <TouchableOpacity;  />/;,/g/;
+      <TouchableOpacity;  />
 style={styles.basicContent}
         onPress={handlePress}
-        activeOpacity={0.8}';'';
-      >';'';
+        activeOpacity={0.8}
+      >'
         <Icon name={getStatusIcon()} size={16} color="#fff"  />"/;"/g"/;
-        <Text style={styles.basicText}>{getStatusText()}</Text>/;/g/;
+        <Text style={styles.basicText}>{getStatusText()}</Text>
         {syncStatus.pendingOperations > 0  && <View style={styles.badge}>;
-            <Text style={styles.badgeText}>{syncStatus.pendingOperations}</Text>/;/g/;
-          </View>/;/g/;
+            <Text style={styles.badgeText}>{syncStatus.pendingOperations}</Text>
+          </View>
         )}
-      </TouchableOpacity>/;/g/;
-    </Animated.View>/;/g/;
+      </TouchableOpacity>
+    </Animated.View>
   );
-const renderDetailedIndicator = () => (<Animated.View;  />/;,)style={[;,]styles.detailedIndicator,;}        {}}/g,/;
+const renderDetailedIndicator = () => (<Animated.View;  />/,)style={[]styles.detailedIndicator,}        {}}/g,/;
   opacity: fadeAnim,}
 ];
 transform: [{ translateY: slideAnim ;}}]}
 style]}
     >;
-      <TouchableOpacity;  />/;,/g/;
+      <TouchableOpacity;  />
 style={styles.detailedContent}
         onPress={handlePress}
         activeOpacity={0.8});
       >);
         <View style={styles.statusHeader}>);
-          <Icon name={getStatusIcon()} size={24} color={getStatusColor()}  />/;/g/;
+          <Icon name={getStatusIcon()} size={24} color={getStatusColor()}  />
           <Text style={[styles.statusTitle, { color: getStatusColor() ;}}]}>;
             {getStatusText()}
-          </Text>/;/g/;
-        </View>/;/g/;
+          </Text>
+        </View>
         <View style={styles.statusDetails}>;
-          <View style={styles.statusRow}>";"";
+          <View style={styles.statusRow}>
             <Text style={styles.statusLabel}>网络状态: </Text>"/;"/g"/;
-            <Text style={[styles.statusValue, { color: syncStatus.isOnline ? '#4CAF50' : '#f44336' ;}}]}>';'';
-
-            </Text>/;/g/;
-          </View>/;/g/;
+            <Text style={[styles.statusValue, { color: syncStatus.isOnline ? '#4CAF50' : '#f44336' ;}}]}>
+            </Text>
+          </View>
           {syncStatus.pendingOperations > 0  && <View style={styles.statusRow}>;
-              <Text style={styles.statusLabel}>待同步操作: </Text>/;/g/;
-              <Text style={styles.statusValue}>{syncStatus.pendingOperations}</Text>/;/g/;
-            </View>/;/g/;
+              <Text style={styles.statusLabel}>待同步操作: </Text>
+              <Text style={styles.statusValue}>{syncStatus.pendingOperations}</Text>
+            </View>
           )}
-          {syncStatus.failedOperations > 0  && <View style={styles.statusRow}>';'';
+          {syncStatus.failedOperations > 0  && <View style={styles.statusRow}>'
               <Text style={styles.statusLabel}>失败操作: </Text>'/;'/g'/;
-              <Text style={[styles.statusValue, { color: '#f44336' ;}}]}>';'';
+              <Text style={[styles.statusValue, { color: '#f44336' ;}}]}>
                 {syncStatus.failedOperations}
-              </Text>/;/g/;
-            </View>/;/g/;
+              </Text>
+            </View>
           )}
           {syncStatus.lastSyncTime  && <View style={styles.statusRow}>;
-              <Text style={styles.statusLabel}>上次同步: </Text>/;/g/;
+              <Text style={styles.statusLabel}>上次同步: </Text>
               <Text style={styles.statusValue}>;
                 {new Date(syncStatus.lastSyncTime).toLocaleTimeString()}
-              </Text>/;/g/;
-            </View>/;/g/;
+              </Text>
+            </View>
           )}
-        </View>/;/g/;
+        </View>
         {syncStatus.isOnline && syncStatus.pendingOperations > 0  && <View style={styles.actionButton}>;
-            <Text style={styles.actionButtonText}>点击同步</Text>/;/g/;
-          </View>/;/g/;
+            <Text style={styles.actionButtonText}>点击同步</Text>
+          </View>
         )}
-      </TouchableOpacity>/;/g/;
-    </Animated.View>/;/g/;
+      </TouchableOpacity>
+    </Animated.View>
   );
 return showDetails ? renderDetailedIndicator() : renderBasicIndicator();
 };
-// 同步状态卡片组件/;,/g/;
-interface SyncStatusCardProps {}}
+// 同步状态卡片组件
+interface SyncStatusCardProps {
 }
-  style?: any;}
+  style?: any}
 }
-export const SyncStatusCard: React.FC<SyncStatusCardProps> = ({ style ;}) => {const [syncStatus, setSyncStatus] = useState<SyncStatus>(getSyncStatus());,}const [cacheStats, setCacheStats] = useState<any>(null);
-useEffect() => {const unsubscribe = addSyncListener(setSyncStatus);}    // 获取缓存统计/;,/g/;
+export const SyncStatusCard: React.FC<SyncStatusCardProps> = ({  style ; }) => {const [syncStatus, setSyncStatus] = useState<SyncStatus>(getSyncStatus())const [cacheStats, setCacheStats] = useState<any>(null);
+useEffect() => {const unsubscribe = addSyncListener(setSyncStatus}    // 获取缓存统计
 const stats = offlineService.getCacheStats();
 setCacheStats(stats);
 }
-    return unsubscribe;}
-  }, []);  // 检查是否需要添加依赖项;/;,/g/;
-if (!GATEWAY_FEATURES.ENABLE_OFFLINE) {}}
-    return null;}
+    return unsubscribe}
+  }, []);  // 检查是否需要添加依赖项;
+if (!GATEWAY_FEATURES.ENABLE_OFFLINE) {}
+    return null}
   }
-  const  handleForcSync = async () => {try {}}
-      const await = offlineService.forcSync();}';'';
-    } catch (error) {';}}'';
-      console.error('Force sync failed:', error);'}'';'';
+  const  handleForcSync = async () => {try {}
+      const await = offlineService.forcSync()}
+    } catch (error) {';}}
+      console.error('Force sync failed:', error);'}
     }
   };
 const  handleClearCache = async () => {try {}      const await = offlineService.clearOfflineData();
 const stats = offlineService.getCacheStats();
 }
-      setCacheStats(stats);}';'';
-    } catch (error) {';}}'';
-      console.error('Clear cache failed:', error);'}'';'';
+      setCacheStats(stats)}
+    } catch (error) {';}}
+      console.error('Clear cache failed:', error);'}
     }
   };
-return (<View style={[styles.syncCard, style]}>';)      <View style={styles.syncCardHeader}>';'';
+return (<View style={[styles.syncCard, style]}>';)      <View style={styles.syncCardHeader}>'
         <Icon name="sync" size={24} color="#2196F3"  />"/;"/g"/;
-        <Text style={styles.syncCardTitle}>同步状态</Text>/;/g/;
-      </View>/;/g/;
+        <Text style={styles.syncCardTitle}>同步状态</Text>
+      </View>
       <View style={styles.syncCardContent}>;
         <View style={styles.statusGrid}>;
           <View style={styles.statusItem}>;
-            <Text style={styles.statusItemLabel}>网络</Text>/;/g/;
-            <Text style={ />/;}[;]";"/g"/;
+            <Text style={styles.statusItemLabel}>网络</Text>"
+            <Text style={ />/;}[;]/g"/;
 }
-              styles.statusItemValue,"}"";"";
+              styles.statusItemValue,"};
 ];
-              { color: syncStatus.isOnline ? '#4CAF50' : '#f44336' ;}}]}>';'';
-
-            </Text>/;/g/;
-          </View>/;/g/;
+              { color: syncStatus.isOnline ? '#4CAF50' : '#f44336' ;}}]}>
+            </Text>
+          </View>
           <View style={styles.statusItem}>;
-            <Text style={styles.statusItemLabel}>待同步</Text>/;/g/;
-            <Text style={styles.statusItemValue}>{syncStatus.pendingOperations}</Text>/;/g/;
-          </View>/;/g/;
+            <Text style={styles.statusItemLabel}>待同步</Text>
+            <Text style={styles.statusItemValue}>{syncStatus.pendingOperations}</Text>
+          </View>
           <View style={styles.statusItem}>;
-            <Text style={styles.statusItemLabel}>失败</Text>/;/g/;
-            <Text style={ />/;}[;]';'/g'/;
+            <Text style={styles.statusItemLabel}>失败</Text>'
+            <Text style={ />/;}[;]/g'/;
 }
-              styles.statusItemValue,'}'';'';
+              styles.statusItemValue,'}
 ];
-              { color: syncStatus.failedOperations > 0 ? '#f44336' : '#666' ;}}]}>';'';
+              { color: syncStatus.failedOperations > 0 ? '#f44336' : '#666' ;}}]}>
               {syncStatus.failedOperations}
-            </Text>/;/g/;
-          </View>/;/g/;
+            </Text>
+          </View>
           <View style={styles.statusItem}>;
-            <Text style={styles.statusItemLabel}>同步中</Text>/;/g/;
-            <Text style={ />/;}[;]';'/g'/;
+            <Text style={styles.statusItemLabel}>同步中</Text>'
+            <Text style={ />/;}[;]/g'/;
 }
-              styles.statusItemValue,'}'';'';
+              styles.statusItemValue,'}
 ];
-              { color: syncStatus.syncInProgress ? '#ff9800' : '#666' ;}}]}>';'';
-
-            </Text>/;/g/;
-          </View>/;/g/;
-        </View>/;/g/;
+              { color: syncStatus.syncInProgress ? '#ff9800' : '#666' ;}}]}>
+            </Text>
+          </View>
+        </View>
         {cacheStats  && <View style={styles.cacheStats}>;
-            <Text style={styles.cacheStatsTitle}>缓存统计</Text>)/;/g/;
+            <Text style={styles.cacheStatsTitle}>缓存统计</Text>)
             <Text style={styles.cacheStatsText}>);
 );
-              大小: {Math.round(cacheStats.totalSize / 1024)}KB |/;/g/;
-
-            </Text>/;/g/;
-          </View>/;/g/;
+              大小: {Math.round(cacheStats.totalSize / 1024)}KB |
+            </Text>
+          </View>
         )}
-        <View style={styles.syncCardActions}>';'';
-          {syncStatus.isOnline && syncStatus.pendingOperations > 0  && <TouchableOpacity style={styles.syncButton} onPress={handleForcSync}>';'';
+        <View style={styles.syncCardActions}>
+          {syncStatus.isOnline && syncStatus.pendingOperations > 0  && <TouchableOpacity style={styles.syncButton} onPress={handleForcSync}>'
               <Icon name="sync" size={16} color="#fff"  />"/;"/g"/;
-              <Text style={styles.syncButtonText}>立即同步</Text>/;/g/;
-            </TouchableOpacity>/;/g/;
-          )}";"";
-          <TouchableOpacity style={styles.clearButton} onPress={handleClearCache}>";"";
+              <Text style={styles.syncButtonText}>立即同步</Text>
+            </TouchableOpacity>"
+          )}
+          <TouchableOpacity style={styles.clearButton} onPress={handleClearCache}>
             <Icon name="clear-all" size={16} color="#666"  />"/;"/g"/;
-            <Text style={styles.clearButtonText}>清除缓存</Text>/;/g/;
-          </TouchableOpacity>/;/g/;
-        </View>/;/g/;
-      </View>/;/g/;
-    </View>/;/g/;
+            <Text style={styles.clearButtonText}>清除缓存</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </View>
   );
 };
-const  styles = StyleSheet.create({)";,}basicIndicator: {,";,}position: 'absolute';','';
-top: 0,;
-left: 0,;
+const  styles = StyleSheet.create({)"basicIndicator: {,"position: 'absolute,'';
+top: 0,
+left: 0,
 }
     right: 0,}
-    zIndex: 1000;},';,'';
-basicContent: {,';,}flexDirection: 'row';','';
-alignItems: 'center';','';
-justifyContent: 'center';','';
-paddingVertical: 8,;
+    zIndex: 1000;},'
+basicContent: {,'flexDirection: 'row,'
+alignItems: 'center,'
+justifyContent: 'center,'';
+paddingVertical: 8,
 }
     paddingHorizontal: 16,}
-    gap: 8;},';,'';
-basicText: {,';,}color: '#fff';','';'';
+    gap: 8;},'
+basicText: {,'color: '#fff,'
 }
-    fontSize: 14,')}'';
-fontWeight: '500';},')'';
-badge: {,)';,}backgroundColor: 'rgba(255, 255, 255, 0.3)',';,'';
-borderRadius: 10,;
-paddingHorizontal: 6,;
-paddingVertical: 2,';'';
+    fontSize: 14,')}
+fontWeight: '500';},')'
+badge: {,)'backgroundColor: 'rgba(255, 255, 255, 0.3)',
+borderRadius: 10,
+paddingHorizontal: 6,
+paddingVertical: 2,
 }
-    minWidth: 20,'}'';
-alignItems: 'center';},';,'';
-badgeText: {,';,}color: '#fff';','';'';
+    minWidth: 20,'}
+alignItems: 'center';},'
+badgeText: {,'color: '#fff,'
 }
-    fontSize: 12,'}'';
-fontWeight: 'bold';},';,'';
-detailedIndicator: {,';,}backgroundColor: '#fff';','';
-margin: 16,';,'';
-borderRadius: 12,';'';
+    fontSize: 12,'}
+fontWeight: 'bold';},'
+detailedIndicator: {,'backgroundColor: '#fff,'';
+margin: 16,
+borderRadius: 12,
 }
-    shadowColor: '#000';',}'';
-shadowOffset: { width: 0, height: 2 ;}
-shadowOpacity: 0.1,;
-shadowRadius: 4,;
-elevation: 3;}
+    shadowColor: '#000,}'';
+shadowOffset: { width: 0, height: 2 }
+shadowOpacity: 0.1,
+shadowRadius: 4,
+elevation: 3}
 detailedContent: {,}
-  padding: 16;},';,'';
-statusHeader: {,';,}flexDirection: 'row';','';
-alignItems: 'center';','';'';
+  padding: 16;},'
+statusHeader: {,'flexDirection: 'row,'
+alignItems: 'center,'
 }
     marginBottom: 16,}
-    gap: 12;}
-statusTitle: {,';}}'';
-  fontSize: 18,'}'';
-fontWeight: 'bold';},';,'';
+    gap: 12}
+statusTitle: {,';}}
+  fontSize: 18,'}
+fontWeight: 'bold';},
 statusDetails: {,}
-  gap: 8;},';,'';
-statusRow: {,';,}flexDirection: 'row';','';'';
+  gap: 8;},'
+statusRow: {,'flexDirection: 'row,'
 }
-    justifyContent: 'space-between';','}';,'';
-alignItems: 'center';},';,'';
-statusLabel: {,';}}'';
-  fontSize: 14,'}'';
-color: '#666';},';,'';
-statusValue: {,';,}fontSize: 14,';'';
+    justifyContent: 'space-between,'}
+alignItems: 'center';},'
+statusLabel: {,';}}
+  fontSize: 14,'}
+color: '#666';},'
+statusValue: {,'fontSize: 14,
 }
-    fontWeight: '500';','}';,'';
-color: '#333';},';,'';
-actionButton: {,';,}marginTop: 16,';,'';
-backgroundColor: '#2196F3';','';
-borderRadius: 8,';'';
+    fontWeight: '500,'}
+color: '#333';},'
+actionButton: {,'marginTop: 16,'
+backgroundColor: '#2196F3,'';
+borderRadius: 8,
 }
-    paddingVertical: 12,'}'';
-alignItems: 'center';},';,'';
-actionButtonText: {,';,}color: '#fff';','';'';
+    paddingVertical: 12,'}
+alignItems: 'center';},'
+actionButtonText: {,'color: '#fff,'
 }
-    fontSize: 16,'}'';
-fontWeight: '600';},';,'';
-syncCard: {,';,}backgroundColor: '#fff';','';
-borderRadius: 12,';,'';
-padding: 16,';'';
+    fontSize: 16,'}
+fontWeight: '600';},'
+syncCard: {,'backgroundColor: '#fff,'';
+borderRadius: 12,
+padding: 16,
 }
-    shadowColor: '#000';',}'';
-shadowOffset: { width: 0, height: 2 ;}
-shadowOpacity: 0.1,;
-shadowRadius: 4,;
-elevation: 3;},';,'';
-syncCardHeader: {,';,}flexDirection: 'row';','';
-alignItems: 'center';','';'';
+    shadowColor: '#000,}'';
+shadowOffset: { width: 0, height: 2 }
+shadowOpacity: 0.1,
+shadowRadius: 4,
+elevation: 3;},'
+syncCardHeader: {,'flexDirection: 'row,'
+alignItems: 'center,'
 }
     marginBottom: 16,}
-    gap: 12;}
-syncCardTitle: {,';,}fontSize: 18,';'';
+    gap: 12}
+syncCardTitle: {,'fontSize: 18,
 }
-    fontWeight: 'bold';','}';,'';
-color: '#333';},';,'';
+    fontWeight: 'bold,'}
+color: '#333';},
 syncCardContent: {,}
-  gap: 16;},';,'';
-statusGrid: {,';,}flexDirection: 'row';','';'';
+  gap: 16;},'
+statusGrid: {,'flexDirection: 'row,'
 }
-    flexWrap: 'wrap';',}'';
-gap: 16;}
-statusItem: {,';,}flex: 1,';'';
+    flexWrap: 'wrap,}'';
+gap: 16}
+statusItem: {,'flex: 1,
 }
-    minWidth: '40%';','}';,'';
-alignItems: 'center';},';,'';
-statusItemLabel: {,';,}fontSize: 12,';'';
+    minWidth: '40%,'}
+alignItems: 'center';},'
+statusItemLabel: {,'fontSize: 12,
 }
-    color: '#666';',}'';
-marginBottom: 4;}
-statusItemValue: {,';,}fontSize: 16,';'';
+    color: '#666,}'';
+marginBottom: 4}
+statusItemValue: {,'fontSize: 16,
 }
-    fontWeight: 'bold';','}';,'';
-color: '#333';},';,'';
-cacheStats: {,';,}backgroundColor: '#f5f5f5';','';'';
+    fontWeight: 'bold,'}
+color: '#333';},'
+cacheStats: {,'backgroundColor: '#f5f5f5,'
 }
     borderRadius: 8,}
-    padding: 12;}
-cacheStatsTitle: {,';,}fontSize: 14,';,'';
-fontWeight: 'bold';','';'';
+    padding: 12}
+cacheStatsTitle: {,'fontSize: 14,'
+fontWeight: 'bold,'
 }
-    color: '#333';','}'';
-marginBottom: 4;}
-cacheStatsText: {,';}}'';
-  fontSize: 12,'}'';
-color: '#666';},';,'';
-syncCardActions: {,';}}'';
-  flexDirection: 'row';','}'';
-gap: 12;}
-syncButton: {,';,}flex: 1,';,'';
-flexDirection: 'row';','';
-alignItems: 'center';','';
-justifyContent: 'center';','';
-backgroundColor: '#2196F3';','';
-borderRadius: 8,;
-}
-    paddingVertical: 12,}
-    gap: 8;},';,'';
-syncButtonText: {,';,}color: '#fff';','';'';
-}
-    fontSize: 14,'}'';
-fontWeight: '600';},';,'';
-clearButton: {,';,}flex: 1,';,'';
-flexDirection: 'row';','';
-alignItems: 'center';','';
-justifyContent: 'center';','';
-backgroundColor: 'transparent';','';
-borderWidth: 1,';,'';
-borderColor: '#ddd';','';
-borderRadius: 8,;
+    color: '#333,'}'';
+marginBottom: 4}
+cacheStatsText: {,';}}
+  fontSize: 12,'}
+color: '#666';},'
+syncCardActions: {,';}}
+  flexDirection: 'row,'}'';
+gap: 12}
+syncButton: {,'flex: 1,'
+flexDirection: 'row,'
+alignItems: 'center,'
+justifyContent: 'center,'
+backgroundColor: '#2196F3,'';
+borderRadius: 8,
 }
     paddingVertical: 12,}
-    gap: 8;},';,'';
-clearButtonText: {,';,}color: '#666';','';'';
+    gap: 8;},'
+syncButtonText: {,'color: '#fff,'
 }
-    fontSize: 14,'}'';
-const fontWeight = '600';}});';,'';
+    fontSize: 14,'}
+fontWeight: '600';},'
+clearButton: {,'flex: 1,'
+flexDirection: 'row,'
+alignItems: 'center,'
+justifyContent: 'center,'
+backgroundColor: 'transparent,'';
+borderWidth: 1,'
+borderColor: '#ddd,'';
+borderRadius: 8,
+}
+    paddingVertical: 12,}
+    gap: 8;},'
+clearButtonText: {,'color: '#666,'
+}
+    fontSize: 14,'}
+const fontWeight = '600';}});
 export default OfflineIndicator;

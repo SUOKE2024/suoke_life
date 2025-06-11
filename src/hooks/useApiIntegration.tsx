@@ -1,9 +1,9 @@
-import React from "react";";
-react";";
-useApiIntegration', {'';,}trackRender: true,;'';
+import React from "react";
+react;
+useApiIntegration', {''trackRender: true,'';
 }
     trackMemory: false,}
-    warnThreshold: 100, // ms ;};);/;,/g/;
+    warnThreshold: 100, // ms ;};);
 setState({)data: null}loading: false,);
 error: null,);
 }
@@ -14,12 +14,12 @@ const effectEnd = performance.now();
 performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
 const setLoading = useCallback(loading: boolean;); => {}
-    setState(prev); => ({ ...prev, loading }));
+    setState(prev); => ({  ...prev, loading  }));
 const effectEnd = performance.now();
 performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
 const setError = useCallback(error: string | null;); => {}
-    setState(prev); => ({ ...prev, error, loading: false, success: false;}));
+    setState(prev); => ({  ...prev, error, loading: false, success: false; }));
 const effectEnd = performance.now();
 performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
@@ -35,54 +35,53 @@ performanceMonitor.recordEffect(effectEnd - effectStart);
 const getCachedData = useCallback(;);
     (key: strin;g;); => {}
       const cached = cacheRef.current.get(key);
-if (cached && Date.now(); - cached.timestamp < cacheTime) {}}
-        return cached.da;t;a;}
+if (cached && Date.now(); - cached.timestamp < cacheTime) {}
+        return cached.da;t;a}
       }
       return nu;l;l;
     }
     [cacheTime];
   );
 setCachedData: useCallback(key: string, data: unknow;n;); => {}
-    cacheRef.current.set(key, {));}}
+    cacheRef.current.set(key, {))}
       data,)}
       const timestamp = Date.now();});
 const effectEnd = performance.now();
 performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
 const executeRequest = useCallback(;);
-async <R = T  />(/      requestFn:  => Promise<R /    >,cacheKey?: string;)/;/g/;
-    ): Promise<R | null /    > => {}/;,/g/;
+async <R = T  />(/      requestFn:  => Promise<R /    >,cacheKey?: string;)
+    ): Promise<R | null /    > => {}
 try {if (cacheKey) {}          const cachedData = getCachedData(cacheKey;);
-if (cachedData) {setSuccess(cachedData);}}
-            return cachedDa;t;a;}
+if (cachedData) {setSuccess(cachedData)}
+            return cachedDa;t;a}
           }
         }
         setLoading(true);
 setError(null);
 const result = await request;F;n;
-if (cacheKey) {}}
-          setCachedData(cacheKey, result);}
+if (cacheKey) {}
+          setCachedData(cacheKey, result)}
         }
         setSuccess(result as T);
 retryCountRef.current = 0;
 return resu;l;t;
-      } catch (error: unknown) {if (retryCountRef.current < retryCount) {}}
+      } catch (error: unknown) {if (retryCountRef.current < retryCount) {}
           retryCountRef.current++}
           setTimeout(); => {}
             executeRequest(requestFn, cacheKey);
           }, retryDelay * retryCountRef.current);
 return nu;l;l;
         }
-
         return nu;l;l;
       }
     }
-    [;,]retryCount,;
-retryDelay,;
-getCachedData,;
-setCachedData,;
-setLoading,;
-setError,;
+    []retryCount,
+retryDelay,
+getCachedData,
+setCachedData,
+setLoading,
+setError,
 setSuccess;
 ];
     ];
@@ -97,9 +96,9 @@ const  logout = useCallback(async  => {});
 return executeRequest(); => apiIntegrationService.logout(););
 const effectEnd = performance.now();
 performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [executeRequest]);';,'';
-const  getCurrentUser = useCallback(async  => {})';,'';
-return executeRequest() => apiIntegrationService.getCurrentUser(),"current-user";";"";
+  }, [executeRequest]);
+const  getCurrentUser = useCallback(async  => {})'
+return executeRequest() => apiIntegrationService.getCurrentUser(),"current-user;"";
     );
 const effectEnd = performance.now();
 performanceMonitor.recordEffect(effectEnd - effectStart);
@@ -111,8 +110,8 @@ performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [executeRequest]);
 const getHealthData = useCallback(;);
 async (userId: string, timeRange?: { start: stri;n;g, end: string;}) => {}
-      const cacheKey = `health-data-${userId}-${JSON.stringify(timeRange);};`;````;,```;
-return executeRequest(); => apiIntegrationService.getHealthData(userId, timeRange),;
+      const cacheKey = `health-data-${userId}-${JSON.stringify(timeRange);};`;````,```;
+return executeRequest(); => apiIntegrationService.getHealthData(userId, timeRange),
 cacheKey;
       );
     }
@@ -126,23 +125,23 @@ async (data: unknow;n;); => {}
   );
 const getHealthMetrics = useCallback(;);
 async (userId: string, metric: string, period: strin;g;) => {}
-      const cacheKey = `health-metrics-${userId}-${metric}-${period;};`;````;,```;
-return executeRequest(); => apiIntegrationService.getHealthMetrics(userId, metric, period),;
+      const cacheKey = `health-metrics-${userId}-${metric}-${period;};`;````,```;
+return executeRequest(); => apiIntegrationService.getHealthMetrics(userId, metric, period),
 cacheKey;
       );
     }
     [executeRequest];
-  );";,"";
-const exportHealthData = useCallback(;)";,"";
-async (userId: string, format: "json" | "csv" | "pdf" = "json";); => {}";,"";
+  );","
+const exportHealthData = useCallback(;)","
+async (userId: string, format: "json" | "csv" | "pdf" = "json";); => {};
 return executeRequest(); => {}
         apiIntegrationService.exportHealthData(userId, format);
       );
     }
     [executeRequest];
-  );";,"";
-const  getAgentStatus = useCallback(async  => {})";,"";
-return executeRequest() => apiIntegrationService.getAgentStatus(),"agent-status";";"";
+  );","
+const  getAgentStatus = useCallback(async  => {})","
+return executeRequest() => apiIntegrationService.getAgentStatus(),"agent-status;"";
     );
 const effectEnd = performance.now();
 performanceMonitor.recordEffect(effectEnd - effectStart);
@@ -165,9 +164,9 @@ async (agentId: string, message: string, context?: unknow;n;); => {}
   );
 const getAgentPerformance = useCallback(;);
 async (agentId: string, timeRange?: { start: stri;n;g, end: string;}) => {}
-      const cacheKey = `agent-performance-${agentId}-${JSON.stringify(;)``}```;,```;
-timeRange);};`;`````;,```;
-return executeRequest(); => apiIntegrationService.getAgentPerformance(agentId, timeRange),;
+      const cacheKey = `agent-performance-${agentId}-${JSON.stringify(;)``}```,```;
+timeRange);};`;`````,```;
+return executeRequest(); => apiIntegrationService.getAgentPerformance(agentId, timeRange),
 cacheKey;
       );
     }
@@ -180,9 +179,9 @@ async (agentId: string, settings: unknow;n;); => {}
       );
     }
     [executeRequest];
-  );";,"";
-const startDiagnosis = useCallback(;)";,"";
-async (type: "look" | "listen" | "inquiry" | "palpation", data: unknow;n;); => {}";,"";
+  );","
+const startDiagnosis = useCallback(;)","
+async (type: "look" | "listen" | "inquiry" | "palpation", data: unknow;n;); => {};
 return executeRequest(); => {}
         apiIntegrationService.startDiagnosis(type, data);
       );
@@ -191,8 +190,8 @@ return executeRequest(); => {}
   );
 const getDiagnosisHistory = useCallback(;);
 async (userId: string, limit: number = 1;0;) => {}
-      const cacheKey = `diagnosis-history-${userId}-${limit;};`;````;,```;
-return executeRequest(); => apiIntegrationService.getDiagnosisHistory(userId, limit),;
+      const cacheKey = `diagnosis-history-${userId}-${limit;};`;````,```;
+return executeRequest(); => apiIntegrationService.getDiagnosisHistory(userId, limit),
 cacheKey;
       );
     }
@@ -208,8 +207,8 @@ async (userId: string, symptoms: string[;];); => {}
   );
 const getUserSettings = useCallback(;);
 async (userId: strin;g;) => {}
-      const cacheKey = `user-settings-${userId;};`;````;,```;
-return executeRequest(); => apiIntegrationService.getUserSettings(userId),;
+      const cacheKey = `user-settings-${userId;};`;````,```;
+return executeRequest(); => apiIntegrationService.getUserSettings(userId),
 cacheKey;
       );
     }
@@ -241,8 +240,8 @@ async (userId: string, healthData: unknow;n;); => {}
   );
 const getBlockchainHealthRecords = useCallback(;);
 async (userId: strin;g;) => {}
-      const cacheKey = `blockchain-records-${userId;};`;````;,```;
-return executeRequest(); => apiIntegrationService.getBlockchainHealthRecords(userId),;
+      const cacheKey = `blockchain-records-${userId;};`;````,```;
+return executeRequest(); => apiIntegrationService.getBlockchainHealthRecords(userId),
 cacheKey;
       );
     }
@@ -258,8 +257,8 @@ async (recordId: strin;g;); => {}
   );
 const searchMedicalResources = useCallback(;);
 async (query: unknow;n;) => {}
-      const cacheKey = `medical-resources-${JSON.stringify(query);};`;````;,```;
-return executeRequest(); => apiIntegrationService.searchMedicalResources(query),;
+      const cacheKey = `medical-resources-${JSON.stringify(query);};`;````,```;
+return executeRequest(); => apiIntegrationService.searchMedicalResources(query),
 cacheKey;
       );
     }
@@ -267,8 +266,8 @@ cacheKey;
   );
 const getMedicalResourceDetails = useCallback(;);
 async (resourceId: strin;g;) => {}
-      const cacheKey = `medical-resource-${resourceId;};`;````;,```;
-return executeRequest(); => apiIntegrationService.getMedicalResourceDetails(resourceId),;
+      const cacheKey = `medical-resource-${resourceId;};`;````,```;
+return executeRequest(); => apiIntegrationService.getMedicalResourceDetails(resourceId),
 cacheKey;
       );
     }
@@ -278,7 +277,7 @@ const bookMedicalAppointment = useCallback(;);
 async (resourceId: string, appointmentData: unknow;n;); => {}
       return executeRequest(); => {}
         apiIntegrationService.bookMedicalAppointment();
-resourceId,;
+resourceId,
 appointmentData;
         );
       );
@@ -287,8 +286,8 @@ appointmentData;
   );
 const searchKnowledge = useCallback(;);
 async (query: unknow;n;) => {}
-      const cacheKey = `knowledge-search-${JSON.stringify(query);};`;````;,```;
-return executeRequest(); => apiIntegrationService.searchKnowledge(query),;
+      const cacheKey = `knowledge-search-${JSON.stringify(query);};`;````,```;
+return executeRequest(); => apiIntegrationService.searchKnowledge(query),
 cacheKey;
       );
     }
@@ -296,8 +295,8 @@ cacheKey;
   );
 const getKnowledgeDetails = useCallback(;);
 async (knowledgeId: strin;g;) => {}
-      const cacheKey = `knowledge-${knowledgeId;};`;````;,```;
-return executeRequest(); => apiIntegrationService.getKnowledgeDetails(knowledgeId),;
+      const cacheKey = `knowledge-${knowledgeId;};`;````,```;
+return executeRequest(); => apiIntegrationService.getKnowledgeDetails(knowledgeId),
 cacheKey;
       );
     }
@@ -305,9 +304,9 @@ cacheKey;
   );
 const getRecommendedKnowledge = useCallback(;);
 async (userId: string, context?: unknow;n;) => {}
-      const cacheKey = `recommended-knowledge-${userId}-${JSON.stringify(;)``}```;,```;
-context);};`;`````;,```;
-return executeRequest(); => apiIntegrationService.getRecommendedKnowledge(userId, context),;
+      const cacheKey = `recommended-knowledge-${userId}-${JSON.stringify(;)``}```,```;
+context);};`;`````,```;
+return executeRequest(); => apiIntegrationService.getRecommendedKnowledge(userId, context),
 cacheKey;
       );
     }
@@ -331,8 +330,8 @@ async (userId: string, inputData: unknow;n;); => {}
   );
 const getModelPerformance = useCallback(;);
 async (userId: strin;g;) => {}
-      const cacheKey = `model-performance-${userId;};`;````;,```;
-return executeRequest(); => apiIntegrationService.getModelPerformance(userId),;
+      const cacheKey = `model-performance-${userId;};`;````,```;
+return executeRequest(); => apiIntegrationService.getModelPerformance(userId),
 cacheKey;
       );
     }
@@ -340,8 +339,8 @@ cacheKey;
   );
 const getAccessibilitySettings = useCallback(;);
 async (userId: strin;g;) => {}
-      const cacheKey = `accessibility-settings-${userId;};`;````;,```;
-return executeRequest(); => apiIntegrationService.getAccessibilitySettings(userId),;
+      const cacheKey = `accessibility-settings-${userId;};`;````,```;
+return executeRequest(); => apiIntegrationService.getAccessibilitySettings(userId),
 cacheKey;
       );
     }
@@ -362,9 +361,9 @@ async (userId: strin;g;); => {}
       );
     }
     [executeRequest];
-  );";,"";
-const  getEcoServices = useCallback(async  => {})";,"";
-return executeRequest() => apiIntegrationService.getEcoServices(),"eco-services";";"";
+  );","
+const  getEcoServices = useCallback(async  => {})","
+return executeRequest() => apiIntegrationService.getEcoServices(),"eco-services;"";
     );
 const effectEnd = performance.now();
 performanceMonitor.recordEffect(effectEnd - effectStart);
@@ -379,8 +378,8 @@ async (userId: string, serviceId: string, plan: strin;g;); => {}
   );
 const getEcoServiceUsage = useCallback(;);
 async (userId: string, serviceId: strin;g;) => {}
-      const cacheKey = `eco-service-usage-${userId}-${serviceId;};`;````;,```;
-return executeRequest(); => apiIntegrationService.getEcoServiceUsage(userId, serviceId),;
+      const cacheKey = `eco-service-usage-${userId}-${serviceId;};`;````,```;
+return executeRequest(); => apiIntegrationService.getEcoServiceUsage(userId, serviceId),
 cacheKey;
       );
     }
@@ -396,8 +395,8 @@ async (feedback: unknow;n;); => {}
   );
 const getFeedbackHistory = useCallback(;);
 async (userId: strin;g;) => {}
-      const cacheKey = `feedback-history-${userId;};`;````;,```;
-return executeRequest(); => apiIntegrationService.getFeedbackHistory(userId),;
+      const cacheKey = `feedback-history-${userId;};`;````,```;
+return executeRequest(); => apiIntegrationService.getFeedbackHistory(userId),
 cacheKey;
       );
     }
@@ -405,8 +404,8 @@ cacheKey;
   );
 const getSupportTickets = useCallback(;);
 async (userId: strin;g;) => {}
-      const cacheKey = `support-tickets-${userId;};`;````;,```;
-return executeRequest(); => apiIntegrationService.getSupportTickets(userId),;
+      const cacheKey = `support-tickets-${userId;};`;````,```;
+return executeRequest(); => apiIntegrationService.getSupportTickets(userId),
 cacheKey;
       );
     }
@@ -419,15 +418,15 @@ async (ticket: unknow;n;); => {}
       );
     }
     [executeRequest];
-  );";,"";
-const  getSystemHealth = useCallback(async  => {})";,"";
-return executeRequest() => apiIntegrationService.getSystemHealth(),"system-health";";"";
+  );","
+const  getSystemHealth = useCallback(async  => {})","
+return executeRequest() => apiIntegrationService.getSystemHealth(),"system-health;"";
     );
 const effectEnd = performance.now();
 performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [executeRequest]);";,"";
-const  getSystemMetrics = useCallback(async  => {})";,"";
-return executeRequest() => apiIntegrationService.getSystemMetrics(),"system-metrics";";"";
+  }, [executeRequest]);","
+const  getSystemMetrics = useCallback(async  => {})","
+return executeRequest() => apiIntegrationService.getSystemMetrics(),"system-metrics;"";
     );
 const effectEnd = performance.now();
 performanceMonitor.recordEffect(effectEnd - effectStart);
@@ -445,22 +444,22 @@ async (requests: Array<{ name: stri;n;g, request: (); => Promise<any>   }>) => {
       return executeRequest(); => apiIntegrationService.batchRequest(requests););
     }
     [executeRequest];
-  );";,"";
-const  healthCheck = useCallback(async  => {})";,"";
-return executeRequest() => apiIntegrationService.healthCheck(),"health-check";";"";
+  );","
+const  healthCheck = useCallback(async  => {})","
+return executeRequest() => apiIntegrationService.healthCheck(),"health-check;"";
     );
 const effectEnd = performance.now();
 performanceMonitor.recordEffect(effectEnd - effectStart);
-  }, [executeRequest]);";,"";
-const  getApiVersion = useCallback(async  => {})";,"";
-return executeRequest() => apiIntegrationService.getApiVersion(),"api-version";";"";
+  }, [executeRequest]);","
+const  getApiVersion = useCallback(async  => {})","
+return executeRequest() => apiIntegrationService.getApiVersion(),"api-version;"";
     );
 const effectEnd = performance.now();
 performanceMonitor.recordEffect(effectEnd - effectStart);
   }, [executeRequest]);
-const clearCache = useCallback() => {;,}const effectEnd = performance.now;
+const clearCache = useCallback() => {const effectEnd = performance.now;
 }
-    performanceMonitor.recordEffect(effectEnd - effectStart);}
+    performanceMonitor.recordEffect(effectEnd - effectStart)}
   }, []);
 const addEventListener = useCallback(;);
     (event: string, listener: (...args: unknown[;];); => void) => {}
@@ -474,50 +473,50 @@ const removeEventListener = useCallback(;);
     }
     [];
   );
-useEffect() => {const effectStart = performance.now();}    // 记录渲染性能;/;/g/;
+useEffect() => {const effectStart = performance.now();}    // 记录渲染性能;
 }
-performanceMonitor.recordRender();}
+performanceMonitor.recordRender()}
     return() => {}
       cacheRef.current.clear;
     }
       const effectEnd = performance.now();
 performanceMonitor.recordEffect(effectEnd - effectStart);
   }, []);
-return {...state}resetState,;
-clearCache,;
-executeRequest,;
-login,;
-logout,;
-getCurrentUser,;
-refreshToken,;
-getHealthData,;
-saveHealthData,;
-getHealthMetrics,;
-exportHealthData,;
-getAgentStatus,;
-startAgentChat,;
-sendMessageToAgent,;
-getAgentPerformance,;
-updateAgentSettings,;
-startDiagnosis,;
-getDiagnosisHistory,;
-getComprehensiveDiagnosis,;
-getUserSettings,;
-updateUserSettings,;
-resetUserSettings,;
-saveHealthRecordToBlockchain,;
-getBlockchainHealthRecords,;
-verifyHealthRecord,;
-searchMedicalResources,;
-getMedicalResourceDetails,;
-bookMedicalAppointment,;
-searchKnowledge,;
-getKnowledgeDetails,;
-getRecommendedKnowledge,;
-trainPersonalModel,;
-getModelPrediction,;
-getModelPerformance,;
+return {...state}resetState,
+clearCache,
+executeRequest,
+login,
+logout,
+getCurrentUser,
+refreshToken,
+getHealthData,
+saveHealthData,
+getHealthMetrics,
+exportHealthData,
+getAgentStatus,
+startAgentChat,
+sendMessageToAgent,
+getAgentPerformance,
+updateAgentSettings,
+startDiagnosis,
+getDiagnosisHistory,
+getComprehensiveDiagnosis,
+getUserSettings,
+updateUserSettings,
+resetUserSettings,
+saveHealthRecordToBlockchain,
+getBlockchainHealthRecords,
+verifyHealthRecord,
+searchMedicalResources,
+getMedicalResourceDetails,
+bookMedicalAppointment,
+searchKnowledge,
+getKnowledgeDetails,
+getRecommendedKnowledge,
+trainPersonalModel,
+getModelPrediction,
+getModelPerformance,
 }
     getAccessibilitySettings,}
-    updateAccessibilitySettings,generateAccessibilityReport, getEcoServices,subscribeToEcoService,getEcoServiceUsage, submitFeedback,getFeedbackHistory,getSupportTickets,createSupportTicket, getSystemHealth,getSystemMetrics,reportPerformanceMetrics, batchRequest,healthCheck,getApiVersion, addEventListener,removeEventListene;r;};";"";
-};""";
+    updateAccessibilitySettings,generateAccessibilityReport, getEcoServices,subscribeToEcoService,getEcoServiceUsage, submitFeedback,getFeedbackHistory,getSupportTickets,createSupportTicket, getSystemHealth,getSystemMetrics,reportPerformanceMetrics, batchRequest,healthCheck,getApiVersion, addEventListener,removeEventListene;r;};
+};""

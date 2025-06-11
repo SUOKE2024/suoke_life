@@ -2,12 +2,13 @@
 metrics - 索克生活项目模块
 """
 
+import time
+from typing import Callable
+
+import structlog
 from fastapi import Request, Response
 from prometheus_client import Counter, Histogram, generate_latest
 from starlette.middleware.base import BaseHTTPMiddleware
-from typing import Callable
-import structlog
-import time
 
 """指标中间件"""
 
@@ -44,7 +45,7 @@ RESPONSE_SIZE = Histogram(
 class MetricsMiddleware(BaseHTTPMiddleware):
     """指标中间件"""
 
-    async def dispatch(self, request: Request, call_next: Callable) - > Response:
+    async def dispatch(self, request: Request, call_next: Callable) -> Response:
         """收集请求指标"""
 
         # 记录开始时间
@@ -92,7 +93,7 @@ class MetricsMiddleware(BaseHTTPMiddleware):
 
             return response
 
-        except Exception as e:
+        except Exception:
             # 计算处理时间
             duration = time.time() - start_time
 
@@ -110,7 +111,7 @@ class MetricsMiddleware(BaseHTTPMiddleware):
 
             raise
 
-    def _get_endpoint(self, request: Request) - > str:
+    def _get_endpoint(self, request: Request) -> str:
         """获取端点路径"""
         # 获取路由模式而不是实际路径
         if hasattr(request, 'scope') and 'route' in request.scope:
@@ -121,7 +122,7 @@ class MetricsMiddleware(BaseHTTPMiddleware):
         # 回退到URL路径
         return request.url.path
 
-    def _get_request_size(self, request: Request) - > int:
+    def _get_request_size(self, request: Request) -> int:
         """获取请求大小"""
         content_length = request.headers.get('content - length')
         if content_length:
@@ -131,7 +132,7 @@ class MetricsMiddleware(BaseHTTPMiddleware):
                 pass
         return 0
 
-    def _get_response_size(self, response: Response) - > int:
+    def _get_response_size(self, response: Response) -> int:
         """获取响应大小"""
         content_length = response.headers.get('content - length')
         if content_length:
@@ -147,6 +148,6 @@ class MetricsMiddleware(BaseHTTPMiddleware):
         return 0
 
 
-def get_metrics() - > str:
+def get_metrics() -> str:
     """获取Prometheus指标"""
     return generate_latest()

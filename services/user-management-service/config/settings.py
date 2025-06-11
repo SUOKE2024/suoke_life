@@ -3,10 +3,10 @@
 整合认证和用户管理的统一配置
 """
 
-import os
 from functools import lru_cache
-from typing import List, Optional, Dict, Any
-from pydantic import BaseSettings, Field, validator
+from typing import Dict, List, Optional
+
+from pydantic import Field, validator
 from pydantic_settings import BaseSettings as PydanticBaseSettings
 
 

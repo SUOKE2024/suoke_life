@@ -1,73 +1,72 @@
-
-";,"";
-import {;,}storeAuthTokens,;
-clearAuthTokens,;
-getAuthToken,;
-getRefreshToken,";"";
+";"";
+import {;}storeAuthTokens,
+clearAuthTokens,
+getAuthToken,
+getRefreshToken,";
 }
-  getDeviceId;"}"";"";
-} from "../utils/authUtils";""/;"/g"/;
-// 登录请求参数/;,/g/;
+  getDeviceId;"}"";
+} from "../utils/authUtils"/;"/g"/;
+// 登录请求参数
 export interface LoginRequest {email: string}const password = string;
 deviceId?: string;
 }
 }
   rememberMe?: boolean;}
 }
-// 登录响应/;,/g/;
-export interface LoginResponse {user: User}accessToken: string,;
-refreshToken: string,;
+// 登录响应
+export interface LoginResponse {user: User}accessToken: string,
+refreshToken: string,
 }
 }
   const expiresIn = number;}
 }
-// 注册请求参数/;,/g/;
-export interface RegisterRequest {username: string}email: string,;
+// 注册请求参数
+export interface RegisterRequest {username: string}email: string,
 const password = string;
 phone?: string;
 }
 }
   deviceId?: string;}
 }
-// 注册响应/;,/g/;
-export interface RegisterResponse {user: User}accessToken: string,;
-refreshToken: string,;
+// 注册响应
+export interface RegisterResponse {user: User}accessToken: string,
+refreshToken: string,
 }
 }
   const expiresIn = number;}
 }
-// 忘记密码请求参数/;,/g/;
+// 忘记密码请求参数
 export interface ForgotPasswordRequest {;}}
 }
   const email = string;}
 }
-// 验证重置码请求参数/;,/g/;
-export interface VerifyResetCodeRequest {email: string,;}}
+// 验证重置码请求参数
+export interface VerifyResetCodeRequest {email: string,}}
 }
   const code = string;}
 }
-// 重置密码请求参数/;,/g/;
-export interface ResetPasswordRequest {email: string}code: string,;
+// 重置密码请求参数
+export interface ResetPasswordRequest {email: string}code: string,
 }
 }
   const newPassword = string;}
 }
-// 刷新令牌请求参数/;,/g/;
+// 刷新令牌请求参数
 export interface RefreshTokenRequest {;}}
 }
   const refreshToken = string;}
 }
-// 刷新令牌响应/;,/g/;
-export interface RefreshTokenResponse {accessToken: string}refreshToken: string,;
+// 刷新令牌响应
+export interface RefreshTokenResponse {accessToken: string}refreshToken: string,
 }
 }
   const expiresIn = number;}
 }
-class AuthService {// 用户登录/;,}const async = login(credentials: LoginRequest): Promise<LoginResponse> {try {}      // 获取设备ID;/;,/g/;
-const deviceId = await getDeviceId();";,"";
-const  response: ApiResponse<LoginResponse> = await apiClient.post()";"";
-        "AUTH",/login",""/;"/g"/;
-        {...credentials,;}}
+class AuthService {// 用户登录/;}const async = login(credentials: LoginRequest): Promise<LoginResponse> {try {}      // 获取设备ID;
+const deviceId = await getDeviceId();";"";
+const  response: ApiResponse<LoginResponse> = await apiClient.post()";
+        "AUTH",/login/;"/g"/;
+        {...credentials,}}
 }
           deviceId;}
         }
@@ -75,9 +74,9 @@ const  response: ApiResponse<LoginResponse> = await apiClient.post()";"";
 if (!response.success || !response.data) {}}
 }
       }
-      // 存储认证令牌/;,/g/;
+      // 存储认证令牌
 const await = storeAuthTokens();
-response.data.accessToken,;
+response.data.accessToken,
 response.data.refreshToken;
       );
 return response.data;
@@ -85,21 +84,21 @@ return response.data;
 }
     ;}
   }
-  // 用户注册/;,/g/;
-const async = register(userData: RegisterRequest): Promise<RegisterResponse> {try {}      // 获取设备ID;/;,/g/;
-const deviceId = await getDeviceId();";,"";
-const  response: ApiResponse<RegisterResponse> = await apiClient.post()";"";
-        "AUTH",/register",""/;"/g"/;
-        {...userData,;}}
+  // 用户注册
+const async = register(userData: RegisterRequest): Promise<RegisterResponse> {try {}      // 获取设备ID;
+const deviceId = await getDeviceId();";"";
+const  response: ApiResponse<RegisterResponse> = await apiClient.post()";
+        "AUTH",/register/;"/g"/;
+        {...userData,}}
           deviceId;}
         }
       );
 if (!response.success || !response.data) {}}
 }
       }
-      // 存储认证令牌/;,/g/;
+      // 存储认证令牌
 const await = storeAuthTokens();
-response.data.accessToken,;
+response.data.accessToken,
 response.data.refreshToken;
       );
 return response.data;
@@ -107,7 +106,7 @@ return response.data;
 }
     ;}
   }
-  // 用户登出/;,/g/;
+  // 用户登出
 const async = logout(): Promise<void> {try {";}      // 调用服务端登出接口"/;"/g"/;
 }
       await: apiClient.post("AUTH",/logout");"}""/;"/g"/;
@@ -117,13 +116,13 @@ const async = logout(): Promise<void> {try {";}      // 调用服务端登出接
       const await = clearAuthTokens();}
     }
   }
-  // 刷新访问令牌/;,/g/;
-const async = refreshAccessToken(): Promise<RefreshTokenResponse> {try {}      const refreshToken = await getRefreshToken();";,"";
+  // 刷新访问令牌
+const async = refreshAccessToken(): Promise<RefreshTokenResponse> {try {}      const refreshToken = await getRefreshToken();";"";
 if (!refreshToken) {";}}"";
-        const throw = new Error("No refresh token available");"}"";"";
-      }";,"";
-const  response: ApiResponse<RefreshTokenResponse> = await apiClient.post()";"";
-        "AUTH",/refresh",""/;"/g"/;
+        const throw = new Error("No refresh token available");"}"";
+      }";"";
+const  response: ApiResponse<RefreshTokenResponse> = await apiClient.post()";
+        "AUTH",/refresh/;"/g"/;
         {}}
           refreshToken;}
         }
@@ -131,19 +130,19 @@ const  response: ApiResponse<RefreshTokenResponse> = await apiClient.post()";"";
 if (!response.success || !response.data) {}}
 }
       }
-      // 更新存储的令牌/;,/g/;
+      // 更新存储的令牌
 const await = storeAuthTokens();
-response.data.accessToken,;
+response.data.accessToken,
 response.data.refreshToken;
       );
 return response.data;
-    } catch (error: any) {// 刷新失败，清除所有认证信息/;,}const await = clearAuthTokens();/g/;
+    } catch (error: any) {// 刷新失败，清除所有认证信息/;}const await = clearAuthTokens();/g/;
 }
 }
     }
   }
-  // 获取当前用户信息/;,/g/;
-const async = getCurrentUser(): Promise<User> {";,}try {";,}const response: ApiResponse<User> = await apiClient.get("AUTH",/me");""/;,"/g"/;
+  // 获取当前用户信息
+const async = getCurrentUser(): Promise<User> {";}try {";}const response: ApiResponse<User> = await apiClient.get("AUTH",/me");""/;"/g"/;
 if (!response.success || !response.data) {}}
 }
       }
@@ -152,9 +151,9 @@ if (!response.success || !response.data) {}}
 }
     ;}
   }
-  // 发送忘记密码邮件/;,/g/;
-const async = forgotPassword(request: ForgotPasswordRequest): Promise<void> {try {";,}const  response: ApiResponse = await apiClient.post()";"";
-        "AUTH",/forgot-password",""/;,"/g"/;
+  // 发送忘记密码邮件
+const async = forgotPassword(request: ForgotPasswordRequest): Promise<void> {try {";}const  response: ApiResponse = await apiClient.post()";
+        "AUTH",/forgot-password/;"/g"/;
 request;
       );
 if (!response.success) {}}
@@ -164,9 +163,9 @@ if (!response.success) {}}
 }
     ;}
   }
-  // 验证重置密码验证码/;,/g/;
-const async = verifyResetCode(request: VerifyResetCodeRequest): Promise<void> {try {";,}const  response: ApiResponse = await apiClient.post()";"";
-        "AUTH",/verify-reset-code",""/;,"/g"/;
+  // 验证重置密码验证码
+const async = verifyResetCode(request: VerifyResetCodeRequest): Promise<void> {try {";}const  response: ApiResponse = await apiClient.post()";
+        "AUTH",/verify-reset-code/;"/g"/;
 request;
       );
 if (!response.success) {}}
@@ -176,9 +175,9 @@ if (!response.success) {}}
 }
     ;}
   }
-  // 重置密码/;,/g/;
-const async = resetPassword(request: ResetPasswordRequest): Promise<void> {try {";,}const  response: ApiResponse = await apiClient.post()";"";
-        "AUTH",/reset-password",""/;,"/g"/;
+  // 重置密码
+const async = resetPassword(request: ResetPasswordRequest): Promise<void> {try {";}const  response: ApiResponse = await apiClient.post()";
+        "AUTH",/reset-password/;"/g"/;
 request;
       );
 if (!response.success) {}}
@@ -188,10 +187,10 @@ if (!response.success) {}}
 }
     ;}
   }
-  // 修改密码/;,/g,/;
-  async: changePassword(oldPassword: string, newPassword: string): Promise<void> {try {";,}const  response: ApiResponse = await apiClient.post()";"";
-        "AUTH",/change-password",""/;"/g"/;
-        {oldPassword,;}}
+  // 修改密码/;/g,/;
+  async: changePassword(oldPassword: string, newPassword: string): Promise<void> {try {";}const  response: ApiResponse = await apiClient.post()";
+        "AUTH",/change-password/;"/g"/;
+        {oldPassword,}}
           newPassword;}
         }
       );
@@ -202,11 +201,11 @@ if (!response.success) {}}
 }
     ;}
   }
-  // 验证当前密码/;,/g/;
+  // 验证当前密码
 const async = verifyPassword(password: string): Promise<boolean> {}}
-    try {}";,"";
-const  response: ApiResponse<{ valid: boolean ;}> = await apiClient.post()";"";
-        "AUTH",/verify-password",""/;"/g"/;
+    try {}";"";
+const  response: ApiResponse<{ valid: boolean ;}> = await apiClient.post()";
+        "AUTH",/verify-password/;"/g"/;
         {}}
           password;}
         }
@@ -219,11 +218,11 @@ if (!response.success) {}}
 }
     ;}
   }
-  // 检查邮箱是否已存在/;,/g/;
+  // 检查邮箱是否已存在
 const async = checkEmailExists(email: string): Promise<boolean> {}}
-    try {}";,"";
-const  response: ApiResponse<{ exists: boolean ;}> = await apiClient.get()";"";
-        "AUTH",";"";
+    try {}";"";
+const  response: ApiResponse<{ exists: boolean ;}> = await apiClient.get()";
+        "AUTH",";
         `/check-email?email=${encodeURIComponent(email)}````/`;`/g`/`;
       );
 if (!response.success) {}}
@@ -234,11 +233,11 @@ if (!response.success) {}}
       return false;}
     }
   }
-  // 检查用户名是否已存在/;,/g/;
+  // 检查用户名是否已存在
 const async = checkUsernameExists(username: string): Promise<boolean> {}}
-    try {}";,"";
-const  response: ApiResponse<{ exists: boolean ;}> = await apiClient.get()";"";
-        "AUTH",";"";
+    try {}";"";
+const  response: ApiResponse<{ exists: boolean ;}> = await apiClient.get()";
+        "AUTH",";
         `/check-username?username=${encodeURIComponent(username)}````/`;`/g`/`;
       );
 if (!response.success) {}}
@@ -249,9 +248,9 @@ if (!response.success) {}}
       return false;}
     }
   }
-  // 发送邮箱验证码/;,/g/;
-const async = sendEmailVerification(email: string): Promise<void> {try {";,}const  response: ApiResponse = await apiClient.post()";"";
-        "AUTH",/send-email-verification",""/;"/g"/;
+  // 发送邮箱验证码
+const async = sendEmailVerification(email: string): Promise<void> {try {";}const  response: ApiResponse = await apiClient.post()";
+        "AUTH",/send-email-verification/;"/g"/;
         {}}
           email;}
         }
@@ -263,10 +262,10 @@ if (!response.success) {}}
 }
     ;}
   }
-  // 验证邮箱验证码/;,/g,/;
-  async: verifyEmailCode(email: string, code: string): Promise<void> {try {";,}const  response: ApiResponse = await apiClient.post()";"";
-        "AUTH",/verify-email-code",""/;"/g"/;
-        {email,;}}
+  // 验证邮箱验证码/;/g,/;
+  async: verifyEmailCode(email: string, code: string): Promise<void> {try {";}const  response: ApiResponse = await apiClient.post()";
+        "AUTH",/verify-email-code/;"/g"/;
+        {email,}}
           code;}
         }
       );
@@ -277,12 +276,12 @@ if (!response.success) {}}
 }
     ;}
   }
-  // 检查认证状态/;,/g/;
+  // 检查认证状态
 const async = checkAuthStatus(): Promise<boolean> {try {}      const token = await getAuthToken();
 if (!token) {}}
         return false;}
       }
-      // 验证令牌有效性/;,/g/;
+      // 验证令牌有效性
 const await = this.getCurrentUser();
 return true;
     } catch (error) {}}
@@ -290,6 +289,6 @@ return true;
     }
   }
 }
-// 导出单例实例/;,/g/;
-export const authService = new AuthService();";,"";
+// 导出单例实例
+export const authService = new AuthService();";"";
 export default authService;""";

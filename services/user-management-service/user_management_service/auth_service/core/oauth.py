@@ -28,53 +28,53 @@ class OAuthProvider(str, Enum):
 class OAuthManager:
     """OAuth认证管理器"""
 
-    def __init__(self) - > None:
+    def __init__(self) -> None:
         """TODO: 添加文档字符串"""
         self.settings = get_settings()
         self.providers_config = {
             OAuthProvider.GOOGLE: {
                 "client_id": getattr(self.settings, 'GOOGLE_CLIENT_ID', ''),
                 "client_secret": getattr(self.settings, 'GOOGLE_CLIENT_SECRET', ''),
-                "auth_url": "https: / /accounts.google.com / o / oauth2 / v2 / auth",
-                "token_url": "https: / /oauth2.googleapis.com / token",
-                "user_info_url": "https: / /www.googleapis.com / oauth2 / v2 / userinfo",
+                "auth_url": "https: //accounts.google.com / o / oauth2 / v2 / auth",
+                "token_url": "https: //oauth2.googleapis.com / token",
+                "user_info_url": "https: //www.googleapis.com / oauth2 / v2 / userinfo",
                 "scope": "openid email profile"
             },
             OAuthProvider.GITHUB: {
                 "client_id": getattr(self.settings, 'GITHUB_CLIENT_ID', ''),
                 "client_secret": getattr(self.settings, 'GITHUB_CLIENT_SECRET', ''),
-                "auth_url": "https: / /github.com / login / oauth / authorize",
-                "token_url": "https: / /github.com / login / oauth / access_token",
-                "user_info_url": "https: / /api.github.com / user",
+                "auth_url": "https: //github.com / login / oauth / authorize",
+                "token_url": "https: //github.com / login / oauth / access_token",
+                "user_info_url": "https: //api.github.com / user",
                 "scope": "user:email"
             },
             OAuthProvider.WECHAT: {
                 "client_id": getattr(self.settings, 'WECHAT_APP_ID', ''),
                 "client_secret": getattr(self.settings, 'WECHAT_APP_SECRET', ''),
-                "auth_url": "https: / /open.weixin.qq.com / connect / qrconnect",
-                "token_url": "https: / /api.weixin.qq.com / sns / oauth2 / access_token",
-                "user_info_url": "https: / /api.weixin.qq.com / sns / userinfo",
+                "auth_url": "https: //open.weixin.qq.com / connect / qrconnect",
+                "token_url": "https: //api.weixin.qq.com / sns / oauth2 / access_token",
+                "user_info_url": "https: //api.weixin.qq.com / sns / userinfo",
                 "scope": "snsapi_login"
             },
             OAuthProvider.QQ: {
                 "client_id": getattr(self.settings, 'QQ_APP_ID', ''),
                 "client_secret": getattr(self.settings, 'QQ_APP_KEY', ''),
-                "auth_url": "https: / /graph.qq.com / oauth2.0 / authorize",
-                "token_url": "https: / /graph.qq.com / oauth2.0 / token",
-                "user_info_url": "https: / /graph.qq.com / user / get_user_info",
+                "auth_url": "https: //graph.qq.com / oauth2.0 / authorize",
+                "token_url": "https: //graph.qq.com / oauth2.0 / token",
+                "user_info_url": "https: //graph.qq.com / user / get_user_info",
                 "scope": "get_user_info"
             },
             OAuthProvider.WEIBO: {
                 "client_id": getattr(self.settings, 'WEIBO_APP_KEY', ''),
                 "client_secret": getattr(self.settings, 'WEIBO_APP_SECRET', ''),
-                "auth_url": "https: / /api.weibo.com / oauth2 / authorize",
-                "token_url": "https: / /api.weibo.com / oauth2 / access_token",
-                "user_info_url": "https: / /api.weibo.com / 2 / users / show.json",
+                "auth_url": "https: //api.weibo.com / oauth2 / authorize",
+                "token_url": "https: //api.weibo.com / oauth2 / access_token",
+                "user_info_url": "https: //api.weibo.com / 2 / users / show.json",
                 "scope": "email"
             }
         }
 
-    def is_provider_supported(self, provider: str) - > bool:
+    def is_provider_supported(self, provider: str) -> bool:
         """检查是否支持指定的OAuth提供商"""
         try:
             return OAuthProvider(provider) in self.providers_config
@@ -86,7 +86,7 @@ class OAuthManager:
         provider: str,
         redirect_uri: Optional[str] = None,
         state: Optional[str] = None
-    ) - > str:
+    ) -> str:
         """生成OAuth授权URL"""
         if not self.is_provider_supported(provider):
             raise ValueError(f"不支持的OAuth提供商: {provider}")
@@ -99,7 +99,7 @@ class OAuthManager:
 
         # 设置默认重定向URI
         if not redirect_uri:
-            base_url = getattr(self.settings, 'BASE_URL', 'http: / /localhost:8000')
+            base_url = getattr(self.settings, 'BASE_URL', 'http: //localhost:8000')
             redirect_uri = f"{base_url} / auth / oauth / callback / {provider}"
 
         # 构建授权参数
@@ -126,7 +126,7 @@ class OAuthManager:
         code: str,
         state: Optional[str] = None,
         redirect_uri: Optional[str] = None
-    ) - > str:
+    ) -> str:
         """交换授权码获取访问令牌"""
         if not self.is_provider_supported(provider):
             raise ValueError(f"不支持的OAuth提供商: {provider}")
@@ -135,7 +135,7 @@ class OAuthManager:
 
         # 设置默认重定向URI
         if not redirect_uri:
-            base_url = getattr(self.settings, 'BASE_URL', 'http: / /localhost:8000')
+            base_url = getattr(self.settings, 'BASE_URL', 'http: //localhost:8000')
             redirect_uri = f"{base_url} / auth / oauth / callback / {provider}"
 
         # 构建令牌请求参数
@@ -169,7 +169,7 @@ class OAuthManager:
                 timeout = 30.0
             )
 
-            if response.status_code ! = 200:
+            if response.status_code != 200:
                 raise Exception(f"获取访问令牌失败: {response.text}")
 
             token_data = response.json()
@@ -180,7 +180,7 @@ class OAuthManager:
             else:
                 raise Exception(f"响应中未找到访问令牌: {token_data}")
 
-    async def get_user_info(self, provider: str, access_token: str) - > Dict[str, Any]:
+    async def get_user_info(self, provider: str, access_token: str) -> Dict[str, Any]:
         """获取用户信息"""
         if not self.is_provider_supported(provider):
             raise ValueError(f"不支持的OAuth提供商: {provider}")
@@ -211,7 +211,7 @@ class OAuthManager:
         async with httpx.AsyncClient() as client:
             response = await client.get(url, headers = headers, timeout = 30.0)
 
-            if response.status_code ! = 200:
+            if response.status_code != 200:
                 raise Exception(f"获取用户信息失败: {response.text}")
 
             user_data = response.json()
@@ -219,7 +219,7 @@ class OAuthManager:
             # 标准化用户信息
             return self._normalize_user_info(provider, user_data)
 
-    def _normalize_user_info(self, provider: str, user_data: Dict[str, Any]) - > Dict[str, Any]:
+    def _normalize_user_info(self, provider: str, user_data: Dict[str, Any]) -> Dict[str, Any]:
         """标准化不同提供商的用户信息"""
         normalized = {
             "id": None,
@@ -271,14 +271,14 @@ class OAuthManager:
 
         return normalized
 
-    async def _get_qq_openid(self, access_token: str) - > str:
+    async def _get_qq_openid(self, access_token: str) -> str:
         """获取QQ用户的OpenID"""
-        url = f"https: / /graph.qq.com / oauth2.0 / me?access_token = {access_token}"
+        url = f"https: //graph.qq.com / oauth2.0 / me?access_token = {access_token}"
 
         async with httpx.AsyncClient() as client:
             response = await client.get(url, timeout = 30.0)
 
-            if response.status_code ! = 200:
+            if response.status_code != 200:
                 raise Exception(f"获取QQ OpenID失败: {response.text}")
 
             # QQ返回的是JSONP格式，需要解析
@@ -289,16 +289,16 @@ class OAuthManager:
             data = json.loads(text)
             return data.get("openid")
 
-    async def _get_wechat_openid(self, access_token: str) - > str:
+    async def _get_wechat_openid(self, access_token: str) -> str:
         """获取微信用户的OpenID"""
         # 在实际的微信OAuth流程中，OpenID通常在获取access_token时一起返回
         # 这里是简化实现，实际应该从token响应中获取
         return "mock_wechat_openid"
 
-    def validate_state(self, received_state: str, expected_state: str) - > bool:
+    def validate_state(self, received_state: str, expected_state: str) -> bool:
         """验证OAuth状态参数"""
         return received_state == expected_state
 
-    def generate_state(self) - > str:
+    def generate_state(self) -> str:
         """生成OAuth状态参数"""
         return secrets.token_urlsafe(32)

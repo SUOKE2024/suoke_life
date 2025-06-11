@@ -2,12 +2,13 @@
 cache - 索克生活项目模块
 """
 
-from redis.asyncio import Redis
-from typing import Any, Optional, Union
-from user_service.config import get_settings
 import json
 import logging
+from typing import Any, Optional
+
 import redis.asyncio as redis
+from redis.asyncio import Redis
+from user_service.config import get_settings
 
 """缓存管理"""
 
@@ -19,7 +20,7 @@ logger = logging.getLogger(__name__)
 redis_client: Optional[Redis] = None
 
 
-async def init_cache() - > None:
+async def init_cache() -> None:
     """初始化缓存连接"""
     global redis_client
 
@@ -44,7 +45,7 @@ async def init_cache() - > None:
         raise
 
 
-async def close_cache() - > None:
+async def close_cache() -> None:
     """关闭缓存连接"""
     global redis_client
 
@@ -56,7 +57,7 @@ async def close_cache() - > None:
             logger.error(f"关闭缓存连接时出错: {e}")
 
 
-def get_cache_client() - > Redis:
+def get_cache_client() -> Redis:
     """获取缓存客户端"""
     if not redis_client:
         raise RuntimeError("缓存未初始化")
@@ -66,12 +67,12 @@ def get_cache_client() - > Redis:
 class CacheManager:
     """缓存管理器"""
 
-    def __init__(self) - > None:
+    def __init__(self) -> None:
         """TODO: 添加文档字符串"""
         self.settings = get_settings()
         self.default_ttl = self.settings.cache.default_ttl
 
-    async def get(self, key: str) - > Optional[Any]:
+    async def get(self, key: str) -> Optional[Any]:
         """获取缓存值"""
         try:
             client = get_cache_client()
@@ -95,7 +96,7 @@ class CacheManager:
         key: str,
         value: Any,
         ttl: Optional[int] = None
-    ) - > bool:
+    ) -> bool:
         """设置缓存值"""
         try:
             client = get_cache_client()
@@ -116,7 +117,7 @@ class CacheManager:
             logger.error(f"设置缓存失败 {key}: {e}")
             return False
 
-    async def delete(self, key: str) - > bool:
+    async def delete(self, key: str) -> bool:
         """删除缓存"""
         try:
             client = get_cache_client()
@@ -127,7 +128,7 @@ class CacheManager:
             logger.error(f"删除缓存失败 {key}: {e}")
             return False
 
-    async def exists(self, key: str) - > bool:
+    async def exists(self, key: str) -> bool:
         """检查缓存是否存在"""
         try:
             client = get_cache_client()
@@ -138,7 +139,7 @@ class CacheManager:
             logger.error(f"检查缓存存在性失败 {key}: {e}")
             return False
 
-    async def expire(self, key: str, ttl: int) - > bool:
+    async def expire(self, key: str, ttl: int) -> bool:
         """设置缓存过期时间"""
         try:
             client = get_cache_client()
@@ -149,7 +150,7 @@ class CacheManager:
             logger.error(f"设置缓存过期时间失败 {key}: {e}")
             return False
 
-    async def ttl(self, key: str) - > int:
+    async def ttl(self, key: str) -> int:
         """获取缓存剩余时间"""
         try:
             client = get_cache_client()
@@ -159,7 +160,7 @@ class CacheManager:
             logger.error(f"获取缓存TTL失败 {key}: {e}")
             return - 1
 
-    async def increment(self, key: str, amount: int = 1) - > Optional[int]:
+    async def increment(self, key: str, amount: int = 1) -> Optional[int]:
         """递增缓存值"""
         try:
             client = get_cache_client()
@@ -169,7 +170,7 @@ class CacheManager:
             logger.error(f"递增缓存失败 {key}: {e}")
             return None
 
-    async def decrement(self, key: str, amount: int = 1) - > Optional[int]:
+    async def decrement(self, key: str, amount: int = 1) -> Optional[int]:
         """递减缓存值"""
         try:
             client = get_cache_client()
@@ -179,7 +180,7 @@ class CacheManager:
             logger.error(f"递减缓存失败 {key}: {e}")
             return None
 
-    async def get_many(self, keys: list[str]) - > dict[str, Any]:
+    async def get_many(self, keys: list[str]) -> dict[str, Any]:
         """批量获取缓存"""
         try:
             client = get_cache_client()
@@ -205,7 +206,7 @@ class CacheManager:
         self,
         mapping: dict[str, Any],
         ttl: Optional[int] = None
-    ) - > bool:
+    ) -> bool:
         """批量设置缓存"""
         try:
             client = get_cache_client()
@@ -233,7 +234,7 @@ class CacheManager:
             logger.error(f"批量设置缓存失败: {e}")
             return False
 
-    async def delete_pattern(self, pattern: str) - > int:
+    async def delete_pattern(self, pattern: str) -> int:
         """按模式删除缓存"""
         try:
             client = get_cache_client()
@@ -247,17 +248,17 @@ class CacheManager:
             logger.error(f"按模式删除缓存失败 {pattern}: {e}")
             return 0
 
-    def get_user_cache_key(self, user_id: str, suffix: str = "") - > str:
+    def get_user_cache_key(self, user_id: str, suffix: str = "") -> str:
         """生成用户缓存键"""
         if suffix:
             return f"user:{user_id}:{suffix}"
         return f"user:{user_id}"
 
-    def get_session_cache_key(self, session_id: str) - > str:
+    def get_session_cache_key(self, session_id: str) -> str:
         """生成会话缓存键"""
         return f"session:{session_id}"
 
-    def get_device_cache_key(self, device_id: str) - > str:
+    def get_device_cache_key(self, device_id: str) -> str:
         """生成设备缓存键"""
         return f"device:{device_id}"
 

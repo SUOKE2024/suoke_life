@@ -1,7 +1,7 @@
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 from corn_maze_service.config import get_settings
-from corn_maze_service.internal.model.maze import (
+from corn_maze_service.internal.model.maze import MazeModel
 from datetime import UTC, datetime
 from fastapi import FastAPI, HTTPException, Query, status
 from fastapi.middleware.cors import CORSMiddleware

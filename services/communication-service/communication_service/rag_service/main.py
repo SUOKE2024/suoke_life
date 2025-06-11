@@ -1,11 +1,10 @@
-from typing import Dict, List, Any, Optional, Union
 
 """
 main - 索克生活项目模块
 """
 
-from rag_service.api.main import create_app
 import uvicorn
+from rag_service.api.main import create_app
 
 """
 rag - service 主入口文件

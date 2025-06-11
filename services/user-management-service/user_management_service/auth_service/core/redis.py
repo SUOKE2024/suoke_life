@@ -2,13 +2,15 @@
 redis - 索克生活项目模块
 """
 
-from auth_service.config.settings import RedisSettings, get_settings
-from datetime import timedelta
-from typing import Any, Dict, List, Optional, Union
 import json
 import pickle
+from datetime import timedelta
+from typing import Any, Dict, Optional, Union
+
 import redis.asyncio as redis
 import structlog
+
+from auth_service.config.settings import RedisSettings, get_settings
 
 """Redis核心模块"""
 
@@ -26,7 +28,7 @@ class RedisManager:
         self._pool: Optional[redis.ConnectionPool] = None
         self._redis: Optional[redis.Redis] = None
 
-    async def connect(self) - > None:
+    async def connect(self) -> None:
         """连接Redis"""
         try:
             self._pool = redis.ConnectionPool.from_url(
@@ -45,7 +47,7 @@ class RedisManager:
             logger.error("Failed to connect to Redis", error = str(e))
             raise
 
-    async def disconnect(self) - > None:
+    async def disconnect(self) -> None:
         """断开Redis连接"""
         if self._redis:
             await self._redis.close()
@@ -54,13 +56,13 @@ class RedisManager:
         logger.info("Redis disconnected")
 
     @property
-    def redis(self) - > redis.Redis:
+    def redis(self) -> redis.Redis:
         """获取Redis客户端"""
         if not self._redis:
             raise RuntimeError("Redis not connected")
         return self._redis
 
-    async def get(self, key: str) - > Optional[bytes]:
+    async def get(self, key: str) -> Optional[bytes]:
         """获取值"""
         try:
             return await self.redis.get(key)
@@ -73,7 +75,7 @@ class RedisManager:
         key: str,
         value: Union[str, bytes],
         ex: Optional[Union[int, timedelta]] = None
-    ) - > bool:
+    ) -> bool:
         """设置值"""
         try:
             return await self.redis.set(key, value, ex = ex)
@@ -86,7 +88,7 @@ class RedisManager:
         key: str,
         time: Union[int, timedelta],
         value: Union[str, bytes]
-    ) - > bool:
+    ) -> bool:
         """设置值并指定过期时间"""
         try:
             return await self.redis.setex(key, time, value)
@@ -94,7 +96,7 @@ class RedisManager:
             logger.error("Redis setex failed", key = key, error = str(e))
             return False
 
-    async def delete(self, * keys: str) - > int:
+    async def delete(self, * keys: str) -> int:
         """删除键"""
         try:
             return await self.redis.delete( * keys)
@@ -102,7 +104,7 @@ class RedisManager:
             logger.error("Redis delete failed", keys = keys, error = str(e))
             return 0
 
-    async def exists(self, key: str) - > bool:
+    async def exists(self, key: str) -> bool:
         """检查键是否存在"""
         try:
             return bool(await self.redis.exists(key))
@@ -110,7 +112,7 @@ class RedisManager:
             logger.error("Redis exists failed", key = key, error = str(e))
             return False
 
-    async def expire(self, key: str, time: Union[int, timedelta]) - > bool:
+    async def expire(self, key: str, time: Union[int, timedelta]) -> bool:
         """设置键的过期时间"""
         try:
             return await self.redis.expire(key, time)
@@ -118,7 +120,7 @@ class RedisManager:
             logger.error("Redis expire failed", key = key, error = str(e))
             return False
 
-    async def ttl(self, key: str) - > int:
+    async def ttl(self, key: str) -> int:
         """获取键的剩余生存时间"""
         try:
             return await self.redis.ttl(key)
@@ -126,7 +128,7 @@ class RedisManager:
             logger.error("Redis ttl failed", key = key, error = str(e))
             return - 1
 
-    async def incr(self, key: str, amount: int = 1) - > Optional[int]:
+    async def incr(self, key: str, amount: int = 1) -> Optional[int]:
         """递增计数器"""
         try:
             return await self.redis.incr(key, amount)
@@ -134,7 +136,7 @@ class RedisManager:
             logger.error("Redis incr failed", key = key, error = str(e))
             return None
 
-    async def decr(self, key: str, amount: int = 1) - > Optional[int]:
+    async def decr(self, key: str, amount: int = 1) -> Optional[int]:
         """递减计数器"""
         try:
             return await self.redis.decr(key, amount)
@@ -150,7 +152,7 @@ class CacheService:
         """TODO: 添加文档字符串"""
         self.redis = redis_manager
 
-    async def get_json(self, key: str) - > Optional[Dict]:
+    async def get_json(self, key: str) -> Optional[Dict]:
         """获取JSON数据"""
         try:
             data = await self.redis.get(key)
@@ -166,7 +168,7 @@ class CacheService:
         key: str,
         value: Dict,
         ex: Optional[Union[int, timedelta]] = None
-    ) - > bool:
+    ) -> bool:
         """设置JSON数据"""
         try:
             json_data = json.dumps(value, ensure_ascii = False)
@@ -175,7 +177,7 @@ class CacheService:
             logger.error("Failed to set JSON to cache", key = key, error = str(e))
             return False
 
-    async def get_object(self, key: str) - > Optional[Any]:
+    async def get_object(self, key: str) -> Optional[Any]:
         """获取Python对象（使用pickle）"""
         try:
             data = await self.redis.get(key)
@@ -191,7 +193,7 @@ class CacheService:
         key: str,
         value: Any,
         ex: Optional[Union[int, timedelta]] = None
-    ) - > bool:
+    ) -> bool:
         """设置Python对象（使用pickle）"""
         try:
             pickled_data = pickle.dumps(value)
@@ -200,7 +202,7 @@ class CacheService:
             logger.error("Failed to set object to cache", key = key, error = str(e))
             return False
 
-    async def get_user_cache(self, user_id: str) - > Optional[Dict]:
+    async def get_user_cache(self, user_id: str) -> Optional[Dict]:
         """获取用户缓存"""
         key = f"user:{user_id}"
         return await self.get_json(key)
@@ -210,19 +212,19 @@ class CacheService:
         user_id: str,
         user_data: Dict,
         ttl: Optional[int] = None
-    ) - > bool:
+    ) -> bool:
         """设置用户缓存"""
         key = f"user:{user_id}"
         settings = get_settings()
         ex = ttl or settings.cache.user_cache_ttl
         return await self.set_json(key, user_data, ex = ex)
 
-    async def delete_user_cache(self, user_id: str) - > bool:
+    async def delete_user_cache(self, user_id: str) -> bool:
         """删除用户缓存"""
         key = f"user:{user_id}"
         return bool(await self.redis.delete(key))
 
-    async def get_session_cache(self, session_id: str) - > Optional[Dict]:
+    async def get_session_cache(self, session_id: str) -> Optional[Dict]:
         """获取会话缓存"""
         key = f"session:{session_id}"
         return await self.get_json(key)
@@ -232,14 +234,14 @@ class CacheService:
         session_id: str,
         session_data: Dict,
         ttl: Optional[int] = None
-    ) - > bool:
+    ) -> bool:
         """设置会话缓存"""
         key = f"session:{session_id}"
         settings = get_settings()
         ex = ttl or settings.cache.session_cache_ttl
         return await self.set_json(key, session_data, ex = ex)
 
-    async def delete_session_cache(self, session_id: str) - > bool:
+    async def delete_session_cache(self, session_id: str) -> bool:
         """删除会话缓存"""
         key = f"session:{session_id}"
         return bool(await self.redis.delete(key))
@@ -250,7 +252,7 @@ _redis_manager: Optional[RedisManager] = None
 _cache_service: Optional[CacheService] = None
 
 
-async def init_redis() - > None:
+async def init_redis() -> None:
     """初始化Redis"""
     global _redis_manager, _cache_service
 
@@ -261,26 +263,26 @@ async def init_redis() - > None:
     _cache_service = CacheService(_redis_manager)
 
 
-async def close_redis() - > None:
+async def close_redis() -> None:
     """关闭Redis连接"""
     global _redis_manager
     if _redis_manager:
         await _redis_manager.disconnect()
 
 
-def get_redis() - > RedisManager:
+def get_redis() -> RedisManager:
     """获取Redis管理器"""
     if not _redis_manager:
         raise RuntimeError("Redis not initialized")
     return _redis_manager
 
 
-def get_redis_manager() - > RedisManager:
+def get_redis_manager() -> RedisManager:
     """获取Redis管理器（别名）"""
     return get_redis()
 
 
-def get_cache() - > CacheService:
+def get_cache() -> CacheService:
     """获取缓存服务"""
     if not _cache_service:
         raise RuntimeError("Cache service not initialized")

@@ -1,0 +1,194 @@
+{
+  "timestamp": "2025-06-11T09:33:39.127335",
+  "summary": {
+    "total_services": 14,
+    "functional_services": 0,
+    "functionality_rate": 0.0,
+    "analysis_date": "2025-06-11 09:33:39"
+  },
+  "services": {
+    "agent-services": {
+      "xiaoai-service": {
+        "name": "xiaoai-service",
+        "path": "services/agent-services/xiaoai-service",
+        "status": "missing",
+        "structure": {},
+        "implementation": {},
+        "tests": {},
+        "issues": [
+          "服务目录不存在"
+        ],
+        "strengths": []
+      },
+      "xiaoke-service": {
+        "name": "xiaoke-service",
+        "path": "services/agent-services/xiaoke-service",
+        "status": "missing",
+        "structure": {},
+        "implementation": {},
+        "tests": {},
+        "issues": [
+          "服务目录不存在"
+        ],
+        "strengths": []
+      },
+      "laoke-service": {
+        "name": "laoke-service",
+        "path": "services/agent-services/laoke-service",
+        "status": "missing",
+        "structure": {},
+        "implementation": {},
+        "tests": {},
+        "issues": [
+          "服务目录不存在"
+        ],
+        "strengths": []
+      },
+      "soer-service": {
+        "name": "soer-service",
+        "path": "services/agent-services/soer-service",
+        "status": "missing",
+        "structure": {},
+        "implementation": {},
+        "tests": {},
+        "issues": [
+          "服务目录不存在"
+        ],
+        "strengths": []
+      }
+    },
+    "core-services": {
+      "api-gateway": {
+        "name": "api-gateway",
+        "path": "services/api-gateway",
+        "status": "missing",
+        "structure": {},
+        "implementation": {},
+        "tests": {},
+        "issues": [
+          "服务目录不存在"
+        ],
+        "strengths": []
+      },
+      "user-management-service": {
+        "name": "user-management-service",
+        "path": "services/user-management-service",
+        "status": "missing",
+        "structure": {},
+        "implementation": {},
+        "tests": {},
+        "issues": [
+          "服务目录不存在"
+        ],
+        "strengths": []
+      },
+      "blockchain-service": {
+        "name": "blockchain-service",
+        "path": "services/blockchain-service",
+        "status": "missing",
+        "structure": {},
+        "implementation": {},
+        "tests": {},
+        "issues": [
+          "服务目录不存在"
+        ],
+        "strengths": []
+      },
+      "ai-model-service": {
+        "name": "ai-model-service",
+        "path": "services/ai-model-service",
+        "status": "missing",
+        "structure": {},
+        "implementation": {},
+        "tests": {},
+        "issues": [
+          "服务目录不存在"
+        ],
+        "strengths": []
+      }
+    },
+    "data-services": {
+      "unified-health-data-service": {
+        "name": "unified-health-data-service",
+        "path": "services/unified-health-data-service",
+        "status": "missing",
+        "structure": {},
+        "implementation": {},
+        "tests": {},
+        "issues": [
+          "服务目录不存在"
+        ],
+        "strengths": []
+      },
+      "unified-knowledge-service": {
+        "name": "unified-knowledge-service",
+        "path": "services/unified-knowledge-service",
+        "status": "missing",
+        "structure": {},
+        "implementation": {},
+        "tests": {},
+        "issues": [
+          "服务目录不存在"
+        ],
+        "strengths": []
+      },
+      "communication-service": {
+        "name": "communication-service",
+        "path": "services/communication-service",
+        "status": "missing",
+        "structure": {},
+        "implementation": {},
+        "tests": {},
+        "issues": [
+          "服务目录不存在"
+        ],
+        "strengths": []
+      }
+    },
+    "support-services": {
+      "unified-support-service": {
+        "name": "unified-support-service",
+        "path": "services/unified-support-service",
+        "status": "missing",
+        "structure": {},
+        "implementation": {},
+        "tests": {},
+        "issues": [
+          "服务目录不存在"
+        ],
+        "strengths": []
+      },
+      "utility-services": {
+        "name": "utility-services",
+        "path": "services/utility-services",
+        "status": "missing",
+        "structure": {},
+        "implementation": {},
+        "tests": {},
+        "issues": [
+          "服务目录不存在"
+        ],
+        "strengths": []
+      },
+      "diagnostic-services": {
+        "name": "diagnostic-services",
+        "path": "services/diagnostic-services",
+        "status": "missing",
+        "structure": {},
+        "implementation": {},
+        "tests": {},
+        "issues": [
+          "服务目录不存在"
+        ],
+        "strengths": []
+      }
+    }
+  },
+  "recommendations": [
+    "🔧 优先完善核心服务的基础功能实现",
+    "📝 增加服务文档和配置管理",
+    "🧪 需要添加测试的服务: xiaoai-service, xiaoke-service, laoke-service, soer-service, api-gateway",
+    "🚀 建议优先完善API网关和用户管理服务作为基础设施",
+    "🔄 建议建立持续集成和自动化测试流程"
+  ]
+}

@@ -1,0 +1,204 @@
+version: '3.8'
+
+services:
+  # 五诊协调器服务
+  five-diagnosis-orchestrator:
+    build:
+      context: ./services/diagnostic-services/five-diagnosis-orchestrator
+      dockerfile: Dockerfile
+    container_name: suoke-five-diagnosis-orchestrator
+    ports:
+      - "8080:8080"
+    environment:
+      - PYTHONPATH=/app
+      - REDIS_URL=redis://redis:6379/0
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/suoke_diagnosis
+      - LOG_LEVEL=INFO
+      - ENVIRONMENT=production
+    depends_on:
+      - redis
+      - postgres
+    networks:
+      - suoke-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    volumes:
+      - ./logs/five-diagnosis-orchestrator:/app/logs
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
+
+  # 诊断服务网关
+  diagnostic-gateway:
+    build:
+      context: ./services/diagnostic-services/common/gateway
+      dockerfile: Dockerfile
+    container_name: suoke-diagnostic-gateway
+    ports:
+      - "8081:8081"
+    environment:
+      - PYTHONPATH=/app
+      - REDIS_URL=redis://redis:6379/1
+      - SERVICE_REGISTRY_URL=http://service-registry:8500
+      - LOG_LEVEL=INFO
+      - ENVIRONMENT=production
+    depends_on:
+      - redis
+      - service-registry
+    networks:
+      - suoke-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    volumes:
+      - ./logs/diagnostic-gateway:/app/logs
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.3'
+        reservations:
+          memory: 128M
+          cpus: '0.15'
+
+  # 服务注册中心
+  service-registry:
+    build:
+      context: ./services/common/service-registry
+      dockerfile: Dockerfile
+    container_name: suoke-service-registry
+    ports:
+      - "8500:8500"
+    environment:
+      - PYTHONPATH=/app
+      - REDIS_URL=redis://redis:6379/2
+      - LOG_LEVEL=INFO
+      - ENVIRONMENT=production
+      - REGISTRY_TYPE=consul
+    depends_on:
+      - redis
+    networks:
+      - suoke-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8500/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    volumes:
+      - ./logs/service-registry:/app/logs
+      - service-registry-data:/app/data
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.3'
+        reservations:
+          memory: 128M
+          cpus: '0.15'
+
+  # 算诊优化服务
+  calculation-optimizer:
+    build:
+      context: ./services/diagnostic-services/calculation-service
+      dockerfile: Dockerfile
+    container_name: suoke-calculation-optimizer
+    ports:
+      - "8082:8082"
+    environment:
+      - PYTHONPATH=/app
+      - REDIS_URL=redis://redis:6379/3
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/suoke_calculation
+      - LOG_LEVEL=INFO
+      - ENVIRONMENT=production
+      - ACCURACY_OPTIMIZER_ENABLED=true
+    depends_on:
+      - redis
+      - postgres
+    networks:
+      - suoke-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8082/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    volumes:
+      - ./logs/calculation-optimizer:/app/logs
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '1.0'
+        reservations:
+          memory: 512M
+          cpus: '0.5'
+
+  # Redis (如果不存在)
+  redis:
+    image: redis:7-alpine
+    container_name: suoke-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - suoke-network
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # PostgreSQL (如果不存在)
+  postgres:
+    image: postgres:15-alpine
+    container_name: suoke-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=suoke_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    networks:
+      - suoke-network
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./scripts/database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  suoke-network:
+    driver: bridge
+    name: suoke-network
+
+volumes:
+  redis-data:
+    driver: local
+  postgres-data:
+    driver: local
+  service-registry-data:
+    driver: local 

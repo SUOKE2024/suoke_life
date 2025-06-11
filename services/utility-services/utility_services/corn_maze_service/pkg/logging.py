@@ -2,11 +2,13 @@
 logging - 索克生活项目模块
 """
 
-from corn_maze_service.config import get_settings
-from structlog.types import EventDict, Processor
-from typing import Any
 import logging.config
+from typing import Any
+
 import structlog
+from structlog.types import EventDict, Processor
+
+from corn_maze_service.config import get_settings
 
 """
 结构化日志配置

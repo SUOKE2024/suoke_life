@@ -3,9 +3,10 @@ settings - 索克生活项目模块
 """
 
 from functools import lru_cache
-from pydantic import Field, PostgresDsn, RedisDsn, field_validator
+from typing import List, Optional
+
+from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from typing import Any, Dict, List, Optional
 
 """应用配置设置"""
 
@@ -24,14 +25,14 @@ class DatabaseSettings(BaseSettings):
     echo: bool = Field(default = False, description = "是否打印SQL")
 
     @property
-    def url(self) - > str:
+    def url(self) -> str:
         """获取数据库连接URL"""
-        return f"postgresql + asyncpg: / /{self.user}:{self.password}@{self.host}:{self.port} / {self.name}"
+        return f"postgresql + asyncpg: //{self.user}:{self.password}@{self.host}:{self.port} / {self.name}"
 
     @property
-    def sync_url(self) - > str:
+    def sync_url(self) -> str:
         """获取同步数据库连接URL"""
-        return f"postgresql: / /{self.user}:{self.password}@{self.host}:{self.port} / {self.name}"
+        return f"postgresql: //{self.user}:{self.password}@{self.host}:{self.port} / {self.name}"
 
 class RedisSettings(BaseSettings):
     """Redis配置"""
@@ -43,11 +44,11 @@ class RedisSettings(BaseSettings):
     max_connections: int = Field(default = 10, description = "最大连接数")
 
     @property
-    def url(self) - > str:
+    def url(self) -> str:
         """获取Redis连接URL"""
         if self.password:
-            return f"redis: / /:{self.password}@{self.host}:{self.port} / {self.db}"
-        return f"redis: / /{self.host}:{self.port} / {self.db}"
+            return f"redis: //:{self.password}@{self.host}:{self.port} / {self.db}"
+        return f"redis: //{self.host}:{self.port} / {self.db}"
 
 class EmailSettings(BaseSettings):
     """邮件服务配置"""
@@ -81,7 +82,7 @@ class EmailSettings(BaseSettings):
 
     @field_validator("provider")
     @classmethod
-    def validate_provider(cls, v: str) - > str:
+    def validate_provider(cls, v: str) -> str:
         """验证邮件服务提供商"""
         allowed = ["smtp", "sendgrid", "aws_ses"]
         if v not in allowed:
@@ -190,7 +191,7 @@ class Settings(BaseSettings):
     cors_headers: List[str] = Field(default = [" * "], description = "CORS允许的头部")
 
     # OAuth配置
-    base_url: str = Field(default = "http: / /localhost:8000", description = "应用基础URL")
+    base_url: str = Field(default = "http: //localhost:8000", description = "应用基础URL")
 
     # Google OAuth
     google_client_id: str = Field(default = "", description = "Google OAuth客户端ID")
@@ -218,7 +219,7 @@ class Settings(BaseSettings):
 
     @field_validator("environment")
     @classmethod
-    def validate_environment(cls, v: str) - > str:
+    def validate_environment(cls, v: str) -> str:
         """验证环境配置"""
         allowed = ["development", "testing", "staging", "production"]
         if v not in allowed:
@@ -226,21 +227,21 @@ class Settings(BaseSettings):
         return v
 
     @property
-    def is_development(self) - > bool:
+    def is_development(self) -> bool:
         """是否为开发环境"""
         return self.environment == "development"
 
     @property
-    def is_production(self) - > bool:
+    def is_production(self) -> bool:
         """是否为生产环境"""
         return self.environment == "production"
 
     @property
-    def is_testing(self) - > bool:
+    def is_testing(self) -> bool:
         """是否为测试环境"""
         return self.environment == "testing"
 
 @lru_cache()
-def get_settings() - > Settings:
+def get_settings() -> Settings:
     """获取应用配置单例"""
     return Settings()

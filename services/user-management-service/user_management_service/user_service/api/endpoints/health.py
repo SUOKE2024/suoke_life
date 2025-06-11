@@ -87,7 +87,7 @@ async def record_health_data(
         for data_point in health_data.data_points:
             # 这里应该调用实际的数据存储服务
             # await health_data_service.store_data_point(user_id, data_point)
-            recorded_count + = 1
+            recorded_count += 1
 
         return {
             "message": "健康数据记录成功",
@@ -138,7 +138,7 @@ async def get_health_data(
                     "timestamp": (end_date - timedelta(hours = i)).isoformat(),
                     "metadata": {"device": "smartwatch"}
                 }
-                for i in range(min(limit / / 4, 24))
+                for i in range(min(limit // 4, 24))
             ])
 
         if not metric_type or metric_type == "steps":
@@ -150,7 +150,7 @@ async def get_health_data(
                     "timestamp": (end_date - timedelta(days = i)).isoformat(),
                     "metadata": {"device": "smartphone"}
                 }
-                for i in range(min(limit / / 4, 7))
+                for i in range(min(limit // 4, 7))
             ])
 
         return {
@@ -215,7 +215,7 @@ async def query_health_data(
 
             elif query.aggregation == "weekly":
                 # 模拟每周聚合数据
-                weeks = (end_date - start_date).days / / 7 + 1
+                weeks = (end_date - start_date).days // 7 + 1
                 weekly_data = []
                 for i in range(weeks):
                     week_start = start_date + timedelta(weeks = i)

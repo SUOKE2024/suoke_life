@@ -2,14 +2,16 @@
 user_service - 索克生活项目模块
 """
 
-from ..core.security import verify_password, get_password_hash
-from ..models.user import User, UserPlatformAuth
-from .base_service import BaseService
+import logging
 from datetime import datetime
+from typing import Any, Dict, Optional
+
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
-from typing import Optional, Dict, Any
-import logging
+
+from ..core.security import get_password_hash, verify_password
+from ..models.user import User, UserPlatformAuth
+from .base_service import BaseService
 
 """
 用户服务模块

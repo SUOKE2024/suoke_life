@@ -1,129 +1,118 @@
-import React, { ComponentType, ReactNode } from "react";";
-import {;,}ActivityIndicator,;
-StyleSheet,;
-Text,;
-TouchableOpacity,";"";
+import React, { ComponentType, ReactNode } from "react";
+import {ActivityIndicator,
+StyleSheet,
+Text,"
+TouchableOpacity,";
+} fromiew'}
+} from "react-native;
+import {borderRadius,
+colors,
+spacing,
+} fromypography'}
+} from "../../constants/theme"
+interface LazyLoaderProps {
 }
-  View'}'';'';
-} from "react-native";";
-import {;,}borderRadius,;
-colors,;
-spacing,';'';
-}
-  typography'}'';'';
-} from "../../constants/theme";""/;,"/g"/;
-interface LazyLoaderProps {}}
-}
-  /** 懒加载的组件工厂函数 */}/;,/g,/;
+  /** 懒加载的组件工厂函数 */}/,/g,/;
   factory: () => Promise<{ default: ComponentType<any> ;}>;
-  /** 加载中的占位组件 *//;,/g/;
+  /** 加载中的占位组件 */
 fallback?: ReactNode;
-  /** 错误时的占位组件 *//;,/g/;
+  /** 错误时的占位组件 */
 errorFallback?: ReactNode;
-  /** 组件属性 *//;,/g/;
+  /** 组件属性 */
 props?: any;
-  /** 是否显示加载进度 *//;,/g/;
+  /** 是否显示加载进度 */
 showProgress?: boolean;
-  /** 加载超时时间（毫秒） *//;,/g/;
+  /** 加载超时时间（毫秒） */
 timeout?: number;
-  /** 重试次数 *//;,/g/;
+  /** 重试次数 */
 retryCount?: number;
-  /** 组件名称（用于调试） *//;,/g/;
+  /** 组件名称（用于调试） */
 componentName?: string;
 }
-
-interface LazyLoaderState {hasError: boolean}isLoading: boolean,;
+interface LazyLoaderState {hasError: boolean}isLoading: boolean,
 const retryAttempts = number;
 }
 }
-  error?: Error;}
+  error?: Error}
 }
-
 const class = LazyLoaderErrorBoundary extends React.Component<;
-  { children: ReactNode; onError?: (error: Error) => void ;}
+  { children: ReactNode; onError?: (error: Error) => void }
   { hasError: boolean; error?: Error }
-> {constructor(props: any) {}}
-    super(props);}
-    this.state = { hasError: false ;};
+> {constructor(props: any) {}
+    super(props)}
+    this.state = { hasError: false ;
   }
-
   static getDerivedStateFromError(error: Error) {}
     return { hasError: true, error ;};
   }
-';,'';
-componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {';,}console.error('LazyLoader Error:', error, errorInfo);';'';
+componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {'console.error('LazyLoader Error:', error, errorInfo);
 }
-    this.props.onError?.(error);}
+    this.props.onError?.(error)}
   }
-
-  render() {}}
+  render() {}
     if (this.state.hasError) {}
-      return (<View style={styles.errorContainer}>;)          <Text style={styles.errorTitle}>组件加载失败</Text>/;/g/;
+      return (<View style={styles.errorContainer}>;)          <Text style={styles.errorTitle}>组件加载失败</Text>
           <Text style={styles.errorMessage}>;
-
-          </Text>)/;/g/;
-          <TouchableOpacity;)  />/;,/g/;
+          </Text>)
+          <TouchableOpacity;)  />
 style={styles.retryButton});
-onPress={() => this.setState({ hasError: false, error: undefined ;})}
+onPress={() => this.setState({  hasError: false, error: undefined ; })}
           >;
-            <Text style={styles.retryButtonText}>重试</Text>/;/g/;
-          </TouchableOpacity>/;/g/;
-        </View>/;/g/;
+            <Text style={styles.retryButtonText}>重试</Text>
+          </TouchableOpacity>
+        </View>
       );
     }
-
     return this.props.children;
   }
 }
-
-const  DefaultFallback: React.FC<{componentName?: string;}}
-  showProgress?: boolean;}';'';
-}> = ({ componentName, showProgress = true }) => (<View style={styles.fallbackContainer}>';)    {showProgress && <ActivityIndicator size="large" color={colors.primary}  />}"/;"/g"/;
+const  DefaultFallback: React.FC<{componentName?: string}
+  showProgress?: boolean}
+}> = ({  componentName, showProgress = true  }) => (<View style={styles.fallbackContainer}>';)    {showProgress && <ActivityIndicator size="large" color={colors.primary}  />}"/;"/g"/;
     <Text style={styles.fallbackText}>;
 );
-    </Text>)/;/g/;
-  </View>)/;/g/;
+    </Text>)
+  </View>)
 );
-const  DefaultErrorFallback: React.FC<{ onRetry?: () => void ;}> = ({));}}
+const  DefaultErrorFallback: React.FC<{ onRetry?: () => void ;}> = ({))}
   onRetry)}
-}) => (<View style={styles.errorContainer}>;)    <Text style={styles.errorTitle}>加载失败</Text>/;/g/;
-    <Text style={styles.errorMessage}>组件加载时出现错误</Text>/;/g/;
+}) => (<View style={styles.errorContainer}>;)    <Text style={styles.errorTitle}>加载失败</Text>
+    <Text style={styles.errorMessage}>组件加载时出现错误</Text>
     {onRetry && (})      <TouchableOpacity style={styles.retryButton} onPress={onRetry}>);
-        <Text style={styles.retryButtonText}>重试</Text>)/;/g/;
-      </TouchableOpacity>)/;/g/;
+        <Text style={styles.retryButtonText}>重试</Text>)
+      </TouchableOpacity>)
     )}
-  </View>/;/g/;
+  </View>
 );
 export const LazyLoader: React.FC<LazyLoaderProps> = ({)factory}fallback,;
 }
   errorFallback,};
-props = {;}
-showProgress = true,;
+props = {}
+showProgress = true,
 timeout = 10000,);
 retryCount = 3,);
 componentName);
-}) => {const [state, setState] = React.useState<LazyLoaderState>({)    hasError: false,);,}isLoading: false,);
+}) => {const [state, setState] = React.useState<LazyLoaderState>({)    hasError: false,)isLoading: false,);
 }
     const retryAttempts = 0)}
   ;});
 const [LazyComponent, setLazyComponent] =;
 React.useState<ComponentType<any> | null>(null);
-const  loadComponent = React.useCallback(async () => {}}
+const  loadComponent = React.useCallback(async () => {}
     if (state.retryAttempts >= retryCount) {}
-      setState(prev) => ({ ...prev, hasError: true ;}));
+      setState(prev) => ({  ...prev, hasError: true ; }));
 return;
     }
-
-    setState(prev) => ({ ...prev, isLoading: true, hasError: false ;}));
+    setState(prev) => ({  ...prev, isLoading: true, hasError: false ; }));
 try {const: timeoutPromise = new Promise(_, reject) =>;}      );
-const  componentModule = (await Promise.race([;));,]factory(),;
+const  componentModule = (await Promise.race([;))]factory(),
 timeoutPromise;
 ];
       ])) as any;
 }
-      setLazyComponent() => componentModule.default);}
-      setState(prev) => ({ ...prev, isLoading: false ;}));
-    } catch (error) {setState(prev) => ({)        ...prev}isLoading: false,;
+      setLazyComponent() => componentModule.default)}
+      setState(prev) => ({  ...prev, isLoading: false ; }));
+    } catch (error) {setState(prev) => ({)        ...prev}isLoading: false,
 hasError: true,);
 error: error as Error,);
 }
@@ -131,131 +120,125 @@ error: error as Error,);
       ;}));
     }
   }, [factory, timeout, retryCount, state.retryAttempts]);
-React.useEffect() => {}}
-    loadComponent();}
+React.useEffect() => {}
+    loadComponent()}
   }, [loadComponent]);
 const  handleRetry = React.useCallback() => {}
-    setState(prev) => ({ ...prev, retryAttempts: 0 ;}));
+    setState(prev) => ({  ...prev, retryAttempts: 0 ; }));
 loadComponent();
   }, [loadComponent]);
 if (state.hasError) {}
-    return errorFallback || <DefaultErrorFallback onRetry={handleRetry}  />;/;/g/;
+    return errorFallback || <DefaultErrorFallback onRetry={handleRetry}  />;
   }
-
   if (state.isLoading || !LazyComponent) {}return (fallback || (;)}
-        <DefaultFallback;}  />/;,/g/;
+        <DefaultFallback;}  />
 componentName={componentName});
 showProgress={showProgress});
-        />)/;/g/;
+        />)
       );
     );
   }
-
-  return (<LazyLoaderErrorBoundary;)  />/;,/g/;
+  return (<LazyLoaderErrorBoundary;)  />
 onError={(error) =>}
-        setState(prev) => ({ ...prev, hasError: true, error ;}));
+        setState(prev) => ({  ...prev, hasError: true, error ; }));
       }
     >;
-      <LazyComponent {...props}  />/;/g/;
-    </LazyLoaderErrorBoundary>/;/g/;
+      <LazyComponent {...props}  />
+    </LazyLoaderErrorBoundary>
   );
 };
-
-// 高阶组件版本/;,/g/;
-export const withLazyLoader = <P extends object>(;)";,"";
-factory: () => Promise<{ default: ComponentType<P> ;}>,";,"";
-options?: Omit<LazyLoaderProps; 'factory' | 'props'>';'';
+// 高阶组件版本"
+export const withLazyLoader = <P extends object>(;)","
+factory: () => Promise<{ default: ComponentType<P> ;}>,","
+options?: Omit<LazyLoaderProps; 'factory' | 'props'>
 ) => {}
-  return (props: P) => (<LazyLoader factory={factory;} props={props} {...options}  />)/;/g/;
+  return (props: P) => (<LazyLoader factory={factory;} props={props} {...options}  />)
   );
 };
-
-// Hook 版本/;,/g/;
+// Hook 版本
 export const useLazyComponent = <T extends ComponentType<any>>(;);
-factory: () => Promise<{ default: T ;}>,;
+factory: () => Promise<{ default: T ;}>,
 deps: React.DependencyList = [];
-) => {const [component, setComponent] = React.useState<T | null>(null);,}const [loading, setLoading] = React.useState(false);
+) => {const [component, setComponent] = React.useState<T | null>(null)const [loading, setLoading] = React.useState(false);
 const [error, setError] = React.useState<Error | null>(null);
-React.useEffect() => {let cancelled = false;,}const  loadComponent = async () => {setLoading(true);,}setError(null);
-try {const module = await factory();,}if (!cancelled) {}}
-          setComponent() => module.default);}
+React.useEffect() => {let cancelled = falseconst  loadComponent = async () => {setLoading(true)setError(null);
+try {const module = await factory()if (!cancelled) {}
+          setComponent() => module.default)}
         }
-      } catch (err) {if (!cancelled) {}}
-          setError(err as Error);}
+      } catch (err) {if (!cancelled) {}
+          setError(err as Error)}
         }
-      } finally {if (!cancelled) {}}
-          setLoading(false);}
+      } finally {if (!cancelled) {}
+          setLoading(false)}
         }
       }
     };
 loadComponent();
-return () => {}}
-      cancelled = true;}
+return () => {}
+      cancelled = true}
     };
   }, deps);
 return { component, loading, error };
 };
-
-// 预加载函数/;,/g/;
+// 预加载函数
 export const preloadComponent = (;);
 factory: () => Promise<{ default: ComponentType<any> ;}>;
-) => {const return = factory().catch(error) => {}}
+) => {const return = factory().catch(error) => {}
 }
   });
 };
-
-// 批量预加载/;,/g/;
+// 批量预加载
 export const preloadComponents = (;);
 factories: Array<() => Promise<{ default: ComponentType<any> ;}>>;
-) => {const return = Promise.allSettled();,}factories.map(factory) => preloadComponent(factory));
+) => {const return = Promise.allSettled()factories.map(factory) => preloadComponent(factory));
 }
-  );}
+  )}
 };
-const  styles = StyleSheet.create({)fallbackContainer: {,';,}flex: 1,';,'';
-justifyContent: 'center';','';
-alignItems: 'center';','';
-padding: spacing.xl,;
+const  styles = StyleSheet.create({)fallbackContainer: {,'flex: 1,'
+justifyContent: 'center,'
+alignItems: 'center,'';
+padding: spacing.xl,
 }
     const backgroundColor = colors.background}
-  ;}
-fallbackText: {fontSize: typography.fontSize.base,;
-color: colors.textSecondary,';,'';
-marginTop: spacing.md,';'';
+  }
+fallbackText: {fontSize: typography.fontSize.base,
+color: colors.textSecondary,
+marginTop: spacing.md,
 }
-    const textAlign = 'center'}'';'';
-  ;}
-errorContainer: {,';,}flex: 1,';,'';
-justifyContent: 'center';','';
-alignItems: 'center';','';
-padding: spacing.xl,;
+    const textAlign = 'center'}
+  }
+errorContainer: {,'flex: 1,'
+justifyContent: 'center,'
+alignItems: 'center,'';
+padding: spacing.xl,
 }
     const backgroundColor = colors.background}
-  ;}
-errorTitle: {,';,}fontSize: typography.fontSize.lg,';,'';
+  }
+errorTitle: {,'fontSize: typography.fontSize.lg,'
 fontWeight: '600' as const;','';
-color: colors.error,';,'';
-marginBottom: spacing.sm,';'';
+color: colors.error,
+marginBottom: spacing.sm,
 }
-    const textAlign = 'center'}'';'';
-  ;}
-errorMessage: {fontSize: typography.fontSize.base,;
-color: colors.textSecondary,';,'';
-marginBottom: spacing.lg,';,'';
-textAlign: 'center';','';'';
+    const textAlign = 'center'}
+  }
+errorMessage: {fontSize: typography.fontSize.base,
+color: colors.textSecondary,
+marginBottom: spacing.lg,'
+textAlign: 'center,'
 }
     const lineHeight = 22}
-  ;}
-retryButton: {backgroundColor: colors.primary,;
-paddingHorizontal: spacing.lg,;
-paddingVertical: spacing.md,;
+  }
+retryButton: {backgroundColor: colors.primary,
+paddingHorizontal: spacing.lg,
+paddingVertical: spacing.md,
 }
     const borderRadius = borderRadius.md}
-  ;}
-retryButtonText: {,';,}fontSize: typography.fontSize.base,';,'';
-fontWeight: '600' as const;',)'';'';
+  }
+retryButtonText: {,'fontSize: typography.fontSize.base,'
+fontWeight: '600' as const;',)'
 }
     const color = colors.white)}
   ;});
 });
-export default LazyLoader;';'';
-''';
+export default LazyLoader;
+''

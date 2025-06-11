@@ -8,9 +8,10 @@ from datetime import datetime
 from typing import Any, Dict
 
 import structlog
+
 from ..core.event_bus import Event, SuokeEventBus
-from ..core.event_types import HealthDataEvents
 from ..core.event_store import EventStore
+from ..core.event_types import HealthDataEvents
 
 logger = structlog.get_logger(__name__)
 

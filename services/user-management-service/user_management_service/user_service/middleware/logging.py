@@ -2,12 +2,13 @@
 logging - 索克生活项目模块
 """
 
-from fastapi import Request, Response
-from starlette.middleware.base import BaseHTTPMiddleware
-from typing import Callable
 import logging
 import time
 import uuid
+from typing import Callable
+
+from fastapi import Request, Response
+from starlette.middleware.base import BaseHTTPMiddleware
 
 """日志中间件"""
 
@@ -22,7 +23,7 @@ class LoggingMiddleware(BaseHTTPMiddleware):
         """TODO: 添加文档字符串"""
         super().__init__(app)
 
-    async def dispatch(self, request: Request, call_next: Callable) - > Response:
+    async def dispatch(self, request: Request, call_next: Callable) -> Response:
         """处理请求日志"""
 
         # 生成请求ID
@@ -37,7 +38,7 @@ class LoggingMiddleware(BaseHTTPMiddleware):
 
         # 记录请求信息
         logger.info(
-            f"请求开始",
+            "请求开始",
             extra = {
                 "request_id": request_id,
                 "method": request.method,
@@ -58,7 +59,7 @@ class LoggingMiddleware(BaseHTTPMiddleware):
 
             # 记录响应信息
             logger.info(
-                f"请求完成",
+                "请求完成",
                 extra = {
                     "request_id": request_id,
                     "method": request.method,
@@ -83,7 +84,7 @@ class LoggingMiddleware(BaseHTTPMiddleware):
 
             # 记录错误信息
             logger.error(
-                f"请求处理失败",
+                "请求处理失败",
                 extra = {
                     "request_id": request_id,
                     "method": request.method,
@@ -100,7 +101,7 @@ class LoggingMiddleware(BaseHTTPMiddleware):
             # 重新抛出异常
             raise
 
-    def _get_client_ip(self, request: Request) - > str:
+    def _get_client_ip(self, request: Request) -> str:
         """获取客户端IP地址"""
 
         # 检查代理头

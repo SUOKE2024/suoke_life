@@ -1,56 +1,55 @@
-react";";
-export const HotTopics: React.FC  = () => {;};
+react;
+export const HotTopics: React.FC  = () => {;
 const topics = [;];
-
 ];
   ];
 return (;);
     <View style={styles.container}>;
-      <Text style={styles.title}>热门话题</    Text>;/;/g/;
+      <Text style={styles.title}>热门话题</    Text>;
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>;
         <View style={styles.topics}>;
           {topics.map(topic, index) => (;))}
             <TouchableOpacity key={index} style={styles.topic}>;
-              <Text style={styles.topicText}>{topic}</    Text>;/;/g/;
-            </    TouchableOpacity>;/;/g/;
+              <Text style={styles.topicText}>{topic}</    Text>;
+            </    TouchableOpacity>;
           ))};
-        </    View>;/;/g/;
-      </    ScrollView>;/;/g/;
-    </    View>;/;/g/;
+        </    View>;
+      </    ScrollView>;
+    </    View>;
   );
-}";,"";
-const: styles = StyleSheet.create({)container: {),";,}backgroundColor: "white";",";
-borderRadius: 12,;
-padding: 16,";,"";
-marginBottom: 16,";,"";
-shadowColor: #000";",";,"";
-shadowOffset: {width: 0,;
+}","
+const: styles = StyleSheet.create({)container: {),"backgroundColor: "white,";
+borderRadius: 12,"
+padding: 16,","
+marginBottom: 16,","
+shadowColor: #000,
+shadowOffset: {width: 0,
 }
-      const height = 2;}
+      const height = 2}
     }
-shadowOpacity: 0.1,;
-shadowRadius: 3.84,;
+shadowOpacity: 0.1,
+shadowRadius: 3.84,
 const elevation = 5;
   }
-title: {,";,}fontSize: 18,";,"";
-fontWeight: "bold,",";,"";
-color: "#333";","";"";
+title: {,"fontSize: 18,","
+fontWeight: "bold,",","
+color: "#333,
 }
-    const marginBottom = 12;}
-  },";,"";
-topics: {,";,}flexDirection: row";",";"";
+    const marginBottom = 12}
+  },","
+topics: {,"flexDirection: row,";
 }
-    const paddingRight = 16;}
-  },";,"";
-topic: {,";,}backgroundColor: "#f0f0f0,",";,"";
-borderRadius: 20,;
-paddingHorizontal: 16,;
-paddingVertical: 8,;
+    const paddingRight = 16}
+  },","
+topic: {,"backgroundColor: "#f0f0f0,",
+borderRadius: 20,
+paddingHorizontal: 16,
+paddingVertical: 8,
 }
-    const marginRight = 12;}
+    const marginRight = 12}
   }
-topicText: {,";,}fontSize: 14,";"";
+topicText: {,"fontSize: 14,";
 }
-    const color = "#333'"''}'';'';
-  ;};';'';
+    const color = "#333'"''}
+  ;};
 });

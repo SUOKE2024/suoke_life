@@ -1,54 +1,54 @@
-/* 等 *//;/g/;
-*//;,/g/;
+/* 等 */
+*/
 export interface TokenInfo {accessToken: string}refreshToken: string,;
-expiresAt: Date,;
+expiresAt: Date,
 }
 }
-  const tokenType = string;}
+  const tokenType = string}
 }
-export interface SecurityEvent {id: string}const type = 'login' | 'logout' | 'failed_login' | 'token_refresh';';,'';
+export interface SecurityEvent {id: string}const type = 'login' | 'logout' | 'failed_login' | 'token_refresh';
 userId?: string;
-timestamp: Date,;
+  timestamp: Date,
 }
 }
-  details: Record<string, any>;}
+  details: Record<string, any>}
 }
-class SecurityService {private events: SecurityEvent[] = [];}  /* ; *//;/g/;
-  *//;,/g/;
-const async = validateAccessToken(token: string): Promise<boolean> {try {}      // 简单的Token验证逻辑/;/g/;
+class SecurityService {private events: SecurityEvent[] = [];}  /* ; */
+  */
+const async = validateAccessToken(token: string): Promise<boolean> {try {}      // 简单的Token验证逻辑
 }
 }
-      return token && token.length > 0;}
-    } catch (error) {}}
-      return false;}
+      return token && token.length > 0}
+    } catch (error) {}
+      return false}
     }
   }
-  /* 制 *//;/g/;
-  *//;,/g/;
+  /* 制 */
+  */
 checkRateLimit(identifier: string): boolean {// 简化的速率限制检查/;}}/g/;
-    return true;}
+    return true}
   }
   /* ' *//;'/g'/;
-  */'/;,'/g'/;
+  *//,'/g'/;
 recordSecurityEvent(eventData: Omit<SecurityEvent, 'id' | 'timestamp'>): void {';}}'';
     const: event: SecurityEvent = {,}
-  id: `event_${Date.now();}`,````;,```;
+  id: `event_${Date.now();}`,````,```;
 const timestamp = new Date();
       ...eventData;
     };
 this.events.push(event);
-        // 保留最近1000个事件/;,/g/;
-if (this.events.length > 1000) {}}
-      this.events = this.events.slice(-1000);}
+        // 保留最近1000个事件
+if (this.events.length > 1000) {}
+      this.events = this.events.slice(-1000)}
     }
   }
-  /* 件 *//;/g/;
-  *//;,/g/;
-getSecurityEvents(): SecurityEvent[] {}}
-    return [...this.events];}
+  /* 件 */
+  */
+getSecurityEvents(): SecurityEvent[] {}
+    return [...this.events]}
   }
 }
-// 创建全局实例/;,/g/;
+// 创建全局实例
 export const securityService = new SecurityService();
-// 导出类型和实例'/;,'/g'/;
+// 导出类型和实例'/,'/g'/;
 export default SecurityService;

@@ -1,4 +1,3 @@
-from typing import Dict, List, Any, Optional, Union
 
 """
 router - 索克生活项目模块
@@ -6,7 +5,7 @@ router - 索克生活项目模块
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import JSONResponse
-from user_service.api.endpoints import users, analytics, monitoring, health
+from user_service.api.endpoints import analytics, health, monitoring, users
 from user_service.auth import get_current_user
 
 """用户服务主API路由器"""
@@ -18,7 +17,7 @@ api_router = APIRouter()
 
 # 健康检查端点
 @api_router.get(" / health")
-async def health_check() - > None:
+async def health_check() -> None:
     """健康检查端点"""
     return {
         "status": "healthy",
@@ -29,7 +28,7 @@ async def health_check() - > None:
 
 # 服务信息端点
 @api_router.get(" / info")
-async def service_info() - > None:
+async def service_info() -> None:
     """服务信息端点"""
     return {
         "name": "索克生活用户服务",

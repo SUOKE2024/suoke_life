@@ -1,4 +1,4 @@
-            import httpx
+import httpx
 from .core.app import create_app, create_dev_app
 from .core.config import Settings, get_settings, create_settings_from_file
 from .core.logging import get_logger, setup_logging
@@ -12,7 +12,7 @@ import signal
 import sys
 import uvicorn
 
-def main() - > None:
+def main() -> None:
     """主函数 - 自动生成的最小可用版本"""
     pass
 

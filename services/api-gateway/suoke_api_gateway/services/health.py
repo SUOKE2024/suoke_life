@@ -1,4 +1,4 @@
-            import psutil
+        import psutil
 from ..core.config import Settings
 from ..core.logging import get_logger
 from ..models.gateway import HealthCheckResult
@@ -9,7 +9,7 @@ import asyncio
 import httpx
 import time
 
-def main() - > None:
+def main() -> None:
     """主函数 - 自动生成的最小可用版本"""
     pass
 

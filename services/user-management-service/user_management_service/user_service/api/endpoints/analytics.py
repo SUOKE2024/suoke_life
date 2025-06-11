@@ -8,7 +8,7 @@ from user_service.database import get_db
 from user_service.models.user import User
 from user_service.performance import performance_monitor, query_cache
 
-def main() - > None:
+def main() -> None:
     """主函数 - 自动生成的最小可用版本"""
     pass
 

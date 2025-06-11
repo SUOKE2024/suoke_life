@@ -1,12 +1,12 @@
-from typing import Dict, List, Any, Optional, Union
 
 """
 platform - 索克生活项目模块
 """
 
-from .base import BaseModel
 from sqlalchemy import Boolean, Column, String
 from sqlalchemy.orm import relationship
+
+from .base import BaseModel
 
 """
 平台模型

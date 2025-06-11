@@ -1,6 +1,6 @@
-                import html
-                import re
-            from cryptography.fernet import Fernet
+import html
+import re
+from cryptography.fernet import Fernet
 from datetime import datetime, timedelta
 from typing import Dict, List, Any
 from unittest.mock import AsyncMock, Mock, patch
@@ -16,7 +16,7 @@ import sys
 import time
 import uuid
 
-def main() - > None:
+def main() -> None:
     """主函数 - 自动生成的最小可用版本"""
     pass
 

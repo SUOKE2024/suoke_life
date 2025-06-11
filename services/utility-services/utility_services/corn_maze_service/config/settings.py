@@ -3,9 +3,10 @@ settings - 索克生活项目模块
 """
 
 from functools import lru_cache
+from typing import Any
+
 from pydantic import BaseModel, Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from typing import Any
 
 """
 应用配置设置

@@ -3,18 +3,21 @@
 提供用户管理的核心功能
 """
 
-from datetime import datetime, timedelta
-from sqlalchemy import select, update, delete
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import selectinload
-from typing import List, Optional, Dict, Any, Tuple
-import uuid
 import logging
+import uuid
+from datetime import datetime
+from typing import Any, Dict, List, Optional, Tuple
 
-from user_service.core.exceptions import UserNotFoundError, UserAlreadyExistsError, DeviceNotFoundError
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+from user_service.core.exceptions import (
+    DeviceNotFoundError,
+    UserAlreadyExistsError,
+    UserNotFoundError,
+)
 from user_service.models.device import UserDevice
 from user_service.models.health import HealthSummary
-from user_service.models.user import User, UserStatus, UserRole
+from user_service.models.user import User, UserStatus
 
 logger = logging.getLogger(__name__)
 

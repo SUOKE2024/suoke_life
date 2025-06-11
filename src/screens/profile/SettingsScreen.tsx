@@ -1,7 +1,7 @@
-// SettingsScreen/;/g/;
-// 自动修复的文件/;,/g/;
-export default class SettingsScreen {}}
+// SettingsScreen
+export default class SettingsScreen {
+  // TODO: 实现具体功能
 }
-  // TODO: 实现具体功能}/;/g/;
+}
+  // TODO: 实现具体功能}
 };
-;

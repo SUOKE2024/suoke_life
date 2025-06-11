@@ -4,7 +4,7 @@
 
 import logging
 import sys
-from typing import Any
+
 
 def configure_logging() -> None:
     """配置日志"""

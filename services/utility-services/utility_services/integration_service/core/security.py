@@ -2,15 +2,17 @@
 security - 索克生活项目模块
 """
 
-from ..config import settings
+import logging
 from datetime import datetime, timedelta
+from typing import Any, Dict, Optional
+
+import jwt
 from fastapi import HTTPException, status
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.security import HTTPBearer
 from passlib.context import CryptContext
 from pydantic import BaseModel
-from typing import Any, Dict, Optional, Union
-import jwt
-import logging
+
+from ..config import settings
 
 """
 安全认证模块
@@ -166,7 +168,7 @@ def verify_refresh_token(token: str) -> TokenData:
         )
 
         token_type: str = payload.get("type")
-        if token_type ! = "refresh":
+        if token_type != "refresh":
             raise credentials_exception
 
         user_id: str = payload.get("sub")
@@ -279,7 +281,7 @@ def verify_api_key(api_key: str) -> Dict[str, Any]:
             algorithms = [settings.algorithm]
         )
 
-        if payload.get("type") ! = "api_key":
+        if payload.get("type") != "api_key":
             raise HTTPException(
                 status_code = status.HTTP_401_UNAUTHORIZED,
                 detail = "无效的API密钥类型"

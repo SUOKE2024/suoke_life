@@ -2,12 +2,11 @@
 retry - 索克生活项目模块
 """
 
+from collections.abc import Callable
 from functools import wraps
-from typing import Callable, Any, Type, Tuple
 import logging
 import time
-
-
+from typing import Any, Tuple, Type
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +33,7 @@ def retry(
                         logger.error(f"函数 {func.__name__} 重试 {max_attempts} 次后仍然失败: {e}")
                         raise
 
-                    wait_time = delay * (backoff * * attempt)
+                    wait_time = delay * (backoff ** attempt)
                     logger.warning(f"函数 {func.__name__} 第 {attempt + 1} 次尝试失败，{wait_time}秒后重试: {e}")
                     time.sleep(wait_time)
 

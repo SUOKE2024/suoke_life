@@ -38,45 +38,45 @@ class ServiceInstance(BaseModel):
     metadata: Dict[str, str] = {}
 
     class Meta:
-        """TODO: 添加文档字符串"""
-        # 性能优化: 添加常用查询字段的索引
-        indexes = [
+"""TODO: 添加文档字符串"""
+# 性能优化: 添加常用查询字段的索引
+indexes = [
             # 根据实际查询需求添加索引
             # models.Index(fields = ['created_at']),
             # models.Index(fields = ['user_id']),
             # models.Index(fields = ['status']),
-        ]
-        # 数据库表选项
-        db_table = 'serviceinstance'
-        ordering = [' - created_at']
+]
+# 数据库表选项
+db_table = 'serviceinstance'
+ordering = [' - created_at']
 
 
 class ServiceRegistry:
     """服务注册表"""
 
     def __init__(self, settings: Settings):
-        """TODO: 添加文档字符串"""
-        self.settings = settings
-        self.services: Dict[str, List[ServiceInstance]] = {}
-        self.health_check_interval = 30  # 秒
-        self.failure_threshold = 3
-        self.recovery_threshold = 2
-        self._health_check_task: Optional[asyncio.Task] = None
+"""TODO: 添加文档字符串"""
+self.settings = settings
+self.services: Dict[str, List[ServiceInstance]] = {}
+self.health_check_interval = 30  # 秒
+self.failure_threshold = 3
+self.recovery_threshold = 2
+self._health_check_task: Optional[asyncio.Task] = None
 
-    async def initialize(self) - > None:
-        """初始化服务注册表"""
-        # 从配置加载服务
-        for service_name, service_config in self.settings.services.items():
+    async def initialize(self) -> None:
+"""初始化服务注册表"""
+# 从配置加载服务
+for service_name, service_config in self.settings.services.items():
             await self.register_service(service_name, service_config)
 
-        # 启动健康检查任务
-        self._health_check_task = asyncio.create_task(self._health_check_loop())
+# 启动健康检查任务
+self._health_check_task = asyncio.create_task(self._health_check_loop())
 
-        logger.info("Service registry initialized", services = len(self.services))
+logger.info("Service registry initialized", services = len(self.services))
 
-    async def cleanup(self) - > None:
-        """清理资源"""
-        if self._health_check_task:
+    async def cleanup(self) -> None:
+"""清理资源"""
+if self._health_check_task:
             self._health_check_task.cancel()
             try:
                 await self._health_check_task
@@ -84,50 +84,50 @@ class ServiceRegistry:
                 pass
 
     async def register_service(
-        self,
-        service_name: str,
-        service_config: ServiceConfig,
-        instance_id: Optional[str] = None,
-    ) - > str:
-        """注册服务实例"""
-        if instance_id is None:
+self,
+service_name: str,
+service_config: ServiceConfig,
+instance_id: Optional[str] = None,
+    ) -> str:
+"""注册服务实例"""
+if instance_id is None:
             instance_id = f"{service_name} - {service_config.host} - {service_config.port}"
 
-        instance = ServiceInstance(
+instance = ServiceInstance(
             id = instance_id,
             name = service_name,
             host = service_config.host,
             port = service_config.port,
             health_check_path = service_config.health_check_path,
-        )
+)
 
-        if service_name not in self.services:
+if service_name not in self.services:
             self.services[service_name] = []
 
-        # 检查是否已存在相同实例
-        existing_instance = None
-        for i, existing in enumerate(self.services[service_name]):
+# 检查是否已存在相同实例
+existing_instance = None
+for i, existing in enumerate(self.services[service_name]):
             if existing.id == instance_id:
                 existing_instance = i
                 break
 
-        if existing_instance is not None:
+if existing_instance is not None:
             # 更新现有实例
             self.services[service_name][existing_instance] = instance
             logger.info("Service instance updated", service = service_name, instance_id = instance_id)
-        else:
+else:
             # 添加新实例
             self.services[service_name].append(instance)
             logger.info("Service instance registered", service = service_name, instance_id = instance_id)
 
-        return instance_id
+return instance_id
 
-    async def deregister_service(self, service_name: str, instance_id: str) - > bool:
-        """注销服务实例"""
-        if service_name not in self.services:
+    async def deregister_service(self, service_name: str, instance_id: str) -> bool:
+"""注销服务实例"""
+if service_name not in self.services:
             return False
 
-        for i, instance in enumerate(self.services[service_name]):
+for i, instance in enumerate(self.services[service_name]):
             if instance.id == instance_id:
                 del self.services[service_name][i]
                 logger.info("Service instance deregistered", service = service_name, instance_id = instance_id)
@@ -138,52 +138,52 @@ class ServiceRegistry:
 
                 return True
 
-        return False
+return False
 
     def get_service_instance(
-        self,
-        service_name: str,
-        strategy: str = "round_robin"
-    ) - > Optional[ServiceInstance]:
-        """获取服务实例（负载均衡）"""
-        if service_name not in self.services:
+self,
+service_name: str,
+strategy: str = "round_robin"
+    ) -> Optional[ServiceInstance]:
+"""获取服务实例（负载均衡）"""
+if service_name not in self.services:
             return None
 
-        # 过滤健康的实例
-        healthy_instances = [
+# 过滤健康的实例
+healthy_instances = [
             instance for instance in self.services[service_name]
             if instance.healthy
-        ]
+]
 
-        if not healthy_instances:
+if not healthy_instances:
             logger.warning("No healthy instances available", service = service_name)
             return None
 
-        # 根据策略选择实例
-        if strategy == "round_robin":
+# 根据策略选择实例
+if strategy == "round_robin":
             return self._round_robin_select(healthy_instances)
-        elif strategy == "random":
+elif strategy == "random":
             return random.choice(healthy_instances)
-        elif strategy == "weighted":
+elif strategy == "weighted":
             return self._weighted_select(healthy_instances)
-        else:
+else:
             # 默认使用轮询
             return self._round_robin_select(healthy_instances)
 
-    def get_all_services(self) - > Dict[str, List[ServiceInstance]]:
-        """获取所有服务"""
-        return self.services.copy()
+    def get_all_services(self) -> Dict[str, List[ServiceInstance]]:
+"""获取所有服务"""
+return self.services.copy()
 
-    def get_service_health(self, service_name: str) - > Dict[str, any]:
-        """获取服务健康状态"""
-        if service_name not in self.services:
+    def get_service_health(self, service_name: str) -> Dict[str, any]:
+"""获取服务健康状态"""
+if service_name not in self.services:
             return {"status": "not_found"}
 
-        instances = self.services[service_name]
-        healthy_count = sum(1 for instance in instances if instance.healthy)
-        total_count = len(instances)
+instances = self.services[service_name]
+healthy_count = sum(1 for instance in instances if instance.healthy)
+total_count = len(instances)
 
-        return {
+return {
             "status": "healthy" if healthy_count > 0 else "unhealthy",
             "healthy_instances": healthy_count,
             "total_instances": total_count,
@@ -199,11 +199,11 @@ class ServiceRegistry:
                 }
                 for instance in instances
             ]
-        }
+}
 
-    async def _health_check_loop(self) - > None:
-        """健康检查循环"""
-        while True:
+    async def _health_check_loop(self) -> None:
+"""健康检查循环"""
+while True:
             try:
                 await self._perform_health_checks()
                 await asyncio.sleep(self.health_check_interval)
@@ -213,11 +213,11 @@ class ServiceRegistry:
                 logger.error("Health check loop error", error = str(e), exc_info = True)
                 await asyncio.sleep(5)  # 短暂等待后重试
 
-    async def _perform_health_checks(self) - > None:
-        """执行健康检查"""
-        tasks = []
+    async def _perform_health_checks(self) -> None:
+"""执行健康检查"""
+tasks = []
 
-        for service_name, instances in self.services.items():
+for service_name, instances in self.services.items():
             for instance in instances:
                 task = asyncio.create_task(
                     self._check_instance_health(instance),
@@ -225,14 +225,14 @@ class ServiceRegistry:
                 )
                 tasks.append(task)
 
-        if tasks:
+if tasks:
             await asyncio.gather( * tasks, return_exceptions = True)
 
-    async def _check_instance_health(self, instance: ServiceInstance) - > None:
-        """检查单个实例健康状态"""
-        start_time = time.time()
+    async def _check_instance_health(self, instance: ServiceInstance) -> None:
+"""检查单个实例健康状态"""
+start_time = time.time()
 
-        try:
+try:
             url = f"http: / /{instance.host}:{instance.port}{instance.health_check_path}"
 
             async with httpx.AsyncClient(timeout = 5.0) as client:
@@ -257,11 +257,11 @@ class ServiceRegistry:
                     # 健康检查失败
                     self._handle_health_check_failure(instance, f"HTTP {response.status_code}")
 
-        except Exception as e:
+except Exception as e:
             # 健康检查异常
             self._handle_health_check_failure(instance, str(e))
 
-        finally:
+finally:
             instance.last_health_check = datetime.utcnow()
 
             # 记录健康检查指标
@@ -271,11 +271,11 @@ class ServiceRegistry:
                     instance.name, duration, instance.healthy
                 )
 
-    def _handle_health_check_failure(self, instance: ServiceInstance, error: str) - > None:
-        """处理健康检查失败"""
-        instance.failure_count + = 1
+    def _handle_health_check_failure(self, instance: ServiceInstance, error: str) -> None:
+"""处理健康检查失败"""
+instance.failure_count += 1
 
-        if instance.healthy and instance.failure_count > = self.failure_threshold:
+if instance.healthy and instance.failure_count > = self.failure_threshold:
             instance.healthy = False
             logger.warning(
                 "Service instance marked unhealthy",
@@ -285,23 +285,23 @@ class ServiceRegistry:
                 error = error,
             )
 
-    def _round_robin_select(self, instances: List[ServiceInstance]) - > ServiceInstance:
-        """轮询选择"""
-        # 简单的轮询实现，实际应该使用更复杂的状态管理
-        return instances[int(time.time()) % len(instances)]
+    def _round_robin_select(self, instances: List[ServiceInstance]) -> ServiceInstance:
+"""轮询选择"""
+# 简单的轮询实现，实际应该使用更复杂的状态管理
+return instances[int(time.time()) % len(instances)]
 
-    def _weighted_select(self, instances: List[ServiceInstance]) - > ServiceInstance:
-        """加权选择"""
-        total_weight = sum(instance.weight for instance in instances)
-        if total_weight == 0:
+    def _weighted_select(self, instances: List[ServiceInstance]) -> ServiceInstance:
+"""加权选择"""
+total_weight = sum(instance.weight for instance in instances)
+if total_weight == 0:
             return random.choice(instances)
 
-        random_weight = random.randint(1, total_weight)
-        current_weight = 0
+random_weight = random.randint(1, total_weight)
+current_weight = 0
 
-        for instance in instances:
-            current_weight + = instance.weight
+for instance in instances:
+            current_weight += instance.weight
             if current_weight > = random_weight:
                 return instance
 
-        return instances[ - 1]  # 回退
+return instances[ - 1]  # 回退

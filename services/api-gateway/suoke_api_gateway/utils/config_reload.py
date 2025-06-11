@@ -1,4 +1,4 @@
-                import json
+            import json
                 import tomllib
                 import yaml
 from ..core.config import Settings
@@ -11,7 +11,7 @@ import asyncio
 import os
 import time
 
-def main() - > None:
+def main() -> None:
     """主函数 - 自动生成的最小可用版本"""
     pass
 

@@ -1,5 +1,5 @@
-        from internal.delivery.rest.routes import setup_routes
-    from unittest.mock import MagicMock
+from internal.delivery.rest.routes import setup_routes
+from unittest.mock import MagicMock
 from concurrent.futures import ThreadPoolExecutor
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
@@ -13,7 +13,7 @@ import statistics
 import sys
 import time
 
-def main() - > None:
+def main() -> None:
     """主函数 - 自动生成的最小可用版本"""
     pass
 

@@ -2,15 +2,16 @@
 platforms - 索克生活项目模块
 """
 
-from ...core.database import get_db
-from ...core.security import verify_token, TokenData
-from ...models.platform import Platform, PlatformConfig
-from ...services.platform_service import PlatformService
-from fastapi import APIRouter, Depends, HTTPException, status, Query
+import logging
+from typing import Dict, List, Optional
+
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
-from typing import Any, Dict, List, Optional
-import logging
+
+from ...core.database import get_db
+from ...core.security import TokenData, verify_token
+from ...services.platform_service import PlatformService
 
 """
 平台管理相关的API路由

@@ -40,74 +40,74 @@ class JWTManager:
     """JWT令牌管理器"""
 
     def __init__(self, config: JwtConfig):
-        """
-        初始化JWT管理器
+"""
+初始化JWT管理器
 
-        Args:
+Args:
             config: JWT配置
-        """
-        self.config = config
+"""
+self.config = config
 
-    def create_access_token(self, user_id: str, roles: List[str] = None) - > str:
-        """
-        创建访问令牌
+    def create_access_token(self, user_id: str, roles: List[str] = None) -> str:
+"""
+创建访问令牌
 
-        Args:
+Args:
             user_id: 用户ID
             roles: 用户角色列表
 
-        Returns:
+Returns:
             访问令牌
-        """
-        return self._create_token(
+"""
+return self._create_token(
             user_id = user_id,
             roles = roles or ["user"],
             token_type = "access",
             expires_delta = timedelta(minutes = self.config.expire_minutes)
-        )
+)
 
-    def create_refresh_token(self, user_id: str, roles: List[str] = None) - > str:
-        """
-        创建刷新令牌
+    def create_refresh_token(self, user_id: str, roles: List[str] = None) -> str:
+"""
+创建刷新令牌
 
-        Args:
+Args:
             user_id: 用户ID
             roles: 用户角色列表
 
-        Returns:
+Returns:
             刷新令牌
-        """
-        return self._create_token(
+"""
+return self._create_token(
             user_id = user_id,
             roles = roles or ["user"],
             token_type = "refresh",
             expires_delta = timedelta(minutes = self.config.refresh_expire_minutes)
-        )
+)
 
     def _create_token(
-        self,
-        user_id: str,
-        roles: List[str],
-        token_type: str,
-        expires_delta: timedelta
-    ) - > str:
-        """
-        创建令牌
+self,
+user_id: str,
+roles: List[str],
+token_type: str,
+expires_delta: timedelta
+    ) -> str:
+"""
+创建令牌
 
-        Args:
+Args:
             user_id: 用户ID
             roles: 用户角色列表
             token_type: 令牌类型
             expires_delta: 过期时间增量
 
-        Returns:
+Returns:
             JWT令牌
-        """
-        now = datetime.now(UTC)
-        expires = now + expires_delta
+"""
+now = datetime.now(UTC)
+expires = now + expires_delta
 
-        # 创建令牌负载
-        payload = {
+# 创建令牌负载
+payload = {
             "sub": user_id,
             "roles": roles,
             "type": token_type,
@@ -115,54 +115,54 @@ class JWTManager:
             "iat": now.timestamp(),
             "nbf": now.timestamp(),
             "jti": str(uuid.uuid4())
-        }
+}
 
-        # 编码令牌
-        token = jwt.encode(
+# 编码令牌
+token = jwt.encode(
             payload,
             self.config.secret_key,
             algorithm = self.config.algorithm
-        )
+)
 
-        return token
+return token
 
-    def decode_token(self, token: str) - > TokenPayload:
-        """
-        解码令牌
+    def decode_token(self, token: str) -> TokenPayload:
+"""
+解码令牌
 
-        Args:
+Args:
             token: JWT令牌
 
-        Returns:
+Returns:
             令牌负载
 
-        Raises:
+Raises:
             jwt.InvalidTokenError: 无效令牌
             jwt.ExpiredSignatureError: 令牌已过期
-        """
-        payload = jwt.decode(
+"""
+payload = jwt.decode(
             token,
             self.config.secret_key,
             algorithms = [self.config.algorithm],
             options = {"verify_signature": True}
-        )
+)
 
-        return TokenPayload( * *payload)
+return TokenPayload( **payload)
 
-    def refresh_access_token(self, refresh_token: str) - > str:
-        """
-        使用刷新令牌创建新的访问令牌
+    def refresh_access_token(self, refresh_token: str) -> str:
+"""
+使用刷新令牌创建新的访问令牌
 
-        Args:
+Args:
             refresh_token: 刷新令牌
 
-        Returns:
+Returns:
             新的访问令牌
 
-        Raises:
+Raises:
             ValueError: 无效的刷新令牌
-        """
-        try:
+"""
+try:
             payload = self.decode_token(refresh_token)
 
             # 验证令牌类型
@@ -175,24 +175,24 @@ class JWTManager:
                 roles = payload.roles
             )
 
-        except jwt.InvalidTokenError as e:
+except jwt.InvalidTokenError as e:
             logger.warning(f"无效的刷新令牌: {e}")
             raise ValueError("无效的刷新令牌") from e
 
-    def validate_token(self, token: str) - > TokenPayload:
-        """
-        验证令牌有效性
+    def validate_token(self, token: str) -> TokenPayload:
+"""
+验证令牌有效性
 
-        Args:
+Args:
             token: JWT令牌
 
-        Returns:
+Returns:
             令牌负载
 
-        Raises:
+Raises:
             ValueError: 令牌验证失败的具体原因
-        """
-        try:
+"""
+try:
             payload = self.decode_token(token)
 
             # 验证exp字段
@@ -205,33 +205,33 @@ class JWTManager:
 
             return payload
 
-        except jwt.ExpiredSignatureError:
+except jwt.ExpiredSignatureError:
             raise ValueError("令牌已过期")
-        except pydantic.ValidationError:
+except pydantic.ValidationError:
             # 处理验证错误，表示令牌缺少必要字段
             raise ValueError("缺少必要字段")
-        except jwt.InvalidTokenError as e:
+except jwt.InvalidTokenError as e:
             raise ValueError(f"无效的令牌: {str(e)}")
 
 
-def extract_token_from_header(authorization: str) - > str:
+def extract_token_from_header(authorization: str) -> str:
     """
     从认证头中提取令牌
 
     Args:
-        authorization: 认证头
+authorization: 认证头
 
     Returns:
-        JWT令牌
+JWT令牌
 
     Raises:
-        ValueError: 无效的认证头格式
+ValueError: 无效的认证头格式
     """
     if not authorization:
-        raise ValueError("未提供认证令牌")
+raise ValueError("未提供认证令牌")
 
     parts = authorization.split()
     if len(parts) ! = 2 or parts[0].lower() ! = "bearer":
-        raise ValueError("无效的认证头部格式")
+raise ValueError("无效的认证头部格式")
 
     return parts[1]

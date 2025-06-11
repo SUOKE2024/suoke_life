@@ -1,14 +1,15 @@
-from typing import Dict, List, Any, Optional, Union
 
 """
 health_data - 索克生活项目模块
 """
 
-from .base import BaseModel
 from enum import Enum
-from sqlalchemy import Enum as SQLEnum
+
 from sqlalchemy import JSON, Column, Float, ForeignKey, String
+from sqlalchemy import Enum as SQLEnum
 from sqlalchemy.orm import relationship
+
+from .base import BaseModel
 
 """
 健康数据模型

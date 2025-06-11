@@ -42,20 +42,20 @@ class CacheManager:
     """缓存管理器"""
 
     def __init__(self, settings: Settings):
-        """TODO: 添加文档字符串"""
-        self.settings = settings
-        self.redis_client: Optional[redis.Redis] = None
-        self.enabled = True
-        self.default_ttl = 3600  # 1小时
-        self.key_prefix = "suoke:gateway:"
+"""TODO: 添加文档字符串"""
+self.settings = settings
+self.redis_client: Optional[redis.Redis] = None
+self.enabled = True
+self.default_ttl = 3600  # 1小时
+self.key_prefix = "suoke:gateway:"
 
-        # 统计信息
-        self.hit_count = 0
-        self.miss_count = 0
+# 统计信息
+self.hit_count = 0
+self.miss_count = 0
 
-    async def initialize(self) - > None:
-        """初始化缓存管理器"""
-        try:
+    async def initialize(self) -> None:
+"""初始化缓存管理器"""
+try:
             self.redis_client = redis.from_url(
                 self.settings.get_redis_url(),
                 decode_responses = True,
@@ -63,52 +63,52 @@ class CacheManager:
             # 测试连接
             await self.redis_client.ping()
             logger.info("Cache manager initialized")
-        except Exception as e:
+except Exception as e:
             logger.error("Failed to initialize cache manager", error = str(e))
             self.enabled = False
             raise
 
-    async def cleanup(self) - > None:
-        """清理资源"""
-        if self.redis_client:
+    async def cleanup(self) -> None:
+"""清理资源"""
+if self.redis_client:
             await self.redis_client.close()
 
-    async def get(self, key: str) - > Optional[Any]:
-        """获取缓存值"""
-        if not self.enabled or not self.redis_client:
+    async def get(self, key: str) -> Optional[Any]:
+"""获取缓存值"""
+if not self.enabled or not self.redis_client:
             return None
 
-        try:
+try:
             full_key = self._get_full_key(key)
             value = await self.redis_client.get(full_key)
 
             if value is not None:
-                self.hit_count + = 1
+                self.hit_count += 1
                 # 尝试解析JSON
                 try:
                     return json.loads(value)
                 except json.JSONDecodeError:
                     return value
             else:
-                self.miss_count + = 1
+                self.miss_count += 1
                 return None
 
-        except Exception as e:
+except Exception as e:
             logger.error("Cache get failed", key = key, error = str(e))
-            self.miss_count + = 1
+            self.miss_count += 1
             return None
 
     async def set(
-        self,
-        key: str,
-        value: Any,
-        ttl: Optional[int] = None
-    ) - > bool:
-        """设置缓存值"""
-        if not self.enabled or not self.redis_client:
+self,
+key: str,
+value: Any,
+ttl: Optional[int] = None
+    ) -> bool:
+"""设置缓存值"""
+if not self.enabled or not self.redis_client:
             return False
 
-        try:
+try:
             full_key = self._get_full_key(key)
 
             # 序列化值
@@ -123,61 +123,61 @@ class CacheManager:
             await self.redis_client.setex(full_key, expire_time, serialized_value)
             return True
 
-        except Exception as e:
+except Exception as e:
             logger.error("Cache set failed", key = key, error = str(e))
             return False
 
-    async def delete(self, key: str) - > bool:
-        """删除缓存值"""
-        if not self.enabled or not self.redis_client:
+    async def delete(self, key: str) -> bool:
+"""删除缓存值"""
+if not self.enabled or not self.redis_client:
             return False
 
-        try:
+try:
             full_key = self._get_full_key(key)
             result = await self.redis_client.delete(full_key)
             return result > 0
 
-        except Exception as e:
+except Exception as e:
             logger.error("Cache delete failed", key = key, error = str(e))
             return False
 
-    async def exists(self, key: str) - > bool:
-        """检查缓存键是否存在"""
-        if not self.enabled or not self.redis_client:
+    async def exists(self, key: str) -> bool:
+"""检查缓存键是否存在"""
+if not self.enabled or not self.redis_client:
             return False
 
-        try:
+try:
             full_key = self._get_full_key(key)
             result = await self.redis_client.exists(full_key)
             return result > 0
 
-        except Exception as e:
+except Exception as e:
             logger.error("Cache exists check failed", key = key, error = str(e))
             return False
 
     async def get_or_set(
-        self,
-        key: str,
-        factory_func,
-        ttl: Optional[int] = None,
-        * args,
-        * *kwargs
-    ) - > Any:
-        """获取缓存值，如果不存在则调用工厂函数设置"""
-        # 先尝试获取
-        value = await self.get(key)
-        if value is not None:
+self,
+key: str,
+factory_func,
+ttl: Optional[int] = None,
+* args,
+**kwargs
+    ) -> Any:
+"""获取缓存值，如果不存在则调用工厂函数设置"""
+# 先尝试获取
+value = await self.get(key)
+if value is not None:
             return value
 
-        # 调用工厂函数
-        try:
+# 调用工厂函数
+try:
             if callable(factory_func):
                 if hasattr(factory_func, '__call__') and hasattr(factory_func, '__await__'):
                     # 异步函数
-                    value = await factory_func( * args, * *kwargs)
+                    value = await factory_func( * args, **kwargs)
                 else:
                     # 同步函数
-                    value = factory_func( * args, * *kwargs)
+                    value = factory_func( * args, **kwargs)
             else:
                 value = factory_func
 
@@ -185,58 +185,58 @@ class CacheManager:
             await self.set(key, value, ttl)
             return value
 
-        except Exception as e:
+except Exception as e:
             logger.error("Factory function failed", key = key, error = str(e))
             return None
 
-    async def increment(self, key: str, amount: int = 1) - > Optional[int]:
-        """递增计数器"""
-        if not self.enabled or not self.redis_client:
+    async def increment(self, key: str, amount: int = 1) -> Optional[int]:
+"""递增计数器"""
+if not self.enabled or not self.redis_client:
             return None
 
-        try:
+try:
             full_key = self._get_full_key(key)
             result = await self.redis_client.incrby(full_key, amount)
             return result
 
-        except Exception as e:
+except Exception as e:
             logger.error("Cache increment failed", key = key, error = str(e))
             return None
 
-    async def expire(self, key: str, ttl: int) - > bool:
-        """设置键的过期时间"""
-        if not self.enabled or not self.redis_client:
+    async def expire(self, key: str, ttl: int) -> bool:
+"""设置键的过期时间"""
+if not self.enabled or not self.redis_client:
             return False
 
-        try:
+try:
             full_key = self._get_full_key(key)
             result = await self.redis_client.expire(full_key, ttl)
             return result
 
-        except Exception as e:
+except Exception as e:
             logger.error("Cache expire failed", key = key, error = str(e))
             return False
 
-    async def get_ttl(self, key: str) - > Optional[int]:
-        """获取键的剩余生存时间"""
-        if not self.enabled or not self.redis_client:
+    async def get_ttl(self, key: str) -> Optional[int]:
+"""获取键的剩余生存时间"""
+if not self.enabled or not self.redis_client:
             return None
 
-        try:
+try:
             full_key = self._get_full_key(key)
             ttl = await self.redis_client.ttl(full_key)
             return ttl if ttl > 0 else None
 
-        except Exception as e:
+except Exception as e:
             logger.error("Cache TTL check failed", key = key, error = str(e))
             return None
 
-    async def clear_pattern(self, pattern: str) - > int:
-        """清除匹配模式的所有键"""
-        if not self.enabled or not self.redis_client:
+    async def clear_pattern(self, pattern: str) -> int:
+"""清除匹配模式的所有键"""
+if not self.enabled or not self.redis_client:
             return 0
 
-        try:
+try:
             full_pattern = self._get_full_key(pattern)
             keys = await self.redis_client.keys(full_pattern)
 
@@ -246,13 +246,13 @@ class CacheManager:
 
             return 0
 
-        except Exception as e:
+except Exception as e:
             logger.error("Cache clear pattern failed", pattern = pattern, error = str(e))
             return 0
 
-    async def get_stats(self) - > CacheStats:
-        """获取缓存统计信息"""
-        try:
+    async def get_stats(self) -> CacheStats:
+"""获取缓存统计信息"""
+try:
             if not self.enabled or not self.redis_client:
                 return CacheStats(
                     total_keys = 0,
@@ -283,7 +283,7 @@ class CacheManager:
                 expired_keys = info.get("expired_keys", 0),
             )
 
-        except Exception as e:
+except Exception as e:
             logger.error("Failed to get cache stats", error = str(e))
             return CacheStats(
                 total_keys = 0,
@@ -294,6 +294,6 @@ class CacheManager:
                 expired_keys = 0,
             )
 
-    def _get_full_key(self, key: str) - > str:
-        """获取完整的缓存键"""
-        return f"{self.key_prefix}{key}"
+    def _get_full_key(self, key: str) -> str:
+"""获取完整的缓存键"""
+return f"{self.key_prefix}{key}"

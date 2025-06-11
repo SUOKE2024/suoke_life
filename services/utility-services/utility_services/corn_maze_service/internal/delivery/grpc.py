@@ -1,14 +1,15 @@
-from typing import Dict, List, Any, Optional, Union
 
 """
 grpc - 索克生活项目模块
 """
 
+import logging
+
+import grpc
+from grpc import aio
+
 from api import corn_maze_pb2, corn_maze_pb2_grpc
 from corn_maze_service.config import get_settings
-from grpc import aio
-import grpc
-import logging
 
 """
 gRPC 交付层
