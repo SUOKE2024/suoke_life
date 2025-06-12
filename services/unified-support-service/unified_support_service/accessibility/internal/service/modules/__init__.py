@@ -1,4 +1,4 @@
-from typing import Dict, List, Any, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 """
 __init__ - 索克生活项目模块
@@ -21,7 +21,7 @@ from .blind_assistance import BlindAssistanceModule
 # from .settings_manager import SettingsManagerModule
 
 __all__ = [
-    'BlindAssistanceModule',
+    "BlindAssistanceModule",
     # 'SignLanguageModule',
     # 'VoiceAssistanceModule',
     # 'ScreenReadingModule',

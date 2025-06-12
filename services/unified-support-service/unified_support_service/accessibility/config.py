@@ -2,8 +2,9 @@
 config - 索克生活项目模块
 """
 
-from pydantic_settings import BaseSettings
 from typing import Optional
+
+from pydantic_settings import BaseSettings
 
 """
 accessibility - service 配置管理
@@ -40,8 +41,10 @@ class Settings(BaseSettings):
 
     class Config:
         """TODO: 添加文档字符串"""
+
         env_file = ".env"
         case_sensitive = False
+
 
 # 全局配置实例
 settings = Settings()

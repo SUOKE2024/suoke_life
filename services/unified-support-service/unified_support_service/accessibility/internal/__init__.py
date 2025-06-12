@@ -1,4 +1,4 @@
-from typing import Dict, List, Any, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 """
 __init__ - 索克生活项目模块
@@ -24,8 +24,4 @@ from .service.app import AccessibilityApp, AccessibilityService
 
 # 导出核心组件
 
-__all__ = [
-    "AccessibilityService",
-    "AccessibilityApp",
-    "AccessibilityServicer"
-]
+__all__ = ["AccessibilityService", "AccessibilityApp", "AccessibilityServicer"]

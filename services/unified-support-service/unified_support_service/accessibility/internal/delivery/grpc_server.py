@@ -2,12 +2,13 @@
 grpc_server - 索克生活项目模块
 """
 
-from api.grpc import accessibility_pb2, accessibility_pb2_grpc
-from typing import Any
-import grpc
 import logging
 import os
 import sys
+from typing import Any
+
+import grpc
+from api.grpc import accessibility_pb2, accessibility_pb2_grpc
 
 #! / usr / bin / env python3
 
@@ -19,7 +20,7 @@ import sys
 # 导入protobuf生成的类
 
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '.. / ..')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), ".. / ..")))
 
 logger = logging.getLogger(__name__)
 
@@ -187,7 +188,9 @@ class AccessibilityServicer(accessibility_pb2_grpc.AccessibilityServiceServicer)
             response = accessibility_pb2.AccessibleContentResponse()
             response.success = True
             response.message = "内容转换处理成功"
-            response.accessible_text = "【健康提醒】今日建议：多喝水，适量运动，保持良好心情"
+            response.accessible_text = (
+                "【健康提醒】今日建议：多喝水，适量运动，保持良好心情"
+            )
             response.audio_content = "audio_content_data"
             response.braille_content = "braille_content_data"
 

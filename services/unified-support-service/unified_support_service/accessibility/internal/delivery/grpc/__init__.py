@@ -1,4 +1,4 @@
-from typing import Dict, List, Any, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 """
 __init__ - 索克生活项目模块
@@ -16,7 +16,4 @@ gRPC服务实现
 """
 
 
-__all__ = [
-    "AccessibilityServicer",
-    "TranslationHandler"
-]
+__all__ = ["AccessibilityServicer", "TranslationHandler"]
