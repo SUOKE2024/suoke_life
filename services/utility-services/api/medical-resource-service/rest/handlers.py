@@ -1,15 +1,36 @@
         from ...internal.domain.models import UrgencyLevel
-from ...internal.infrastructure.container import (
-from ...internal.infrastructure.models import ResourceType
-from datetime import datetime
-from fastapi import APIRouter, Depends, HTTPException, Path, Query
-from fastapi.responses import JSONResponse
-from pydantic import BaseModel, Field
-from typing import Any, Dict, List, Optional
-import logging
 
-def main() -> None:
-    """主函数 - 自动生成的最小可用版本"""
+from ...internal.infrastructure.container import (
+    Any,
+    APIRouter,
+    BaseModel,
+    Depends,
+    Dict,
+    Field,
+    HTTPException,
+    JSONResponse,
+    List,
+    None:,
+    Optional,
+    Path,
+    Query,
+    ResourceType,
+    """主函数,
+    -,
+    ->,
+    ...internal.infrastructure.models,
+    datetime,
+    def,
+    fastapi,
+    fastapi.responses,
+    from,
+    import,
+    logging,
+    main,
+    pydantic,
+    typing,
+    自动生成的最小可用版本""",
+)
     pass
 
 if __name__=="__main__":

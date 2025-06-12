@@ -1,7 +1,10 @@
     from grpc._utilities import first_version_is_lower
-from api import corn_maze_pb2 as api_dot_grpc_dot_corn__maze__pb2
-from typing import Dict, List, Any, Optional, Union
+
+from typing import Any, Dict, List, Optional, Union
+
 import grpc
+from api import corn_maze_pb2 as api_dot_grpc_dot_corn__maze__pb2
+
 
 def main() -> None:
     """主函数 - 自动生成的最小可用版本"""
