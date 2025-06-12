@@ -1,4 +1,3 @@
-
 """
 platform_service - 索克生活项目模块
 """
@@ -13,9 +12,6 @@ from .base_service import BaseService
 """
 
 
-
-
-
 class PlatformService(BaseService[Platform]):
     """平台服务"""
 
@@ -25,19 +21,26 @@ class PlatformService(BaseService[Platform]):
 
     async def get_by_name(self, name: str) -> Platform | None:
         """根据名称获取平台"""
-        return self.db.query(self.model).filter(self.model.name==name).first()
+        return self.db.query(self.model).filter(self.model.name == name).first()
 
     async def get_enabled_platforms(self) -> list[Platform]:
         """获取启用的平台列表"""
-        return self.db.query(self.model).filter(self.model.is_enabled).prefetch_related().all()[:1000]  # 限制查询结果数量
+        return (
+            self.db.query(self.model)
+            .filter(self.model.is_enabled)
+            .prefetch_related()
+            .all()[:1000]
+        )  # 限制查询结果数量
 
-    async def get_platform_config(self, platform_id: str, config_key: str) -> PlatformConfig | None:
+    async def get_platform_config(
+        self, platform_id: str, config_key: str
+    ) -> PlatformConfig | None:
         """获取平台配置"""
         return (
             self.db.query(PlatformConfig)
             .filter(
-                PlatformConfig.platform_id==platform_id,
-                PlatformConfig.config_key==config_key
+                PlatformConfig.platform_id == platform_id,
+                PlatformConfig.config_key == config_key,
             )
             .first()
         )
@@ -48,7 +51,7 @@ class PlatformService(BaseService[Platform]):
         config_key: str,
         config_value: str,
         is_encrypted: bool = False,
-        description: str = None
+        description: str = None,
     ) -> PlatformConfig:
         """设置平台配置"""
         config = await self.get_platform_config(platform_id, config_key)
@@ -62,11 +65,11 @@ class PlatformService(BaseService[Platform]):
             self.db.refresh(config)
         else:
             config = PlatformConfig(
-                platform_id = platform_id,
-                config_key = config_key,
-                config_value = config_value,
-                is_encrypted = is_encrypted,
-                description = description
+                platform_id=platform_id,
+                config_key=config_key,
+                config_value=config_value,
+                is_encrypted=is_encrypted,
+                description=description,
             )
             self.db.add(config)
             self.db.commit()

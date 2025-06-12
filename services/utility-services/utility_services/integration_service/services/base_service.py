@@ -12,8 +12,7 @@ from sqlalchemy.orm import Session
 """
 
 
-
-ModelType = TypeVar("ModelType", bound = DeclarativeMeta)
+ModelType = TypeVar("ModelType", bound=DeclarativeMeta)
 
 
 class BaseService(Generic[ModelType]):
@@ -34,11 +33,13 @@ class BaseService(Generic[ModelType]):
 
     async def get(self, id: int) -> ModelType | None:
         """根据ID获取对象"""
-        return self.db.query(self.model).filter(self.model.id==id).first()
+        return self.db.query(self.model).filter(self.model.id == id).first()
 
     async def get_multi(self, skip: int = 0, limit: int = 100) -> list[ModelType]:
         """获取多个对象"""
-        return self.db.query(self.model).offset(skip).limit(limit).all()[:1000]  # 限制查询结果数量
+        return (
+            self.db.query(self.model).offset(skip).limit(limit).all()[:1000]
+        )  # 限制查询结果数量
 
     async def update(self, db_obj: ModelType, obj_in: dict) -> ModelType:
         """更新对象"""
@@ -51,13 +52,15 @@ class BaseService(Generic[ModelType]):
 
     async def delete(self, id: int) -> ModelType | None:
         """删除对象"""
-        obj = self.db.query(self.model).filter(self.model.id==id).first()
+        obj = self.db.query(self.model).filter(self.model.id == id).first()
         if obj:
             self.db.delete(obj)
             self.db.commit()
         return obj
+
     class Meta:
         """TODO: 添加文档字符串"""
+
         # 性能优化: 添加常用查询字段的索引
         indexes = [
             # 根据实际查询需求添加索引
@@ -66,6 +69,5 @@ class BaseService(Generic[ModelType]):
             # models.Index(fields = ['status']),
         ]
         # 数据库表选项
-        db_table = 'baseservice'
-        ordering = [' - created_at']
-
+        db_table = "baseservice"
+        ordering = [" - created_at"]

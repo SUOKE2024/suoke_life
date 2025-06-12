@@ -18,8 +18,6 @@ from .base_service import BaseService
 """
 
 
-
-
 logger = logging.getLogger(__name__)
 
 
@@ -33,7 +31,7 @@ class UserService(BaseService[User]):
     def get_user_by_id(self, user_id: str) -> Optional[User]:
         """根据用户ID获取用户"""
         try:
-            return self.db.query(User).filter(User.id==user_id).first()
+            return self.db.query(User).filter(User.id == user_id).first()
         except Exception as e:
             logger.error(f"获取用户失败: {e}")
             return None
@@ -41,7 +39,7 @@ class UserService(BaseService[User]):
     def get_user_by_username(self, username: str) -> Optional[User]:
         """根据用户名获取用户"""
         try:
-            return self.db.query(User).filter(User.username==username).first()
+            return self.db.query(User).filter(User.username == username).first()
         except Exception as e:
             logger.error(f"根据用户名获取用户失败: {e}")
             return None
@@ -49,7 +47,7 @@ class UserService(BaseService[User]):
     def get_user_by_email(self, email: str) -> Optional[User]:
         """根据邮箱获取用户"""
         try:
-            return self.db.query(User).filter(User.email==email).first()
+            return self.db.query(User).filter(User.email == email).first()
         except Exception as e:
             logger.error(f"根据邮箱获取用户失败: {e}")
             return None
@@ -69,7 +67,9 @@ class UserService(BaseService[User]):
 
             # 验证密码（这里假设用户模型有password字段）
             # 实际实现中需要根据具体的用户模型调整
-            if hasattr(user, 'password_hash') and verify_password(password, user.password_hash):
+            if hasattr(user, "password_hash") and verify_password(
+                password, user.password_hash
+            ):
                 return user
 
             return None
@@ -84,7 +84,7 @@ class UserService(BaseService[User]):
         email: Optional[str] = None,
         phone: Optional[str] = None,
         password: Optional[str] = None,
-        profile: Optional[Dict[str, Any]] = None
+        profile: Optional[Dict[str, Any]] = None,
     ) -> Optional[User]:
         """创建新用户"""
         try:
@@ -106,7 +106,7 @@ class UserService(BaseService[User]):
                 "is_active": True,
                 "profile": profile or {},
                 "created_at": datetime.utcnow(),
-                "updated_at": datetime.utcnow()
+                "updated_at": datetime.utcnow(),
             }
 
             # 如果提供了密码，进行哈希处理
@@ -131,11 +131,7 @@ class UserService(BaseService[User]):
             logger.error(f"创建用户失败: {e}")
             return None
 
-    def update_user(
-        self,
-        user_id: str,
-        update_data: Dict[str, Any]
-    ) -> Optional[User]:
+    def update_user(self, user_id: str, update_data: Dict[str, Any]) -> Optional[User]:
         """更新用户信息"""
         try:
             user = self.get_user_by_id(user_id)
@@ -172,7 +168,7 @@ class UserService(BaseService[User]):
             password_hash = get_password_hash(new_password)
 
             # 更新密码
-            if hasattr(user, 'password_hash'):
+            if hasattr(user, "password_hash"):
                 user.password_hash = password_hash
                 user.updated_at = datetime.utcnow()
 
@@ -261,18 +257,14 @@ class UserService(BaseService[User]):
                 "is_active": user.is_active,
                 "profile": user.profile,
                 "created_at": user.created_at.isoformat(),
-                "updated_at": user.updated_at.isoformat()
+                "updated_at": user.updated_at.isoformat(),
             }
 
         except Exception as e:
             logger.error(f"获取用户档案失败: {e}")
             return None
 
-    def update_user_profile(
-        self,
-        user_id: str,
-        profile_data: Dict[str, Any]
-    ) -> bool:
+    def update_user_profile(self, user_id: str, profile_data: Dict[str, Any]) -> bool:
         """更新用户档案"""
         try:
             user = self.get_user_by_id(user_id)
@@ -297,16 +289,14 @@ class UserService(BaseService[User]):
             return False
 
     async def get_user_platform_auth(
-        self,
-        user_id: str,
-        platform_id: str
+        self, user_id: str, platform_id: str
     ) -> UserPlatformAuth | None:
         """获取用户平台授权信息"""
         return (
             self.db.query(UserPlatformAuth)
             .filter(
-                UserPlatformAuth.user_id==user_id,
-                UserPlatformAuth.platform_id==platform_id
+                UserPlatformAuth.user_id == user_id,
+                UserPlatformAuth.platform_id == platform_id,
             )
             .first()
         )
@@ -317,8 +307,8 @@ class UserService(BaseService[User]):
         platform_id: str,
         access_token: str = None,
         refresh_token: str = None,
-        token_expires_at = None,
-        auth_metadata: dict = None
+        token_expires_at=None,
+        auth_metadata: dict = None,
     ) -> UserPlatformAuth:
         """创建或更新用户平台授权"""
         auth = await self.get_user_platform_auth(user_id, platform_id)
@@ -337,13 +327,13 @@ class UserService(BaseService[User]):
             self.db.refresh(auth)
         else:
             auth = UserPlatformAuth(
-                user_id = user_id,
-                platform_id = platform_id,
-                access_token = access_token,
-                refresh_token = refresh_token,
-                token_expires_at = token_expires_at,
-                auth_metadata = auth_metadata,
-                is_active = True
+                user_id=user_id,
+                platform_id=platform_id,
+                access_token=access_token,
+                refresh_token=refresh_token,
+                token_expires_at=token_expires_at,
+                auth_metadata=auth_metadata,
+                is_active=True,
             )
             self.db.add(auth)
             self.db.commit()
@@ -355,9 +345,6 @@ class UserService(BaseService[User]):
         """获取用户已授权的平台列表"""
         return (
             self.db.query(UserPlatformAuth)
-            .filter(
-                UserPlatformAuth.user_id==user_id,
-                UserPlatformAuth.is_active
-            )
+            .filter(UserPlatformAuth.user_id == user_id, UserPlatformAuth.is_active)
             .all()[:1000]  # 限制查询结果数量
         )
