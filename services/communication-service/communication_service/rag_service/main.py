@@ -1,4 +1,3 @@
-
 """
 main - 索克生活项目模块
 """
@@ -14,12 +13,8 @@ rag - service 主入口文件
 def main() -> None:
     """主函数"""
     app = create_app()
-    uvicorn.run(
-        app,
-        host = "0.0.0.0",
-        port = 8000,
-        reload = True
-    )
+    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     main()

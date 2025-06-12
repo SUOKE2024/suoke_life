@@ -91,7 +91,7 @@ if verify_health_zkp(proof):
   if: failure()
   uses: dawidd6/action-send-mail@v3
   with:
-    server_address: smtp.example.com
+    server_address: smtp.suoke.com
     server_port: 465
     username: ${{ secrets.MAIL_USERNAME }}
     password: ${{ secrets.MAIL_PASSWORD }}

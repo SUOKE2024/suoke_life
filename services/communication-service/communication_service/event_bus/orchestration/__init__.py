@@ -12,8 +12,8 @@ from .agent_orchestrator import (
 
 __all__ = [
     "AgentOrchestrator",
-    "AgentCollaborationManager", 
+    "AgentCollaborationManager",
     "CollaborationSession",
     "AgentTask",
-    "CollaborationState"
-] 
+    "CollaborationState",
+]

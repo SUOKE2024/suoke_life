@@ -15,14 +15,14 @@ from .handlers.health_handlers import HealthEventHandlers
 from .utils.event_router import SmartDataAccessRouter
 
 __all__ = [
-    'SuokeEventBus',
-    'EventStore', 
-    'AgentCollaborationEvents',
-    'HealthDataEvents',
-    'UserInteractionEvents',
-    'AgentEventHandlers',
-    'HealthEventHandlers',
-    'SmartDataAccessRouter'
+    "SuokeEventBus",
+    "EventStore",
+    "AgentCollaborationEvents",
+    "HealthDataEvents",
+    "UserInteractionEvents",
+    "AgentEventHandlers",
+    "HealthEventHandlers",
+    "SmartDataAccessRouter",
 ]
 
-__version__ = "1.0.0" 
+__version__ = "1.0.0"

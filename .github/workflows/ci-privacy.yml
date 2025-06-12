@@ -39,12 +39,12 @@ jobs:
         if: failure()
         uses: dawidd6/action-send-mail@v3
         with:
-          server_address: smtp.example.com
+          server_address: smtp.suoke.life
           server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: 索克生活隐私合规检测失败
-          to: security@suoke.com
+          to: security@suoke.life
           from: ci-bot@suoke.com
           body: |
             CI合规检测失败，请及时处理。
