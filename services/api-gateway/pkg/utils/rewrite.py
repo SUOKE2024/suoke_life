@@ -2,10 +2,11 @@
 rewrite - 索克生活项目模块
 """
 
-from internal.model.config import RouteConfig
-from typing import Dict, List, Optional, Pattern
 import logging
 import re
+from typing import Dict, List, Optional, Pattern
+
+from internal.model.config import RouteConfig
 
 #! / usr / bin / env python
 # - * - coding: utf - 8 - * -

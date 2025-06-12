@@ -2,22 +2,23 @@
 test_performance_enhanced - 索克生活项目模块
 """
 
+import asyncio
+import gc
+import os
+import statistics
+import sys
+import time
+from typing import Any, Dict, List
+from unittest.mock import AsyncMock, Mock, patch
+
+import httpx
+import psutil
+import pytest
 from suoke_api_gateway.core.app import create_app
 from suoke_api_gateway.core.config import Settings
 from suoke_api_gateway.middleware.rate_limit import RateLimitMiddleware
 from suoke_api_gateway.services.service_registry import ServiceRegistry
 from suoke_api_gateway.utils.cache import CacheManager
-from typing import List, Dict, Any
-from unittest.mock import AsyncMock, Mock, patch
-import asyncio
-import gc
-import httpx
-import os
-import psutil
-import pytest
-import statistics
-import sys
-import time
 
 #! / usr / bin / env python
 # - * - coding: utf - 8 - * -
@@ -29,8 +30,7 @@ API网关增强性能测试
 
 
 # 添加项目根目录到Python路径
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 
 class PerformanceMetrics:
@@ -59,9 +59,9 @@ class PerformanceMetrics:
         """记录响应"""
         self.response_times.append(response_time)
         if success:
-            self.success_count+=1
+            self.success_count += 1
         else:
-            self.error_count+=1
+            self.error_count += 1
 
     def record_system_metrics(self) -> None:
         """记录系统指标"""
@@ -106,7 +106,7 @@ class PerformanceMetrics:
                 "min": min(self.cpu_usage) if self.cpu_usage else 0,
                 "max": max(self.cpu_usage) if self.cpu_usage else 0,
                 "mean": statistics.mean(self.cpu_usage) if self.cpu_usage else 0,
-            }
+            },
         }
 
     def _percentile(self, data: List[float], percentile: int) -> float:
@@ -153,7 +153,7 @@ class TestConcurrencyPerformance:
             """缓存操作"""
             start_time = time.time()
 
-            if operation_id % 2==0:
+            if operation_id % 2 == 0:
                 # 写操作
                 cache_data[f"key_{operation_id}"] = f"value_{operation_id}"
             else:
@@ -171,7 +171,7 @@ class TestConcurrencyPerformance:
         summary = metrics.get_summary()
 
         # 性能断言
-        assert summary["success_rate"]==100.0
+        assert summary["success_rate"] == 100.0
         assert summary["response_times"]["mean"] < 0.001  # 1ms
 
         print(f"并发缓存操作性能: {summary}")
@@ -192,14 +192,14 @@ class TestConcurrencyPerformance:
             end_time = time.time()
             metrics.record_response(end_time - start_time, True)
 
-            if i % 10==0:
+            if i % 10 == 0:
                 metrics.record_system_metrics()
 
         metrics.stop_monitoring()
         summary = metrics.get_summary()
 
         # 验证性能稳定性
-        assert summary["success_rate"]==100.0
+        assert summary["success_rate"] == 100.0
         assert summary["response_times"]["p95"] < 0.01  # 10ms
 
         print(f"持续负载测试: {summary}")
@@ -248,7 +248,7 @@ class TestMemoryPerformance:
             start_time = time.time()
 
             # 模拟大数据处理
-            processed_data = large_data.encode('utf-8')
+            processed_data = large_data.encode("utf-8")
             result = len(processed_data)
 
             end_time = time.time()
@@ -258,7 +258,7 @@ class TestMemoryPerformance:
         metrics.stop_monitoring()
         summary = metrics.get_summary()
 
-        assert summary["success_rate"]==100.0
+        assert summary["success_rate"] == 100.0
         print(f"大数据处理性能: {summary}")
 
 
@@ -286,8 +286,7 @@ class TestRateLimitPerformance:
 
             # 清理过期记录
             rate_limit_store[client_id] = [
-                t for t in rate_limit_store[client_id]
-                if current_time - t < 60
+                t for t in rate_limit_store[client_id] if current_time - t < 60
             ]
 
             # 检查限流
@@ -298,7 +297,7 @@ class TestRateLimitPerformance:
             end_time = time.time()
             metrics.record_response(end_time - start_time, allowed)
 
-            if i % 100==0:
+            if i % 100 == 0:
                 metrics.record_system_metrics()
 
         metrics.stop_monitoring()
@@ -324,7 +323,7 @@ class TestServiceDiscoveryPerformance:
             services[service_name] = {
                 "host": f"192.168.1.{i % 255}",
                 "port": 8000 + i,
-                "healthy": True
+                "healthy": True,
             }
 
         metrics.start_monitoring()
@@ -339,13 +338,13 @@ class TestServiceDiscoveryPerformance:
             end_time = time.time()
             metrics.record_response(end_time - start_time, service_info is not None)
 
-            if i % 100==0:
+            if i % 100 == 0:
                 metrics.record_system_metrics()
 
         metrics.stop_monitoring()
         summary = metrics.get_summary()
 
-        assert summary["success_rate"]==100.0
+        assert summary["success_rate"] == 100.0
         assert summary["response_times"]["mean"] < 0.0001
         print(f"服务发现性能: {summary}")
 
@@ -361,16 +360,16 @@ async def test_end_to_end_performance() -> None:
         start_time = time.time()
 
         # 模拟各个处理阶段
-        await asyncio.sleep(0.001)   # 认证
+        await asyncio.sleep(0.001)  # 认证
         await asyncio.sleep(0.0005)  # 限流
         await asyncio.sleep(0.0002)  # 缓存检查
-        await asyncio.sleep(0.005)   # 后端调用
+        await asyncio.sleep(0.005)  # 后端调用
         await asyncio.sleep(0.0001)  # 响应处理
 
         end_time = time.time()
         metrics.record_response(end_time - start_time, True)
 
-        if i % 10==0:
+        if i % 10 == 0:
             metrics.record_system_metrics()
 
     metrics.stop_monitoring()
@@ -378,11 +377,11 @@ async def test_end_to_end_performance() -> None:
 
     # 端到端性能要求
     assert summary["response_times"]["mean"] < 0.01  # 10ms
-    assert summary["response_times"]["p95"] < 0.02   # 20ms
-    assert summary["success_rate"]==100.0
+    assert summary["response_times"]["p95"] < 0.02  # 20ms
+    assert summary["success_rate"] == 100.0
 
     print(f"端到端性能测试: {summary}")
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     pytest.main([__file__, " - v", " - s"])

@@ -2,19 +2,21 @@
 oauth2_provider - 索克生活项目模块
 """
 
-from ..core.config import get_settings
-from ..core.logging import get_logger
-from cryptography.hazmat.primitives import serialization
-from cryptography.hazmat.primitives.asymmetric import rsa
-from dataclasses import dataclass, asdict
-from enum import Enum
-from typing import Dict, Any, Optional, List, Set
-from urllib.parse import urlencode, parse_qs, urlparse
 import base64
 import hashlib
-import jwt
 import secrets
 import time
+from dataclasses import asdict, dataclass
+from enum import Enum
+from typing import Any, Dict, List, Optional, Set
+from urllib.parse import parse_qs, urlencode, urlparse
+
+import jwt
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric import rsa
+
+from ..core.config import get_settings
+from ..core.logging import get_logger
 
 #! / usr / bin / env python
 # - * - coding: utf - 8 - * -

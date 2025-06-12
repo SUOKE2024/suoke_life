@@ -2,14 +2,16 @@
 tracing - 索克生活项目模块
 """
 
-from ..core.config import get_settings
-from ..core.logging import get_logger
+import time
+from typing import Optional
+
 from fastapi import Request, Response
 from opentelemetry import trace
 from opentelemetry.trace import Status, StatusCode
 from starlette.middleware.base import BaseHTTPMiddleware
-from typing import Optional
-import time
+
+from ..core.config import get_settings
+from ..core.logging import get_logger
 
 """
 链路追踪中间件

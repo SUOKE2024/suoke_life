@@ -2,18 +2,19 @@
 monitor - 索克生活项目模块
 """
 
+import argparse
+import asyncio
+import json
 from datetime import datetime, timedelta
 from pathlib import Path
+from typing import Any, Dict, List
+
+import httpx
 from rich.console import Console
 from rich.layout import Layout
 from rich.live import Live
 from rich.panel import Panel
 from rich.text import Text
-from typing import Dict, Any, List
-import argparse
-import asyncio
-import httpx
-import json
 
 #! / usr / bin / env python
 # - * - coding: utf - 8 - * -

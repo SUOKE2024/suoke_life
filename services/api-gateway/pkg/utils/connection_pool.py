@@ -2,13 +2,14 @@
 connection_pool - 索克生活项目模块
 """
 
-from aiohttp import ClientSession, ClientTimeout, TCPConnector
-from dataclasses import dataclass
-from typing import Dict, Optional, Set
-from urllib.parse import urlparse
 import asyncio
 import logging
 import time
+from dataclasses import dataclass
+from typing import Dict, Optional, Set
+from urllib.parse import urlparse
+
+from aiohttp import ClientSession, ClientTimeout, TCPConnector
 
 #! / usr / bin / env python
 # - * - coding: utf - 8 - * -

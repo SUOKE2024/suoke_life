@@ -1,14 +1,16 @@
-from typing import Dict, List, Any, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 """
 gateway - 索克生活项目模块
 """
 
+import time
+
+import httpx
+from fastapi import APIRouter, HTTPException, Request, Response, status
+
 from ..core.logging import get_logger
 from ..services.service_registry import ServiceRegistry
-from fastapi import APIRouter, HTTPException, Request, Response, status
-import httpx
-import time
 
 """
 网关路由处理器

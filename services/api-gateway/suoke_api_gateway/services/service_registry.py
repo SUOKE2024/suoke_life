@@ -2,15 +2,17 @@
 service_registry - 索克生活项目模块
 """
 
-from ..core.config import ServiceConfig, Settings
-from ..core.logging import get_logger
-from datetime import datetime, timedelta
-from pydantic import BaseModel
-from typing import Dict, List, Optional
 import asyncio
-import httpx
 import random
 import time
+from datetime import datetime, timedelta
+from typing import Dict, List, Optional
+
+import httpx
+from pydantic import BaseModel
+
+from ..core.config import ServiceConfig, Settings
+from ..core.logging import get_logger
 
 """
 服务注册表

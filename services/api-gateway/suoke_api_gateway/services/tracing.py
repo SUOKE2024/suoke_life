@@ -2,24 +2,26 @@
 tracing - 索克生活项目模块
 """
 
-from ..core.config import get_settings
-from ..core.logging import get_logger
+import time
+import uuid
 from contextlib import contextmanager
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 from enum import Enum
+from typing import Any, Callable, Dict, List, Optional
+
 from opentelemetry import trace
 from opentelemetry.exporter.jaeger.thrift import JaegerExporter
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from opentelemetry.instrumentation.redis import RedisInstrumentor
 from opentelemetry.instrumentation.requests import RequestsInstrumentor
-from opentelemetry.propagate import inject, extract
+from opentelemetry.propagate import extract, inject
 from opentelemetry.sdk.resources import Resource
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.trace.status import Status, StatusCode
-from typing import Dict, Any, Optional, List, Callable
-import time
-import uuid
+
+from ..core.config import get_settings
+from ..core.logging import get_logger
 
 #! / usr / bin / env python
 # - * - coding: utf - 8 - * -

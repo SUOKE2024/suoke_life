@@ -4,8 +4,8 @@ websocket_client - 索克生活项目模块
 
 import asyncio
 import json
-from typing import Any
 import uuid
+from typing import Any
 
 import websockets
 from websockets.exceptions import ConnectionClosed

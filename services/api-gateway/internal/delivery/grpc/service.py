@@ -7,7 +7,6 @@ import logging
 
 import grpc
 import httpx
-
 from internal.model.config import GatewayConfig
 from internal.service.service_registry import ServiceRegistry
 

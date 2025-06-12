@@ -4,9 +4,8 @@ service_registry - 索克生活项目模块
 
 import logging
 
-from kubernetes_asyncio import client
-
 from internal.model.config import ServiceConfig, ServiceEndpointConfig
+from kubernetes_asyncio import client
 
 #! / usr / bin / env python
 # - * - coding: utf - 8 - * -

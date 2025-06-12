@@ -2,19 +2,26 @@
 middleware - 索克生活项目模块
 """
 
-from fastapi import FastAPI, Request, Response
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.gzip import GZipMiddleware
-from fastapi.responses import JSONResponse
-from internal.model.config import GatewayConfig, AuthConfig, CorsConfig, MiddlewareConfig, RateLimitConfig
-from pkg.utils.auth import JWTManager
-from starlette.middleware.base import BaseHTTPMiddleware
-from starlette.middleware.trustedhost import TrustedHostMiddleware
-from typing import Callable, Dict, List, Optional, Set, Union
 import fnmatch
 import logging
 import time
 import uuid
+from typing import Callable, Dict, List, Optional, Set, Union
+
+from fastapi import FastAPI, Request, Response
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
+from fastapi.responses import JSONResponse
+from internal.model.config import (
+    AuthConfig,
+    CorsConfig,
+    GatewayConfig,
+    MiddlewareConfig,
+    RateLimitConfig,
+)
+from pkg.utils.auth import JWTManager
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 #! / usr / bin / env python
 # - * - coding: utf - 8 - * -

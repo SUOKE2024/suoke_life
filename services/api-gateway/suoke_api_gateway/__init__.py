@@ -19,18 +19,21 @@ try:
     from .core.config import Settings, get_settings
 except ImportError as e:
     print(f"警告: 部分模块导入失败: {e}")
-    
+
     def create_app():
         """应用创建占位符"""
         from fastapi import FastAPI
+
         return FastAPI(title="索克生活API网关", version=__version__)
-    
+
     class Settings:
         """配置占位符"""
+
         pass
-    
+
     def get_settings():
         """配置获取占位符"""
         return Settings()
+
 
 __all__ = ["create_app", "Settings", "get_settings"]

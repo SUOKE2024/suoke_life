@@ -2,26 +2,28 @@
 optimized_async_gateway - 索克生活项目模块
 """
 
-from aiohttp import web, ClientSession, ClientTimeout
-from aiohttp_cors import setup as cors_setup, ResourceOptions
-from collections import defaultdict, deque
-from dataclasses import dataclass, asdict
-from datetime import datetime, timedelta
-from functools import wraps
-from typing import Dict, List, Any, Optional, Callable, Union
-import aiohttp
-import aioredis
 import asyncio
-import asyncpg
-import certifi
 import hashlib
 import json
-import jwt
 import logging
-import psutil
 import ssl
 import time
 import uuid
+from collections import defaultdict, deque
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
+from functools import wraps
+from typing import Any, Callable, Dict, List, Optional, Union
+
+import aiohttp
+import aioredis
+import asyncpg
+import certifi
+import jwt
+import psutil
+from aiohttp import ClientSession, ClientTimeout, web
+from aiohttp_cors import ResourceOptions
+from aiohttp_cors import setup as cors_setup
 
 #! / usr / bin / env python3
 """
@@ -31,12 +33,14 @@ import uuid
 
 
 # 配置日志
-logging.basicConfig(level = logging.INFO)
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
 
 @dataclass
 class ServiceEndpoint:
     """服务端点配置"""
+
     name: str
     url: str
     health_check_path: str = " / health"
@@ -54,9 +58,11 @@ class ServiceEndpoint:
         if self.last_health_check is None:
             self.last_health_check = datetime.now()
 
+
 @dataclass
 class RequestMetrics:
     """请求指标"""
+
     request_id: str
     method: str
     path: str
@@ -67,6 +73,7 @@ class RequestMetrics:
     status_code: int = 0
     error_message: Optional[str] = None
     user_id: Optional[str] = None
+
 
 class CircuitBreaker:
     """熔断器"""
@@ -81,16 +88,17 @@ class CircuitBreaker:
 
     def call(self, func: Callable) -> Callable:
         """装饰器：熔断器调用"""
+
         @wraps(func)
-        async def wrapper(*args,**kwargs):
-            if self.state=="OPEN":
+        async def wrapper(*args, **kwargs):
+            if self.state == "OPEN":
                 if self._should_attempt_reset():
                     self.state = "HALF_OPEN"
                 else:
                     raise Exception("Circuit breaker is OPEN")
 
             try:
-                result = await func(*args,**kwargs)
+                result = await func(*args, **kwargs)
                 self._on_success()
                 return result
             except Exception as e:
@@ -102,8 +110,9 @@ class CircuitBreaker:
     def _should_attempt_reset(self) -> bool:
         """是否应该尝试重置"""
         return (
-            self.last_failure_time and
-            datetime.now() - self.last_failure_time > timedelta(seconds=self.recovery_timeout)
+            self.last_failure_time
+            and datetime.now() - self.last_failure_time
+            > timedelta(seconds=self.recovery_timeout)
         )
 
     def _on_success(self) -> None:
@@ -113,11 +122,12 @@ class CircuitBreaker:
 
     def _on_failure(self) -> None:
         """失败时的处理"""
-        self.failure_count+=1
+        self.failure_count += 1
         self.last_failure_time = datetime.now()
 
-        if self.failure_count>=self.failure_threshold:
+        if self.failure_count >= self.failure_threshold:
             self.state = "OPEN"
+
 
 class LoadBalancer:
     """智能负载均衡器"""
@@ -146,25 +156,29 @@ class LoadBalancer:
         if not healthy_endpoints:
             return None
 
-        if self.strategy=="round_robin":
+        if self.strategy == "round_robin":
             return self._round_robin_select(service_name, healthy_endpoints)
-        elif self.strategy=="weighted_round_robin":
+        elif self.strategy == "weighted_round_robin":
             return self._weighted_round_robin_select(service_name, healthy_endpoints)
-        elif self.strategy=="least_response_time":
+        elif self.strategy == "least_response_time":
             return self._least_response_time_select(healthy_endpoints)
         else:
             return healthy_endpoints[0]
 
-    def _round_robin_select(self, service_name: str, endpoints: List[ServiceEndpoint]) -> ServiceEndpoint:
+    def _round_robin_select(
+        self, service_name: str, endpoints: List[ServiceEndpoint]
+    ) -> ServiceEndpoint:
         """轮询选择"""
         index = self.current_index[service_name] % len(endpoints)
-        self.current_index[service_name]+=1
+        self.current_index[service_name] += 1
         return endpoints[index]
 
-    def _weighted_round_robin_select(self, service_name: str, endpoints: List[ServiceEndpoint]) -> ServiceEndpoint:
+    def _weighted_round_robin_select(
+        self, service_name: str, endpoints: List[ServiceEndpoint]
+    ) -> ServiceEndpoint:
         """加权轮询选择"""
         total_weight = sum(ep.weight for ep in endpoints)
-        if total_weight==0:
+        if total_weight == 0:
             return endpoints[0]
 
         # 简化的加权轮询实现
@@ -172,34 +186,39 @@ class LoadBalancer:
         cumulative_weight = 0
 
         for endpoint in endpoints:
-            cumulative_weight+=endpoint.weight
+            cumulative_weight += endpoint.weight
             if current < cumulative_weight:
-                self.current_index[service_name]+=1
+                self.current_index[service_name] += 1
                 return endpoint
 
         return endpoints[0]
 
-    def _least_response_time_select(self, endpoints: List[ServiceEndpoint]) -> ServiceEndpoint:
+    def _least_response_time_select(
+        self, endpoints: List[ServiceEndpoint]
+    ) -> ServiceEndpoint:
         """最少响应时间选择"""
+
         def avg_response_time(endpoint: ServiceEndpoint) -> float:
             """TODO: 添加文档字符串"""
             if not endpoint.response_times:
                 return 0.0
             return sum(endpoint.response_times) / len(endpoint.response_times)
 
-        return min(endpoints, key = avg_response_time)
+        return min(endpoints, key=avg_response_time)
 
-    def record_response_time(self, service_name: str, endpoint_url: str, response_time: float):
+    def record_response_time(
+        self, service_name: str, endpoint_url: str, response_time: float
+    ):
         """记录响应时间"""
         for endpoint in self.services[service_name]:
-            if endpoint.url==endpoint_url:
+            if endpoint.url == endpoint_url:
                 endpoint.response_times.append(response_time)
                 break
 
     def mark_unhealthy(self, service_name: str, endpoint_url: str):
         """标记端点为不健康"""
         for endpoint in self.services[service_name]:
-            if endpoint.url==endpoint_url:
+            if endpoint.url == endpoint_url:
                 endpoint.is_healthy = False
                 logger.warning(f"标记端点为不健康: {service_name} -> {endpoint_url}")
                 break
@@ -207,10 +226,11 @@ class LoadBalancer:
     def mark_healthy(self, service_name: str, endpoint_url: str):
         """标记端点为健康"""
         for endpoint in self.services[service_name]:
-            if endpoint.url==endpoint_url:
+            if endpoint.url == endpoint_url:
                 endpoint.is_healthy = True
                 logger.info(f"标记端点为健康: {service_name} -> {endpoint_url}")
                 break
+
 
 class RateLimiter:
     """速率限制器"""
@@ -236,6 +256,7 @@ class RateLimiter:
 
         return current_requests < limit
 
+
 class CacheManager:
     """缓存管理器"""
 
@@ -256,7 +277,7 @@ class CacheManager:
     async def set(self, key: str, value: Any, ttl: int = 300):
         """设置缓存"""
         try:
-            await self.redis.setex(key, ttl, json.dumps(value, default = str))
+            await self.redis.setex(key, ttl, json.dumps(value, default=str))
         except Exception as e:
             logger.error(f"缓存设置失败: {key}, 错误: {e}")
 
@@ -277,6 +298,7 @@ class CacheManager:
 
         key_string = "|".join(key_parts)
         return f"api_cache:{hashlib.md5(key_string.encode()).hexdigest()}"
+
 
 class MetricsCollector:
     """指标收集器"""
@@ -299,46 +321,60 @@ class MetricsCollector:
         async with self.metrics_lock:
             now = datetime.now()
             recent_metrics = [
-                m for m in self.metrics
-                if m.start_time > now - timedelta(seconds = time_window)
+                m
+                for m in self.metrics
+                if m.start_time > now - timedelta(seconds=time_window)
             ]
 
             if not recent_metrics:
                 return {}
 
             total_requests = len(recent_metrics)
-            successful_requests = len([m for m in recent_metrics if 200<=m.status_code < 400])
+            successful_requests = len(
+                [m for m in recent_metrics if 200 <= m.status_code < 400]
+            )
             failed_requests = total_requests - successful_requests
 
-            response_times = [m.response_time for m in recent_metrics if m.response_time > 0]
-            avg_response_time = sum(response_times) / len(response_times) if response_times else 0
+            response_times = [
+                m.response_time for m in recent_metrics if m.response_time > 0
+            ]
+            avg_response_time = (
+                sum(response_times) / len(response_times) if response_times else 0
+            )
 
             # 按服务统计
-            service_stats = defaultdict(lambda: {"count": 0, "errors": 0, "total_time": 0})
+            service_stats = defaultdict(
+                lambda: {"count": 0, "errors": 0, "total_time": 0}
+            )
             for metric in recent_metrics:
-                service_stats[metric.service]["count"]+=1
-                if metric.status_code>=400:
-                    service_stats[metric.service]["errors"]+=1
-                service_stats[metric.service]["total_time"]+=metric.response_time
+                service_stats[metric.service]["count"] += 1
+                if metric.status_code >= 400:
+                    service_stats[metric.service]["errors"] += 1
+                service_stats[metric.service]["total_time"] += metric.response_time
 
             return {
                 "time_window": time_window,
                 "total_requests": total_requests,
                 "successful_requests": successful_requests,
                 "failed_requests": failed_requests,
-                "success_rate": successful_requests / total_requests if total_requests > 0 else 0,
+                "success_rate": (
+                    successful_requests / total_requests if total_requests > 0 else 0
+                ),
                 "average_response_time": avg_response_time,
                 "requests_per_second": total_requests / time_window,
-                "service_stats": dict(service_stats)
+                "service_stats": dict(service_stats),
             }
+
 
 class OptimizedAsyncGateway:
     """优化后的异步API网关"""
 
-    def __init__(self,
-                redis_url: str = "redis: / /localhost:6379",
-                database_url: Optional[str] = None,
-                jwt_secret: str = "your - secret - key"):
+    def __init__(
+        self,
+        redis_url: str = "redis: / /localhost:6379",
+        database_url: Optional[str] = None,
+        jwt_secret: str = "your - secret - key",
+    ):
         self.redis_url = redis_url
         self.database_url = database_url
         self.jwt_secret = jwt_secret
@@ -369,23 +405,18 @@ class OptimizedAsyncGateway:
         self.cache_manager = CacheManager(self.redis_client)
 
         # 初始化HTTP客户端
-        timeout = ClientTimeout(total = 30, connect = 10)
+        timeout = ClientTimeout(total=30, connect=10)
         connector = aiohttp.TCPConnector(
-            limit = 100,  # 总连接池大小
-            limit_per_host = 20,  # 每个主机的连接数
-            ssl = ssl.create_default_context(cafile = certifi.where())
+            limit=100,  # 总连接池大小
+            limit_per_host=20,  # 每个主机的连接数
+            ssl=ssl.create_default_context(cafile=certifi.where()),
         )
-        self.client_session = ClientSession(
-            timeout = timeout,
-            connector = connector
-        )
+        self.client_session = ClientSession(timeout=timeout, connector=connector)
 
         # 初始化数据库连接池
         if self.database_url:
             self.db_pool = await asyncpg.create_pool(
-                self.database_url,
-                min_size = 5,
-                max_size = 20
+                self.database_url, min_size=5, max_size=20
             )
 
         # 初始化Web应用
@@ -401,26 +432,33 @@ class OptimizedAsyncGateway:
 
     def _setup_web_app(self) -> None:
         """设置Web应用"""
-        self.app = web.Application(middlewares = [
-            self._auth_middleware,
-            self._rate_limit_middleware,
-            self._cache_middleware,
-            self._metrics_middleware,
-            self._error_handling_middleware
-        ])
+        self.app = web.Application(
+            middlewares=[
+                self._auth_middleware,
+                self._rate_limit_middleware,
+                self._cache_middleware,
+                self._metrics_middleware,
+                self._error_handling_middleware,
+            ]
+        )
 
         # 设置CORS
-        cors = cors_setup(self.app, defaults = {
-            " * ": ResourceOptions(
-                allow_credentials = True,
-                expose_headers = " * ",
-                allow_headers = " * ",
-                allow_methods = " * "
-            )
-        })
+        cors = cors_setup(
+            self.app,
+            defaults={
+                " * ": ResourceOptions(
+                    allow_credentials=True,
+                    expose_headers=" * ",
+                    allow_headers=" * ",
+                    allow_methods=" * ",
+                )
+            },
+        )
 
         # 注册路由
-        self.app.router.add_route(" * ", " / api / {service} / {path:. * }", self._proxy_handler)
+        self.app.router.add_route(
+            " * ", " / api / {service} / {path:. * }", self._proxy_handler
+        )
         self.app.router.add_get(" / health", self._health_handler)
         self.app.router.add_get(" / metrics", self._metrics_handler)
 
@@ -439,19 +477,19 @@ class OptimizedAsyncGateway:
             ("auth", "http: / /auth - service:8005"),
             ("user", "http: / /user - service:8006"),
             ("health - data", "http: / /health - data - service:8007"),
-            ("medical - resource", "http: / /medical - resource - service:8008")
+            ("medical - resource", "http: / /medical - resource - service:8008"),
         ]
 
         for service_name, url in services:
             endpoint = ServiceEndpoint(
-                name = f"{service_name} - primary",
-                url = url,
-                weight = 1
+                name=f"{service_name} - primary", url=url, weight=1
             )
             self.load_balancer.add_service(service_name, endpoint)
 
     @web.middleware
-    async def _auth_middleware(self, request: web.Request, handler: Callable) -> web.Response:
+    async def _auth_middleware(
+        self, request: web.Request, handler: Callable
+    ) -> web.Response:
         """认证中间件"""
         # 跳过健康检查和指标端点
         if request.path in [" / health", " / metrics"]:
@@ -462,25 +500,23 @@ class OptimizedAsyncGateway:
         if auth_header and auth_header.startswith("Bearer "):
             token = auth_header[7:]
             try:
-                payload = jwt.decode(token, self.jwt_secret, algorithms = ["HS256"])
+                payload = jwt.decode(token, self.jwt_secret, algorithms=["HS256"])
                 request["user"] = payload
             except jwt.InvalidTokenError:
-                return web.json_response(
-                    {"error": "Invalid token"},
-                    status = 401
-                )
+                return web.json_response({"error": "Invalid token"}, status=401)
         else:
             # 对于某些公开端点，可以跳过认证
             if not request.path.startswith(" / api / auth / "):
                 return web.json_response(
-                    {"error": "Authentication required"},
-                    status = 401
+                    {"error": "Authentication required"}, status=401
                 )
 
         return await handler(request)
 
     @web.middleware
-    async def _rate_limit_middleware(self, request: web.Request, handler: Callable) -> web.Response:
+    async def _rate_limit_middleware(
+        self, request: web.Request, handler: Callable
+    ) -> web.Response:
         """速率限制中间件"""
         # 获取客户端标识
         client_id = request.remote
@@ -489,26 +525,23 @@ class OptimizedAsyncGateway:
 
         # 检查速率限制
         rate_limit_key = f"rate_limit:{client_id}"
-        if not await self.rate_limiter.is_allowed(rate_limit_key, limit = 100, window = 60):
-            return web.json_response(
-                {"error": "Rate limit exceeded"},
-                status = 429
-            )
+        if not await self.rate_limiter.is_allowed(rate_limit_key, limit=100, window=60):
+            return web.json_response({"error": "Rate limit exceeded"}, status=429)
 
         return await handler(request)
 
     @web.middleware
-    async def _cache_middleware(self, request: web.Request, handler: Callable) -> web.Response:
+    async def _cache_middleware(
+        self, request: web.Request, handler: Callable
+    ) -> web.Response:
         """缓存中间件"""
         # 只缓存GET请求
-        if request.method!="GET":
+        if request.method != "GET":
             return await handler(request)
 
         # 生成缓存键
         cache_key = self.cache_manager.generate_cache_key(
-            request.method,
-            request.path_qs,
-            dict(request.query)
+            request.method, request.path_qs, dict(request.query)
         )
 
         # 尝试从缓存获取
@@ -520,17 +553,19 @@ class OptimizedAsyncGateway:
         response = await handler(request)
 
         # 缓存成功响应
-        if response.status==200 and response.content_type=="application / json":
+        if response.status == 200 and response.content_type == "application / json":
             try:
                 response_data = json.loads(response.text)
-                await self.cache_manager.set(cache_key, response_data, ttl = 300)
+                await self.cache_manager.set(cache_key, response_data, ttl=300)
             except:
                 pass  # 忽略缓存错误
 
         return response
 
     @web.middleware
-    async def _metrics_middleware(self, request: web.Request, handler: Callable) -> web.Response:
+    async def _metrics_middleware(
+        self, request: web.Request, handler: Callable
+    ) -> web.Response:
         """指标收集中间件"""
         start_time = datetime.now()
         request_id = str(uuid.uuid4())
@@ -539,7 +574,7 @@ class OptimizedAsyncGateway:
         service_name = "unknown"
         if request.path.startswith("/api/"):
             path_parts = request.path.split("/")
-            if len(path_parts)>=3:
+            if len(path_parts) >= 3:
                 service_name = path_parts[2]
 
         try:
@@ -547,15 +582,15 @@ class OptimizedAsyncGateway:
 
             # 记录成功指标
             metrics = RequestMetrics(
-                request_id = request_id,
-                method = request.method,
-                path = request.path,
-                service = service_name,
-                start_time = start_time,
-                end_time = datetime.now(),
-                response_time = (datetime.now() - start_time).total_seconds(),
-                status_code = response.status,
-                user_id = request.get("user", {}).get("user_id")
+                request_id=request_id,
+                method=request.method,
+                path=request.path,
+                service=service_name,
+                start_time=start_time,
+                end_time=datetime.now(),
+                response_time=(datetime.now() - start_time).total_seconds(),
+                status_code=response.status,
+                user_id=request.get("user", {}).get("user_id"),
             )
 
             await self.metrics_collector.record_request(metrics)
@@ -564,23 +599,25 @@ class OptimizedAsyncGateway:
         except Exception as e:
             # 记录错误指标
             metrics = RequestMetrics(
-                request_id = request_id,
-                method = request.method,
-                path = request.path,
-                service = service_name,
-                start_time = start_time,
-                end_time = datetime.now(),
-                response_time = (datetime.now() - start_time).total_seconds(),
-                status_code = 500,
-                error_message = str(e),
-                user_id = request.get("user", {}).get("user_id")
+                request_id=request_id,
+                method=request.method,
+                path=request.path,
+                service=service_name,
+                start_time=start_time,
+                end_time=datetime.now(),
+                response_time=(datetime.now() - start_time).total_seconds(),
+                status_code=500,
+                error_message=str(e),
+                user_id=request.get("user", {}).get("user_id"),
             )
 
             await self.metrics_collector.record_request(metrics)
             raise
 
     @web.middleware
-    async def _error_handling_middleware(self, request: web.Request, handler: Callable) -> web.Response:
+    async def _error_handling_middleware(
+        self, request: web.Request, handler: Callable
+    ) -> web.Response:
         """错误处理中间件"""
         try:
             return await handler(request)
@@ -589,8 +626,7 @@ class OptimizedAsyncGateway:
         except Exception as e:
             logger.error(f"请求处理错误: {request.path}, 错误: {e}")
             return web.json_response(
-                {"error": "Internal server error", "message": str(e)},
-                status = 500
+                {"error": "Internal server error", "message": str(e)}, status=500
             )
 
     async def _proxy_handler(self, request: web.Request) -> web.Response:
@@ -603,14 +639,13 @@ class OptimizedAsyncGateway:
         endpoint = self.load_balancer.get_endpoint(service_name)
         if not endpoint:
             return web.json_response(
-                {"error": f"Service {service_name} not available"},
-                status = 503
+                {"error": f"Service {service_name} not available"}, status=503
             )
 
         # 构建目标URL
         target_url = f"{endpoint.url} / {path}"
         if request.query_string:
-            target_url+=f"?{request.query_string}"
+            target_url += f"?{request.query_string}"
 
         # 准备请求数据
         headers = dict(request.headers)
@@ -625,11 +660,11 @@ class OptimizedAsyncGateway:
         try:
             # 发送请求
             async with self.client_session.request(
-                method = request.method,
-                url = target_url,
-                headers = headers,
-                data = data,
-                timeout = ClientTimeout(total = endpoint.timeout)
+                method=request.method,
+                url=target_url,
+                headers=headers,
+                data=data,
+                timeout=ClientTimeout(total=endpoint.timeout),
             ) as response:
                 response_time = time.time() - start_time
 
@@ -643,32 +678,26 @@ class OptimizedAsyncGateway:
 
                 # 构建响应
                 return web.Response(
-                    body = response_data,
-                    status = response.status,
-                    headers = response.headers,
-                    content_type = response.content_type
+                    body=response_data,
+                    status=response.status,
+                    headers=response.headers,
+                    content_type=response.content_type,
                 )
 
         except asyncio.TimeoutError:
             self.load_balancer.mark_unhealthy(service_name, endpoint.url)
-            return web.json_response(
-                {"error": "Service timeout"},
-                status = 504
-            )
+            return web.json_response({"error": "Service timeout"}, status=504)
         except Exception as e:
             self.load_balancer.mark_unhealthy(service_name, endpoint.url)
             logger.error(f"代理请求失败: {target_url}, 错误: {e}")
-            return web.json_response(
-                {"error": "Service unavailable"},
-                status = 503
-            )
+            return web.json_response({"error": "Service unavailable"}, status=503)
 
     async def _health_handler(self, request: web.Request) -> web.Response:
         """健康检查处理器"""
         health_status = {
             "status": "healthy",
             "timestamp": datetime.now().isoformat(),
-            "services": {}
+            "services": {},
         }
 
         # 检查各服务健康状态
@@ -679,7 +708,7 @@ class OptimizedAsyncGateway:
             health_status["services"][service_name] = {
                 "healthy_endpoints": healthy_count,
                 "total_endpoints": total_count,
-                "status": "healthy" if healthy_count > 0 else "unhealthy"
+                "status": "healthy" if healthy_count > 0 else "unhealthy",
             }
 
         return web.json_response(health_status)
@@ -692,7 +721,7 @@ class OptimizedAsyncGateway:
         metrics["system"] = {
             "cpu_percent": psutil.cpu_percent(),
             "memory_percent": psutil.virtual_memory().percent,
-            "disk_percent": psutil.disk_usage(" / ").percent
+            "disk_percent": psutil.disk_usage(" / ").percent,
         }
 
         return web.json_response(metrics)
@@ -719,18 +748,19 @@ class OptimizedAsyncGateway:
                 tasks.append(task)
 
         if tasks:
-            await asyncio.gather( * tasks, return_exceptions = True)
+            await asyncio.gather(*tasks, return_exceptions=True)
 
-    async def _check_endpoint_health(self, service_name: str, endpoint: ServiceEndpoint):
+    async def _check_endpoint_health(
+        self, service_name: str, endpoint: ServiceEndpoint
+    ):
         """检查端点健康状态"""
         health_url = f"{endpoint.url}{endpoint.health_check_path}"
 
         try:
             async with self.client_session.get(
-                health_url,
-                timeout = ClientTimeout(total = 5)
+                health_url, timeout=ClientTimeout(total=5)
             ) as response:
-                if response.status==200:
+                if response.status == 200:
                     if not endpoint.is_healthy:
                         self.load_balancer.mark_healthy(service_name, endpoint.url)
                 else:
@@ -777,16 +807,18 @@ class OptimizedAsyncGateway:
 
         logger.info("异步API网关已关闭")
 
+
 # 使用示例
 async def main() -> None:
     """主函数"""
     gateway = OptimizedAsyncGateway(
-        redis_url = "redis: / /localhost:6379",
-        database_url = None,  # 如果有数据库，提供连接字符串
-        jwt_secret = "your - secret - key"
+        redis_url="redis: / /localhost:6379",
+        database_url=None,  # 如果有数据库，提供连接字符串
+        jwt_secret="your - secret - key",
     )
 
-    await gateway.start_server(host = "0.0.0.0", port = 8000)
+    await gateway.start_server(host="0.0.0.0", port=8000)
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     asyncio.run(main())

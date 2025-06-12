@@ -2,11 +2,12 @@
 circuit_breaker - 索克生活项目模块
 """
 
-from enum import Enum
-from internal.model.config import CircuitBreakerConfig
-from typing import Dict, Optional
 import logging
 import time
+from enum import Enum
+from typing import Dict, Optional
+
+from internal.model.config import CircuitBreakerConfig
 
 #! / usr / bin / env python
 # - * - coding: utf - 8 - * -

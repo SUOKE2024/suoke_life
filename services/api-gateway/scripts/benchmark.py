@@ -2,18 +2,19 @@
 benchmark - 索克生活项目模块
 """
 
-from dataclasses import dataclass, asdict
-from datetime import datetime, timedelta
-from rich.console import Console
-from rich.progress import Progress, BarColumn, TextColumn, TimeRemainingColumn
-from rich.table import Table
-from typing import Dict, List, Any, Optional
-import aiohttp
 import argparse
 import asyncio
 import json
 import statistics
 import time
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional
+
+import aiohttp
+from rich.console import Console
+from rich.progress import BarColumn, Progress, TextColumn, TimeRemainingColumn
+from rich.table import Table
 
 #! / usr / bin / env python
 # - * - coding: utf - 8 - * -

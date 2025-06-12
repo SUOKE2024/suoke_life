@@ -2,15 +2,16 @@
 smart_load_balancer - 索克生活项目模块
 """
 
-from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Dict, List, Optional, Tuple
-import aiohttp
 import asyncio
 import logging
 import random
 import time
+from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Dict, List, Optional, Tuple
+
+import aiohttp
 
 #! / usr / bin / env python
 # - * - coding: utf - 8 - * -

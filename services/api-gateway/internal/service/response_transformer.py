@@ -5,7 +5,6 @@ response_transformer - 索克生活项目模块
 import logging
 
 from fastapi import Response
-
 from internal.model.config import GatewayConfig
 
 #! / usr / bin / env python

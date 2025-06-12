@@ -2,16 +2,15 @@
 test_auth - 索克生活项目模块
 """
 
-from datetime import UTC, datetime, timedelta
 import os
 import sys
 import time
+from datetime import UTC, datetime, timedelta
 
-from fastapi import FastAPI, HTTPException, Request
-from fastapi.testclient import TestClient
 import jwt
 import pytest
-
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.testclient import TestClient
 from internal.delivery.rest.middleware import AuthMiddleware, setup_middlewares
 from internal.model.config import AuthConfig, JwtConfig, MiddlewareConfig
 from pkg.utils.auth import JWTManager

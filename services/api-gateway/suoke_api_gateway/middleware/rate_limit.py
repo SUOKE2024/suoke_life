@@ -1,16 +1,18 @@
-from typing import Dict, List, Any, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 """
 rate_limit - 索克生活项目模块
 """
 
-from ..core.config import get_settings
-from ..core.logging import get_logger, log_security_event
+import time
+
 from fastapi import Request, Response, status
 from limits import RateLimitItemPerSecond, parse
 from limits.storage import RedisStorage
 from starlette.middleware.base import BaseHTTPMiddleware
-import time
+
+from ..core.config import get_settings
+from ..core.logging import get_logger, log_security_event
 
 """
 限流中间件

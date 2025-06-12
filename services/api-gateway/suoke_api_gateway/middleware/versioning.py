@@ -2,13 +2,15 @@
 versioning - 索克生活项目模块
 """
 
-from ..core.logging import get_logger
+import re
 from enum import Enum
+from typing import Dict, List, Optional, Tuple
+
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import JSONResponse
-from typing import Dict, List, Optional, Tuple
-import re
+
+from ..core.logging import get_logger
 
 #! / usr / bin / env python
 # - * - coding: utf - 8 - * -

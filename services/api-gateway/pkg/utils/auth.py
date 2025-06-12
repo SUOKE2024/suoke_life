@@ -2,15 +2,16 @@
 auth - 索克生活项目模块
 """
 
-from datetime import datetime, timedelta, UTC
-from internal.model.config import JwtConfig
-from pydantic import BaseModel
-from typing import Dict, List, Optional, Union
-import jwt
 import logging
-import pydantic
 import time
 import uuid
+from datetime import UTC, datetime, timedelta
+from typing import Dict, List, Optional, Union
+
+import jwt
+import pydantic
+from internal.model.config import JwtConfig
+from pydantic import BaseModel
 
 #! / usr / bin / env python
 # - * - coding: utf - 8 - * -

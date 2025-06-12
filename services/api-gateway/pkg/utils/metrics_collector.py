@@ -2,10 +2,15 @@
 metrics_collector - 索克生活项目模块
 """
 
+import logging
+import time
 from collections import defaultdict, deque
 from contextlib import asynccontextmanager
 from dataclasses import dataclass, field
-from opentelemetry import trace, metrics
+from typing import Any, Callable, Dict, List, Optional
+
+import prometheus_client
+from opentelemetry import metrics, trace
 from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import OTLPMetricExporter
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 from opentelemetry.instrumentation.aiohttp_client import AioHttpClientInstrumentor
@@ -14,11 +19,7 @@ from opentelemetry.sdk.metrics import MeterProvider
 from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from prometheus_client import Counter, Histogram, Gauge, Summary, Info
-from typing import Dict, List, Optional, Any, Callable
-import logging
-import prometheus_client
-import time
+from prometheus_client import Counter, Gauge, Histogram, Info, Summary
 
 #! / usr / bin / env python
 # - * - coding: utf - 8 - * -

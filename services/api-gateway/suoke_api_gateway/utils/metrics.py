@@ -1,15 +1,19 @@
 import platform
 import sys
-from ..core.logging import get_logger
+import time
 from collections import defaultdict, deque
-from prometheus_client import Counter, Histogram, Gauge, CollectorRegistry
 from threading import Lock
 from typing import Dict, List, Optional, Set
-import time
+
+from prometheus_client import CollectorRegistry, Counter, Gauge, Histogram
+
+from ..core.logging import get_logger
+
 
 def main() -> None:
     """主函数 - 自动生成的最小可用版本"""
     pass
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     main()

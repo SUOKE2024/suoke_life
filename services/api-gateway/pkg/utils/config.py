@@ -7,7 +7,6 @@ import os
 from typing import Any
 
 import yaml
-
 from internal.model.config import GatewayConfig
 
 #! / usr / bin / env python

@@ -2,12 +2,14 @@
 gateway_service - 索克生活项目模块
 """
 
+import asyncio
+from typing import AsyncIterator, Dict, List, Optional
+
+import grpc
+
 from ..core.config import Settings
 from ..core.logging import get_logger
 from ..services.service_registry import ServiceRegistry
-from typing import AsyncIterator, Dict, List, Optional
-import asyncio
-import grpc
 
 """
 gRPC 网关服务
