@@ -4,10 +4,10 @@
 基于五诊数据进行中医辨证分析，包括八纲辨证、气血津液辨证、脏腑辨证等
 """
 
-import logging
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
+import logging
 from typing import Any, Dict, List, Tuple
 
 from .five_diagnosis_coordinator import DiagnosisResult, DiagnosisType
@@ -50,9 +50,7 @@ class SyndromeAnalysisResult:
     pathogenesis_summary: str = ""
     treatment_principles: List[str] = field(default_factory=list)
     overall_confidence: float = 0.0
-    analysis_timestamp: datetime = field(
-        default_factory=lambda: datetime.now(timezone.utc)
-    )
+    analysis_timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 class SyndromeAnalyzer:
@@ -242,9 +240,7 @@ class SyndromeAnalyzer:
             syndrome_scores = await self._calculate_syndrome_scores(extracted_features)
 
             # 识别主要证型和次要证型
-            primary_syndromes, secondary_syndromes = await self._identify_syndromes(
-                syndrome_scores
-            )
+            primary_syndromes, secondary_syndromes = await self._identify_syndromes(syndrome_scores)
 
             # 分析证型组合
             syndrome_combinations = await self._analyze_syndrome_combinations(
@@ -276,12 +272,8 @@ class SyndromeAnalyzer:
             logger.info(f"辨证分析完成，识别到 {len(primary_syndromes)} 个主要证型")
 
             return {
-                "primary_syndromes": [
-                    self._syndrome_to_dict(s) for s in primary_syndromes
-                ],
-                "secondary_syndromes": [
-                    self._syndrome_to_dict(s) for s in secondary_syndromes
-                ],
+                "primary_syndromes": [self._syndrome_to_dict(s) for s in primary_syndromes],
+                "secondary_syndromes": [self._syndrome_to_dict(s) for s in secondary_syndromes],
                 "syndrome_combinations": syndrome_combinations,
                 "pathogenesis_summary": pathogenesis_summary,
                 "treatment_principles": treatment_principles,
@@ -301,9 +293,7 @@ class SyndromeAnalyzer:
                 "error": str(e),
             }
 
-    async def _extract_features(
-        self, diagnosis_results: List[DiagnosisResult]
-    ) -> Dict[str, Any]:
+    async def _extract_features(self, diagnosis_results: List[DiagnosisResult]) -> Dict[str, Any]:
         """从诊断结果中提取特征"""
         features = {
             "symptoms": [],
@@ -381,9 +371,7 @@ class SyndromeAnalyzer:
 
         if "conversation_analysis" in result.features:
             conversation = result.features["conversation_analysis"]
-            features["symptoms"] = self._parse_symptoms(
-                conversation.get("chief_complaint", "")
-            )
+            features["symptoms"] = self._parse_symptoms(conversation.get("chief_complaint", ""))
             features["pain_characteristics"] = conversation.get("pain_description", "")
             features["sleep_quality"] = conversation.get("sleep_quality", "")
             features["appetite"] = conversation.get("appetite", "")
@@ -448,9 +436,7 @@ class SyndromeAnalyzer:
 
         return found_symptoms
 
-    async def _calculate_syndrome_scores(
-        self, features: Dict[str, Any]
-    ) -> Dict[str, float]:
+    async def _calculate_syndrome_scores(self, features: Dict[str, Any]) -> Dict[str, float]:
         """计算证型匹配度"""
         syndrome_scores = {}
 
@@ -467,15 +453,11 @@ class SyndromeAnalyzer:
                     score += weight
 
             # 归一化分数
-            syndrome_scores[syndrome_name] = (
-                score / total_weight if total_weight > 0 else 0.0
-            )
+            syndrome_scores[syndrome_name] = score / total_weight if total_weight > 0 else 0.0
 
         return syndrome_scores
 
-    def _feature_matches(
-        self, feature: str, extracted_features: Dict[str, Any]
-    ) -> bool:
+    def _feature_matches(self, feature: str, extracted_features: Dict[str, Any]) -> bool:
         """检查特征是否匹配"""
         # 检查症状列表
         if feature in extracted_features.get("symptoms", []):
@@ -532,9 +514,7 @@ class SyndromeAnalyzer:
     ) -> Tuple[List[SyndromePattern], List[SyndromePattern]]:
         """识别主要证型和次要证型"""
         # 按分数排序
-        sorted_syndromes = sorted(
-            syndrome_scores.items(), key=lambda x: x[1], reverse=True
-        )
+        sorted_syndromes = sorted(syndrome_scores.items(), key=lambda x: x[1], reverse=True)
 
         primary_syndromes = []
         secondary_syndromes = []
@@ -625,17 +605,12 @@ class SyndromeAnalyzer:
         principles = []
 
         for syndrome in primary_syndromes:
-            if (
-                syndrome.treatment_principle
-                and syndrome.treatment_principle not in principles
-            ):
+            if syndrome.treatment_principle and syndrome.treatment_principle not in principles:
                 principles.append(syndrome.treatment_principle)
 
         return principles[:3]  # 限制数量
 
-    def _calculate_overall_confidence(
-        self, primary_syndromes: List[SyndromePattern]
-    ) -> float:
+    def _calculate_overall_confidence(self, primary_syndromes: List[SyndromePattern]) -> float:
         """计算整体置信度"""
         if not primary_syndromes:
             return 0.0

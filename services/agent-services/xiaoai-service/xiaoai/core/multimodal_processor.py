@@ -6,19 +6,19 @@
 
 import asyncio
 import base64
+from dataclasses import dataclass, field
+from datetime import datetime, timezone
+from enum import Enum
 import io
 import logging
 import os
 import tempfile
-from dataclasses import dataclass, field
-from datetime import datetime, timezone
-from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 
+from PIL import Image
 import librosa
 import numpy as np
 import speech_recognition as sr
-from PIL import Image
 from transformers import pipeline
 
 from ..config.settings import get_settings
@@ -124,9 +124,7 @@ class MultimodalProcessor:
             # 初始化语音识别器
             self.processors["audio"] = {
                 "recognizer": sr.Recognizer(),
-                "microphone": (
-                    sr.Microphone() if sr.Microphone.list_microphone_names() else None
-                ),
+                "microphone": (sr.Microphone() if sr.Microphone.list_microphone_names() else None),
             }
 
             # 调整识别器参数
@@ -145,9 +143,7 @@ class MultimodalProcessor:
         try:
             # 初始化图像分析管道
             self.processors["image"] = {
-                "object_detection": pipeline(
-                    "object-detection", model="facebook/detr-resnet-50"
-                ),
+                "object_detection": pipeline("object-detection", model="facebook/detr-resnet-50"),
                 "image_classification": pipeline(
                     "image-classification", model="google/vit-base-patch16-224"
                 ),
@@ -241,9 +237,7 @@ class MultimodalProcessor:
             elif input_data.modality_type == ModalityType.SENSOR:
                 result = await self._process_sensor(input_data)
             else:
-                raise UnsupportedFormatError(
-                    f"不支持的模态类型: {input_data.modality_type}"
-                )
+                raise UnsupportedFormatError(f"不支持的模态类型: {input_data.modality_type}")
 
             # 计算处理时间
             processing_time = int((datetime.now() - start_time).total_seconds() * 1000)
@@ -253,9 +247,7 @@ class MultimodalProcessor:
             return result
 
         except Exception as e:
-            logger.error(
-                f"模态处理失败 - 类型: {input_data.modality_type.value}, 错误: {e}"
-            )
+            logger.error(f"模态处理失败 - 类型: {input_data.modality_type.value}, 错误: {e}")
             processing_time = int((datetime.now() - start_time).total_seconds() * 1000)
 
             return ProcessingResult(
@@ -272,9 +264,7 @@ class MultimodalProcessor:
 
         # 验证文件格式
         if input_data.format:
-            await validate_file_format(
-                input_data.modality_type.value, input_data.format
-            )
+            await validate_file_format(input_data.modality_type.value, input_data.format)
 
         # 验证文件大小
         if isinstance(input_data.data, bytes):
@@ -283,9 +273,7 @@ class MultimodalProcessor:
     async def _process_text(self, input_data: ModalityInput) -> ProcessingResult:
         """处理文本数据"""
         text = (
-            input_data.data
-            if isinstance(input_data.data, str)
-            else input_data.data.decode("utf-8")
+            input_data.data if isinstance(input_data.data, str) else input_data.data.decode("utf-8")
         )
 
         processed_data = {
@@ -446,9 +434,7 @@ class MultimodalProcessor:
             # 图像分类
             if "image_classification" in self.processors.get("image", {}):
                 try:
-                    classification_result = self.processors["image"][
-                        "image_classification"
-                    ](image)
+                    classification_result = self.processors["image"]["image_classification"](image)
                     features["classification"] = [
                         {"label": item["label"], "score": item["score"]}
                         for item in classification_result[:5]  # 取前5个结果
@@ -459,9 +445,7 @@ class MultimodalProcessor:
             # 目标检测
             if "object_detection" in self.processors.get("image", {}):
                 try:
-                    detection_result = self.processors["image"]["object_detection"](
-                        image
-                    )
+                    detection_result = self.processors["image"]["object_detection"](image)
                     objects = []
                     for obj in detection_result:
                         if obj["score"] > 0.5:  # 置信度阈值
@@ -480,9 +464,7 @@ class MultimodalProcessor:
             features.update(await self._extract_image_features(image))
 
             # 中医相关分析（如舌象、面色等）
-            features["tcm_analysis"] = await self._analyze_tcm_image(
-                image, input_data.metadata
-            )
+            features["tcm_analysis"] = await self._analyze_tcm_image(image, input_data.metadata)
 
         except Exception as e:
             logger.error(f"图像处理失败: {e}")
@@ -545,17 +527,13 @@ class MultimodalProcessor:
                 # 根据传感器类型进行特定分析
                 sensor_type = input_data.metadata.get("sensor_type", "")
                 if "heart_rate" in sensor_type.lower():
-                    features["heart_rate_analysis"] = await self._analyze_heart_rate(
-                        data_array
-                    )
+                    features["heart_rate_analysis"] = await self._analyze_heart_rate(data_array)
                 elif "blood_pressure" in sensor_type.lower():
-                    features["blood_pressure_analysis"] = (
-                        await self._analyze_blood_pressure(data_array)
+                    features["blood_pressure_analysis"] = await self._analyze_blood_pressure(
+                        data_array
                     )
                 elif "temperature" in sensor_type.lower():
-                    features["temperature_analysis"] = await self._analyze_temperature(
-                        data_array
-                    )
+                    features["temperature_analysis"] = await self._analyze_temperature(data_array)
 
         except Exception as e:
             logger.error(f"传感器数据处理失败: {e}")
@@ -649,9 +627,7 @@ class MultimodalProcessor:
 
         try:
             # 基本特征
-            features["zero_crossing_rate"] = float(
-                np.mean(librosa.feature.zero_crossing_rate(y))
-            )
+            features["zero_crossing_rate"] = float(np.mean(librosa.feature.zero_crossing_rate(y)))
             features["spectral_centroid"] = float(
                 np.mean(librosa.feature.spectral_centroid(y=y, sr=sr))
             )
@@ -672,9 +648,7 @@ class MultimodalProcessor:
             # 语音活动检测
             intervals = librosa.effects.split(y, top_db=20)
             features["speech_segments"] = len(intervals)
-            features["speech_ratio"] = sum(
-                end - start for start, end in intervals
-            ) / len(y)
+            features["speech_ratio"] = sum(end - start for start, end in intervals) / len(y)
 
         except Exception as e:
             logger.warning(f"音频特征提取失败: {e}")
@@ -951,9 +925,7 @@ class MultimodalProcessor:
             tts_engine = self.processors.get("accessibility", {}).get("tts")
             if tts_engine:
                 # 保存到临时文件
-                with tempfile.NamedTemporaryFile(
-                    suffix=".wav", delete=False
-                ) as temp_file:
+                with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as temp_file:
                     temp_file_path = temp_file.name
 
                 tts_engine.save_to_file(text, temp_file_path)

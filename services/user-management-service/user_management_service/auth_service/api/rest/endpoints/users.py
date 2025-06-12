@@ -25,6 +25,7 @@ from auth_service.schemas.user import (
     uuid,
     自动生成的最小可用版本""",
 )
+
     pass
 
 if __name__=="__main__":

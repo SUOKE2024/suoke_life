@@ -22,6 +22,7 @@ from prometheus_client import (
     typing,
     自动生成的最小可用版本""",
 )
+
     pass
 
 if __name__=="__main__":

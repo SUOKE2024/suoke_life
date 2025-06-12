@@ -45,10 +45,14 @@ class CalculationRequest(BaseModel):
     session_id: str = Field(description="会话ID")
     calculation_type: CalculationType = Field(description="算诊类型")
     patient_info: PatientInfo = Field(description="患者信息")
-    analysis_parameters: Optional[Dict[str, Any]] = Field(default=None, description="分析参数")
+    analysis_parameters: Optional[Dict[str, Any]] = Field(
+        default=None, description="分析参数"
+    )
     options: Optional[Dict[str, Any]] = Field(default=None, description="请求选项")
     # 向后兼容
-    diagnosis_data: Optional[Dict[str, Any]] = Field(default=None, description="诊断数据（兼容）")
+    diagnosis_data: Optional[Dict[str, Any]] = Field(
+        default=None, description="诊断数据（兼容）"
+    )
     metadata: Dict[str, Any] = Field(default_factory=dict, description="元数据")
 
 
@@ -128,8 +132,12 @@ class ComprehensiveAnalysis(BaseModel):
 
     constitution_analysis: ConstitutionAnalysis = Field(description="体质分析")
     ziwu_analysis: ZiwuLiuzhuAnalysis = Field(description="子午流注分析")
-    wuyun_analysis: Optional[WuyunLiuqiAnalysis] = Field(default=None, description="五运六气分析")
-    bagua_analysis: Optional[BaguaAnalysis] = Field(default=None, description="八卦分析")
+    wuyun_analysis: Optional[WuyunLiuqiAnalysis] = Field(
+        default=None, description="五运六气分析"
+    )
+    bagua_analysis: Optional[BaguaAnalysis] = Field(
+        default=None, description="八卦分析"
+    )
 
     # 综合评估
     overall_assessment: str = Field(description="综合评估")
@@ -155,17 +163,27 @@ class CalculationResponse(BaseModel):
     constitution_analysis: Optional[ConstitutionAnalysis] = Field(
         default=None, description="体质分析"
     )
-    ziwu_analysis: Optional[ZiwuLiuzhuAnalysis] = Field(default=None, description="子午流注分析")
-    wuyun_analysis: Optional[WuyunLiuqiAnalysis] = Field(default=None, description="五运六气分析")
-    bagua_analysis: Optional[BaguaAnalysis] = Field(default=None, description="八卦分析")
+    ziwu_analysis: Optional[ZiwuLiuzhuAnalysis] = Field(
+        default=None, description="子午流注分析"
+    )
+    wuyun_analysis: Optional[WuyunLiuqiAnalysis] = Field(
+        default=None, description="五运六气分析"
+    )
+    bagua_analysis: Optional[BaguaAnalysis] = Field(
+        default=None, description="八卦分析"
+    )
     comprehensive_analysis: Optional[ComprehensiveAnalysis] = Field(
         default=None, description="综合分析"
     )
 
     # 向后兼容字段
     confidence: float = Field(ge=0.0, le=1.0, description="置信度")
-    calculation_results: Dict[str, Any] = Field(default_factory=dict, description="计算结果")
-    analysis_results: Dict[str, Any] = Field(default_factory=dict, description="分析结果")
+    calculation_results: Dict[str, Any] = Field(
+        default_factory=dict, description="计算结果"
+    )
+    analysis_results: Dict[str, Any] = Field(
+        default_factory=dict, description="分析结果"
+    )
     recommendations: List[str] = Field(default_factory=list, description="建议")
     processing_time: Optional[float] = Field(default=None, description="处理时间(秒)")
 

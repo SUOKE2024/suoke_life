@@ -3,9 +3,9 @@ container - 索克生活项目模块
 """
 
 import asyncio
+import logging
 from collections.abc import Callable
 from dataclasses import dataclass
-import logging
 from typing import Any, TypeVar
 
 from internal.repository.knowledge_repository import KnowledgeRepository
