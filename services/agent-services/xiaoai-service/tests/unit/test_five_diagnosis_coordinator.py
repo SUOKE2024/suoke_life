@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 from unittest.mock import AsyncMock, Mock, patch
 
 import pytest
+
 from xiaoai.core.five_diagnosis_coordinator import (
     DiagnosisResult,
     DiagnosisSession,

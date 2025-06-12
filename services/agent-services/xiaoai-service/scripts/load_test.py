@@ -7,11 +7,11 @@
 
 import argparse
 import asyncio
+from dataclasses import dataclass
+from datetime import datetime
 import json
 import logging
 import time
-from dataclasses import dataclass
-from datetime import datetime
 from typing import Any, Dict, List
 
 import aiohttp
@@ -41,9 +41,7 @@ class TestResult:
 class LoadTester:
     """负载测试器"""
 
-    def __init__(
-        self, base_url: str, concurrent_users: int = 10, total_requests: int = 1000
-    ):
+    def __init__(self, base_url: str, concurrent_users: int = 10, total_requests: int = 1000):
         self.base_url = base_url.rstrip("/")
         self.concurrent_users = concurrent_users
         self.total_requests = total_requests
@@ -112,9 +110,7 @@ class LoadTester:
                     "severity": "中等",
                 },
             }
-            await self.make_request(
-                session, "/api/diagnosis/coordinate", "POST", diagnosis_data
-            )
+            await self.make_request(session, "/api/diagnosis/coordinate", "POST", diagnosis_data)
 
             # 模拟体质分析请求
             constitution_data = {
@@ -125,9 +121,7 @@ class LoadTester:
                     "symptoms": ["易疲劳", "怕冷", "消化不良"],
                 },
             }
-            await self.make_request(
-                session, "/api/constitution/analyze", "POST", constitution_data
-            )
+            await self.make_request(session, "/api/constitution/analyze", "POST", constitution_data)
 
             # 添加随机延迟模拟真实用户行为
             await asyncio.sleep(0.1)
@@ -144,13 +138,10 @@ class LoadTester:
         timeout = aiohttp.ClientTimeout(total=30)
         connector = aiohttp.TCPConnector(limit=self.concurrent_users * 2)
 
-        async with aiohttp.ClientSession(
-            timeout=timeout, connector=connector
-        ) as session:
+        async with aiohttp.ClientSession(timeout=timeout, connector=connector) as session:
             # 创建并发任务
             tasks = [
-                self.user_simulation(session, user_id)
-                for user_id in range(self.concurrent_users)
+                self.user_simulation(session, user_id) for user_id in range(self.concurrent_users)
             ]
 
             # 等待所有任务完成

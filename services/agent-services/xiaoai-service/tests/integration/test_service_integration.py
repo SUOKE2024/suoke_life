@@ -8,6 +8,7 @@ from unittest.mock import AsyncMock, Mock, patch
 
 import grpc
 import pytest
+
 from xiaoai.core.five_diagnosis_coordinator import FiveDiagnosisCoordinator
 from xiaoai.models.diagnosis import DiagnosisData, DiagnosisRequest
 from xiaoai.services.service_clients import (
@@ -51,13 +52,9 @@ class TestServiceIntegration:
         )
 
     @pytest.mark.asyncio
-    async def test_inquiry_service_integration(
-        self, coordinator, sample_diagnosis_request
-    ):
+    async def test_inquiry_service_integration(self, coordinator, sample_diagnosis_request):
         """测试问诊服务集成"""
-        with patch.object(
-            coordinator.inquiry_client, "conduct_inquiry"
-        ) as mock_inquiry:
+        with patch.object(coordinator.inquiry_client, "conduct_inquiry") as mock_inquiry:
             # 模拟问诊服务响应
             mock_inquiry.return_value = {
                 "inquiry_id": "inquiry_123",
@@ -175,9 +172,7 @@ class TestServiceIntegration:
     @pytest.mark.asyncio
     async def test_palpation_service_integration(self, coordinator):
         """测试切诊服务集成"""
-        with patch.object(
-            coordinator.palpation_client, "analyze_pulse"
-        ) as mock_palpation:
+        with patch.object(coordinator.palpation_client, "analyze_pulse") as mock_palpation:
             # 模拟切诊服务响应
             mock_palpation.return_value = {
                 "analysis_id": "palpation_123",
@@ -234,9 +229,7 @@ class TestServiceIntegration:
             },
         }
 
-        with patch.object(
-            coordinator.calculation_client, "calculate_syndrome"
-        ) as mock_calc:
+        with patch.object(coordinator.calculation_client, "calculate_syndrome") as mock_calc:
             # 模拟计算服务响应
             mock_calc.return_value = {
                 "calculation_id": "calc_123",
@@ -277,17 +270,13 @@ class TestServiceIntegration:
     @pytest.mark.asyncio
     async def test_full_diagnosis_workflow(self, coordinator, sample_diagnosis_request):
         """测试完整诊断流程"""
-        with patch.object(
-            coordinator, "_conduct_inquiry"
-        ) as mock_inquiry, patch.object(
-            coordinator, "_conduct_look_diagnosis"
-        ) as mock_look, patch.object(
-            coordinator, "_conduct_listen_diagnosis"
-        ) as mock_listen, patch.object(
-            coordinator, "_conduct_palpation_diagnosis"
-        ) as mock_palpation, patch.object(
-            coordinator, "_conduct_calculation_analysis"
-        ) as mock_calc:
+        with (
+            patch.object(coordinator, "_conduct_inquiry") as mock_inquiry,
+            patch.object(coordinator, "_conduct_look_diagnosis") as mock_look,
+            patch.object(coordinator, "_conduct_listen_diagnosis") as mock_listen,
+            patch.object(coordinator, "_conduct_palpation_diagnosis") as mock_palpation,
+            patch.object(coordinator, "_conduct_calculation_analysis") as mock_calc,
+        ):
 
             # 模拟各个诊断步骤的响应
             mock_inquiry.return_value = {
@@ -328,13 +317,9 @@ class TestServiceIntegration:
             assert "syndrome_analysis" in result.results
 
     @pytest.mark.asyncio
-    async def test_service_failure_handling(
-        self, coordinator, sample_diagnosis_request
-    ):
+    async def test_service_failure_handling(self, coordinator, sample_diagnosis_request):
         """测试服务故障处理"""
-        with patch.object(
-            coordinator.inquiry_client, "conduct_inquiry"
-        ) as mock_inquiry:
+        with patch.object(coordinator.inquiry_client, "conduct_inquiry") as mock_inquiry:
             # 模拟服务故障
             mock_inquiry.side_effect = grpc.RpcError("Service unavailable")
 
@@ -358,11 +343,10 @@ class TestServiceIntegration:
             )
             requests.append(request)
 
-        with patch.object(
-            coordinator, "_conduct_inquiry"
-        ) as mock_inquiry, patch.object(
-            coordinator, "_conduct_calculation_analysis"
-        ) as mock_calc:
+        with (
+            patch.object(coordinator, "_conduct_inquiry") as mock_inquiry,
+            patch.object(coordinator, "_conduct_calculation_analysis") as mock_calc,
+        ):
 
             mock_inquiry.return_value = {"confidence": 0.8}
             mock_calc.return_value = {"confidence": 0.8}
@@ -378,13 +362,9 @@ class TestServiceIntegration:
             assert all(r.session_id == f"session_{i}" for i, r in enumerate(results))
 
     @pytest.mark.asyncio
-    async def test_service_timeout_handling(
-        self, coordinator, sample_diagnosis_request
-    ):
+    async def test_service_timeout_handling(self, coordinator, sample_diagnosis_request):
         """测试服务超时处理"""
-        with patch.object(
-            coordinator.inquiry_client, "conduct_inquiry"
-        ) as mock_inquiry:
+        with patch.object(coordinator.inquiry_client, "conduct_inquiry") as mock_inquiry:
             # 模拟服务超时
             async def slow_service(*args, **kwargs):
                 await asyncio.sleep(10)  # 模拟慢服务

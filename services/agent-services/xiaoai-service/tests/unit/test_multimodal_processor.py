@@ -7,9 +7,10 @@ import base64
 import io
 from unittest.mock import AsyncMock, MagicMock, Mock, patch
 
+from PIL import Image
 import numpy as np
 import pytest
-from PIL import Image
+
 from xiaoai.core.multimodal_processor import (
     ModalityInput,
     ModalityType,
@@ -131,9 +132,7 @@ class TestMultimodalProcessor:
         with patch.object(processor, "processors") as mock_processors:
             # 模拟图像处理管道
             mock_processors.get.return_value = {
-                "image_classification": Mock(
-                    return_value=[{"label": "tongue", "score": 0.9}]
-                ),
+                "image_classification": Mock(return_value=[{"label": "tongue", "score": 0.9}]),
                 "object_detection": Mock(
                     return_value=[
                         {
@@ -156,11 +155,12 @@ class TestMultimodalProcessor:
     @pytest.mark.asyncio
     async def test_audio_processing(self, processor, sample_audio_input):
         """测试音频处理"""
-        with patch("librosa.load") as mock_load, patch(
-            "librosa.feature.zero_crossing_rate"
-        ) as mock_zcr, patch("librosa.feature.spectral_centroid") as mock_sc, patch(
-            "librosa.feature.mfcc"
-        ) as mock_mfcc:
+        with (
+            patch("librosa.load") as mock_load,
+            patch("librosa.feature.zero_crossing_rate") as mock_zcr,
+            patch("librosa.feature.spectral_centroid") as mock_sc,
+            patch("librosa.feature.mfcc") as mock_mfcc,
+        ):
 
             # 模拟librosa函数
             mock_load.return_value = (np.random.random(16000), 16000)
@@ -210,9 +210,7 @@ class TestMultimodalProcessor:
                 ),
             ]
 
-            results = await processor.process_multimodal_input(
-                inputs, user_id, session_id
-            )
+            results = await processor.process_multimodal_input(inputs, user_id, session_id)
 
             assert len(results) == 2
             assert all(isinstance(result, ProcessingResult) for result in results)
@@ -318,9 +316,7 @@ class TestMultimodalProcessor:
     async def test_input_validation(self, processor):
         """测试输入验证"""
         # 测试空数据
-        empty_input = ModalityInput(
-            modality_type=ModalityType.TEXT, data="", format="text/plain"
-        )
+        empty_input = ModalityInput(modality_type=ModalityType.TEXT, data="", format="text/plain")
 
         with pytest.raises(ValueError):
             await processor._validate_input(empty_input)
@@ -353,18 +349,15 @@ class TestMultimodalProcessor:
         """测试无障碍文本转语音"""
         text = "这是测试文本"
 
-        with patch.object(
-            processor.processors.get("accessibility", {}), "get"
-        ) as mock_tts:
+        with patch.object(processor.processors.get("accessibility", {}), "get") as mock_tts:
             mock_engine = Mock()
             mock_tts.return_value = mock_engine
 
-            with patch("tempfile.NamedTemporaryFile"), patch(
-                "builtins.open", create=True
-            ) as mock_open:
-                mock_open.return_value.__enter__.return_value.read.return_value = (
-                    b"fake_audio_data"
-                )
+            with (
+                patch("tempfile.NamedTemporaryFile"),
+                patch("builtins.open", create=True) as mock_open,
+            ):
+                mock_open.return_value.__enter__.return_value.read.return_value = b"fake_audio_data"
 
                 audio_data = await processor.text_to_speech(text)
 
@@ -404,9 +397,7 @@ class TestMultimodalProcessor:
         # 并发处理
         tasks = []
         for input_data in inputs:
-            task = processor._process_single_modality(
-                input_data, "test_user", "test_session"
-            )
+            task = processor._process_single_modality(input_data, "test_user", "test_session")
             tasks.append(task)
 
         results = await asyncio.gather(*tasks)
@@ -435,15 +426,14 @@ class TestMultimodalProcessor:
         y = np.random.random(16000).astype(np.float32)
         sr = 16000
 
-        with patch("librosa.feature.zero_crossing_rate") as mock_zcr, patch(
-            "librosa.feature.spectral_centroid"
-        ) as mock_sc, patch("librosa.feature.spectral_rolloff") as mock_sr, patch(
-            "librosa.feature.mfcc"
-        ) as mock_mfcc, patch(
-            "librosa.feature.rms"
-        ) as mock_rms, patch(
-            "librosa.effects.split"
-        ) as mock_split:
+        with (
+            patch("librosa.feature.zero_crossing_rate") as mock_zcr,
+            patch("librosa.feature.spectral_centroid") as mock_sc,
+            patch("librosa.feature.spectral_rolloff") as mock_sr,
+            patch("librosa.feature.mfcc") as mock_mfcc,
+            patch("librosa.feature.rms") as mock_rms,
+            patch("librosa.effects.split") as mock_split,
+        ):
 
             # 模拟librosa函数返回值
             mock_zcr.return_value = np.array([[0.1]])

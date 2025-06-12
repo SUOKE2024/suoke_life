@@ -4,6 +4,7 @@ import asyncio
 from datetime import datetime, timedelta
 from unittest.mock import AsyncMock, Mock, patch
 
+import pytest
 from laoke_service.core.agent import (
     ConversationContext,
     LaokeAgent,
@@ -20,7 +21,6 @@ from laoke_service.core.exceptions import (
     SessionException,
     ValidationException,
 )
-import pytest
 
 
 class TestMessage:

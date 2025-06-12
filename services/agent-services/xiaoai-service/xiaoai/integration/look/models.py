@@ -80,22 +80,14 @@ class LookAnalysisResponse(BaseModel):
     image_type: ImageType = Field(description="图像类型")
 
     # 不同类型的分析结果
-    facial_features: Optional[FacialFeatures] = Field(
-        default=None, description="面部特征"
-    )
-    tongue_features: Optional[TongueFeatures] = Field(
-        default=None, description="舌诊特征"
-    )
+    facial_features: Optional[FacialFeatures] = Field(default=None, description="面部特征")
+    tongue_features: Optional[TongueFeatures] = Field(default=None, description="舌诊特征")
     body_posture: Optional[BodyPosture] = Field(default=None, description="体态特征")
-    skin_condition: Optional[SkinCondition] = Field(
-        default=None, description="皮肤状态"
-    )
+    skin_condition: Optional[SkinCondition] = Field(default=None, description="皮肤状态")
 
     # 通用分析结果
     features: Dict[str, Any] = Field(default_factory=dict, description="提取的特征")
-    analysis_results: Dict[str, Any] = Field(
-        default_factory=dict, description="分析结果"
-    )
+    analysis_results: Dict[str, Any] = Field(default_factory=dict, description="分析结果")
     recommendations: List[str] = Field(default_factory=list, description="建议")
 
     # 元数据
@@ -117,9 +109,7 @@ class LookResponse(BaseModel):
 
     confidence: float = Field(ge=0.0, le=1.0, description="置信度")
     features: Dict[str, Any] = Field(default_factory=dict, description="提取的特征")
-    analysis_results: Dict[str, Any] = Field(
-        default_factory=dict, description="分析结果"
-    )
+    analysis_results: Dict[str, Any] = Field(default_factory=dict, description="分析结果")
     recommendations: List[str] = Field(default_factory=list, description="建议")
     processing_time: Optional[float] = Field(default=None, description="处理时间(秒)")
     timestamp: Optional[str] = Field(default=None, description="分析时间戳")

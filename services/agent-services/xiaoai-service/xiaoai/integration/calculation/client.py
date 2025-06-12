@@ -59,9 +59,7 @@ class CalculationServiceClient(BaseServiceClient):
             options=options or {},
         )
 
-        return await self._make_http_request(
-            "/api/v1/calculation/constitution", request
-        )
+        return await self._make_http_request("/api/v1/calculation/constitution", request)
 
     @retry_with_backoff(max_retries=3)
     async def analyze_ziwu_liuzhu(
@@ -154,9 +152,7 @@ class CalculationServiceClient(BaseServiceClient):
             options=options or {},
         )
 
-        return await self._make_http_request(
-            "/api/v1/calculation/comprehensive", request
-        )
+        return await self._make_http_request("/api/v1/calculation/comprehensive", request)
 
     # 向后兼容的方法
     @retry_with_backoff(max_retries=3)
@@ -204,9 +200,7 @@ class CalculationServiceClient(BaseServiceClient):
         url = f"{self.base_url}{endpoint}"
 
         try:
-            async with aiohttp.ClientSession(
-                timeout=aiohttp.ClientTimeout(total=30)
-            ) as session:
+            async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=30)) as session:
                 async with session.post(
                     url,
                     json=request.model_dump(),
@@ -217,9 +211,7 @@ class CalculationServiceClient(BaseServiceClient):
                         return CalculationResponse(**data)
                     else:
                         error_text = await response.text()
-                        logger.error(
-                            f"算诊服务请求失败: {response.status} - {error_text}"
-                        )
+                        logger.error(f"算诊服务请求失败: {response.status} - {error_text}")
                         raise DiagnosisError(f"算诊服务请求失败: {response.status}")
 
         except asyncio.TimeoutError:
@@ -232,9 +224,7 @@ class CalculationServiceClient(BaseServiceClient):
             logger.error(f"算诊服务请求异常: {e}")
             raise DiagnosisError(f"算诊服务请求异常: {e}")
 
-    async def get_calculation_history(
-        self, user_id: str, limit: int = 10
-    ) -> List[Dict[str, Any]]:
+    async def get_calculation_history(self, user_id: str, limit: int = 10) -> List[Dict[str, Any]]:
         """
         获取用户的算诊历史记录
 
@@ -265,9 +255,7 @@ class CalculationServiceClient(BaseServiceClient):
     async def health_check(self) -> bool:
         """健康检查"""
         try:
-            async with aiohttp.ClientSession(
-                timeout=aiohttp.ClientTimeout(total=5)
-            ) as session:
+            async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=5)) as session:
                 async with session.get(f"{self.base_url}/health") as response:
                     return response.status == 200
         except Exception as e:
@@ -277,9 +265,7 @@ class CalculationServiceClient(BaseServiceClient):
     async def get_service_info(self) -> Dict[str, Any]:
         """获取服务信息"""
         try:
-            async with aiohttp.ClientSession(
-                timeout=aiohttp.ClientTimeout(total=10)
-            ) as session:
+            async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=10)) as session:
                 async with session.get(f"{self.base_url}/") as response:
                     if response.status == 200:
                         return await response.json()

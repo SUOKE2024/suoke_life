@@ -2,11 +2,11 @@
 validator - 索克生活项目模块
 """
 
-from dataclasses import dataclass
 import html
 import json
 import logging
 import re
+from dataclasses import dataclass
 from typing import Any
 
 """

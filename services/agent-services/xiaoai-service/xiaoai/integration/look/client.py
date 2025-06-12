@@ -73,9 +73,7 @@ class LookServiceClient(BaseServiceClient):
             logger.error(f"望诊分析错误: {e}")
             raise CommunicationError(f"望诊服务通信错误: {e}")
 
-    async def get_analysis_history(
-        self, user_id: str, limit: int = 10
-    ) -> List[Dict[str, Any]]:
+    async def get_analysis_history(self, user_id: str, limit: int = 10) -> List[Dict[str, Any]]:
         """
         获取用户的望诊历史记录
 

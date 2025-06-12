@@ -5,14 +5,14 @@ AI模型管理器
 """
 
 import asyncio
-import hashlib
-import logging
-import threading
-import time
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
+import hashlib
+import logging
+import threading
+import time
 from typing import Any, Dict, List, Optional, Union
 
 # AI依赖的可选导入
@@ -171,9 +171,7 @@ class ModelInstance:
             # 预热模型
             await self._warmup()
 
-            logger.info(
-                f"模型加载成功: {self.config.name}, 耗时: {self.load_time:.2f}s"
-            )
+            logger.info(f"模型加载成功: {self.config.name}, 耗时: {self.load_time:.2f}s")
 
         except Exception as e:
             self.status = ModelStatus.ERROR
@@ -190,18 +188,12 @@ class ModelInstance:
         self.tokenizer = AutoTokenizer.from_pretrained(self.config.model_path)
 
         if self.config.task == "classification":
-            self.model = AutoModelForSequenceClassification.from_pretrained(
-                self.config.model_path
-            )
+            self.model = AutoModelForSequenceClassification.from_pretrained(self.config.model_path)
         else:
             self.model = AutoModel.from_pretrained(self.config.model_path)
 
         # 移动到指定设备
-        if (
-            self.config.device != "cpu"
-            and TORCH_AVAILABLE
-            and torch.cuda.is_available()
-        ):
+        if self.config.device != "cpu" and TORCH_AVAILABLE and torch.cuda.is_available():
             self.model = self.model.to(self.config.device)
 
     async def _load_onnx(self) -> None:
@@ -218,13 +210,9 @@ class ModelInstance:
     async def _load_sentence_transformer(self) -> None:
         """加载SentenceTransformer模型"""
         if not SENTENCE_TRANSFORMERS_AVAILABLE:
-            raise ModelError(
-                "sentence-transformers库未安装，无法加载SentenceTransformer模型"
-            )
+            raise ModelError("sentence-transformers库未安装，无法加载SentenceTransformer模型")
 
-        self.model = SentenceTransformer(
-            self.config.model_path, device=self.config.device
-        )
+        self.model = SentenceTransformer(self.config.model_path, device=self.config.device)
 
     async def _load_pipeline(self) -> None:
         """加载Pipeline模型"""
@@ -234,16 +222,10 @@ class ModelInstance:
             raise ModelError("torch库未安装，无法加载Pipeline模型")
 
         device = -1  # 默认CPU
-        if (
-            self.config.device != "cpu"
-            and TORCH_AVAILABLE
-            and torch.cuda.is_available()
-        ):
+        if self.config.device != "cpu" and TORCH_AVAILABLE and torch.cuda.is_available():
             device = 0
 
-        self.model = pipeline(
-            self.config.task, model=self.config.model_path, device=device
-        )
+        self.model = pipeline(self.config.task, model=self.config.model_path, device=device)
 
     async def _warmup(self) -> None:
         """预热模型"""
@@ -300,9 +282,7 @@ class ModelInstance:
             self._update_metrics(0, success=False)
             raise ModelError(f"模型预测失败: {e}")
 
-    async def _predict_internal(
-        self, inputs: Any, warmup: bool = False, **kwargs
-    ) -> Any:
+    async def _predict_internal(self, inputs: Any, warmup: bool = False, **kwargs) -> Any:
         """内部预测方法"""
         if self.config.model_type == ModelType.TRANSFORMER:
             return await self._predict_transformer(inputs, **kwargs)
@@ -315,9 +295,7 @@ class ModelInstance:
         else:
             raise ModelError(f"不支持的模型类型: {self.config.model_type}")
 
-    async def _predict_transformer(
-        self, inputs: Union[str, List[str]], **kwargs
-    ) -> Any:
+    async def _predict_transformer(self, inputs: Union[str, List[str]], **kwargs) -> Any:
         """Transformer模型预测"""
         if isinstance(inputs, str):
             inputs = [inputs]
@@ -343,9 +321,7 @@ class ModelInstance:
             outputs = self.model(**encoded)
 
         return (
-            outputs.last_hidden_state
-            if hasattr(outputs, "last_hidden_state")
-            else outputs.logits
+            outputs.last_hidden_state if hasattr(outputs, "last_hidden_state") else outputs.logits
         )
 
     async def _predict_onnx(self, inputs: Any, **kwargs) -> Any:
@@ -365,9 +341,7 @@ class ModelInstance:
 
         return outputs[0]
 
-    async def _predict_sentence_transformer(
-        self, inputs: Union[str, List[str]], **kwargs
-    ) -> Any:
+    async def _predict_sentence_transformer(self, inputs: Union[str, List[str]], **kwargs) -> Any:
         """SentenceTransformer模型预测"""
         if isinstance(inputs, str):
             inputs = [inputs]
@@ -387,9 +361,7 @@ class ModelInstance:
 
         if success:
             self.metrics.total_time_ms += processing_time_ms
-            self.metrics.avg_time_ms = (
-                self.metrics.total_time_ms / self.metrics.total_calls
-            )
+            self.metrics.avg_time_ms = self.metrics.total_time_ms / self.metrics.total_calls
         else:
             self.metrics.error_count += 1
 
@@ -509,9 +481,7 @@ class AIModelManager:
 
         return model_instance
 
-    async def predict(
-        self, model_name: str, inputs: Any, use_cache: bool = True, **kwargs
-    ) -> Any:
+    async def predict(self, model_name: str, inputs: Any, use_cache: bool = True, **kwargs) -> Any:
         """执行预测"""
         # 检查缓存
         if use_cache:
@@ -530,16 +500,12 @@ class AIModelManager:
 
         return result
 
-    def _generate_cache_key(
-        self, model_name: str, inputs: Any, kwargs: Dict[str, Any]
-    ) -> str:
+    def _generate_cache_key(self, model_name: str, inputs: Any, kwargs: Dict[str, Any]) -> str:
         """生成缓存键"""
         content = f"{model_name}:{str(inputs)}:{str(sorted(kwargs.items()))}"
         return hashlib.md5(content.encode()).hexdigest()
 
-    async def batch_predict(
-        self, model_name: str, inputs_list: List[Any], **kwargs
-    ) -> List[Any]:
+    async def batch_predict(self, model_name: str, inputs_list: List[Any], **kwargs) -> List[Any]:
         """批量预测"""
         model_instance = await self.get_model(model_name)
 

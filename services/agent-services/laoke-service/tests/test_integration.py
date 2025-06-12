@@ -5,6 +5,7 @@ import json
 from typing import Any, Dict
 from unittest.mock import AsyncMock, Mock, patch
 
+import pytest
 from fastapi.testclient import TestClient
 from httpx import AsyncClient
 from laoke_service.api.routes import app
@@ -16,7 +17,6 @@ from laoke_service.integrations.accessibility import (
     TTSResponse,
     get_accessibility_client,
 )
-import pytest
 
 
 class TestAPIIntegration:

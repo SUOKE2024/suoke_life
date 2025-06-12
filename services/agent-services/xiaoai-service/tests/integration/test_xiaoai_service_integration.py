@@ -3,12 +3,13 @@
 """
 
 import asyncio
-import json
 from datetime import datetime, timezone
+import json
 from typing import Any, Dict
 from unittest.mock import AsyncMock, Mock, patch
 
 import pytest
+
 from xiaoai.accessibility.accessibility_service import AccessibilityService
 from xiaoai.core.constitution_analyzer import ConstitutionAnalyzer
 from xiaoai.core.five_diagnosis_coordinator import (
@@ -55,10 +56,11 @@ class TestXiaoAIServiceIntegration:
         processor = MultimodalProcessor()
 
         # 模拟初始化
-        with patch.object(processor, "_initialize_text_processor"), patch.object(
-            processor, "_initialize_audio_processor"
-        ), patch.object(processor, "_initialize_image_processor"), patch.object(
-            processor, "_initialize_accessibility_services"
+        with (
+            patch.object(processor, "_initialize_text_processor"),
+            patch.object(processor, "_initialize_audio_processor"),
+            patch.object(processor, "_initialize_image_processor"),
+            patch.object(processor, "_initialize_accessibility_services"),
         ):
             await processor.initialize()
 
@@ -172,9 +174,7 @@ class TestXiaoAIServiceIntegration:
                 mock_client.analyze.return_value = mock_responses[diagnosis_type]
                 mock_clients[diagnosis_type.value] = mock_client
 
-            mock_service_manager.get_client.side_effect = lambda name: mock_clients.get(
-                name
-            )
+            mock_service_manager.get_client.side_effect = lambda name: mock_clients.get(name)
 
             # 3. 执行诊断流程
             diagnosis_results = await coordinator.start_diagnosis_process(
@@ -198,9 +198,7 @@ class TestXiaoAIServiceIntegration:
             assert syndrome_result.overall_confidence > 0.0
 
             # 6. 执行体质分析
-            constitution_result = constitution_analyzer.analyze_constitution(
-                diagnosis_results
-            )
+            constitution_result = constitution_analyzer.analyze_constitution(diagnosis_results)
 
             assert constitution_result is not None
             assert constitution_result.constitution_scores is not None
@@ -243,13 +241,11 @@ class TestXiaoAIServiceIntegration:
         ]
 
         # 模拟处理器方法
-        with patch.object(
-            multimodal_processor, "_process_text"
-        ) as mock_text, patch.object(
-            multimodal_processor, "_process_image"
-        ) as mock_image, patch.object(
-            multimodal_processor, "_process_audio"
-        ) as mock_audio:
+        with (
+            patch.object(multimodal_processor, "_process_text") as mock_text,
+            patch.object(multimodal_processor, "_process_image") as mock_image,
+            patch.object(multimodal_processor, "_process_audio") as mock_audio,
+        ):
 
             # 设置模拟返回值
             mock_text.return_value = {
@@ -289,9 +285,11 @@ class TestXiaoAIServiceIntegration:
         accessibility_service = AccessibilityService()
 
         # 模拟初始化
-        with patch.object(accessibility_service, "_initialize_tts"), patch.object(
-            accessibility_service, "_initialize_stt"
-        ), patch.object(accessibility_service, "_initialize_gesture_recognition"):
+        with (
+            patch.object(accessibility_service, "_initialize_tts"),
+            patch.object(accessibility_service, "_initialize_stt"),
+            patch.object(accessibility_service, "_initialize_gesture_recognition"),
+        ):
 
             await accessibility_service.initialize()
 
@@ -316,14 +314,10 @@ class TestXiaoAIServiceIntegration:
                 mock_stt.assert_called_once()
 
             # 测试手势识别
-            with patch.object(
-                accessibility_service, "recognize_gesture"
-            ) as mock_gesture:
+            with patch.object(accessibility_service, "recognize_gesture") as mock_gesture:
                 mock_gesture.return_value = "thumbs_up"
 
-                gesture = await accessibility_service.recognize_gesture(
-                    b"fake_video_frame"
-                )
+                gesture = await accessibility_service.recognize_gesture(b"fake_video_frame")
 
                 assert gesture == "thumbs_up"
                 mock_gesture.assert_called_once()
@@ -337,9 +331,10 @@ class TestXiaoAIServiceIntegration:
         redis_repo = RedisRepository()
 
         # 模拟数据库连接
-        with patch.object(pg_repo, "initialize") as mock_pg_init, patch.object(
-            redis_repo, "initialize"
-        ) as mock_redis_init:
+        with (
+            patch.object(pg_repo, "initialize") as mock_pg_init,
+            patch.object(redis_repo, "initialize") as mock_redis_init,
+        ):
 
             await pg_repo.initialize()
             await redis_repo.initialize()
@@ -365,9 +360,10 @@ class TestXiaoAIServiceIntegration:
                 mock_save.assert_called_once_with(test_diagnosis_data)
 
             # 测试缓存操作
-            with patch.object(redis_repo, "set") as mock_set, patch.object(
-                redis_repo, "get"
-            ) as mock_get:
+            with (
+                patch.object(redis_repo, "set") as mock_set,
+                patch.object(redis_repo, "get") as mock_get,
+            ):
 
                 mock_get.return_value = None
                 mock_set.return_value = True
@@ -441,9 +437,7 @@ class TestXiaoAIServiceIntegration:
 
             diagnosis_data = {DiagnosisType.LOOKING: {"test": "data"}}
 
-            results = await coordinator.start_diagnosis_process(
-                user_id, session_id, diagnosis_data
-            )
+            results = await coordinator.start_diagnosis_process(user_id, session_id, diagnosis_data)
 
             # 验证错误处理
             assert len(results) == 1
@@ -470,9 +464,7 @@ class TestXiaoAIServiceIntegration:
             diagnosis_data = {DiagnosisType.LOOKING: {"test": "data"}}
 
             start_time = datetime.now(timezone.utc)
-            results = await coordinator.start_diagnosis_process(
-                user_id, session_id, diagnosis_data
-            )
+            results = await coordinator.start_diagnosis_process(user_id, session_id, diagnosis_data)
             end_time = datetime.now(timezone.utc)
 
             # 验证性能指标
@@ -509,9 +501,7 @@ class TestXiaoAIServiceIntegration:
             tasks = []
             for user_id, session_id in sessions:
                 diagnosis_data = {DiagnosisType.LOOKING: {"user": user_id}}
-                task = coordinator.start_diagnosis_process(
-                    user_id, session_id, diagnosis_data
-                )
+                task = coordinator.start_diagnosis_process(user_id, session_id, diagnosis_data)
                 tasks.append(task)
 
             # 等待所有任务完成

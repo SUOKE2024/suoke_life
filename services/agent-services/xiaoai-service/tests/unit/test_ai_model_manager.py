@@ -3,11 +3,12 @@ AI模型管理器单元测试
 """
 
 import asyncio
-import time
 from datetime import datetime, timezone
+import time
 from unittest.mock import AsyncMock, MagicMock, Mock, patch
 
 import pytest
+
 from xiaoai.core.ai_model_manager import (
     AIModelManager,
     ModelConfig,
@@ -52,11 +53,10 @@ class TestModelInstance:
     @pytest.mark.asyncio
     async def test_load_transformer_model(self, model_instance):
         """测试加载Transformer模型"""
-        with patch(
-            "xiaoai.core.ai_model_manager.AutoTokenizer"
-        ) as mock_tokenizer, patch(
-            "xiaoai.core.ai_model_manager.AutoModelForSequenceClassification"
-        ) as mock_model:
+        with (
+            patch("xiaoai.core.ai_model_manager.AutoTokenizer") as mock_tokenizer,
+            patch("xiaoai.core.ai_model_manager.AutoModelForSequenceClassification") as mock_model,
+        ):
 
             mock_tokenizer.from_pretrained.return_value = Mock()
             mock_model.from_pretrained.return_value = Mock()
@@ -84,11 +84,10 @@ class TestModelInstance:
     async def test_predict_transformer(self, model_instance):
         """测试Transformer模型预测"""
         # 模拟加载成功
-        with patch(
-            "xiaoai.core.ai_model_manager.AutoTokenizer"
-        ) as mock_tokenizer, patch(
-            "xiaoai.core.ai_model_manager.AutoModelForSequenceClassification"
-        ) as mock_model:
+        with (
+            patch("xiaoai.core.ai_model_manager.AutoTokenizer") as mock_tokenizer,
+            patch("xiaoai.core.ai_model_manager.AutoModelForSequenceClassification") as mock_model,
+        ):
 
             # 设置模拟对象
             mock_tokenizer_instance = Mock()
@@ -188,9 +187,10 @@ class TestAIModelManager:
         manager = AIModelManager()
 
         # 模拟初始化过程
-        with patch.object(manager, "_load_model_configs") as mock_load_configs, patch(
-            "asyncio.create_task"
-        ) as mock_create_task:
+        with (
+            patch.object(manager, "_load_model_configs") as mock_load_configs,
+            patch("asyncio.create_task") as mock_create_task,
+        ):
 
             mock_load_configs.return_value = None
             mock_create_task.return_value = Mock()
@@ -297,9 +297,7 @@ class TestAIModelManager:
         with patch.object(model_manager, "get_model") as mock_get_model:
             mock_get_model.return_value = mock_instance
 
-            result = await model_manager.predict(
-                "test_model", "test_input", use_cache=False
-            )
+            result = await model_manager.predict("test_model", "test_input", use_cache=False)
 
             assert result == "prediction_result"
             mock_instance.predict.assert_called_once_with("test_input")
@@ -498,9 +496,7 @@ async def test_predict_convenience_function():
         result = await predict("test_model", "test_input", param="value")
 
         assert result == "prediction_result"
-        mock_manager.predict.assert_called_once_with(
-            "test_model", "test_input", param="value"
-        )
+        mock_manager.predict.assert_called_once_with("test_model", "test_input", param="value")
 
 
 @pytest.mark.asyncio
@@ -516,9 +512,7 @@ async def test_batch_predict_convenience_function():
         result = await batch_predict("test_model", ["input1", "input2"])
 
         assert result == ["result1", "result2"]
-        mock_manager.batch_predict.assert_called_once_with(
-            "test_model", ["input1", "input2"]
-        )
+        mock_manager.batch_predict.assert_called_once_with("test_model", ["input1", "input2"])
 
 
 class TestModelConfig:

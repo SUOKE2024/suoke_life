@@ -4,10 +4,10 @@
 基于辨证分析和体质分析结果，生成个性化的健康建议
 """
 
-import logging
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 from enum import Enum
+import logging
 from typing import Any, Dict, List, Optional
 
 from ..config.settings import get_settings
@@ -323,22 +323,20 @@ class RecommendationEngine:
 
         try:
             # 基于证型生成建议
-            syndrome_recommendations = (
-                await self._generate_syndrome_based_recommendations(syndrome_analysis)
+            syndrome_recommendations = await self._generate_syndrome_based_recommendations(
+                syndrome_analysis
             )
             recommendations.extend(syndrome_recommendations)
 
             # 基于体质生成建议
-            constitution_recommendations = (
-                await self._generate_constitution_based_recommendations(
-                    constitution_analysis
-                )
+            constitution_recommendations = await self._generate_constitution_based_recommendations(
+                constitution_analysis
             )
             recommendations.extend(constitution_recommendations)
 
             # 基于诊断结果生成建议
-            diagnosis_recommendations = (
-                await self._generate_diagnosis_based_recommendations(diagnosis_results)
+            diagnosis_recommendations = await self._generate_diagnosis_based_recommendations(
+                diagnosis_results
             )
             recommendations.extend(diagnosis_recommendations)
 
@@ -347,8 +345,8 @@ class RecommendationEngine:
             recommendations.extend(seasonal_recommendations)
 
             # 生成预防保健建议
-            prevention_recommendations = (
-                await self._generate_prevention_recommendations(user_profile)
+            prevention_recommendations = await self._generate_prevention_recommendations(
+                user_profile
             )
             recommendations.extend(prevention_recommendations)
 
@@ -610,28 +608,20 @@ class RecommendationEngine:
         # 添加具体的实施细节
         if "specific_foods" in template:
             foods = template["specific_foods"]
-            recommendation.description += (
-                f"\n推荐食物：{', '.join(foods['recommended'])}"
-            )
+            recommendation.description += f"\n推荐食物：{', '.join(foods['recommended'])}"
             recommendation.description += f"\n避免食物：{', '.join(foods['avoid'])}"
 
         if "exercises" in template:
-            recommendation.description += (
-                f"\n推荐运动：{', '.join(template['exercises'])}"
-            )
+            recommendation.description += f"\n推荐运动：{', '.join(template['exercises'])}"
             recommendation.duration = template.get("duration")
             recommendation.frequency = template.get("frequency")
 
         if "techniques" in template:
-            recommendation.description += (
-                f"\n调节方法：{', '.join(template['techniques'])}"
-            )
+            recommendation.description += f"\n调节方法：{', '.join(template['techniques'])}"
 
         return [recommendation]
 
-    def _create_sleep_improvement_recommendation(
-        self, confidence: float
-    ) -> Recommendation:
+    def _create_sleep_improvement_recommendation(self, confidence: float) -> Recommendation:
         """创建睡眠改善建议"""
         return Recommendation(
             id=f"sleep_improvement_{int(datetime.now().timestamp())}",
@@ -648,9 +638,7 @@ class RecommendationEngine:
             ],
         )
 
-    def _create_stress_management_recommendation(
-        self, confidence: float
-    ) -> Recommendation:
+    def _create_stress_management_recommendation(self, confidence: float) -> Recommendation:
         """创建压力管理建议"""
         return Recommendation(
             id=f"stress_management_{int(datetime.now().timestamp())}",
@@ -764,10 +752,7 @@ class RecommendationEngine:
         for i, rec1 in enumerate(recommendations):
             for j, rec2 in enumerate(recommendations[i + 1 :], i + 1):
                 # 检查是否有冲突的建议
-                if (
-                    rec1.type == RecommendationType.DIET
-                    and rec2.type == RecommendationType.DIET
-                ):
+                if rec1.type == RecommendationType.DIET and rec2.type == RecommendationType.DIET:
                     # 检查饮食建议是否冲突
                     if self._check_diet_conflict(rec1, rec2):
                         # 保留置信度更高的建议
@@ -793,9 +778,7 @@ class RecommendationEngine:
     ) -> List[Recommendation]:
         """排序和优化建议"""
         # 按优先级和置信度排序
-        recommendations.sort(
-            key=lambda x: (x.priority.value, x.confidence), reverse=True
-        )
+        recommendations.sort(key=lambda x: (x.priority.value, x.confidence), reverse=True)
 
         # 去重和合并相似建议
         optimized_recommendations = []
@@ -809,9 +792,7 @@ class RecommendationEngine:
                 seen_types.add(type_key)
 
         # 限制建议数量
-        max_recommendations = (
-            self.settings.recommendation_engine.max_recommendations_per_session
-        )
+        max_recommendations = self.settings.recommendation_engine.max_recommendations_per_session
         return optimized_recommendations[:max_recommendations]
 
     async def create_recommendation_plan(
@@ -843,19 +824,13 @@ class RecommendationEngine:
             follow_up_schedule=follow_up_schedule,
         )
 
-    def _determine_implementation_order(
-        self, recommendations: List[Recommendation]
-    ) -> List[str]:
+    def _determine_implementation_order(self, recommendations: List[Recommendation]) -> List[str]:
         """确定实施顺序"""
         # 按优先级排序
-        sorted_recs = sorted(
-            recommendations, key=lambda x: x.priority.value, reverse=True
-        )
+        sorted_recs = sorted(recommendations, key=lambda x: x.priority.value, reverse=True)
         return [rec.id for rec in sorted_recs]
 
-    def _generate_monitoring_points(
-        self, recommendations: List[Recommendation]
-    ) -> List[str]:
+    def _generate_monitoring_points(self, recommendations: List[Recommendation]) -> List[str]:
         """生成监测要点"""
         monitoring_points = []
 
@@ -869,9 +844,7 @@ class RecommendationEngine:
 
         return list(set(monitoring_points))  # 去重
 
-    def _create_follow_up_schedule(
-        self, recommendations: List[Recommendation]
-    ) -> Dict[str, str]:
+    def _create_follow_up_schedule(self, recommendations: List[Recommendation]) -> Dict[str, str]:
         """创建随访计划"""
         schedule = {}
 

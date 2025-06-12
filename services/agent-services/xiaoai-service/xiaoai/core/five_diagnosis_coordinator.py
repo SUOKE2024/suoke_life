@@ -5,10 +5,10 @@
 """
 
 import asyncio
-import logging
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
+import logging
 from typing import Any, Dict, List, Optional
 
 from ..config.settings import get_settings
@@ -126,9 +126,7 @@ class FiveDiagnosisCoordinator:
             logger.error(f"初始化服务客户端失败: {e}")
             raise ServiceUnavailableError(f"无法初始化诊断服务: {e}")
 
-    async def coordinate_diagnosis(
-        self, request: DiagnosisRequest
-    ) -> FusedDiagnosisResult:
+    async def coordinate_diagnosis(self, request: DiagnosisRequest) -> FusedDiagnosisResult:
         """协调五诊分析"""
         coordination_id = f"{request.session_id}_{int(datetime.now().timestamp())}"
 
@@ -179,13 +177,9 @@ class FiveDiagnosisCoordinator:
         # 验证诊断数据
         for diagnosis_type in request.diagnosis_types:
             if diagnosis_type.value in request.data:
-                await validate_diagnosis_data(
-                    diagnosis_type, request.data[diagnosis_type.value]
-                )
+                await validate_diagnosis_data(diagnosis_type, request.data[diagnosis_type.value])
 
-    async def _execute_diagnoses(
-        self, request: DiagnosisRequest
-    ) -> List[DiagnosisResult]:
+    async def _execute_diagnoses(self, request: DiagnosisRequest) -> List[DiagnosisResult]:
         """执行各项诊断"""
         coordinator_mode = self.settings.five_diagnosis.coordinator_mode
 
@@ -194,9 +188,7 @@ class FiveDiagnosisCoordinator:
         else:
             return await self._execute_sequential_diagnoses(request)
 
-    async def _execute_parallel_diagnoses(
-        self, request: DiagnosisRequest
-    ) -> List[DiagnosisResult]:
+    async def _execute_parallel_diagnoses(self, request: DiagnosisRequest) -> List[DiagnosisResult]:
         """并行执行诊断"""
         tasks = []
 
@@ -253,9 +245,7 @@ class FiveDiagnosisCoordinator:
     ) -> DiagnosisResult:
         """执行单项诊断"""
         start_time = datetime.now()
-        diagnosis_id = (
-            f"{request.session_id}_{diagnosis_type.value}_{int(start_time.timestamp())}"
-        )
+        diagnosis_id = f"{request.session_id}_{diagnosis_type.value}_{int(start_time.timestamp())}"
 
         try:
             client = self.service_clients[diagnosis_type]
@@ -315,9 +305,7 @@ class FiveDiagnosisCoordinator:
         recommendation_engine = RecommendationEngine()
 
         # 提取有效结果
-        valid_results = [
-            r for r in individual_results if r.status == DiagnosisStatus.COMPLETED
-        ]
+        valid_results = [r for r in individual_results if r.status == DiagnosisStatus.COMPLETED]
 
         if not valid_results:
             logger.warning(f"没有有效的诊断结果 - 协调ID: {coordination_id}")
@@ -405,9 +393,7 @@ class FiveDiagnosisCoordinator:
 
         # 建议总结
         if recommendations:
-            high_priority_recs = [
-                r for r in recommendations if r.get("priority", 0) >= 4
-            ]
+            high_priority_recs = [r for r in recommendations if r.get("priority", 0) >= 4]
             if high_priority_recs:
                 summary_parts.append(f"重点建议：{len(high_priority_recs)}项")
 

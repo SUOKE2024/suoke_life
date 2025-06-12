@@ -64,9 +64,7 @@ class PalpationServiceClient(BaseServiceClient):
             logger.error(f"脉象分析错误: {e}")
             raise CommunicationError(f"切诊服务通信错误: {e}")
 
-    async def get_pulse_history(
-        self, user_id: str, limit: int = 10
-    ) -> List[Dict[str, Any]]:
+    async def get_pulse_history(self, user_id: str, limit: int = 10) -> List[Dict[str, Any]]:
         """
         获取用户的脉象历史记录
 

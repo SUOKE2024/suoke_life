@@ -6,6 +6,7 @@ from datetime import datetime
 from unittest.mock import AsyncMock, Mock, patch
 
 import pytest
+
 from xiaoai.core.syndrome_analyzer import (
     AnalysisMethod,
     SyndromeAnalyzer,
@@ -257,9 +258,7 @@ class TestSyndromeAnalyzer:
             ),
         ]
 
-        confidence = analyzer._calculate_overall_confidence(
-            patterns, sample_diagnosis_data
-        )
+        confidence = analyzer._calculate_overall_confidence(patterns, sample_diagnosis_data)
 
         assert 0 <= confidence <= 1
         assert confidence > 0.5  # 应该有合理的置信度
@@ -268,12 +267,8 @@ class TestSyndromeAnalyzer:
     async def test_pattern_combination_analysis(self, analyzer):
         """测试证型组合分析"""
         patterns = [
-            SyndromePattern(
-                name="气虚", type=SyndromeType.QI_DEFICIENCY, confidence=0.8
-            ),
-            SyndromePattern(
-                name="血瘀", type=SyndromeType.BLOOD_STASIS, confidence=0.7
-            ),
+            SyndromePattern(name="气虚", type=SyndromeType.QI_DEFICIENCY, confidence=0.8),
+            SyndromePattern(name="血瘀", type=SyndromeType.BLOOD_STASIS, confidence=0.7),
         ]
 
         combinations = analyzer._analyze_pattern_combinations(patterns)
@@ -287,9 +282,7 @@ class TestSyndromeAnalyzer:
     async def test_syndrome_evolution_analysis(self, analyzer):
         """测试证型演变分析"""
         current_patterns = [
-            SyndromePattern(
-                name="外感风寒", type=SyndromeType.EXTERIOR_COLD, confidence=0.8
-            )
+            SyndromePattern(name="外感风寒", type=SyndromeType.EXTERIOR_COLD, confidence=0.8)
         ]
 
         evolution = analyzer._analyze_syndrome_evolution(current_patterns)
@@ -317,11 +310,7 @@ class TestSyndromeAnalyzer:
     @pytest.mark.asyncio
     async def test_treatment_principle_generation(self, analyzer):
         """测试治疗原则生成"""
-        patterns = [
-            SyndromePattern(
-                name="心火亢盛", type=SyndromeType.EXCESS_HEAT, confidence=0.8
-            )
-        ]
+        patterns = [SyndromePattern(name="心火亢盛", type=SyndromeType.EXCESS_HEAT, confidence=0.8)]
 
         principles = analyzer._generate_treatment_principles(patterns)
 
