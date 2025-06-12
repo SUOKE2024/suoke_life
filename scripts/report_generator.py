@@ -3,10 +3,11 @@
 自动化报告生成器
 """
 
+import datetime
 import json
 import time
-import datetime
 from pathlib import Path
+
 
 def generate_daily_report():
     """生成每日报告"""
@@ -30,14 +31,21 @@ def generate_daily_report():
 
 *此报告由索克生活质量监控系统自动生成*
 """
-    
+
     # 确保报告目录存在
-    Path('reports').mkdir(exist_ok=True)
-    
-    with open(f'reports/daily_report_{datetime.now().strftime("%Y%m%d")}.md', 'w', encoding='utf-8') as f:
+    Path("reports").mkdir(exist_ok=True)
+
+    with open(
+        f'reports/daily_report_{datetime.now().strftime("%Y%m%d")}.md',
+        "w",
+        encoding="utf-8",
+    ) as f:
         f.write(report_content)
-    
-    print(f"每日报告已生成: reports/daily_report_{datetime.now().strftime('%Y%m%d')}.md")
+
+    print(
+        f"每日报告已生成: reports/daily_report_{datetime.now().strftime('%Y%m%d')}.md"
+    )
+
 
 if __name__ == "__main__":
     generate_daily_report()

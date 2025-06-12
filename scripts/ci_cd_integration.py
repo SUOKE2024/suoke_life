@@ -4,39 +4,40 @@
 建立持续集成和部署流程
 """
 
-import os
 import json
-from pathlib import Path
+import os
 import time
+from pathlib import Path
+
 
 class CICDIntegration:
     def __init__(self):
         self.project_root = Path.cwd()
-        
+
     def setup_cicd_pipeline(self):
         """设置CI/CD流水线"""
-        print('🚀 设置索克生活CI/CD流水线...')
-        print('=' * 60)
-        
+        print("🚀 设置索克生活CI/CD流水线...")
+        print("=" * 60)
+
         # 1. 创建GitHub Actions工作流
         self._create_github_actions()
-        
+
         # 2. 创建部署脚本
         self._create_deployment_scripts()
-        
+
         # 3. 生成CI/CD文档
         self._generate_cicd_documentation()
-        
-        print('\n🎉 CI/CD流水线设置完成！')
-        
+
+        print("\n🎉 CI/CD流水线设置完成！")
+
     def _create_github_actions(self):
         """创建GitHub Actions工作流"""
-        print('⚙️ 创建GitHub Actions工作流...')
-        
+        print("⚙️ 创建GitHub Actions工作流...")
+
         # 确保.github/workflows目录存在
-        workflows_dir = Path('.github/workflows')
+        workflows_dir = Path(".github/workflows")
         workflows_dir.mkdir(parents=True, exist_ok=True)
-        
+
         # 主CI工作流
         ci_workflow = """name: Suoke Life CI
 
@@ -92,22 +93,22 @@ jobs:
         pip install pip-audit
         pip-audit
 """
-        
-        with open(workflows_dir / 'ci.yml', 'w') as f:
+
+        with open(workflows_dir / "ci.yml", "w") as f:
             f.write(ci_workflow)
-            
-        print('  ✅ GitHub Actions工作流创建完成')
-        
+
+        print("  ✅ GitHub Actions工作流创建完成")
+
     def _create_deployment_scripts(self):
         """创建部署脚本"""
-        print('📦 创建部署脚本...')
-        
+        print("📦 创建部署脚本...")
+
         # 确保scripts目录存在
-        scripts_dir = Path('scripts')
+        scripts_dir = Path("scripts")
         scripts_dir.mkdir(exist_ok=True)
-        
+
         # 部署脚本
-        deploy_script = '''#!/bin/bash
+        deploy_script = """#!/bin/bash
 set -e
 
 echo "🚀 开始部署索克生活项目..."
@@ -125,18 +126,18 @@ echo "🔍 执行健康检查..."
 # 这里添加健康检查命令
 
 echo "✅ 部署完成！"
-'''
-        
-        with open('scripts/deploy.sh', 'w') as f:
+"""
+
+        with open("scripts/deploy.sh", "w") as f:
             f.write(deploy_script)
-        os.chmod('scripts/deploy.sh', 0o755)
-        
-        print('  ✅ 部署脚本创建完成')
-        
+        os.chmod("scripts/deploy.sh", 0o755)
+
+        print("  ✅ 部署脚本创建完成")
+
     def _generate_cicd_documentation(self):
         """生成CI/CD文档"""
-        print('📚 生成CI/CD文档...')
-        
+        print("📚 生成CI/CD文档...")
+
         doc_content = f"""# 索克生活项目CI/CD流水线文档
 
 ## 📋 概述
@@ -210,20 +211,22 @@ DATABASE_URL=postgresql://user:password@host:port/database
 **最后更新**: {time.strftime("%Y-%m-%d")}  
 **维护团队**: 索克生活DevOps团队  
 """
-        
-        with open('CICD_DOCUMENTATION.md', 'w', encoding='utf-8') as f:
+
+        with open("CICD_DOCUMENTATION.md", "w", encoding="utf-8") as f:
             f.write(doc_content)
-            
-        print('  ✅ CI/CD文档生成完成')
+
+        print("  ✅ CI/CD文档生成完成")
+
 
 def main():
     """主函数"""
     cicd = CICDIntegration()
-    
-    print('🚀 启动CI/CD集成工具...')
-    print('🎯 建立持续集成和部署流程')
-    
+
+    print("🚀 启动CI/CD集成工具...")
+    print("🎯 建立持续集成和部署流程")
+
     cicd.setup_cicd_pipeline()
 
+
 if __name__ == "__main__":
-    main() 
+    main()

@@ -4,82 +4,91 @@
 建立项目级别的统一异常处理框架
 """
 
-import os
-import re
 import ast
-import sys
 import json
 import logging
-from pathlib import Path
-from typing import List, Dict, Tuple, Optional, Set
+import os
+import re
+import sys
 from dataclasses import dataclass
+from pathlib import Path
+from typing import Dict, List, Optional, Set, Tuple
 
 # 配置日志
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
+
 
 @dataclass
 class ExceptionPattern:
     """异常处理模式"""
+
     file_path: str
     line_number: int
     pattern_type: str
     original_code: str
     suggested_fix: str
 
+
 class UnifiedExceptionHandler:
     """统一异常处理创建器"""
-    
+
     def __init__(self, project_root: str):
         self.project_root = Path(project_root)
         self.patterns_found = []
         self.backup_dir = self.project_root / "backups" / "exception_handling"
         self.backup_dir.mkdir(parents=True, exist_ok=True)
-        
+
         # 项目目录
         self.project_dirs = ["src", "services", "scripts", "tests"]
-        
+
         # 排除的目录模式
         self.exclude_patterns = [
-            "*/.venv/*", "*/venv/*", "*/env/*",
-            "*/node_modules/*", "*/.git/*", 
-            "*/build/*", "*/dist/*", "*/__pycache__/*",
-            "*/coverage/*", "*/htmlcov/*",
-            "*/site-packages/*", "*/lib/python*/*"
+            "*/.venv/*",
+            "*/venv/*",
+            "*/env/*",
+            "*/node_modules/*",
+            "*/.git/*",
+            "*/build/*",
+            "*/dist/*",
+            "*/__pycache__/*",
+            "*/coverage/*",
+            "*/htmlcov/*",
+            "*/site-packages/*",
+            "*/lib/python*/*",
         ]
-        
+
         # 问题异常处理模式
         self.problematic_patterns = [
             # 过于宽泛的异常捕获
-            r'except\s+Exception\s*:',
-            r'except\s*:',
+            r"except\s+Exception\s*:",
+            r"except\s*:",
             # 静默忽略异常
-            r'except.*:\s*pass',
-            r'except.*:\s*continue',
+            r"except.*:\s*pass",
+            r"except.*:\s*continue",
             # 不具体的异常类型
-            r'except\s+Exception\s+as\s+\w+\s*:',
+            r"except\s+Exception\s+as\s+\w+\s*:",
         ]
-    
+
     def should_exclude_file(self, file_path: Path) -> bool:
         """检查文件是否应该被排除"""
         for pattern in self.exclude_patterns:
             if file_path.match(pattern):
                 return True
-        
+
         # 检查是否在项目目录中
         try:
             relative_path = file_path.relative_to(self.project_root)
-            first_part = str(relative_path).split('/')[0]
+            first_part = str(relative_path).split("/")[0]
             return first_part not in self.project_dirs
         except ValueError:
             return True
-    
+
     def create_exception_framework(self):
         """创建统一异常处理框架"""
-        
+
         # 1. 创建基础异常类
         base_exceptions_content = '''"""
 索克生活项目 - 统一异常处理框架
@@ -366,17 +375,17 @@ class RecoveryStrategy:
             return wrapper
         return decorator
 '''
-        
+
         # 创建异常框架文件
         exceptions_dir = self.project_root / "src" / "core" / "exceptions"
         exceptions_dir.mkdir(parents=True, exist_ok=True)
-        
+
         exceptions_file = exceptions_dir / "__init__.py"
-        with open(exceptions_file, 'w', encoding='utf-8') as f:
+        with open(exceptions_file, "w", encoding="utf-8") as f:
             f.write(base_exceptions_content)
-        
+
         logger.info(f"✅ 创建统一异常处理框架: {exceptions_file}")
-        
+
         # 2. 创建异常处理配置
         config_content = '''"""
 异常处理配置
@@ -443,78 +452,80 @@ CIRCUIT_BREAKER_CONFIG = {
     'recovery_timeout': 60
 }
 '''
-        
+
         config_file = exceptions_dir / "config.py"
-        with open(config_file, 'w', encoding='utf-8') as f:
+        with open(config_file, "w", encoding="utf-8") as f:
             f.write(config_content)
-        
+
         logger.info(f"✅ 创建异常处理配置: {config_file}")
-        
+
         return exceptions_file, config_file
-    
+
     def scan_exception_patterns(self) -> List[ExceptionPattern]:
         """扫描项目中的异常处理模式"""
         patterns = []
-        
+
         # 扫描项目目录中的Python文件
         all_python_files = []
         for project_dir in self.project_dirs:
             dir_path = self.project_root / project_dir
             if dir_path.exists():
-                all_python_files.extend(dir_path.rglob('*.py'))
-        
+                all_python_files.extend(dir_path.rglob("*.py"))
+
         # 过滤文件
         filtered_files = [
-            f for f in all_python_files 
-            if not self.should_exclude_file(f)
+            f for f in all_python_files if not self.should_exclude_file(f)
         ]
-        
+
         logger.info(f"扫描 {len(filtered_files)} 个文件中的异常处理模式...")
-        
+
         for file_path in filtered_files:
             try:
-                with open(file_path, 'r', encoding='utf-8') as f:
+                with open(file_path, "r", encoding="utf-8") as f:
                     content = f.read()
-                
-                lines = content.split('\n')
+
+                lines = content.split("\n")
                 for line_num, line in enumerate(lines, 1):
                     for pattern in self.problematic_patterns:
                         if re.search(pattern, line):
-                            patterns.append(ExceptionPattern(
-                                file_path=str(file_path),
-                                line_number=line_num,
-                                pattern_type=pattern,
-                                original_code=line.strip(),
-                                suggested_fix=self._suggest_fix(line.strip(), pattern)
-                            ))
-                            
+                            patterns.append(
+                                ExceptionPattern(
+                                    file_path=str(file_path),
+                                    line_number=line_num,
+                                    pattern_type=pattern,
+                                    original_code=line.strip(),
+                                    suggested_fix=self._suggest_fix(
+                                        line.strip(), pattern
+                                    ),
+                                )
+                            )
+
             except Exception as e:
                 logger.error(f"扫描文件 {file_path} 时出错: {e}")
-        
+
         return patterns
-    
+
     def _suggest_fix(self, original_code: str, pattern: str) -> str:
         """建议修复方案"""
-        if 'except Exception:' in original_code:
-            return original_code.replace(
-                'except Exception:', 
-                'except SpecificException:'
-            ) + " # 使用具体的异常类型"
-        
-        elif 'except:' in original_code and 'pass' in original_code:
-            return original_code.replace(
-                'pass', 
-                'logger.error("Unexpected error occurred", exc_info=True)'
+        if "except Exception:" in original_code:
+            return (
+                original_code.replace("except Exception:", "except SpecificException:")
+                + " # 使用具体的异常类型"
             )
-        
-        elif 'except:' in original_code:
+
+        elif "except:" in original_code and "pass" in original_code:
             return original_code.replace(
-                'except:', 
-                'except Exception as e:'
-            ) + " # 至少捕获Exception并记录"
-        
+                "pass", 'logger.error("Unexpected error occurred", exc_info=True)'
+            )
+
+        elif "except:" in original_code:
+            return (
+                original_code.replace("except:", "except Exception as e:")
+                + " # 至少捕获Exception并记录"
+            )
+
         return original_code + " # 需要手动检查和修复"
-    
+
     def create_migration_script(self, patterns: List[ExceptionPattern]):
         """创建异常处理迁移脚本"""
         migration_content = f'''#!/usr/bin/env python3
@@ -566,32 +577,36 @@ def fix_exception_patterns():
 if __name__ == "__main__":
     fix_exception_patterns()
 '''
-        
+
         # 转换模式为字典格式
         patterns_dict = [
             {
-                'file_path': p.file_path,
-                'line_number': p.line_number,
-                'pattern_type': p.pattern_type,
-                'original_code': p.original_code,
-                'suggested_fix': p.suggested_fix
+                "file_path": p.file_path,
+                "line_number": p.line_number,
+                "pattern_type": p.pattern_type,
+                "original_code": p.original_code,
+                "suggested_fix": p.suggested_fix,
             }
             for p in patterns
         ]
-        
-        migration_script = self.project_root / "scripts" / "migrate_exception_handling.py"
-        with open(migration_script, 'w', encoding='utf-8') as f:
+
+        migration_script = (
+            self.project_root / "scripts" / "migrate_exception_handling.py"
+        )
+        with open(migration_script, "w", encoding="utf-8") as f:
             f.write(migration_content.format(patterns=patterns_dict))
-        
+
         logger.info(f"✅ 创建异常处理迁移脚本: {migration_script}")
         return migration_script
-    
+
     def generate_report(self, patterns: List[ExceptionPattern]) -> str:
         """生成异常处理分析报告"""
         pattern_counts = {}
         for pattern in patterns:
-            pattern_counts[pattern.pattern_type] = pattern_counts.get(pattern.pattern_type, 0) + 1
-        
+            pattern_counts[pattern.pattern_type] = (
+                pattern_counts.get(pattern.pattern_type, 0) + 1
+            )
+
         report = f"""
 # 索克生活项目 - 异常处理分析报告
 
@@ -647,36 +662,37 @@ with ExceptionContext("database_operation"):
 """
         return report
 
+
 def main():
     """主函数"""
     project_root = os.getcwd()
-    
+
     print("🔧 索克生活项目 - 统一异常处理机制创建工具")
     print("=" * 60)
-    
+
     handler = UnifiedExceptionHandler(project_root)
-    
+
     # 1. 创建异常处理框架
     print("📦 创建统一异常处理框架...")
     exceptions_file, config_file = handler.create_exception_framework()
-    
+
     # 2. 扫描现有异常处理模式
     print("🔍 扫描现有异常处理模式...")
     patterns = handler.scan_exception_patterns()
-    
+
     # 3. 创建迁移脚本
     if patterns:
         print("📝 创建异常处理迁移脚本...")
         migration_script = handler.create_migration_script(patterns)
-    
+
     # 4. 生成报告
     report = handler.generate_report(patterns)
-    
+
     # 保存报告
     report_file = Path(project_root) / "exception_handling_report.md"
-    with open(report_file, 'w', encoding='utf-8') as f:
+    with open(report_file, "w", encoding="utf-8") as f:
         f.write(report)
-    
+
     print("\n" + "=" * 60)
     print("📄 异常处理框架创建完成！")
     print(f"📊 发现 {len(patterns)} 个需要改进的异常处理模式")
@@ -685,8 +701,9 @@ def main():
     print("1. 查看报告了解具体问题")
     print("2. 运行迁移脚本修复问题")
     print("3. 在新代码中使用统一异常处理框架")
-    
+
     return 0
 
+
 if __name__ == "__main__":
-    sys.exit(main()) 
+    sys.exit(main())

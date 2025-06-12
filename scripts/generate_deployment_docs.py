@@ -2,11 +2,12 @@
 generate_deployment_docs - 索克生活项目模块
 """
 
-from jaeger_client import Config
-from pathlib import Path
 import logging
 import os
+from pathlib import Path
+
 import yaml
+from jaeger_client import Config
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
@@ -16,8 +17,11 @@ import yaml
 """
 
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 logger = logging.getLogger(__name__)
+
 
 class DeploymentDocGenerator:
     """部署文档生成器"""
@@ -159,7 +163,7 @@ blockchain_data:
 ```
 """
 
-        with open(self.docs_dir / "docker-guide.md", 'w', encoding='utf-8') as f:
+        with open(self.docs_dir / "docker-guide.md", "w", encoding="utf-8") as f:
             f.write(content)
 
         logger.info("✅ Docker部署指南生成完成")
@@ -349,7 +353,7 @@ kubectl rollout undo deployment/xiaoai-service
 ```
 """
 
-        with open(self.docs_dir / "kubernetes-guide.md", 'w', encoding='utf-8') as f:
+        with open(self.docs_dir / "kubernetes-guide.md", "w", encoding="utf-8") as f:
             f.write(content)
 
         logger.info("✅ Kubernetes部署指南生成完成")
@@ -632,7 +636,7 @@ kubectl exec -it redis-0 -- redis-cli --rdb dump.rdb
 - 回滚准备
 """
 
-        with open(self.docs_dir / "production-guide.md", 'w', encoding='utf-8') as f:
+        with open(self.docs_dir / "production-guide.md", "w", encoding="utf-8") as f:
             f.write(content)
 
         logger.info("✅ 生产环境部署指南生成完成")
@@ -994,10 +998,11 @@ kubectl delete pods --field-selector=status.phase=Succeeded
 - [ ] 灾难恢复演练
 """
 
-        with open(self.docs_dir / "monitoring-guide.md", 'w', encoding='utf-8') as f:
+        with open(self.docs_dir / "monitoring-guide.md", "w", encoding="utf-8") as f:
             f.write(content)
 
         logger.info("✅ 监控运维指南生成完成")
+
 
 def main():
     """主函数"""
@@ -1022,5 +1027,6 @@ def main():
         logger.error(f"❌ 部署文档生成失败: {e}")
         return 1
 
+
 if __name__ == "__main__":
-    exit(main()) 
+    exit(main())

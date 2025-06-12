@@ -4,12 +4,13 @@
 将med-knowledge和suoke-bench-service整合为unified-knowledge-service
 """
 
+import datetime
+import json
 import os
 import shutil
-import json
 from pathlib import Path
-import datetime
-from typing import Dict, List, Any
+from typing import Any, Dict, List
+
 
 class KnowledgeServicesIntegrator:
     def __init__(self):
@@ -17,7 +18,7 @@ class KnowledgeServicesIntegrator:
         self.source_services = ["med-knowledge", "suoke-bench-service"]
         self.target_service = "unified-knowledge-service"
         self.target_path = self.base_path / self.target_service
-        
+
         self.integration_record = {
             "timestamp": datetime.now().isoformat(),
             "source_services": self.source_services,
@@ -25,17 +26,17 @@ class KnowledgeServicesIntegrator:
             "integration_status": "started",
             "files_created": [],
             "directories_created": [],
-            "integration_summary": {}
+            "integration_summary": {},
         }
-    
+
     def create_unified_service_structure(self):
         """创建统一知识服务的目录结构"""
         print("🏗️ 创建统一知识服务目录结构...")
-        
+
         directories = [
             "unified_knowledge_service",
             "unified_knowledge_service/med_knowledge",
-            "unified_knowledge_service/benchmark", 
+            "unified_knowledge_service/benchmark",
             "unified_knowledge_service/common",
             "unified_knowledge_service/api",
             "unified_knowledge_service/data",
@@ -61,21 +62,21 @@ class KnowledgeServicesIntegrator:
             "data/knowledge",
             "data/benchmark",
             "logs",
-            "monitoring"
+            "monitoring",
         ]
-        
+
         for directory in directories:
             dir_path = self.target_path / directory
             dir_path.mkdir(parents=True, exist_ok=True)
             self.integration_record["directories_created"].append(str(dir_path))
             print(f"  📁 创建目录: {directory}")
-        
+
         print(f"✅ 创建了 {len(directories)} 个目录")
-    
+
     def create_main_service_manager(self):
         """创建主服务管理器"""
         print("🔧 创建主服务管理器...")
-        
+
         main_service_content = '''"""
 统一知识服务主管理器
 整合医学知识管理和基准测试功能
@@ -285,20 +286,20 @@ if __name__ == "__main__":
     
     asyncio.run(main())
 '''
-        
+
         main_file = self.target_path / "unified_knowledge_service" / "__init__.py"
-        with open(main_file, 'w', encoding='utf-8') as f:
+        with open(main_file, "w", encoding="utf-8") as f:
             f.write(main_service_content)
-        
+
         self.integration_record["files_created"].append(str(main_file))
         print("✅ 主服务管理器创建完成")
-    
+
     def create_configuration_files(self):
         """创建配置文件"""
         print("⚙️ 创建配置文件...")
-        
+
         # 主配置文件
-        config_content = '''# 统一知识服务配置
+        config_content = """# 统一知识服务配置
 
 # 服务基本配置
 service:
@@ -378,14 +379,14 @@ monitoring:
   metrics_enabled: true
   health_check_interval: 30
   performance_tracking: true
-'''
-        
+"""
+
         config_file = self.target_path / "config" / "service.yml"
-        with open(config_file, 'w', encoding='utf-8') as f:
+        with open(config_file, "w", encoding="utf-8") as f:
             f.write(config_content)
-        
+
         # 环境变量示例文件
-        env_content = '''# 统一知识服务环境变量配置
+        env_content = """# 统一知识服务环境变量配置
 
 # 数据库配置
 DB_HOST=localhost
@@ -427,21 +428,23 @@ BACKUP_PATH=/backup/unified-knowledge
 # 监控配置
 PROMETHEUS_PORT=9090
 GRAFANA_PORT=3000
-'''
-        
+"""
+
         env_file = self.target_path / ".env.example"
-        with open(env_file, 'w', encoding='utf-8') as f:
+        with open(env_file, "w", encoding="utf-8") as f:
             f.write(env_content)
-        
-        self.integration_record["files_created"].extend([str(config_file), str(env_file)])
+
+        self.integration_record["files_created"].extend(
+            [str(config_file), str(env_file)]
+        )
         print("✅ 配置文件创建完成")
-    
+
     def create_docker_files(self):
         """创建Docker部署文件"""
         print("🐳 创建Docker部署文件...")
-        
+
         # Dockerfile
-        dockerfile_content = '''FROM python:3.11-slim
+        dockerfile_content = """FROM python:3.11-slim
 
 # 设置工作目录
 WORKDIR /app
@@ -478,14 +481,14 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \\
 
 # 启动命令
 CMD ["python", "-m", "unified_knowledge_service"]
-'''
-        
+"""
+
         dockerfile = self.target_path / "Dockerfile"
-        with open(dockerfile, 'w', encoding='utf-8') as f:
+        with open(dockerfile, "w", encoding="utf-8") as f:
             f.write(dockerfile_content)
-        
+
         # docker-compose.yml
-        compose_content = '''version: '3.8'
+        compose_content = """version: '3.8'
 
 services:
   unified-knowledge-service:
@@ -552,20 +555,22 @@ volumes:
 networks:
   knowledge-network:
     driver: bridge
-'''
-        
+"""
+
         compose_file = self.target_path / "docker-compose.yml"
-        with open(compose_file, 'w', encoding='utf-8') as f:
+        with open(compose_file, "w", encoding="utf-8") as f:
             f.write(compose_content)
-        
-        self.integration_record["files_created"].extend([str(dockerfile), str(compose_file)])
+
+        self.integration_record["files_created"].extend(
+            [str(dockerfile), str(compose_file)]
+        )
         print("✅ Docker部署文件创建完成")
-    
+
     def create_requirements_file(self):
         """创建依赖文件"""
         print("📦 创建依赖文件...")
-        
-        requirements_content = '''# 统一知识服务依赖
+
+        requirements_content = """# 统一知识服务依赖
 
 # Web框架
 fastapi>=0.104.0
@@ -620,20 +625,20 @@ passlib[bcrypt]>=1.7.4
 requests>=2.31.0
 aiohttp>=3.9.0
 celery>=5.3.0
-'''
-        
+"""
+
         requirements_file = self.target_path / "requirements.txt"
-        with open(requirements_file, 'w', encoding='utf-8') as f:
+        with open(requirements_file, "w", encoding="utf-8") as f:
             f.write(requirements_content)
-        
+
         self.integration_record["files_created"].append(str(requirements_file))
         print("✅ 依赖文件创建完成")
-    
+
     def create_readme_file(self):
         """创建README文档"""
         print("📚 创建README文档...")
-        
-        readme_content = '''# 统一知识服务 (Unified Knowledge Service)
+
+        readme_content = """# 统一知识服务 (Unified Knowledge Service)
 
 ## 概述
 
@@ -889,81 +894,88 @@ export LOG_LEVEL=DEBUG
 
 **版本**: 1.0.0  
 **更新时间**: 2025年6月9日
-'''
-        
+"""
+
         readme_file = self.target_path / "README.md"
-        with open(readme_file, 'w', encoding='utf-8') as f:
+        with open(readme_file, "w", encoding="utf-8") as f:
             f.write(readme_content)
-        
+
         self.integration_record["files_created"].append(str(readme_file))
         print("✅ README文档创建完成")
-    
+
     def run_integration(self):
         """执行完整的整合流程"""
         print("🚀 开始知识服务整合...")
-        print(f"📋 整合目标: {' + '.join(self.source_services)} → {self.target_service}")
-        
+        print(
+            f"📋 整合目标: {' + '.join(self.source_services)} → {self.target_service}"
+        )
+
         try:
             # 1. 创建目录结构
             self.create_unified_service_structure()
-            
+
             # 2. 创建主服务管理器
             self.create_main_service_manager()
-            
+
             # 3. 创建配置文件
             self.create_configuration_files()
-            
+
             # 4. 创建Docker文件
             self.create_docker_files()
-            
+
             # 5. 创建依赖文件
             self.create_requirements_file()
-            
+
             # 6. 创建README文档
             self.create_readme_file()
-            
+
             # 更新整合记录
             self.integration_record["integration_status"] = "completed"
             self.integration_record["integration_summary"] = {
-                "directories_created": len(self.integration_record["directories_created"]),
+                "directories_created": len(
+                    self.integration_record["directories_created"]
+                ),
                 "files_created": len(self.integration_record["files_created"]),
                 "source_services": len(self.source_services),
-                "target_service": self.target_service
+                "target_service": self.target_service,
             }
-            
+
             print(f"\n🎉 知识服务整合完成!")
-            print(f"📁 创建目录: {len(self.integration_record['directories_created'])} 个")
+            print(
+                f"📁 创建目录: {len(self.integration_record['directories_created'])} 个"
+            )
             print(f"📄 创建文件: {len(self.integration_record['files_created'])} 个")
             print(f"🎯 目标服务: {self.target_service}")
-            
+
             return True
-            
+
         except Exception as e:
             print(f"❌ 整合过程中出现错误: {e}")
             self.integration_record["integration_status"] = "failed"
             self.integration_record["error"] = str(e)
             return False
-    
+
     def save_integration_record(self):
         """保存整合记录"""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         record_file = f"knowledge_services_integration_record_{timestamp}.json"
-        
-        with open(record_file, 'w', encoding='utf-8') as f:
+
+        with open(record_file, "w", encoding="utf-8") as f:
             json.dump(self.integration_record, f, indent=2, ensure_ascii=False)
-        
+
         print(f"📄 整合记录已保存: {record_file}")
+
 
 def main():
     integrator = KnowledgeServicesIntegrator()
-    
+
     try:
         # 执行整合
         success = integrator.run_integration()
-        
+
         # 保存记录
         integrator.save_integration_record()
-        
+
         if success:
             print("\n✅ 知识服务整合任务完成!")
             print("🔄 下一步: 可以开始清理原始服务")
@@ -971,10 +983,11 @@ def main():
         else:
             print("\n❌ 知识服务整合失败!")
             return 1
-            
+
     except Exception as e:
         print(f"❌ 执行过程中出现错误: {e}")
         return 1
 
+
 if __name__ == "__main__":
-    exit(main()) 
+    exit(main())

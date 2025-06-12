@@ -9,10 +9,11 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 def fix_consul_patch():
     """修复consul_patch.py文件"""
-    file_path = 'services/api-gateway/pkg/utils/consul_patch.py'
-    
+    file_path = "services/api-gateway/pkg/utils/consul_patch.py"
+
     # 重写整个文件内容
     content = '''from typing import Dict, List, Any, Optional, Union
 
@@ -49,11 +50,11 @@ if sys.version_info >= (3, 10) and not hasattr(asyncio, 'coroutine'):
     # 将修补版本添加到asyncio模块
     asyncio.coroutine = async_coroutine_patch
 '''
-    
+
     try:
         # 验证语法
         ast.parse(content)
-        with open(file_path, 'w', encoding='utf-8') as f:
+        with open(file_path, "w", encoding="utf-8") as f:
             f.write(content)
         logger.info(f"成功修复 {file_path}")
         return True
@@ -61,10 +62,11 @@ if sys.version_info >= (3, 10) and not hasattr(asyncio, 'coroutine'):
         logger.error(f"修复失败: {e}")
         return False
 
+
 def fix_exception_handler():
     """修复exception_handler.py文件"""
-    file_path = 'services/api-gateway/utils/exception_handler.py'
-    
+    file_path = "services/api-gateway/utils/exception_handler.py"
+
     content = '''"""
 exception_handler - 索克生活项目模块
 """
@@ -99,11 +101,11 @@ class GlobalExceptionHandler:
             "timestamp": error_info["timestamp"]
         }
 '''
-    
+
     try:
         # 验证语法
         ast.parse(content)
-        with open(file_path, 'w', encoding='utf-8') as f:
+        with open(file_path, "w", encoding="utf-8") as f:
             f.write(content)
         logger.info(f"成功修复 {file_path}")
         return True
@@ -111,19 +113,21 @@ class GlobalExceptionHandler:
         logger.error(f"修复失败: {e}")
         return False
 
+
 def main():
     """主函数"""
     logger.info("开始修复特定文件的语法错误...")
-    
+
     success_count = 0
-    
+
     if fix_consul_patch():
         success_count += 1
-        
+
     if fix_exception_handler():
         success_count += 1
-    
+
     logger.info(f"修复完成，成功修复 {success_count} 个文件")
 
+
 if __name__ == "__main__":
-    main() 
+    main()

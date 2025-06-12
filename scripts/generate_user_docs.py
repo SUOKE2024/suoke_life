@@ -2,9 +2,9 @@
 generate_user_docs - 索克生活项目模块
 """
 
-from pathlib import Path
 import logging
 import os
+from pathlib import Path
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
@@ -14,8 +14,11 @@ import os
 """
 
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 logger = logging.getLogger(__name__)
+
 
 class UserDocGenerator:
     """用户文档生成器"""
@@ -176,7 +179,7 @@ A:
 *感谢您选择索克生活，让我们一起开启智慧健康新生活！*
 """
 
-        with open(self.docs_dir / "user-guide.md", 'w', encoding='utf-8') as f:
+        with open(self.docs_dir / "user-guide.md", "w", encoding="utf-8") as f:
             f.write(content)
 
         logger.info("✅ 用户使用指南生成完成")
@@ -400,7 +403,7 @@ A:
 *四位AI智能体期待与您一起，开启个性化健康管理之旅！*
 """
 
-        with open(self.docs_dir / "agent-guide.md", 'w', encoding='utf-8') as f:
+        with open(self.docs_dir / "agent-guide.md", "w", encoding="utf-8") as f:
             f.write(content)
 
         logger.info("✅ 智能体使用指南生成完成")
@@ -657,7 +660,7 @@ A:
 *通过科学的诊断方法，让健康管理更加精准有效！*
 """
 
-        with open(self.docs_dir / "diagnosis-guide.md", 'w', encoding='utf-8') as f:
+        with open(self.docs_dir / "diagnosis-guide.md", "w", encoding="utf-8") as f:
             f.write(content)
 
         logger.info("✅ 诊断功能指南生成完成")
@@ -898,10 +901,11 @@ A:
 我们致力于为您提供最好的健康管理体验！
 """
 
-        with open(self.docs_dir / "faq.md", 'w', encoding='utf-8') as f:
+        with open(self.docs_dir / "faq.md", "w", encoding="utf-8") as f:
             f.write(content)
 
         logger.info("✅ 常见问题FAQ生成完成")
+
 
 def main():
     """主函数"""
@@ -926,5 +930,6 @@ def main():
         logger.error(f"❌ 用户文档生成失败: {e}")
         return 1
 
+
 if __name__ == "__main__":
-    exit(main()) 
+    exit(main())

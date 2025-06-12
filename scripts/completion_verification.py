@@ -6,16 +6,19 @@
 最终验证项目是否真正达到100%完成度
 """
 
-import os
 import json
-import subprocess
-from pathlib import Path
-from typing import Dict, List, Any, Tuple
 import logging
+import os
+import subprocess
 from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Tuple
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 logger = logging.getLogger(__name__)
+
 
 class CompletionVerifier:
     """项目完成度验证器"""
@@ -27,7 +30,7 @@ class CompletionVerifier:
             "component_scores": {},
             "critical_issues": [],
             "recommendations": [],
-            "final_status": "未完成"
+            "final_status": "未完成",
         }
 
     def verify_completion(self) -> bool:
@@ -46,7 +49,7 @@ class CompletionVerifier:
                 "测试覆盖": self.verify_test_coverage(),
                 "安全配置": self.verify_security_config(),
                 "监控系统": self.verify_monitoring_system(),
-                "性能优化": self.verify_performance_optimization()
+                "性能优化": self.verify_performance_optimization(),
             }
 
             self.verification_results["component_scores"] = scores
@@ -76,7 +79,12 @@ class CompletionVerifier:
         """验证智能体服务"""
         logger.info("🤖 验证智能体服务...")
 
-        agent_services = ["xiaoai-service", "xiaoke-service", "laoke-service", "soer-service"]
+        agent_services = [
+            "xiaoai-service",
+            "xiaoke-service",
+            "laoke-service",
+            "soer-service",
+        ]
         agent_dir = self.project_root / "services" / "agent-services"
 
         if not agent_dir.exists():
@@ -105,7 +113,9 @@ class CompletionVerifier:
                 if (service_path / "api").exists():
                     score += 1
             else:
-                self.verification_results["critical_issues"].append(f"智能体服务 {service} 不存在")
+                self.verification_results["critical_issues"].append(
+                    f"智能体服务 {service} 不存在"
+                )
 
         completion_rate = (score / total_checks) * 100
         logger.info(f"智能体服务完成度: {completion_rate:.1f}%")
@@ -129,15 +139,24 @@ class CompletionVerifier:
             if (src_dir / dir_name).exists():
                 score += 1
             else:
-                self.verification_results["critical_issues"].append(f"前端目录 {dir_name} 缺失")
+                self.verification_results["critical_issues"].append(
+                    f"前端目录 {dir_name} 缺失"
+                )
 
         # 检查配置文件
-        config_files = ["package.json", "tsconfig.json", "babel.config.js", "metro.config.js"]
+        config_files = [
+            "package.json",
+            "tsconfig.json",
+            "babel.config.js",
+            "metro.config.js",
+        ]
         for config_file in config_files:
             if (self.project_root / config_file).exists():
                 score += 1
             else:
-                self.verification_results["recommendations"].append(f"建议添加配置文件: {config_file}")
+                self.verification_results["recommendations"].append(
+                    f"建议添加配置文件: {config_file}"
+                )
 
         completion_rate = (score / total_checks) * 100
         logger.info(f"前端应用完成度: {completion_rate:.1f}%")
@@ -153,7 +172,11 @@ class CompletionVerifier:
             return 0
 
         # 统计服务数量
-        service_dirs = [d for d in services_dir.iterdir() if d.is_dir() and not d.name.startswith('.')]
+        service_dirs = [
+            d
+            for d in services_dir.iterdir()
+            if d.is_dir() and not d.name.startswith(".")
+        ]
 
         score = 0
         total_services = len(service_dirs)
@@ -165,8 +188,12 @@ class CompletionVerifier:
 
         # 检查关键服务
         critical_services = [
-            "user-service", "auth-service", "health-data-service", 
-            "blockchain-service", "api-gateway", "message-bus"
+            "user-service",
+            "auth-service",
+            "health-data-service",
+            "blockchain-service",
+            "api-gateway",
+            "message-bus",
         ]
 
         critical_score = 0
@@ -194,7 +221,7 @@ class CompletionVerifier:
         db_config_paths = [
             self.project_root / "config" / "database.py",
             self.project_root / "config" / "database.yml",
-            self.project_root / "database"
+            self.project_root / "database",
         ]
 
         if any(path.exists() for path in db_config_paths):
@@ -203,7 +230,7 @@ class CompletionVerifier:
         # 检查迁移文件
         migration_paths = [
             self.project_root / "migrations",
-            self.project_root / "database" / "migrations"
+            self.project_root / "database" / "migrations",
         ]
 
         if any(path.exists() for path in migration_paths):
@@ -241,8 +268,12 @@ class CompletionVerifier:
             score += 1
 
         # 检查Kubernetes配置
-        k8s_files = list(self.project_root.rglob("*.yaml")) + list(self.project_root.rglob("*.yml"))
-        k8s_configs = [f for f in k8s_files if "k8s" in str(f) or "kubernetes" in str(f)]
+        k8s_files = list(self.project_root.rglob("*.yaml")) + list(
+            self.project_root.rglob("*.yml")
+        )
+        k8s_configs = [
+            f for f in k8s_files if "k8s" in str(f) or "kubernetes" in str(f)
+        ]
         if k8s_configs:
             score += 1
 
@@ -260,7 +291,7 @@ class CompletionVerifier:
         deploy_docs = [
             self.project_root / "docs" / "DEPLOYMENT_GUIDE.md",
             self.project_root / "DEPLOYMENT.md",
-            self.project_root / "README.md"
+            self.project_root / "README.md",
         ]
         if any(doc.exists() for doc in deploy_docs):
             score += 1
@@ -281,7 +312,7 @@ class CompletionVerifier:
             self.project_root / "README.md",
             self.project_root / "docs" / "api",
             self.project_root / "docs" / "user",
-            self.project_root / "docs" / "guides"
+            self.project_root / "docs" / "guides",
         ]
 
         for doc_path in main_docs:
@@ -306,7 +337,7 @@ class CompletionVerifier:
         # 检查项目报告
         reports = [
             self.project_root / "PROJECT_DELIVERY_REPORT.md",
-            self.project_root / "FINAL_VALIDATION_REPORT.md"
+            self.project_root / "FINAL_VALIDATION_REPORT.md",
         ]
         if any(report.exists() for report in reports):
             score += 1
@@ -373,7 +404,9 @@ class CompletionVerifier:
                 score += 1
 
         # 检查SSL配置
-        ssl_configs = list(self.project_root.rglob("*ssl*")) + list(self.project_root.rglob("*tls*"))
+        ssl_configs = list(self.project_root.rglob("*ssl*")) + list(
+            self.project_root.rglob("*tls*")
+        )
         if ssl_configs:
             score += 1
 
@@ -392,7 +425,7 @@ class CompletionVerifier:
         monitoring_paths = [
             self.project_root / "monitoring",
             self.project_root / "deploy" / "prometheus",
-            self.project_root / "services" / "common" / "monitoring"
+            self.project_root / "services" / "common" / "monitoring",
         ]
 
         if any(path.exists() for path in monitoring_paths):
@@ -427,23 +460,29 @@ class CompletionVerifier:
         # 检查性能优化报告
         perf_reports = [
             self.project_root / "PERFORMANCE_OPTIMIZATION_REPORT.json",
-            self.project_root / "SYSTEM_STABILITY_REPORT.json"
+            self.project_root / "SYSTEM_STABILITY_REPORT.json",
         ]
         if any(report.exists() for report in perf_reports):
             score += 1
 
         # 检查缓存配置
-        cache_configs = list(self.project_root.rglob("*redis*")) + list(self.project_root.rglob("*cache*"))
+        cache_configs = list(self.project_root.rglob("*redis*")) + list(
+            self.project_root.rglob("*cache*")
+        )
         if cache_configs:
             score += 1
 
         # 检查数据库优化
-        db_optimizations = list(self.project_root.rglob("*index*")) + list(self.project_root.rglob("*optimize*"))
+        db_optimizations = list(self.project_root.rglob("*index*")) + list(
+            self.project_root.rglob("*optimize*")
+        )
         if db_optimizations:
             score += 1
 
         # 检查负载均衡配置
-        lb_configs = list(self.project_root.rglob("*nginx*")) + list(self.project_root.rglob("*load*"))
+        lb_configs = list(self.project_root.rglob("*nginx*")) + list(
+            self.project_root.rglob("*load*")
+        )
         if lb_configs:
             score += 1
 
@@ -457,7 +496,7 @@ class CompletionVerifier:
 
         # 保存JSON报告
         report_file = self.project_root / "COMPLETION_VERIFICATION_REPORT.json"
-        with open(report_file, 'w', encoding='utf-8') as f:
+        with open(report_file, "w", encoding="utf-8") as f:
             json.dump(self.verification_results, f, ensure_ascii=False, indent=2)
 
         # 生成Markdown报告
@@ -471,7 +510,11 @@ class CompletionVerifier:
         final_status = self.verification_results["final_status"]
 
         # 状态图标
-        status_icon = "🎉" if final_status == "完成" else "⚠️" if final_status == "基本完成" else "❌"
+        status_icon = (
+            "🎉"
+            if final_status == "完成"
+            else "⚠️" if final_status == "基本完成" else "❌"
+        )
 
         report_content = f"""# 索克生活 - 项目完成度验证报告
 
@@ -530,7 +573,8 @@ class CompletionVerifier:
 """
 
         report_file = self.project_root / "COMPLETION_VERIFICATION_REPORT.md"
-        report_file.write_text(report_content, encoding='utf-8')
+        report_file.write_text(report_content, encoding="utf-8")
+
 
 def main():
     """主函数"""
@@ -541,17 +585,18 @@ def main():
 
     if success:
         logger.info("🎉 项目验证通过，已达到100%完成度！")
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
         print("🎊 恭喜！索克生活项目已成功达到100%完成度！")
         print("🚀 项目已准备好投入生产环境使用！")
-        print("="*60)
+        print("=" * 60)
     else:
         logger.warning("⚠️ 项目尚未达到100%完成度，请查看验证报告。")
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
         print("📋 请查看 COMPLETION_VERIFICATION_REPORT.md 了解详情")
-        print("="*60)
+        print("=" * 60)
 
     return 0 if success else 1
 
+
 if __name__ == "__main__":
-    exit(main()) 
+    exit(main())

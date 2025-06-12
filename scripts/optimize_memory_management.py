@@ -4,29 +4,30 @@
 检测和修复Python代码中的内存管理问题
 """
 
-import os
-import re
 import ast
-import sys
+import gc
 import json
 import logging
-import gc
-import tracemalloc
-from pathlib import Path
-from typing import List, Dict, Tuple, Optional, Set
-from dataclasses import dataclass
+import os
+import re
 import subprocess
+import sys
+import tracemalloc
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Dict, List, Optional, Set, Tuple
 
 # 配置日志
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
+
 
 @dataclass
 class MemoryIssue:
     """内存问题"""
+
     file_path: str
     line_number: int
     issue_type: str
@@ -35,116 +36,127 @@ class MemoryIssue:
     suggested_fix: str
     severity: str
 
+
 class MemoryOptimizer:
     """内存管理优化器"""
-    
+
     def __init__(self, project_root: str):
         self.project_root = Path(project_root)
         self.issues_found = []
         self.backup_dir = self.project_root / "backups" / "memory_optimization"
-        
+
         # 内存问题检测模式
         self.memory_patterns = {
-            'unclosed_file': {
-                'patterns': [
-                    r'open\s*\([^)]+\)(?!\s*with)',  # open() 不在 with 语句中
-                    r'file\s*=\s*open\s*\([^)]+\)'   # file = open() 模式
+            "unclosed_file": {
+                "patterns": [
+                    r"open\s*\([^)]+\)(?!\s*with)",  # open() 不在 with 语句中
+                    r"file\s*=\s*open\s*\([^)]+\)",  # file = open() 模式
                 ],
-                'severity': 'HIGH',
-                'description': '未正确关闭的文件句柄'
+                "severity": "HIGH",
+                "description": "未正确关闭的文件句柄",
             },
-            'large_list_comprehension': {
-                'patterns': [
-                    r'\[[^\]]{100,}\]',  # 超长列表推导式
-                    r'\[[^]]*for[^]]*for[^]]*\]'  # 嵌套列表推导式
+            "large_list_comprehension": {
+                "patterns": [
+                    r"\[[^\]]{100,}\]",  # 超长列表推导式
+                    r"\[[^]]*for[^]]*for[^]]*\]",  # 嵌套列表推导式
                 ],
-                'severity': 'MEDIUM',
-                'description': '可能消耗大量内存的列表推导式'
+                "severity": "MEDIUM",
+                "description": "可能消耗大量内存的列表推导式",
             },
-            'global_variables': {
-                'patterns': [
-                    r'global\s+\w+',
-                    r'^\s*[A-Z_][A-Z0-9_]*\s*=.*'  # 全局常量模式
+            "global_variables": {
+                "patterns": [
+                    r"global\s+\w+",
+                    r"^\s*[A-Z_][A-Z0-9_]*\s*=.*",  # 全局常量模式
                 ],
-                'severity': 'MEDIUM',
-                'description': '全局变量可能导致内存泄漏'
+                "severity": "MEDIUM",
+                "description": "全局变量可能导致内存泄漏",
             },
-            'circular_reference': {
-                'patterns': [
-                    r'self\.\w+\s*=\s*self',
-                    r'parent\.\w+\s*=\s*child'
-                ],
-                'severity': 'HIGH',
-                'description': '可能的循环引用'
+            "circular_reference": {
+                "patterns": [r"self\.\w+\s*=\s*self", r"parent\.\w+\s*=\s*child"],
+                "severity": "HIGH",
+                "description": "可能的循环引用",
             },
-            'large_data_structures': {
-                'patterns': [
-                    r'dict\(\)\s*#.*large',
-                    r'list\(\)\s*#.*large',
-                    r'\[\]\s*#.*large'
+            "large_data_structures": {
+                "patterns": [
+                    r"dict\(\)\s*#.*large",
+                    r"list\(\)\s*#.*large",
+                    r"\[\]\s*#.*large",
                 ],
-                'severity': 'MEDIUM',
-                'description': '大型数据结构'
+                "severity": "MEDIUM",
+                "description": "大型数据结构",
             },
-            'memory_intensive_operations': {
-                'patterns': [
-                    r'\.read\(\)',  # 读取整个文件
-                    r'\.readlines\(\)',  # 读取所有行
-                    r'json\.loads\([^)]*\.read\(\)'  # 加载大JSON
+            "memory_intensive_operations": {
+                "patterns": [
+                    r"\.read\(\)",  # 读取整个文件
+                    r"\.readlines\(\)",  # 读取所有行
+                    r"json\.loads\([^)]*\.read\(\)",  # 加载大JSON
                 ],
-                'severity': 'MEDIUM',
-                'description': '内存密集型操作'
-            }
+                "severity": "MEDIUM",
+                "description": "内存密集型操作",
+            },
         }
-        
+
         # 排除的文件和目录
         self.exclude_patterns = {
-            'venv', 'env', '.env', '__pycache__', '.git', 
-            'node_modules', '.pytest_cache', 'dist', 'build',
-            '.idea', '.vscode', '*.pyc', '*.pyo', '*.egg-info'
+            "venv",
+            "env",
+            ".env",
+            "__pycache__",
+            ".git",
+            "node_modules",
+            ".pytest_cache",
+            "dist",
+            "build",
+            ".idea",
+            ".vscode",
+            "*.pyc",
+            "*.pyo",
+            "*.egg-info",
         }
-    
+
     def scan_memory_issues(self) -> List[MemoryIssue]:
         """扫描内存管理问题"""
         logger.info("🔍 扫描内存管理问题...")
-        
+
         python_files = self._get_python_files()
-        
+
         for file_path in python_files:
             try:
                 self._analyze_file_memory(file_path)
             except Exception as e:
                 logger.warning(f"无法分析文件 {file_path}: {e}")
-        
+
         logger.info(f"发现 {len(self.issues_found)} 个内存问题")
         return self.issues_found
-    
+
     def _get_python_files(self) -> List[Path]:
         """获取所有Python文件"""
         python_files = []
-        
+
         for root, dirs, files in os.walk(self.project_root):
             # 排除特定目录
-            dirs[:] = [d for d in dirs if not any(
-                pattern in d for pattern in self.exclude_patterns
-            )]
-            
+            dirs[:] = [
+                d
+                for d in dirs
+                if not any(pattern in d for pattern in self.exclude_patterns)
+            ]
+
             for file in files:
-                if file.endswith('.py'):
+                if file.endswith(".py"):
                     file_path = Path(root) / file
                     # 排除备份文件
-                    if 'backup' not in str(file_path).lower():
+                    if "backup" not in str(file_path).lower():
                         python_files.append(file_path)
-        
+
         return python_files
-    
+
     def _analyze_file_memory(self, file_path: Path):
         """分析单个文件的内存问题"""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
-                lines = content.split('\n')
-            
+                lines = content.split("\n")
+
             # 使用AST分析
             try:
                 tree = ast.parse(content)
@@ -152,33 +164,33 @@ class MemoryOptimizer:
             except SyntaxError:
                 # 如果AST解析失败，使用正则表达式
                 self._analyze_regex_memory(file_path, lines)
-                
+
         except Exception as e:
             logger.warning(f"无法读取文件 {file_path}: {e}")
-    
+
     def _analyze_ast_memory(self, file_path: Path, tree: ast.AST, lines: List[str]):
         """使用AST分析内存问题"""
         for node in ast.walk(tree):
             # 检查文件操作
             if isinstance(node, ast.Call):
                 self._check_file_operations(file_path, node, lines)
-            
+
             # 检查列表推导式
             elif isinstance(node, ast.ListComp):
                 self._check_list_comprehension(file_path, node, lines)
-            
+
             # 检查全局变量
             elif isinstance(node, ast.Global):
                 self._check_global_variables(file_path, node, lines)
-    
+
     def _check_file_operations(self, file_path: Path, node: ast.Call, lines: List[str]):
         """检查文件操作"""
-        if (isinstance(node.func, ast.Name) and node.func.id == 'open'):
+        if isinstance(node.func, ast.Name) and node.func.id == "open":
             line_num = node.lineno
             line_content = lines[line_num - 1] if line_num <= len(lines) else ""
-            
+
             # 检查是否在with语句中
-            if 'with' not in line_content:
+            if "with" not in line_content:
                 issue = MemoryIssue(
                     file_path=str(file_path.relative_to(self.project_root)),
                     line_number=line_num,
@@ -186,15 +198,17 @@ class MemoryOptimizer:
                     description="文件未使用with语句打开，可能导致文件句柄泄漏",
                     code_snippet=line_content.strip(),
                     suggested_fix=self._suggest_file_fix(line_content),
-                    severity="HIGH"
+                    severity="HIGH",
                 )
                 self.issues_found.append(issue)
-    
-    def _check_list_comprehension(self, file_path: Path, node: ast.ListComp, lines: List[str]):
+
+    def _check_list_comprehension(
+        self, file_path: Path, node: ast.ListComp, lines: List[str]
+    ):
         """检查列表推导式"""
         line_num = node.lineno
         line_content = lines[line_num - 1] if line_num <= len(lines) else ""
-        
+
         # 检查嵌套循环
         if len(node.generators) > 1:
             issue = MemoryIssue(
@@ -204,15 +218,17 @@ class MemoryOptimizer:
                 description="嵌套列表推导式可能消耗大量内存",
                 code_snippet=line_content.strip(),
                 suggested_fix="考虑使用生成器表达式或分步处理",
-                severity="MEDIUM"
+                severity="MEDIUM",
             )
             self.issues_found.append(issue)
-    
-    def _check_global_variables(self, file_path: Path, node: ast.Global, lines: List[str]):
+
+    def _check_global_variables(
+        self, file_path: Path, node: ast.Global, lines: List[str]
+    ):
         """检查全局变量"""
         line_num = node.lineno
         line_content = lines[line_num - 1] if line_num <= len(lines) else ""
-        
+
         issue = MemoryIssue(
             file_path=str(file_path.relative_to(self.project_root)),
             line_number=line_num,
@@ -220,29 +236,31 @@ class MemoryOptimizer:
             description="全局变量可能导致内存泄漏",
             code_snippet=line_content.strip(),
             suggested_fix="考虑使用类属性或函数参数替代全局变量",
-            severity="MEDIUM"
+            severity="MEDIUM",
         )
         self.issues_found.append(issue)
-    
+
     def _analyze_regex_memory(self, file_path: Path, lines: List[str]):
         """使用正则表达式分析内存问题（备用方法）"""
         for line_num, line in enumerate(lines, 1):
             line_stripped = line.strip()
-            
+
             for pattern_type, pattern_info in self.memory_patterns.items():
-                for pattern in pattern_info['patterns']:
+                for pattern in pattern_info["patterns"]:
                     if re.search(pattern, line_stripped):
                         issue = MemoryIssue(
                             file_path=str(file_path.relative_to(self.project_root)),
                             line_number=line_num,
                             issue_type=pattern_type,
-                            description=pattern_info['description'],
+                            description=pattern_info["description"],
                             code_snippet=line_stripped,
-                            suggested_fix=self._generate_memory_fix(pattern_type, line_stripped),
-                            severity=pattern_info['severity']
+                            suggested_fix=self._generate_memory_fix(
+                                pattern_type, line_stripped
+                            ),
+                            severity=pattern_info["severity"],
                         )
                         self.issues_found.append(issue)
-    
+
     def _suggest_file_fix(self, line_content: str) -> str:
         """建议文件操作修复方案"""
         return f"""
@@ -254,28 +272,28 @@ with open(...) as f:
     pass
 # 文件会自动关闭
 """
-    
+
     def _generate_memory_fix(self, issue_type: str, code_snippet: str) -> str:
         """生成内存问题修复建议"""
         fixes = {
-            'unclosed_file': "使用 with 语句确保文件正确关闭",
-            'large_list_comprehension': "使用生成器表达式: (x for x in ...) 替代 [x for x in ...]",
-            'global_variables': "避免使用全局变量，使用类属性或函数参数",
-            'circular_reference': "使用弱引用 weakref 避免循环引用",
-            'large_data_structures': "考虑使用生成器或分批处理大型数据",
-            'memory_intensive_operations': "分块读取大文件，避免一次性加载到内存"
+            "unclosed_file": "使用 with 语句确保文件正确关闭",
+            "large_list_comprehension": "使用生成器表达式: (x for x in ...) 替代 [x for x in ...]",
+            "global_variables": "避免使用全局变量，使用类属性或函数参数",
+            "circular_reference": "使用弱引用 weakref 避免循环引用",
+            "large_data_structures": "考虑使用生成器或分批处理大型数据",
+            "memory_intensive_operations": "分块读取大文件，避免一次性加载到内存",
         }
         return fixes.get(issue_type, "优化内存使用")
-    
+
     def create_memory_profiler(self) -> str:
         """创建内存分析器"""
         logger.info("📊 创建内存分析器...")
-        
+
         profiler_dir = self.project_root / "src" / "core" / "monitoring"
         profiler_dir.mkdir(parents=True, exist_ok=True)
-        
+
         profiler_file = profiler_dir / "memory_profiler.py"
-        
+
         profiler_content = '''"""
 索克生活项目 - 内存分析器
 监控和分析应用程序的内存使用情况
@@ -460,17 +478,19 @@ class MemoryContext:
 # 全局内存分析器实例
 global_profiler = MemoryProfiler()
 '''
-        
-        with open(profiler_file, 'w', encoding='utf-8') as f:
+
+        with open(profiler_file, "w", encoding="utf-8") as f:
             f.write(profiler_content)
-        
+
         return str(profiler_file)
-    
+
     def create_memory_optimization_guide(self) -> str:
         """创建内存优化指南"""
-        guide_path = self.project_root / "docs" / "development" / "memory_optimization_guide.md"
+        guide_path = (
+            self.project_root / "docs" / "development" / "memory_optimization_guide.md"
+        )
         guide_path.parent.mkdir(parents=True, exist_ok=True)
-        
+
         guide_content = """# Python内存优化指南
 
 ## 📋 内存管理最佳实践
@@ -680,16 +700,16 @@ def data_pipeline(filename):
 - 内存使用告警
 - 自动重启机制
 """
-        
-        with open(guide_path, 'w', encoding='utf-8') as f:
+
+        with open(guide_path, "w", encoding="utf-8") as f:
             f.write(guide_content)
-        
+
         return str(guide_path)
-    
+
     def generate_report(self) -> str:
         """生成内存优化报告"""
         logger.info("📊 生成内存优化报告...")
-        
+
         report = f"""# 内存管理优化报告
 
 ## 📊 扫描结果概览
@@ -698,32 +718,32 @@ def data_pipeline(filename):
 - **发现内存问题**: {len(self.issues_found)}
 - **问题类型分布**:
 """
-        
+
         # 统计问题类型
         issue_types = {}
         severity_count = {}
-        
+
         for issue in self.issues_found:
             issue_types[issue.issue_type] = issue_types.get(issue.issue_type, 0) + 1
             severity_count[issue.severity] = severity_count.get(issue.severity, 0) + 1
-        
+
         for issue_type, count in issue_types.items():
             report += f"  - {issue_type}: {count}\n"
-        
+
         report += "\n- **严重性分布**:\n"
         for severity, count in severity_count.items():
             report += f"  - {severity}: {count}\n"
-        
+
         report += "\n## 🔍 发现的内存问题详情\n\n"
-        
+
         # 按严重性分组
         by_severity = {}
         for issue in self.issues_found:
             if issue.severity not in by_severity:
                 by_severity[issue.severity] = []
             by_severity[issue.severity].append(issue)
-        
-        for severity in ['HIGH', 'MEDIUM', 'LOW']:
+
+        for severity in ["HIGH", "MEDIUM", "LOW"]:
             if severity in by_severity:
                 report += f"### {severity} 严重性\n\n"
                 for issue in by_severity[severity]:
@@ -732,7 +752,7 @@ def data_pipeline(filename):
                     report += f"**描述**: {issue.description}\n"
                     report += f"**代码**: `{issue.code_snippet}`\n"
                     report += f"**修复建议**: {issue.suggested_fix}\n\n"
-        
+
         report += """
 ## 🛠️ 修复步骤
 
@@ -762,42 +782,44 @@ def data_pipeline(filename):
 3. **大型数据结构**会快速消耗内存
 4. **全局变量**会持续占用内存直到程序结束
 """
-        
+
         return report
+
 
 def main():
     """主函数"""
     project_root = os.getcwd()
-    print('🧠 索克生活项目 - 内存管理优化工具')
-    print('=' * 60)
-    
+    print("🧠 索克生活项目 - 内存管理优化工具")
+    print("=" * 60)
+
     optimizer = MemoryOptimizer(project_root)
-    
+
     # 1. 扫描内存问题
     issues = optimizer.scan_memory_issues()
-    
+
     # 2. 创建内存分析器
     profiler_file = optimizer.create_memory_profiler()
     print(f"✅ 已创建内存分析器: {profiler_file}")
-    
+
     # 3. 创建内存优化指南
     guide_file = optimizer.create_memory_optimization_guide()
     print(f"✅ 已创建内存优化指南: {guide_file}")
-    
+
     # 4. 生成报告
     report = optimizer.generate_report()
-    
+
     # 保存报告
-    report_file = Path(project_root) / 'memory_optimization_report.md'
-    with open(report_file, 'w', encoding='utf-8') as f:
+    report_file = Path(project_root) / "memory_optimization_report.md"
+    with open(report_file, "w", encoding="utf-8") as f:
         f.write(report)
-    
+
     print(f"📊 优化报告已保存到: {report_file}")
-    
+
     if issues:
         print(f"\n⚠️  发现 {len(issues)} 个内存问题，请查看报告详情")
     else:
         print("\n✅ 未发现内存问题")
 
+
 if __name__ == "__main__":
-    main() 
+    main()

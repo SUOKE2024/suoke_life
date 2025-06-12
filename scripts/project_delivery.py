@@ -2,14 +2,14 @@
 project_delivery - 索克生活项目模块
 """
 
-from datetime import datetime
-from pathlib import Path
-from typing import Dict, List, Any
 import json
 import logging
 import os
 import shutil
 import time
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
@@ -20,8 +20,11 @@ import time
 """
 
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 logger = logging.getLogger(__name__)
+
 
 class ProjectDelivery:
     """项目交付管理器"""
@@ -37,7 +40,7 @@ class ProjectDelivery:
             "deliverables": [],
             "quality_metrics": {},
             "deployment_ready": True,
-            "production_ready": True
+            "production_ready": True,
         }
 
     def execute_delivery(self) -> bool:
@@ -71,14 +74,14 @@ class ProjectDelivery:
             "文档": self.project_root / "docs",
             "脚本工具": self.project_root / "scripts",
             "配置文件": self.project_root / "config",
-            "测试": self.project_root / "tests"
+            "测试": self.project_root / "tests",
         }
 
         for component_name, component_path in required_components.items():
             exists = component_path.exists()
             self.delivery_report["components"][component_name] = {
                 "status": "完整" if exists else "缺失",
-                "path": str(component_path.relative_to(self.project_root))
+                "path": str(component_path.relative_to(self.project_root)),
             }
 
             if exists:
@@ -95,13 +98,21 @@ class ProjectDelivery:
         # 统计微服务数量
         services_dir = self.project_root / "services"
         if services_dir.exists():
-            microservices = [d for d in services_dir.iterdir() if d.is_dir() and not d.name.startswith('.')]
+            microservices = [
+                d
+                for d in services_dir.iterdir()
+                if d.is_dir() and not d.name.startswith(".")
+            ]
             self.delivery_report["components"]["微服务数量"] = len(microservices)
 
         # 统计智能体数量
         agent_services_dir = services_dir / "agent-services"
         if agent_services_dir.exists():
-            agents = [d for d in agent_services_dir.iterdir() if d.is_dir() and not d.name.startswith('.')]
+            agents = [
+                d
+                for d in agent_services_dir.iterdir()
+                if d.is_dir() and not d.name.startswith(".")
+            ]
             self.delivery_report["components"]["智能体数量"] = len(agents)
 
         # 统计前端组件数量
@@ -115,8 +126,12 @@ class ProjectDelivery:
         self.delivery_report["components"]["Docker配置数量"] = len(dockerfiles)
 
         # 统计K8s配置数量
-        k8s_files = list(self.project_root.rglob("*.yaml")) + list(self.project_root.rglob("*.yml"))
-        k8s_configs = [f for f in k8s_files if "k8s" in str(f) or "kubernetes" in str(f)]
+        k8s_files = list(self.project_root.rglob("*.yaml")) + list(
+            self.project_root.rglob("*.yml")
+        )
+        k8s_configs = [
+            f for f in k8s_files if "k8s" in str(f) or "kubernetes" in str(f)
+        ]
         self.delivery_report["components"]["K8s配置数量"] = len(k8s_configs)
 
         logger.info("✅ 组件摘要生成完成")
@@ -130,50 +145,50 @@ class ProjectDelivery:
                 "name": "源代码",
                 "description": "完整的项目源代码，包括前端和后端",
                 "location": "整个项目目录",
-                "type": "源码"
+                "type": "源码",
             },
             {
                 "name": "部署配置",
                 "description": "Docker和Kubernetes部署配置文件",
                 "location": "deploy/ 目录",
-                "type": "配置"
+                "type": "配置",
             },
             {
                 "name": "API文档",
                 "description": "所有微服务的API接口文档",
                 "location": "docs/api/ 目录",
-                "type": "文档"
+                "type": "文档",
             },
             {
                 "name": "用户文档",
                 "description": "用户使用指南和操作手册",
                 "location": "docs/user/ 目录",
-                "type": "文档"
+                "type": "文档",
             },
             {
                 "name": "部署指南",
                 "description": "详细的部署和运维指南",
                 "location": "docs/guides/ 目录",
-                "type": "文档"
+                "type": "文档",
             },
             {
                 "name": "测试报告",
                 "description": "完整的测试报告和验收报告",
                 "location": "根目录下的报告文件",
-                "type": "报告"
+                "type": "报告",
             },
             {
                 "name": "监控配置",
                 "description": "Prometheus和Grafana监控配置",
                 "location": "monitoring/ 目录",
-                "type": "配置"
+                "type": "配置",
             },
             {
                 "name": "安全配置",
                 "description": "安全防护和认证配置",
                 "location": "services/common/security/ 目录",
-                "type": "配置"
-            }
+                "type": "配置",
+            },
         ]
 
         self.delivery_report["deliverables"] = deliverables
@@ -190,25 +205,27 @@ class ProjectDelivery:
         # 读取完成度报告
         completion_report_file = self.project_root / "PROJECT_COMPLETION_REPORT.json"
         if completion_report_file.exists():
-            with open(completion_report_file, 'r', encoding='utf-8') as f:
+            with open(completion_report_file, "r", encoding="utf-8") as f:
                 reports["completion"] = json.load(f)
 
         # 读取性能优化报告
-        performance_report_file = self.project_root / "PERFORMANCE_OPTIMIZATION_REPORT.json"
+        performance_report_file = (
+            self.project_root / "PERFORMANCE_OPTIMIZATION_REPORT.json"
+        )
         if performance_report_file.exists():
-            with open(performance_report_file, 'r', encoding='utf-8') as f:
+            with open(performance_report_file, "r", encoding="utf-8") as f:
                 reports["performance"] = json.load(f)
 
         # 读取稳定性报告
         stability_report_file = self.project_root / "SYSTEM_STABILITY_REPORT.json"
         if stability_report_file.exists():
-            with open(stability_report_file, 'r', encoding='utf-8') as f:
+            with open(stability_report_file, "r", encoding="utf-8") as f:
                 reports["stability"] = json.load(f)
 
         # 读取验收报告
         validation_report_file = self.project_root / "FINAL_VALIDATION_REPORT.json"
         if validation_report_file.exists():
-            with open(validation_report_file, 'r', encoding='utf-8') as f:
+            with open(validation_report_file, "r", encoding="utf-8") as f:
                 reports["validation"] = json.load(f)
 
         # 汇总质量指标
@@ -222,12 +239,16 @@ class ProjectDelivery:
             "文档完整性": "完整",
             "测试覆盖率": "全面",
             "部署就绪度": "100%",
-            "生产就绪度": "100%"
+            "生产就绪度": "100%",
         }
 
         if "validation" in reports:
-            quality_metrics["最终评分"] = f"{reports['validation'].get('overall_score', 100)}/100"
-            quality_metrics["完成度"] = f"{reports['validation'].get('completion_percentage', 100)}%"
+            quality_metrics["最终评分"] = (
+                f"{reports['validation'].get('overall_score', 100)}/100"
+            )
+            quality_metrics["完成度"] = (
+                f"{reports['validation'].get('completion_percentage', 100)}%"
+            )
 
         self.delivery_report["quality_metrics"] = quality_metrics
 
@@ -353,7 +374,7 @@ curl http://localhost:8080/health
 
         guide_file = self.project_root / "docs" / "DEPLOYMENT_GUIDE.md"
         guide_file.parent.mkdir(parents=True, exist_ok=True)
-        guide_file.write_text(deployment_guide, encoding='utf-8')
+        guide_file.write_text(deployment_guide, encoding="utf-8")
 
         logger.info("✅ 部署指南创建完成")
 
@@ -363,7 +384,7 @@ curl http://localhost:8080/health
 
         # 保存JSON报告
         report_file = self.project_root / "PROJECT_DELIVERY_REPORT.json"
-        with open(report_file, 'w', encoding='utf-8') as f:
+        with open(report_file, "w", encoding="utf-8") as f:
             json.dump(self.delivery_report, f, ensure_ascii=False, indent=2)
 
         # 生成Markdown报告
@@ -404,7 +425,9 @@ curl http://localhost:8080/health
         for component, details in self.delivery_report["components"].items():
             if isinstance(details, dict):
                 status_icon = "✅" if details["status"] == "完整" else "❌"
-                report_content += f"- {status_icon} **{component}**: {details['status']}\n"
+                report_content += (
+                    f"- {status_icon} **{component}**: {details['status']}\n"
+                )
             else:
                 report_content += f"- 📈 **{component}**: {details}\n"
 
@@ -415,12 +438,9 @@ curl http://localhost:8080/health
 """
 
         for deliverable in self.delivery_report["deliverables"]:
-            type_icon = {
-                "源码": "💻",
-                "配置": "⚙️",
-                "文档": "📖",
-                "报告": "📊"
-            }.get(deliverable["type"], "📄")
+            type_icon = {"源码": "💻", "配置": "⚙️", "文档": "📖", "报告": "📊"}.get(
+                deliverable["type"], "📄"
+            )
 
             report_content += f"""
 #### {type_icon} {deliverable['name']}
@@ -525,7 +545,7 @@ open http://localhost:8080
 """
 
         report_file = self.project_root / "PROJECT_DELIVERY_REPORT.md"
-        report_file.write_text(report_content, encoding='utf-8')
+        report_file.write_text(report_content, encoding="utf-8")
 
     def celebrate_completion(self):
         """庆祝项目完成"""
@@ -593,9 +613,10 @@ open http://localhost:8080
 
         # 创建庆祝文件
         celebration_file = self.project_root / "PROJECT_COMPLETION_CELEBRATION.txt"
-        celebration_file.write_text(celebration_message, encoding='utf-8')
+        celebration_file.write_text(celebration_message, encoding="utf-8")
 
         logger.info("🎉 项目完成庆祝活动结束！")
+
 
 def main():
     """主函数"""
@@ -612,5 +633,6 @@ def main():
 
     return 0
 
+
 if __name__ == "__main__":
-    exit(main()) 
+    exit(main())

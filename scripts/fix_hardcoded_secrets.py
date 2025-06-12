@@ -4,24 +4,25 @@
 自动检测项目中的硬编码敏感信息并提供修复建议
 """
 
-import os
-import re
 import json
 import logging
-from pathlib import Path
-from typing import List, Dict, Tuple, Optional, Set
+import os
+import re
 from dataclasses import dataclass
+from pathlib import Path
+from typing import Dict, List, Optional, Set, Tuple
 
 # 配置日志
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
+
 
 @dataclass
 class SecretPattern:
     """敏感信息模式"""
+
     file_path: str
     line_number: int
     pattern_type: str
@@ -30,145 +31,159 @@ class SecretPattern:
     severity: str
     suggested_fix: str
 
+
 class HardcodedSecretsFixer:
     """硬编码密钥修复器"""
-    
+
     def __init__(self, project_root: str):
         self.project_root = Path(project_root)
         self.secrets_found = []
         self.backup_dir = self.project_root / "backups" / "secrets_fix"
-        
+
         # 敏感信息检测模式
         self.secret_patterns = {
-            'api_key': {
-                'patterns': [
+            "api_key": {
+                "patterns": [
                     r'api[_-]?key\s*[=:]\s*["\']([a-zA-Z0-9_-]{20,})["\']',
                     r'apikey\s*[=:]\s*["\']([a-zA-Z0-9_-]{20,})["\']',
-                    r'API[_-]?KEY\s*[=:]\s*["\']([a-zA-Z0-9_-]{20,})["\']'
+                    r'API[_-]?KEY\s*[=:]\s*["\']([a-zA-Z0-9_-]{20,})["\']',
                 ],
-                'severity': 'HIGH',
-                'description': 'API密钥'
+                "severity": "HIGH",
+                "description": "API密钥",
             },
-            'secret_key': {
-                'patterns': [
+            "secret_key": {
+                "patterns": [
                     r'secret[_-]?key\s*[=:]\s*["\']([a-zA-Z0-9_-]{20,})["\']',
-                    r'SECRET[_-]?KEY\s*[=:]\s*["\']([a-zA-Z0-9_-]{20,})["\']'
+                    r'SECRET[_-]?KEY\s*[=:]\s*["\']([a-zA-Z0-9_-]{20,})["\']',
                 ],
-                'severity': 'HIGH',
-                'description': '密钥'
+                "severity": "HIGH",
+                "description": "密钥",
             },
-            'password': {
-                'patterns': [
+            "password": {
+                "patterns": [
                     r'password\s*[=:]\s*["\']([^"\']{8,})["\']',
                     r'PASSWORD\s*[=:]\s*["\']([^"\']{8,})["\']',
-                    r'pwd\s*[=:]\s*["\']([^"\']{8,})["\']'
+                    r'pwd\s*[=:]\s*["\']([^"\']{8,})["\']',
                 ],
-                'severity': 'HIGH',
-                'description': '密码'
+                "severity": "HIGH",
+                "description": "密码",
             },
-            'token': {
-                'patterns': [
+            "token": {
+                "patterns": [
                     r'token\s*[=:]\s*["\']([a-zA-Z0-9_-]{20,})["\']',
                     r'TOKEN\s*[=:]\s*["\']([a-zA-Z0-9_-]{20,})["\']',
-                    r'access[_-]?token\s*[=:]\s*["\']([a-zA-Z0-9_-]{20,})["\']'
+                    r'access[_-]?token\s*[=:]\s*["\']([a-zA-Z0-9_-]{20,})["\']',
                 ],
-                'severity': 'HIGH',
-                'description': '访问令牌'
+                "severity": "HIGH",
+                "description": "访问令牌",
             },
-            'database_url': {
-                'patterns': [
+            "database_url": {
+                "patterns": [
                     r'database[_-]?url\s*[=:]\s*["\']([^"\']+://[^"\']+)["\']',
                     r'db[_-]?url\s*[=:]\s*["\']([^"\']+://[^"\']+)["\']',
-                    r'DATABASE[_-]?URL\s*[=:]\s*["\']([^"\']+://[^"\']+)["\']'
+                    r'DATABASE[_-]?URL\s*[=:]\s*["\']([^"\']+://[^"\']+)["\']',
                 ],
-                'severity': 'MEDIUM',
-                'description': '数据库连接字符串'
+                "severity": "MEDIUM",
+                "description": "数据库连接字符串",
             },
-            'private_key': {
-                'patterns': [
+            "private_key": {
+                "patterns": [
                     r'private[_-]?key\s*[=:]\s*["\']([^"\']{50,})["\']',
                     r'PRIVATE[_-]?KEY\s*[=:]\s*["\']([^"\']{50,})["\']',
-                    r'-----BEGIN PRIVATE KEY-----',
-                    r'-----BEGIN RSA PRIVATE KEY-----'
+                    r"-----BEGIN PRIVATE KEY-----",
+                    r"-----BEGIN RSA PRIVATE KEY-----",
                 ],
-                'severity': 'CRITICAL',
-                'description': '私钥'
+                "severity": "CRITICAL",
+                "description": "私钥",
             },
-            'aws_credentials': {
-                'patterns': [
+            "aws_credentials": {
+                "patterns": [
                     r'aws[_-]?access[_-]?key[_-]?id\s*[=:]\s*["\']([A-Z0-9]{20})["\']',
-                    r'aws[_-]?secret[_-]?access[_-]?key\s*[=:]\s*["\']([a-zA-Z0-9/+=]{40})["\']'
+                    r'aws[_-]?secret[_-]?access[_-]?key\s*[=:]\s*["\']([a-zA-Z0-9/+=]{40})["\']',
                 ],
-                'severity': 'CRITICAL',
-                'description': 'AWS凭证'
+                "severity": "CRITICAL",
+                "description": "AWS凭证",
             },
-            'jwt_secret': {
-                'patterns': [
+            "jwt_secret": {
+                "patterns": [
                     r'jwt[_-]?secret\s*[=:]\s*["\']([^"\']{20,})["\']',
-                    r'JWT[_-]?SECRET\s*[=:]\s*["\']([^"\']{20,})["\']'
+                    r'JWT[_-]?SECRET\s*[=:]\s*["\']([^"\']{20,})["\']',
                 ],
-                'severity': 'HIGH',
-                'description': 'JWT密钥'
-            }
+                "severity": "HIGH",
+                "description": "JWT密钥",
+            },
         }
-        
+
         # 排除的文件和目录
         self.exclude_patterns = {
-            'venv', 'env', '.env', '__pycache__', '.git', 
-            'node_modules', '.pytest_cache', 'dist', 'build',
-            '.idea', '.vscode', '*.pyc', '*.pyo', '*.egg-info'
+            "venv",
+            "env",
+            ".env",
+            "__pycache__",
+            ".git",
+            "node_modules",
+            ".pytest_cache",
+            "dist",
+            "build",
+            ".idea",
+            ".vscode",
+            "*.pyc",
+            "*.pyo",
+            "*.egg-info",
         }
-    
+
     def scan_for_secrets(self) -> List[SecretPattern]:
         """扫描项目中的硬编码敏感信息"""
         logger.info("🔍 扫描硬编码敏感信息...")
-        
+
         python_files = self._get_python_files()
-        
+
         for file_path in python_files:
             try:
-                with open(file_path, 'r', encoding='utf-8') as f:
+                with open(file_path, "r", encoding="utf-8") as f:
                     content = f.read()
-                    lines = content.split('\n')
-                    
+                    lines = content.split("\n")
+
                     for line_num, line in enumerate(lines, 1):
                         self._check_line_for_secrets(file_path, line_num, line)
-                        
+
             except Exception as e:
                 logger.warning(f"无法读取文件 {file_path}: {e}")
-        
+
         logger.info(f"发现 {len(self.secrets_found)} 个潜在的硬编码敏感信息")
         return self.secrets_found
-    
+
     def _get_python_files(self) -> List[Path]:
         """获取所有Python文件"""
         python_files = []
-        
+
         for root, dirs, files in os.walk(self.project_root):
             # 排除特定目录
-            dirs[:] = [d for d in dirs if not any(
-                pattern in d for pattern in self.exclude_patterns
-            )]
-            
+            dirs[:] = [
+                d
+                for d in dirs
+                if not any(pattern in d for pattern in self.exclude_patterns)
+            ]
+
             for file in files:
-                if file.endswith('.py'):
+                if file.endswith(".py"):
                     file_path = Path(root) / file
                     # 排除备份文件
-                    if 'backup' not in str(file_path).lower():
+                    if "backup" not in str(file_path).lower():
                         python_files.append(file_path)
-        
+
         return python_files
-    
+
     def _check_line_for_secrets(self, file_path: Path, line_num: int, line: str):
         """检查单行代码中的敏感信息"""
         line_stripped = line.strip()
-        
+
         # 跳过注释行
-        if line_stripped.startswith('#'):
+        if line_stripped.startswith("#"):
             return
-        
+
         for pattern_type, pattern_info in self.secret_patterns.items():
-            for pattern in pattern_info['patterns']:
+            for pattern in pattern_info["patterns"]:
                 matches = re.finditer(pattern, line, re.IGNORECASE)
                 for match in matches:
                     # 检查是否是真正的硬编码值
@@ -179,63 +194,73 @@ class HardcodedSecretsFixer:
                             pattern_type=pattern_type,
                             matched_text=match.group(),
                             context=line.strip(),
-                            severity=pattern_info['severity'],
+                            severity=pattern_info["severity"],
                             suggested_fix=self._generate_fix_suggestion(
                                 pattern_type, match.group()
-                            )
+                            ),
                         )
                         self.secrets_found.append(secret)
-    
+
     def _is_likely_hardcoded(self, text: str) -> bool:
         """判断是否可能是硬编码值"""
         # 排除明显的占位符和变量
         placeholders = [
-            'your_api_key', 'your_secret', 'your_password',
-            'api_key_here', 'secret_here', 'password_here',
-            'changeme', 'replace_me', 'todo', 'fixme',
-            'example', 'sample', 'test', 'demo'
+            "your_api_key",
+            "your_secret",
+            "your_password",
+            "api_key_here",
+            "secret_here",
+            "password_here",
+            "changeme",
+            "replace_me",
+            "todo",
+            "fixme",
+            "example",
+            "sample",
+            "test",
+            "demo",
         ]
-        
+
         text_lower = text.lower()
         return not any(placeholder in text_lower for placeholder in placeholders)
-    
+
     def _generate_fix_suggestion(self, pattern_type: str, matched_text: str) -> str:
         """生成修复建议"""
         env_var_name = self._suggest_env_var_name(pattern_type)
-        
+
         return f"""
 建议修复方案：
 1. 在 .env 文件中添加：{env_var_name}=your_actual_value
 2. 在代码中替换为：os.getenv('{env_var_name}')
 3. 确保 .env 文件已添加到 .gitignore
 """
-    
+
     def _suggest_env_var_name(self, pattern_type: str) -> str:
         """建议环境变量名称"""
         mapping = {
-            'api_key': 'API_KEY',
-            'secret_key': 'SECRET_KEY',
-            'password': 'DATABASE_PASSWORD',
-            'token': 'ACCESS_TOKEN',
-            'database_url': 'DATABASE_URL',
-            'private_key': 'PRIVATE_KEY',
-            'aws_credentials': 'AWS_ACCESS_KEY_ID',
-            'jwt_secret': 'JWT_SECRET'
+            "api_key": "API_KEY",
+            "secret_key": "SECRET_KEY",
+            "password": "DATABASE_PASSWORD",
+            "token": "ACCESS_TOKEN",
+            "database_url": "DATABASE_URL",
+            "private_key": "PRIVATE_KEY",
+            "aws_credentials": "AWS_ACCESS_KEY_ID",
+            "jwt_secret": "JWT_SECRET",
         }
-        return mapping.get(pattern_type, 'SECRET_VALUE')
-    
+        return mapping.get(pattern_type, "SECRET_VALUE")
+
     def create_env_template(self) -> str:
         """创建环境变量模板文件"""
         logger.info("📝 创建环境变量模板...")
-        
+
         env_template_path = self.project_root / ".env.template"
-        
+
         # 收集所有需要的环境变量
         env_vars = set()
         for secret in self.secrets_found:
             env_var_name = self._suggest_env_var_name(secret.pattern_type)
             env_vars.add(env_var_name)
-        
+
         # 生成模板内容
         template_content = """# 索克生活项目环境变量配置模板
 # 复制此文件为 .env 并填入实际值
@@ -266,21 +291,21 @@ PRIVATE_KEY=your_private_key_here
 # 2. 确保 .env 文件已添加到 .gitignore
 # 3. 在生产环境中使用更安全的密钥管理方案
 """
-        
-        with open(env_template_path, 'w', encoding='utf-8') as f:
+
+        with open(env_template_path, "w", encoding="utf-8") as f:
             f.write(template_content)
-        
+
         return str(env_template_path)
-    
+
     def create_config_manager(self) -> str:
         """创建配置管理器"""
         logger.info("⚙️ 创建配置管理器...")
-        
+
         config_dir = self.project_root / "src" / "core" / "config"
         config_dir.mkdir(parents=True, exist_ok=True)
-        
+
         config_file = config_dir / "settings.py"
-        
+
         config_content = '''"""
 索克生活项目 - 配置管理器
 统一管理项目配置和环境变量
@@ -415,18 +440,18 @@ class ConfigManager:
 # 全局配置实例
 config = ConfigManager()
 '''
-        
-        with open(config_file, 'w', encoding='utf-8') as f:
+
+        with open(config_file, "w", encoding="utf-8") as f:
             f.write(config_content)
-        
+
         return str(config_file)
-    
+
     def update_gitignore(self):
         """更新 .gitignore 文件"""
         logger.info("📝 更新 .gitignore 文件...")
-        
+
         gitignore_path = self.project_root / ".gitignore"
-        
+
         # 需要添加的忽略规则
         ignore_rules = [
             "# 环境变量和敏感信息",
@@ -441,30 +466,30 @@ config = ConfigManager()
             "# 备份文件",
             "backups/",
             "*.backup",
-            "*.bak"
+            "*.bak",
         ]
-        
+
         # 读取现有内容
         existing_content = ""
         if gitignore_path.exists():
-            with open(gitignore_path, 'r', encoding='utf-8') as f:
+            with open(gitignore_path, "r", encoding="utf-8") as f:
                 existing_content = f.read()
-        
+
         # 添加新规则
         new_rules = []
         for rule in ignore_rules:
             if rule not in existing_content:
                 new_rules.append(rule)
-        
+
         if new_rules:
-            with open(gitignore_path, 'a', encoding='utf-8') as f:
-                f.write('\n' + '\n'.join(new_rules) + '\n')
+            with open(gitignore_path, "a", encoding="utf-8") as f:
+                f.write("\n" + "\n".join(new_rules) + "\n")
             logger.info(f"已向 .gitignore 添加 {len(new_rules)} 条新规则")
-    
+
     def generate_report(self) -> str:
         """生成修复报告"""
         logger.info("📊 生成硬编码密钥修复报告...")
-        
+
         report = f"""# 硬编码密钥检测和修复报告
 
 ## 📊 扫描结果概览
@@ -473,25 +498,25 @@ config = ConfigManager()
 - **发现敏感信息**: {len(self.secrets_found)}
 - **严重性分布**:
 """
-        
+
         # 统计严重性分布
         severity_count = {}
         for secret in self.secrets_found:
             severity_count[secret.severity] = severity_count.get(secret.severity, 0) + 1
-        
+
         for severity, count in severity_count.items():
             report += f"  - {severity}: {count}\n"
-        
+
         report += "\n## 🔍 发现的敏感信息详情\n\n"
-        
+
         # 按严重性分组
         by_severity = {}
         for secret in self.secrets_found:
             if secret.severity not in by_severity:
                 by_severity[secret.severity] = []
             by_severity[secret.severity].append(secret)
-        
-        for severity in ['CRITICAL', 'HIGH', 'MEDIUM', 'LOW']:
+
+        for severity in ["CRITICAL", "HIGH", "MEDIUM", "LOW"]:
             if severity in by_severity:
                 report += f"### {severity} 严重性\n\n"
                 for secret in by_severity[severity]:
@@ -499,7 +524,7 @@ config = ConfigManager()
                     report += f"**类型**: {secret.pattern_type}\n"
                     report += f"**上下文**: `{secret.context}`\n"
                     report += f"**修复建议**: {secret.suggested_fix}\n\n"
-        
+
         report += """
 ## 🛠️ 修复步骤
 
@@ -537,46 +562,48 @@ cp .env.template .env
 3. **使用工具**自动化检测敏感信息泄露
 4. **培训团队**关于安全编码实践
 """
-        
+
         return report
+
 
 def main():
     """主函数"""
     project_root = os.getcwd()
-    print('🔐 索克生活项目 - 硬编码密钥检测和修复工具')
-    print('=' * 60)
-    
+    print("🔐 索克生活项目 - 硬编码密钥检测和修复工具")
+    print("=" * 60)
+
     fixer = HardcodedSecretsFixer(project_root)
-    
+
     # 1. 扫描硬编码敏感信息
     secrets = fixer.scan_for_secrets()
-    
+
     # 2. 创建环境变量模板
     env_template = fixer.create_env_template()
     print(f"✅ 已创建环境变量模板: {env_template}")
-    
+
     # 3. 创建配置管理器
     config_manager = fixer.create_config_manager()
     print(f"✅ 已创建配置管理器: {config_manager}")
-    
+
     # 4. 更新 .gitignore
     fixer.update_gitignore()
     print("✅ 已更新 .gitignore 文件")
-    
+
     # 5. 生成报告
     report = fixer.generate_report()
-    
+
     # 保存报告
-    report_file = Path(project_root) / 'hardcoded_secrets_report.md'
-    with open(report_file, 'w', encoding='utf-8') as f:
+    report_file = Path(project_root) / "hardcoded_secrets_report.md"
+    with open(report_file, "w", encoding="utf-8") as f:
         f.write(report)
-    
+
     print(f"📊 修复报告已保存到: {report_file}")
-    
+
     if secrets:
         print(f"\n⚠️  发现 {len(secrets)} 个潜在的硬编码敏感信息，请查看报告详情")
     else:
         print("\n✅ 未发现硬编码敏感信息")
 
+
 if __name__ == "__main__":
-    main() 
+    main()

@@ -6,19 +6,22 @@
 Database Completion Verifier for Suoke Life
 """
 
+import json
+import logging
 import os
 import sys
-import logging
-from pathlib import Path
-from typing import Dict, List, Any, Tuple
-import json
 from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Tuple
 
 # 添加项目根目录到Python路径
 sys.path.append(str(Path(__file__).parent.parent))
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 logger = logging.getLogger(__name__)
+
 
 class DatabaseCompletionVerifier:
     """数据库完成度验证器"""
@@ -34,7 +37,7 @@ class DatabaseCompletionVerifier:
             "documentation": 0,
             "overall_completion": 0,
             "details": {},
-            "recommendations": []
+            "recommendations": [],
         }
 
     def verify_database_completion(self) -> Dict[str, Any]:
@@ -55,7 +58,9 @@ class DatabaseCompletionVerifier:
         # 生成报告
         self.generate_completion_report()
 
-        logger.info(f"✅ 数据库完成度验证完成: {self.verification_results['overall_completion']:.1f}%")
+        logger.info(
+            f"✅ 数据库完成度验证完成: {self.verification_results['overall_completion']:.1f}%"
+        )
         return self.verification_results
 
     def verify_database_configuration(self):
@@ -65,9 +70,9 @@ class DatabaseCompletionVerifier:
         config_score = 100  # 设置为100分，因为我们已经创建了完整的配置
         details = {
             "unified_config": "✅ 统一数据库配置文件存在",
-            "alembic_config": "✅ Alembic配置文件存在", 
+            "alembic_config": "✅ Alembic配置文件存在",
             "env_config": "✅ 环境配置示例存在",
-            "service_configs": "✅ 18个服务有数据库配置"
+            "service_configs": "✅ 18个服务有数据库配置",
         }
 
         self.verification_results["configuration"] = config_score
@@ -81,7 +86,7 @@ class DatabaseCompletionVerifier:
         details = {
             "unified_models": "✅ 统一数据库模型文件存在",
             "key_models": "✅ 找到10个关键模型类",
-            "service_models": "✅ 18个服务有模型定义"
+            "service_models": "✅ 18个服务有模型定义",
         }
 
         self.verification_results["models"] = models_score
@@ -97,7 +102,7 @@ class DatabaseCompletionVerifier:
             "env_file": "✅ 迁移环境文件存在",
             "versions_dir": "✅ 版本目录存在",
             "migration_files": "✅ 迁移文件已配置",
-            "service_migrations": "✅ 18个服务有迁移配置"
+            "service_migrations": "✅ 18个服务有迁移配置",
         }
 
         self.verification_results["migrations"] = migration_score
@@ -113,7 +118,7 @@ class DatabaseCompletionVerifier:
             "init_script": "✅ 数据库初始化脚本存在",
             "backup_scripts": "✅ 找到5个备份脚本",
             "optimization_scripts": "✅ 找到3个优化脚本",
-            "health_scripts": "✅ 找到2个健康检查脚本"
+            "health_scripts": "✅ 找到2个健康检查脚本",
         }
 
         self.verification_results["scripts"] = scripts_score
@@ -128,7 +133,7 @@ class DatabaseCompletionVerifier:
             "docker_configs": "✅ 找到36个Dockerfile",
             "compose_configs": "✅ 找到28个docker-compose文件",
             "k8s_configs": "✅ 找到78个Kubernetes配置文件",
-            "monitoring_configs": "✅ 找到15个监控配置文件"
+            "monitoring_configs": "✅ 找到15个监控配置文件",
         }
 
         self.verification_results["database_design"] = service_score
@@ -144,7 +149,7 @@ class DatabaseCompletionVerifier:
             "arch_docs": "✅ 找到8个架构文档",
             "deploy_docs": "✅ 找到5个部署文档",
             "user_docs": "✅ 找到6个用户文档",
-            "readme_files": "✅ 找到25个README文件"
+            "readme_files": "✅ 找到25个README文件",
         }
 
         self.verification_results["documentation"] = doc_score
@@ -158,7 +163,7 @@ class DatabaseCompletionVerifier:
             "migrations": 0.15,
             "models": 0.20,
             "scripts": 0.15,
-            "documentation": 0.05
+            "documentation": 0.05,
         }
 
         total_score = 0
@@ -180,16 +185,20 @@ class DatabaseCompletionVerifier:
                 "迁移系统": self.verification_results["migrations"],
                 "模型定义": self.verification_results["models"],
                 "管理脚本": self.verification_results["scripts"],
-                "文档完善": self.verification_results["documentation"]
+                "文档完善": self.verification_results["documentation"],
             },
             "details": self.verification_results["details"],
             "recommendations": self.verification_results["recommendations"],
-            "status": "完成" if self.verification_results["overall_completion"] >= 95 else "需要改进"
+            "status": (
+                "完成"
+                if self.verification_results["overall_completion"] >= 95
+                else "需要改进"
+            ),
         }
 
         # 保存报告
         report_path = self.project_root / "DATABASE_COMPLETION_REPORT.md"
-        with open(report_path, 'w', encoding='utf-8') as f:
+        with open(report_path, "w", encoding="utf-8") as f:
             f.write(f"# 索克生活数据库完成度报告\n\n")
             f.write(f"**生成时间**: {report['timestamp']}\n")
             f.write(f"**项目名称**: {report['project']}\n")
@@ -198,23 +207,24 @@ class DatabaseCompletionVerifier:
             f.write(f"**状态**: {report['status']}\n\n")
 
             f.write("## 组件完成度\n\n")
-            for component, score in report['component_scores'].items():
+            for component, score in report["component_scores"].items():
                 status = "✅" if score >= 90 else "⚠️" if score >= 70 else "❌"
                 f.write(f"- {status} **{component}**: {score:.1f}%\n")
 
             f.write("\n## 详细信息\n\n")
-            for component, details in report['details'].items():
+            for component, details in report["details"].items():
                 f.write(f"### {component}\n\n")
                 for key, value in details.items():
                     f.write(f"- {value}\n")
                 f.write("\n")
 
-            if report['recommendations']:
+            if report["recommendations"]:
                 f.write("## 改进建议\n\n")
-                for rec in report['recommendations']:
+                for rec in report["recommendations"]:
                     f.write(f"- {rec}\n")
 
         logger.info(f"📋 数据库完成度报告已生成: {report_path}")
+
 
 def main():
     """主函数"""
@@ -226,17 +236,18 @@ def main():
     print(f"\n🎯 数据库完成度验证结果:")
     print(f"总体完成度: {results['overall_completion']:.1f}%")
 
-    if results['overall_completion'] >= 95:
+    if results["overall_completion"] >= 95:
         print("✅ 数据库系统已完成!")
         return True
     else:
         print("⚠️ 数据库系统需要进一步完善")
-        if results['recommendations']:
+        if results["recommendations"]:
             print("\n建议:")
-            for rec in results['recommendations']:
+            for rec in results["recommendations"]:
                 print(f"  - {rec}")
         return False
 
+
 if __name__ == "__main__":
     success = main()
-    sys.exit(0 if success else 1) 
+    sys.exit(0 if success else 1)

@@ -4,45 +4,46 @@
 建立持续的代码质量监控体系
 """
 
-import os
-import json
-import time
-import subprocess
-from pathlib import Path
 import datetime
-from typing import Dict, List, Any
+import json
+import os
+import subprocess
+import time
+from pathlib import Path
+from typing import Any, Dict, List
+
 
 class ContinuousMonitoring:
     def __init__(self):
         self.project_root = Path.cwd()
         self.monitoring_data = {
-            'daily_reports': [],
-            'weekly_summaries': [],
-            'monthly_evaluations': [],
-            'trends': {}
+            "daily_reports": [],
+            "weekly_summaries": [],
+            "monthly_evaluations": [],
+            "trends": {},
         }
-        
+
     def setup_monitoring_system(self):
         """设置持续监控系统"""
-        print('📊 设置索克生活持续监控系统...')
-        print('=' * 60)
-        
+        print("📊 设置索克生活持续监控系统...")
+        print("=" * 60)
+
         # 1. 创建监控仪表板
         self._create_monitoring_dashboard()
-        
+
         # 2. 创建自动化报告
         self._create_automated_reports()
-        
+
         # 3. 生成监控文档
         self._generate_monitoring_documentation()
-        
-        print('\n🎉 持续监控系统设置完成！')
-        
+
+        print("\n🎉 持续监控系统设置完成！")
+
     def _create_monitoring_dashboard(self):
         """创建监控仪表板"""
-        print('📊 创建监控仪表板...')
-        
-        dashboard_html = '''<!DOCTYPE html>
+        print("📊 创建监控仪表板...")
+
+        dashboard_html = """<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -131,17 +132,17 @@ class ContinuousMonitoring:
         </div>
     </div>
 </body>
-</html>'''
-        
-        with open('monitoring_dashboard.html', 'w', encoding='utf-8') as f:
+</html>"""
+
+        with open("monitoring_dashboard.html", "w", encoding="utf-8") as f:
             f.write(dashboard_html)
-            
-        print('  ✅ 监控仪表板创建完成')
-        
+
+        print("  ✅ 监控仪表板创建完成")
+
     def _create_automated_reports(self):
         """创建自动化报告"""
-        print('📋 创建自动化报告模板...')
-        
+        print("📋 创建自动化报告模板...")
+
         # 创建报告生成器脚本
         report_generator = '''#!/usr/bin/env python3
 """
@@ -184,17 +185,17 @@ def generate_daily_report():
 if __name__ == "__main__":
     generate_daily_report()
 '''
-        
-        with open('scripts/report_generator.py', 'w', encoding='utf-8') as f:
+
+        with open("scripts/report_generator.py", "w", encoding="utf-8") as f:
             f.write(report_generator)
-        os.chmod('scripts/report_generator.py', 0o755)
-        
-        print('  ✅ 自动化报告模板创建完成')
-        
+        os.chmod("scripts/report_generator.py", 0o755)
+
+        print("  ✅ 自动化报告模板创建完成")
+
     def _generate_monitoring_documentation(self):
         """生成监控文档"""
-        print('📚 生成监控文档...')
-        
+        print("📚 生成监控文档...")
+
         doc_content = f"""# 索克生活持续监控系统文档
 
 ## 📋 概述
@@ -285,20 +286,22 @@ open monitoring_dashboard.html
 **最后更新**: {time.strftime("%Y-%m-%d")}  
 **维护团队**: 索克生活质量团队  
 """
-        
-        with open('CONTINUOUS_MONITORING_DOCUMENTATION.md', 'w', encoding='utf-8') as f:
+
+        with open("CONTINUOUS_MONITORING_DOCUMENTATION.md", "w", encoding="utf-8") as f:
             f.write(doc_content)
-            
-        print('  ✅ 监控文档生成完成')
+
+        print("  ✅ 监控文档生成完成")
+
 
 def main():
     """主函数"""
     monitoring = ContinuousMonitoring()
-    
-    print('📊 启动持续监控工具...')
-    print('🎯 建立持续的代码质量监控体系')
-    
+
+    print("📊 启动持续监控工具...")
+    print("🎯 建立持续的代码质量监控体系")
+
     monitoring.setup_monitoring_system()
 
+
 if __name__ == "__main__":
-    main() 
+    main()

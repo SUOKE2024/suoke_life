@@ -4,27 +4,28 @@
 自动检测和修复Python代码中的导入问题
 """
 
-import os
-import re
 import ast
-import sys
 import json
 import logging
-from pathlib import Path
-from typing import List, Dict, Tuple, Optional, Set
-from dataclasses import dataclass
+import os
+import re
 import subprocess
+import sys
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Dict, List, Optional, Set, Tuple
 
 # 配置日志
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
+
 
 @dataclass
 class ImportIssue:
     """导入问题"""
+
     file_path: str
     line_number: int
     issue_type: str
@@ -32,62 +33,76 @@ class ImportIssue:
     suggested_fix: str
     severity: str
 
+
 class ImportOptimizer:
     """导入语句优化器"""
-    
+
     def __init__(self, project_root: str):
         self.project_root = Path(project_root)
         self.issues_found = []
         self.backup_dir = self.project_root / "backups" / "import_optimization"
-        
+
         # 排除的文件和目录
         self.exclude_patterns = {
-            'venv', 'env', '.env', '__pycache__', '.git', 
-            'node_modules', '.pytest_cache', 'dist', 'build',
-            '.idea', '.vscode', '*.pyc', '*.pyo', '*.egg-info'
+            "venv",
+            "env",
+            ".env",
+            "__pycache__",
+            ".git",
+            "node_modules",
+            ".pytest_cache",
+            "dist",
+            "build",
+            ".idea",
+            ".vscode",
+            "*.pyc",
+            "*.pyo",
+            "*.egg-info",
         }
-    
+
     def scan_import_issues(self) -> List[ImportIssue]:
         """扫描导入问题"""
         logger.info("🔍 扫描导入语句问题...")
-        
+
         python_files = self._get_python_files()
-        
+
         for file_path in python_files:
             try:
                 self._analyze_file_imports(file_path)
             except Exception as e:
                 logger.warning(f"无法分析文件 {file_path}: {e}")
-        
+
         logger.info(f"发现 {len(self.issues_found)} 个导入问题")
         return self.issues_found
-    
+
     def _get_python_files(self) -> List[Path]:
         """获取所有Python文件"""
         python_files = []
-        
+
         for root, dirs, files in os.walk(self.project_root):
             # 排除特定目录
-            dirs[:] = [d for d in dirs if not any(
-                pattern in d for pattern in self.exclude_patterns
-            )]
-            
+            dirs[:] = [
+                d
+                for d in dirs
+                if not any(pattern in d for pattern in self.exclude_patterns)
+            ]
+
             for file in files:
-                if file.endswith('.py'):
+                if file.endswith(".py"):
                     file_path = Path(root) / file
                     # 排除备份文件
-                    if 'backup' not in str(file_path).lower():
+                    if "backup" not in str(file_path).lower():
                         python_files.append(file_path)
-        
+
         return python_files
-    
+
     def _analyze_file_imports(self, file_path: Path):
         """分析单个文件的导入语句"""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
-                lines = content.split('\n')
-            
+                lines = content.split("\n")
+
             # 使用AST分析
             try:
                 tree = ast.parse(content)
@@ -95,10 +110,10 @@ class ImportOptimizer:
             except SyntaxError:
                 # 如果AST解析失败，使用正则表达式
                 self._analyze_regex_imports(file_path, lines)
-                
+
         except Exception as e:
             logger.warning(f"无法读取文件 {file_path}: {e}")
-    
+
     def _analyze_ast_imports(self, file_path: Path, tree: ast.AST, lines: List[str]):
         """使用AST分析导入语句"""
         for node in ast.walk(tree):
@@ -106,25 +121,27 @@ class ImportOptimizer:
                 self._check_import_from(file_path, node, lines)
             elif isinstance(node, ast.Import):
                 self._check_import(file_path, node, lines)
-    
-    def _check_import_from(self, file_path: Path, node: ast.ImportFrom, lines: List[str]):
+
+    def _check_import_from(
+        self, file_path: Path, node: ast.ImportFrom, lines: List[str]
+    ):
         """检查 from ... import ... 语句"""
         line_num = node.lineno
         line_content = lines[line_num - 1] if line_num <= len(lines) else ""
-        
+
         # 检查通配符导入
         for alias in node.names:
-            if alias.name == '*':
+            if alias.name == "*":
                 issue = ImportIssue(
                     file_path=str(file_path.relative_to(self.project_root)),
                     line_number=line_num,
                     issue_type="wildcard_import",
                     original_import=line_content.strip(),
                     suggested_fix=self._suggest_wildcard_fix(node),
-                    severity="HIGH"
+                    severity="HIGH",
                 )
                 self.issues_found.append(issue)
-        
+
         # 检查过长的导入行
         if len(line_content) > 100:
             issue = ImportIssue(
@@ -133,15 +150,15 @@ class ImportOptimizer:
                 issue_type="long_import_line",
                 original_import=line_content.strip(),
                 suggested_fix=self._suggest_multiline_import(node),
-                severity="MEDIUM"
+                severity="MEDIUM",
             )
             self.issues_found.append(issue)
-    
+
     def _check_import(self, file_path: Path, node: ast.Import, lines: List[str]):
         """检查 import ... 语句"""
         line_num = node.lineno
         line_content = lines[line_num - 1] if line_num <= len(lines) else ""
-        
+
         # 检查多个模块在一行导入
         if len(node.names) > 1:
             issue = ImportIssue(
@@ -150,39 +167,39 @@ class ImportOptimizer:
                 issue_type="multiple_imports",
                 original_import=line_content.strip(),
                 suggested_fix=self._suggest_separate_imports(node),
-                severity="MEDIUM"
+                severity="MEDIUM",
             )
             self.issues_found.append(issue)
-    
+
     def _analyze_regex_imports(self, file_path: Path, lines: List[str]):
         """使用正则表达式分析导入语句（备用方法）"""
         for line_num, line in enumerate(lines, 1):
             line_stripped = line.strip()
-            
+
             # 检查通配符导入
-            if re.match(r'from\s+\w+.*\s+import\s+\*', line_stripped):
+            if re.match(r"from\s+\w+.*\s+import\s+\*", line_stripped):
                 issue = ImportIssue(
                     file_path=str(file_path.relative_to(self.project_root)),
                     line_number=line_num,
                     issue_type="wildcard_import",
                     original_import=line_stripped,
                     suggested_fix="使用具体的导入名称替换 *",
-                    severity="HIGH"
+                    severity="HIGH",
                 )
                 self.issues_found.append(issue)
-            
+
             # 检查多个导入在一行
-            if re.match(r'import\s+\w+,', line_stripped):
+            if re.match(r"import\s+\w+,", line_stripped):
                 issue = ImportIssue(
                     file_path=str(file_path.relative_to(self.project_root)),
                     line_number=line_num,
                     issue_type="multiple_imports",
                     original_import=line_stripped,
                     suggested_fix="将多个导入分别写在不同行",
-                    severity="MEDIUM"
+                    severity="MEDIUM",
                 )
                 self.issues_found.append(issue)
-    
+
     def _suggest_wildcard_fix(self, node: ast.ImportFrom) -> str:
         """建议通配符导入的修复方案"""
         module_name = node.module or ""
@@ -195,66 +212,71 @@ class ImportOptimizer:
    import {module_name}
    # 然后使用 {module_name}.function_name
 """
-    
+
     def _suggest_multiline_import(self, node: ast.ImportFrom) -> str:
         """建议多行导入的修复方案"""
         module_name = node.module or ""
         imports = [alias.name for alias in node.names]
-        
+
         if len(imports) > 3:
             multiline_import = f"from {module_name} import (\n"
             for imp in imports:
                 multiline_import += f"    {imp},\n"
             multiline_import += ")"
-            
+
             return f"""
 建议修复方案：
 {multiline_import}
 """
         return "将导入语句分行以提高可读性"
-    
+
     def _suggest_separate_imports(self, node: ast.Import) -> str:
         """建议分离导入的修复方案"""
         separate_imports = []
         for alias in node.names:
             separate_imports.append(f"import {alias.name}")
-        
+
         return f"""
 建议修复方案：
 {chr(10).join(separate_imports)}
 """
-    
+
     def optimize_imports_with_isort(self) -> bool:
         """使用isort优化导入语句"""
         logger.info("🔧 使用isort优化导入语句...")
-        
+
         try:
             # 检查isort是否安装
-            result = subprocess.run(['isort', '--version'], 
-                                  capture_output=True, text=True)
+            result = subprocess.run(
+                ["isort", "--version"], capture_output=True, text=True
+            )
             if result.returncode != 0:
                 logger.warning("isort未安装，跳过自动优化")
                 return False
-            
+
             # 创建isort配置
             self._create_isort_config()
-            
+
             # 运行isort
             python_files = self._get_python_files()
             for file_path in python_files:
                 try:
-                    subprocess.run(['isort', str(file_path)], 
-                                 capture_output=True, text=True, check=True)
+                    subprocess.run(
+                        ["isort", str(file_path)],
+                        capture_output=True,
+                        text=True,
+                        check=True,
+                    )
                 except subprocess.CalledProcessError as e:
                     logger.warning(f"isort处理文件失败 {file_path}: {e}")
-            
+
             logger.info("✅ isort优化完成")
             return True
-            
+
         except Exception as e:
             logger.error(f"isort优化失败: {e}")
             return False
-    
+
     def _create_isort_config(self):
         """创建isort配置文件"""
         config_content = """[tool.isort]
@@ -276,55 +298,63 @@ sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
 # 跳过的文件
 skip = ["venv", "env", ".env", "__pycache__", ".git", "node_modules"]
 """
-        
+
         config_file = self.project_root / "pyproject.toml"
-        
+
         # 如果文件存在，追加配置；否则创建新文件
         if config_file.exists():
-            with open(config_file, 'a', encoding='utf-8') as f:
-                f.write('\n' + config_content)
+            with open(config_file, "a", encoding="utf-8") as f:
+                f.write("\n" + config_content)
         else:
-            with open(config_file, 'w', encoding='utf-8') as f:
+            with open(config_file, "w", encoding="utf-8") as f:
                 f.write(config_content)
-    
+
     def remove_unused_imports(self) -> bool:
         """移除未使用的导入"""
         logger.info("🧹 移除未使用的导入...")
-        
+
         try:
             # 检查autoflake是否安装
-            result = subprocess.run(['autoflake', '--version'], 
-                                  capture_output=True, text=True)
+            result = subprocess.run(
+                ["autoflake", "--version"], capture_output=True, text=True
+            )
             if result.returncode != 0:
                 logger.warning("autoflake未安装，跳过未使用导入移除")
                 return False
-            
+
             # 运行autoflake
             python_files = self._get_python_files()
             for file_path in python_files:
                 try:
-                    subprocess.run([
-                        'autoflake', 
-                        '--in-place', 
-                        '--remove-all-unused-imports',
-                        '--remove-unused-variables',
-                        str(file_path)
-                    ], capture_output=True, text=True, check=True)
+                    subprocess.run(
+                        [
+                            "autoflake",
+                            "--in-place",
+                            "--remove-all-unused-imports",
+                            "--remove-unused-variables",
+                            str(file_path),
+                        ],
+                        capture_output=True,
+                        text=True,
+                        check=True,
+                    )
                 except subprocess.CalledProcessError as e:
                     logger.warning(f"autoflake处理文件失败 {file_path}: {e}")
-            
+
             logger.info("✅ 未使用导入移除完成")
             return True
-            
+
         except Exception as e:
             logger.error(f"移除未使用导入失败: {e}")
             return False
-    
+
     def create_import_guidelines(self) -> str:
         """创建导入规范指南"""
-        guidelines_path = self.project_root / "docs" / "development" / "import_guidelines.md"
+        guidelines_path = (
+            self.project_root / "docs" / "development" / "import_guidelines.md"
+        )
         guidelines_path.parent.mkdir(parents=True, exist_ok=True)
-        
+
         guidelines_content = """# Python导入语句规范指南
 
 ## 📋 导入顺序
@@ -471,16 +501,16 @@ black your_file.py
 3. **团队代码审查时关注导入质量**
 4. **使用IDE插件自动优化导入**
 """
-        
-        with open(guidelines_path, 'w', encoding='utf-8') as f:
+
+        with open(guidelines_path, "w", encoding="utf-8") as f:
             f.write(guidelines_content)
-        
+
         return str(guidelines_path)
-    
+
     def generate_report(self) -> str:
         """生成导入优化报告"""
         logger.info("📊 生成导入优化报告...")
-        
+
         report = f"""# 导入语句优化报告
 
 ## 📊 扫描结果概览
@@ -489,32 +519,32 @@ black your_file.py
 - **发现导入问题**: {len(self.issues_found)}
 - **问题类型分布**:
 """
-        
+
         # 统计问题类型
         issue_types = {}
         severity_count = {}
-        
+
         for issue in self.issues_found:
             issue_types[issue.issue_type] = issue_types.get(issue.issue_type, 0) + 1
             severity_count[issue.severity] = severity_count.get(issue.severity, 0) + 1
-        
+
         for issue_type, count in issue_types.items():
             report += f"  - {issue_type}: {count}\n"
-        
+
         report += "\n- **严重性分布**:\n"
         for severity, count in severity_count.items():
             report += f"  - {severity}: {count}\n"
-        
+
         report += "\n## 🔍 发现的导入问题详情\n\n"
-        
+
         # 按严重性分组
         by_severity = {}
         for issue in self.issues_found:
             if issue.severity not in by_severity:
                 by_severity[issue.severity] = []
             by_severity[issue.severity].append(issue)
-        
-        for severity in ['HIGH', 'MEDIUM', 'LOW']:
+
+        for severity in ["HIGH", "MEDIUM", "LOW"]:
             if severity in by_severity:
                 report += f"### {severity} 严重性\n\n"
                 for issue in by_severity[severity]:
@@ -522,7 +552,7 @@ black your_file.py
                     report += f"**类型**: {issue.issue_type}\n"
                     report += f"**原始导入**: `{issue.original_import}`\n"
                     report += f"**修复建议**: {issue.suggested_fix}\n\n"
-        
+
         report += """
 ## 🛠️ 修复步骤
 
@@ -562,48 +592,50 @@ black .
 3. **不规范的导入顺序**会影响代码可读性
 4. **循环导入**会导致运行时错误
 """
-        
+
         return report
+
 
 def main():
     """主函数"""
     project_root = os.getcwd()
-    print('📦 索克生活项目 - 导入语句优化工具')
-    print('=' * 60)
-    
+    print("📦 索克生活项目 - 导入语句优化工具")
+    print("=" * 60)
+
     optimizer = ImportOptimizer(project_root)
-    
+
     # 1. 扫描导入问题
     issues = optimizer.scan_import_issues()
-    
+
     # 2. 自动优化导入（如果工具可用）
     isort_success = optimizer.optimize_imports_with_isort()
     autoflake_success = optimizer.remove_unused_imports()
-    
+
     # 3. 创建导入规范指南
     guidelines_file = optimizer.create_import_guidelines()
     print(f"✅ 已创建导入规范指南: {guidelines_file}")
-    
+
     # 4. 生成报告
     report = optimizer.generate_report()
-    
+
     # 保存报告
-    report_file = Path(project_root) / 'import_optimization_report.md'
-    with open(report_file, 'w', encoding='utf-8') as f:
+    report_file = Path(project_root) / "import_optimization_report.md"
+    with open(report_file, "w", encoding="utf-8") as f:
         f.write(report)
-    
+
     print(f"📊 优化报告已保存到: {report_file}")
-    
+
     if issues:
         print(f"\n⚠️  发现 {len(issues)} 个导入问题，请查看报告详情")
     else:
         print("\n✅ 未发现导入问题")
-    
+
     if isort_success:
         print("✅ isort导入排序完成")
-    
+
     if autoflake_success:
         print("✅ 未使用导入移除完成")
 
+
 if __name__ == "__main__":
-    main() 
+    main()

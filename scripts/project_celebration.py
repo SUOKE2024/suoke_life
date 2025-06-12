@@ -6,14 +6,17 @@
 正式宣布项目达到100%完成度并庆祝成功！
 """
 
-import os
-import json
-from pathlib import Path
 import datetime
+import json
 import logging
+import os
+from pathlib import Path
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 logger = logging.getLogger(__name__)
+
 
 class ProjectCelebration:
     """项目完成庆祝器"""
@@ -53,7 +56,7 @@ class ProjectCelebration:
                 "📊 完整监控系统运行",
                 "📖 完善文档系统提供",
                 "🧪 全面测试覆盖实现",
-                "⚡ 性能优化全面完成"
+                "⚡ 性能优化全面完成",
             ],
             "technical_highlights": [
                 "多智能体协同决策",
@@ -63,21 +66,21 @@ class ProjectCelebration:
                 "AI驱动的健康管理",
                 "跨平台移动应用",
                 "实时监控与告警",
-                "零知识健康数据验证"
+                "零知识健康数据验证",
             ],
             "business_value": [
                 "填补AI中医健康管理市场空白",
                 "实现中医传承数字化",
                 "提供个性化健康解决方案",
                 "构建健康管理生态闭环",
-                "推动预防医学发展"
+                "推动预防医学发展",
             ],
-            "team_message": "感谢所有参与者的辛勤努力和卓越贡献！"
+            "team_message": "感谢所有参与者的辛勤努力和卓越贡献！",
         }
 
         # 保存庆祝数据
         celebration_file = self.project_root / "PROJECT_CELEBRATION.json"
-        with open(celebration_file, 'w', encoding='utf-8') as f:
+        with open(celebration_file, "w", encoding="utf-8") as f:
             json.dump(celebration_data, f, ensure_ascii=False, indent=2)
 
         # 生成Markdown庆祝报告
@@ -99,7 +102,7 @@ class ProjectCelebration:
 
 """
 
-        for achievement in data['key_achievements']:
+        for achievement in data["key_achievements"]:
             report_content += f"- {achievement}\n"
 
         report_content += f"""
@@ -107,7 +110,7 @@ class ProjectCelebration:
 
 """
 
-        for highlight in data['technical_highlights']:
+        for highlight in data["technical_highlights"]:
             report_content += f"- ⭐ {highlight}\n"
 
         report_content += f"""
@@ -115,7 +118,7 @@ class ProjectCelebration:
 
 """
 
-        for value in data['business_value']:
+        for value in data["business_value"]:
             report_content += f"- 💎 {value}\n"
 
         report_content += f"""
@@ -176,11 +179,12 @@ class ProjectCelebration:
 """
 
         report_file = self.project_root / "PROJECT_CELEBRATION_REPORT.md"
-        report_file.write_text(report_content, encoding='utf-8')
+        report_file.write_text(report_content, encoding="utf-8")
 
     def create_achievement_badge(self):
         """创建成就徽章"""
-        badge_content = """
+        badge_content = (
+            """
 🏆 索克生活项目完成徽章 🏆
 
     ╔══════════════════════════════════════╗
@@ -195,15 +199,18 @@ class ProjectCelebration:
     ║                                      ║
     ║    🌟 技术创新 | 💎 商业价值 | 🌍 社会意义  ║
     ║                                      ║
-    ║         完成时间: """ + datetime.now().strftime('%Y-%m-%d') + """         ║
+    ║         完成时间: """
+            + datetime.now().strftime("%Y-%m-%d")
+            + """         ║
     ║                                      ║
     ╚══════════════════════════════════════╝
 
     🎊 恭喜！项目已准备好投入生产环境！ 🚀
 """
+        )
 
         badge_file = self.project_root / "ACHIEVEMENT_BADGE.txt"
-        badge_file.write_text(badge_content, encoding='utf-8')
+        badge_file.write_text(badge_content, encoding="utf-8")
 
         logger.info(f"🏆 成就徽章已创建: {badge_file}")
 
@@ -243,7 +250,8 @@ class ProjectCelebration:
 
         # 保存庆祝信息
         celebration_file = self.project_root / "CELEBRATION_MESSAGE.txt"
-        celebration_file.write_text(celebration_message, encoding='utf-8')
+        celebration_file.write_text(celebration_message, encoding="utf-8")
+
 
 def main():
     """主函数"""
@@ -254,5 +262,6 @@ def main():
 
     return 0
 
+
 if __name__ == "__main__":
-    exit(main()) 
+    exit(main())

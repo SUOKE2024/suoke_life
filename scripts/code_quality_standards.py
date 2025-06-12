@@ -4,39 +4,40 @@
 建立统一的代码质量标准和检查规范
 """
 
-import os
 import json
-from pathlib import Path
-from typing import Dict, List, Any
+import os
 import time
+from pathlib import Path
+from typing import Any, Dict, List
+
 
 class CodeQualityStandards:
     def __init__(self):
         self.project_root = Path.cwd()
-        
+
     def create_quality_standards(self):
         """创建代码质量标准"""
-        print('📋 创建索克生活代码质量标准...')
-        print('=' * 60)
-        
+        print("📋 创建索克生活代码质量标准...")
+        print("=" * 60)
+
         # 1. 生成配置文件
         self._generate_config_files()
-        
+
         # 2. 创建质量检查脚本
         self._create_quality_checker()
-        
+
         # 3. 创建Pre-commit配置
         self._create_precommit_config()
-        
+
         # 4. 生成标准文档
         self._generate_standards_documentation()
-        
-        print('\n🎉 代码质量标准创建完成！')
-        
+
+        print("\n🎉 代码质量标准创建完成！")
+
     def _generate_config_files(self):
         """生成配置文件"""
-        print('⚙️ 生成质量检查配置文件...')
-        
+        print("⚙️ 生成质量检查配置文件...")
+
         # 生成 .pylintrc
         pylintrc_content = """[MASTER]
 load-plugins=pylint.extensions.docparams
@@ -55,10 +56,10 @@ max-returns=6
 max-branches=12
 max-statements=50
 """
-        
-        with open('.pylintrc', 'w') as f:
+
+        with open(".pylintrc", "w") as f:
             f.write(pylintrc_content)
-            
+
         # 生成 pyproject.toml
         pyproject_content = """[tool.black]
 line-length = 88
@@ -83,16 +84,16 @@ omit = ["*/tests/*", "*/test_*"]
 [tool.coverage.report]
 exclude_lines = ["pragma: no cover", "def __repr__"]
 """
-        
-        with open('pyproject.toml', 'w') as f:
+
+        with open("pyproject.toml", "w") as f:
             f.write(pyproject_content)
-            
-        print('  ✅ 配置文件生成完成')
-        
+
+        print("  ✅ 配置文件生成完成")
+
     def _create_quality_checker(self):
         """创建质量检查脚本"""
-        print('🔍 创建质量检查脚本...')
-        
+        print("🔍 创建质量检查脚本...")
+
         checker_script = '''#!/usr/bin/env python3
 """
 索克生活项目质量检查器
@@ -185,17 +186,17 @@ def main():
 if __name__ == "__main__":
     main()
 '''
-        
-        with open('scripts/quality_checker.py', 'w', encoding='utf-8') as f:
+
+        with open("scripts/quality_checker.py", "w", encoding="utf-8") as f:
             f.write(checker_script)
-            
-        os.chmod('scripts/quality_checker.py', 0o755)
-        print('  ✅ 质量检查脚本创建完成')
-        
+
+        os.chmod("scripts/quality_checker.py", 0o755)
+        print("  ✅ 质量检查脚本创建完成")
+
     def _create_precommit_config(self):
         """创建Pre-commit配置"""
-        print('🔗 创建Pre-commit配置...')
-        
+        print("🔗 创建Pre-commit配置...")
+
         precommit_config = """repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0
@@ -223,16 +224,16 @@ if __name__ == "__main__":
       - id: flake8
         args: [--max-line-length=88]
 """
-        
-        with open('.pre-commit-config.yaml', 'w') as f:
+
+        with open(".pre-commit-config.yaml", "w") as f:
             f.write(precommit_config)
-            
-        print('  ✅ Pre-commit配置创建完成')
-        
+
+        print("  ✅ Pre-commit配置创建完成")
+
     def _generate_standards_documentation(self):
         """生成标准文档"""
-        print('📚 生成代码质量标准文档...')
-        
+        print("📚 生成代码质量标准文档...")
+
         doc_content = f"""# 索克生活项目代码质量标准
 
 ## 📋 概述
@@ -318,20 +319,22 @@ pre-commit run --all-files
 **最后更新**: {time.strftime("%Y-%m-%d")}  
 **维护团队**: 索克生活开发团队  
 """
-        
-        with open('CODE_QUALITY_STANDARDS.md', 'w', encoding='utf-8') as f:
+
+        with open("CODE_QUALITY_STANDARDS.md", "w", encoding="utf-8") as f:
             f.write(doc_content)
-            
-        print('  ✅ 质量标准文档生成完成')
+
+        print("  ✅ 质量标准文档生成完成")
+
 
 def main():
     """主函数"""
     standards = CodeQualityStandards()
-    
-    print('📋 启动代码质量标准制定工具...')
-    print('🎯 建立统一的代码质量标准')
-    
+
+    print("📋 启动代码质量标准制定工具...")
+    print("🎯 建立统一的代码质量标准")
+
     standards.create_quality_standards()
 
+
 if __name__ == "__main__":
-    main() 
+    main()
