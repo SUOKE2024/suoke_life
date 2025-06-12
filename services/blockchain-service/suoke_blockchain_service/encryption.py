@@ -2,14 +2,16 @@
 encryption - 索克生活项目模块
     """
 
-from .exceptions import EncryptionError
-from .logging import get_logger
+import base64
+import os
+from typing import Tuple
+
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-from typing import Tuple
-import base64
-import os
+
+from .exceptions import EncryptionError
+from .logging import get_logger
 
     """
 加密服务模块

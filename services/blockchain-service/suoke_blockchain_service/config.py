@@ -2,10 +2,11 @@
 config - 索克生活项目模块
     """
 
+import os
+from typing import Optional, Union, list
+
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from typing import Union, list, Optional
-import os
 
     """
 配置管理模块 - 最小可用版本
