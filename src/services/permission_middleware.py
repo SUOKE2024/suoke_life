@@ -2,7 +2,7 @@
 permission_middleware - 索克生活项目模块
 """
 
-from fastapi import Request, HTTPException
+from fastapi import HTTPException, Request
 from starlette.middleware.base import BaseHTTPMiddleware
 
 # -*- coding: utf-8 -*-
@@ -19,6 +19,7 @@ ROLE_PERMISSIONS = {
     "user": [("GET", "/profile"), ("POST", "/health-data")],
 }
 
+
 def check_permission_rbac(user, path, method):
     if not user or "role" not in user:
         return False
@@ -27,20 +28,27 @@ def check_permission_rbac(user, path, method):
     # 支持模糊匹配
     return any(path.startswith(p) and method == m for m, p in allowed)
 
+
 def check_permission_abac(user, path, method, attributes):
     # attributes: dict, 例如 {"department": "cardiology", "resource_owner": "user123"}
     if not user:
         return False
     # 例：只有本部门医生可访问本部门患者
-    if user.get("role") == "doctor" and user.get("department") == attributes.get("department"):
+    if user.get("role") == "doctor" and user.get("department") == attributes.get(
+        "department"
+    ):
         return True
     # 例：用户只能访问自己的数据
-    if user.get("role") == "user" and user.get("user_id") == attributes.get("resource_owner"):
+    if user.get("role") == "user" and user.get("user_id") == attributes.get(
+        "resource_owner"
+    ):
         return True
     return False
 
+
 # 统一权限检查入口
 # mode: "rbac" 或 "abac"，attributes仅abac用
+
 
 def check_permission(user, path, method, mode="rbac", attributes=None):
     if mode == "rbac":
@@ -49,6 +57,7 @@ def check_permission(user, path, method, mode="rbac", attributes=None):
         return check_permission_abac(user, path, method, attributes or {})
     else:
         return False
+
 
 class PermissionMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
@@ -59,7 +68,8 @@ class PermissionMiddleware(BaseHTTPMiddleware):
         response = await call_next(request)
         return response
 
+
 # 用法示例（FastAPI）
 # from fastapi import FastAPI
 # app = FastAPI()
-# app.add_middleware(PermissionMiddleware) 
+# app.add_middleware(PermissionMiddleware)

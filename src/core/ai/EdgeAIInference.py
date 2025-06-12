@@ -10,12 +10,13 @@ import asyncio
 import logging
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional, Union
 from pathlib import Path
+from typing import Any, Dict, List, Optional, Union
 
 
 class ModelType(Enum):
     """模型类型枚举"""
+
     ONNX = "onnx"
     TFLITE = "tflite"
     PYTORCH = "pytorch"
@@ -24,6 +25,7 @@ class ModelType(Enum):
 
 class DeviceType(Enum):
     """设备类型枚举"""
+
     CPU = "cpu"
     GPU = "gpu"
     NPU = "npu"
@@ -31,6 +33,7 @@ class DeviceType(Enum):
 
 class Precision(Enum):
     """精度类型枚举"""
+
     FP32 = "fp32"
     FP16 = "fp16"
     INT8 = "int8"
@@ -38,6 +41,7 @@ class Precision(Enum):
 
 class Priority(Enum):
     """优先级枚举"""
+
     LOW = "low"
     NORMAL = "normal"
     HIGH = "high"
@@ -47,6 +51,7 @@ class Priority(Enum):
 @dataclass
 class ModelConfig:
     """模型配置"""
+
     model_id: str
     model_type: ModelType
     model_path: str
@@ -61,6 +66,7 @@ class ModelConfig:
 @dataclass
 class InferenceRequest:
     """推理请求"""
+
     request_id: str
     model_id: str
     input_data: Any
@@ -72,6 +78,7 @@ class InferenceRequest:
 @dataclass
 class InferenceResult:
     """推理结果"""
+
     request_id: str
     model_id: str
     output_data: Any
@@ -84,6 +91,7 @@ class InferenceResult:
 @dataclass
 class DeviceInfo:
     """设备信息"""
+
     device_id: str
     device_type: DeviceType
     capabilities: List[str]
@@ -138,7 +146,7 @@ class EdgeAIInference:
                 memory_total=self._get_system_memory(),
                 memory_available=self._get_available_memory(),
                 compute_units=self._get_cpu_cores(),
-                is_available=True
+                is_available=True,
             )
             self.device_info["cpu-0"] = cpu_device
 
@@ -151,7 +159,7 @@ class EdgeAIInference:
                     memory_total=await self._get_gpu_memory(),
                     memory_available=await self._get_available_gpu_memory(),
                     compute_units=await self._get_gpu_cores(),
-                    is_available=True
+                    is_available=True,
                 )
                 self.device_info["gpu-0"] = gpu_device
 
@@ -203,7 +211,7 @@ class EdgeAIInference:
                 "model": model,
                 "config": config,
                 "device_id": selected_device.device_id,
-                "load_time": 0  # 实际实现中记录加载时间
+                "load_time": 0,  # 实际实现中记录加载时间
             }
 
             self.model_configs[config.model_id] = config
@@ -244,7 +252,9 @@ class EdgeAIInference:
         # 如果指定设备不可用，返回CPU设备
         return self.device_info.get("cpu-0")
 
-    async def _load_model_on_device(self, config: ModelConfig, device: DeviceInfo) -> Any:
+    async def _load_model_on_device(
+        self, config: ModelConfig, device: DeviceInfo
+    ) -> Any:
         """在设备上加载模型"""
         # 模拟模型加载
         await asyncio.sleep(0.1)  # 模拟加载时间
@@ -268,11 +278,7 @@ class EdgeAIInference:
             confidence=0.95,
             latency=50.0,  # 毫秒
             device_used="cpu-0",
-            metadata={
-                "timestamp": 0,
-                "processing_time": 50.0,
-                "memory_usage": 1024
-            }
+            metadata={"timestamp": 0, "processing_time": 50.0, "memory_usage": 1024},
         )
 
     # 辅助方法（模拟实现）
@@ -287,6 +293,7 @@ class EdgeAIInference:
     def _get_cpu_cores(self) -> int:
         """获取CPU核心数"""
         import os
+
         return os.cpu_count() or 4
 
     async def _is_gpu_available(self) -> bool:
@@ -328,10 +335,7 @@ async def get_edge_ai_inference() -> EdgeAIInference:
 
 
 def create_model_config(
-    model_id: str,
-    model_path: str,
-    model_type: str = "onnx",
-    device_type: str = "cpu"
+    model_id: str, model_path: str, model_type: str = "onnx", device_type: str = "cpu"
 ) -> ModelConfig:
     """创建模型配置的便捷函数"""
     return ModelConfig(
@@ -343,15 +347,12 @@ def create_model_config(
         precision=Precision.FP32,
         device_type=DeviceType(device_type),
         max_batch_size=1,
-        warmup_iterations=3
+        warmup_iterations=3,
     )
 
 
 def create_inference_request(
-    request_id: str,
-    model_id: str,
-    input_data: Any,
-    priority: str = "normal"
+    request_id: str, model_id: str, input_data: Any, priority: str = "normal"
 ) -> InferenceRequest:
     """创建推理请求的便捷函数"""
     return InferenceRequest(
@@ -360,9 +361,5 @@ def create_inference_request(
         input_data=input_data,
         priority=Priority(priority),
         timeout=30000,  # 30秒
-        metadata={
-            "timestamp": 0,
-            "user_id": None,
-            "session_id": None
-        }
-    ) 
+        metadata={"timestamp": 0, "user_id": None, "session_id": None},
+    )
