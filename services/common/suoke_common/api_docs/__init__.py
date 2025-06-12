@@ -1,10 +1,23 @@
 from .doc_decorators import api_doc, api_parameter, api_response
 from .openapi_generator import (
-from .swagger_ui import SwaggerUIServer
-from typing import Dict, List, Any, Optional, Union
-
-def main() -> None:
-    """主函数 - 自动生成的最小可用版本"""
+    Any,
+    Dict,
+    List,
+    None:,
+    Optional,
+    SwaggerUIServer,
+    Union,
+    """主函数,
+    -,
+    ->,
+    .swagger_ui,
+    def,
+    from,
+    import,
+    main,
+    typing,
+    自动生成的最小可用版本""",
+)
     pass
 
 if __name__=="__main__":

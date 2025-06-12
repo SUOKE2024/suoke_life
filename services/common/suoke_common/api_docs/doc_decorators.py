@@ -1,11 +1,21 @@
 from .openapi_generator import (
-from collections.abc import Callable
-from functools import wraps
-from typing import Any
-import logging
-
-def main() -> None:
-    """主函数 - 自动生成的最小可用版本"""
+    Any,
+    Callable,
+    None:,
+    """主函数,
+    -,
+    ->,
+    collections.abc,
+    def,
+    from,
+    functools,
+    import,
+    logging,
+    main,
+    typing,
+    wraps,
+    自动生成的最小可用版本""",
+)
     pass
 
 if __name__=="__main__":

@@ -2,21 +2,22 @@
 hybrid_architecture - 索克生活项目模块
 """
 
-from collections import defaultdict, deque
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor, as_completed
-from dataclasses import dataclass, asdict
-from datetime import datetime, timedelta
-from enum import Enum
-from typing import Dict, List, Any, Optional, Union, Callable, Tuple
-import aioredis
 import asyncio
 import json
 import logging
 import multiprocessing
-import psutil
 import threading
 import time
 import uuid
+from collections import defaultdict, deque
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor, as_completed
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
+
+import aioredis
+import psutil
 
 #! / usr / bin / env python3
 """

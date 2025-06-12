@@ -1,11 +1,12 @@
-from typing import Dict, List, Any, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 """
 setup - 索克生活项目模块
 """
 
-from setuptools import setup, Extension
 import platform
+
+from setuptools import Extension, setup
 
 #! / usr / bin / env python3
 """
@@ -17,10 +18,10 @@ import platform
 numpy_include = np.get_include()
 
 # 根据平台设置编译选项
-if platform.system()=="Windows":
+if platform.system() == "Windows":
     extra_compile_args = [" / O2", " / openmp"]
     extra_link_args = []
-elif platform.system()=="Darwin":  # macOS
+elif platform.system() == "Darwin":  # macOS
     extra_compile_args = [" - O3", " - Xpreprocessor", " - fopenmp"]
     extra_link_args = [" - lomp"]
 else:  # Linux
@@ -30,29 +31,29 @@ else:  # Linux
 # 定义扩展模块
 extensions = [
     Extension(
-        name = "tcm_analysis",
-        sources = ["c_algorithms / tcm_analysis.c"],
-        include_dirs = [numpy_include],
-        extra_compile_args = extra_compile_args,
-        extra_link_args = extra_link_args,
-        language = "c"
+        name="tcm_analysis",
+        sources=["c_algorithms / tcm_analysis.c"],
+        include_dirs=[numpy_include],
+        extra_compile_args=extra_compile_args,
+        extra_link_args=extra_link_args,
+        language="c",
     )
 ]
 
 # 设置配置
 setup(
-    name = "suoke_life_c_extensions",
-    version = "1.0.0",
-    description = "索克生活高性能C扩展模块",
-    author = "索克生活团队",
-    author_email = "dev@suoke.life",
-    ext_modules = extensions,
-    zip_safe = False,
-    python_requires = ">=3.8",
-    install_requires = [
+    name="suoke_life_c_extensions",
+    version="1.0.0",
+    description="索克生活高性能C扩展模块",
+    author="索克生活团队",
+    author_email="dev@suoke.life",
+    ext_modules=extensions,
+    zip_safe=False,
+    python_requires=">=3.8",
+    install_requires=[
         "numpy>=1.19.0",
     ],
-    classifiers = [
+    classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Healthcare Industry",
         "License :: OSI Approved :: MIT License",

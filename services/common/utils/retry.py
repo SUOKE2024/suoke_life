@@ -2,12 +2,10 @@
 retry - 索克生活项目模块
 """
 
-from functools import wraps
-from typing import Callable, Any, Type, Tuple
 import logging
 import time
-
-
+from functools import wraps
+from typing import Any, Callable, Tuple, Type
 
 logger = logging.getLogger(__name__)
 

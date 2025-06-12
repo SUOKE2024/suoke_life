@@ -2,14 +2,14 @@
 event_sourcing - 索克生活项目模块
 """
 
+import asyncio
+import logging
+import uuid
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
-import asyncio
-import logging
-import uuid
 
 #! / usr / bin / env python3
 """

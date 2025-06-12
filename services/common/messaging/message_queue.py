@@ -2,14 +2,14 @@
 message_queue - 索克生活项目模块
 """
 
+import asyncio
+import json
+import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
 from typing import Any
-import asyncio
-import json
-import logging
 
 #! / usr / bin / env python3
 """
@@ -51,14 +51,14 @@ class Message:
 
     def serialize(self) -> bytes:
         """序列化消息"""
-        if self.format==MessageFormat.JSON:
+        if self.format == MessageFormat.JSON:
             if isinstance(self.value, dict | list):
-                return json.dumps(self.value, ensure_ascii = False).encode("utf - 8")
+                return json.dumps(self.value, ensure_ascii=False).encode("utf - 8")
             else:
-                return json.dumps({"value": self.value}, ensure_ascii = False).encode(
+                return json.dumps({"value": self.value}, ensure_ascii=False).encode(
                     "utf - 8"
                 )
-        elif self.format==MessageFormat.BINARY:
+        elif self.format == MessageFormat.BINARY:
             if isinstance(self.value, bytes):
                 return self.value
             else:
@@ -71,9 +71,9 @@ class Message:
         cls, data: bytes, format: MessageFormat = MessageFormat.JSON
     ) -> Any:
         """反序列化消息"""
-        if format==MessageFormat.JSON:
+        if format == MessageFormat.JSON:
             return json.loads(data.decode("utf - 8"))
-        elif format==MessageFormat.BINARY:
+        elif format == MessageFormat.BINARY:
             return data
         else:  # TEXT
             return data.decode("utf - 8")
@@ -151,7 +151,7 @@ class MessageHandler(ABC):
 
     async def on_error(self, message: Message, error: Exception):
         """错误处理"""
-        logger.error(f"消息处理失败: {error}", exc_info = True)
+        logger.error(f"消息处理失败: {error}", exc_info=True)
 
 
 class MessageQueue(ABC):
@@ -295,7 +295,7 @@ class MessageQueue(ABC):
         while True:
             try:
                 # 批量消费
-                messages = await self.consume_batch(max_messages = 100, timeout = 1.0)
+                messages = await self.consume_batch(max_messages=100, timeout=1.0)
 
                 for message in messages:
                     try:

@@ -1,23 +1,22 @@
-from typing import Dict, List, Any, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 """
 encryption - 索克生活项目模块
 """
 
+import base64
+import hashlib
+import secrets
+
+import bcrypt
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-import base64
-import bcrypt
-import hashlib
-import secrets
 
 #! / usr / bin / env python3
 """
 通用安全组件 - 加密和密码处理
 """
-
-
 
 
 class EncryptionService:
@@ -82,10 +81,10 @@ class EncryptionService:
             bytes: 派生的密钥
         """
         kdf = PBKDF2HMAC(
-            algorithm = hashes.SHA256(),
-            length = 32,
-            salt = salt,
-            iterations = 100000,
+            algorithm=hashes.SHA256(),
+            length=32,
+            salt=salt,
+            iterations=100000,
         )
         key = base64.urlsafe_b64encode(kdf.derive(password.encode()))
         return key
@@ -119,7 +118,9 @@ def verify_password(password: str, hashed_password: str) -> bool:
         bool: 密码是否匹配
     """
     try:
-        return bcrypt.checkpw(password.encode("utf - 8"), hashed_password.encode("utf - 8"))
+        return bcrypt.checkpw(
+            password.encode("utf - 8"), hashed_password.encode("utf - 8")
+        )
     except Exception:
         return False
 
@@ -153,11 +154,11 @@ def hash_data(data: str, algorithm: str = "sha256") -> str:
     Returns:
         str: 哈希值（十六进制）
     """
-    if algorithm=="sha256":
+    if algorithm == "sha256":
         return hashlib.sha256(data.encode()).hexdigest()
-    elif algorithm=="sha512":
+    elif algorithm == "sha512":
         return hashlib.sha512(data.encode()).hexdigest()
-    elif algorithm=="md5":
+    elif algorithm == "md5":
         return hashlib.md5(data.encode()).hexdigest()
     else:
         raise ValueError(f"不支持的哈希算法: {algorithm}")
@@ -191,7 +192,7 @@ def validate_password_strength(password: str) -> tuple[bool, list[str]]:
     if not any(c in special_chars for c in password):
         errors.append("密码必须包含至少一个特殊字符")
 
-    return len(errors)==0, errors
+    return len(errors) == 0, errors
 
 
 # 全局加密服务实例

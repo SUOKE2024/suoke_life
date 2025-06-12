@@ -2,14 +2,13 @@
 error_handler - 索克生活项目模块
 """
 
-from datetime import datetime
-from typing import Dict, Any, Optional
 import logging
 import traceback
-
-
+from datetime import datetime
+from typing import Any, Dict, Optional
 
 logger = logging.getLogger(__name__)
+
 
 class GlobalErrorHandler:
     """全局错误处理器"""
@@ -19,7 +18,7 @@ class GlobalErrorHandler:
         error: Exception,
         context: Optional[Dict[str, Any]] = None,
         user_id: Optional[str] = None,
-        request_id: Optional[str] = None
+        request_id: Optional[str] = None,
     ) -> Dict[str, Any]:
         """处理错误"""
 
@@ -30,7 +29,7 @@ class GlobalErrorHandler:
             "context": context or {},
             "user_id": user_id,
             "request_id": request_id,
-            "traceback": traceback.format_exc()
+            "traceback": traceback.format_exc(),
         }
 
         # 记录错误日志
@@ -38,39 +37,30 @@ class GlobalErrorHandler:
 
         # 根据错误类型返回适当的响应
         if isinstance(error, ValueError):
-            return {
-                "error": "参数错误",
-                "message": "请检查输入参数",
-                "code": 400
-            }
+            return {"error": "参数错误", "message": "请检查输入参数", "code": 400}
         elif isinstance(error, PermissionError):
             return {
                 "error": "权限错误",
                 "message": "您没有执行此操作的权限",
-                "code": 403
+                "code": 403,
             }
         elif isinstance(error, FileNotFoundError):
-            return {
-                "error": "资源未找到",
-                "message": "请求的资源不存在",
-                "code": 404
-            }
+            return {"error": "资源未找到", "message": "请求的资源不存在", "code": 404}
         else:
             return {
                 "error": "服务器内部错误",
                 "message": "服务暂时不可用，请稍后重试",
-                "code": 500
+                "code": 500,
             }
 
     @staticmethod
-    def log_performance_issue(
-        operation: str,
-        duration: float,
-        threshold: float = 5.0
-    ):
+    def log_performance_issue(operation: str, duration: float, threshold: float = 5.0):
         """记录性能问题"""
         if duration > threshold:
-            logger.warning(f"性能警告: {operation} 耗时 {duration:.2f}秒，超过阈值 {threshold}秒")
+            logger.warning(
+                f"性能警告: {operation} 耗时 {duration:.2f}秒，超过阈值 {threshold}秒"
+            )
+
 
 class ErrorRecovery:
     """错误恢复机制"""

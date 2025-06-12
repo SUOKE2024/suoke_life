@@ -2,12 +2,13 @@
 openapi_generator - 索克生活项目模块
 """
 
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any
 import inspect
 import json
 import logging
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any
+
 import yaml
 
 #! / usr / bin / env python3
@@ -15,7 +16,6 @@ import yaml
 OpenAPI文档生成器
 自动生成OpenAPI 3.0规范的API文档
 """
-
 
 
 logger = logging.getLogger(__name__)
@@ -50,7 +50,7 @@ class APIParameter:
     location: ParameterLocation
     description: str = ""
     required: bool = True
-    schema: dict[str, Any] = field(default_factory = dict)
+    schema: dict[str, Any] = field(default_factory=dict)
     example: Any = None
 
     def to_openapi(self) -> dict[str, Any]:
@@ -76,9 +76,9 @@ class APIResponse:
     status_code: int
     description: str = ""
     content_type: str = "application / json"
-    schema: dict[str, Any] = field(default_factory = dict)
+    schema: dict[str, Any] = field(default_factory=dict)
     example: Any = None
-    headers: dict[str, dict[str, Any]] = field(default_factory = dict)
+    headers: dict[str, dict[str, Any]] = field(default_factory=dict)
 
     def to_openapi(self) -> dict[str, Any]:
         """转换为OpenAPI格式"""
@@ -102,8 +102,8 @@ class APISchema:
 
     name: str
     type: str = "object"
-    properties: dict[str, dict[str, Any]] = field(default_factory = dict)
-    required: list[str] = field(default_factory = list)
+    properties: dict[str, dict[str, Any]] = field(default_factory=dict)
+    required: list[str] = field(default_factory=list)
     description: str = ""
     example: Any = None
 
@@ -114,10 +114,10 @@ class APISchema:
         description: str = "",
         required: bool = False,
         example: Any = None,
-       **kwargs,
+        **kwargs,
     ):
         """添加属性"""
-        prop = {"type": prop_type, "description": description,**kwargs}
+        prop = {"type": prop_type, "description": description, **kwargs}
 
         if example is not None:
             prop["example"] = example
@@ -152,11 +152,11 @@ class APIEndpoint:
     method: HTTPMethod
     summary: str = ""
     description: str = ""
-    tags: list[str] = field(default_factory = list)
-    parameters: list[APIParameter] = field(default_factory = list)
+    tags: list[str] = field(default_factory=list)
+    parameters: list[APIParameter] = field(default_factory=list)
     request_body: dict[str, Any] | None = None
-    responses: dict[int, APIResponse] = field(default_factory = dict)
-    security: list[dict[str, list[str]]] = field(default_factory = list)
+    responses: dict[int, APIResponse] = field(default_factory=dict)
+    security: list[dict[str, list[str]]] = field(default_factory=list)
     deprecated: bool = False
     operation_id: str | None = None
 
@@ -247,10 +247,10 @@ class OpenAPIGenerator:
         logger.info(f"添加数据模型: {schema.name}")
 
     def add_security_scheme(
-        self, name: str, scheme_type: str, description: str = "",**kwargs
+        self, name: str, scheme_type: str, description: str = "", **kwargs
     ):
         """添加安全方案"""
-        scheme = {"type": scheme_type, "description": description,**kwargs}
+        scheme = {"type": scheme_type, "description": description, **kwargs}
 
         self.security_schemes[name] = scheme
         logger.info(f"添加安全方案: {name}")
@@ -264,11 +264,11 @@ class OpenAPIGenerator:
     ):
         """添加Bearer认证"""
         self.add_security_scheme(
-            name = name,
-            scheme_type = "http",
-            scheme = "bearer",
-            bearer_format = "JWT",
-            description = description,
+            name=name,
+            scheme_type="http",
+            scheme="bearer",
+            bearer_format="JWT",
+            description=description,
         )
 
     def add_api_key_auth(
@@ -338,23 +338,23 @@ class OpenAPIGenerator:
     def generate_json(self, indent: int = 2) -> str:
         """生成JSON格式的文档"""
         spec = self.generate_openapi_spec()
-        return json.dumps(spec, indent = indent, ensure_ascii = False)
+        return json.dumps(spec, indent=indent, ensure_ascii=False)
 
     def generate_yaml(self) -> str:
         """生成YAML格式的文档"""
         spec = self.generate_openapi_spec()
-        return yaml.dump(spec, default_flow_style = False, allow_unicode = True)
+        return yaml.dump(spec, default_flow_style=False, allow_unicode=True)
 
     def save_to_file(self, file_path: str, format: str = "json"):
         """保存到文件"""
-        if format.lower()=="json":
+        if format.lower() == "json":
             content = self.generate_json()
-        elif format.lower()=="yaml":
+        elif format.lower() == "yaml":
             content = self.generate_yaml()
         else:
             raise ValueError("格式必须是 'json' 或 'yaml'")
 
-        with open(file_path, "w", encoding = "utf - 8") as f:
+        with open(file_path, "w", encoding="utf - 8") as f:
             f.write(content)
 
         logger.info(f"API文档已保存到: {file_path}")
@@ -376,11 +376,11 @@ class OpenAPIGenerator:
             description = func.__doc__.strip()
 
         endpoint = APIEndpoint(
-            path = path,
-            method = method,
-            summary = summary,
-            description = description,
-            tags = tags or [],
+            path=path,
+            method=method,
+            summary=summary,
+            description=description,
+            tags=tags or [],
         )
 
         # 分析函数签名
@@ -391,12 +391,12 @@ class OpenAPIGenerator:
 
             # 确定参数类型
             param_type = "string"
-            if param.annotation!=inspect.Parameter.empty:
-                if param.annotation==int:
+            if param.annotation != inspect.Parameter.empty:
+                if param.annotation == int:
                     param_type = "integer"
-                elif param.annotation==float:
+                elif param.annotation == float:
                     param_type = "number"
-                elif param.annotation==bool:
+                elif param.annotation == bool:
                     param_type = "boolean"
 
             # 确定参数位置
@@ -405,22 +405,22 @@ class OpenAPIGenerator:
                 location = ParameterLocation.PATH
 
             api_param = APIParameter(
-                name = param_name,
-                location = location,
-                required = param.default==inspect.Parameter.empty,
-                schema = {"type": param_type},
+                name=param_name,
+                location=location,
+                required=param.default == inspect.Parameter.empty,
+                schema={"type": param_type},
             )
 
             endpoint.add_parameter(api_param)
 
         # 添加默认响应
-        endpoint.add_response(APIResponse(status_code = 200, description = "成功响应"))
+        endpoint.add_response(APIResponse(status_code=200, description="成功响应"))
 
         return endpoint
 
     def create_health_check_schema(self) -> APISchema:
         """创建健康检查数据模型（索克生活平台专用）"""
-        schema = APISchema(name = "HealthCheck", description = "健康检查响应")
+        schema = APISchema(name="HealthCheck", description="健康检查响应")
 
         schema.add_property("status", "string", "服务状态", True, "healthy")
         schema.add_property(
@@ -433,7 +433,7 @@ class OpenAPIGenerator:
 
     def create_user_schema(self) -> APISchema:
         """创建用户数据模型（索克生活平台专用）"""
-        schema = APISchema(name = "User", description = "用户信息")
+        schema = APISchema(name="User", description="用户信息")
 
         schema.add_property("user_id", "string", "用户ID", True, "user123")
         schema.add_property("name", "string", "用户姓名", True, "张三")
@@ -446,7 +446,7 @@ class OpenAPIGenerator:
 
     def create_health_metric_schema(self) -> APISchema:
         """创建健康指标数据模型（索克生活平台专用）"""
-        schema = APISchema(name = "HealthMetric", description = "健康指标")
+        schema = APISchema(name="HealthMetric", description="健康指标")
 
         schema.add_property("metric_id", "string", "指标ID", True, "metric123")
         schema.add_property("user_id", "string", "用户ID", True, "user123")
@@ -479,9 +479,9 @@ def get_openapi_generator(name: str) -> OpenAPIGenerator | None:
 def create_default_generator(service_name: str) -> OpenAPIGenerator:
     """创建默认的OpenAPI生成器"""
     generator = OpenAPIGenerator(
-        title = f"{service_name} API",
-        version = "1.0.0",
-        description = f"{service_name}服务API文档",
+        title=f"{service_name} API",
+        version="1.0.0",
+        description=f"{service_name}服务API文档",
     )
 
     # 添加常用的安全方案

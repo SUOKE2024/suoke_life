@@ -3,16 +3,17 @@ rbac - 索克生活项目模块
 """
 
 from enum import Enum
-from typing import List, Dict, Set
-
+from typing import Dict, List, Set
 
 
 class Permission(Enum):
     """权限枚举"""
+
     READ = "read"
     WRITE = "write"
     DELETE = "delete"
     ADMIN = "admin"
+
 
 class Role:
     """角色类"""
@@ -25,6 +26,7 @@ class Role:
     def has_permission(self, permission: Permission) -> bool:
         """检查是否有权限"""
         return permission in self.permissions
+
 
 class RBACManager:
     """基于角色的访问控制管理器"""
@@ -39,7 +41,10 @@ class RBACManager:
 
     def _init_default_roles(self) -> None:
         """初始化默认角色"""
-        self.roles["admin"] = Role("admin", [Permission.READ, Permission.WRITE, Permission.DELETE, Permission.ADMIN])
+        self.roles["admin"] = Role(
+            "admin",
+            [Permission.READ, Permission.WRITE, Permission.DELETE, Permission.ADMIN],
+        )
         self.roles["user"] = Role("user", [Permission.READ])
         self.roles["doctor"] = Role("doctor", [Permission.READ, Permission.WRITE])
 

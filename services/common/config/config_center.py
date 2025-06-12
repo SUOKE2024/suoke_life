@@ -1,16 +1,19 @@
     import consul
+
+import json
+import logging
+import threading
+import time
 from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from typing import Any
+
 import consul
-import json
-import logging
-import threading
-import time
 import yaml
+
 
 def main() -> None:
     """主函数 - 自动生成的最小可用版本"""

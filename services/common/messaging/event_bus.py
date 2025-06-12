@@ -2,15 +2,15 @@
 event_bus - 索克生活项目模块
 """
 
+import asyncio
+import json
+import logging
+import threading
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
 from typing import Any, Callable
-import asyncio
-import json
-import logging
-import threading
 
 #! / usr / bin / env python3
 # - * - coding: utf - 8 - * -
@@ -22,14 +22,17 @@ import threading
 
 logger = logging.getLogger(__name__)
 
+
 class EventType(Enum):
     """TODO: 添加文档字符串"""
+
     USER_REGISTERED = "user.registered"
     USER_LOGIN = "user.login"
     DIAGNOSIS_COMPLETED = "diagnosis.completed"
     HEALTH_RECORD_UPDATED = "health_record.updated"
     RECOMMENDATION_GENERATED = "recommendation.generated"
     SYSTEM_ALERT = "system.alert"
+
 
 @dataclass
 class Event:
@@ -44,6 +47,7 @@ class Event:
     user_id: str = None
     metadata: dict[str, Any] = None
 
+
 class EventHandler(ABC):
     """事件处理器抽象基类"""
 
@@ -57,10 +61,11 @@ class EventHandler(ABC):
         """获取处理的事件类型"""
         pass
 
+
 class EventBus:
     """事件总线"""
 
-    def __init__(self, backend: str = 'kafka', config: dict = None):
+    def __init__(self, backend: str = "kafka", config: dict = None):
         """TODO: 添加文档字符串"""
         self.backend = backend
         self.config = config or {}
@@ -95,7 +100,7 @@ class EventBus:
     def _mock_receive(self, topic: str, event: dict):
         """模拟接收事件，仅用于本地测试"""
         for handler in self.subscribers.get(topic, []):
-            threading.Thread(target = handler, args = (event,)).start()
+            threading.Thread(target=handler, args=(event,)).start()
 
     async def start_consuming(self) -> None:
         """开始消费事件"""
@@ -120,7 +125,7 @@ class EventBus:
             task.cancel()
 
         # 等待任务完成
-        await asyncio.gather( * self.consumer_tasks, return_exceptions = True)
+        await asyncio.gather(*self.consumer_tasks, return_exceptions=True)
         self.consumer_tasks.clear()
 
         logger.info("Stopped consuming events")
@@ -135,7 +140,7 @@ class EventBus:
             # 创建消费者组
             try:
                 await self.redis.xgroup_create(
-                    stream_key, consumer_group, id = "0", mkstream = True
+                    stream_key, consumer_group, id="0", mkstream=True
                 )
             except Exception:
                 pass  # 组可能已存在
@@ -147,8 +152,8 @@ class EventBus:
                         consumer_group,
                         consumer_name,
                         {stream_key: ">"},
-                        count = 10,
-                        block = 1000,
+                        count=10,
+                        block=1000,
                     )
 
                     for _stream, msgs in messages:
@@ -169,14 +174,14 @@ class EventBus:
         try:
             # 反序列化事件
             event = Event(
-                event_id = fields.get("event_id"),
-                event_type = fields.get("event_type"),
-                source_service = fields.get("source_service"),
-                timestamp = datetime.fromisoformat(fields.get("timestamp")),
-                data = json.loads(fields.get("data", "{}")),
-                correlation_id = fields.get("correlation_id"),
-                user_id = fields.get("user_id"),
-                metadata = json.loads(fields.get("metadata", "{}")),
+                event_id=fields.get("event_id"),
+                event_type=fields.get("event_type"),
+                source_service=fields.get("source_service"),
+                timestamp=datetime.fromisoformat(fields.get("timestamp")),
+                data=json.loads(fields.get("data", "{}")),
+                correlation_id=fields.get("correlation_id"),
+                user_id=fields.get("user_id"),
+                metadata=json.loads(fields.get("metadata", "{}")),
             )
 
             # 调用处理器
@@ -196,6 +201,7 @@ class EventBus:
 
         except Exception as e:
             logger.error(f"Failed to process message {msg_id}: {e}")
+
 
 # 具体事件处理器示例
 class DiagnosisEventHandler(EventHandler):
@@ -233,6 +239,7 @@ class DiagnosisEventHandler(EventHandler):
             logger.error(f"Failed to handle diagnosis event: {e}")
             return False
 
+
 class UserEventHandler(EventHandler):
     """用户事件处理器"""
 
@@ -248,9 +255,9 @@ class UserEventHandler(EventHandler):
     async def handle(self, event: Event) -> bool:
         """处理用户事件"""
         try:
-            if event.event_type==EventType.USER_REGISTERED.value:
+            if event.event_type == EventType.USER_REGISTERED.value:
                 return await self._handle_user_registered(event)
-            elif event.event_type==EventType.USER_LOGIN.value:
+            elif event.event_type == EventType.USER_LOGIN.value:
                 return await self._handle_user_login(event)
 
             return True
@@ -292,6 +299,7 @@ class UserEventHandler(EventHandler):
         logger.info(f"Processed user login for {user_id}")
         return True
 
+
 class HealthRecordEventHandler(EventHandler):
     """健康记录事件处理器"""
 
@@ -323,13 +331,13 @@ class HealthRecordEventHandler(EventHandler):
             # 发布推荐生成事件
             if recommendations:
                 Event(
-                    event_id = f"rec_{event.event_id}",
-                    event_type = EventType.RECOMMENDATION_GENERATED.value,
-                    source_service = "health - record - handler",
-                    timestamp = datetime.utcnow(),
-                    data = {"recommendations": recommendations},
-                    user_id = user_id,
-                    correlation_id = event.correlation_id,
+                    event_id=f"rec_{event.event_id}",
+                    event_type=EventType.RECOMMENDATION_GENERATED.value,
+                    source_service="health - record - handler",
+                    timestamp=datetime.utcnow(),
+                    data={"recommendations": recommendations},
+                    user_id=user_id,
+                    correlation_id=event.correlation_id,
                 )
 
                 # 这里需要访问事件总线实例来发布新事件
@@ -341,6 +349,7 @@ class HealthRecordEventHandler(EventHandler):
         except Exception as e:
             logger.error(f"Failed to handle health record event: {e}")
             return False
+
 
 class SystemAlertEventHandler(EventHandler):
     """系统告警事件处理器"""
@@ -367,7 +376,7 @@ class SystemAlertEventHandler(EventHandler):
             if severity in ["critical", "high"]:
                 # 立即通知运维团队
                 await self.alert_service.send_immediate_alert(alert_data)
-            elif severity=="medium":
+            elif severity == "medium":
                 # 发送邮件通知
                 await self.alert_service.send_email_alert(alert_data)
             else:

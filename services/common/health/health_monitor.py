@@ -2,21 +2,21 @@
 health_monitor - 索克生活项目模块
 """
 
-from .health_checker import HealthChecker
-from collections.abc import Callable
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any
 import asyncio
 import contextlib
 import logging
 import time
+from collections.abc import Callable
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any
+
+from .health_checker import HealthChecker
 
 """
 健康监控器
 提供持续的健康状态监控和告警功能
 """
-
 
 
 logger = logging.getLogger(__name__)
@@ -38,8 +38,8 @@ class HealthAlert:
     level: AlertLevel
     component: str
     message: str
-    details: dict[str, Any] = field(default_factory = dict)
-    timestamp: float = field(default_factory = time.time)
+    details: dict[str, Any] = field(default_factory=dict)
+    timestamp: float = field(default_factory=time.time)
     resolved: bool = False
     resolved_at: float | None = None
 
@@ -152,7 +152,7 @@ class HealthMonitor:
 
         # 限制历史记录大小
         if len(self.health_history) > self.max_history_size:
-            self.health_history = self.health_history[ - self.max_history_size :]
+            self.health_history = self.health_history[-self.max_history_size :]
 
     async def _analyze_health_status(
         self, health_result: dict[str, Any], consecutive_failures: dict[str, int]
@@ -162,14 +162,14 @@ class HealthMonitor:
         checks = health_result.get("checks", {})
 
         # 检查整体状态
-        if overall_status=="unhealthy":
+        if overall_status == "unhealthy":
             await self._create_alert(
                 AlertLevel.CRITICAL,
                 "system",
                 "系统整体状态不健康",
                 {"overall_status": overall_status, "checks": len(checks)},
             )
-        elif overall_status=="degraded":
+        elif overall_status == "degraded":
             await self._create_alert(
                 AlertLevel.WARNING,
                 "system",
@@ -200,13 +200,13 @@ class HealthMonitor:
         if component_name not in consecutive_failures:
             consecutive_failures[component_name] = 0
 
-        if status=="unhealthy":
-            consecutive_failures[component_name]+=1
+        if status == "unhealthy":
+            consecutive_failures[component_name] += 1
 
             # 检查连续失败次数
             if (
                 consecutive_failures[component_name]
-               >=self.alert_thresholds["consecutive_failures"]
+                >= self.alert_thresholds["consecutive_failures"]
             ):
                 await self._create_alert(
                     AlertLevel.ERROR,
@@ -218,7 +218,7 @@ class HealthMonitor:
                     },
                 )
 
-        elif status=="degraded":
+        elif status == "degraded":
             await self._create_alert(
                 AlertLevel.WARNING,
                 component_name,
@@ -263,7 +263,7 @@ class HealthMonitor:
 
         # 创建新告警
         alert = HealthAlert(
-            level = level, component = component, message = message, details = details or {}
+            level=level, component=component, message=message, details=details or {}
         )
 
         self.active_alerts[alert_key] = alert
@@ -271,7 +271,7 @@ class HealthMonitor:
 
         # 限制告警历史大小
         if len(self.alert_history) > self.max_history_size:
-            self.alert_history = self.alert_history[ - self.max_history_size :]
+            self.alert_history = self.alert_history[-self.max_history_size :]
 
         # 通知告警处理器
         for handler in self.alert_handlers:
@@ -287,7 +287,7 @@ class HealthMonitor:
         resolved_alerts = []
 
         for alert_key, alert in list(self.active_alerts.items()):
-            if alert.component==component and not alert.resolved:
+            if alert.component == component and not alert.resolved:
                 alert.resolved = True
                 alert.resolved_at = time.time()
                 resolved_alerts.append(alert)
@@ -303,7 +303,7 @@ class HealthMonitor:
         if not self.health_history:
             return {"status": "unknown", "message": "暂无健康数据"}
 
-        latest_health = self.health_history[ - 1]
+        latest_health = self.health_history[-1]
 
         # 统计告警
         active_alerts_by_level = {}
@@ -311,7 +311,7 @@ class HealthMonitor:
             level = alert.level.value
             if level not in active_alerts_by_level:
                 active_alerts_by_level[level] = 0
-            active_alerts_by_level[level]+=1
+            active_alerts_by_level[level] += 1
 
         # 计算健康趋势
         trend = self._calculate_health_trend()
@@ -335,16 +335,16 @@ class HealthMonitor:
             return "stable"
 
         # 取最近10次检查结果
-        recent_checks = self.health_history[ - 10:]
+        recent_checks = self.health_history[-10:]
 
-        healthy_count = len([h for h in recent_checks if h.get("status")=="healthy"])
+        healthy_count = len([h for h in recent_checks if h.get("status") == "healthy"])
         total_count = len(recent_checks)
 
-        if len(self.health_history)>=20:
+        if len(self.health_history) >= 20:
             # 比较前10次和后10次
-            previous_checks = self.health_history[ - 20: - 10]
+            previous_checks = self.health_history[-20:-10]
             previous_healthy = len(
-                [h for h in previous_checks if h.get("status")=="healthy"]
+                [h for h in previous_checks if h.get("status") == "healthy"]
             )
             previous_rate = previous_healthy / len(previous_checks)
             current_rate = healthy_count / total_count
@@ -370,13 +370,13 @@ class HealthMonitor:
 
         # 过滤条件
         if level:
-            alerts = [a for a in alerts if a.level==level]
+            alerts = [a for a in alerts if a.level == level]
 
         if component:
-            alerts = [a for a in alerts if a.component==component]
+            alerts = [a for a in alerts if a.component == component]
 
         # 按时间倒序排序
-        alerts.sort(key = lambda a: a.timestamp, reverse = True)
+        alerts.sort(key=lambda a: a.timestamp, reverse=True)
 
         # 限制数量
         alerts = alerts[:limit]
@@ -389,8 +389,8 @@ class HealthMonitor:
             return {}
 
         # 计算可用性
-        recent_checks = self.health_history[ - 100:]  # 最近100次检查
-        healthy_count = len([h for h in recent_checks if h.get("status")=="healthy"])
+        recent_checks = self.health_history[-100:]  # 最近100次检查
+        healthy_count = len([h for h in recent_checks if h.get("status") == "healthy"])
         availability = healthy_count / len(recent_checks) if recent_checks else 0
 
         # 计算平均响应时间
@@ -402,8 +402,8 @@ class HealthMonitor:
             for check_result in checks.values():
                 duration = check_result.get("duration_ms", 0)
                 if duration > 0:
-                    total_duration+=duration
-                    check_count+=1
+                    total_duration += duration
+                    check_count += 1
 
         avg_response_time = total_duration / check_count if check_count > 0 else 0
 
@@ -412,10 +412,11 @@ class HealthMonitor:
             "avg_response_time_ms": avg_response_time,
             "total_checks": len(self.health_history),
             "active_alerts": len(self.active_alerts),
-            "monitoring_uptime": time.time()
-            - self.health_history[0].get("timestamp", time.time())
-            if self.health_history
-            else 0,
+            "monitoring_uptime": (
+                time.time() - self.health_history[0].get("timestamp", time.time())
+                if self.health_history
+                else 0
+            ),
         }
 
     async def health_check(self) -> dict[str, Any]:

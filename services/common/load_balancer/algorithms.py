@@ -2,19 +2,18 @@
 algorithms - 索克生活项目模块
 """
 
-from .load_balancer import LoadBalancingAlgorithm, ServiceEndpoint
-from typing import Any
 import asyncio
 import hashlib
 import random
 import time
+from typing import Any
+
+from .load_balancer import LoadBalancingAlgorithm, ServiceEndpoint
 
 """
 负载均衡算法实现
 提供多种负载均衡策略的具体算法
 """
-
-
 
 
 class RoundRobinBalancer(LoadBalancingAlgorithm):
@@ -40,7 +39,7 @@ class RoundRobinBalancer(LoadBalancingAlgorithm):
 
         async with self.lock:
             endpoint = endpoints[self.current_index % len(endpoints)]
-            self.current_index+=1
+            self.current_index += 1
             return endpoint
 
 
@@ -74,15 +73,15 @@ class WeightedRoundRobinBalancer(LoadBalancingAlgorithm):
                 addr = endpoint.address
                 if addr not in self.current_weights:
                     self.current_weights[addr] = 0
-                self.current_weights[addr]+=endpoint.weight
+                self.current_weights[addr] += endpoint.weight
 
             # 选择权重最高的端点
             selected_endpoint = max(
-                endpoints, key = lambda ep: self.current_weights[ep.address]
+                endpoints, key=lambda ep: self.current_weights[ep.address]
             )
 
             # 减少选中端点的权重
-            self.current_weights[selected_endpoint.address]-=total_weight
+            self.current_weights[selected_endpoint.address] -= total_weight
 
             return selected_endpoint
 
@@ -104,7 +103,7 @@ class LeastConnectionsBalancer(LoadBalancingAlgorithm):
             return None
 
         # 选择当前连接数最少的端点
-        return min(endpoints, key = lambda ep: ep.current_connections)
+        return min(endpoints, key=lambda ep: ep.current_connections)
 
 
 class IPHashBalancer(LoadBalancingAlgorithm):
@@ -210,7 +209,7 @@ class ConsistentHashBalancer(LoadBalancingAlgorithm):
         # 找到第一个大于等于客户端哈希值的节点
         sorted_hashes = sorted(self.hash_ring.keys())
         for hash_value in sorted_hashes:
-            if hash_value>=client_hash:
+            if hash_value >= client_hash:
                 return self.hash_ring[hash_value]
 
         # 如果没找到，返回第一个节点（环形结构）

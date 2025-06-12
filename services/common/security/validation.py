@@ -2,11 +2,10 @@
 validation - 索克生活项目模块
 """
 
-from datetime import datetime
-from typing import Any, Dict, List, Optional
 import html
 import re
-
+from datetime import datetime
+from typing import Any, Dict, List, Optional
 
 
 class InputValidator:
@@ -15,13 +14,15 @@ class InputValidator:
     @staticmethod
     def validate_email(email: str) -> bool:
         """验证邮箱格式"""
-        pattern = r'^[a - zA - Z0 - 9._% + -] + @[a - zA - Z0 - 9. - ] + \.[a - zA - Z]{2,}$'
+        pattern = (
+            r"^[a - zA - Z0 - 9._% + -] + @[a - zA - Z0 - 9. - ] + \.[a - zA - Z]{2,}$"
+        )
         return bool(re.match(pattern, email))
 
     @staticmethod
     def validate_phone(phone: str) -> bool:
         """验证手机号格式"""
-        pattern = r'^1[3 - 9]\d{9}$'
+        pattern = r"^1[3 - 9]\d{9}$"
         return bool(re.match(pattern, phone))
 
     @staticmethod
@@ -33,13 +34,13 @@ class InputValidator:
     def validate_sql_injection(text: str) -> bool:
         """检查SQL注入"""
         dangerous_patterns = [
-            r'union\s + select',
-            r'drop\s + table',
-            r'delete\s + from',
-            r'insert\s + into',
-            r'update\s + set',
-            r'exec\s * \(',
-            r'script\s * >',
+            r"union\s + select",
+            r"drop\s + table",
+            r"delete\s + from",
+            r"insert\s + into",
+            r"update\s + set",
+            r"exec\s * \(",
+            r"script\s * >",
         ]
 
         text_lower = text.lower()
@@ -52,11 +53,11 @@ class InputValidator:
     def validate_xss(text: str) -> bool:
         """检查XSS攻击"""
         dangerous_patterns = [
-            r'<script',
-            r'javascript:',
-            r'onload\s*=',
-            r'onerror\s*=',
-            r'onclick\s*=',
+            r"<script",
+            r"javascript:",
+            r"onload\s*=",
+            r"onerror\s*=",
+            r"onclick\s*=",
         ]
 
         text_lower = text.lower()

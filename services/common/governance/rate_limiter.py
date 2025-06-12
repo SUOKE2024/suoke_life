@@ -2,13 +2,13 @@
 rate_limiter - 索克生活项目模块
 """
 
+import asyncio
+import logging
+import time
 from abc import ABC, abstractmethod
 from collections import deque
 from dataclasses import dataclass
 from typing import Any
-import asyncio
-import logging
-import time
 
 #! / usr / bin / env python3
 """
@@ -77,7 +77,7 @@ class RateLimiter(ABC):
     def get_stats(self) -> dict[str, Any]:
         """获取统计信息"""
         return {
-           **self.stats,
+            **self.stats,
             "rejection_rate": (
                 self.stats["rejected_requests"] / self.stats["total_requests"]
                 if self.stats["total_requests"] > 0
@@ -133,7 +133,7 @@ class TokenBucketRateLimiter(RateLimiter):
             # 计算需要等待的时间
             async with self._lock:
                 await self._refill_tokens()
-                if self.tokens>=tokens:
+                if self.tokens >= tokens:
                     continue
 
                 # 计算等待时间
@@ -145,15 +145,15 @@ class TokenBucketRateLimiter(RateLimiter):
     async def try_acquire(self, tokens: int = 1) -> bool:
         """尝试获取令牌（非阻塞）"""
         async with self._lock:
-            self.stats["total_requests"]+=1
+            self.stats["total_requests"] += 1
             await self._refill_tokens()
 
-            if self.tokens>=tokens:
-                self.tokens-=tokens
-                self.stats["allowed_requests"]+=1
+            if self.tokens >= tokens:
+                self.tokens -= tokens
+                self.stats["allowed_requests"] += 1
                 return True
             else:
-                self.stats["rejected_requests"]+=1
+                self.stats["rejected_requests"] += 1
                 return False
 
 
@@ -190,23 +190,23 @@ class SlidingWindowRateLimiter(RateLimiter):
     async def try_acquire(self, tokens: int = 1) -> bool:
         """尝试获取令牌（非阻塞）"""
         async with self._lock:
-            self.stats["total_requests"]+=1
+            self.stats["total_requests"] += 1
             await self._clean_old_requests()
 
             # 检查当前窗口内的请求数
             max_requests = int(self.config.rate * self.config.window_size)
             current_requests = len(self.requests)
 
-            if current_requests + tokens<=max_requests:
+            if current_requests + tokens <= max_requests:
                 # 记录请求时间
                 current_time = time.time()
                 for _ in range(tokens):
                     self.requests.append(current_time)
 
-                self.stats["allowed_requests"]+=1
+                self.stats["allowed_requests"] += 1
                 return True
             else:
-                self.stats["rejected_requests"]+=1
+                self.stats["rejected_requests"] += 1
                 return False
 
 
@@ -217,7 +217,7 @@ class FixedWindowRateLimiter(RateLimiter):
         """TODO: 添加文档字符串"""
         super().__init__(config)
         self.current_window_start = (
-            int(time.time()//config.window_size) * config.window_size
+            int(time.time() // config.window_size) * config.window_size
         )
         self.current_window_count = 0
         self._lock = asyncio.Lock()
@@ -228,7 +228,7 @@ class FixedWindowRateLimiter(RateLimiter):
         """检查并重置窗口"""
         current_time = time.time()
         window_start = (
-            int(current_time//self.config.window_size) * self.config.window_size
+            int(current_time // self.config.window_size) * self.config.window_size
         )
 
         if window_start > self.current_window_start:
@@ -244,7 +244,7 @@ class FixedWindowRateLimiter(RateLimiter):
             # 等待到下一个窗口
             current_time = time.time()
             next_window = (
-                int(current_time//self.config.window_size) + 1
+                int(current_time // self.config.window_size) + 1
             ) * self.config.window_size
             wait_time = next_window - current_time
 
@@ -253,17 +253,17 @@ class FixedWindowRateLimiter(RateLimiter):
     async def try_acquire(self, tokens: int = 1) -> bool:
         """尝试获取令牌（非阻塞）"""
         async with self._lock:
-            self.stats["total_requests"]+=1
+            self.stats["total_requests"] += 1
             await self._check_window()
 
             max_requests = int(self.config.rate * self.config.window_size)
 
-            if self.current_window_count + tokens<=max_requests:
-                self.current_window_count+=tokens
-                self.stats["allowed_requests"]+=1
+            if self.current_window_count + tokens <= max_requests:
+                self.current_window_count += tokens
+                self.stats["allowed_requests"] += 1
                 return True
             else:
-                self.stats["rejected_requests"]+=1
+                self.stats["rejected_requests"] += 1
                 return False
 
 
@@ -274,7 +274,7 @@ class AdaptiveRateLimiter(RateLimiter):
         """TODO: 添加文档字符串"""
         super().__init__(config)
         self.base_limiter = TokenBucketRateLimiter(config)
-        self.success_rate_window = deque(maxlen = 100)  # 最近100个请求的成功率
+        self.success_rate_window = deque(maxlen=100)  # 最近100个请求的成功率
         self.adjustment_factor = 1.0  # 调整因子
         self._lock = asyncio.Lock()
 
@@ -284,7 +284,7 @@ class AdaptiveRateLimiter(RateLimiter):
         """根据成功率调整限流速率"""
         self.success_rate_window.append(success)
 
-        if len(self.success_rate_window)>=10:  # 至少有10个样本
+        if len(self.success_rate_window) >= 10:  # 至少有10个样本
             success_rate = sum(self.success_rate_window) / len(self.success_rate_window)
 
             if success_rate > 0.95:  # 成功率高，可以放宽限制
@@ -294,9 +294,9 @@ class AdaptiveRateLimiter(RateLimiter):
 
             # 更新基础限流器的配置
             adjusted_config = RateLimitConfig(
-                rate = self.config.rate * self.adjustment_factor,
-                burst = self.config.burst,
-                window_size = self.config.window_size,
+                rate=self.config.rate * self.adjustment_factor,
+                burst=self.config.burst,
+                window_size=self.config.window_size,
             )
             self.base_limiter.config = adjusted_config
 
@@ -354,13 +354,13 @@ class RateLimiterRegistry:
                 if config is None:
                     config = RateLimitConfig()
 
-                if limiter_type=="token_bucket":
+                if limiter_type == "token_bucket":
                     self._limiters[name] = TokenBucketRateLimiter(config)
-                elif limiter_type=="sliding_window":
+                elif limiter_type == "sliding_window":
                     self._limiters[name] = SlidingWindowRateLimiter(config)
-                elif limiter_type=="fixed_window":
+                elif limiter_type == "fixed_window":
                     self._limiters[name] = FixedWindowRateLimiter(config)
-                elif limiter_type=="adaptive":
+                elif limiter_type == "adaptive":
                     self._limiters[name] = AdaptiveRateLimiter(config)
                 else:
                     raise ValueError(f"不支持的限流器类型: {limiter_type}")
@@ -420,16 +420,17 @@ def rate_limit(
 
     def decorator(func):
         """TODO: 添加文档字符串"""
-        async def wrapper( *args,**kwargs):
+
+        async def wrapper(*args, **kwargs):
             limiter = await get_rate_limiter(name, limiter_type, config)
 
             if not await limiter.try_acquire(tokens):
                 raise RateLimitExceededError(f"限流器 {name} 拒绝请求")
 
             return (
-                await func( *args,**kwargs)
+                await func(*args, **kwargs)
                 if asyncio.iscoroutinefunction(func)
-                else func( *args,**kwargs)
+                else func(*args, **kwargs)
             )
 
         return wrapper

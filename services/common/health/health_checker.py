@@ -2,18 +2,19 @@
 health_checker - 索克生活项目模块
 """
 
+import asyncio
+import logging
+import time
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
-from sqlalchemy import create_engine, text
 from typing import Any
+
 import aiohttp
-import asyncio
-import logging
 import psutil
 import pymongo
 import redis
-import time
+from sqlalchemy import create_engine, text
 
 """
 健康检查器组件

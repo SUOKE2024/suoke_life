@@ -2,15 +2,16 @@
 async_optimization - 索克生活项目模块
 """
 
+import asyncio
+import logging
 from collections.abc import Callable, Coroutine
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
 from functools import wraps
 from typing import Any, TypeVar
+
 import aioredis
-import asyncio
 import asyncpg
-import logging
 
 #! / usr / bin / env python3
 """

@@ -2,15 +2,15 @@
 saga_manager - 索克生活项目模块
 """
 
+import asyncio
+import logging
+import time
+import uuid
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any
-import asyncio
-import logging
-import time
-import uuid
 
 #! / usr / bin / env python3
 """
@@ -65,10 +65,10 @@ class SagaStep:
 class SagaContext:
     """Saga上下文"""
 
-    saga_id: str = field(default_factory = lambda: str(uuid.uuid4()))
-    data: dict[str, Any] = field(default_factory = dict)
-    metadata: dict[str, Any] = field(default_factory = dict)
-    created_at: datetime = field(default_factory = datetime.now)
+    saga_id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    data: dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
+    created_at: datetime = field(default_factory=datetime.now)
 
     def set(self, key: str, value: Any):
         """设置上下文数据"""
@@ -93,7 +93,7 @@ class SagaManager:
         persist_state: bool = True,
     ):
         self.saga_id = saga_id or str(uuid.uuid4())
-        self.context = context or SagaContext(saga_id = self.saga_id)
+        self.context = context or SagaContext(saga_id=self.saga_id)
         self.steps: list[SagaStep] = []
         self.completed_steps: list[str] = []
         self.status = SagaStatus.PENDING
@@ -185,14 +185,14 @@ class SagaManager:
                 # 执行步骤
                 if asyncio.iscoroutinefunction(step.action):
                     result = await asyncio.wait_for(
-                        step.action(self.context), timeout = step.timeout
+                        step.action(self.context), timeout=step.timeout
                     )
                 else:
                     result = await asyncio.wait_for(
                         asyncio.get_event_loop().run_in_executor(
                             None, step.action, self.context
                         ),
-                        timeout = step.timeout,
+                        timeout=step.timeout,
                     )
 
                 step.result = result
@@ -246,21 +246,21 @@ class SagaManager:
 
         # 反向执行补偿
         for step_name in reversed(self.completed_steps):
-            step = next(s for s in self.steps if s.name==step_name)
+            step = next(s for s in self.steps if s.name == step_name)
 
             try:
                 logger.info(f"执行补偿: {step.name}")
 
                 if asyncio.iscoroutinefunction(step.compensation):
                     await asyncio.wait_for(
-                        step.compensation(self.context), timeout = step.timeout
+                        step.compensation(self.context), timeout=step.timeout
                     )
                 else:
                     await asyncio.wait_for(
                         asyncio.get_event_loop().run_in_executor(
                             None, step.compensation, self.context
                         ),
-                        timeout = step.timeout,
+                        timeout=step.timeout,
                     )
 
                 self._record_event("compensation_completed", {"step_name": step.name})
@@ -315,9 +315,11 @@ class SagaManager:
             "completed_steps": self.completed_steps,
             "start_time": self.start_time,
             "end_time": self.end_time,
-            "duration": self.end_time - self.start_time
-            if self.end_time and self.start_time
-            else None,
+            "duration": (
+                self.end_time - self.start_time
+                if self.end_time and self.start_time
+                else None
+            ),
             "events_count": len(self.events),
         }
 
