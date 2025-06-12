@@ -5,8 +5,4 @@
 from .client import PalpationServiceClient
 from .models import PalpationRequest, PalpationResponse
 
-__all__ = [
-    "PalpationServiceClient",
-    "PalpationRequest",
-    "PalpationResponse"
-]
+__all__ = ["PalpationServiceClient", "PalpationRequest", "PalpationResponse"]

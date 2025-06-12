@@ -2,12 +2,12 @@
 knowledge_graph - 索克生活项目模块
 """
 
+import logging
+from typing import Any
+
 import networkx as nx
 from neo4j import GraphDatabase
 from py2neo import Graph
-from typing import Any
-import logging
-
 
 logger = logging.getLogger(__name__)
 
@@ -36,17 +36,48 @@ class KnowledgeGraphService:
 
         # 实体和关系类型
         self.entity_types = [
-            "症候", "疾病", "方剂", "药物", "穴位", "食材",
-            "经络", "体质", "养生方法", "医家", "医籍",
-            "中医理论", "证型", "中药方属性", "五行", "五味",
-            "四性", "归经"
+            "症候",
+            "疾病",
+            "方剂",
+            "药物",
+            "穴位",
+            "食材",
+            "经络",
+            "体质",
+            "养生方法",
+            "医家",
+            "医籍",
+            "中医理论",
+            "证型",
+            "中药方属性",
+            "五行",
+            "五味",
+            "四性",
+            "归经",
         ]
 
         self.relation_types = [
-            "治疗", "组成", "主治", "配伍", "归经", "含有",
-            "相关", "著作", "适宜", "禁忌", "出处", "属于",
-            "分类", "表现为", "具有", "来源", "可替代",
-            "调理", "作用于", "辩证", "所属"
+            "治疗",
+            "组成",
+            "主治",
+            "配伍",
+            "归经",
+            "含有",
+            "相关",
+            "著作",
+            "适宜",
+            "禁忌",
+            "出处",
+            "属于",
+            "分类",
+            "表现为",
+            "具有",
+            "来源",
+            "可替代",
+            "调理",
+            "作用于",
+            "辩证",
+            "所属",
         ]
 
     def connect(self) -> bool:
@@ -61,12 +92,12 @@ class KnowledgeGraphService:
                 self.neo4j_uri,
                 auth=(self.neo4j_user, self.neo4j_password),
                 max_connection_lifetime=3600,  # 连接最大生存时间1小时
-                max_connection_pool_size=50,   # 最大连接池大小
+                max_connection_pool_size=50,  # 最大连接池大小
                 connection_acquisition_timeout=60,  # 获取连接超时60秒
-                connection_timeout=30,         # 连接超时30秒
-                max_retry_time=30,            # 最大重试时间30秒
+                connection_timeout=30,  # 连接超时30秒
+                max_retry_time=30,  # 最大重试时间30秒
                 resolver=None,
-                encrypted=False               # 根据实际环境调整
+                encrypted=False,  # 根据实际环境调整
             )
 
             # 测试连接
@@ -77,8 +108,7 @@ class KnowledgeGraphService:
 
             # 构建Py2neo连接（用于复杂查询）
             self._py2neo_graph = Graph(
-                self.neo4j_uri,
-                auth=(self.neo4j_user, self.neo4j_password)
+                self.neo4j_uri, auth=(self.neo4j_user, self.neo4j_password)
             )
 
             # 加载基本知识图谱到内存
@@ -107,11 +137,13 @@ class KnowledgeGraphService:
             # 加载节点
             with self._driver.session() as session:
                 # 加载节点
-                result = session.run("""
+                result = session.run(
+                    """
                     MATCH (n)
                     RETURN id(n) AS id, labels(n) AS types, properties(n) AS props
                     LIMIT 10000
-                """)
+                """
+                )
 
                 for record in result:
                     node_id = record["id"]
@@ -119,19 +151,17 @@ class KnowledgeGraphService:
                     node_props = record["props"]
 
                     # 添加到NetworkX图
-                    self.graph.add_node(
-                        node_id,
-                        types=node_types,
-                       **node_props
-                    )
+                    self.graph.add_node(node_id, types=node_types, **node_props)
 
                 # 加载关系
-                result = session.run("""
+                result = session.run(
+                    """
                     MATCH ()-[r]->()
                     RETURN id(startNode(r)) AS source, id(endNode(r)) AS target,
                         type(r) AS type, properties(r) AS props
                     LIMIT 20000
-                """)
+                """
+                )
 
                 for record in result:
                     source = record["source"]
@@ -140,19 +170,18 @@ class KnowledgeGraphService:
                     rel_props = record["props"]
 
                     # 添加到NetworkX图
-                    self.graph.add_edge(
-                        source,
-                        target,
-                        type=rel_type,
-                       **rel_props
-                    )
+                    self.graph.add_edge(source, target, type=rel_type, **rel_props)
 
-            logger.info(f"已加载基本知识图谱到内存: {self.graph.number_of_nodes()} 个节点, "
-                        f"{self.graph.number_of_edges()} 个关系")
+            logger.info(
+                f"已加载基本知识图谱到内存: {self.graph.number_of_nodes()} 个节点, "
+                f"{self.graph.number_of_edges()} 个关系"
+            )
         except Exception as e:
             logger.error(f"加载知识图谱失败: {str(e)}")
 
-    def get_entity_by_name(self, name: str, entity_type: str | None = None) -> dict | None:
+    def get_entity_by_name(
+        self, name: str, entity_type: str | None = None
+    ) -> dict | None:
         """根据名称获取实体
 
         Args:
@@ -169,9 +198,9 @@ class KnowledgeGraphService:
         """
 
         if entity_type:
-            cypher+=f" WHERE '{entity_type}' IN labels(n)"
+            cypher += f" WHERE '{entity_type}' IN labels(n)"
 
-        cypher+="""
+        cypher += """
             RETURN id(n) AS id, labels(n) AS types, properties(n) AS props
             LIMIT 1
         """
@@ -187,16 +216,15 @@ class KnowledgeGraphService:
                 return {
                     "id": record["id"],
                     "types": record["types"],
-                    "properties": record["props"]
+                    "properties": record["props"],
                 }
         except Exception as e:
             logger.error(f"获取实体失败: {str(e)}")
             return None
 
     def search_entities(
-            self,
-            keyword: str,
-            entity_types: list[str] = None) -> list[dict]:
+        self, keyword: str, entity_types: list[str] = None
+    ) -> list[dict]:
         """搜索实体
 
         Args:
@@ -215,9 +243,9 @@ class KnowledgeGraphService:
 
         if entity_types and len(entity_types) > 0:
             type_conditions = " OR ".join([f"'{t}' IN labels(n)" for t in entity_types])
-            cypher+=f" AND ({type_conditions})"
+            cypher += f" AND ({type_conditions})"
 
-        cypher+="""
+        cypher += """
             RETURN id(n) AS id, labels(n) AS types, properties(n) AS props
             LIMIT 50
         """
@@ -228,11 +256,13 @@ class KnowledgeGraphService:
                 entities = []
 
                 for record in result:
-                    entities.append({
-                        "id": record["id"],
-                        "types": record["types"],
-                        "properties": record["props"]
-                    })
+                    entities.append(
+                        {
+                            "id": record["id"],
+                            "types": record["types"],
+                            "properties": record["props"],
+                        }
+                    )
 
                 return entities
         except Exception as e:
@@ -285,18 +315,20 @@ class KnowledgeGraphService:
                     if rel_type not in relations["outgoing"]:
                         relations["outgoing"][rel_type] = []
 
-                    relations["outgoing"][rel_type].append({
-                        "source": {
-                            "id": record["source_id"],
-                            "properties": record.get("source_props", {})
-                        },
-                        "target": {
-                            "id": record["target_id"],
-                            "types": record["target_types"],
-                            "properties": record["target_props"]
-                        },
-                        "properties": record["relation_props"]
-                    })
+                    relations["outgoing"][rel_type].append(
+                        {
+                            "source": {
+                                "id": record["source_id"],
+                                "properties": record.get("source_props", {}),
+                            },
+                            "target": {
+                                "id": record["target_id"],
+                                "types": record["target_types"],
+                                "properties": record["target_props"],
+                            },
+                            "properties": record["relation_props"],
+                        }
+                    )
 
                 # 处理入向关系
                 in_result = session.run(incoming_cypher, query_params)
@@ -307,18 +339,22 @@ class KnowledgeGraphService:
                     if rel_type not in relations["incoming"]:
                         relations["incoming"][rel_type] = []
 
-                    relations["incoming"][rel_type].append({
-                        "source": {
-                            "id": record["source_id"],
-                            "types": record["target_types"],  # 这里是入向关系，所以对调了
-                            "properties": record.get("source_props", {})
-                        },
-                        "target": {
-                            "id": record["target_id"],
-                            "properties": record["target_props"]
-                        },
-                        "properties": record["relation_props"]
-                    })
+                    relations["incoming"][rel_type].append(
+                        {
+                            "source": {
+                                "id": record["source_id"],
+                                "types": record[
+                                    "target_types"
+                                ],  # 这里是入向关系，所以对调了
+                                "properties": record.get("source_props", {}),
+                            },
+                            "target": {
+                                "id": record["target_id"],
+                                "properties": record["target_props"],
+                            },
+                            "properties": record["relation_props"],
+                        }
+                    )
 
             return relations
         except Exception as e:
@@ -326,10 +362,7 @@ class KnowledgeGraphService:
             return {"outgoing": {}, "incoming": {}}
 
     def get_path_between_entities(
-        self,
-        source_id: int,
-        target_id: int,
-        max_depth: int = 3
+        self, source_id: int, target_id: int, max_depth: int = 3
     ) -> list[dict]:
         """查找两个实体之间的路径
 
@@ -354,7 +387,8 @@ class KnowledgeGraphService:
 
             # 这里使用py2neo执行，因为它更容易处理路径
             result = self._py2neo_graph.run(
-                cypher, source_id=source_id, target_id=target_id)
+                cypher, source_id=source_id, target_id=target_id
+            )
 
             for record in result:
                 path = record[0]  # 获取路径
@@ -375,17 +409,14 @@ class KnowledgeGraphService:
         Returns:
             Dict: 格式化后的路径
         """
-        formatted_path = {
-            "nodes": [],
-            "relationships": []
-        }
+        formatted_path = {"nodes": [], "relationships": []}
 
         # 处理节点
         for node in path.nodes:
             formatted_node = {
                 "id": node.identity,
                 "labels": list(node.labels),
-                "properties": dict(node)
+                "properties": dict(node),
             }
             formatted_path["nodes"].append(formatted_node)
 
@@ -396,7 +427,7 @@ class KnowledgeGraphService:
                 "type": rel.type,
                 "properties": dict(rel),
                 "start_node": rel.start_node.identity,
-                "end_node": rel.end_node.identity
+                "end_node": rel.end_node.identity,
             }
             formatted_path["relationships"].append(formatted_rel)
 
@@ -407,7 +438,7 @@ class KnowledgeGraphService:
         entity_name: str,
         relation_types: list[str] = None,
         entity_types: list[str] = None,
-        limit: int = 20
+        limit: int = 20,
     ) -> list[dict]:
         """查找与实体相关的知识
 
@@ -429,15 +460,18 @@ class KnowledgeGraphService:
         # 构建关系和目标节点类型的约束
         relation_constraint = ""
         if relation_types and len(relation_types) > 0:
-            relation_constraint = "WHERE type(r) IN [" + \
-                ", ".join([f"'{t}'" for t in relation_types]) + "]"
+            relation_constraint = (
+                "WHERE type(r) IN ["
+                + ", ".join([f"'{t}'" for t in relation_types])
+                + "]"
+            )
 
         entity_constraint = ""
         if entity_types and len(entity_types) > 0:
             type_conditions = " OR ".join([f"'{t}' IN labels(m)" for t in entity_types])
             entity_constraint = f"AND ({type_conditions})"
 
-        cypher+=f"""
+        cypher += f"""
             MATCH (n)-[r]->(m) {relation_constraint} {entity_constraint}
             RETURN id(n) AS source_id, properties(n) AS source_props, labels(n) AS source_types,
                 type(r) AS relation_type, properties(r) AS relation_props,
@@ -451,22 +485,24 @@ class KnowledgeGraphService:
                 knowledge_items = []
 
                 for record in result:
-                    knowledge_items.append({
-                        "source": {
-                            "id": record["source_id"],
-                            "types": record["source_types"],
-                            "properties": record["source_props"]
-                        },
-                        "relation": {
-                            "type": record["relation_type"],
-                            "properties": record["relation_props"]
-                        },
-                        "target": {
-                            "id": record["target_id"],
-                            "types": record["target_types"],
-                            "properties": record["target_props"]
+                    knowledge_items.append(
+                        {
+                            "source": {
+                                "id": record["source_id"],
+                                "types": record["source_types"],
+                                "properties": record["source_props"],
+                            },
+                            "relation": {
+                                "type": record["relation_type"],
+                                "properties": record["relation_props"],
+                            },
+                            "target": {
+                                "id": record["target_id"],
+                                "types": record["target_types"],
+                                "properties": record["target_props"],
+                            },
                         }
-                    })
+                    )
 
                 return knowledge_items
         except Exception as e:
@@ -474,10 +510,7 @@ class KnowledgeGraphService:
             return []
 
     def create_entity(
-        self,
-        name: str,
-        entity_type: str,
-        properties: dict[str, Any] = None
+        self, name: str, entity_type: str, properties: dict[str, Any] = None
     ) -> int | None:
         """创建实体
 
@@ -495,9 +528,7 @@ class KnowledgeGraphService:
         props = properties or {}
         props["name"] = name
 
-        query_params = {
-            "props": props
-        }
+        query_params = {"props": props}
 
         cypher = f"""
             CREATE (n:{entity_type} $props)
@@ -518,7 +549,7 @@ class KnowledgeGraphService:
         source_id: int,
         target_id: int,
         relation_type: str,
-        properties: dict[str, Any] = None
+        properties: dict[str, Any] = None,
     ) -> bool:
         """创建关系
 
@@ -536,11 +567,7 @@ class KnowledgeGraphService:
 
         props = properties or {}
 
-        query_params = {
-            "source_id": source_id,
-            "target_id": target_id,
-            "props": props
-        }
+        query_params = {"source_id": source_id, "target_id": target_id, "props": props}
 
         cypher = f"""
             MATCH (source), (target)
@@ -558,10 +585,7 @@ class KnowledgeGraphService:
             return False
 
     def get_subgraph_by_entity(
-        self,
-        entity_name: str,
-        depth: int = 2,
-        max_nodes: int = 100
+        self, entity_name: str, depth: int = 2, max_nodes: int = 100
     ) -> dict:
         """获取以实体为中心的子图
 
@@ -588,37 +612,36 @@ class KnowledgeGraphService:
         """
 
         try:
-            subgraph = {
-                "nodes": [],
-                "links": []
-            }
+            subgraph = {"nodes": [], "links": []}
 
             # 这里使用py2neo执行
             result = self._py2neo_graph.run(
-                cypher,
-                entity_name=entity_name,
-                max_nodes=max_nodes
+                cypher, entity_name=entity_name, max_nodes=max_nodes
             )
 
             record = result.data()[0]
 
             # 处理节点
             for node in record["nodes"]:
-                subgraph["nodes"].append({
-                    "id": node.identity,
-                    "labels": list(node.labels),
-                    "properties": dict(node)
-                })
+                subgraph["nodes"].append(
+                    {
+                        "id": node.identity,
+                        "labels": list(node.labels),
+                        "properties": dict(node),
+                    }
+                )
 
             # 处理关系
             for rel in record["relationships"]:
-                subgraph["links"].append({
-                    "id": rel.identity,
-                    "source": rel.start_node.identity,
-                    "target": rel.end_node.identity,
-                    "type": rel.type,
-                    "properties": dict(rel)
-                })
+                subgraph["links"].append(
+                    {
+                        "id": rel.identity,
+                        "source": rel.start_node.identity,
+                        "target": rel.end_node.identity,
+                        "type": rel.type,
+                        "properties": dict(rel),
+                    }
+                )
 
             return subgraph
         except Exception as e:
@@ -626,9 +649,8 @@ class KnowledgeGraphService:
             return {"nodes": [], "links": []}
 
     def suggest_related_content(
-            self,
-            user_interests: list[str],
-            limit: int = 10) -> list[dict]:
+        self, user_interests: list[str], limit: int = 10
+    ) -> list[dict]:
         """基于用户兴趣推荐相关内容
 
         Args:
@@ -644,8 +666,8 @@ class KnowledgeGraphService:
         try:
             # 构建查询参数
             interest_params = {
-                f"interest_{i}": interest for i,
-                interest in enumerate(user_interests)}
+                f"interest_{i}": interest for i, interest in enumerate(user_interests)
+            }
             interest_strings = [f"$interest_{i}" for i in range(len(user_interests))]
 
             # Cypher查询
@@ -668,12 +690,14 @@ class KnowledgeGraphService:
 
                 recommendations = []
                 for record in result:
-                    recommendations.append({
-                        "id": record["id"],
-                        "types": record["types"],
-                        "properties": record["props"],
-                        "relevance_score": record["relevance"]
-                    })
+                    recommendations.append(
+                        {
+                            "id": record["id"],
+                            "types": record["types"],
+                            "properties": record["props"],
+                            "relevance_score": record["relevance"],
+                        }
+                    )
 
                 return recommendations
         except Exception as e:
@@ -694,46 +718,48 @@ class KnowledgeGraphService:
         try:
             concept_entity = self.get_entity_by_name(concept)
             if not concept_entity:
-                return {
-                    "concept": concept,
-                    "found": False,
-                    "message": "未找到相关概念"
-                }
+                return {"concept": concept, "found": False, "message": "未找到相关概念"}
 
             concept_id = concept_entity["id"]
-            entity_type = concept_entity["types"][0] if concept_entity["types"] else "未知"
+            entity_type = (
+                concept_entity["types"][0] if concept_entity["types"] else "未知"
+            )
 
             # 获取虚拟知识 - 理论关联
             virtual_knowledge = []
             virtual_relations = ["属于", "分类", "相关", "理论基础"]
             virtual_data = self.find_related_knowledge(
-                concept,
-                relation_types=virtual_relations,
-                limit=10
+                concept, relation_types=virtual_relations, limit=10
             )
 
             for item in virtual_data:
-                virtual_knowledge.append({
-                    "entity": item["target"]["properties"].get("name", "未知"),
-                    "relation": item["relation"]["type"],
-                    "description": item["relation"]["properties"].get("description", "")
-                })
+                virtual_knowledge.append(
+                    {
+                        "entity": item["target"]["properties"].get("name", "未知"),
+                        "relation": item["relation"]["type"],
+                        "description": item["relation"]["properties"].get(
+                            "description", ""
+                        ),
+                    }
+                )
 
             # 获取实体知识 - 实践应用
             real_knowledge = []
             real_relations = ["治疗", "组成", "主治", "应用", "调理"]
             real_data = self.find_related_knowledge(
-                concept,
-                relation_types=real_relations,
-                limit=10
+                concept, relation_types=real_relations, limit=10
             )
 
             for item in real_data:
-                real_knowledge.append({
-                    "entity": item["target"]["properties"].get("name", "未知"),
-                    "relation": item["relation"]["type"],
-                    "description": item["relation"]["properties"].get("description", "")
-                })
+                real_knowledge.append(
+                    {
+                        "entity": item["target"]["properties"].get("name", "未知"),
+                        "relation": item["relation"]["type"],
+                        "description": item["relation"]["properties"].get(
+                            "description", ""
+                        ),
+                    }
+                )
 
             # 获取关联媒体资源
             media_resources = self.get_related_media_resources(concept_id)
@@ -746,14 +772,14 @@ class KnowledgeGraphService:
                 "properties": concept_entity["properties"],
                 "virtual_knowledge": virtual_knowledge,
                 "real_knowledge": real_knowledge,
-                "media_resources": media_resources
+                "media_resources": media_resources,
             }
         except Exception as e:
             logger.error(f"获取虚实融合知识失败: {str(e)}")
             return {
                 "concept": concept,
                 "found": False,
-                "message": f"获取知识时出错: {str(e)}"
+                "message": f"获取知识时出错: {str(e)}",
             }
 
     def get_related_media_resources(self, entity_id: int) -> list[dict]:
@@ -781,13 +807,15 @@ class KnowledgeGraphService:
 
                 media_resources = []
                 for record in result:
-                    media_resources.append({
-                        "id": record["id"],
-                        "type": record["type"],
-                        "url": record["url"],
-                        "title": record["title"],
-                        "description": record["description"]
-                    })
+                    media_resources.append(
+                        {
+                            "id": record["id"],
+                            "type": record["type"],
+                            "url": record["url"],
+                            "title": record["title"],
+                            "description": record["description"],
+                        }
+                    )
 
                 return media_resources
         except Exception as e:
@@ -820,19 +848,13 @@ class KnowledgeGraphService:
 
                 record = result.single()
                 if not record:
-                    return {
-                        "name": root_concept,
-                        "children": []
-                    }
+                    return {"name": root_concept, "children": []}
 
                 tree = record["tree"]
                 return self._format_tree(tree)
         except Exception as e:
             logger.error(f"获取知识层次结构失败: {str(e)}")
-            return {
-                "name": root_concept,
-                "children": []
-            }
+            return {"name": root_concept, "children": []}
 
     def _format_tree(self, tree_data) -> dict:
         """格式化树结构数据
@@ -843,13 +865,14 @@ class KnowledgeGraphService:
         Returns:
             Dict: 格式化后的树
         """
+
         # 递归格式化树
         def format_node(node):
             """格式化单个节点"""
             formatted = {
                 "name": node.get("name", "未命名"),
                 "id": node.get("_id", -1),
-                "type": node.get("type", "未知")
+                "type": node.get("type", "未知"),
             }
 
             children = []

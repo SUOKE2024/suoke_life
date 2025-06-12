@@ -2,14 +2,15 @@
 knowledge_repository - 索克生活项目模块
 """
 
+import logging
+from datetime import UTC, datetime
+from typing import Any
+
 import motor.motor_asyncio
 from bson.objectid import ObjectId
-from datetime import UTC, datetime
 from pkg.utils.config import Config
 from pkg.utils.metrics import get_metrics_collector
 from pymongo.errors import PyMongoError
-from typing import Any
-import logging
 
 """
 老克智能体服务 - 知识存储库
@@ -57,10 +58,14 @@ class KnowledgeRepository:
             await self.learning_paths.create_index("category")
             await self.learning_paths.create_index("level")
             await self.learning_paths.create_index("created_at")
-            await self.learning_paths.create_index([("title", "text"), ("description", "text")])
+            await self.learning_paths.create_index(
+                [("title", "text"), ("description", "text")]
+            )
 
             # 用户进度集合索引
-            await self.user_progress.create_index([("user_id", 1), ("path_id", 1)], unique=True)
+            await self.user_progress.create_index(
+                [("user_id", 1), ("path_id", 1)], unique=True
+            )
             await self.user_progress.create_index("path_id")
             await self.user_progress.create_index("last_activity_at")
 
@@ -101,11 +106,13 @@ class KnowledgeRepository:
 
             # 初始化浏览计数
             article_id = str(result.inserted_id)
-            await self.view_counts.insert_one({
-                "article_id": article_id,
-                "count": 0,
-                "last_updated": datetime.now(UTC).isoformat()
-            })
+            await self.view_counts.insert_one(
+                {
+                    "article_id": article_id,
+                    "count": 0,
+                    "last_updated": datetime.now(UTC).isoformat(),
+                }
+            )
 
             # 更新分类
             if "category" in article_data and article_data["category"]:
@@ -115,8 +122,8 @@ class KnowledgeRepository:
         except PyMongoError as e:
             logger.error(f"创建知识文章失败: {str(e)}")
             metrics.increment_counter(
-                "knowledge_repo_errors", {
-                    "method": "create_article"})
+                "knowledge_repo_errors", {"method": "create_article"}
+            )
             return None
 
     @metrics.measure_execution_time("knowledge_repo_find_article_by_id")
@@ -144,7 +151,9 @@ class KnowledgeRepository:
 
             # 获取浏览量
             try:
-                view_count_doc = await self.view_counts.find_one({"article_id": article["id"]})
+                view_count_doc = await self.view_counts.find_one(
+                    {"article_id": article["id"]}
+                )
                 article["view_count"] = view_count_doc["count"] if view_count_doc else 0
             except (KeyError, TypeError):
                 article["view_count"] = 0
@@ -154,14 +163,16 @@ class KnowledgeRepository:
         return None
 
     @metrics.measure_execution_time("knowledge_repo_find_articles")
-    async def find_articles(self,
-                            category: str | None = None,
-                            tags: list[str] | None = None,
-                            difficulty: str | None = None,
-                            limit: int = 10,
-                            offset: int = 0,
-                            sort_by: str = "created_at",
-                            sort_order: str = "desc") -> list[dict[str, Any]]:
+    async def find_articles(
+        self,
+        category: str | None = None,
+        tags: list[str] | None = None,
+        difficulty: str | None = None,
+        limit: int = 10,
+        offset: int = 0,
+        sort_by: str = "created_at",
+        sort_order: str = "desc",
+    ) -> list[dict[str, Any]]:
         """
         查找知识文章列表
 
@@ -188,13 +199,15 @@ class KnowledgeRepository:
                 query["difficulty"] = difficulty
 
             # 排序方向
-            sort_direction = 1 if sort_order.lower()=="asc" else -1
+            sort_direction = 1 if sort_order.lower() == "asc" else -1
 
             # 执行查询
-            cursor = self.articles.find(query) \
-                .sort(sort_by, sort_direction) \
-                .skip(offset) \
+            cursor = (
+                self.articles.find(query)
+                .sort(sort_by, sort_direction)
+                .skip(offset)
                 .limit(limit)
+            )
 
             articles = await cursor.to_list(length=limit)
 
@@ -208,7 +221,8 @@ class KnowledgeRepository:
 
             if article_ids:
                 view_cursor = self.view_counts.find(
-                    {"article_id": {"$in": article_ids}})
+                    {"article_id": {"$in": article_ids}}
+                )
                 view_docs = await view_cursor.to_list(length=None)
                 view_counts = {doc["article_id"]: doc["count"] for doc in view_docs}
 
@@ -220,13 +234,14 @@ class KnowledgeRepository:
         except PyMongoError as e:
             logger.error(f"查找知识文章列表失败: {str(e)}")
             metrics.increment_counter(
-                "knowledge_repo_errors", {
-                    "method": "find_articles"})
+                "knowledge_repo_errors", {"method": "find_articles"}
+            )
             return []
 
     @metrics.measure_execution_time("knowledge_repo_search_articles")
-    async def search_articles(self, query: str, limit: int = 10,
-                              offset: int = 0) -> list[dict[str, Any]]:
+    async def search_articles(
+        self, query: str, limit: int = 10, offset: int = 0
+    ) -> list[dict[str, Any]]:
         """
         搜索知识文章
 
@@ -240,13 +255,14 @@ class KnowledgeRepository:
         """
         try:
             # 执行全文搜索
-            cursor = self.articles.find(
-                {"$text": {"$search": query}},
-                {"score": {"$meta": "textScore"}}
-            ) \
-                .sort([("score", {"$meta": "textScore"}), ("created_at", -1)]) \
-                .skip(offset) \
+            cursor = (
+                self.articles.find(
+                    {"$text": {"$search": query}}, {"score": {"$meta": "textScore"}}
+                )
+                .sort([("score", {"$meta": "textScore"}), ("created_at", -1)])
+                .skip(offset)
                 .limit(limit)
+            )
 
             articles = await cursor.to_list(length=limit)
 
@@ -260,7 +276,8 @@ class KnowledgeRepository:
 
             if article_ids:
                 view_cursor = self.view_counts.find(
-                    {"article_id": {"$in": article_ids}})
+                    {"article_id": {"$in": article_ids}}
+                )
                 view_docs = await view_cursor.to_list(length=None)
                 view_counts = {doc["article_id"]: doc["count"] for doc in view_docs}
 
@@ -272,16 +289,14 @@ class KnowledgeRepository:
         except PyMongoError as e:
             logger.error(f"搜索知识文章失败: {str(e)}")
             metrics.increment_counter(
-                "knowledge_repo_errors", {
-                    "method": "search_articles"})
+                "knowledge_repo_errors", {"method": "search_articles"}
+            )
             return []
 
     @metrics.measure_execution_time("knowledge_repo_find_related_articles")
-    async def find_related_articles(self,
-                                    article_id: str,
-                                    tags: list[str],
-                                    category: str,
-                                    limit: int = 5) -> list[dict[str, Any]]:
+    async def find_related_articles(
+        self, article_id: str, tags: list[str], category: str, limit: int = 5
+    ) -> list[dict[str, Any]]:
         """
         查找相关文章
 
@@ -309,25 +324,36 @@ class KnowledgeRepository:
                 # 加权搜索 - 标签匹配更多的文章得分更高
                 pipeline = [
                     {"$match": query},
-                    {"$addFields": {
-                        "matchedTags": {"$size": {"$setIntersection": [tags, {"$ifNull": ["$tags", []]}]}},
-                        "categoryMatch": {"$cond": [{"$eq": ["$category", category]}, 3, 0]}
-                    }},
-                    {"$addFields": {
-                        "score": {"$add": ["$matchedTags", "$categoryMatch"]}
-                    }},
+                    {
+                        "$addFields": {
+                            "matchedTags": {
+                                "$size": {
+                                    "$setIntersection": [
+                                        tags,
+                                        {"$ifNull": ["$tags", []]},
+                                    ]
+                                }
+                            },
+                            "categoryMatch": {
+                                "$cond": [{"$eq": ["$category", category]}, 3, 0]
+                            },
+                        }
+                    },
+                    {
+                        "$addFields": {
+                            "score": {"$add": ["$matchedTags", "$categoryMatch"]}
+                        }
+                    },
                     {"$match": {"score": {"$gt": 0}}},  # 至少要有一个标签匹配或分类匹配
                     {"$sort": {"score": -1, "created_at": -1}},
-                    {"$limit": limit}
+                    {"$limit": limit},
                 ]
 
                 cursor = self.articles.aggregate(pipeline)
                 articles = await cursor.to_list(length=limit)
             else:
                 # 如果没有标签和分类，返回最新文章
-                cursor = self.articles.find(query) \
-                    .sort("created_at", -1) \
-                    .limit(limit)
+                cursor = self.articles.find(query).sort("created_at", -1).limit(limit)
                 articles = await cursor.to_list(length=limit)
 
             # 处理ObjectId
@@ -341,7 +367,8 @@ class KnowledgeRepository:
 
             if article_ids:
                 view_cursor = self.view_counts.find(
-                    {"article_id": {"$in": article_ids}})
+                    {"article_id": {"$in": article_ids}}
+                )
                 view_docs = await view_cursor.to_list(length=None)
                 view_counts = {doc["article_id"]: doc["count"] for doc in view_docs}
 
@@ -353,13 +380,14 @@ class KnowledgeRepository:
         except PyMongoError as e:
             logger.error(f"查找相关文章失败: {str(e)}")
             metrics.increment_counter(
-                "knowledge_repo_errors", {
-                    "method": "find_related_articles"})
+                "knowledge_repo_errors", {"method": "find_related_articles"}
+            )
             return []
 
     @metrics.measure_execution_time("knowledge_repo_update_article")
-    async def update_article(self, article_id: str,
-                             update_data: dict[str, Any]) -> bool:
+    async def update_article(
+        self, article_id: str, update_data: dict[str, Any]
+    ) -> bool:
         """
         更新知识文章
 
@@ -375,14 +403,12 @@ class KnowledgeRepository:
             try:
                 article_id_obj = ObjectId(article_id)
                 result = await self.articles.update_one(
-                    {"_id": article_id_obj},
-                    {"$set": update_data}
+                    {"_id": article_id_obj}, {"$set": update_data}
                 )
             except (ValueError, TypeError):
                 # 如果不是有效的ObjectId，尝试使用字符串ID
                 result = await self.articles.update_one(
-                    {"id": article_id},
-                    {"$set": update_data}
+                    {"id": article_id}, {"$set": update_data}
                 )
 
             # 更新分类
@@ -393,8 +419,8 @@ class KnowledgeRepository:
         except PyMongoError as e:
             logger.error(f"更新知识文章失败: {str(e)}")
             metrics.increment_counter(
-                "knowledge_repo_errors", {
-                    "method": "update_article"})
+                "knowledge_repo_errors", {"method": "update_article"}
+            )
             return False
 
     @metrics.measure_execution_time("knowledge_repo_delete_article")
@@ -424,8 +450,8 @@ class KnowledgeRepository:
         except PyMongoError as e:
             logger.error(f"删除知识文章失败: {str(e)}")
             metrics.increment_counter(
-                "knowledge_repo_errors", {
-                    "method": "delete_article"})
+                "knowledge_repo_errors", {"method": "delete_article"}
+            )
             return False
 
     @metrics.measure_execution_time("knowledge_repo_increment_article_view_count")
@@ -445,17 +471,17 @@ class KnowledgeRepository:
                 {"article_id": article_id},
                 {
                     "$inc": {"count": 1},
-                    "$set": {"last_updated": datetime.now(UTC).isoformat()}
+                    "$set": {"last_updated": datetime.now(UTC).isoformat()},
                 },
-                upsert=True
+                upsert=True,
             )
 
             return result.acknowledged
         except PyMongoError as e:
             logger.error(f"增加文章浏览次数失败: {str(e)}")
             metrics.increment_counter(
-                "knowledge_repo_errors", {
-                    "method": "increment_article_view_count"})
+                "knowledge_repo_errors", {"method": "increment_article_view_count"}
+            )
             return False
 
     @metrics.measure_execution_time("knowledge_repo_create_learning_path")
@@ -493,8 +519,8 @@ class KnowledgeRepository:
         except PyMongoError as e:
             logger.error(f"创建学习路径失败: {str(e)}")
             metrics.increment_counter(
-                "knowledge_repo_errors", {
-                    "method": "create_learning_path"})
+                "knowledge_repo_errors", {"method": "create_learning_path"}
+            )
             return None
 
     @metrics.measure_execution_time("knowledge_repo_find_learning_path_by_id")
@@ -526,16 +552,18 @@ class KnowledgeRepository:
         except PyMongoError as e:
             logger.error(f"查找学习路径失败: {str(e)}")
             metrics.increment_counter(
-                "knowledge_repo_errors", {
-                    "method": "find_learning_path_by_id"})
+                "knowledge_repo_errors", {"method": "find_learning_path_by_id"}
+            )
             return None
 
     @metrics.measure_execution_time("knowledge_repo_find_learning_paths")
-    async def find_learning_paths(self,
-                                  category: str | None = None,
-                                  level: str | None = None,
-                                  limit: int = 10,
-                                  offset: int = 0) -> list[dict[str, Any]]:
+    async def find_learning_paths(
+        self,
+        category: str | None = None,
+        level: str | None = None,
+        limit: int = 10,
+        offset: int = 0,
+    ) -> list[dict[str, Any]]:
         """
         查找学习路径列表
 
@@ -557,10 +585,12 @@ class KnowledgeRepository:
                 query["level"] = level
 
             # 执行查询
-            cursor = self.learning_paths.find(query) \
-                .sort("created_at", -1) \
-                .skip(offset) \
+            cursor = (
+                self.learning_paths.find(query)
+                .sort("created_at", -1)
+                .skip(offset)
                 .limit(limit)
+            )
 
             paths = await cursor.to_list(length=limit)
 
@@ -572,13 +602,14 @@ class KnowledgeRepository:
         except PyMongoError as e:
             logger.error(f"查找学习路径列表失败: {str(e)}")
             metrics.increment_counter(
-                "knowledge_repo_errors", {
-                    "method": "find_learning_paths"})
+                "knowledge_repo_errors", {"method": "find_learning_paths"}
+            )
             return []
 
     @metrics.measure_execution_time("knowledge_repo_update_learning_path")
     async def update_learning_path(
-            self, path_id: str, update_data: dict[str, Any]) -> bool:
+        self, path_id: str, update_data: dict[str, Any]
+    ) -> bool:
         """
         更新学习路径
 
@@ -594,14 +625,12 @@ class KnowledgeRepository:
             try:
                 path_id_obj = ObjectId(path_id)
                 result = await self.learning_paths.update_one(
-                    {"_id": path_id_obj},
-                    {"$set": update_data}
+                    {"_id": path_id_obj}, {"$set": update_data}
                 )
             except (ValueError, TypeError):
                 # 如果不是有效的ObjectId，尝试使用字符串ID
                 result = await self.learning_paths.update_one(
-                    {"id": path_id},
-                    {"$set": update_data}
+                    {"id": path_id}, {"$set": update_data}
                 )
 
             # 更新分类
@@ -612,8 +641,8 @@ class KnowledgeRepository:
         except PyMongoError as e:
             logger.error(f"更新学习路径失败: {str(e)}")
             metrics.increment_counter(
-                "knowledge_repo_errors", {
-                    "method": "update_learning_path"})
+                "knowledge_repo_errors", {"method": "update_learning_path"}
+            )
             return False
 
     @metrics.measure_execution_time("knowledge_repo_delete_learning_path")
@@ -643,13 +672,14 @@ class KnowledgeRepository:
         except PyMongoError as e:
             logger.error(f"删除学习路径失败: {str(e)}")
             metrics.increment_counter(
-                "knowledge_repo_errors", {
-                    "method": "delete_learning_path"})
+                "knowledge_repo_errors", {"method": "delete_learning_path"}
+            )
             return False
 
     @metrics.measure_execution_time("knowledge_repo_get_user_learning_progress")
     async def get_user_learning_progress(
-            self, user_id: str, path_id: str) -> dict[str, Any]:
+        self, user_id: str, path_id: str
+    ) -> dict[str, Any]:
         """
         获取用户学习进度
 
@@ -662,7 +692,9 @@ class KnowledgeRepository:
         """
         try:
             # 查询用户进度
-            progress = await self.user_progress.find_one({"user_id": user_id, "path_id": path_id})
+            progress = await self.user_progress.find_one(
+                {"user_id": user_id, "path_id": path_id}
+            )
 
             if progress:
                 # 处理ObjectId
@@ -679,13 +711,13 @@ class KnowledgeRepository:
                 "current_module_id": None,
                 "progress_percentage": 0,
                 "started_at": None,
-                "last_activity_at": None
+                "last_activity_at": None,
             }
         except PyMongoError as e:
             logger.error(f"获取用户学习进度失败: {str(e)}")
             metrics.increment_counter(
-                "knowledge_repo_errors", {
-                    "method": "get_user_learning_progress"})
+                "knowledge_repo_errors", {"method": "get_user_learning_progress"}
+            )
             return {
                 "user_id": user_id,
                 "path_id": path_id,
@@ -693,12 +725,13 @@ class KnowledgeRepository:
                 "current_module_id": None,
                 "progress_percentage": 0,
                 "started_at": None,
-                "last_activity_at": None
+                "last_activity_at": None,
             }
 
     @metrics.measure_execution_time("knowledge_repo_update_user_learning_progress")
     async def update_user_learning_progress(
-            self, user_id: str, path_id: str, progress_data: dict[str, Any]) -> bool:
+        self, user_id: str, path_id: str, progress_data: dict[str, Any]
+    ) -> bool:
         """
         更新用户学习进度
 
@@ -719,20 +752,21 @@ class KnowledgeRepository:
             result = await self.user_progress.update_one(
                 {"user_id": user_id, "path_id": path_id},
                 {"$set": progress_data},
-                upsert=True
+                upsert=True,
             )
 
             return result.acknowledged
         except PyMongoError as e:
             logger.error(f"更新用户学习进度失败: {str(e)}")
             metrics.increment_counter(
-                "knowledge_repo_errors", {
-                    "method": "update_user_learning_progress"})
+                "knowledge_repo_errors", {"method": "update_user_learning_progress"}
+            )
             return False
 
     @metrics.measure_execution_time("knowledge_repo_get_all_user_progress_for_path")
     async def get_all_user_progress_for_path(
-            self, path_id: str) -> list[dict[str, Any]]:
+        self, path_id: str
+    ) -> list[dict[str, Any]]:
         """
         获取学习路径的所有用户进度
 
@@ -756,8 +790,8 @@ class KnowledgeRepository:
         except PyMongoError as e:
             logger.error(f"获取学习路径的所有用户进度失败: {str(e)}")
             metrics.increment_counter(
-                "knowledge_repo_errors", {
-                    "method": "get_all_user_progress_for_path"})
+                "knowledge_repo_errors", {"method": "get_all_user_progress_for_path"}
+            )
             return []
 
     @metrics.measure_execution_time("knowledge_repo_get_categories")
@@ -782,8 +816,8 @@ class KnowledgeRepository:
         except PyMongoError as e:
             logger.error(f"获取知识分类列表失败: {str(e)}")
             metrics.increment_counter(
-                "knowledge_repo_errors", {
-                    "method": "get_categories"})
+                "knowledge_repo_errors", {"method": "get_categories"}
+            )
             return []
 
     async def _ensure_category_exists(self, category_name: str) -> None:
@@ -797,11 +831,13 @@ class KnowledgeRepository:
             # 更新或创建分类
             await self.categories.update_one(
                 {"name": category_name},
-                {"$setOnInsert": {
-                    "created_at": datetime.now(UTC).isoformat(),
-                    "description": ""
-                }},
-                upsert=True
+                {
+                    "$setOnInsert": {
+                        "created_at": datetime.now(UTC).isoformat(),
+                        "description": "",
+                    }
+                },
+                upsert=True,
             )
         except PyMongoError as e:
             logger.error(f"确保分类存在失败: {str(e)}")

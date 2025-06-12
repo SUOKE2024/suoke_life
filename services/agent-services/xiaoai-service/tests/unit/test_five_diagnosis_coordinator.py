@@ -2,18 +2,18 @@
 五诊协调器单元测试
 """
 
-import pytest
 import asyncio
 from datetime import datetime, timezone
-from unittest.mock import Mock, AsyncMock, patch
+from unittest.mock import AsyncMock, Mock, patch
 
+import pytest
 from xiaoai.core.five_diagnosis_coordinator import (
-    FiveDiagnosisCoordinator,
-    DiagnosisType,
-    DiagnosisStatus,
-    SessionStatus,
+    DiagnosisResult,
     DiagnosisSession,
-    DiagnosisResult
+    DiagnosisStatus,
+    DiagnosisType,
+    FiveDiagnosisCoordinator,
+    SessionStatus,
 )
 from xiaoai.utils.exceptions import DiagnosisError, ServiceUnavailableError
 

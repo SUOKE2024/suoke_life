@@ -8,11 +8,11 @@
 - 缓存集成
 """
 
-from .accessibility import AccessibilityClient, TTSRequest, STTRequest, AccessibilityProfile
+from .accessibility import (
+    AccessibilityClient,
+    AccessibilityProfile,
+    STTRequest,
+    TTSRequest,
+)
 
-__all__ = [
-    "AccessibilityClient",
-    "TTSRequest", 
-    "STTRequest",
-    "AccessibilityProfile"
-]
+__all__ = ["AccessibilityClient", "TTSRequest", "STTRequest", "AccessibilityProfile"]

@@ -1,4 +1,4 @@
-from typing import Dict, List, Any, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 """
 routes - 索克生活项目模块
@@ -14,11 +14,10 @@ API 路由模块
 """
 
 
-
 # 创建主路由器
 api_router = APIRouter()
 
 # 包含各个版本的路由
-api_router.include_router(health.router, prefix = " / health", tags = ["健康检查"])
-api_router.include_router(chat.router, prefix = " / chat", tags = ["智能对话"])
-api_router.include_router(knowledge.router, prefix = " / knowledge", tags = ["知识库"])
+api_router.include_router(health.router, prefix=" / health", tags=["健康检查"])
+api_router.include_router(chat.router, prefix=" / chat", tags=["智能对话"])
+api_router.include_router(knowledge.router, prefix=" / knowledge", tags=["知识库"])

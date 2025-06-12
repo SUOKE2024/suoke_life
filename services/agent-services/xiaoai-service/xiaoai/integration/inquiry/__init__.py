@@ -7,8 +7,4 @@
 from .client import InquiryServiceClient
 from .models import InquiryRequest, InquiryResponse
 
-__all__ = [
-    "InquiryServiceClient",
-    "InquiryRequest",
-    "InquiryResponse"
-]
+__all__ = ["InquiryServiceClient", "InquiryRequest", "InquiryResponse"]

@@ -4,7 +4,6 @@ exceptions - 索克生活项目模块
 
 from laoke_service.core.exceptions import ServiceException
 
-
 """
 知识服务专用异常类
 """
@@ -12,6 +11,7 @@ from laoke_service.core.exceptions import ServiceException
 
 class KnowledgeServiceException(ServiceException):
     """知识服务基础异常"""
+
     pass
 
 

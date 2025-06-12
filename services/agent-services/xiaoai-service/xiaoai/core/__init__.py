@@ -18,12 +18,7 @@ __author__ = "索克生活团队"
 logger = logging.getLogger(__name__)
 
 # 导出主要类和函数
-__all__ = [
-    "DecisionEngine",
-    "DialogueManager",
-    "KnowledgeProcessor",
-    "XiaoaiAgent"
-]
+__all__ = ["DecisionEngine", "DialogueManager", "KnowledgeProcessor", "XiaoaiAgent"]
 
 
 class XiaoaiAgent:
@@ -81,16 +76,14 @@ class DialogueManager:
 
     async def process(self, message: str, context: dict[str, Any] | None = None) -> dict[str, Any]:
         """处理对话"""
-        self.conversation_history.append({
-            "message": message,
-            "timestamp": "now",
-            "context": context or {}
-        })
+        self.conversation_history.append(
+            {"message": message, "timestamp": "now", "context": context or {}}
+        )
 
         return {
             "current_message": message,
             "history": self.conversation_history[-5:],  # 保留最近5条
-            "context": self.context
+            "context": self.context,
         }
 
 
@@ -109,7 +102,7 @@ class KnowledgeProcessor:
         return {
             "message": message,
             "dialogue_context": dialogue_context,
-            "knowledge_result": "基于中医理论的健康建议"
+            "knowledge_result": "基于中医理论的健康建议",
         }
 
 

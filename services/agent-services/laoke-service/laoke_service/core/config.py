@@ -3,14 +3,16 @@
 import os
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
-from pydantic import BaseModel, Field, validator
-from pydantic_settings import BaseSettings
+
 import yaml
 from loguru import logger
+from pydantic import BaseModel, Field, validator
+from pydantic_settings import BaseSettings
 
 
 class DatabaseConfig(BaseModel):
     """数据库配置"""
+
     type: str = "sqlite"
     sqlite_path: str = "data/laoke.db"
     postgres_host: str = "localhost"
@@ -24,6 +26,7 @@ class DatabaseConfig(BaseModel):
 
 class CacheConfig(BaseModel):
     """缓存配置"""
+
     backend: str = "memory"
     redis_url: str = "redis://localhost:6379"
     redis_db: int = 0
@@ -35,6 +38,7 @@ class CacheConfig(BaseModel):
 
 class AIModelConfig(BaseModel):
     """AI模型配置"""
+
     primary_model: str = "gpt-4o-mini"
     fallback_model: str = "llama-3-8b"
     api_key: str = ""
@@ -47,6 +51,7 @@ class AIModelConfig(BaseModel):
 
 class ConversationConfig(BaseModel):
     """对话配置"""
+
     system_prompt: str = """
 你是老克，一位资深的中医专家和教育者，专注于中医知识传播、社群管理和教育内容创建。
 
@@ -70,6 +75,7 @@ class ConversationConfig(BaseModel):
 
 class AgentConfig(BaseModel):
     """智能体配置"""
+
     models: AIModelConfig = Field(default_factory=AIModelConfig)
     conversation: ConversationConfig = Field(default_factory=ConversationConfig)
     session_timeout: int = 3600
@@ -79,15 +85,16 @@ class AgentConfig(BaseModel):
 
 class ServerConfig(BaseModel):
     """服务器配置"""
+
     grpc_host: str = "0.0.0.0"
     grpc_port: int = 50051
     grpc_max_workers: int = 10
     grpc_max_message_length: int = 4194304
-    
+
     rest_host: str = "0.0.0.0"
     rest_port: int = 8080
     rest_workers: int = 4
-    
+
     cors_allowed_origins: List[str] = ["*"]
     cors_allow_credentials: bool = True
     cors_allowed_methods: List[str] = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
@@ -96,6 +103,7 @@ class ServerConfig(BaseModel):
 
 class RateLimitRule(BaseModel):
     """速率限制规则"""
+
     requests: int
     window: int
     algorithm: str = "sliding_window"
@@ -104,15 +112,19 @@ class RateLimitRule(BaseModel):
 
 class RateLimitConfig(BaseModel):
     """速率限制配置"""
-    global_rules: List[RateLimitRule] = Field(default_factory=lambda: [
-        RateLimitRule(requests=100, window=60),
-        RateLimitRule(requests=1000, window=3600)
-    ])
+
+    global_rules: List[RateLimitRule] = Field(
+        default_factory=lambda: [
+            RateLimitRule(requests=100, window=60),
+            RateLimitRule(requests=1000, window=3600),
+        ]
+    )
     user_rules: Dict[str, RateLimitRule] = Field(default_factory=dict)
 
 
 class LoggingConfig(BaseModel):
     """日志配置"""
+
     level: str = "INFO"
     format: str = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     file_enabled: bool = True
@@ -125,6 +137,7 @@ class LoggingConfig(BaseModel):
 
 class MetricsConfig(BaseModel):
     """指标配置"""
+
     enabled: bool = True
     port: int = 9090
     path: str = "/metrics"
@@ -132,6 +145,7 @@ class MetricsConfig(BaseModel):
 
 class HealthConfig(BaseModel):
     """健康检查配置"""
+
     enabled: bool = True
     path: str = "/health"
     database_timeout: int = 5
@@ -141,15 +155,16 @@ class HealthConfig(BaseModel):
 
 class SecurityConfig(BaseModel):
     """安全配置"""
+
     api_key_enabled: bool = False
     api_key_header_name: str = "X-API-Key"
     api_keys: List[str] = Field(default_factory=list)
-    
+
     jwt_enabled: bool = False
     jwt_secret: str = ""
     jwt_algorithm: str = "HS256"
     jwt_expiration: int = 3600
-    
+
     max_request_size: int = 1048576
     sanitize_html: bool = True
     check_sql_injection: bool = True
@@ -157,16 +172,17 @@ class SecurityConfig(BaseModel):
 
 class ExternalServiceConfig(BaseModel):
     """外部服务配置"""
+
     knowledge_service_enabled: bool = True
     knowledge_service_url: str = "http://localhost:8081"
     knowledge_service_timeout: int = 10
     knowledge_service_api_key: str = ""
-    
+
     user_service_enabled: bool = True
     user_service_url: str = "http://localhost:8082"
     user_service_timeout: int = 5
     user_service_api_key: str = ""
-    
+
     accessibility_service_enabled: bool = True
     accessibility_service_url: str = "http://localhost:8083"
     accessibility_service_timeout: int = 5
@@ -175,6 +191,7 @@ class ExternalServiceConfig(BaseModel):
 
 class FeaturesConfig(BaseModel):
     """特性开关配置"""
+
     enable_caching: bool = True
     enable_rate_limiting: bool = True
     enable_metrics: bool = True
@@ -186,6 +203,7 @@ class FeaturesConfig(BaseModel):
 
 class ServiceConfig(BaseModel):
     """服务基本配置"""
+
     name: str = "laoke-service"
     version: str = "1.0.0"
     debug: bool = False
@@ -194,6 +212,7 @@ class ServiceConfig(BaseModel):
 
 class Config(BaseSettings):
     """老克智能体服务配置"""
+
     service: ServiceConfig = Field(default_factory=ServiceConfig)
     server: ServerConfig = Field(default_factory=ServerConfig)
     database: DatabaseConfig = Field(default_factory=DatabaseConfig)
@@ -204,9 +223,11 @@ class Config(BaseSettings):
     metrics: MetricsConfig = Field(default_factory=MetricsConfig)
     health: HealthConfig = Field(default_factory=HealthConfig)
     security: SecurityConfig = Field(default_factory=SecurityConfig)
-    external_services: ExternalServiceConfig = Field(default_factory=ExternalServiceConfig)
+    external_services: ExternalServiceConfig = Field(
+        default_factory=ExternalServiceConfig
+    )
     features: FeaturesConfig = Field(default_factory=FeaturesConfig)
-    
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
@@ -218,7 +239,9 @@ class Config(BaseSettings):
     def validate_service(cls, v):
         """验证服务配置"""
         if v.environment not in ["development", "testing", "production"]:
-            raise ValueError("environment must be one of: development, testing, production")
+            raise ValueError(
+                "environment must be one of: development, testing, production"
+            )
         return v
 
     @validator("database")
@@ -238,36 +261,36 @@ class Config(BaseSettings):
 
 class ConfigManager:
     """配置管理器"""
-    
+
     def __init__(self, config_path: Optional[str] = None):
         self.config_path = config_path or "config/config.yaml"
         self._config: Optional[Config] = None
-    
+
     def load_config(self) -> Config:
         """加载配置"""
         if self._config is None:
             self._config = self._load_from_sources()
         return self._config
-    
+
     def _load_from_sources(self) -> Config:
         """从多个源加载配置"""
         # 1. 从YAML文件加载基础配置
         yaml_config = self._load_from_yaml()
-        
+
         # 2. 从环境变量覆盖配置
         config = Config(**yaml_config)
-        
+
         logger.info(f"配置加载完成: environment={config.service.environment}")
         return config
-    
+
     def _load_from_yaml(self) -> Dict[str, Any]:
         """从YAML文件加载配置"""
         config_file = Path(self.config_path)
-        
+
         if not config_file.exists():
             logger.warning(f"配置文件不存在: {config_file}, 使用默认配置")
             return {}
-        
+
         try:
             with open(config_file, "r", encoding="utf-8") as f:
                 yaml_content = yaml.safe_load(f)
@@ -276,36 +299,39 @@ class ConfigManager:
         except Exception as e:
             logger.error(f"加载YAML配置文件失败: {e}")
             return {}
-    
+
     def validate_config(self) -> bool:
         """验证配置"""
         try:
             config = self.load_config()
-            
+
             # 验证必要的配置项
-            if config.agent.models.api_key=="":
+            if config.agent.models.api_key == "":
                 logger.warning("AI模型API密钥未配置")
-            
-            if config.database.type=="postgres" and config.database.postgres_password=="":
+
+            if (
+                config.database.type == "postgres"
+                and config.database.postgres_password == ""
+            ):
                 logger.warning("PostgreSQL密码未配置")
-            
-            if config.cache.backend=="redis" and config.cache.redis_password=="":
+
+            if config.cache.backend == "redis" and config.cache.redis_password == "":
                 logger.warning("Redis密码未配置")
-            
+
             logger.info("配置验证通过")
             return True
-            
+
         except Exception as e:
             logger.error(f"配置验证失败: {e}")
             return False
-    
+
     def get_database_url(self) -> str:
         """获取数据库连接URL"""
         config = self.load_config()
-        
-        if config.database.type=="sqlite":
+
+        if config.database.type == "sqlite":
             return f"sqlite:///{config.database.sqlite_path}"
-        elif config.database.type=="postgres":
+        elif config.database.type == "postgres":
             return (
                 f"postgresql://{config.database.postgres_user}:"
                 f"{config.database.postgres_password}@"
@@ -314,21 +340,21 @@ class ConfigManager:
             )
         else:
             raise ValueError(f"不支持的数据库类型: {config.database.type}")
-    
+
     def get_redis_url(self) -> str:
         """获取Redis连接URL"""
         config = self.load_config()
-        
-        if config.cache.backend!="redis":
+
+        if config.cache.backend != "redis":
             raise ValueError("缓存后端不是Redis")
-        
+
         redis_url = config.cache.redis_url
         if config.cache.redis_password:
             # 在URL中添加密码
             if "://" in redis_url:
                 protocol, rest = redis_url.split("://", 1)
                 redis_url = f"{protocol}://:{config.cache.redis_password}@{rest}"
-        
+
         return redis_url
 
 

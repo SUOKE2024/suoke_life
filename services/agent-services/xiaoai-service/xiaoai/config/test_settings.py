@@ -11,6 +11,7 @@ from typing import Optional
 @dataclass
 class ServiceConfig:
     """服务配置"""
+
     host: str = "localhost"
     port: int = 8000
 
@@ -18,6 +19,7 @@ class ServiceConfig:
 @dataclass
 class ExternalServices:
     """外部服务配置"""
+
     look_service: ServiceConfig = field(default_factory=lambda: ServiceConfig(port=8001))
     listen_service: ServiceConfig = field(default_factory=lambda: ServiceConfig(port=8002))
     inquiry_service: ServiceConfig = field(default_factory=lambda: ServiceConfig(port=8003))
@@ -28,6 +30,7 @@ class ExternalServices:
 @dataclass
 class TestSettings:
     """测试设置"""
+
     external_services: ExternalServices = field(default_factory=ExternalServices)
 
 

@@ -1,11 +1,15 @@
-from typing import Dict, List, Any, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 """
 __init__ - 索克生活项目模块
 """
 
 from .config import Config, get_config
-from .exceptions import ConfigurationException, LaokeServiceException, ValidationException
+from .exceptions import (
+    ConfigurationException,
+    LaokeServiceException,
+    ValidationException,
+)
 from .logging import get_logger, setup_logging
 
 """

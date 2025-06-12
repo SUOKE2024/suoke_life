@@ -2,15 +2,20 @@
 knowledge_service - 索克生活项目模块
 """
 
+import logging
 from datetime import datetime
+from typing import Any
+
 from internal.knowledge.exceptions import (
-    ArticleNotFoundException, ArticleCreationException, ArticleUpdateException,
-    LearningPathNotFoundException, UserProgressException, RepositoryException
+    ArticleCreationException,
+    ArticleNotFoundException,
+    ArticleUpdateException,
+    LearningPathNotFoundException,
+    RepositoryException,
+    UserProgressException,
 )
 from internal.repository.knowledge_repository import KnowledgeRepository
 from pkg.utils.metrics import get_metrics_collector
-from typing import Any
-import logging
 
 """
 老克智能体服务 - 知识服务
@@ -57,31 +62,36 @@ class KnowledgeService:
         except ConnectionError as e:
             logger.error(f"数据库连接失败: {str(e)}")
             metrics.increment_counter(
-                "knowledge_service_errors", {
-                    "method": "get_article", "error_type": "connection"})
+                "knowledge_service_errors",
+                {"method": "get_article", "error_type": "connection"},
+            )
             raise RepositoryException("find_article_by_id", str(e))
         except ValueError as e:
             logger.error(f"无效的文章ID: {str(e)}")
             metrics.increment_counter(
-                "knowledge_service_errors", {
-                    "method": "get_article", "error_type": "validation"})
+                "knowledge_service_errors",
+                {"method": "get_article", "error_type": "validation"},
+            )
             raise ArticleNotFoundException(article_id)
         except Exception as e:
             logger.error(f"获取知识文章失败: {str(e)}")
             metrics.increment_counter(
-                "knowledge_service_errors", {
-                    "method": "get_article", "error_type": "unknown"})
+                "knowledge_service_errors",
+                {"method": "get_article", "error_type": "unknown"},
+            )
             raise RepositoryException("get_article", str(e))
 
     @metrics.measure_execution_time("knowledge_service_get_articles")
-    async def get_articles(self,
-                           category: str | None = None,
-                           tags: list[str] | None = None,
-                           difficulty: str | None = None,
-                           limit: int = 10,
-                           offset: int = 0,
-                           sort_by: str = "created_at",
-                           sort_order: str = "desc") -> list[dict[str, Any]]:
+    async def get_articles(
+        self,
+        category: str | None = None,
+        tags: list[str] | None = None,
+        difficulty: str | None = None,
+        limit: int = 10,
+        offset: int = 0,
+        sort_by: str = "created_at",
+        sort_order: str = "desc",
+    ) -> list[dict[str, Any]]:
         """
         获取知识文章列表
 
@@ -98,7 +108,8 @@ class KnowledgeService:
             List[Dict[str, Any]]: 知识文章列表
         """
         logger.debug(
-            f"获取知识文章列表，category = {category}, tags = {tags}, difficulty = {difficulty}")
+            f"获取知识文章列表，category = {category}, tags = {tags}, difficulty = {difficulty}"
+        )
 
         try:
             articles = await self.repository.find_articles(
@@ -108,19 +119,20 @@ class KnowledgeService:
                 limit=limit,
                 offset=offset,
                 sort_by=sort_by,
-                sort_order=sort_order
+                sort_order=sort_order,
             )
             return articles
         except Exception as e:
             logger.error(f"获取知识文章列表失败: {str(e)}")
             metrics.increment_counter(
-                "knowledge_service_errors", {
-                    "method": "get_articles"})
+                "knowledge_service_errors", {"method": "get_articles"}
+            )
             return []
 
     @metrics.measure_execution_time("knowledge_service_search_articles")
-    async def search_articles(self, query: str, limit: int = 10,
-                              offset: int = 0) -> list[dict[str, Any]]:
+    async def search_articles(
+        self, query: str, limit: int = 10, offset: int = 0
+    ) -> list[dict[str, Any]]:
         """
         搜索知识文章
 
@@ -136,21 +148,20 @@ class KnowledgeService:
 
         try:
             articles = await self.repository.search_articles(
-                query=query,
-                limit=limit,
-                offset=offset
+                query=query, limit=limit, offset=offset
             )
             return articles
         except Exception as e:
             logger.error(f"搜索知识文章失败: {str(e)}")
             metrics.increment_counter(
-                "knowledge_service_errors", {
-                    "method": "search_articles"})
+                "knowledge_service_errors", {"method": "search_articles"}
+            )
             return []
 
     @metrics.measure_execution_time("knowledge_service_get_related_articles")
     async def get_related_articles(
-            self, article_id: str, limit: int = 5) -> list[dict[str, Any]]:
+        self, article_id: str, limit: int = 5
+    ) -> list[dict[str, Any]]:
         """
         获取相关文章
 
@@ -174,27 +185,27 @@ class KnowledgeService:
                 article_id=article_id,
                 tags=article.get("tags", []),
                 category=article.get("category"),
-                limit=limit
+                limit=limit,
             )
             return related_articles
         except Exception as e:
             logger.error(f"获取相关文章失败: {str(e)}")
             metrics.increment_counter(
-                "knowledge_service_errors", {
-                    "method": "get_related_articles"})
+                "knowledge_service_errors", {"method": "get_related_articles"}
+            )
             return []
 
     @metrics.measure_execution_time("knowledge_service_create_article")
-    async def create_article(self,
-                             title: str,
-                             content: str,
-                             category: str,
-                             author_id: str,
-                             tags: list[str] | None = None,
-                             difficulty: str = "INTERMEDIATE",
-                             resources: list[dict[str,
-                                                  Any]] | None = None) -> dict[str,
-                                                                               Any] | None:
+    async def create_article(
+        self,
+        title: str,
+        content: str,
+        category: str,
+        author_id: str,
+        tags: list[str] | None = None,
+        difficulty: str = "INTERMEDIATE",
+        resources: list[dict[str, Any]] | None = None,
+    ) -> dict[str, Any] | None:
         """
         创建知识文章
 
@@ -225,7 +236,7 @@ class KnowledgeService:
                 "created_at": datetime.utcnow().isoformat(),
                 "view_count": 0,
                 "rating": 0,
-                "rating_count": 0
+                "rating_count": 0,
             }
 
             # 保存文章
@@ -239,21 +250,21 @@ class KnowledgeService:
         except Exception as e:
             logger.error(f"创建知识文章失败: {str(e)}")
             metrics.increment_counter(
-                "knowledge_service_errors", {
-                    "method": "create_article"})
+                "knowledge_service_errors", {"method": "create_article"}
+            )
             return None
 
     @metrics.measure_execution_time("knowledge_service_update_article")
-    async def update_article(self,
-                             article_id: str,
-                             title: str | None = None,
-                             content: str | None = None,
-                             category: str | None = None,
-                             tags: list[str] | None = None,
-                             difficulty: str | None = None,
-                             resources: list[dict[str,
-                                                  Any]] | None = None) -> dict[str,
-                                                                               Any] | None:
+    async def update_article(
+        self,
+        article_id: str,
+        title: str | None = None,
+        content: str | None = None,
+        category: str | None = None,
+        tags: list[str] | None = None,
+        difficulty: str | None = None,
+        resources: list[dict[str, Any]] | None = None,
+    ) -> dict[str, Any] | None:
         """
         更新知识文章
 
@@ -308,8 +319,8 @@ class KnowledgeService:
         except Exception as e:
             logger.error(f"更新知识文章失败: {str(e)}")
             metrics.increment_counter(
-                "knowledge_service_errors", {
-                    "method": "update_article"})
+                "knowledge_service_errors", {"method": "update_article"}
+            )
             return None
 
     @metrics.measure_execution_time("knowledge_service_rate_article")
@@ -346,10 +357,7 @@ class KnowledgeService:
             new_rating = ((current_rating * current_count) + rating) / new_count
 
             # 更新评分
-            update_data = {
-                "rating": round(new_rating, 2),
-                "rating_count": new_count
-            }
+            update_data = {"rating": round(new_rating, 2), "rating_count": new_count}
 
             # 保存更新
             success = await self.repository.update_article(article_id, update_data)
@@ -357,8 +365,8 @@ class KnowledgeService:
         except Exception as e:
             logger.error(f"对文章评分失败: {str(e)}")
             metrics.increment_counter(
-                "knowledge_service_errors", {
-                    "method": "rate_article"})
+                "knowledge_service_errors", {"method": "rate_article"}
+            )
             return False
 
     @metrics.measure_execution_time("knowledge_service_get_learning_path")
@@ -380,16 +388,18 @@ class KnowledgeService:
         except Exception as e:
             logger.error(f"获取学习路径失败: {str(e)}")
             metrics.increment_counter(
-                "knowledge_service_errors", {
-                    "method": "get_learning_path"})
+                "knowledge_service_errors", {"method": "get_learning_path"}
+            )
             return None
 
     @metrics.measure_execution_time("knowledge_service_get_learning_paths")
-    async def get_learning_paths(self,
-                                 category: str | None = None,
-                                 level: str | None = None,
-                                 limit: int = 10,
-                                 offset: int = 0) -> list[dict[str, Any]]:
+    async def get_learning_paths(
+        self,
+        category: str | None = None,
+        level: str | None = None,
+        limit: int = 10,
+        offset: int = 0,
+    ) -> list[dict[str, Any]]:
         """
         获取学习路径列表
 
@@ -406,17 +416,14 @@ class KnowledgeService:
 
         try:
             paths = await self.repository.find_learning_paths(
-                category=category,
-                level=level,
-                limit=limit,
-                offset=offset
+                category=category, level=level, limit=limit, offset=offset
             )
             return paths
         except Exception as e:
             logger.error(f"获取学习路径列表失败: {str(e)}")
             metrics.increment_counter(
-                "knowledge_service_errors", {
-                    "method": "get_learning_paths"})
+                "knowledge_service_errors", {"method": "get_learning_paths"}
+            )
             return []
 
     @metrics.measure_execution_time("knowledge_service_get_user_progress")
@@ -434,13 +441,15 @@ class KnowledgeService:
         logger.debug(f"获取用户学习进度，user_id = {user_id}, path_id = {path_id}")
 
         try:
-            progress = await self.repository.get_user_learning_progress(user_id, path_id)
+            progress = await self.repository.get_user_learning_progress(
+                user_id, path_id
+            )
             return progress
         except Exception as e:
             logger.error(f"获取用户学习进度失败: {str(e)}")
             metrics.increment_counter(
-                "knowledge_service_errors", {
-                    "method": "get_user_progress"})
+                "knowledge_service_errors", {"method": "get_user_progress"}
+            )
             return {
                 "user_id": user_id,
                 "path_id": path_id,
@@ -448,15 +457,13 @@ class KnowledgeService:
                 "current_module_id": None,
                 "progress_percentage": 0,
                 "started_at": None,
-                "last_activity_at": None
+                "last_activity_at": None,
             }
 
     @metrics.measure_execution_time("knowledge_service_update_user_progress")
-    async def update_user_progress(self,
-                                   user_id: str,
-                                   path_id: str,
-                                   module_id: str,
-                                   completed: bool) -> bool:
+    async def update_user_progress(
+        self, user_id: str, path_id: str, module_id: str, completed: bool
+    ) -> bool:
         """
         更新用户在特定学习路径上的进度
 
@@ -470,7 +477,8 @@ class KnowledgeService:
             bool: 是否更新成功
         """
         logger.debug(
-            f"更新用户学习进度，user_id = {user_id}, path_id = {path_id}, module_id = {module_id}, completed = {completed}")
+            f"更新用户学习进度，user_id = {user_id}, path_id = {path_id}, module_id = {module_id}, completed = {completed}"
+        )
 
         try:
             # 获取学习路径信息
@@ -483,7 +491,7 @@ class KnowledgeService:
             module_exists = False
             modules = path.get("modules", [])
             for module in modules:
-                if module.get("id")==module_id:
+                if module.get("id") == module_id:
                     module_exists = True
                     break
 
@@ -492,7 +500,9 @@ class KnowledgeService:
                 return False
 
             # 获取当前用户进度
-            progress = await self.repository.get_user_learning_progress(user_id, path_id)
+            progress = await self.repository.get_user_learning_progress(
+                user_id, path_id
+            )
 
             # 准备更新数据
             now = datetime.utcnow().isoformat()
@@ -506,7 +516,7 @@ class KnowledgeService:
                     "current_module_id": module_id,
                     "progress_percentage": (1 / len(modules) * 100) if completed else 0,
                     "started_at": now,
-                    "last_activity_at": now
+                    "last_activity_at": now,
                 }
             else:
                 # 更新已有进度记录
@@ -520,11 +530,11 @@ class KnowledgeService:
                     completed_modules.remove(module_id)
 
                 # 更新进度百分比
-                progress_percentage = (len(completed_modules) / len(modules) * 100)
+                progress_percentage = len(completed_modules) / len(modules) * 100
 
                 # 确定当前模块
                 current_module_id = module_id
-                if len(completed_modules)==len(modules):
+                if len(completed_modules) == len(modules):
                     # 全部完成
                     current_module_id = None
                 elif not completed and len(modules) > 0:
@@ -542,11 +552,13 @@ class KnowledgeService:
                     "completed_modules": completed_modules,
                     "current_module_id": current_module_id,
                     "progress_percentage": round(progress_percentage, 2),
-                    "last_activity_at": now
+                    "last_activity_at": now,
                 }
 
             # 保存进度
-            success = await self.repository.update_user_learning_progress(user_id, path_id, progress)
+            success = await self.repository.update_user_learning_progress(
+                user_id, path_id, progress
+            )
 
             # 更新学习路径统计
             if success:
@@ -557,8 +569,8 @@ class KnowledgeService:
         except Exception as e:
             logger.error(f"更新用户学习进度失败: {str(e)}")
             metrics.increment_counter(
-                "knowledge_service_errors", {
-                    "method": "update_user_progress"})
+                "knowledge_service_errors", {"method": "update_user_progress"}
+            )
             return False
 
     async def _update_learning_path_stats(self, path_id: str) -> None:
@@ -577,16 +589,16 @@ class KnowledgeService:
             total_count = len(all_progress)
 
             for progress in all_progress:
-                if progress.get("progress_percentage", 0)>=100:
-                    completed_count+=1
+                if progress.get("progress_percentage", 0) >= 100:
+                    completed_count += 1
 
             # 计算完成率
-            completion_rate = 0 if total_count==0 else (completed_count / total_count)
+            completion_rate = 0 if total_count == 0 else (completed_count / total_count)
 
             # 更新学习路径统计
             stats_update = {
                 "enrolled_users": total_count,
-                "completion_rate": round(completion_rate, 2)
+                "completion_rate": round(completion_rate, 2),
             }
 
             # 保存统计
@@ -594,5 +606,5 @@ class KnowledgeService:
         except Exception as e:
             logger.error(f"更新学习路径统计失败: {str(e)}")
             metrics.increment_counter(
-                "knowledge_service_errors", {
-                    "method": "_update_learning_path_stats"})
+                "knowledge_service_errors", {"method": "_update_learning_path_stats"}
+            )

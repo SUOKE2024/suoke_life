@@ -5,8 +5,4 @@
 from .client import CalculationServiceClient
 from .models import CalculationRequest, CalculationResponse
 
-__all__ = [
-    "CalculationServiceClient",
-    "CalculationRequest",
-    "CalculationResponse"
-]
+__all__ = ["CalculationServiceClient", "CalculationRequest", "CalculationResponse"]

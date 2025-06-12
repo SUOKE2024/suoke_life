@@ -7,7 +7,7 @@ import functools
 import logging
 import threading
 import time
-from typing import Dict, List, Any, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 """
 弹性工具
@@ -22,9 +22,9 @@ class CircuitBreaker:
     """断路器，防止系统级联失败"""
 
     # 断路器状态
-    CLOSED = 'closed'  # 正常关闭状态
-    OPEN = 'open'      # 开路状态，快速失败
-    HALF_OPEN = 'half_open'  # 半开状态，尝试恢复
+    CLOSED = "closed"  # 正常关闭状态
+    OPEN = "open"  # 开路状态，快速失败
+    HALF_OPEN = "half_open"  # 半开状态，尝试恢复
 
     def __init__(self, name: str, failure_threshold: int = 5, recovery_time: int = 30):
         """
@@ -48,19 +48,24 @@ class CircuitBreaker:
     def _record_failure(self) -> None:
         """记录失败"""
         with self.lock:
-            self.failure_count+=1
+            self.failure_count += 1
             self.last_failure_time = time.time()
 
             # 检查是否达到开路阈值
-            if self.state==self.CLOSED and self.failure_count>=self.failure_threshold:
-                logger.warning(f"断路器 {self.name} 开路: 失败次数达到阈值 {self.failure_threshold}")
+            if (
+                self.state == self.CLOSED
+                and self.failure_count >= self.failure_threshold
+            ):
+                logger.warning(
+                    f"断路器 {self.name} 开路: 失败次数达到阈值 {self.failure_threshold}"
+                )
                 self.state = self.OPEN
 
     def _record_success(self) -> None:
         """记录成功"""
         with self.lock:
             # 如果是半开状态，成功则恢复到关闭状态
-            if self.state==self.HALF_OPEN:
+            if self.state == self.HALF_OPEN:
                 logger.info(f"断路器 {self.name} 关闭: 恢复正常")
                 self.state = self.CLOSED
                 self.failure_count = 0
@@ -69,9 +74,9 @@ class CircuitBreaker:
         """检查并更新断路器状态"""
         with self.lock:
             # 如果是开路状态且已超过恢复时间，尝试半开
-            if self.state==self.OPEN:
+            if self.state == self.OPEN:
                 elapsed = time.time() - self.last_failure_time
-                if elapsed>=self.recovery_time:
+                if elapsed >= self.recovery_time:
                     logger.info(f"断路器 {self.name} 半开: 尝试恢复")
                     self.state = self.HALF_OPEN
 
@@ -86,11 +91,11 @@ class CircuitBreaker:
 
         with self.lock:
             # 开路状态直接拒绝请求
-            if self.state==self.OPEN:
+            if self.state == self.OPEN:
                 return False
 
             # 半开状态只允许一个请求通过
-            if self.state==self.HALF_OPEN:
+            if self.state == self.HALF_OPEN:
                 # 允许通过后立即切换回开路状态，防止并发请求都通过
                 self.state = self.OPEN
                 return True
@@ -119,8 +124,9 @@ _circuit_breakers = {}
 _circuit_breakers_lock = threading.RLock()
 
 
-def get_circuit_breaker(name: str, failure_threshold: int = 5,
-                        recovery_time: int = 30) -> CircuitBreaker:
+def get_circuit_breaker(
+    name: str, failure_threshold: int = 5, recovery_time: int = 30
+) -> CircuitBreaker:
     """
     获取或创建断路器
 
@@ -135,7 +141,8 @@ def get_circuit_breaker(name: str, failure_threshold: int = 5,
     with _circuit_breakers_lock:
         if name not in _circuit_breakers:
             _circuit_breakers[name] = CircuitBreaker(
-                name, failure_threshold, recovery_time)
+                name, failure_threshold, recovery_time
+            )
         return _circuit_breakers[name]
 
 
@@ -147,15 +154,17 @@ def circuit_breaker(failure_threshold: int = 5, recovery_time: int = 30):
         failure_threshold: 触发断路的失败阈值
         recovery_time: 恢复尝试时间（秒）
     """
+
     def decorator(func):
         """断路器装饰器内部函数"""
         # 使用函数名作为断路器名称
         breaker_name = f"cb_{func.__name__}"
 
         @functools.wraps(func)
-        async def wrapper(*args,**kwargs):
+        async def wrapper(*args, **kwargs):
             breaker = get_circuit_breaker(
-                breaker_name, failure_threshold, recovery_time)
+                breaker_name, failure_threshold, recovery_time
+            )
 
             # 检查是否允许请求
             if not breaker.allow_request():
@@ -164,7 +173,7 @@ def circuit_breaker(failure_threshold: int = 5, recovery_time: int = 30):
 
             try:
                 # 调用原始函数
-                result = await func(*args,**kwargs)
+                result = await func(*args, **kwargs)
 
                 # 记录成功
                 breaker.on_success()
@@ -176,6 +185,7 @@ def circuit_breaker(failure_threshold: int = 5, recovery_time: int = 30):
                 raise
 
         return wrapper
+
     return decorator
 
 
@@ -204,7 +214,8 @@ class RateLimiter:
         now = time.time()
         with self.lock:
             self.calls = [
-                call for call in self.calls if (now - call[0]) < self.time_period]
+                call for call in self.calls if (now - call[0]) < self.time_period
+            ]
 
     def allow_call(self) -> bool:
         """
@@ -220,9 +231,10 @@ class RateLimiter:
             current_calls = sum(call[1] for call in self.calls)
 
             # 检查是否达到限制
-            if current_calls>=self.max_calls:
+            if current_calls >= self.max_calls:
                 logger.warning(
-                    f"速率限制器 {self.name} 限制请求: {current_calls}/{self.max_calls} in {self.time_period}s")
+                    f"速率限制器 {self.name} 限制请求: {current_calls}/{self.max_calls} in {self.time_period}s"
+                )
                 return False
 
             # 记录调用
@@ -243,9 +255,8 @@ _rate_limiters_lock = threading.RLock()
 
 
 def get_rate_limiter(
-        name: str,
-        max_calls: int = 100,
-        time_period: int = 60) -> RateLimiter:
+    name: str, max_calls: int = 100, time_period: int = 60
+) -> RateLimiter:
     """
     获取或创建速率限制器
 
@@ -271,13 +282,14 @@ def rate_limiter(max_calls: int = 100, time_period: int = 60):
         max_calls: 时间周期内允许的最大调用次数
         time_period: 时间周期（秒）
     """
+
     def decorator(func):
         """速率限制器装饰器内部函数"""
         # 使用函数名作为限制器名称
         limiter_name = f"rl_{func.__name__}"
 
         @functools.wraps(func)
-        async def wrapper(*args,**kwargs):
+        async def wrapper(*args, **kwargs):
             limiter = get_rate_limiter(limiter_name, max_calls, time_period)
 
             # 检查是否允许调用
@@ -294,7 +306,8 @@ def rate_limiter(max_calls: int = 100, time_period: int = 60):
                     raise RuntimeError(f"Rate limit exceeded: {limiter_name}")
 
             # 调用原始函数
-            return await func(*args,**kwargs)
+            return await func(*args, **kwargs)
 
         return wrapper
+
     return decorator

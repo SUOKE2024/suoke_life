@@ -1,4 +1,4 @@
-from typing import Dict, List, Any, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 """
 __init__ - 索克生活项目模块
@@ -6,7 +6,11 @@ __init__ - 索克生活项目模块
 
 from .core.agent import LaokeAgent
 from .core.config import Config, get_config
-from .core.exceptions import ConfigurationException, LaokeServiceException, ValidationException
+from .core.exceptions import (
+    ConfigurationException,
+    LaokeServiceException,
+    ValidationException,
+)
 
 """
 老克智能体服务 (Laoke Service)

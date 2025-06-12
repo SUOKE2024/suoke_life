@@ -2,8 +2,8 @@
 models - 索克生活项目模块
 """
 
-from dataclasses import dataclass
 import datetime
+from dataclasses import dataclass
 from enum import Enum
 from typing import Any
 
@@ -13,7 +13,6 @@ from typing import Any
 领域模型
 定义服务中使用的领域模型和枚举
 """
-
 
 
 class MedicalResourceType(str, Enum):

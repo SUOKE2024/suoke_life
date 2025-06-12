@@ -2,15 +2,16 @@
 container - 索克生活项目模块
 """
 
+import asyncio
 from collections.abc import Callable
 from dataclasses import dataclass
+import logging
+from typing import Any, TypeVar
+
 from internal.repository.knowledge_repository import KnowledgeRepository
 from pkg.utils.config import Config
 from pkg.utils.logger import setup_logger
 from pkg.utils.metrics import MetricsCollector
-from typing import Any, TypeVar
-import asyncio
-import logging
 
 """
 依赖注入容器
@@ -18,12 +19,13 @@ import logging
 """
 
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 @dataclass
 class ServiceConfig:
     """服务配置"""
+
     name: str
     version: str
     debug: bool = False
@@ -85,16 +87,16 @@ class Container:
         try:
             # 1. 初始化配置
             config = Config()
-            self.register_singleton('config', config)
+            self.register_singleton("config", config)
 
             # 2. 初始化日志
             logger = logging.getLogger("laoke-service")
             setup_logger(logger, level=config.get("logging.level", "INFO"))
-            self.register_singleton('logger', logger)
+            self.register_singleton("logger", logger)
 
             # 3. 初始化指标收集器
             metrics = MetricsCollector()
-            self.register_singleton('metrics', metrics)
+            self.register_singleton("metrics", metrics)
 
             # 4. 初始化服务配置
             service_config = ServiceConfig(
@@ -104,14 +106,14 @@ class Container:
                 host=config.get("server.host", "0.0.0.0"),
                 port=config.get("server.port", 8080),
                 grpc_port=config.get("server.grpc_port", 50051),
-                metrics_port=config.get("server.metrics_port", 9091)
+                metrics_port=config.get("server.metrics_port", 9091),
             )
-            self.register_singleton('service_config', service_config)
+            self.register_singleton("service_config", service_config)
 
             # 5. 注册存储库工厂
             self.register_factory(
-                'knowledge_repository',
-                self._create_knowledge_repository)
+                "knowledge_repository", self._create_knowledge_repository
+            )
 
             # 6. 初始化存储库索引
             await self._initialize_repositories()
@@ -131,8 +133,8 @@ class Container:
         """初始化存储库索引"""
         try:
             # 初始化知识存储库
-            knowledge_repo = self.get('knowledge_repository')
-            if hasattr(knowledge_repo, 'init_indexes'):
+            knowledge_repo = self.get("knowledge_repository")
+            if hasattr(knowledge_repo, "init_indexes"):
                 await knowledge_repo.init_indexes()
 
             self._logger.info("所有存储库索引初始化完成")
@@ -145,10 +147,10 @@ class Container:
         try:
             # 清理存储库连接
             cleanup_tasks = []
-            for repo_name in ['knowledge_repository']:
+            for repo_name in ["knowledge_repository"]:
                 if repo_name in self._services:
                     repo = self._services[repo_name]
-                    if hasattr(repo, 'close'):
+                    if hasattr(repo, "close"):
                         cleanup_tasks.append(repo.close())
 
             if cleanup_tasks:

@@ -11,8 +11,4 @@
 from .client import ListenServiceClient
 from .models import ListenRequest, ListenResponse
 
-__all__ = [
-    "ListenServiceClient",
-    "ListenRequest",
-    "ListenResponse"
-]
+__all__ = ["ListenServiceClient", "ListenRequest", "ListenResponse"]

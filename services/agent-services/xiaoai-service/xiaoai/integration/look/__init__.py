@@ -11,8 +11,4 @@
 from .client import LookServiceClient
 from .models import LookRequest, LookResponse
 
-__all__ = [
-    "LookServiceClient",
-    "LookRequest",
-    "LookResponse"
-] 
+__all__ = ["LookServiceClient", "LookRequest", "LookResponse"]

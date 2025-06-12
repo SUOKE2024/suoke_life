@@ -2,14 +2,14 @@
 rate_limiter - 索克生活项目模块
 """
 
+import asyncio
 from collections import deque
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any
-import asyncio
 import hashlib
 import logging
 import time
+from typing import Any
 
 """
 速率限制器
@@ -22,6 +22,7 @@ logger = logging.getLogger(__name__)
 
 class RateLimitAlgorithm(Enum):
     """速率限制算法"""
+
     TOKEN_BUCKET = "token_bucket"
     SLIDING_WINDOW = "sliding_window"
     FIXED_WINDOW = "fixed_window"
@@ -30,8 +31,9 @@ class RateLimitAlgorithm(Enum):
 @dataclass
 class RateLimitRule:
     """速率限制规则"""
+
     requests: int  # 允许的请求数
-    window: int    # 时间窗口（秒）
+    window: int  # 时间窗口（秒）
     algorithm: RateLimitAlgorithm = RateLimitAlgorithm.SLIDING_WINDOW
     burst: int | None = None  # 突发请求数（仅用于令牌桶）
 
@@ -39,6 +41,7 @@ class RateLimitRule:
 @dataclass
 class RateLimitResult:
     """速率限制结果"""
+
     allowed: bool
     remaining: int
     reset_time: float
@@ -71,13 +74,13 @@ class TokenBucket:
             # 添加令牌
             time_passed = now - self.last_refill
             self.tokens = min(
-                self.capacity,
-                self.tokens + (time_passed * self.refill_rate))
+                self.capacity, self.tokens + (time_passed * self.refill_rate)
+            )
             self.last_refill = now
 
             # 检查是否有足够的令牌
-            if self.tokens>=tokens:
-                self.tokens-=tokens
+            if self.tokens >= tokens:
+                self.tokens -= tokens
                 return True
 
             return False
@@ -87,8 +90,8 @@ class TokenBucket:
         now = time.time()
         time_passed = now - self.last_refill
         current_tokens = min(
-            self.capacity,
-            self.tokens + (time_passed * self.refill_rate))
+            self.capacity, self.tokens + (time_passed * self.refill_rate)
+        )
         return int(current_tokens)
 
 
@@ -113,7 +116,7 @@ class SlidingWindow:
             now = time.time()
 
             # 移除过期的请求
-            while self.requests and self.requests[0]<=now - self.window:
+            while self.requests and self.requests[0] <= now - self.window:
                 self.requests.popleft()
 
             # 检查是否超过限制
@@ -128,7 +131,8 @@ class SlidingWindow:
         now = time.time()
         # 计算当前窗口内的请求数
         valid_requests = sum(
-            1 for req_time in self.requests if req_time > (now - self.window))
+            1 for req_time in self.requests if req_time > (now - self.window)
+        )
         return max(0, self.limit - valid_requests)
 
     def get_reset_time(self) -> float:
@@ -160,13 +164,13 @@ class FixedWindow:
             now = time.time()
 
             # 检查是否需要重置窗口
-            if now - self.window_start>=self.window:
+            if now - self.window_start >= self.window:
                 self.count = 0
                 self.window_start = now
 
             # 检查是否超过限制
             if self.count < self.limit:
-                self.count+=1
+                self.count += 1
                 return True
 
             return False
@@ -174,7 +178,7 @@ class FixedWindow:
     def get_remaining(self) -> int:
         """获取剩余请求数"""
         now = time.time()
-        if now - self.window_start>=self.window:
+        if now - self.window_start >= self.window:
             return self.limit
         return max(0, self.limit - self.count)
 
@@ -215,32 +219,32 @@ class RateLimiter:
             return
 
         # 从配置加载规则
-        rate_limit_config = self.config.get_section('rate_limit')
+        rate_limit_config = self.config.get_section("rate_limit")
 
         # 全局规则
-        global_rules = rate_limit_config.get('global_rules', [])
+        global_rules = rate_limit_config.get("global_rules", [])
         for rule_config in global_rules:
             rule = RateLimitRule(
-                requests=rule_config['requests'],
-                window=rule_config['window'],
+                requests=rule_config["requests"],
+                window=rule_config["window"],
                 algorithm=RateLimitAlgorithm(
-                    rule_config.get(
-                        'algorithm',
-                        'sliding_window')),
-                burst=rule_config.get('burst'))
+                    rule_config.get("algorithm", "sliding_window")
+                ),
+                burst=rule_config.get("burst"),
+            )
             self._global_rules.append(rule)
 
         # 用户特定规则
-        user_rules = rate_limit_config.get('user_rules', {})
+        user_rules = rate_limit_config.get("user_rules", {})
         for user_pattern, rule_config in user_rules.items():
             rule = RateLimitRule(
-                requests=rule_config['requests'],
-                window=rule_config['window'],
+                requests=rule_config["requests"],
+                window=rule_config["window"],
                 algorithm=RateLimitAlgorithm(
-                    rule_config.get(
-                        'algorithm',
-                        'sliding_window')),
-                burst=rule_config.get('burst'))
+                    rule_config.get("algorithm", "sliding_window")
+                ),
+                burst=rule_config.get("burst"),
+            )
             self._rules[user_pattern] = rule
 
     def _start_cleanup_task(self) -> None:
@@ -264,16 +268,20 @@ class RateLimiter:
         expired_keys = []
 
         # 如果限制器数量过多，降低清理阈值
-        cleanup_threshold = 1800 if len(self._limiters) > 1000 else 3600  # 30分钟或1小时
+        cleanup_threshold = (
+            1800 if len(self._limiters) > 1000 else 3600
+        )  # 30分钟或1小时
 
         for key, limiter in list(self._limiters.items()):
             # 检查限制器是否长时间未使用
-            if hasattr(limiter, 'last_access') and now - \
-                    limiter.last_access > cleanup_threshold:
+            if (
+                hasattr(limiter, "last_access")
+                and now - limiter.last_access > cleanup_threshold
+            ):
                 expired_keys.append(key)
             # 对于滑动窗口，清理过期的请求记录
-            elif hasattr(limiter, 'requests') and hasattr(limiter, 'window'):
-                if hasattr(limiter, '_cleanup_old_requests'):
+            elif hasattr(limiter, "requests") and hasattr(limiter, "window"):
+                if hasattr(limiter, "_cleanup_old_requests"):
                     await limiter._cleanup_old_requests()
 
         # 批量删除过期的限制器
@@ -282,7 +290,8 @@ class RateLimiter:
 
         if expired_keys:
             logger.info(
-                f"清理了 {len(expired_keys)} 个过期的速率限制器，当前活跃: {len(self._limiters)}")
+                f"清理了 {len(expired_keys)} 个过期的速率限制器，当前活跃: {len(self._limiters)}"
+            )
 
         # 如果内存使用仍然过高，强制清理最旧的限制器
         if len(self._limiters) > 5000:
@@ -295,33 +304,34 @@ class RateLimiter:
 
         # 按最后访问时间排序，清理最旧的25%
         sorted_limiters = sorted(
-            self._limiters.items(),
-            key=lambda x: getattr(x[1], 'last_access', 0)
+            self._limiters.items(), key=lambda x: getattr(x[1], "last_access", 0)
         )
 
-        cleanup_count = len(sorted_limiters)//4  # 清理25%
+        cleanup_count = len(sorted_limiters) // 4  # 清理25%
         keys_to_remove = [key for key, _ in sorted_limiters[:cleanup_count]]
 
         for key in keys_to_remove:
             self._limiters.pop(key, None)
 
         logger.warning(
-            f"强制清理了 {len(keys_to_remove)} 个最旧的限制器，当前活跃: {len(self._limiters)}")
+            f"强制清理了 {len(keys_to_remove)} 个最旧的限制器，当前活跃: {len(self._limiters)}"
+        )
 
     def _get_limiter_key(self, identifier: str, rule: RateLimitRule) -> str:
         """生成限制器键"""
         rule_hash = hashlib.md5(
-            f"{rule.requests}:{rule.window}:{rule.algorithm.value}".encode()).hexdigest()[:8]
+            f"{rule.requests}:{rule.window}:{rule.algorithm.value}".encode()
+        ).hexdigest()[:8]
         return f"{identifier}:{rule_hash}"
 
     def _create_limiter(self, rule: RateLimitRule) -> Any:
         """创建限制器实例"""
-        if rule.algorithm==RateLimitAlgorithm.TOKEN_BUCKET:
+        if rule.algorithm == RateLimitAlgorithm.TOKEN_BUCKET:
             refill_rate = rule.requests / rule.window
             return TokenBucket(rule.requests, refill_rate, rule.burst)
-        elif rule.algorithm==RateLimitAlgorithm.SLIDING_WINDOW:
+        elif rule.algorithm == RateLimitAlgorithm.SLIDING_WINDOW:
             return SlidingWindow(rule.requests, rule.window)
-        elif rule.algorithm==RateLimitAlgorithm.FIXED_WINDOW:
+        elif rule.algorithm == RateLimitAlgorithm.FIXED_WINDOW:
             return FixedWindow(rule.requests, rule.window)
         else:
             raise ValueError(f"不支持的算法: {rule.algorithm}")
@@ -357,7 +367,7 @@ class RateLimiter:
             limiter.last_access = time.time()
 
             # 检查限制
-            if rule.algorithm==RateLimitAlgorithm.TOKEN_BUCKET:
+            if rule.algorithm == RateLimitAlgorithm.TOKEN_BUCKET:
                 if not await limiter.consume():
                     logger.debug(f"速率限制触发: {identifier}, 规则: {rule}")
                     return False
@@ -369,7 +379,8 @@ class RateLimiter:
         return True
 
     async def get_rate_limit_status(
-            self, identifier: str) -> dict[str, RateLimitResult]:
+        self, identifier: str
+    ) -> dict[str, RateLimitResult]:
         """获取速率限制状态"""
         rules = self._get_rules_for_identifier(identifier)
         results = {}
@@ -382,7 +393,7 @@ class RateLimiter:
                 results[f"rule_{i}"] = RateLimitResult(
                     allowed=True,
                     remaining=rule.requests,
-                    reset_time=time.time() + rule.window
+                    reset_time=time.time() + rule.window,
                 )
                 continue
 
@@ -391,13 +402,12 @@ class RateLimiter:
             # 获取状态
             remaining = limiter.get_remaining()
             reset_time = getattr(
-                limiter,
-                'get_reset_time',
-                lambda r=rule: time.time() + r.window)()
+                limiter, "get_reset_time", lambda r=rule: time.time() + r.window
+            )()
 
             # 模拟检查是否允许（不实际消费）
-            if rule.algorithm==RateLimitAlgorithm.TOKEN_BUCKET:
-                allowed = remaining>=1
+            if rule.algorithm == RateLimitAlgorithm.TOKEN_BUCKET:
+                allowed = remaining >= 1
             else:
                 # 对于窗口算法，需要实际检查
                 test_limiter = self._create_limiter(rule)
@@ -411,7 +421,7 @@ class RateLimiter:
                 allowed=allowed,
                 remaining=remaining,
                 reset_time=reset_time,
-                retry_after=retry_after
+                retry_after=retry_after,
             )
 
         return results
@@ -425,7 +435,7 @@ class RateLimiter:
             limiter_key = self._get_limiter_key(identifier, rule)
             if limiter_key in self._limiters:
                 del self._limiters[limiter_key]
-                reset_count+=1
+                reset_count += 1
 
         logger.info(f"重置了 {reset_count} 个速率限制器: {identifier}")
         return reset_count > 0
@@ -446,10 +456,10 @@ class RateLimiter:
     def get_stats(self) -> dict[str, Any]:
         """获取统计信息"""
         return {
-            'active_limiters': len(self._limiters),
-            'global_rules': len(self._global_rules),
-            'user_rules': len(self._rules),
-            'total_rules': len(self._global_rules) + len(self._rules)
+            "active_limiters": len(self._limiters),
+            "global_rules": len(self._global_rules),
+            "user_rules": len(self._rules),
+            "total_rules": len(self._global_rules) + len(self._rules),
         }
 
     async def close(self) -> None:
@@ -479,12 +489,14 @@ def get_rate_limiter(config=None) -> RateLimiter:
 
 def rate_limit(identifier_func=None, requests: int = 100, window: int = 60):
     """速率限制装饰器"""
+
     def decorator(func):
         """装饰器实现"""
-        async def wrapper(*args,**kwargs):
+
+        async def wrapper(*args, **kwargs):
             # 生成标识符
             if identifier_func:
-                identifier = identifier_func(*args,**kwargs)
+                identifier = identifier_func(*args, **kwargs)
             else:
                 # 默认使用函数名作为标识符
                 identifier = func.__name__
@@ -496,9 +508,10 @@ def rate_limit(identifier_func=None, requests: int = 100, window: int = 60):
 
             # 执行函数
             if asyncio.iscoroutinefunction(func):
-                return await func(*args,**kwargs)
+                return await func(*args, **kwargs)
             else:
-                return func(*args,**kwargs)
+                return func(*args, **kwargs)
 
         return wrapper
+
     return decorator
