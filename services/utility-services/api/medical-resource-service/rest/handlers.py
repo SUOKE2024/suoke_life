@@ -1,5 +1,11 @@
-from ...internal.domain.models import UrgencyLevel
+import logging
+from typing import Any, Dict, List, Optional
 
+import fastapi
+import fastapi.responses
+import pydantic
+
+from ...internal.domain.models import UrgencyLevel
 from ...internal.infrastructure.container import (
     Any,
     APIRouter,
@@ -15,18 +21,13 @@ from ...internal.infrastructure.container import (
     Query,
     ResourceType,
 )
-
 from ...internal.infrastructure.models import datetime
-import logging
-import fastapi
-import fastapi.responses
-import pydantic
-from typing import Dict, List, Optional, Any
 
 
 def main() -> None:
     """主函数 - 自动生成的最小可用版本"""
     pass
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     main()
