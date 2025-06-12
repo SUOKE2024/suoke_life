@@ -2,18 +2,20 @@
 inquiry_service_impl - 索克生活项目模块
 """
 
+import logging
+import time
+from typing import Any
+
+import grpc
+from api.grpc import inquiry_service_pb2 as pb2
+from api.grpc import inquiry_service_pb2_grpc as pb2_grpc
+from google.protobuf.json_format import MessageToDict
+
 from ..dialogue.dialogue_manager import DialogueManager
 from ..knowledge.tcm_knowledge_base import TCMKnowledgeBase
 from ..llm.health_risk_assessor import HealthRiskAssessor
 from ..llm.symptom_extractor import SymptomExtractor
 from ..llm.tcm_pattern_mapper import TCMPatternMapper
-from api.grpc import inquiry_service_pb2 as pb2
-from api.grpc import inquiry_service_pb2_grpc as pb2_grpc
-from google.protobuf.json_format import MessageToDict
-from typing import Any
-import grpc
-import logging
-import time
 
 #! / usr / bin / env python
 
@@ -22,11 +24,11 @@ import time
 """
 
 
-
 # 导入生成的gRPC代码
 
 
 logger = logging.getLogger(__name__)
+
 
 class InquiryServiceServicer(pb2_grpc.InquiryServiceServicer):
     """问诊服务的gRPC实现类"""
@@ -84,18 +86,18 @@ class InquiryServiceServicer(pb2_grpc.InquiryServiceServicer):
                 welcome_message,
                 suggested_questions,
             ) = await self.dialogue_manager.start_session(
-                user_id = user_id,
-                session_type = session_type,
-                language = language_preference,
-                context_data = context_data,
+                user_id=user_id,
+                session_type=session_type,
+                language=language_preference,
+                context_data=context_data,
             )
 
             # 构建响应
             response = pb2.SessionResponse(
-                session_id = session_id,
-                welcome_message = welcome_message,
-                suggested_questions = suggested_questions,
-                timestamp = int(time.time()),
+                session_id=session_id,
+                welcome_message=welcome_message,
+                suggested_questions=suggested_questions,
+                timestamp=int(time.time()),
             )
 
             logger.info(f"开始问诊会话: user_id = {user_id}, session_id = {session_id}")
@@ -128,21 +130,21 @@ class InquiryServiceServicer(pb2_grpc.InquiryServiceServicer):
 
             # 调用对话管理器处理交互
             response_dict = await self.dialogue_manager.interact(
-                session_id = session_id,
-                user_message = user_message,
-                timestamp = timestamp,
-                attached_data_urls = attached_data_urls,
+                session_id=session_id,
+                user_message=user_message,
+                timestamp=timestamp,
+                attached_data_urls=attached_data_urls,
             )
 
             # 构建响应
             response = pb2.InteractionResponse(
-                response_text = response_dict.get("response_text", ""),
-                response_type = self._get_response_type(
+                response_text=response_dict.get("response_text", ""),
+                response_type=self._get_response_type(
                     response_dict.get("response_type", "TEXT")
                 ),
-                detected_symptoms = response_dict.get("detected_symptoms", []),
-                follow_up_questions = response_dict.get("follow_up_questions", []),
-                timestamp = response_dict.get("timestamp", int(time.time())),
+                detected_symptoms=response_dict.get("detected_symptoms", []),
+                follow_up_questions=response_dict.get("follow_up_questions", []),
+                timestamp=response_dict.get("timestamp", int(time.time())),
             )
 
             logger.info(
@@ -195,29 +197,29 @@ class InquiryServiceServicer(pb2_grpc.InquiryServiceServicer):
 
             # 调用对话管理器结束会话
             summary_dict = await self.dialogue_manager.end_session(
-                session_id = session_id, feedback = feedback
+                session_id=session_id, feedback=feedback
             )
 
             # 构建响应
             response = pb2.InquirySummary(
-                session_id = summary_dict.get("session_id", ""),
-                user_id = summary_dict.get("user_id", ""),
-                session_duration = int(summary_dict.get("session_duration", 0)),
-                session_end_time = int(summary_dict.get("session_end_time", 0)),
+                session_id=summary_dict.get("session_id", ""),
+                user_id=summary_dict.get("user_id", ""),
+                session_duration=int(summary_dict.get("session_duration", 0)),
+                session_end_time=int(summary_dict.get("session_end_time", 0)),
             )
 
             # 添加检测到的症状
             symptoms = summary_dict.get("detected_symptoms", [])
             for symptom in symptoms:
                 symptom_info = pb2.SymptomInfo(
-                    symptom_name = symptom.get("symptom_name", ""),
-                    severity = self._get_symptom_severity(
+                    symptom_name=symptom.get("symptom_name", ""),
+                    severity=self._get_symptom_severity(
                         symptom.get("severity", "MODERATE")
                     ),
-                    onset_time = int(symptom.get("onset_time", 0)),
-                    duration = int(symptom.get("duration", 0)),
-                    description = symptom.get("description", ""),
-                    confidence = float(symptom.get("confidence", 0.8)),
+                    onset_time=int(symptom.get("onset_time", 0)),
+                    duration=int(symptom.get("duration", 0)),
+                    description=symptom.get("description", ""),
+                    confidence=float(symptom.get("confidence", 0.8)),
                 )
                 response.detected_symptoms.append(symptom_info)
 
@@ -225,10 +227,10 @@ class InquiryServiceServicer(pb2_grpc.InquiryServiceServicer):
             tcm_patterns = summary_dict.get("tcm_patterns", [])
             for pattern in tcm_patterns:
                 tcm_pattern = pb2.TCMPattern(
-                    pattern_name = pattern.get("pattern_name", ""),
-                    category = pattern.get("category", ""),
-                    match_score = float(pattern.get("match_score", 0.0)),
-                    description = pattern.get("description", ""),
+                    pattern_name=pattern.get("pattern_name", ""),
+                    category=pattern.get("category", ""),
+                    match_score=float(pattern.get("match_score", 0.0)),
+                    description=pattern.get("description", ""),
                 )
                 tcm_pattern.related_symptoms.extend(pattern.get("related_symptoms", []))
                 response.tcm_patterns.append(tcm_pattern)
@@ -236,8 +238,8 @@ class InquiryServiceServicer(pb2_grpc.InquiryServiceServicer):
             # 添加健康档案
             health_profile = summary_dict.get("health_profile", {})
             profile = pb2.HealthProfile(
-                user_id = health_profile.get("user_id", ""),
-                constitution_type = self._get_constitution_type(
+                user_id=health_profile.get("user_id", ""),
+                constitution_type=self._get_constitution_type(
                     health_profile.get("constitution_type", "BALANCED")
                 ),
             )
@@ -247,10 +249,10 @@ class InquiryServiceServicer(pb2_grpc.InquiryServiceServicer):
             recommendations = summary_dict.get("recommendations", [])
             for rec in recommendations:
                 recommendation = pb2.FollowUpRecommendation(
-                    type = self._get_recommendation_type(rec.get("type", "MONITORING")),
-                    description = rec.get("description", ""),
-                    rationale = rec.get("rationale", ""),
-                    suggested_timeframe = int(rec.get("suggested_timeframe", 0)),
+                    type=self._get_recommendation_type(rec.get("type", "MONITORING")),
+                    description=rec.get("description", ""),
+                    rationale=rec.get("rationale", ""),
+                    suggested_timeframe=int(rec.get("suggested_timeframe", 0)),
                 )
                 response.recommendations.append(recommendation)
 
@@ -344,11 +346,11 @@ class InquiryServiceServicer(pb2_grpc.InquiryServiceServicer):
                     if condition and condition not in conditions:
                         conditions.add(condition)
                         chronic = pb2.ChronicCondition(
-                            condition_name = condition,
-                            severity = pb2.ChronicCondition.MODERATE,
-                            current_status = "持续存在"
-                            if "慢性" in condition
-                            else "已治愈",
+                            condition_name=condition,
+                            severity=pb2.ChronicCondition.MODERATE,
+                            current_status=(
+                                "持续存在" if "慢性" in condition else "已治愈"
+                            ),
                         )
                         response.chronic_conditions.append(chronic)
 
@@ -376,7 +378,7 @@ class InquiryServiceServicer(pb2_grpc.InquiryServiceServicer):
 
             for name, score, desc, suggestions in risk_factors:
                 risk = pb2.RiskFactor(
-                    factor_name = name, risk_score = score, description = desc
+                    factor_name=name, risk_score=score, description=desc
                 )
                 risk.prevention_suggestions.extend(suggestions)
                 response.risk_factors.append(risk)
@@ -384,16 +386,16 @@ class InquiryServiceServicer(pb2_grpc.InquiryServiceServicer):
             # 添加历史证型
             historical_patterns = [
                 pb2.TCMPattern(
-                    pattern_name = "气虚证",
-                    category = "虚证",
-                    match_score = 0.75,
-                    description = "气虚证是指人体内气的不足所导致的一系列症状",
+                    pattern_name="气虚证",
+                    category="虚证",
+                    match_score=0.75,
+                    description="气虚证是指人体内气的不足所导致的一系列症状",
                 ),
                 pb2.TCMPattern(
-                    pattern_name = "痰湿证",
-                    category = "实证",
-                    match_score = 0.65,
-                    description = "痰湿证是指体内水液代谢异常，聚湿成痰所导致的一系列症状",
+                    pattern_name="痰湿证",
+                    category="实证",
+                    match_score=0.65,
+                    description="痰湿证是指体内水液代谢异常，聚湿成痰所导致的一系列症状",
                 ),
             ]
             historical_patterns[0].related_symptoms.extend(["疲劳", "气短", "自汗"])
@@ -402,7 +404,7 @@ class InquiryServiceServicer(pb2_grpc.InquiryServiceServicer):
             response.historical_patterns.extend(historical_patterns)
 
             # 添加生活方式影响
-            lifestyle = pb2.LifestyleImpact(overall_impact_score = 0.7)
+            lifestyle = pb2.LifestyleImpact(overall_impact_score=0.7)
             lifestyle.dietary_factors.extend(["高糖饮食", "油腻食物", "不规律进餐"])
             lifestyle.exercise_factors.extend(["缺乏运动", "久坐"])
             lifestyle.sleep_factors.extend(["睡眠不足", "睡眠质量差"])
@@ -446,21 +448,21 @@ class InquiryServiceServicer(pb2_grpc.InquiryServiceServicer):
 
             # 构建响应
             response = pb2.SymptomsResponse(
-                confidence_score = extraction_result.get("confidence_score", 0.0)
+                confidence_score=extraction_result.get("confidence_score", 0.0)
             )
 
             # 添加症状
             symptoms = extraction_result.get("symptoms", [])
             for symptom in symptoms:
                 symptom_info = pb2.SymptomInfo(
-                    symptom_name = symptom.get("symptom_name", ""),
-                    severity = self._get_symptom_severity(
+                    symptom_name=symptom.get("symptom_name", ""),
+                    severity=self._get_symptom_severity(
                         symptom.get("severity", "MODERATE")
                     ),
-                    onset_time = int(symptom.get("onset_time", 0)),
-                    duration = int(symptom.get("duration", 0)),
-                    description = symptom.get("description", ""),
-                    confidence = float(symptom.get("confidence", 0.8)),
+                    onset_time=int(symptom.get("onset_time", 0)),
+                    duration=int(symptom.get("duration", 0)),
+                    description=symptom.get("description", ""),
+                    confidence=float(symptom.get("confidence", 0.8)),
                 )
                 response.symptoms.append(symptom_info)
 
@@ -468,8 +470,8 @@ class InquiryServiceServicer(pb2_grpc.InquiryServiceServicer):
             body_locations = extraction_result.get("body_locations", [])
             for location in body_locations:
                 body_location = pb2.BodyLocation(
-                    location_name = location.get("location_name", ""),
-                    side = location.get("side", "central"),
+                    location_name=location.get("location_name", ""),
+                    side=location.get("side", "central"),
                 )
                 body_location.associated_symptoms.extend(
                     location.get("associated_symptoms", [])
@@ -480,15 +482,17 @@ class InquiryServiceServicer(pb2_grpc.InquiryServiceServicer):
             temporal_factors = extraction_result.get("temporal_factors", [])
             for factor in temporal_factors:
                 temporal_factor = pb2.TemporalFactor(
-                    factor_type = factor.get("factor_type", ""),
-                    description = factor.get("description", ""),
+                    factor_type=factor.get("factor_type", ""),
+                    description=factor.get("description", ""),
                 )
                 temporal_factor.symptoms_affected.extend(
                     factor.get("symptoms_affected", [])
                 )
                 response.temporal_factors.append(temporal_factor)
 
-            logger.info(f"提取症状: user_id = {user_id}, symptoms_count = {len(symptoms)}")
+            logger.info(
+                f"提取症状: user_id = {user_id}, symptoms_count = {len(symptoms)}"
+            )
 
             return response
 
@@ -522,26 +526,26 @@ class InquiryServiceServicer(pb2_grpc.InquiryServiceServicer):
 
             # 调用TCM映射器
             mapping_result = await self.tcm_pattern_mapper.map_to_tcm_patterns(
-                symptoms = symptoms,
-                user_constitution = user_constitution,
-                body_locations = body_locations,
-                temporal_factors = temporal_factors,
+                symptoms=symptoms,
+                user_constitution=user_constitution,
+                body_locations=body_locations,
+                temporal_factors=temporal_factors,
             )
 
             # 构建响应
             response = pb2.TCMPatternResponse(
-                interpretation = mapping_result.get("interpretation", ""),
-                confidence_score = mapping_result.get("confidence_score", 0.0),
+                interpretation=mapping_result.get("interpretation", ""),
+                confidence_score=mapping_result.get("confidence_score", 0.0),
             )
 
             # 添加主证
             primary_patterns = mapping_result.get("primary_patterns", [])
             for pattern in primary_patterns:
                 tcm_pattern = pb2.TCMPattern(
-                    pattern_name = pattern.get("pattern_name", ""),
-                    category = pattern.get("category", ""),
-                    match_score = float(pattern.get("match_score", 0.0)),
-                    description = pattern.get("description", ""),
+                    pattern_name=pattern.get("pattern_name", ""),
+                    category=pattern.get("category", ""),
+                    match_score=float(pattern.get("match_score", 0.0)),
+                    description=pattern.get("description", ""),
                 )
                 tcm_pattern.related_symptoms.extend(pattern.get("related_symptoms", []))
                 response.primary_patterns.append(tcm_pattern)
@@ -550,10 +554,10 @@ class InquiryServiceServicer(pb2_grpc.InquiryServiceServicer):
             secondary_patterns = mapping_result.get("secondary_patterns", [])
             for pattern in secondary_patterns:
                 tcm_pattern = pb2.TCMPattern(
-                    pattern_name = pattern.get("pattern_name", ""),
-                    category = pattern.get("category", ""),
-                    match_score = float(pattern.get("match_score", 0.0)),
-                    description = pattern.get("description", ""),
+                    pattern_name=pattern.get("pattern_name", ""),
+                    category=pattern.get("category", ""),
+                    match_score=float(pattern.get("match_score", 0.0)),
+                    description=pattern.get("description", ""),
                 )
                 tcm_pattern.related_symptoms.extend(pattern.get("related_symptoms", []))
                 response.secondary_patterns.append(tcm_pattern)
@@ -599,19 +603,19 @@ class InquiryServiceServicer(pb2_grpc.InquiryServiceServicer):
             # 添加分析洞察
             insights = [
                 pb2.AnalysisInsight(
-                    insight_type = "symptom_pattern",
-                    description = "症状'疲劳'在多次问诊中持续出现，与'气虚证'高度相关",
-                    confidence = 0.85,
+                    insight_type="symptom_pattern",
+                    description="症状'疲劳'在多次问诊中持续出现，与'气虚证'高度相关",
+                    confidence=0.85,
                 ),
                 pb2.AnalysisInsight(
-                    insight_type = "lifestyle_impact",
-                    description = "工作压力与'失眠'、'焦虑'症状呈现显著相关性",
-                    confidence = 0.78,
+                    insight_type="lifestyle_impact",
+                    description="工作压力与'失眠'、'焦虑'症状呈现显著相关性",
+                    confidence=0.78,
                 ),
                 pb2.AnalysisInsight(
-                    insight_type = "treatment_effectiveness",
-                    description = "调整饮食结构后，'腹胀'症状明显改善",
-                    confidence = 0.72,
+                    insight_type="treatment_effectiveness",
+                    description="调整饮食结构后，'腹胀'症状明显改善",
+                    confidence=0.72,
                 ),
             ]
 
@@ -655,25 +659,25 @@ class InquiryServiceServicer(pb2_grpc.InquiryServiceServicer):
 
             # 调用健康风险评估器
             assessment_result = await self.health_risk_assessor.assess_health_risks(
-                user_id = user_id,
-                current_symptoms = current_symptoms,
-                medical_history = medical_history,
-                health_profile = health_profile,
+                user_id=user_id,
+                current_symptoms=current_symptoms,
+                medical_history=medical_history,
+                health_profile=health_profile,
             )
 
             # 构建响应
             response = pb2.HealthRiskResponse(
-                overall_risk_score = assessment_result.get("overall_risk_score", 0.0)
+                overall_risk_score=assessment_result.get("overall_risk_score", 0.0)
             )
 
             # 添加即时风险
             immediate_risks = assessment_result.get("immediate_risks", [])
             for risk in immediate_risks:
                 health_risk = pb2.HealthRisk(
-                    risk_name = risk.get("risk_name", ""),
-                    probability = float(risk.get("probability", 0.0)),
-                    severity = risk.get("severity", "low"),
-                    timeframe = risk.get("timeframe", "unknown"),
+                    risk_name=risk.get("risk_name", ""),
+                    probability=float(risk.get("probability", 0.0)),
+                    severity=risk.get("severity", "low"),
+                    timeframe=risk.get("timeframe", "unknown"),
                 )
                 health_risk.contributing_factors.extend(
                     risk.get("contributing_factors", [])
@@ -684,10 +688,10 @@ class InquiryServiceServicer(pb2_grpc.InquiryServiceServicer):
             long_term_risks = assessment_result.get("long_term_risks", [])
             for risk in long_term_risks:
                 health_risk = pb2.HealthRisk(
-                    risk_name = risk.get("risk_name", ""),
-                    probability = float(risk.get("probability", 0.0)),
-                    severity = risk.get("severity", "low"),
-                    timeframe = risk.get("timeframe", "unknown"),
+                    risk_name=risk.get("risk_name", ""),
+                    probability=float(risk.get("probability", 0.0)),
+                    severity=risk.get("severity", "low"),
+                    timeframe=risk.get("timeframe", "unknown"),
                 )
                 health_risk.contributing_factors.extend(
                     risk.get("contributing_factors", [])
@@ -698,9 +702,9 @@ class InquiryServiceServicer(pb2_grpc.InquiryServiceServicer):
             prevention_strategies = assessment_result.get("prevention_strategies", [])
             for strategy in prevention_strategies:
                 prevention_strategy = pb2.PreventionStrategy(
-                    strategy_name = strategy.get("strategy_name", ""),
-                    description = strategy.get("description", ""),
-                    effectiveness_score = float(strategy.get("effectiveness_score", 0.0)),
+                    strategy_name=strategy.get("strategy_name", ""),
+                    description=strategy.get("description", ""),
+                    effectiveness_score=float(strategy.get("effectiveness_score", 0.0)),
                 )
                 prevention_strategy.action_items.extend(
                     strategy.get("action_items", [])
@@ -718,7 +722,7 @@ class InquiryServiceServicer(pb2_grpc.InquiryServiceServicer):
             return response
 
         except Exception as e:
-            logger.error(f"健康风险评估失败: {e!s}", exc_info = True)
+            logger.error(f"健康风险评估失败: {e!s}", exc_info=True)
             context.set_code(grpc.StatusCode.INTERNAL)
             context.set_details(f"健康风险评估失败: {e!s}")
             return pb2.HealthRiskResponse()

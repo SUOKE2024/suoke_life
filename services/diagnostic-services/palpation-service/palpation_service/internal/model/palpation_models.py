@@ -2,8 +2,8 @@
 palpation_models - 索克生活项目模块
 """
 
-from dataclasses import dataclass, field
 import datetime
+from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
 
@@ -12,7 +12,6 @@ from typing import Any
 """
 腹诊和皮肤触诊数据模型定义
 """
-
 
 
 class AbdominalRegion(Enum):
@@ -104,9 +103,9 @@ class AbdominalRegionData:
     pulsation: bool = False
     gurgling: bool = False  # 肠鸣音
     comments: str = ""
-    examined_time: datetime = field(default_factory = datetime.now)
+    examined_time: datetime = field(default_factory=datetime.now)
     pressure_applied: float = 0.0  # 施加的压力 (N)
-    examiner_notes: list[str] = field(default_factory = list)
+    examiner_notes: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -119,8 +118,8 @@ class AbdominalFinding:
     description: str
     severity: float  # 0 - 1
     confidence: float  # 0 - 1
-    potential_causes: list[str] = field(default_factory = list)
-    related_meridians: list[str] = field(default_factory = list)
+    potential_causes: list[str] = field(default_factory=list)
+    related_meridians: list[str] = field(default_factory=list)
     tcm_interpretation: str = ""
     western_interpretation: str = ""
 
@@ -138,8 +137,8 @@ class SkinRegionData:
     color: str  # 颜色描述
     temperature_value: float | None = None  # 实际温度值
     moisture_value: float | None = None  # 实际湿度值
-    special_markings: list[str] = field(default_factory = list)  # 特殊标记（痣、斑等）
-    examined_time: datetime = field(default_factory = datetime.now)
+    special_markings: list[str] = field(default_factory=list)  # 特殊标记（痣、斑等）
+    examined_time: datetime = field(default_factory=datetime.now)
 
 
 @dataclass
@@ -150,7 +149,7 @@ class SkinFinding:
     region_name: str
     finding_type: str
     description: str
-    related_conditions: list[str] = field(default_factory = list)
+    related_conditions: list[str] = field(default_factory=list)
     tcm_interpretation: str = ""
     severity: float = 0.0  # 0 - 1
     requires_attention: bool = False
@@ -168,7 +167,7 @@ class PalpationOverview:
     skin_overview: dict[str, Any] | None = None
     general_condition: str = ""
     examiner_id: str | None = None
-    notes: list[str] = field(default_factory = list)
+    notes: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -181,10 +180,10 @@ class TCMPattern:
     nature: str  # 寒热属性
     confidence: float  # 置信度
     description: str  # 描述
-    supporting_findings: list[str] = field(default_factory = list)  # 支持的发现
-    contradicting_findings: list[str] = field(default_factory = list)  # 矛盾的发现
-    related_symptoms: list[str] = field(default_factory = list)  # 相关症状
-    treatment_principles: list[str] = field(default_factory = list)  # 治则
+    supporting_findings: list[str] = field(default_factory=list)  # 支持的发现
+    contradicting_findings: list[str] = field(default_factory=list)  # 矛盾的发现
+    related_symptoms: list[str] = field(default_factory=list)  # 相关症状
+    treatment_principles: list[str] = field(default_factory=list)  # 治则
 
 
 @dataclass
@@ -198,8 +197,8 @@ class HealthAlert:
     urgency: str  # 紧急程度：low, medium, high, critical
     recommendation: str  # 建议
     requires_immediate_attention: bool
-    related_findings: list[str] = field(default_factory = list)
-    created_time: datetime = field(default_factory = datetime.now)
+    related_findings: list[str] = field(default_factory=list)
+    created_time: datetime = field(default_factory=datetime.now)
 
 
 @dataclass
@@ -213,24 +212,24 @@ class ComprehensivePalpationAnalysis:
     # 各项切诊结果
     pulse_session_id: str | None = None
     pulse_analysis: dict[str, Any] | None = None
-    abdominal_findings: list[AbdominalFinding] = field(default_factory = list)
-    skin_findings: list[SkinFinding] = field(default_factory = list)
+    abdominal_findings: list[AbdominalFinding] = field(default_factory=list)
+    skin_findings: list[SkinFinding] = field(default_factory=list)
 
     # 综合分析
-    tcm_patterns: list[TCMPattern] = field(default_factory = list)
-    health_alerts: list[HealthAlert] = field(default_factory = list)
+    tcm_patterns: list[TCMPattern] = field(default_factory=list)
+    health_alerts: list[HealthAlert] = field(default_factory=list)
     overall_assessment: str = ""
 
     # 建议
-    dietary_recommendations: list[str] = field(default_factory = list)
-    lifestyle_recommendations: list[str] = field(default_factory = list)
-    treatment_suggestions: list[str] = field(default_factory = list)
-    followup_recommendations: list[str] = field(default_factory = list)
+    dietary_recommendations: list[str] = field(default_factory=list)
+    lifestyle_recommendations: list[str] = field(default_factory=list)
+    treatment_suggestions: list[str] = field(default_factory=list)
+    followup_recommendations: list[str] = field(default_factory=list)
 
     # 元数据
     confidence_score: float = 0.0
     quality_score: float = 0.0
-    examiner_notes: list[str] = field(default_factory = list)
+    examiner_notes: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -246,17 +245,17 @@ class PalpationReport:
     # 报告内容
     executive_summary: str
     detailed_findings: dict[str, Any]
-    visualizations: list[dict[str, Any]] = field(default_factory = list)
+    visualizations: list[dict[str, Any]] = field(default_factory=list)
 
     # 历史对比
     historical_comparison: dict[str, Any] | None = None
     trend_analysis: dict[str, Any] | None = None
 
     # 建议和计划
-    action_items: list[str] = field(default_factory = list)
+    action_items: list[str] = field(default_factory=list)
     followup_schedule: dict[str, Any] | None = None
 
     # 元数据
     report_url: str | None = None
     report_data: bytes | None = None
-    metadata: dict[str, Any] = field(default_factory = dict)
+    metadata: dict[str, Any] = field(default_factory=dict)

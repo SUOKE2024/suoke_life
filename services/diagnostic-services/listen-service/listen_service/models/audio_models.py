@@ -14,7 +14,6 @@ from typing import Any
 """
 
 
-
 class AudioType(Enum):
     """音频类型"""
 
@@ -55,7 +54,7 @@ class AudioMetadata:
     file_size: int
     bit_depth: int | None = None
     codec: str | None = None
-    created_at: datetime = field(default_factory = datetime.now)
+    created_at: datetime = field(default_factory=datetime.now)
 
 
 @dataclass
@@ -67,8 +66,8 @@ class AudioAnalysisRequest:
     audio_type: AudioType
     audio_data: str  # Base64编码的音频数据
     sample_rate: int = 44100
-    metadata: dict[str, Any] = field(default_factory = dict)
-    timestamp: datetime = field(default_factory = datetime.now)
+    metadata: dict[str, Any] = field(default_factory=dict)
+    timestamp: datetime = field(default_factory=datetime.now)
     enable_caching: bool = True
     analysis_type: str = "default"
 
@@ -81,7 +80,7 @@ class AudioFeature:
     value: Any
     confidence: float
     time_range: tuple[float, float] | None = None  # 时间范围（秒）
-    metadata: dict[str, Any] = field(default_factory = dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -136,7 +135,7 @@ class ListenResult:
     voice_features: VoiceFeatures | None = None
     breathing_features: BreathingFeatures | None = None
     cough_features: CoughFeatures | None = None
-    timestamp: datetime = field(default_factory = datetime.now)
+    timestamp: datetime = field(default_factory=datetime.now)
 
 
 @dataclass
@@ -146,7 +145,7 @@ class BatchAudioRequest:
     batch_id: str
     requests: list[AudioAnalysisRequest]
     priority: int = 1
-    created_at: datetime = field(default_factory = datetime.now)
+    created_at: datetime = field(default_factory=datetime.now)
 
 
 @dataclass
@@ -159,7 +158,7 @@ class BatchAnalysisResult:
     successful_analyses: int
     failed_analyses: int
     total_processing_time_ms: float
-    created_at: datetime = field(default_factory = datetime.now)
+    created_at: datetime = field(default_factory=datetime.now)
 
 
 @dataclass
@@ -171,7 +170,7 @@ class AudioAnalysisResponse:
     result: ListenResult | None = None
     error_message: str | None = None
     processing_time_ms: float = 0.0
-    timestamp: datetime = field(default_factory = datetime.now)
+    timestamp: datetime = field(default_factory=datetime.now)
 
     @property
     def voice_features(self) -> VoiceFeatures | None:

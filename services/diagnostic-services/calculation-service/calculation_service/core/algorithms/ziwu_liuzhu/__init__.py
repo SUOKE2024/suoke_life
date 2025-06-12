@@ -1,11 +1,11 @@
-from typing import Dict, List, Any, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 """
 __init__ - 索克生活项目模块
 """
 
 from .calculator import ZiwuLiuzhuCalculator
-from .data import MERIDIAN_TIME_MAP, ACUPOINT_TIME_MAP
+from .data import ACUPOINT_TIME_MAP, MERIDIAN_TIME_MAP
 
 """
 子午流注算法模块

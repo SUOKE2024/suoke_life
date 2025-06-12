@@ -2,21 +2,23 @@
 enhanced_palpation_service - 索克生活项目模块
 """
 
-from collections import defaultdict
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-from loguru import logger
-from scipy import signal
-from services.common.governance.circuit_breaker import CircuitBreakerConfig
-from services.common.governance.rate_limiter import RateLimitConfig, rate_limit
-from services.common.observability.tracing import SpanKind, trace
-from typing import Any
 import asyncio
 import hashlib
 import json
 import time
 import uuid
+from collections import defaultdict
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Any
+
+from loguru import logger
+from scipy import signal
+
+from services.common.governance.circuit_breaker import CircuitBreakerConfig
+from services.common.governance.rate_limiter import RateLimitConfig, rate_limit
+from services.common.observability.tracing import SpanKind, trace
 
 #! / usr / bin / env python3
 
@@ -28,8 +30,8 @@ import uuid
 """
 
 
-
 # 导入通用组件
+
 
 class PulsePosition(Enum):
     """脉位"""
@@ -38,12 +40,14 @@ class PulsePosition(Enum):
     DEEP = "deep"  # 沉脉
     MIDDLE = "middle"  # 中脉
 
+
 class PulseRate(Enum):
     """脉率"""
 
     SLOW = "slow"  # 迟脉 (<60次 / 分)
     NORMAL = "normal"  # 正常 (60 - 100次 / 分)
     RAPID = "rapid"  # 数脉 (>100次 / 分)
+
 
 class PulseStrength(Enum):
     """脉力"""
@@ -52,6 +56,7 @@ class PulseStrength(Enum):
     STRONG = "strong"  # 实脉
     MODERATE = "moderate"  # 中等
 
+
 class PulseRhythm(Enum):
     """脉律"""
 
@@ -59,6 +64,7 @@ class PulseRhythm(Enum):
     IRREGULAR = "irregular"  # 不齐脉
     INTERMITTENT = "intermittent"  # 结脉
     MISSED = "missed"  # 代脉
+
 
 class PulseShape(Enum):
     """脉形"""
@@ -70,6 +76,7 @@ class PulseShape(Enum):
     SLIPPERY = "slippery"  # 滑脉
     ROUGH = "rough"  # 涩脉
 
+
 @dataclass
 class PulseDataPoint:
     """脉象数据点"""
@@ -78,6 +85,7 @@ class PulseDataPoint:
     amplitude: float
     pressure: float
     channel: int = 0  # 传感器通道
+
 
 @dataclass
 class PulseAnalysisRequest:
@@ -88,8 +96,9 @@ class PulseAnalysisRequest:
     pulse_data: list[PulseDataPoint]
     duration: float  # 采集时长（秒）
     sample_rate: int = 1000  # 采样率
-    metadata: dict[str, Any] = field(default_factory = dict)
-    timestamp: datetime = field(default_factory = datetime.now)
+    metadata: dict[str, Any] = field(default_factory=dict)
+    timestamp: datetime = field(default_factory=datetime.now)
+
 
 @dataclass
 class PulseFeature:
@@ -100,6 +109,7 @@ class PulseFeature:
     confidence: float
     channel: int = 0
     time_range: tuple[float, float] | None = None
+
 
 @dataclass
 class PalpationResult:
@@ -114,6 +124,7 @@ class PalpationResult:
     processing_time_ms: float
     recommendations: list[str]
 
+
 @dataclass
 class BatchPulseRequest:
     """批量脉象分析请求"""
@@ -121,7 +132,8 @@ class BatchPulseRequest:
     batch_id: str
     requests: list[PulseAnalysisRequest]
     priority: int = 1
-    created_at: datetime = field(default_factory = datetime.now)
+    created_at: datetime = field(default_factory=datetime.now)
+
 
 class EnhancedPalpationService:
     """增强版切诊服务"""
@@ -192,17 +204,17 @@ class EnhancedPalpationService:
         # 断路器配置
         self.circuit_breaker_configs = {
             "pulse_processing": CircuitBreakerConfig(
-                failure_threshold = 3, recovery_timeout = 30.0, timeout = 20.0
+                failure_threshold=3, recovery_timeout=30.0, timeout=20.0
             ),
             "feature_extraction": CircuitBreakerConfig(
-                failure_threshold = 5, recovery_timeout = 20.0, timeout = 15.0
+                failure_threshold=5, recovery_timeout=20.0, timeout=15.0
             ),
         }
 
         # 限流配置
         self.rate_limit_configs = {
-            "analysis": RateLimitConfig(rate = 15.0, burst = 30),
-            "batch": RateLimitConfig(rate = 3.0, burst = 6),
+            "analysis": RateLimitConfig(rate=15.0, burst=30),
+            "batch": RateLimitConfig(rate=3.0, burst=6),
         }
 
         # 后台任务
@@ -224,8 +236,8 @@ class EnhancedPalpationService:
         # 缓存清理器
         self.background_tasks.append(asyncio.create_task(self._cache_cleaner()))
 
-    @trace(service_name = "palpation - service", kind = SpanKind.SERVER)
-    @rate_limit(name = "analysis", tokens = 1)
+    @trace(service_name="palpation - service", kind=SpanKind.SERVER)
+    @rate_limit(name="analysis", tokens=1)
     async def analyze_pulse(
         self,
         patient_id: str,
@@ -249,17 +261,19 @@ class EnhancedPalpationService:
         """
         start_time = time.time()
         request_id = str(uuid.uuid4())
-        self.stats["total_requests"]+=1
+        self.stats["total_requests"] += 1
 
         # 检查缓存
         data_hash = self._hash_pulse_data(pulse_data)
-        cache_key = self._generate_cache_key("analysis", patient_id, data_hash, duration)
+        cache_key = self._generate_cache_key(
+            "analysis", patient_id, data_hash, duration
+        )
         cached_result = await self._get_from_cache(cache_key)
         if cached_result:
-            self.stats["cache_hits"]+=1
+            self.stats["cache_hits"] += 1
             return cached_result
 
-        self.stats["cache_misses"]+=1
+        self.stats["cache_misses"] += 1
 
         try:
             # 预处理脉象数据
@@ -268,14 +282,19 @@ class EnhancedPalpationService:
             # 评估数据质量
             quality_score = await self._assess_pulse_quality(processed_data, duration)
 
-            if quality_score < self.enhanced_config["pulse_processing"]["quality_threshold"]:
+            if (
+                quality_score
+                < self.enhanced_config["pulse_processing"]["quality_threshold"]
+            ):
                 logger.warning(f"脉象数据质量不足: {quality_score}")
                 # 尝试数据增强
                 processed_data = await self._enhance_pulse_data(processed_data)
 
             # 并行提取特征
             if self.enhanced_config["parallel_processing"]["enabled"]:
-                features = await self._parallel_feature_extraction(processed_data, sample_rate)
+                features = await self._parallel_feature_extraction(
+                    processed_data, sample_rate
+                )
             else:
                 features = await self._extract_features(processed_data, sample_rate)
 
@@ -297,21 +316,21 @@ class EnhancedPalpationService:
             processing_time_ms = (time.time() - start_time) * 1000
 
             result = PalpationResult(
-                request_id = request_id,
-                patient_id = patient_id,
-                pulse_characteristics = pulse_characteristics,
-                features = features,
-                syndrome_indicators = syndrome_indicators,
-                quality_score = quality_score,
-                processing_time_ms = processing_time_ms,
-                recommendations = recommendations,
+                request_id=request_id,
+                patient_id=patient_id,
+                pulse_characteristics=pulse_characteristics,
+                features=features,
+                syndrome_indicators=syndrome_indicators,
+                quality_score=quality_score,
+                processing_time_ms=processing_time_ms,
+                recommendations=recommendations,
             )
 
             # 缓存结果
             await self._set_to_cache(cache_key, result)
 
             # 更新统计
-            self.stats["successful_analyses"]+=1
+            self.stats["successful_analyses"] += 1
             self._update_stats(processing_time_ms)
 
             return result
@@ -356,26 +375,28 @@ class EnhancedPalpationService:
             start = max(0, idx - 3)
             end = min(len(data), idx + 4)
             neighbors = data[start:end]
-            neighbors = neighbors[neighbors!=data[idx]]  # 排除当前异常值
+            neighbors = neighbors[neighbors != data[idx]]  # 排除当前异常值
 
             if len(neighbors) > 0:
                 cleaned_data[idx] = np.mean(neighbors)
 
         return cleaned_data
 
-    async def _filter_pulse_signal(self, signal_data: np.ndarray, sample_rate: int) -> np.ndarray:
+    async def _filter_pulse_signal(
+        self, signal_data: np.ndarray, sample_rate: int
+    ) -> np.ndarray:
         """滤波处理脉象信号"""
         config = self.enhanced_config["pulse_processing"]["filtering"]
 
         # 高通滤波（去除基线漂移）
         nyquist = sample_rate / 2
         high_cutoff = config["highpass_freq"] / nyquist
-        b_high, a_high = signal.butter(4, high_cutoff, btype = "high")
+        b_high, a_high = signal.butter(4, high_cutoff, btype="high")
         filtered_signal = signal.filtfilt(b_high, a_high, signal_data)
 
         # 低通滤波（去除高频噪声）
         low_cutoff = config["lowpass_freq"] / nyquist
-        b_low, a_low = signal.butter(4, low_cutoff, btype = "low")
+        b_low, a_low = signal.butter(4, low_cutoff, btype="low")
         filtered_signal = signal.filtfilt(b_low, a_low, filtered_signal)
 
         # 陷波滤波（去除工频干扰）
@@ -386,7 +407,9 @@ class EnhancedPalpationService:
 
         return filtered_signal
 
-    async def _assess_pulse_quality(self, pulse_data: np.ndarray, duration: float) -> float:
+    async def _assess_pulse_quality(
+        self, pulse_data: np.ndarray, duration: float
+    ) -> float:
         """评估脉象数据质量"""
         quality_factors = []
 
@@ -425,9 +448,9 @@ class EnhancedPalpationService:
         for peak in peaks:
             start = max(0, peak - 50)
             end = min(len(pulse_data), peak + 50)
-            signal_power+=np.sum(pulse_data[start:end]**2)
+            signal_power += np.sum(pulse_data[start:end] ** 2)
 
-        signal_power/=len(peaks)
+        signal_power /= len(peaks)
 
         # 计算噪声功率（谷值区域）
         noise_power = 0
@@ -435,10 +458,10 @@ class EnhancedPalpationService:
             valley_start = peaks[i] + 25
             valley_end = peaks[i + 1] - 25
             if valley_end > valley_start:
-                noise_power+=np.sum(pulse_data[valley_start:valley_end]**2)
+                noise_power += np.sum(pulse_data[valley_start:valley_end] ** 2)
 
         if len(peaks) > 1:
-            noise_power/=len(peaks) - 1
+            noise_power /= len(peaks) - 1
 
         # 计算SNR
         if noise_power > 0:
@@ -457,14 +480,16 @@ class EnhancedPalpationService:
 
         # 计算平均心率
         intervals = np.diff(peaks)
-        if len(intervals)==0:
+        if len(intervals) == 0:
             return 0.0
 
         mean_interval = np.mean(intervals)
         std_interval = np.std(intervals)
 
         # 检测异常间隔
-        normal_intervals = intervals[np.abs(intervals - mean_interval) < 2 * std_interval]
+        normal_intervals = intervals[
+            np.abs(intervals - mean_interval) < 2 * std_interval
+        ]
         detection_rate = len(normal_intervals) / len(intervals)
 
         return detection_rate
@@ -475,11 +500,11 @@ class EnhancedPalpationService:
 
         # 自适应滤波
         # 使用Savitzky - Golay滤波平滑信号
-        window_length = min(51, len(enhanced) //10)
-        if window_length % 2==0:
-            window_length+=1
+        window_length = min(51, len(enhanced) // 10)
+        if window_length % 2 == 0:
+            window_length += 1
 
-        if window_length >=3:
+        if window_length >= 3:
             enhanced = signal.savgol_filter(enhanced, window_length, 3)
 
         # 基线校正
@@ -501,21 +526,27 @@ class EnhancedPalpationService:
 
         # 时域特征
         for feature_type in feature_categories["time_domain"]:
-            task = self._extract_time_domain_feature(pulse_data, sample_rate, feature_type)
+            task = self._extract_time_domain_feature(
+                pulse_data, sample_rate, feature_type
+            )
             tasks.append(task)
 
         # 频域特征
         for feature_type in feature_categories["frequency_domain"]:
-            task = self._extract_frequency_domain_feature(pulse_data, sample_rate, feature_type)
+            task = self._extract_frequency_domain_feature(
+                pulse_data, sample_rate, feature_type
+            )
             tasks.append(task)
 
         # 形态学特征
         for feature_type in feature_categories["morphology"]:
-            task = self._extract_morphology_feature(pulse_data, sample_rate, feature_type)
+            task = self._extract_morphology_feature(
+                pulse_data, sample_rate, feature_type
+            )
             tasks.append(task)
 
         # 并行执行
-        feature_results = await asyncio.gather( * tasks, return_exceptions = True)
+        feature_results = await asyncio.gather(*tasks, return_exceptions=True)
 
         # 收集有效结果
         features = []
@@ -536,13 +567,19 @@ class EnhancedPalpationService:
         features = []
 
         # 时域特征
-        features.extend(await self._extract_time_domain_features(pulse_data, sample_rate))
+        features.extend(
+            await self._extract_time_domain_features(pulse_data, sample_rate)
+        )
 
         # 频域特征
-        features.extend(await self._extract_frequency_domain_features(pulse_data, sample_rate))
+        features.extend(
+            await self._extract_frequency_domain_features(pulse_data, sample_rate)
+        )
 
         # 形态学特征
-        features.extend(await self._extract_morphology_features(pulse_data, sample_rate))
+        features.extend(
+            await self._extract_morphology_features(pulse_data, sample_rate)
+        )
 
         return features
 
@@ -554,18 +591,24 @@ class EnhancedPalpationService:
 
         # 心率分析
         heart_rate = await self._calculate_heart_rate(pulse_data, sample_rate)
-        features.append(PulseFeature(feature_type = "heart_rate", value = heart_rate, confidence = 0.90))
+        features.append(
+            PulseFeature(feature_type="heart_rate", value=heart_rate, confidence=0.90)
+        )
 
         # 心率变异性
         hrv = await self._calculate_hrv(pulse_data, sample_rate)
         features.append(
-            PulseFeature(feature_type = "heart_rate_variability", value = hrv, confidence = 0.85)
+            PulseFeature(
+                feature_type="heart_rate_variability", value=hrv, confidence=0.85
+            )
         )
 
         # 脉搏幅度
         amplitude_stats = await self._calculate_amplitude_stats(pulse_data)
         features.append(
-            PulseFeature(feature_type = "pulse_amplitude", value = amplitude_stats, confidence = 0.95)
+            PulseFeature(
+                feature_type="pulse_amplitude", value=amplitude_stats, confidence=0.95
+            )
         )
 
         return features
@@ -579,13 +622,19 @@ class EnhancedPalpationService:
         # 功率谱分析
         power_spectrum = await self._calculate_power_spectrum(pulse_data, sample_rate)
         features.append(
-            PulseFeature(feature_type = "power_spectrum", value = power_spectrum, confidence = 0.85)
+            PulseFeature(
+                feature_type="power_spectrum", value=power_spectrum, confidence=0.85
+            )
         )
 
         # 主频分析
-        dominant_freq = await self._calculate_dominant_frequency(pulse_data, sample_rate)
+        dominant_freq = await self._calculate_dominant_frequency(
+            pulse_data, sample_rate
+        )
         features.append(
-            PulseFeature(feature_type = "dominant_frequency", value = dominant_freq, confidence = 0.80)
+            PulseFeature(
+                feature_type="dominant_frequency", value=dominant_freq, confidence=0.80
+            )
         )
 
         return features
@@ -599,17 +648,19 @@ class EnhancedPalpationService:
         # 脉宽分析
         pulse_width = await self._calculate_pulse_width(pulse_data, sample_rate)
         features.append(
-            PulseFeature(feature_type = "pulse_width", value = pulse_width, confidence = 0.85)
+            PulseFeature(feature_type="pulse_width", value=pulse_width, confidence=0.85)
         )
 
         # 上升时间
         rise_time = await self._calculate_rise_time(pulse_data, sample_rate)
-        features.append(PulseFeature(feature_type = "rise_time", value = rise_time, confidence = 0.80))
+        features.append(
+            PulseFeature(feature_type="rise_time", value=rise_time, confidence=0.80)
+        )
 
         # 形状指数
         shape_index = await self._calculate_shape_index(pulse_data)
         features.append(
-            PulseFeature(feature_type = "shape_index", value = shape_index, confidence = 0.75)
+            PulseFeature(feature_type="shape_index", value=shape_index, confidence=0.75)
         )
 
         return features
@@ -618,15 +669,21 @@ class EnhancedPalpationService:
         self, pulse_data: np.ndarray, sample_rate: int, feature_type: str
     ) -> list[PulseFeature]:
         """提取单个时域特征"""
-        if feature_type=="heart_rate":
+        if feature_type == "heart_rate":
             value = await self._calculate_heart_rate(pulse_data, sample_rate)
-            return [PulseFeature(feature_type = feature_type, value = value, confidence = 0.90)]
-        elif feature_type=="hrv":
+            return [
+                PulseFeature(feature_type=feature_type, value=value, confidence=0.90)
+            ]
+        elif feature_type == "hrv":
             value = await self._calculate_hrv(pulse_data, sample_rate)
-            return [PulseFeature(feature_type = feature_type, value = value, confidence = 0.85)]
-        elif feature_type=="amplitude":
+            return [
+                PulseFeature(feature_type=feature_type, value=value, confidence=0.85)
+            ]
+        elif feature_type == "amplitude":
             value = await self._calculate_amplitude_stats(pulse_data)
-            return [PulseFeature(feature_type = feature_type, value = value, confidence = 0.95)]
+            return [
+                PulseFeature(feature_type=feature_type, value=value, confidence=0.95)
+            ]
 
         return []
 
@@ -634,12 +691,16 @@ class EnhancedPalpationService:
         self, pulse_data: np.ndarray, sample_rate: int, feature_type: str
     ) -> list[PulseFeature]:
         """提取单个频域特征"""
-        if feature_type=="power_spectrum":
+        if feature_type == "power_spectrum":
             value = await self._calculate_power_spectrum(pulse_data, sample_rate)
-            return [PulseFeature(feature_type = feature_type, value = value, confidence = 0.85)]
-        elif feature_type=="dominant_frequency":
+            return [
+                PulseFeature(feature_type=feature_type, value=value, confidence=0.85)
+            ]
+        elif feature_type == "dominant_frequency":
             value = await self._calculate_dominant_frequency(pulse_data, sample_rate)
-            return [PulseFeature(feature_type = feature_type, value = value, confidence = 0.80)]
+            return [
+                PulseFeature(feature_type=feature_type, value=value, confidence=0.80)
+            ]
 
         return []
 
@@ -647,15 +708,21 @@ class EnhancedPalpationService:
         self, pulse_data: np.ndarray, sample_rate: int, feature_type: str
     ) -> list[PulseFeature]:
         """提取单个形态学特征"""
-        if feature_type=="pulse_width":
+        if feature_type == "pulse_width":
             value = await self._calculate_pulse_width(pulse_data, sample_rate)
-            return [PulseFeature(feature_type = feature_type, value = value, confidence = 0.85)]
-        elif feature_type=="rise_time":
+            return [
+                PulseFeature(feature_type=feature_type, value=value, confidence=0.85)
+            ]
+        elif feature_type == "rise_time":
             value = await self._calculate_rise_time(pulse_data, sample_rate)
-            return [PulseFeature(feature_type = feature_type, value = value, confidence = 0.80)]
-        elif feature_type=="shape_index":
+            return [
+                PulseFeature(feature_type=feature_type, value=value, confidence=0.80)
+            ]
+        elif feature_type == "shape_index":
             value = await self._calculate_shape_index(pulse_data)
-            return [PulseFeature(feature_type = feature_type, value = value, confidence = 0.75)]
+            return [
+                PulseFeature(feature_type=feature_type, value=value, confidence=0.75)
+            ]
 
         return []
 
@@ -667,14 +734,16 @@ class EnhancedPalpationService:
         # 使用scipy的find_peaks函数
         peaks, _ = signal.find_peaks(
             pulse_data,
-            height = config["height_threshold"] * np.max(pulse_data),
-            distance = int(config["distance_threshold"] * 1000),  # 转换为样本数
-            prominence = config["prominence"] * np.max(pulse_data),
+            height=config["height_threshold"] * np.max(pulse_data),
+            distance=int(config["distance_threshold"] * 1000),  # 转换为样本数
+            prominence=config["prominence"] * np.max(pulse_data),
         )
 
         return peaks
 
-    async def _calculate_heart_rate(self, pulse_data: np.ndarray, sample_rate: int) -> float:
+    async def _calculate_heart_rate(
+        self, pulse_data: np.ndarray, sample_rate: int
+    ) -> float:
         """计算心率"""
         peaks = await self._detect_pulse_peaks(pulse_data)
 
@@ -690,7 +759,9 @@ class EnhancedPalpationService:
 
         return heart_rate
 
-    async def _calculate_hrv(self, pulse_data: np.ndarray, sample_rate: int) -> dict[str, float]:
+    async def _calculate_hrv(
+        self, pulse_data: np.ndarray, sample_rate: int
+    ) -> dict[str, float]:
         """计算心率变异性"""
         peaks = await self._detect_pulse_peaks(pulse_data)
 
@@ -712,7 +783,9 @@ class EnhancedPalpationService:
 
         return {"rmssd": float(rmssd), "sdnn": float(sdnn), "pnn50": float(pnn50)}
 
-    async def _calculate_amplitude_stats(self, pulse_data: np.ndarray) -> dict[str, float]:
+    async def _calculate_amplitude_stats(
+        self, pulse_data: np.ndarray
+    ) -> dict[str, float]:
         """计算幅度统计特征"""
         return {
             "mean": float(np.mean(pulse_data)),
@@ -727,7 +800,9 @@ class EnhancedPalpationService:
     ) -> dict[str, float]:
         """计算功率谱"""
         # 计算功率谱密度
-        freqs, psd = signal.welch(pulse_data, sample_rate, nperseg = min(256, len(pulse_data) //4))
+        freqs, psd = signal.welch(
+            pulse_data, sample_rate, nperseg=min(256, len(pulse_data) // 4)
+        )
 
         # 定义频段
         vlf_band = (0.003, 0.04)  # 极低频
@@ -735,9 +810,9 @@ class EnhancedPalpationService:
         hf_band = (0.15, 0.4)  # 高频
 
         # 计算各频段功率
-        vlf_power = np.trapz(psd[(freqs >=vlf_band[0]) & (freqs < vlf_band[1])])
-        lf_power = np.trapz(psd[(freqs >=lf_band[0]) & (freqs < lf_band[1])])
-        hf_power = np.trapz(psd[(freqs >=hf_band[0]) & (freqs < hf_band[1])])
+        vlf_power = np.trapz(psd[(freqs >= vlf_band[0]) & (freqs < vlf_band[1])])
+        lf_power = np.trapz(psd[(freqs >= lf_band[0]) & (freqs < lf_band[1])])
+        hf_power = np.trapz(psd[(freqs >= hf_band[0]) & (freqs < hf_band[1])])
 
         total_power = vlf_power + lf_power + hf_power
 
@@ -758,8 +833,8 @@ class EnhancedPalpationService:
         freqs = np.fft.fftfreq(len(pulse_data), 1 / sample_rate)
 
         # 只考虑正频率
-        positive_freqs = freqs[: len(freqs) //2]
-        magnitude = np.abs(fft_result[: len(fft_result) //2])
+        positive_freqs = freqs[: len(freqs) // 2]
+        magnitude = np.abs(fft_result[: len(fft_result) // 2])
 
         # 找到最大幅值对应的频率
         dominant_freq_idx = np.argmax(magnitude)
@@ -767,11 +842,13 @@ class EnhancedPalpationService:
 
         return float(dominant_freq)
 
-    async def _calculate_pulse_width(self, pulse_data: np.ndarray, sample_rate: int) -> float:
+    async def _calculate_pulse_width(
+        self, pulse_data: np.ndarray, sample_rate: int
+    ) -> float:
         """计算脉宽"""
         peaks = await self._detect_pulse_peaks(pulse_data)
 
-        if len(peaks)==0:
+        if len(peaks) == 0:
             return 0.0
 
         widths = []
@@ -783,23 +860,27 @@ class EnhancedPalpationService:
             # 向左搜索
             left_idx = peak
             while left_idx > 0 and pulse_data[left_idx] > half_height:
-                left_idx-=1
+                left_idx -= 1
 
             # 向右搜索
             right_idx = peak
-            while right_idx < len(pulse_data) - 1 and pulse_data[right_idx] > half_height:
-                right_idx+=1
+            while (
+                right_idx < len(pulse_data) - 1 and pulse_data[right_idx] > half_height
+            ):
+                right_idx += 1
 
             width = (right_idx - left_idx) / sample_rate
             widths.append(width)
 
         return float(np.mean(widths)) if widths else 0.0
 
-    async def _calculate_rise_time(self, pulse_data: np.ndarray, sample_rate: int) -> float:
+    async def _calculate_rise_time(
+        self, pulse_data: np.ndarray, sample_rate: int
+    ) -> float:
         """计算上升时间"""
         peaks = await self._detect_pulse_peaks(pulse_data)
 
-        if len(peaks)==0:
+        if len(peaks) == 0:
             return 0.0
 
         rise_times = []
@@ -812,12 +893,12 @@ class EnhancedPalpationService:
             # 向左搜索10%位置
             left_idx = peak
             while left_idx > 0 and pulse_data[left_idx] > ten_percent:
-                left_idx-=1
+                left_idx -= 1
 
             # 从10%位置向右搜索90%位置
             ninety_idx = left_idx
             while ninety_idx < peak and pulse_data[ninety_idx] < ninety_percent:
-                ninety_idx+=1
+                ninety_idx += 1
 
             rise_time = (ninety_idx - left_idx) / sample_rate
             rise_times.append(rise_time)
@@ -842,7 +923,9 @@ class EnhancedPalpationService:
         characteristics = {}
 
         # 提取心率特征
-        heart_rate_feature = next((f for f in features if f.feature_type=="heart_rate"), None)
+        heart_rate_feature = next(
+            (f for f in features if f.feature_type == "heart_rate"), None
+        )
         if heart_rate_feature:
             heart_rate = heart_rate_feature.value
             if heart_rate < 60:
@@ -853,7 +936,9 @@ class EnhancedPalpationService:
                 characteristics["pulse_rate"] = PulseRate.NORMAL.value
 
         # 分析脉力
-        amplitude_feature = next((f for f in features if f.feature_type=="pulse_amplitude"), None)
+        amplitude_feature = next(
+            (f for f in features if f.feature_type == "pulse_amplitude"), None
+        )
         if amplitude_feature:
             amplitude_range = amplitude_feature.value.get("range", 0)
             if amplitude_range < 0.3:
@@ -865,7 +950,7 @@ class EnhancedPalpationService:
 
         # 分析脉律
         hrv_feature = next(
-            (f for f in features if f.feature_type=="heart_rate_variability"), None
+            (f for f in features if f.feature_type == "heart_rate_variability"), None
         )
         if hrv_feature:
             rmssd = hrv_feature.value.get("rmssd", 0)
@@ -887,8 +972,12 @@ class EnhancedPalpationService:
                 characteristics["pulse_position"] = PulsePosition.MIDDLE.value
 
         # 分析脉形
-        shape_feature = next((f for f in features if f.feature_type=="shape_index"), None)
-        width_feature = next((f for f in features if f.feature_type=="pulse_width"), None)
+        shape_feature = next(
+            (f for f in features if f.feature_type == "shape_index"), None
+        )
+        width_feature = next(
+            (f for f in features if f.feature_type == "pulse_width"), None
+        )
 
         if shape_feature and width_feature:
             shape_index = shape_feature.value
@@ -918,53 +1007,69 @@ class EnhancedPalpationService:
         pulse_shape = pulse_characteristics.get("pulse_shape")
 
         # 气虚证候
-        if pulse_strength==PulseStrength.WEAK.value or pulse_rate==PulseRate.SLOW.value:
+        if (
+            pulse_strength == PulseStrength.WEAK.value
+            or pulse_rate == PulseRate.SLOW.value
+        ):
             indicators["气虚"] = indicators.get("气虚", 0) + 0.3
 
         # 血虚证候
-        if pulse_shape==PulseShape.THIN.value or pulse_strength==PulseStrength.WEAK.value:
+        if (
+            pulse_shape == PulseShape.THIN.value
+            or pulse_strength == PulseStrength.WEAK.value
+        ):
             indicators["血虚"] = indicators.get("血虚", 0) + 0.3
 
         # 阳虚证候
-        if pulse_rate==PulseRate.SLOW.value and pulse_position==PulsePosition.DEEP.value:
+        if (
+            pulse_rate == PulseRate.SLOW.value
+            and pulse_position == PulsePosition.DEEP.value
+        ):
             indicators["阳虚"] = indicators.get("阳虚", 0) + 0.4
 
         # 阴虚证候
-        if pulse_rate==PulseRate.RAPID.value and pulse_shape==PulseShape.THIN.value:
+        if pulse_rate == PulseRate.RAPID.value and pulse_shape == PulseShape.THIN.value:
             indicators["阴虚"] = indicators.get("阴虚", 0) + 0.4
 
         # 实热证候
-        if pulse_rate==PulseRate.RAPID.value and pulse_strength==PulseStrength.STRONG.value:
+        if (
+            pulse_rate == PulseRate.RAPID.value
+            and pulse_strength == PulseStrength.STRONG.value
+        ):
             indicators["实热"] = indicators.get("实热", 0) + 0.4
 
         # 痰湿证候
-        if pulse_shape==PulseShape.SLIPPERY.value:
+        if pulse_shape == PulseShape.SLIPPERY.value:
             indicators["痰湿"] = indicators.get("痰湿", 0) + 0.3
 
         # 血瘀证候
-        if pulse_shape==PulseShape.ROUGH.value:
+        if pulse_shape == PulseShape.ROUGH.value:
             indicators["血瘀"] = indicators.get("血瘀", 0) + 0.3
 
         # 归一化
         total = sum(indicators.values())
         if total > 0:
             for key in indicators:
-                indicators[key]/=total
+                indicators[key] /= total
 
         return indicators
 
     async def _generate_recommendations(
-        self, syndrome_indicators: dict[str, float], pulse_characteristics: dict[str, Any]
+        self,
+        syndrome_indicators: dict[str, float],
+        pulse_characteristics: dict[str, Any],
     ) -> list[str]:
         """生成建议"""
         recommendations = []
 
         # 基于证候指标生成建议
         primary_syndrome = (
-            max(syndrome_indicators.items(), key = lambda x: x[1])[0] if syndrome_indicators else None
+            max(syndrome_indicators.items(), key=lambda x: x[1])[0]
+            if syndrome_indicators
+            else None
         )
 
-        if primary_syndrome=="气虚":
+        if primary_syndrome == "气虚":
             recommendations.extend(
                 [
                     "建议适当休息，避免过度劳累",
@@ -972,7 +1077,7 @@ class EnhancedPalpationService:
                     "适当食用补气食物如人参、黄芪、山药等",
                 ]
             )
-        elif primary_syndrome=="血虚":
+        elif primary_syndrome == "血虚":
             recommendations.extend(
                 [
                     "保证充足的睡眠，避免熬夜",
@@ -980,11 +1085,15 @@ class EnhancedPalpationService:
                     "避免过度用眼和思虑",
                 ]
             )
-        elif primary_syndrome=="阳虚":
+        elif primary_syndrome == "阳虚":
             recommendations.extend(
-                ["注意保暖，避免受寒", "适当食用温阳食物如羊肉、生姜、肉桂等", "进行适度的有氧运动"]
+                [
+                    "注意保暖，避免受寒",
+                    "适当食用温阳食物如羊肉、生姜、肉桂等",
+                    "进行适度的有氧运动",
+                ]
             )
-        elif primary_syndrome=="阴虚":
+        elif primary_syndrome == "阴虚":
             recommendations.extend(
                 [
                     "多饮水，保持充足的水分",
@@ -992,7 +1101,7 @@ class EnhancedPalpationService:
                     "避免熬夜和辛辣刺激食物",
                 ]
             )
-        elif primary_syndrome=="实热":
+        elif primary_syndrome == "实热":
             recommendations.extend(
                 [
                     "饮食宜清淡，避免辛辣油腻",
@@ -1000,7 +1109,7 @@ class EnhancedPalpationService:
                     "保持心情平和，避免情绪激动",
                 ]
             )
-        elif primary_syndrome=="痰湿":
+        elif primary_syndrome == "痰湿":
             recommendations.extend(
                 [
                     "饮食清淡，减少油腻甜腻食物",
@@ -1008,7 +1117,7 @@ class EnhancedPalpationService:
                     "可食用化痰食物如陈皮、茯苓、薏米等",
                 ]
             )
-        elif primary_syndrome=="血瘀":
+        elif primary_syndrome == "血瘀":
             recommendations.extend(
                 [
                     "适当运动，促进血液循环",
@@ -1019,9 +1128,9 @@ class EnhancedPalpationService:
 
         # 基于脉象特征的通用建议
         pulse_rate = pulse_characteristics.get("pulse_rate")
-        if pulse_rate==PulseRate.RAPID.value:
+        if pulse_rate == PulseRate.RAPID.value:
             recommendations.append("注意休息，避免过度兴奋")
-        elif pulse_rate==PulseRate.SLOW.value:
+        elif pulse_rate == PulseRate.SLOW.value:
             recommendations.append("适当增加运动量，促进血液循环")
 
         # 添加通用建议
@@ -1035,11 +1144,13 @@ class EnhancedPalpationService:
         # 提取关键信息用于哈希
         data_str = ""
         for point in pulse_data[:100]:  # 只使用前100个点
-            data_str+=f"{point.amplitude:.3f},{point.pressure:.3f},"
+            data_str += f"{point.amplitude:.3f},{point.pressure:.3f},"
 
         return hashlib.md5(data_str.encode()).hexdigest()
 
-    async def batch_analyze(self, requests: list[PulseAnalysisRequest]) -> list[PalpationResult]:
+    async def batch_analyze(
+        self, requests: list[PulseAnalysisRequest]
+    ) -> list[PalpationResult]:
         """
         批量分析脉象数据
 
@@ -1054,15 +1165,15 @@ class EnhancedPalpationService:
             tasks = []
             for request in requests:
                 task = self.analyze_pulse(
-                    patient_id = request.patient_id,
-                    pulse_data = request.pulse_data,
-                    duration = request.duration,
-                    sample_rate = request.sample_rate,
-                    metadata = request.metadata,
+                    patient_id=request.patient_id,
+                    pulse_data=request.pulse_data,
+                    duration=request.duration,
+                    sample_rate=request.sample_rate,
+                    metadata=request.metadata,
                 )
                 tasks.append(task)
 
-            results = await asyncio.gather( * tasks, return_exceptions = True)
+            results = await asyncio.gather(*tasks, return_exceptions=True)
 
             # 过滤有效结果
             valid_results = []
@@ -1072,7 +1183,7 @@ class EnhancedPalpationService:
                 else:
                     logger.error(f"批量分析失败: {result}")
 
-            self.stats["batch_processed"]+=1
+            self.stats["batch_processed"] += 1
             return valid_results
         else:
             # 串行处理
@@ -1080,11 +1191,11 @@ class EnhancedPalpationService:
             for request in requests:
                 try:
                     result = await self.analyze_pulse(
-                        patient_id = request.patient_id,
-                        pulse_data = request.pulse_data,
-                        duration = request.duration,
-                        sample_rate = request.sample_rate,
-                        metadata = request.metadata,
+                        patient_id=request.patient_id,
+                        pulse_data=request.pulse_data,
+                        duration=request.duration,
+                        sample_rate=request.sample_rate,
+                        metadata=request.metadata,
                     )
                     results.append(result)
                 except Exception as e:
@@ -1100,14 +1211,17 @@ class EnhancedPalpationService:
                 deadline = time.time() + 2.0  # 2秒收集窗口
 
                 # 收集批次
-                while len(batch) < self.enhanced_config["parallel_processing"]["batch_size"]:
+                while (
+                    len(batch)
+                    < self.enhanced_config["parallel_processing"]["batch_size"]
+                ):
                     try:
                         remaining_time = deadline - time.time()
-                        if remaining_time <=0:
+                        if remaining_time <= 0:
                             break
 
                         request = await asyncio.wait_for(
-                            self.batch_queue.get(), timeout = remaining_time
+                            self.batch_queue.get(), timeout=remaining_time
                         )
                         batch.append(request)
                     except TimeoutError:
@@ -1146,8 +1260,8 @@ class EnhancedPalpationService:
                 max_size = self.enhanced_config["caching"]["max_cache_size"]
                 if len(self.cache) > max_size:
                     # 删除最旧的项
-                    items = sorted(self.cache.items(), key = lambda x: x[1][1])
-                    for key, _ in items[: len(items) //2]:
+                    items = sorted(self.cache.items(), key=lambda x: x[1][1])
+                    for key, _ in items[: len(items) // 2]:
                         del self.cache[key]
                     logger.info(f"缓存大小超限，清理了{len(items) //2}个项")
 
@@ -1171,29 +1285,32 @@ class EnhancedPalpationService:
 
         return None
 
-    async def _set_to_cache(self, key: str, value: Any, ttl_type: str = "analysis_result"):
+    async def _set_to_cache(
+        self, key: str, value: Any, ttl_type: str = "analysis_result"
+    ):
         """设置缓存"""
         if not self.enhanced_config["caching"]["enabled"]:
             return
 
         ttl = self.enhanced_config["caching"]["ttl_seconds"].get(ttl_type, 1800)
-        expire_time = datetime.now() + timedelta(seconds = ttl)
+        expire_time = datetime.now() + timedelta(seconds=ttl)
         self.cache[key] = (value, expire_time)
 
-    def _generate_cache_key(self, * args) -> str:
+    def _generate_cache_key(self, *args) -> str:
         """生成缓存键"""
-        key_data = json.dumps(args, sort_keys = True)
+        key_data = json.dumps(args, sort_keys=True)
         return hashlib.md5(key_data.encode()).hexdigest()
 
     def _update_stats(self, processing_time_ms: float):
         """更新统计信息"""
         # 更新平均处理时间
         alpha = 0.1
-        if self.stats["average_processing_time_ms"]==0:
+        if self.stats["average_processing_time_ms"] == 0:
             self.stats["average_processing_time_ms"] = processing_time_ms
         else:
             self.stats["average_processing_time_ms"] = (
-                alpha * processing_time_ms + (1 - alpha) * self.stats["average_processing_time_ms"]
+                alpha * processing_time_ms
+                + (1 - alpha) * self.stats["average_processing_time_ms"]
             )
 
     async def get_service_stats(self) -> dict[str, Any]:
@@ -1220,6 +1337,6 @@ class EnhancedPalpationService:
             task.cancel()
 
         # 等待任务完成
-        await asyncio.gather( * self.background_tasks, return_exceptions = True)
+        await asyncio.gather(*self.background_tasks, return_exceptions=True)
 
         logger.info("增强版切诊服务已关闭")

@@ -1,11 +1,11 @@
-from typing import Dict, List, Any, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 """
 __init__ - 索克生活项目模块
 """
 
 from .calculator import WuyunLiuqiCalculator
-from .data import WUYUN_DATA, LIUQI_DATA, YUNQI_DISEASE_MAP
+from .data import LIUQI_DATA, WUYUN_DATA, YUNQI_DISEASE_MAP
 
 """
 五运六气算法模块

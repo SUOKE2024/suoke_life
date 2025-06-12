@@ -1,12 +1,12 @@
-from typing import Dict, List, Any, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 """
 start_server - 索克生活项目模块
 """
 
-from cmd.server import serve
 import os
 import sys
+from cmd.server import serve
 
 #! / usr / bin / env python3
 
@@ -21,6 +21,6 @@ sys.path.insert(0, current_dir)
 
 # 导入并启动服务
 
-if __name__=="__main__":
+if __name__ == "__main__":
     print("正在启动问诊服务...")
     serve()

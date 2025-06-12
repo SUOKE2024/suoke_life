@@ -1,12 +1,13 @@
-from typing import Dict, List, Any, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 """
 run_dev - 索克生活项目模块
 """
 
-from look_service.cmd.server import main
-from pathlib import Path
 import sys
+from pathlib import Path
+
+from look_service.cmd.server import main
 
 #! / usr / bin / env python3
 """Development server runner for look service."""
@@ -17,7 +18,7 @@ project_root = Path(__file__).parent
 sys.path.insert(0, str(project_root))
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:

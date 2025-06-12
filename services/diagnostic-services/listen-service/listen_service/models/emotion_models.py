@@ -2,8 +2,8 @@
 emotion_models - 索克生活项目模块
 """
 
-from dataclasses import dataclass, field
 import datetime
+from dataclasses import dataclass, field
 from enum import Enum
 from typing import Dict, List
 
@@ -14,15 +14,14 @@ from typing import Dict, List
 """
 
 
-
 class EmotionType(Enum):
     """情绪类型"""
 
-    JOY = "joy"          # 喜
-    ANGER = "anger"      # 怒
+    JOY = "joy"  # 喜
+    ANGER = "anger"  # 怒
     SADNESS = "sadness"  # 悲
-    FEAR = "fear"        # 恐
-    SURPRISE = "surprise" # 惊
+    FEAR = "fear"  # 恐
+    SURPRISE = "surprise"  # 惊
     DISGUST = "disgust"  # 厌
     NEUTRAL = "neutral"  # 平静
 
@@ -46,7 +45,7 @@ class EmotionScore:
     confidence: float  # 0.0 - 1.0
     intensity: str  # "weak", "moderate", "strong"
     duration_seconds: float = 0.0
-    timestamp: datetime = field(default_factory = datetime.now)
+    timestamp: datetime = field(default_factory=datetime.now)
 
 
 @dataclass
@@ -61,7 +60,7 @@ class EmotionAnalysis:
     confidence: float
     analysis_duration_ms: float
     audio_features_used: List[str]
-    timestamp: datetime = field(default_factory = datetime.now)
+    timestamp: datetime = field(default_factory=datetime.now)
 
 
 @dataclass
@@ -74,8 +73,8 @@ class MoodState:
     stress_level: float  # 0.0 - 1.0
     emotional_balance: float  # 0.0 - 1.0
     mood_description: str
-    recommendations: List[str] = field(default_factory = list)
-    timestamp: datetime = field(default_factory = datetime.now)
+    recommendations: List[str] = field(default_factory=list)
+    timestamp: datetime = field(default_factory=datetime.now)
 
 
 @dataclass
@@ -88,7 +87,7 @@ class EmotionTrend:
     volatility: float  # 0.0 - 1.0
     pattern_detected: bool
     pattern_description: str = ""
-    created_at: datetime = field(default_factory = datetime.now)
+    created_at: datetime = field(default_factory=datetime.now)
 
 
 @dataclass
@@ -100,4 +99,4 @@ class EmotionalProfile:
     typical_mood_range: tuple[MoodLevel, MoodLevel]
     emotional_triggers: List[str]
     coping_strategies: List[str]
-    last_updated: datetime = field(default_factory = datetime.now)
+    last_updated: datetime = field(default_factory=datetime.now)
