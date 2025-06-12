@@ -1,4 +1,4 @@
-    from grpc._utilities import first_version_is_lower
+from grpc._utilities import first_version_is_lower
 
 from typing import Any, Dict, List, Optional, Union
 

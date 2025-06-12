@@ -1,4 +1,4 @@
-        from ...internal.domain.models import UrgencyLevel
+from ...internal.domain.models import UrgencyLevel
 
 from ...internal.infrastructure.container import (
     Any,
@@ -10,27 +10,22 @@ from ...internal.infrastructure.container import (
     HTTPException,
     JSONResponse,
     List,
-    None:,
     Optional,
     Path,
     Query,
     ResourceType,
-    """主函数,
-    -,
-    ->,
-    ...internal.infrastructure.models,
-    datetime,
-    def,
-    fastapi,
-    fastapi.responses,
-    from,
-    import,
-    logging,
-    main,
-    pydantic,
-    typing,
-    自动生成的最小可用版本""",
 )
+
+from ...internal.infrastructure.models import datetime
+import logging
+import fastapi
+import fastapi.responses
+import pydantic
+from typing import Dict, List, Optional, Any
+
+
+def main() -> None:
+    """主函数 - 自动生成的最小可用版本"""
     pass
 
 if __name__=="__main__":
