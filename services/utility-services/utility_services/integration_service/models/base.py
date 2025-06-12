@@ -1,4 +1,3 @@
-
 """
 base - 索克生活项目模块
 """
@@ -19,13 +18,14 @@ class BaseModel(Base):
 
     __abstract__ = True
 
-    id = Column(Integer, primary_key = True, index = True)
-    created_at = Column(DateTime, default = func.now(), nullable = False)
-    updated_at = Column(DateTime, default = func.now(), onupdate = func.now(), nullable = False)
+    id = Column(Integer, primary_key=True, index=True)
+    created_at = Column(DateTime, default=func.now(), nullable=False)
+    updated_at = Column(
+        DateTime, default=func.now(), onupdate=func.now(), nullable=False
+    )
 
     def to_dict(self) -> dict:
         """转换为字典"""
         return {
-            column.name: getattr(self, column.name)
-            for column in self.__table__.columns
+            column.name: getattr(self, column.name) for column in self.__table__.columns
         }

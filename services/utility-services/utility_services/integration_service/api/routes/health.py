@@ -1,4 +1,3 @@
-
 """
 health - 索克生活项目模块
 """
@@ -13,15 +12,15 @@ from pydantic import BaseModel
 
 router = APIRouter()
 
+
 class HealthResponse(BaseModel):
     """TODO: 添加文档字符串"""
+
     status: str
     message: str
 
-@router.get(" / ", response_model = HealthResponse)
+
+@router.get(" / ", response_model=HealthResponse)
 async def health_check() -> None:
     """健康检查端点"""
-    return HealthResponse(
-        status = "healthy",
-        message = "Service is running"
-    )
+    return HealthResponse(status="healthy", message="Service is running")
