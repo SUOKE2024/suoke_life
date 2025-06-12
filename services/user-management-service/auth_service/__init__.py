@@ -10,8 +10,4 @@ __version__ = "0.1.0"
 __author__ = "索克生活团队"
 
 # 导出主要类和函数
-__all__ = [
-    "AuthConfig",
-    "get_auth_config", 
-    "DEFAULT_CONFIG"
-] 
+__all__ = ["AuthConfig", "get_auth_config", "DEFAULT_CONFIG"]

@@ -13,27 +13,25 @@ __email__ = "song.xu@icloud.com"
 
 class Settings:
     """认证服务设置类"""
-    
+
     def __init__(self):
         self.jwt_secret = "suoke-life-secret-key"
         self.jwt_algorithm = "HS256"
         self.jwt_expire_hours = 24
         self.password_min_length = 8
         self.session_timeout = 30
-    
+
     def get_jwt_config(self) -> Dict[str, Any]:
         """获取JWT配置"""
         return {
             "secret": self.jwt_secret,
             "algorithm": self.jwt_algorithm,
-            "expire_hours": self.jwt_expire_hours
+            "expire_hours": self.jwt_expire_hours,
         }
-    
+
     def get_password_config(self) -> Dict[str, Any]:
         """获取密码配置"""
-        return {
-            "min_length": self.password_min_length
-        }
+        return {"min_length": self.password_min_length}
 
 
 # 导出主要类

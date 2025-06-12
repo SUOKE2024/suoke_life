@@ -13,7 +13,6 @@ from user_service.config import get_settings
 """缓存管理"""
 
 
-
 logger = logging.getLogger(__name__)
 
 # 全局Redis连接
@@ -30,10 +29,10 @@ async def init_cache() -> None:
         # 创建Redis连接
         redis_client = redis.from_url(
             settings.redis.url,
-            max_connections = settings.redis.max_connections,
-            retry_on_timeout = True,
-            socket_timeout = 5,
-            decode_responses = True
+            max_connections=settings.redis.max_connections,
+            retry_on_timeout=True,
+            socket_timeout=5,
+            decode_responses=True,
         )
 
         # 测试连接
@@ -91,19 +90,14 @@ class CacheManager:
             logger.error(f"获取缓存失败 {key}: {e}")
             return None
 
-    async def set(
-        self,
-        key: str,
-        value: Any,
-        ttl: Optional[int] = None
-    ) -> bool:
+    async def set(self, key: str, value: Any, ttl: Optional[int] = None) -> bool:
         """设置缓存值"""
         try:
             client = get_cache_client()
 
             # 序列化值
             if isinstance(value, (dict, list, tuple)):
-                serialized_value = json.dumps(value, ensure_ascii = False)
+                serialized_value = json.dumps(value, ensure_ascii=False)
             else:
                 serialized_value = str(value)
 
@@ -158,7 +152,7 @@ class CacheManager:
 
         except Exception as e:
             logger.error(f"获取缓存TTL失败 {key}: {e}")
-            return - 1
+            return -1
 
     async def increment(self, key: str, amount: int = 1) -> Optional[int]:
         """递增缓存值"""
@@ -203,9 +197,7 @@ class CacheManager:
             return {}
 
     async def set_many(
-        self,
-        mapping: dict[str, Any],
-        ttl: Optional[int] = None
+        self, mapping: dict[str, Any], ttl: Optional[int] = None
     ) -> bool:
         """批量设置缓存"""
         try:
@@ -215,7 +207,7 @@ class CacheManager:
             serialized_mapping = {}
             for key, value in mapping.items():
                 if isinstance(value, (dict, list, tuple)):
-                    serialized_mapping[key] = json.dumps(value, ensure_ascii = False)
+                    serialized_mapping[key] = json.dumps(value, ensure_ascii=False)
                 else:
                     serialized_mapping[key] = str(value)
 
@@ -241,7 +233,7 @@ class CacheManager:
             keys = await client.keys(pattern)
 
             if keys:
-                return await client.delete( * keys)
+                return await client.delete(*keys)
             return 0
 
         except Exception as e:

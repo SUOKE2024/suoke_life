@@ -39,15 +39,15 @@ class LoggingMiddleware(BaseHTTPMiddleware):
         # 记录请求信息
         logger.info(
             "请求开始",
-            extra = {
+            extra={
                 "request_id": request_id,
                 "method": request.method,
                 "url": str(request.url),
                 "client_ip": client_ip,
                 "user_agent": request.headers.get("user - agent", ""),
                 "content_type": request.headers.get("content - type", ""),
-                "content_length": request.headers.get("content - length", 0)
-            }
+                "content_length": request.headers.get("content - length", 0),
+            },
         )
 
         try:
@@ -60,7 +60,7 @@ class LoggingMiddleware(BaseHTTPMiddleware):
             # 记录响应信息
             logger.info(
                 "请求完成",
-                extra = {
+                extra={
                     "request_id": request_id,
                     "method": request.method,
                     "url": str(request.url),
@@ -68,8 +68,8 @@ class LoggingMiddleware(BaseHTTPMiddleware):
                     "process_time": round(process_time, 4),
                     "client_ip": client_ip,
                     "user_id": getattr(request.state, "user_id", None),
-                    "response_size": response.headers.get("content - length", 0)
-                }
+                    "response_size": response.headers.get("content - length", 0),
+                },
             )
 
             # 添加响应头
@@ -85,7 +85,7 @@ class LoggingMiddleware(BaseHTTPMiddleware):
             # 记录错误信息
             logger.error(
                 "请求处理失败",
-                extra = {
+                extra={
                     "request_id": request_id,
                     "method": request.method,
                     "url": str(request.url),
@@ -93,9 +93,9 @@ class LoggingMiddleware(BaseHTTPMiddleware):
                     "error_type": type(e).__name__,
                     "process_time": round(process_time, 4),
                     "client_ip": client_ip,
-                    "user_id": getattr(request.state, "user_id", None)
+                    "user_id": getattr(request.state, "user_id", None),
                 },
-                exc_info = True
+                exc_info=True,
             )
 
             # 重新抛出异常

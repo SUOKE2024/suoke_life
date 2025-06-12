@@ -26,8 +26,8 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         # 限流配置
         self.rate_limits = {
             "default": (100, 60),  # 每分钟100次请求
-            "auth": (10, 60),      # 认证相关每分钟10次
-            "upload": (5, 60),     # 上传相关每分钟5次
+            "auth": (10, 60),  # 认证相关每分钟10次
+            "upload": (5, 60),  # 上传相关每分钟5次
         }
 
         # 存储客户端请求记录
@@ -45,28 +45,30 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
 
         # 获取限流规则
         limit_key = self._get_limit_key(request)
-        max_requests, window_seconds = self.rate_limits.get(limit_key, self.rate_limits["default"])
+        max_requests, window_seconds = self.rate_limits.get(
+            limit_key, self.rate_limits["default"]
+        )
 
         # 检查限流
         if self._is_rate_limited(client_id, max_requests, window_seconds):
             logger.warning(
                 f"客户端 {client_id} 触发限流",
-                extra = {
+                extra={
                     "client_id": client_id,
                     "path": request.url.path,
                     "limit_key": limit_key,
                     "max_requests": max_requests,
-                    "window_seconds": window_seconds
-                }
+                    "window_seconds": window_seconds,
+                },
             )
 
             raise HTTPException(
-                status_code = 429,
-                detail = {
+                status_code=429,
+                detail={
                     "error": "RATE_LIMIT_EXCEEDED",
                     "message": "请求过于频繁，请稍后再试",
-                    "retry_after": window_seconds
-                }
+                    "retry_after": window_seconds,
+                },
             )
 
         # 记录请求
@@ -82,7 +84,9 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         remaining = max_requests - len(self.client_requests[client_id])
         response.headers["X - RateLimit - Limit"] = str(max_requests)
         response.headers["X - RateLimit - Remaining"] = str(max(0, remaining))
-        response.headers["X - RateLimit - Reset"] = str(int(time.time() + window_seconds))
+        response.headers["X - RateLimit - Reset"] = str(
+            int(time.time() + window_seconds)
+        )
 
         return response
 
@@ -121,16 +125,23 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         path = request.url.path.lower()
 
         # 认证相关路径
-        if any(auth_path in path for auth_path in [" / auth", " / login", " / register", " / password"]):
+        if any(
+            auth_path in path
+            for auth_path in [" / auth", " / login", " / register", " / password"]
+        ):
             return "auth"
 
         # 上传相关路径
-        if any(upload_path in path for upload_path in [" / upload", " / file", " / image"]):
+        if any(
+            upload_path in path for upload_path in [" / upload", " / file", " / image"]
+        ):
             return "upload"
 
         return "default"
 
-    def _is_rate_limited(self, client_id: str, max_requests: int, window_seconds: int) -> bool:
+    def _is_rate_limited(
+        self, client_id: str, max_requests: int, window_seconds: int
+    ) -> bool:
         """检查是否触发限流"""
 
         current_time = time.time()
@@ -144,7 +155,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
             requests.popleft()
 
         # 检查是否超过限制
-        return len(requests)>=max_requests
+        return len(requests) >= max_requests
 
     def _record_request(self, client_id: str) -> None:
         """记录请求"""

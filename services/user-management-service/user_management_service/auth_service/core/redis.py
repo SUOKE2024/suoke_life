@@ -9,11 +9,9 @@ from typing import Any, Dict, Optional, Union
 
 import redis.asyncio as redis
 import structlog
-
 from auth_service.config.settings import RedisSettings, get_settings
 
 """Redis核心模块"""
-
 
 
 logger = structlog.get_logger()
@@ -33,18 +31,18 @@ class RedisManager:
         try:
             self._pool = redis.ConnectionPool.from_url(
                 self.settings.url,
-                max_connections = self.settings.max_connections,
-                retry_on_timeout = True,
-                health_check_interval = 30
+                max_connections=self.settings.max_connections,
+                retry_on_timeout=True,
+                health_check_interval=30,
             )
-            self._redis = redis.Redis(connection_pool = self._pool)
+            self._redis = redis.Redis(connection_pool=self._pool)
 
             # 测试连接
             await self._redis.ping()
-            logger.info("Redis connected successfully", url = self.settings.url)
+            logger.info("Redis connected successfully", url=self.settings.url)
 
         except Exception as e:
-            logger.error("Failed to connect to Redis", error = str(e))
+            logger.error("Failed to connect to Redis", error=str(e))
             raise
 
     async def disconnect(self) -> None:
@@ -67,41 +65,38 @@ class RedisManager:
         try:
             return await self.redis.get(key)
         except Exception as e:
-            logger.error("Redis get failed", key = key, error = str(e))
+            logger.error("Redis get failed", key=key, error=str(e))
             return None
 
     async def set(
         self,
         key: str,
         value: Union[str, bytes],
-        ex: Optional[Union[int, timedelta]] = None
+        ex: Optional[Union[int, timedelta]] = None,
     ) -> bool:
         """设置值"""
         try:
-            return await self.redis.set(key, value, ex = ex)
+            return await self.redis.set(key, value, ex=ex)
         except Exception as e:
-            logger.error("Redis set failed", key = key, error = str(e))
+            logger.error("Redis set failed", key=key, error=str(e))
             return False
 
     async def setex(
-        self,
-        key: str,
-        time: Union[int, timedelta],
-        value: Union[str, bytes]
+        self, key: str, time: Union[int, timedelta], value: Union[str, bytes]
     ) -> bool:
         """设置值并指定过期时间"""
         try:
             return await self.redis.setex(key, time, value)
         except Exception as e:
-            logger.error("Redis setex failed", key = key, error = str(e))
+            logger.error("Redis setex failed", key=key, error=str(e))
             return False
 
-    async def delete(self, * keys: str) -> int:
+    async def delete(self, *keys: str) -> int:
         """删除键"""
         try:
-            return await self.redis.delete( * keys)
+            return await self.redis.delete(*keys)
         except Exception as e:
-            logger.error("Redis delete failed", keys = keys, error = str(e))
+            logger.error("Redis delete failed", keys=keys, error=str(e))
             return 0
 
     async def exists(self, key: str) -> bool:
@@ -109,7 +104,7 @@ class RedisManager:
         try:
             return bool(await self.redis.exists(key))
         except Exception as e:
-            logger.error("Redis exists failed", key = key, error = str(e))
+            logger.error("Redis exists failed", key=key, error=str(e))
             return False
 
     async def expire(self, key: str, time: Union[int, timedelta]) -> bool:
@@ -117,7 +112,7 @@ class RedisManager:
         try:
             return await self.redis.expire(key, time)
         except Exception as e:
-            logger.error("Redis expire failed", key = key, error = str(e))
+            logger.error("Redis expire failed", key=key, error=str(e))
             return False
 
     async def ttl(self, key: str) -> int:
@@ -125,15 +120,15 @@ class RedisManager:
         try:
             return await self.redis.ttl(key)
         except Exception as e:
-            logger.error("Redis ttl failed", key = key, error = str(e))
-            return - 1
+            logger.error("Redis ttl failed", key=key, error=str(e))
+            return -1
 
     async def incr(self, key: str, amount: int = 1) -> Optional[int]:
         """递增计数器"""
         try:
             return await self.redis.incr(key, amount)
         except Exception as e:
-            logger.error("Redis incr failed", key = key, error = str(e))
+            logger.error("Redis incr failed", key=key, error=str(e))
             return None
 
     async def decr(self, key: str, amount: int = 1) -> Optional[int]:
@@ -141,7 +136,7 @@ class RedisManager:
         try:
             return await self.redis.decr(key, amount)
         except Exception as e:
-            logger.error("Redis decr failed", key = key, error = str(e))
+            logger.error("Redis decr failed", key=key, error=str(e))
             return None
 
 
@@ -160,21 +155,18 @@ class CacheService:
                 return json.loads(data.decode())
             return None
         except Exception as e:
-            logger.error("Failed to get JSON from cache", key = key, error = str(e))
+            logger.error("Failed to get JSON from cache", key=key, error=str(e))
             return None
 
     async def set_json(
-        self,
-        key: str,
-        value: Dict,
-        ex: Optional[Union[int, timedelta]] = None
+        self, key: str, value: Dict, ex: Optional[Union[int, timedelta]] = None
     ) -> bool:
         """设置JSON数据"""
         try:
-            json_data = json.dumps(value, ensure_ascii = False)
-            return await self.redis.set(key, json_data, ex = ex)
+            json_data = json.dumps(value, ensure_ascii=False)
+            return await self.redis.set(key, json_data, ex=ex)
         except Exception as e:
-            logger.error("Failed to set JSON to cache", key = key, error = str(e))
+            logger.error("Failed to set JSON to cache", key=key, error=str(e))
             return False
 
     async def get_object(self, key: str) -> Optional[Any]:
@@ -185,21 +177,18 @@ class CacheService:
                 return pickle.loads(data)
             return None
         except Exception as e:
-            logger.error("Failed to get object from cache", key = key, error = str(e))
+            logger.error("Failed to get object from cache", key=key, error=str(e))
             return None
 
     async def set_object(
-        self,
-        key: str,
-        value: Any,
-        ex: Optional[Union[int, timedelta]] = None
+        self, key: str, value: Any, ex: Optional[Union[int, timedelta]] = None
     ) -> bool:
         """设置Python对象（使用pickle）"""
         try:
             pickled_data = pickle.dumps(value)
-            return await self.redis.set(key, pickled_data, ex = ex)
+            return await self.redis.set(key, pickled_data, ex=ex)
         except Exception as e:
-            logger.error("Failed to set object to cache", key = key, error = str(e))
+            logger.error("Failed to set object to cache", key=key, error=str(e))
             return False
 
     async def get_user_cache(self, user_id: str) -> Optional[Dict]:
@@ -208,16 +197,13 @@ class CacheService:
         return await self.get_json(key)
 
     async def set_user_cache(
-        self,
-        user_id: str,
-        user_data: Dict,
-        ttl: Optional[int] = None
+        self, user_id: str, user_data: Dict, ttl: Optional[int] = None
     ) -> bool:
         """设置用户缓存"""
         key = f"user:{user_id}"
         settings = get_settings()
         ex = ttl or settings.cache.user_cache_ttl
-        return await self.set_json(key, user_data, ex = ex)
+        return await self.set_json(key, user_data, ex=ex)
 
     async def delete_user_cache(self, user_id: str) -> bool:
         """删除用户缓存"""
@@ -230,16 +216,13 @@ class CacheService:
         return await self.get_json(key)
 
     async def set_session_cache(
-        self,
-        session_id: str,
-        session_data: Dict,
-        ttl: Optional[int] = None
+        self, session_id: str, session_data: Dict, ttl: Optional[int] = None
     ) -> bool:
         """设置会话缓存"""
         key = f"session:{session_id}"
         settings = get_settings()
         ex = ttl or settings.cache.session_cache_ttl
-        return await self.set_json(key, session_data, ex = ex)
+        return await self.set_json(key, session_data, ex=ex)
 
     async def delete_session_cache(self, session_id: str) -> bool:
         """删除会话缓存"""

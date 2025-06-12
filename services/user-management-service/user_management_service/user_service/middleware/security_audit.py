@@ -23,12 +23,12 @@ from starlette.middleware.base import BaseHTTPMiddleware
 """
 
 
-
 logger = logging.getLogger(__name__)
 
 
 class SecurityEventType(Enum):
     """安全事件类型"""
+
     LOGIN_SUCCESS = "login_success"
     LOGIN_FAILURE = "login_failure"
     LOGOUT = "logout"
@@ -49,6 +49,7 @@ class SecurityEventType(Enum):
 
 class SecurityLevel(Enum):
     """安全级别"""
+
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
@@ -58,6 +59,7 @@ class SecurityLevel(Enum):
 @dataclass
 class SecurityEvent:
     """安全事件数据结构"""
+
     event_id: str
     event_type: SecurityEventType
     security_level: SecurityLevel
@@ -94,7 +96,7 @@ class ThreatDetector:
                 r"(\bor\b. * 1\s*=\s * 1)",
                 r"(\band\b. * 1\s*=\s * 1)",
                 r"(\bor\b. * '. * '.*=. * '. * ')",
-                r"(\bunion\b. * \ball\b. * \bselect\b)"
+                r"(\bunion\b. * \ball\b. * \bselect\b)",
             ],
             "xss": [
                 r"<script[^>] * >. * ?< / script>",
@@ -104,7 +106,7 @@ class ThreatDetector:
                 r"<object[^>] * >",
                 r"<embed[^>] * >",
                 r"<link[^>] * >",
-                r"<meta[^>] * >"
+                r"<meta[^>] * >",
             ],
             "path_traversal": [
                 r"\.\. / ",
@@ -112,15 +114,15 @@ class ThreatDetector:
                 r"%2e%2e%2f",
                 r"%2e%2e\\",
                 r"..%2f",
-                r"..%5c"
+                r"..%5c",
             ],
             "command_injection": [
                 r";\s * (cat|ls|pwd|whoami|id|uname)",
                 r"\|\s * (cat|ls|pwd|whoami|id|uname)",
                 r"&&\s * (cat|ls|pwd|whoami|id|uname)",
                 r"`. * `",
-                r"\$\(. * \)"
-            ]
+                r"\$\(. * \)",
+            ],
         }
 
         # 可疑用户代理
@@ -133,7 +135,7 @@ class ThreatDetector:
             "owasp",
             "w3af",
             "acunetix",
-            "nessus"
+            "nessus",
         }
 
         # 敏感端点
@@ -142,7 +144,7 @@ class ThreatDetector:
             " / api / v1 / auth / register",
             " / api / v1 / users / profile",
             " / api / v1 / admin",
-            " / api / v1 / export"
+            " / api / v1 / export",
         }
 
     def detect_threats(self, request: Request, request_body: str = "") -> List[str]:
@@ -208,11 +210,7 @@ class ThreatDetector:
         return threats
 
     def calculate_risk_score(
-        self,
-        threats: List[str],
-        endpoint: str,
-        method: str,
-        status_code: int
+        self, threats: List[str], endpoint: str, method: str, status_code: int
     ) -> int:
         """计算风险评分 (0 - 100)"""
         score = 0
@@ -225,25 +223,25 @@ class ThreatDetector:
             "command_injection_detected": 35,
             "suspicious_user_agent": 15,
             "malicious_header": 10,
-            "missing_user_agent": 5
+            "missing_user_agent": 5,
         }
 
         for threat in threats:
             for pattern, points in threat_scores.items():
                 if pattern in threat:
-                    score+=points
+                    score += points
 
         # 敏感端点加分
         if endpoint in self.sensitive_endpoints:
-            score+=10
+            score += 10
 
         # 错误状态码加分
-        if status_code>=400:
-            score+=5
+        if status_code >= 400:
+            score += 5
 
         # 危险方法加分
         if method in ["DELETE", "PUT", "PATCH"]:
-            score+=5
+            score += 5
 
         return min(score, 100)
 
@@ -257,20 +255,14 @@ class SecurityAuditor:
         self.threat_detector = ThreatDetector()
 
         # 内存存储
-        self.events_buffer: deque = deque(maxlen = 1000)
-        self.ip_activity: Dict[str, deque] = defaultdict(lambda: deque(maxlen = 100))
-        self.user_activity: Dict[str, deque] = defaultdict(lambda: deque(maxlen = 100))
+        self.events_buffer: deque = deque(maxlen=1000)
+        self.ip_activity: Dict[str, deque] = defaultdict(lambda: deque(maxlen=100))
+        self.user_activity: Dict[str, deque] = defaultdict(lambda: deque(maxlen=100))
 
         # 攻击检测阈值
         self.attack_thresholds = {
-            "brute_force": {
-                "failed_attempts": 5,
-                "time_window": 300  # 5分钟
-            },
-            "rate_limit": {
-                "requests": 100,
-                "time_window": 60  # 1分钟
-            }
+            "brute_force": {"failed_attempts": 5, "time_window": 300},  # 5分钟
+            "rate_limit": {"requests": 100, "time_window": 60},  # 1分钟
         }
 
     async def log_security_event(
@@ -281,7 +273,7 @@ class SecurityAuditor:
         user_id: Optional[str] = None,
         session_id: Optional[str] = None,
         details: Optional[Dict[str, Any]] = None,
-        request_body: str = ""
+        request_body: str = "",
     ) -> SecurityEvent:
         """记录安全事件"""
 
@@ -298,23 +290,23 @@ class SecurityAuditor:
 
         # 创建事件
         event = SecurityEvent(
-            event_id = self._generate_event_id(),
-            event_type = event_type,
-            security_level = security_level,
-            timestamp = datetime.utcnow(),
-            user_id = user_id,
-            session_id = session_id,
-            ip_address = self._get_client_ip(request),
-            user_agent = request.headers.get("user - agent", ""),
-            endpoint = str(request.url.path),
-            method = request.method,
-            status_code = response.status_code,
-            request_size = len(request_body),
-            response_size = len(getattr(response, 'body', b'')),
-            processing_time = 0.0,  # 需要从外部传入
-            details = details or {},
-            threat_indicators = threats,
-            risk_score = risk_score
+            event_id=self._generate_event_id(),
+            event_type=event_type,
+            security_level=security_level,
+            timestamp=datetime.utcnow(),
+            user_id=user_id,
+            session_id=session_id,
+            ip_address=self._get_client_ip(request),
+            user_agent=request.headers.get("user - agent", ""),
+            endpoint=str(request.url.path),
+            method=request.method,
+            status_code=response.status_code,
+            request_size=len(request_body),
+            response_size=len(getattr(response, "body", b"")),
+            processing_time=0.0,  # 需要从外部传入
+            details=details or {},
+            threat_indicators=threats,
+            risk_score=risk_score,
         )
 
         # 存储事件
@@ -329,13 +321,15 @@ class SecurityAuditor:
 
         return event
 
-    def _determine_security_level(self, risk_score: int, threats: List[str]) -> SecurityLevel:
+    def _determine_security_level(
+        self, risk_score: int, threats: List[str]
+    ) -> SecurityLevel:
         """确定安全级别"""
-        if risk_score>=80 or any("injection" in threat for threat in threats):
+        if risk_score >= 80 or any("injection" in threat for threat in threats):
             return SecurityLevel.CRITICAL
-        elif risk_score>=60 or any("suspicious" in threat for threat in threats):
+        elif risk_score >= 60 or any("suspicious" in threat for threat in threats):
             return SecurityLevel.HIGH
-        elif risk_score>=30:
+        elif risk_score >= 30:
             return SecurityLevel.MEDIUM
         else:
             return SecurityLevel.LOW
@@ -370,26 +364,23 @@ class SecurityAuditor:
             try:
                 # 存储事件详情
                 await self.redis.hset(
-                    f"security_event:{event.event_id}",
-                    mapping = event_data
+                    f"security_event:{event.event_id}", mapping=event_data
                 )
 
                 # 添加到时间序列
                 await self.redis.zadd(
                     "security_events_timeline",
-                    {event.event_id: event.timestamp.timestamp()}
+                    {event.event_id: event.timestamp.timestamp()},
                 )
 
                 # 按类型索引
                 await self.redis.sadd(
-                    f"security_events_by_type:{event.event_type.value}",
-                    event.event_id
+                    f"security_events_by_type:{event.event_type.value}", event.event_id
                 )
 
                 # 按IP索引
                 await self.redis.sadd(
-                    f"security_events_by_ip:{event.ip_address}",
-                    event.event_id
+                    f"security_events_by_ip:{event.ip_address}", event.event_id
                 )
 
                 # 设置过期时间 (30天)
@@ -402,26 +393,30 @@ class SecurityAuditor:
         self.events_buffer.append(event)
 
         # 记录IP活动
-        self.ip_activity[event.ip_address].append({
-            "timestamp": event.timestamp,
-            "event_type": event.event_type,
-            "risk_score": event.risk_score
-        })
+        self.ip_activity[event.ip_address].append(
+            {
+                "timestamp": event.timestamp,
+                "event_type": event.event_type,
+                "risk_score": event.risk_score,
+            }
+        )
 
         # 记录用户活动
         if event.user_id:
-            self.user_activity[event.user_id].append({
-                "timestamp": event.timestamp,
-                "event_type": event.event_type,
-                "risk_score": event.risk_score
-            })
+            self.user_activity[event.user_id].append(
+                {
+                    "timestamp": event.timestamp,
+                    "event_type": event.event_type,
+                    "risk_score": event.risk_score,
+                }
+            )
 
     async def _detect_attack_patterns(self, event: SecurityEvent):
         """检测攻击模式"""
         current_time = event.timestamp
 
         # 检测暴力破解攻击
-        if event.event_type==SecurityEventType.LOGIN_FAILURE:
+        if event.event_type == SecurityEventType.LOGIN_FAILURE:
             await self._detect_brute_force(event.ip_address, current_time)
 
         # 检测异常活动
@@ -430,65 +425,65 @@ class SecurityAuditor:
     async def _detect_brute_force(self, ip_address: str, current_time: datetime):
         """检测暴力破解攻击"""
         threshold = self.attack_thresholds["brute_force"]
-        time_window = timedelta(seconds = threshold["time_window"])
+        time_window = timedelta(seconds=threshold["time_window"])
 
         # 获取时间窗口内的失败登录次数
         failed_attempts = 0
         for activity in self.ip_activity[ip_address]:
-            if (current_time - activity["timestamp"])<=time_window:
-                if activity["event_type"]==SecurityEventType.LOGIN_FAILURE:
-                    failed_attempts+=1
+            if (current_time - activity["timestamp"]) <= time_window:
+                if activity["event_type"] == SecurityEventType.LOGIN_FAILURE:
+                    failed_attempts += 1
 
         # 如果超过阈值，记录暴力破解事件
-        if failed_attempts>=threshold["failed_attempts"]:
+        if failed_attempts >= threshold["failed_attempts"]:
             await self._create_attack_event(
                 SecurityEventType.BRUTE_FORCE_ATTACK,
                 ip_address,
-                {"failed_attempts": failed_attempts, "time_window": threshold["time_window"]}
+                {
+                    "failed_attempts": failed_attempts,
+                    "time_window": threshold["time_window"],
+                },
             )
 
     async def _detect_anomalous_activity(self, event: SecurityEvent):
         """检测异常活动"""
         # 检测高风险评分的连续事件
-        if event.risk_score>=70:
+        if event.risk_score >= 70:
             recent_high_risk = 0
             for activity in self.ip_activity[event.ip_address]:
-                if (event.timestamp - activity["timestamp"]).seconds<=300:  # 5分钟内
-                    if activity["risk_score"]>=70:
-                        recent_high_risk+=1
+                if (event.timestamp - activity["timestamp"]).seconds <= 300:  # 5分钟内
+                    if activity["risk_score"] >= 70:
+                        recent_high_risk += 1
 
-            if recent_high_risk>=3:
+            if recent_high_risk >= 3:
                 await self._create_attack_event(
                     SecurityEventType.SUSPICIOUS_ACTIVITY,
                     event.ip_address,
-                    {"high_risk_events": recent_high_risk}
+                    {"high_risk_events": recent_high_risk},
                 )
 
     async def _create_attack_event(
-        self,
-        event_type: SecurityEventType,
-        ip_address: str,
-        details: Dict[str, Any]
+        self, event_type: SecurityEventType, ip_address: str, details: Dict[str, Any]
     ):
         """创建攻击事件"""
         attack_event = SecurityEvent(
-            event_id = self._generate_event_id(),
-            event_type = event_type,
-            security_level = SecurityLevel.CRITICAL,
-            timestamp = datetime.utcnow(),
-            user_id = None,
-            session_id = None,
-            ip_address = ip_address,
-            user_agent = "",
-            endpoint = "",
-            method = "",
-            status_code = 0,
-            request_size = 0,
-            response_size = 0,
-            processing_time = 0.0,
-            details = details,
-            threat_indicators = [event_type.value],
-            risk_score = 100
+            event_id=self._generate_event_id(),
+            event_type=event_type,
+            security_level=SecurityLevel.CRITICAL,
+            timestamp=datetime.utcnow(),
+            user_id=None,
+            session_id=None,
+            ip_address=ip_address,
+            user_agent="",
+            endpoint="",
+            method="",
+            status_code=0,
+            request_size=0,
+            response_size=0,
+            processing_time=0.0,
+            details=details,
+            threat_indicators=[event_type.value],
+            risk_score=100,
         )
 
         await self._store_event(attack_event)
@@ -505,7 +500,7 @@ class SecurityAuditor:
             "endpoint": event.endpoint,
             "risk_score": event.risk_score,
             "threat_indicators": event.threat_indicators,
-            "details": event.details
+            "details": event.details,
         }
 
         # 记录告警日志
@@ -529,7 +524,7 @@ class SecurityAuditMiddleware(BaseHTTPMiddleware):
             " / api / v1 / users",
             " / api / v1 / admin",
             " / api / v1 / health - data",
-            " / api / v1 / devices"
+            " / api / v1 / devices",
         }
 
         # 跳过审计的路径
@@ -538,7 +533,7 @@ class SecurityAuditMiddleware(BaseHTTPMiddleware):
             " / metrics",
             " / docs",
             " / redoc",
-            " / openapi.json"
+            " / openapi.json",
         }
 
     async def dispatch(self, request: Request, call_next):
@@ -574,22 +569,24 @@ class SecurityAuditMiddleware(BaseHTTPMiddleware):
         # 记录安全事件
         if any(request.url.path.startswith(audit) for audit in self.audit_paths):
             await self.auditor.log_security_event(
-                event_type = event_type,
-                request = request,
-                response = response,
-                user_id = user_id,
-                session_id = session_id,
-                details = {
+                event_type=event_type,
+                request=request,
+                response=response,
+                user_id=user_id,
+                session_id=session_id,
+                details={
                     "processing_time": processing_time,
                     "request_size": len(request_body),
-                    "response_size": len(getattr(response, 'body', b''))
+                    "response_size": len(getattr(response, "body", b"")),
                 },
-                request_body = request_body
+                request_body=request_body,
             )
 
         return response
 
-    def _determine_event_type(self, request: Request, response: Response) -> SecurityEventType:
+    def _determine_event_type(
+        self, request: Request, response: Response
+    ) -> SecurityEventType:
         """确定事件类型"""
         path = request.url.path
         method = request.method
@@ -597,13 +594,17 @@ class SecurityAuditMiddleware(BaseHTTPMiddleware):
 
         # 登录相关
         if " / auth / login" in path:
-            return SecurityEventType.LOGIN_SUCCESS if status==200 else SecurityEventType.LOGIN_FAILURE
+            return (
+                SecurityEventType.LOGIN_SUCCESS
+                if status == 200
+                else SecurityEventType.LOGIN_FAILURE
+            )
 
         if " / auth / logout" in path:
             return SecurityEventType.LOGOUT
 
         # 数据访问
-        if method=="GET":
+        if method == "GET":
             return SecurityEventType.DATA_ACCESS
 
         # 数据修改
@@ -611,7 +612,7 @@ class SecurityAuditMiddleware(BaseHTTPMiddleware):
             return SecurityEventType.DATA_MODIFICATION
 
         # 未授权访问
-        if status==401:
+        if status == 401:
             return SecurityEventType.UNAUTHORIZED_ACCESS
 
         # 默认为可疑活动

@@ -1,15 +1,29 @@
 from datetime import datetime, timedelta
-from fastapi import APIRouter, Depends, HTTPException, status, Query
-from sqlalchemy.ext.asyncio import AsyncSession
-from typing import List, Optional, Dict, Any
-from user_service.analytics import (
-from user_service.auth import get_current_user, require_active_user
-from user_service.database import get_db
-from user_service.models.user import User
-from user_service.performance import performance_monitor, query_cache
+from typing import Any, Dict, List, Optional
 
-def main() -> None:
-    """主函数 - 自动生成的最小可用版本"""
+from fastapi import APIRouter, Depends, HTTPException, Query, status
+from sqlalchemy.ext.asyncio import AsyncSession
+from user_service.analytics import (
+    None:,
+    User,
+    """主函数,
+    -,
+    ->,
+    def,
+    from,
+    get_current_user,
+    get_db,
+    import,
+    main,
+    performance_monitor,
+    query_cache,
+    require_active_user,
+    user_service.auth,
+    user_service.database,
+    user_service.models.user,
+    user_service.performance,
+    自动生成的最小可用版本""",
+)
     pass
 
 if __name__=="__main__":

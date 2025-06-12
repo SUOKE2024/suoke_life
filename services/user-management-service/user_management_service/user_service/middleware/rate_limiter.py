@@ -19,7 +19,6 @@ from starlette.middleware.base import BaseHTTPMiddleware
 """
 
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -39,45 +38,42 @@ class RateLimiter:
             "global": {
                 "requests_per_minute": 1000,
                 "requests_per_hour": 10000,
-                "burst_size": 100
+                "burst_size": 100,
             },
             # IP限流
             "ip": {
                 "requests_per_minute": 60,
                 "requests_per_hour": 1000,
-                "burst_size": 10
+                "burst_size": 10,
             },
             # 用户限流
             "user": {
                 "requests_per_minute": 120,
                 "requests_per_hour": 2000,
-                "burst_size": 20
+                "burst_size": 20,
             },
             # 端点特定限流
             "endpoints": {
                 " / api / v1 / auth / login": {
                     "requests_per_minute": 5,
                     "requests_per_hour": 20,
-                    "burst_size": 2
+                    "burst_size": 2,
                 },
                 " / api / v1 / users / register": {
                     "requests_per_minute": 3,
                     "requests_per_hour": 10,
-                    "burst_size": 1
+                    "burst_size": 1,
                 },
                 " / api / v1 / health - data": {
                     "requests_per_minute": 30,
                     "requests_per_hour": 500,
-                    "burst_size": 5
-                }
-            }
+                    "burst_size": 5,
+                },
+            },
         }
 
     async def is_allowed(
-        self,
-        key: str,
-        rule_type: str,
-        endpoint: Optional[str] = None
+        self, key: str, rule_type: str, endpoint: Optional[str] = None
     ) -> Tuple[bool, Dict[str, Any]]:
         """
         检查请求是否被允许
@@ -119,10 +115,12 @@ class RateLimiter:
         return True, {
             "allowed": True,
             "remaining": await self._get_remaining_requests(key, rules),
-            "reset_time": await self._get_reset_time(key)
+            "reset_time": await self._get_reset_time(key),
         }
 
-    def _get_applicable_rules(self, rule_type: str, endpoint: Optional[str]) -> Dict[str, int]:
+    def _get_applicable_rules(
+        self, rule_type: str, endpoint: Optional[str]
+    ) -> Dict[str, int]:
         """获取适用的限流规则"""
         # 端点特定规则优先
         if endpoint and endpoint in self.rules["endpoints"]:
@@ -142,26 +140,22 @@ class RateLimiter:
         return 60
 
     async def _check_window(
-        self,
-        key: str,
-        window_seconds: int,
-        limit: int,
-        current_time: float
+        self, key: str, window_seconds: int, limit: int, current_time: float
     ) -> Tuple[bool, Dict[str, Any]]:
         """检查时间窗口限制"""
         window_key = f"{key}:{window_seconds}"
 
         if self.redis:
-            return await self._check_window_redis(window_key, window_seconds, limit, current_time)
+            return await self._check_window_redis(
+                window_key, window_seconds, limit, current_time
+            )
         else:
-            return await self._check_window_memory(window_key, window_seconds, limit, current_time)
+            return await self._check_window_memory(
+                window_key, window_seconds, limit, current_time
+            )
 
     async def _check_window_redis(
-        self,
-        window_key: str,
-        window_seconds: int,
-        limit: int,
-        current_time: float
+        self, window_key: str, window_seconds: int, limit: int, current_time: float
     ) -> Tuple[bool, Dict[str, Any]]:
         """使用Redis检查时间窗口"""
         try:
@@ -185,33 +179,31 @@ class RateLimiter:
             results = await pipe.execute()
             current_count = results[1]
 
-            if current_count>=limit:
+            if current_count >= limit:
                 return False, {
                     "allowed": False,
                     "limit": limit,
                     "current": current_count,
                     "window_seconds": window_seconds,
-                    "retry_after": window_seconds
+                    "retry_after": window_seconds,
                 }
 
             return True, {
                 "allowed": True,
                 "limit": limit,
                 "current": current_count + 1,
-                "window_seconds": window_seconds
+                "window_seconds": window_seconds,
             }
 
         except Exception as e:
             logger.error(f"Redis限流检查失败: {e}")
             # 降级到内存存储
-            return await self._check_window_memory(window_key, window_seconds, limit, current_time)
+            return await self._check_window_memory(
+                window_key, window_seconds, limit, current_time
+            )
 
     async def _check_window_memory(
-        self,
-        window_key: str,
-        window_seconds: int,
-        limit: int,
-        current_time: float
+        self, window_key: str, window_seconds: int, limit: int, current_time: float
     ) -> Tuple[bool, Dict[str, Any]]:
         """使用内存检查时间窗口"""
         async with self.lock:
@@ -222,13 +214,13 @@ class RateLimiter:
             while requests and requests[0] < window_start:
                 requests.popleft()
 
-            if len(requests)>=limit:
+            if len(requests) >= limit:
                 return False, {
                     "allowed": False,
                     "limit": limit,
                     "current": len(requests),
                     "window_seconds": window_seconds,
-                    "retry_after": window_seconds
+                    "retry_after": window_seconds,
                 }
 
             # 添加当前请求
@@ -238,14 +230,11 @@ class RateLimiter:
                 "allowed": True,
                 "limit": limit,
                 "current": len(requests),
-                "window_seconds": window_seconds
+                "window_seconds": window_seconds,
             }
 
     async def _check_burst(
-        self,
-        key: str,
-        burst_size: int,
-        current_time: float
+        self, key: str, burst_size: int, current_time: float
     ) -> Tuple[bool, Dict[str, Any]]:
         """检查突发限制"""
         burst_key = f"{key}:burst"
@@ -264,12 +253,12 @@ class RateLimiter:
                 results = await pipe.execute()
                 current_burst = results[1]
 
-                if current_burst>=burst_size:
+                if current_burst >= burst_size:
                     return False, {
                         "allowed": False,
                         "burst_limit": burst_size,
                         "current_burst": current_burst,
-                        "retry_after": burst_window
+                        "retry_after": burst_window,
                     }
 
                 return True, {"burst_allowed": True}
@@ -285,12 +274,12 @@ class RateLimiter:
             while requests and requests[0] < window_start:
                 requests.popleft()
 
-            if len(requests)>=burst_size:
+            if len(requests) >= burst_size:
                 return False, {
                     "allowed": False,
                     "burst_limit": burst_size,
                     "current_burst": len(requests),
-                    "retry_after": burst_window
+                    "retry_after": burst_window,
                 }
 
             requests.append(current_time)
@@ -301,7 +290,9 @@ class RateLimiter:
         # 在检查方法中已经记录了，这里可以添加额外的统计
         pass
 
-    async def _get_remaining_requests(self, key: str, rules: Dict[str, int]) -> Dict[str, int]:
+    async def _get_remaining_requests(
+        self, key: str, rules: Dict[str, int]
+    ) -> Dict[str, int]:
         """获取剩余请求数"""
         remaining = {}
         current_time = time.time()
@@ -341,11 +332,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         self.limiter = RateLimiter(redis_client)
 
         # 白名单IP
-        self.whitelist_ips = {
-            "127.0.0.1",
-            "::1",
-            "localhost"
-        }
+        self.whitelist_ips = {"127.0.0.1", "::1", "localhost"}
 
         # 需要跳过限流的路径
         self.skip_paths = {
@@ -353,7 +340,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
             " / metrics",
             " / docs",
             " / redoc",
-            " / openapi.json"
+            " / openapi.json",
         }
 
     async def dispatch(self, request: Request, call_next):
@@ -373,9 +360,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         user_id = self._get_user_id(request)
 
         # 检查限流
-        rate_limit_result = await self._check_rate_limits(
-            request, client_ip, user_id
-        )
+        rate_limit_result = await self._check_rate_limits(request, client_ip, user_id)
 
         if not rate_limit_result["allowed"]:
             return self._create_rate_limit_response(rate_limit_result)
@@ -421,10 +406,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         return None
 
     async def _check_rate_limits(
-        self,
-        request: Request,
-        client_ip: str,
-        user_id: Optional[str]
+        self, request: Request, client_ip: str, user_id: Optional[str]
     ) -> Dict[str, Any]:
         """检查所有适用的限流规则"""
         endpoint = request.url.path
@@ -456,14 +438,16 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
             "allowed": True,
             "global_info": global_info,
             "ip_info": ip_info,
-            "user_info": user_info if user_id else None
+            "user_info": user_info if user_id else None,
         }
 
-    def _create_rate_limit_response(self, rate_limit_info: Dict[str, Any]) -> JSONResponse:
+    def _create_rate_limit_response(
+        self, rate_limit_info: Dict[str, Any]
+    ) -> JSONResponse:
         """创建限流响应"""
         return JSONResponse(
-            status_code = 429,
-            content = {
+            status_code=429,
+            content={
                 "error": {
                     "code": "RATE_LIMIT_EXCEEDED",
                     "message": "请求频率超过限制",
@@ -471,19 +455,21 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
                         "limit": rate_limit_info.get("limit"),
                         "current": rate_limit_info.get("current"),
                         "window_seconds": rate_limit_info.get("window_seconds"),
-                        "retry_after": rate_limit_info.get("retry_after")
-                    }
+                        "retry_after": rate_limit_info.get("retry_after"),
+                    },
                 }
             },
-            headers = {
+            headers={
                 "Retry - After": str(rate_limit_info.get("retry_after", 60)),
                 "X - RateLimit - Limit": str(rate_limit_info.get("limit", 0)),
                 "X - RateLimit - Remaining": "0",
-                "X - RateLimit - Reset": str(rate_limit_info.get("retry_after", 60))
-            }
+                "X - RateLimit - Reset": str(rate_limit_info.get("retry_after", 60)),
+            },
         )
 
-    def _add_rate_limit_headers(self, response: Response, rate_limit_info: Dict[str, Any]):
+    def _add_rate_limit_headers(
+        self, response: Response, rate_limit_info: Dict[str, Any]
+    ):
         """添加限流头信息"""
         if rate_limit_info.get("allowed"):
             # 从IP信息中获取限流数据

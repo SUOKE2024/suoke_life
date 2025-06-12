@@ -13,7 +13,6 @@ from starlette.middleware.base import BaseHTTPMiddleware
 """日志中间件"""
 
 
-
 logger = structlog.get_logger(__name__)
 
 
@@ -34,11 +33,11 @@ class LoggingMiddleware(BaseHTTPMiddleware):
 
         # 绑定请求上下文
         bound_logger = logger.bind(
-            request_id = request_id,
-            method = request.method,
-            url = str(request.url),
-            client_ip = client_ip,
-            user_agent = user_agent,
+            request_id=request_id,
+            method=request.method,
+            url=str(request.url),
+            client_ip=client_ip,
+            user_agent=user_agent,
         )
 
         # 将请求ID添加到请求状态
@@ -58,8 +57,8 @@ class LoggingMiddleware(BaseHTTPMiddleware):
             # 记录请求完成
             bound_logger.info(
                 "请求完成",
-                status_code = response.status_code,
-                process_time = f"{process_time:.3f}s"
+                status_code=response.status_code,
+                process_time=f"{process_time:.3f}s",
             )
 
             # 添加响应头
@@ -75,9 +74,9 @@ class LoggingMiddleware(BaseHTTPMiddleware):
             # 记录请求异常
             bound_logger.error(
                 "请求异常",
-                error = str(e),
-                error_type = type(e).__name__,
-                process_time = f"{process_time:.3f}s"
+                error=str(e),
+                error_type=type(e).__name__,
+                process_time=f"{process_time:.3f}s",
             )
 
             raise

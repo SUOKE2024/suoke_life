@@ -14,8 +14,6 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 """基础数据模型"""
 
 
-
-
 class BaseModel(DeclarativeBase):
     """基础模型类"""
 
@@ -26,24 +24,19 @@ class BaseModel(DeclarativeBase):
 
     # 主键
     id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid = True),
-        primary_key = True,
-        default = uuid.uuid4,
-        comment = "主键ID"
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, comment="主键ID"
     )
 
     # 时间戳
     created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone = True),
-        server_default = func.now(),
-        comment = "创建时间"
+        DateTime(timezone=True), server_default=func.now(), comment="创建时间"
     )
 
     updated_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone = True),
-        server_default = func.now(),
-        onupdate = func.now(),
-        comment = "更新时间"
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        comment="更新时间",
     )
 
     def to_dict(self, exclude: Optional[set] = None) -> Dict[str, Any]:

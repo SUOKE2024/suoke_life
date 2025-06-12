@@ -13,7 +13,6 @@ from user_service.config import get_settings
 """数据库连接管理"""
 
 
-
 logger = logging.getLogger(__name__)
 
 # 全局变量
@@ -23,13 +22,14 @@ async_session_maker = None
 
 class Base(DeclarativeBase):
     """数据库模型基类"""
+
     metadata = MetaData(
-        naming_convention = {
+        naming_convention={
             "ix": "ix_%(column_0_label)s",
             "uq": "uq_%(table_name)s_%(column_0_name)s",
             "ck": "ck_%(table_name)s_%(constraint_name)s",
             "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
-            "pk": "pk_%(table_name)s"
+            "pk": "pk_%(table_name)s",
         }
     )
 
@@ -44,19 +44,17 @@ async def init_database() -> None:
         # 创建异步引擎
         engine = create_async_engine(
             settings.database.url,
-            echo = settings.database.echo,
-            pool_size = settings.database.pool_size,
-            max_overflow = settings.database.max_overflow,
-            pool_timeout = settings.database.pool_timeout,
-            pool_recycle = settings.database.pool_recycle,
-            pool_pre_ping = True,
+            echo=settings.database.echo,
+            pool_size=settings.database.pool_size,
+            max_overflow=settings.database.max_overflow,
+            pool_timeout=settings.database.pool_timeout,
+            pool_recycle=settings.database.pool_recycle,
+            pool_pre_ping=True,
         )
 
         # 创建会话工厂
         async_session_maker = async_sessionmaker(
-            engine,
-            class_ = AsyncSession,
-            expire_on_commit = False
+            engine, class_=AsyncSession, expire_on_commit=False
         )
 
         logger.info("数据库连接初始化成功")

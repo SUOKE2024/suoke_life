@@ -7,21 +7,19 @@ from datetime import datetime
 from enum import Enum
 from typing import List, Optional
 
-from sqlalchemy import Boolean, Column, DateTime, ForeignKey, String, Table, Text, func
+from auth_service.models.base import BaseModel
+from sqlalchemy import Boolean, Column, DateTime
 from sqlalchemy import Enum as SQLEnum
+from sqlalchemy import ForeignKey, String, Table, Text, func
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
-from auth_service.models.base import BaseModel
 
 """认证相关数据模型"""
 
 
-
-
-
 class LoginResult(str, Enum):
     """登录结果枚举"""
+
     SUCCESS = "success"
     FAILED_INVALID_CREDENTIALS = "failed_invalid_credentials"
     FAILED_ACCOUNT_LOCKED = "failed_account_locked"
@@ -32,6 +30,7 @@ class LoginResult(str, Enum):
 
 class MFADeviceType(str, Enum):
     """MFA设备类型枚举"""
+
     TOTP = "totp"
     SMS = "sms"
     EMAIL = "email"
@@ -40,6 +39,7 @@ class MFADeviceType(str, Enum):
 
 class OAuthProvider(str, Enum):
     """OAuth提供商枚举"""
+
     GOOGLE = "google"
     WECHAT = "wechat"
     GITHUB = "github"
@@ -48,6 +48,7 @@ class OAuthProvider(str, Enum):
 
 class PermissionType(str, Enum):
     """权限类型枚举"""
+
     READ = "read"
     WRITE = "write"
     DELETE = "delete"
@@ -61,61 +62,40 @@ class LoginAttempt(BaseModel):
 
     # 用户信息
     user_id: Mapped[Optional[uuid.UUID]] = mapped_column(
-        UUID(as_uuid = True),
-        index = True,
-        comment = "用户ID"
+        UUID(as_uuid=True), index=True, comment="用户ID"
     )
 
     username: Mapped[Optional[str]] = mapped_column(
-        String(255),
-        index = True,
-        comment = "用户名"
+        String(255), index=True, comment="用户名"
     )
 
     email: Mapped[Optional[str]] = mapped_column(
-        String(255),
-        index = True,
-        comment = "邮箱"
+        String(255), index=True, comment="邮箱"
     )
 
     # 登录信息
-    ip_address: Mapped[str] = mapped_column(
-        String(45),
-        index = True,
-        comment = "IP地址"
-    )
+    ip_address: Mapped[str] = mapped_column(String(45), index=True, comment="IP地址")
 
-    user_agent: Mapped[Optional[str]] = mapped_column(
-        Text,
-        comment = "用户代理"
-    )
+    user_agent: Mapped[Optional[str]] = mapped_column(Text, comment="用户代理")
 
     # 结果信息
     result: Mapped[LoginResult] = mapped_column(
-        SQLEnum(LoginResult),
-        index = True,
-        comment = "登录结果"
+        SQLEnum(LoginResult), index=True, comment="登录结果"
     )
 
     failure_reason: Mapped[Optional[str]] = mapped_column(
-        String(255),
-        comment = "失败原因"
+        String(255), comment="失败原因"
     )
 
     # 位置信息
-    location: Mapped[Optional[str]] = mapped_column(
-        String(100),
-        comment = "登录位置"
-    )
+    location: Mapped[Optional[str]] = mapped_column(String(100), comment="登录位置")
 
     # 元数据
-    extra_metadata: Mapped[Optional[dict]] = mapped_column(
-        JSONB,
-        comment = "额外元数据"
-    )
+    extra_metadata: Mapped[Optional[dict]] = mapped_column(JSONB, comment="额外元数据")
 
     class Meta:
         """TODO: 添加文档字符串"""
+
         # 性能优化: 添加常用查询字段的索引
         indexes = [
             # 根据实际查询需求添加索引
@@ -124,8 +104,8 @@ class LoginAttempt(BaseModel):
             # models.Index(fields = ['status']),
         ]
         # 数据库表选项
-        db_table = 'loginattempt'
-        ordering = [' - created_at']
+        db_table = "loginattempt"
+        ordering = [" - created_at"]
 
 
 class MFADevice(BaseModel):
@@ -135,65 +115,41 @@ class MFADevice(BaseModel):
 
     # 关联用户
     user_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid = True),
-        index = True,
-        comment = "用户ID"
+        UUID(as_uuid=True), index=True, comment="用户ID"
     )
 
     # 设备信息
     device_type: Mapped[MFADeviceType] = mapped_column(
-        SQLEnum(MFADeviceType),
-        comment = "设备类型"
+        SQLEnum(MFADeviceType), comment="设备类型"
     )
 
-    device_name: Mapped[str] = mapped_column(
-        String(100),
-        comment = "设备名称"
-    )
+    device_name: Mapped[str] = mapped_column(String(100), comment="设备名称")
 
     # 密钥信息
-    secret_key: Mapped[Optional[str]] = mapped_column(
-        String(255),
-        comment = "密钥"
-    )
+    secret_key: Mapped[Optional[str]] = mapped_column(String(255), comment="密钥")
 
-    backup_codes: Mapped[Optional[List[str]]] = mapped_column(
-        JSONB,
-        comment = "备用代码"
-    )
+    backup_codes: Mapped[Optional[List[str]]] = mapped_column(JSONB, comment="备用代码")
 
     # 状态信息
-    is_active: Mapped[bool] = mapped_column(
-        Boolean,
-        default = True,
-        comment = "是否激活"
-    )
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True, comment="是否激活")
 
     is_verified: Mapped[bool] = mapped_column(
-        Boolean,
-        default = False,
-        comment = "是否已验证"
+        Boolean, default=False, comment="是否已验证"
     )
 
     # 使用统计
     last_used_at: Mapped[Optional[datetime]] = mapped_column(
-        DateTime(timezone = True),
-        comment = "最后使用时间"
+        DateTime(timezone=True), comment="最后使用时间"
     )
 
-    use_count: Mapped[int] = mapped_column(
-        default = 0,
-        comment = "使用次数"
-    )
+    use_count: Mapped[int] = mapped_column(default=0, comment="使用次数")
 
     # 元数据
-    device_metadata: Mapped[Optional[dict]] = mapped_column(
-        JSONB,
-        comment = "设备元数据"
-    )
+    device_metadata: Mapped[Optional[dict]] = mapped_column(JSONB, comment="设备元数据")
 
     class Meta:
         """TODO: 添加文档字符串"""
+
         # 性能优化: 添加常用查询字段的索引
         indexes = [
             # 根据实际查询需求添加索引
@@ -202,8 +158,8 @@ class MFADevice(BaseModel):
             # models.Index(fields = ['status']),
         ]
         # 数据库表选项
-        db_table = 'oauthaccount'
-        ordering = [' - created_at']
+        db_table = "oauthaccount"
+        ordering = [" - created_at"]
 
 
 class OAuthAccount(BaseModel):
@@ -213,71 +169,49 @@ class OAuthAccount(BaseModel):
 
     # 关联用户
     user_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid = True),
-        index = True,
-        comment = "用户ID"
+        UUID(as_uuid=True), index=True, comment="用户ID"
     )
 
     # OAuth信息
     provider: Mapped[OAuthProvider] = mapped_column(
-        SQLEnum(OAuthProvider),
-        index = True,
-        comment = "OAuth提供商"
+        SQLEnum(OAuthProvider), index=True, comment="OAuth提供商"
     )
 
     provider_user_id: Mapped[str] = mapped_column(
-        String(255),
-        index = True,
-        comment = "提供商用户ID"
+        String(255), index=True, comment="提供商用户ID"
     )
 
     provider_username: Mapped[Optional[str]] = mapped_column(
-        String(255),
-        comment = "提供商用户名"
+        String(255), comment="提供商用户名"
     )
 
     provider_email: Mapped[Optional[str]] = mapped_column(
-        String(255),
-        comment = "提供商邮箱"
+        String(255), comment="提供商邮箱"
     )
 
     # 令牌信息
-    access_token: Mapped[Optional[str]] = mapped_column(
-        Text,
-        comment = "访问令牌"
-    )
+    access_token: Mapped[Optional[str]] = mapped_column(Text, comment="访问令牌")
 
-    refresh_token: Mapped[Optional[str]] = mapped_column(
-        Text,
-        comment = "刷新令牌"
-    )
+    refresh_token: Mapped[Optional[str]] = mapped_column(Text, comment="刷新令牌")
 
     token_expires_at: Mapped[Optional[datetime]] = mapped_column(
-        DateTime(timezone = True),
-        comment = "令牌过期时间"
+        DateTime(timezone=True), comment="令牌过期时间"
     )
 
     # 状态信息
-    is_active: Mapped[bool] = mapped_column(
-        Boolean,
-        default = True,
-        comment = "是否激活"
-    )
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True, comment="是否激活")
 
     # 最后同步时间
     last_sync_at: Mapped[Optional[datetime]] = mapped_column(
-        DateTime(timezone = True),
-        comment = "最后同步时间"
+        DateTime(timezone=True), comment="最后同步时间"
     )
 
     # 元数据
-    oauth_metadata: Mapped[Optional[dict]] = mapped_column(
-        JSONB,
-        comment = "OAuth元数据"
-    )
+    oauth_metadata: Mapped[Optional[dict]] = mapped_column(JSONB, comment="OAuth元数据")
 
     class Meta:
         """TODO: 添加文档字符串"""
+
         # 性能优化: 添加常用查询字段的索引
         indexes = [
             # 根据实际查询需求添加索引
@@ -286,8 +220,8 @@ class OAuthAccount(BaseModel):
             # models.Index(fields = ['status']),
         ]
         # 数据库表选项
-        db_table = 'refreshtoken'
-        ordering = [' - created_at']
+        db_table = "refreshtoken"
+        ordering = [" - created_at"]
 
 
 class RefreshToken(BaseModel):
@@ -297,64 +231,41 @@ class RefreshToken(BaseModel):
 
     # 关联用户
     user_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid = True),
-        index = True,
-        comment = "用户ID"
+        UUID(as_uuid=True), index=True, comment="用户ID"
     )
 
     # 令牌信息
     token: Mapped[str] = mapped_column(
-        String(255),
-        unique = True,
-        index = True,
-        comment = "刷新令牌"
+        String(255), unique=True, index=True, comment="刷新令牌"
     )
 
     # 时间信息
     expires_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone = True),
-        index = True,
-        comment = "过期时间"
+        DateTime(timezone=True), index=True, comment="过期时间"
     )
 
     # 设备信息
-    device_id: Mapped[Optional[str]] = mapped_column(
-        String(255),
-        comment = "设备ID"
-    )
+    device_id: Mapped[Optional[str]] = mapped_column(String(255), comment="设备ID")
 
-    ip_address: Mapped[Optional[str]] = mapped_column(
-        String(45),
-        comment = "IP地址"
-    )
+    ip_address: Mapped[Optional[str]] = mapped_column(String(45), comment="IP地址")
 
-    user_agent: Mapped[Optional[str]] = mapped_column(
-        Text,
-        comment = "用户代理"
-    )
+    user_agent: Mapped[Optional[str]] = mapped_column(Text, comment="用户代理")
 
     # 状态信息
     is_revoked: Mapped[bool] = mapped_column(
-        Boolean,
-        default = False,
-        comment = "是否已撤销"
+        Boolean, default=False, comment="是否已撤销"
     )
 
     revoked_at: Mapped[Optional[datetime]] = mapped_column(
-        DateTime(timezone = True),
-        comment = "撤销时间"
+        DateTime(timezone=True), comment="撤销时间"
     )
 
     # 使用信息
     last_used_at: Mapped[Optional[datetime]] = mapped_column(
-        DateTime(timezone = True),
-        comment = "最后使用时间"
+        DateTime(timezone=True), comment="最后使用时间"
     )
 
-    use_count: Mapped[int] = mapped_column(
-        default = 0,
-        comment = "使用次数"
-    )
+    use_count: Mapped[int] = mapped_column(default=0, comment="使用次数")
 
     def is_expired(self) -> bool:
         """检查令牌是否过期"""
@@ -366,6 +277,7 @@ class RefreshToken(BaseModel):
 
     class Meta:
         """TODO: 添加文档字符串"""
+
         # 性能优化: 添加常用查询字段的索引
         indexes = [
             # 根据实际查询需求添加索引
@@ -374,8 +286,8 @@ class RefreshToken(BaseModel):
             # models.Index(fields = ['status']),
         ]
         # 数据库表选项
-        db_table = 'userrole'
-        ordering = [' - created_at']
+        db_table = "userrole"
+        ordering = [" - created_at"]
 
 
 class UserRole(BaseModel):
@@ -385,40 +297,23 @@ class UserRole(BaseModel):
 
     # 角色信息
     name: Mapped[str] = mapped_column(
-        String(50),
-        unique = True,
-        index = True,
-        comment = "角色名称"
+        String(50), unique=True, index=True, comment="角色名称"
     )
 
-    display_name: Mapped[str] = mapped_column(
-        String(100),
-        comment = "显示名称"
-    )
+    display_name: Mapped[str] = mapped_column(String(100), comment="显示名称")
 
-    description: Mapped[Optional[str]] = mapped_column(
-        Text,
-        comment = "角色描述"
-    )
+    description: Mapped[Optional[str]] = mapped_column(Text, comment="角色描述")
 
     # 状态信息
-    is_active: Mapped[bool] = mapped_column(
-        Boolean,
-        default = True,
-        comment = "是否激活"
-    )
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True, comment="是否激活")
 
     is_system: Mapped[bool] = mapped_column(
-        Boolean,
-        default = False,
-        comment = "是否为系统角色"
+        Boolean, default=False, comment="是否为系统角色"
     )
 
     # 权限关联
     permissions: Mapped[List["Permission"]] = relationship(
-        "Permission",
-        secondary = "role_permissions",
-        back_populates = "roles"
+        "Permission", secondary="role_permissions", back_populates="roles"
     )
 
 
@@ -429,40 +324,23 @@ class Permission(BaseModel):
 
     # 权限信息
     name: Mapped[str] = mapped_column(
-        String(100),
-        unique = True,
-        index = True,
-        comment = "权限名称"
+        String(100), unique=True, index=True, comment="权限名称"
     )
 
-    resource: Mapped[str] = mapped_column(
-        String(50),
-        index = True,
-        comment = "资源名称"
-    )
+    resource: Mapped[str] = mapped_column(String(50), index=True, comment="资源名称")
 
     action: Mapped[PermissionType] = mapped_column(
-        SQLEnum(PermissionType),
-        comment = "操作类型"
+        SQLEnum(PermissionType), comment="操作类型"
     )
 
-    description: Mapped[Optional[str]] = mapped_column(
-        Text,
-        comment = "权限描述"
-    )
+    description: Mapped[Optional[str]] = mapped_column(Text, comment="权限描述")
 
     # 状态信息
-    is_active: Mapped[bool] = mapped_column(
-        Boolean,
-        default = True,
-        comment = "是否激活"
-    )
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True, comment="是否激活")
 
     # 角色关联
     roles: Mapped[List["UserRole"]] = relationship(
-        "UserRole",
-        secondary = "role_permissions",
-        back_populates = "permissions"
+        "UserRole", secondary="role_permissions", back_populates="permissions"
     )
 
 
@@ -470,7 +348,14 @@ class Permission(BaseModel):
 role_permissions = Table(
     "role_permissions",
     BaseModel.metadata,
-    Column("role_id", UUID(as_uuid = True), ForeignKey("user_roles.id"), primary_key = True),
-    Column("permission_id", UUID(as_uuid = True), ForeignKey("permissions.id"), primary_key = True),
-    Column("created_at", DateTime(timezone = True), server_default = func.now()),
+    Column(
+        "role_id", UUID(as_uuid=True), ForeignKey("user_roles.id"), primary_key=True
+    ),
+    Column(
+        "permission_id",
+        UUID(as_uuid=True),
+        ForeignKey("permissions.id"),
+        primary_key=True,
+    ),
+    Column("created_at", DateTime(timezone=True), server_default=func.now()),
 )

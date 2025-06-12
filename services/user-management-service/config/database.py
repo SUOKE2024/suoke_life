@@ -34,7 +34,7 @@ async_engine = create_async_engine(
     pool_timeout=settings.database.pool_timeout,
     pool_recycle=settings.database.pool_recycle,
     echo=settings.debug,
-    future=True
+    future=True,
 )
 
 # 同步数据库引擎（用于迁移等）
@@ -46,7 +46,7 @@ sync_engine = create_engine(
     pool_timeout=settings.database.pool_timeout,
     pool_recycle=settings.database.pool_recycle,
     echo=settings.debug,
-    future=True
+    future=True,
 )
 
 # 异步会话工厂
@@ -55,15 +55,11 @@ AsyncSessionLocal = async_sessionmaker(
     class_=AsyncSession,
     expire_on_commit=False,
     autoflush=True,
-    autocommit=False
+    autocommit=False,
 )
 
 # 同步会话工厂
-SessionLocal = sessionmaker(
-    bind=sync_engine,
-    autoflush=True,
-    autocommit=False
-)
+SessionLocal = sessionmaker(bind=sync_engine, autoflush=True, autocommit=False)
 
 
 @asynccontextmanager
@@ -90,14 +86,14 @@ async def init_database():
     """初始化数据库"""
     try:
         logger.info("🔄 初始化数据库连接...")
-        
+
         # 测试连接
         async with async_engine.begin() as conn:
             # 这里可以执行一些初始化SQL
             pass
-        
+
         logger.info("✅ 数据库连接初始化成功")
-        
+
     except Exception as e:
         logger.error(f"❌ 数据库初始化失败: {e}")
         raise
@@ -117,7 +113,7 @@ async def close_database():
 # 导出
 __all__ = [
     "Base",
-    "metadata", 
+    "metadata",
     "async_engine",
     "sync_engine",
     "AsyncSessionLocal",
@@ -125,5 +121,5 @@ __all__ = [
     "get_async_session",
     "get_db",
     "init_database",
-    "close_database"
-] 
+    "close_database",
+]

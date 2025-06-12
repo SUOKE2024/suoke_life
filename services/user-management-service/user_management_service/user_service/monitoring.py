@@ -1,15 +1,24 @@
             from user_service.cache import get_cache_manager
             import httpx
         import re
+
+import time
 from datetime import datetime, timedelta
-from fastapi import Request, Response
-from fastapi.responses import PlainTextResponse
-from prometheus_client import Counter, Histogram, Gauge, generate_latest, CONTENT_TYPE_LATEST
-from typing import Dict, List, Optional, Any
-from user_service.config import get_settings
+from typing import Any, Dict, List, Optional
+
 import psutil
 import structlog
-import time
+from fastapi import Request, Response
+from fastapi.responses import PlainTextResponse
+from prometheus_client import (
+    CONTENT_TYPE_LATEST,
+    Counter,
+    Gauge,
+    Histogram,
+    generate_latest,
+)
+from user_service.config import get_settings
+
 
 def main() -> None:
     """主函数 - 自动生成的最小可用版本"""

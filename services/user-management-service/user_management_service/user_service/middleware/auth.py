@@ -15,9 +15,8 @@ from user_service.core.exceptions import AuthenticationError
 """认证中间件"""
 
 
-
 logger = logging.getLogger(__name__)
-security = HTTPBearer(auto_error = False)
+security = HTTPBearer(auto_error=False)
 
 
 class AuthMiddleware(BaseHTTPMiddleware):
@@ -36,7 +35,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
             " / redoc",
             " / openapi.json",
             " / api / v1 / health",
-            " / api / v1 / info"
+            " / api / v1 / info",
         }
 
     async def dispatch(self, request: Request, call_next):
@@ -90,9 +89,9 @@ class AuthMiddleware(BaseHTTPMiddleware):
             payload = jwt.decode(
                 token,
                 self.settings.jwt.secret_key,
-                algorithms = [self.settings.jwt.algorithm],
-                audience = self.settings.jwt.audience,
-                issuer = self.settings.jwt.issuer
+                algorithms=[self.settings.jwt.algorithm],
+                audience=self.settings.jwt.audience,
+                issuer=self.settings.jwt.issuer,
             )
 
             # 提取用户信息
@@ -103,7 +102,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
                 "roles": payload.get("roles", []),
                 "permissions": payload.get("permissions", []),
                 "exp": payload.get("exp"),
-                "iat": payload.get("iat")
+                "iat": payload.get("iat"),
             }
 
             return user_info

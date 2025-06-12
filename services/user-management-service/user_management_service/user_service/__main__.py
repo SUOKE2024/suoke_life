@@ -1,4 +1,3 @@
-
 """
 __main__ - 索克生活项目模块
 """
@@ -12,5 +11,5 @@ from .main import main
 """
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     main()

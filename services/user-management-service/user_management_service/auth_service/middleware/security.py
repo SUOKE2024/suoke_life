@@ -11,8 +11,8 @@ from starlette.middleware.base import BaseHTTPMiddleware
 """安全中间件"""
 
 
-
 logger = structlog.get_logger(__name__)
+
 
 class SecurityMiddleware(BaseHTTPMiddleware):
     """安全中间件"""
@@ -41,7 +41,9 @@ class SecurityMiddleware(BaseHTTPMiddleware):
         response.headers["X - XSS - Protection"] = "1; mode = block"
 
         # 引用者策略
-        response.headers["Referrer - Policy"] = "strict - origin - when - cross - origin"
+        response.headers["Referrer - Policy"] = (
+            "strict - origin - when - cross - origin"
+        )
 
         # 内容安全策略
         response.headers["Content - Security - Policy"] = (
@@ -55,7 +57,11 @@ class SecurityMiddleware(BaseHTTPMiddleware):
         )
 
         # 严格传输安全（仅HTTPS）
-        if hasattr(response, 'url') and response.url and response.url.startswith('https'):
+        if (
+            hasattr(response, "url")
+            and response.url
+            and response.url.startswith("https")
+        ):
             response.headers["Strict - Transport - Security"] = (
                 "max - age = 31536000; includeSubDomains; preload"
             )
