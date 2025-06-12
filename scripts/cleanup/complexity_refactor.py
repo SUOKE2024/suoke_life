@@ -2,12 +2,12 @@
 complexity_refactor - 索克生活项目模块
 """
 
-from pathlib import Path
-from typing import List, Dict, Tuple, Optional
 import argparse
 import ast
 import os
 import re
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple
 
 #!/usr/bin/env python3
 """
@@ -31,7 +31,7 @@ class ComplexityRefactor:
 
         for py_file in python_files:
             try:
-                with open(py_file, 'r', encoding='utf-8') as f:
+                with open(py_file, "r", encoding="utf-8") as f:
                     content = f.read()
 
                 tree = ast.parse(content)
@@ -41,11 +41,13 @@ class ComplexityRefactor:
                 print(f"  ⚠️  分析文件时出错 {py_file}: {e}")
 
         # 按复杂度排序
-        self.high_complexity_functions.sort(key=lambda x: x['complexity'], reverse=True)
+        self.high_complexity_functions.sort(key=lambda x: x["complexity"], reverse=True)
 
         return {
-            'total_functions': len(self.high_complexity_functions),
-            'high_complexity_functions': self.high_complexity_functions[:50]  # 只返回前50个
+            "total_functions": len(self.high_complexity_functions),
+            "high_complexity_functions": self.high_complexity_functions[
+                :50
+            ],  # 只返回前50个
         }
 
     def _analyze_file_complexity(self, file_path: Path, tree: ast.AST):
@@ -54,13 +56,15 @@ class ComplexityRefactor:
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 complexity = self._calculate_complexity(node)
                 if complexity > 10:  # 复杂度阈值
-                    self.high_complexity_functions.append({
-                        'file': str(file_path),
-                        'function': node.name,
-                        'complexity': complexity,
-                        'line': node.lineno,
-                        'node': node
-                    })
+                    self.high_complexity_functions.append(
+                        {
+                            "file": str(file_path),
+                            "function": node.name,
+                            "complexity": complexity,
+                            "line": node.lineno,
+                            "node": node,
+                        }
+                    )
 
     def _calculate_complexity(self, node: ast.AST) -> int:
         """计算圈复杂度"""
@@ -93,34 +97,42 @@ class ComplexityRefactor:
                 if self._refactor_function(func_info):
                     refactored_count += 1
                     self.refactored_functions.append(func_info)
-                    print(f"  ✅ 已重构: {func_info['file']}:{func_info['function']} (复杂度: {func_info['complexity']})")
+                    print(
+                        f"  ✅ 已重构: {func_info['file']}:{func_info['function']} (复杂度: {func_info['complexity']})"
+                    )
                 else:
-                    print(f"  ⚠️  跳过: {func_info['file']}:{func_info['function']} (复杂度: {func_info['complexity']})")
+                    print(
+                        f"  ⚠️  跳过: {func_info['file']}:{func_info['function']} (复杂度: {func_info['complexity']})"
+                    )
             except Exception as e:
-                print(f"  ❌ 重构失败: {func_info['file']}:{func_info['function']} - {e}")
+                print(
+                    f"  ❌ 重构失败: {func_info['file']}:{func_info['function']} - {e}"
+                )
 
         return {
-            'refactored_count': refactored_count,
-            'total_analyzed': len(self.high_complexity_functions[:max_functions])
+            "refactored_count": refactored_count,
+            "total_analyzed": len(self.high_complexity_functions[:max_functions]),
         }
 
     def _refactor_function(self, func_info: Dict) -> bool:
         """重构单个函数"""
-        file_path = Path(func_info['file'])
+        file_path = Path(func_info["file"])
 
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
-            lines = content.split('\n')
+            lines = content.split("\n")
             tree = ast.parse(content)
 
             # 找到目标函数
             target_function = None
             for node in ast.walk(tree):
-                if (isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and 
-                    node.name == func_info['function'] and 
-                    node.lineno == func_info['line']):
+                if (
+                    isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+                    and node.name == func_info["function"]
+                    and node.lineno == func_info["line"]
+                ):
                     target_function = node
                     break
 
@@ -133,11 +145,11 @@ class ComplexityRefactor:
             if refactored_code:
                 # 验证重构后的代码
                 try:
-                    ast.parse('\n'.join(refactored_code))
+                    ast.parse("\n".join(refactored_code))
 
                     # 保存重构后的代码
-                    with open(file_path, 'w', encoding='utf-8') as f:
-                        f.write('\n'.join(refactored_code))
+                    with open(file_path, "w", encoding="utf-8") as f:
+                        f.write("\n".join(refactored_code))
 
                     return True
                 except SyntaxError:
@@ -149,13 +161,19 @@ class ComplexityRefactor:
 
         return False
 
-    def _apply_refactoring_patterns(self, function_node: ast.AST, lines: List[str]) -> Optional[List[str]]:
+    def _apply_refactoring_patterns(
+        self, function_node: ast.AST, lines: List[str]
+    ) -> Optional[List[str]]:
         """应用重构模式"""
         start_line = function_node.lineno - 1
-        end_line = function_node.end_lineno if hasattr(function_node, 'end_lineno') else len(lines)
+        end_line = (
+            function_node.end_lineno
+            if hasattr(function_node, "end_lineno")
+            else len(lines)
+        )
 
         function_lines = lines[start_line:end_line]
-        original_function = '\n'.join(function_lines)
+        original_function = "\n".join(function_lines)
 
         # 重构模式1: 提取条件判断
         refactored = self._extract_complex_conditions(function_lines)
@@ -186,7 +204,7 @@ class ComplexityRefactor:
         # 查找复杂的if条件
         for i, line in enumerate(function_lines):
             stripped = line.strip()
-            if stripped.startswith('if ') and ('and' in stripped or 'or' in stripped):
+            if stripped.startswith("if ") and ("and" in stripped or "or" in stripped):
                 # 检查条件是否很长
                 if len(stripped) > 80:
                     # 提取条件到单独的函数
@@ -198,11 +216,13 @@ class ComplexityRefactor:
                         f"{' ' * indent}def {condition_func_name}(self) -> bool:",
                         f"{' ' * (indent + 4)}\"\"\"提取的条件判断逻辑\"\"\"",
                         f"{' ' * (indent + 4)}return {stripped[3:-1]}",  # 去掉'if '和':'
-                        ""
+                        "",
                     ]
 
                     # 替换原条件
-                    refactored_lines[i] = f"{' ' * indent}if self.{condition_func_name}():"
+                    refactored_lines[i] = (
+                        f"{' ' * indent}if self.{condition_func_name}():"
+                    )
 
                     # 在函数开始前插入条件函数
                     refactored_lines = condition_func + refactored_lines
@@ -217,14 +237,18 @@ class ComplexityRefactor:
         # 查找复杂的for循环
         for i, line in enumerate(function_lines):
             stripped = line.strip()
-            if stripped.startswith('for ') and i + 10 < len(function_lines):
+            if stripped.startswith("for ") and i + 10 < len(function_lines):
                 # 检查循环体是否很长
                 indent = len(line) - len(line.lstrip())
                 loop_end = i + 1
 
                 # 找到循环结束位置
                 for j in range(i + 1, min(i + 20, len(function_lines))):
-                    if function_lines[j].strip() and len(function_lines[j]) - len(function_lines[j].lstrip()) <= indent:
+                    if (
+                        function_lines[j].strip()
+                        and len(function_lines[j]) - len(function_lines[j].lstrip())
+                        <= indent
+                    ):
                         loop_end = j
                         break
 
@@ -233,8 +257,8 @@ class ComplexityRefactor:
                     loop_func_name = f"_process_loop_item_{i}"
 
                     # 提取循环变量
-                    loop_var_match = re.search(r'for\s+(\w+)\s+in', stripped)
-                    loop_var = loop_var_match.group(1) if loop_var_match else 'item'
+                    loop_var_match = re.search(r"for\s+(\w+)\s+in", stripped)
+                    loop_var = loop_var_match.group(1) if loop_var_match else "item"
 
                     # 创建循环处理函数
                     loop_func = [
@@ -251,14 +275,16 @@ class ComplexityRefactor:
                     # 简化原循环
                     new_loop = [
                         line,
-                        f"{' ' * (indent + 4)}self.{loop_func_name}({loop_var})"
+                        f"{' ' * (indent + 4)}self.{loop_func_name}({loop_var})",
                     ]
 
                     # 替换原代码
-                    refactored_lines = (function_lines[:i] + 
-                                    loop_func + 
-                                    new_loop + 
-                                    function_lines[loop_end:])
+                    refactored_lines = (
+                        function_lines[:i]
+                        + loop_func
+                        + new_loop
+                        + function_lines[loop_end:]
+                    )
                     break
 
         return refactored_lines
@@ -270,7 +296,7 @@ class ComplexityRefactor:
         # 查找复杂的try-except块
         for i, line in enumerate(function_lines):
             stripped = line.strip()
-            if stripped.startswith('try:'):
+            if stripped.startswith("try:"):
                 indent = len(line) - len(line.lstrip())
 
                 # 找到except和finally块
@@ -278,11 +304,16 @@ class ComplexityRefactor:
                 except_end = len(function_lines)
 
                 for j in range(i + 1, len(function_lines)):
-                    if function_lines[j].strip().startswith('except'):
+                    if function_lines[j].strip().startswith("except"):
                         except_start = j
-                    elif (function_lines[j].strip() and 
-                        len(function_lines[j]) - len(function_lines[j].lstrip()) <= indent and
-                        not function_lines[j].strip().startswith(('except', 'finally', 'else'))):
+                    elif (
+                        function_lines[j].strip()
+                        and len(function_lines[j]) - len(function_lines[j].lstrip())
+                        <= indent
+                        and not function_lines[j]
+                        .strip()
+                        .startswith(("except", "finally", "else"))
+                    ):
                         except_end = j
                         break
 
@@ -298,7 +329,11 @@ class ComplexityRefactor:
 
                     # 添加except块内容
                     for k in range(except_start + 1, except_end):
-                        if not function_lines[k].strip().startswith(('except', 'finally')):
+                        if (
+                            not function_lines[k]
+                            .strip()
+                            .startswith(("except", "finally"))
+                        ):
                             error_func.append(function_lines[k])
 
                     error_func.append("")
@@ -306,14 +341,16 @@ class ComplexityRefactor:
                     # 简化原异常处理
                     new_except = [
                         function_lines[except_start],
-                        f"{' ' * (indent + 4)}self.{error_handler_name}(e)"
+                        f"{' ' * (indent + 4)}self.{error_handler_name}(e)",
                     ]
 
                     # 替换原代码
-                    refactored_lines = (function_lines[:except_start] + 
-                                    error_func + 
-                                    new_except + 
-                                    function_lines[except_end:])
+                    refactored_lines = (
+                        function_lines[:except_start]
+                        + error_func
+                        + new_except
+                        + function_lines[except_end:]
+                    )
                     break
 
         return refactored_lines
@@ -333,14 +370,17 @@ class ComplexityRefactor:
             # 尝试使用早期返回模式
             for i, line in enumerate(function_lines):
                 stripped = line.strip()
-                if stripped.startswith('if ') and 'not ' not in stripped:
+                if stripped.startswith("if ") and "not " not in stripped:
                     indent = len(line) - len(line.lstrip())
 
                     # 查找对应的else
                     else_line = -1
                     for j in range(i + 1, len(function_lines)):
-                        if (function_lines[j].strip() == 'else:' and 
-                            len(function_lines[j]) - len(function_lines[j].lstrip()) == indent):
+                        if (
+                            function_lines[j].strip() == "else:"
+                            and len(function_lines[j]) - len(function_lines[j].lstrip())
+                            == indent
+                        ):
                             else_line = j
                             break
 
@@ -351,7 +391,9 @@ class ComplexityRefactor:
 
                         refactored_lines[i] = f"{' ' * indent}{new_condition}"
                         # 在if块末尾添加return
-                        refactored_lines.insert(else_line, f"{' ' * (indent + 4)}return")
+                        refactored_lines.insert(
+                            else_line, f"{' ' * (indent + 4)}return"
+                        )
                         # 删除else行
                         refactored_lines.pop(else_line + 1)
                         break
@@ -361,21 +403,21 @@ class ComplexityRefactor:
     def _should_skip_file(self, file_path: Path) -> bool:
         """判断是否应该跳过某个文件"""
         skip_patterns = [
-            'node_modules',
-            'venv',
-            '.venv',
-            '__pycache__',
-            '.git',
-            'build',
-            'dist',
-            '.expo',
-            'ios/Pods',
-            'android/build',
-            '.jest-cache',
-            'coverage',
-            'cleanup_backup',
-            'test',
-            '__test__'
+            "node_modules",
+            "venv",
+            ".venv",
+            "__pycache__",
+            ".git",
+            "build",
+            "dist",
+            ".expo",
+            "ios/Pods",
+            "android/build",
+            ".jest-cache",
+            "coverage",
+            "cleanup_backup",
+            "test",
+            "__test__",
         ]
 
         file_str = str(file_path)
@@ -407,7 +449,11 @@ class ComplexityRefactor:
 
 """
 
-        remaining_functions = [f for f in self.high_complexity_functions if f not in self.refactored_functions]
+        remaining_functions = [
+            f
+            for f in self.high_complexity_functions
+            if f not in self.refactored_functions
+        ]
         for func in remaining_functions[:10]:
             report += f"- **{func['file']}:{func['function']}** (复杂度: {func['complexity']}, 行: {func['line']})\n"
 
@@ -441,12 +487,17 @@ class ComplexityRefactor:
 
         return report
 
+
 def main():
-    parser = argparse.ArgumentParser(description='索克生活项目复杂度重构')
-    parser.add_argument('--project-root', default='.', help='项目根目录路径')
-    parser.add_argument('--output', default='complexity_refactor_report.md', help='输出报告文件名')
-    parser.add_argument('--max-functions', type=int, default=20, help='最大重构函数数量')
-    parser.add_argument('--analyze-only', action='store_true', help='只分析不重构')
+    parser = argparse.ArgumentParser(description="索克生活项目复杂度重构")
+    parser.add_argument("--project-root", default=".", help="项目根目录路径")
+    parser.add_argument(
+        "--output", default="complexity_refactor_report.md", help="输出报告文件名"
+    )
+    parser.add_argument(
+        "--max-functions", type=int, default=20, help="最大重构函数数量"
+    )
+    parser.add_argument("--analyze-only", action="store_true", help="只分析不重构")
 
     args = parser.parse_args()
 
@@ -460,17 +511,20 @@ def main():
 
     if not args.analyze_only:
         # 执行重构
-        refactor_result = refactor.refactor_high_complexity_functions(args.max_functions)
+        refactor_result = refactor.refactor_high_complexity_functions(
+            args.max_functions
+        )
         print(f"✅ 成功重构 {refactor_result['refactored_count']} 个函数")
 
     # 生成报告
     report = refactor.generate_report()
 
     # 保存报告
-    with open(args.output, 'w', encoding='utf-8') as f:
+    with open(args.output, "w", encoding="utf-8") as f:
         f.write(report)
 
     print(f"📋 重构报告已保存到: {args.output}")
 
-if __name__ == '__main__':
-    main() 
+
+if __name__ == "__main__":
+    main()

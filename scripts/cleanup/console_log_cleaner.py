@@ -2,10 +2,10 @@
 console_log_cleaner - 索克生活项目模块
 """
 
-from pathlib import Path
-from typing import List, Dict, Tuple
 import os
 import re
+from pathlib import Path
+from typing import Dict, List, Tuple
 
 #!/usr/bin/env python3
 """
@@ -19,15 +19,15 @@ class ConsoleLogCleaner:
         self.project_root = Path(project_root)
         self.cleaned_files = []
         self.console_log_patterns = [
-            r'console\.log\([^)]*\);?\s*',
-            r'console\.debug\([^)]*\);?\s*',
-            r'console\.info\([^)]*\);?\s*',
-            r'console\.warn\([^)]*\);?\s*',
-            r'console\.error\([^)]*\);?\s*',
-            r'console\.trace\([^)]*\);?\s*',
-            r'console\.table\([^)]*\);?\s*',
-            r'console\.time\([^)]*\);?\s*',
-            r'console\.timeEnd\([^)]*\);?\s*',
+            r"console\.log\([^)]*\);?\s*",
+            r"console\.debug\([^)]*\);?\s*",
+            r"console\.info\([^)]*\);?\s*",
+            r"console\.warn\([^)]*\);?\s*",
+            r"console\.error\([^)]*\);?\s*",
+            r"console\.trace\([^)]*\);?\s*",
+            r"console\.table\([^)]*\);?\s*",
+            r"console\.time\([^)]*\);?\s*",
+            r"console\.timeEnd\([^)]*\);?\s*",
         ]
 
     def clean_console_logs(self) -> Dict:
@@ -55,28 +55,28 @@ class ConsoleLogCleaner:
         report = self._generate_report(total_removed)
 
         return {
-            'total_files_processed': len(js_files),
-            'files_cleaned': len(self.cleaned_files),
-            'total_console_logs_removed': total_removed,
-            'report': report
+            "total_files_processed": len(js_files),
+            "files_cleaned": len(self.cleaned_files),
+            "total_console_logs_removed": total_removed,
+            "report": report,
         }
 
     def _should_skip_file(self, file_path: Path) -> bool:
         """判断是否应该跳过文件"""
         skip_patterns = [
-            'node_modules',
-            '.git',
-            'dist',
-            'build',
-            'coverage',
-            '__pycache__',
-            '.pytest_cache',
-            'venv',
-            'env',
-            '.venv',
-            'Pods',
-            'android/app/build',
-            'ios/build'
+            "node_modules",
+            ".git",
+            "dist",
+            "build",
+            "coverage",
+            "__pycache__",
+            ".pytest_cache",
+            "venv",
+            "env",
+            ".venv",
+            "Pods",
+            "android/app/build",
+            "ios/build",
         ]
 
         file_str = str(file_path)
@@ -85,7 +85,7 @@ class ConsoleLogCleaner:
     def _clean_file_console_logs(self, file_path: Path) -> int:
         """清理单个文件的console.log语句"""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
             original_content = content
@@ -95,14 +95,14 @@ class ConsoleLogCleaner:
             for pattern in self.console_log_patterns:
                 matches = re.findall(pattern, content, re.MULTILINE)
                 removed_count += len(matches)
-                content = re.sub(pattern, '', content, flags=re.MULTILINE)
+                content = re.sub(pattern, "", content, flags=re.MULTILINE)
 
             # 清理空行
-            content = re.sub(r'\n\s*\n\s*\n', '\n\n', content)
+            content = re.sub(r"\n\s*\n\s*\n", "\n\n", content)
 
             # 如果内容有变化，保存文件
             if content != original_content:
-                with open(file_path, 'w', encoding='utf-8') as f:
+                with open(file_path, "w", encoding="utf-8") as f:
                     f.write(content)
                 print(f"✅ 已清理 {removed_count} 个console.log: {file_path}")
                 return removed_count
@@ -165,17 +165,18 @@ class ConsoleLogCleaner:
 
         return report
 
+
 def main():
     print("🧹 开始Console.log语句清理...")
 
-    cleaner = ConsoleLogCleaner('.')
+    cleaner = ConsoleLogCleaner(".")
 
     # 执行清理
     result = cleaner.clean_console_logs()
 
     # 保存报告
-    with open('console_log_cleanup_report.md', 'w', encoding='utf-8') as f:
-        f.write(result['report'])
+    with open("console_log_cleanup_report.md", "w", encoding="utf-8") as f:
+        f.write(result["report"])
 
     print(f"✅ Console.log清理完成！")
     print(f"📊 处理文件: {result['total_files_processed']}")
@@ -183,5 +184,6 @@ def main():
     print(f"📊 移除语句: {result['total_console_logs_removed']}")
     print(f"📄 报告已保存到: console_log_cleanup_report.md")
 
-if __name__ == '__main__':
-    main() 
+
+if __name__ == "__main__":
+    main()

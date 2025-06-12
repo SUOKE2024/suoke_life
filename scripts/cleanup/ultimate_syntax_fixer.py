@@ -2,11 +2,11 @@
 ultimate_syntax_fixer - 索克生活项目模块
 """
 
-from pathlib import Path
-from typing import List, Dict, Tuple
 import argparse
 import os
 import re
+from pathlib import Path
+from typing import Dict, List, Tuple
 
 #!/usr/bin/env python3
 """
@@ -43,15 +43,15 @@ class UltimateSyntaxFixer:
                 self.failed_files.append(str(test_file))
 
         return {
-            'fixed_files': len(self.fixed_files),
-            'failed_files': len(self.failed_files),
-            'total_files': len(test_files)
+            "fixed_files": len(self.fixed_files),
+            "failed_files": len(self.failed_files),
+            "total_files": len(test_files),
         }
 
     def _fix_test_file_ultimate(self, file_path: Path) -> bool:
         """终极修复单个测试文件"""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
             original_content = content
@@ -76,7 +76,7 @@ class UltimateSyntaxFixer:
 
             # 如果内容有变化，保存文件
             if content != original_content:
-                with open(file_path, 'w', encoding='utf-8') as f:
+                with open(file_path, "w", encoding="utf-8") as f:
                     f.write(content)
                 return True
 
@@ -91,21 +91,19 @@ class UltimateSyntaxFixer:
         # 修复缺失的分号和括号
         fixes = [
             # 修复缺失的分号
-            (r'}\s*$', '});', re.MULTILINE),
-            (r'}\s*\n\s*describe', '});\n\ndescribe'),
-            (r'}\s*\n\s*it\(', '});\n\n  it('),
-
+            (r"}\s*$", "});", re.MULTILINE),
+            (r"}\s*\n\s*describe", "});\n\ndescribe"),
+            (r"}\s*\n\s*it\(", "});\n\n  it("),
             # 修复多余的分号
-            (r';;+', ';'),
-            (r';\s*0\s*;\s*0\s*;', ''),
-            (r';\s*;\s*;+', ';'),
-
+            (r";;+", ";"),
+            (r";\s*0\s*;\s*0\s*;", ""),
+            (r";\s*;\s*;+", ";"),
             # 修复缺失的括号
             (r'describe\s*\(\s*"([^"]*)",\s*\(\)\s*;\s*=>', r'describe("\1", () => {'),
             (r'it\s*\(\s*"([^"]*)",\s*\(\)\s*;\s*=>', r'it("\1", () => {'),
             (r'test\s*\(\s*"([^"]*)",\s*\(\)\s*;\s*=>', r'test("\1", () => {'),
-            (r'beforeEach\s*\(\s*\(\)\s*;\s*=>', r'beforeEach(() => {'),
-            (r'afterEach\s*\(\s*\(\)\s*;\s*=>', r'afterEach(() => {'),
+            (r"beforeEach\s*\(\s*\(\)\s*;\s*=>", r"beforeEach(() => {"),
+            (r"afterEach\s*\(\s*\(\)\s*;\s*=>", r"afterEach(() => {"),
         ]
 
         for pattern, replacement, *flags in fixes:
@@ -118,23 +116,29 @@ class UltimateSyntaxFixer:
         """修复测试函数语法"""
         fixes = [
             # 修复describe函数
-            (r'describe\s*\(\s*([^"]*)"([^"]*)",\s*\(\)\s*;\s*=>', r'describe("\1\2", () => {'),
+            (
+                r'describe\s*\(\s*([^"]*)"([^"]*)",\s*\(\)\s*;\s*=>',
+                r'describe("\1\2", () => {',
+            ),
             (r'describe\s*\(\s*"([^"]*)",\s*\(\)\s*;\s*=>', r'describe("\1", () => {'),
-            (r'describe\s*\(\s*([A-Za-z][^"]*)",\s*\(\)\s*;\s*=>', r'describe("\1", () => {'),
-
+            (
+                r'describe\s*\(\s*([A-Za-z][^"]*)",\s*\(\)\s*;\s*=>',
+                r'describe("\1", () => {',
+            ),
             # 修复it函数
             (r'it\s*\(\s*"([^"]*)",\s*\(\)\s*;\s*=>', r'it("\1", () => {'),
-            (r'it\s*\(\s*should\s+([^"]*)",\s*\(\)\s*;\s*=>', r'it("should \1", () => {'),
+            (
+                r'it\s*\(\s*should\s+([^"]*)",\s*\(\)\s*;\s*=>',
+                r'it("should \1", () => {',
+            ),
             (r'it\s*\(\s*([^"]*)",\s*\(\)\s*;\s*=>', r'it("\1", () => {'),
-
             # 修复test函数
             (r'test\s*\(\s*"([^"]*)",\s*\(\)\s*;\s*=>', r'test("\1", () => {'),
-
             # 修复钩子函数
-            (r'beforeEach\s*\(\s*\(\)\s*;\s*=>', r'beforeEach(() => {'),
-            (r'afterEach\s*\(\s*\(\)\s*;\s*=>', r'afterEach(() => {'),
-            (r'beforeAll\s*\(\s*\(\)\s*;\s*=>', r'beforeAll(() => {'),
-            (r'afterAll\s*\(\s*\(\)\s*;\s*=>', r'afterAll(() => {'),
+            (r"beforeEach\s*\(\s*\(\)\s*;\s*=>", r"beforeEach(() => {"),
+            (r"afterEach\s*\(\s*\(\)\s*;\s*=>", r"afterEach(() => {"),
+            (r"beforeAll\s*\(\s*\(\)\s*;\s*=>", r"beforeAll(() => {"),
+            (r"afterAll\s*\(\s*\(\)\s*;\s*=>", r"afterAll(() => {"),
         ]
 
         for pattern, replacement in fixes:
@@ -146,16 +150,17 @@ class UltimateSyntaxFixer:
         """修复import语句"""
         fixes = [
             # 修复缺失引号的import
-            (r'import { performance } from perf_hooks";', 'import { performance } from "perf_hooks";'),
+            (
+                r'import { performance } from perf_hooks";',
+                'import { performance } from "perf_hooks";',
+            ),
             (r'import\s+\{\s*\}\s+from\s+"([^"]*)"([^;])', r'import {} from "\1";\2'),
             (r'import\s+([^;]+)from\s+"([^"]*)"([^;])', r'import \1 from "\2";\3'),
             (r'from\s+"([^"]*)"([^;])', r'from "\1";\2'),
-
             # 修复重复的import
-            (r'(import[^;]+;)\s*\n\s*\1', r'\1'),
-
+            (r"(import[^;]+;)\s*\n\s*\1", r"\1"),
             # 修复空的import
-            (r'import\s+\{\s*\}\s+from\s+"[^"]*";\s*\n', ''),
+            (r'import\s+\{\s*\}\s+from\s+"[^"]*";\s*\n', ""),
         ]
 
         for pattern, replacement in fixes:
@@ -167,15 +172,19 @@ class UltimateSyntaxFixer:
         """修复引号和字符串问题"""
         fixes = [
             # 修复缺失的引号
-            (r'describe\s*\(\s*([A-Za-z][^"]*)",\s*\(\)\s*;\s*=>', r'describe("\1", () => {'),
-            (r'it\s*\(\s*should\s+([^"]*)",\s*\(\)\s*;\s*=>', r'it("should \1", () => {'),
-
+            (
+                r'describe\s*\(\s*([A-Za-z][^"]*)",\s*\(\)\s*;\s*=>',
+                r'describe("\1", () => {',
+            ),
+            (
+                r'it\s*\(\s*should\s+([^"]*)",\s*\(\)\s*;\s*=>',
+                r'it("should \1", () => {',
+            ),
             # 修复多余的引号
             (r'""([^"]*)"', r'"\1"'),
             (r'"([^"]*)""+', r'"\1"'),
-
             # 修复字符串连接
-            (r'"\s*\+\s*"', ''),
+            (r'"\s*\+\s*"', ""),
         ]
 
         for pattern, replacement in fixes:
@@ -187,22 +196,31 @@ class UltimateSyntaxFixer:
         """修复特殊语法错误"""
         fixes = [
             # 修复性能测试中的错误
-            (r'performance\.now\s*;\s*\(\s*;\s*\);', 'performance.now();'),
-            (r'const\s+iterations\s*=\s*10\s*;\s*0\s*;\s*0\s*;', 'const iterations = 100;'),
-            (r'for\s*\(\s*let\s+i\s*=\s*;\s*0\s*;', 'for (let i = 0;'),
-            (r'iteratio\s*;\s*n\s*;\s*s\s*;', 'iterations'),
-
+            (r"performance\.now\s*;\s*\(\s*;\s*\);", "performance.now();"),
+            (
+                r"const\s+iterations\s*=\s*10\s*;\s*0\s*;\s*0\s*;",
+                "const iterations = 100;",
+            ),
+            (r"for\s*\(\s*let\s+i\s*=\s*;\s*0\s*;", "for (let i = 0;"),
+            (r"iteratio\s*;\s*n\s*;\s*s\s*;", "iterations"),
             # 修复expect语句
-            (r'expect\s*\(\s*([^)]+)\s*\)\s*\.\s*toBe\s*\(\s*([^)]+)\s*\)\s*;', r'expect(\1).toBe(\2);'),
-            (r'expect\s*\(\s*([^)]+)\s*\)\s*\.\s*toEqual\s*\(\s*([^)]+)\s*\)\s*;', r'expect(\1).toEqual(\2);'),
-            (r'expect\s*\(\s*([^)]+)\s*\)\s*\.\s*toBeDefined\s*\(\s*\)\s*;', r'expect(\1).toBeDefined();'),
-
+            (
+                r"expect\s*\(\s*([^)]+)\s*\)\s*\.\s*toBe\s*\(\s*([^)]+)\s*\)\s*;",
+                r"expect(\1).toBe(\2);",
+            ),
+            (
+                r"expect\s*\(\s*([^)]+)\s*\)\s*\.\s*toEqual\s*\(\s*([^)]+)\s*\)\s*;",
+                r"expect(\1).toEqual(\2);",
+            ),
+            (
+                r"expect\s*\(\s*([^)]+)\s*\)\s*\.\s*toBeDefined\s*\(\s*\)\s*;",
+                r"expect(\1).toBeDefined();",
+            ),
             # 修复注释中的语法错误
-            (r'/\*\s*valid\s+params\s*\*\s*/;', '/* valid params */'),
-            (r'//\s*Add\s+test\s+cases[^;]*;', '// Add test cases'),
-
+            (r"/\*\s*valid\s+params\s*\*\s*/;", "/* valid params */"),
+            (r"//\s*Add\s+test\s+cases[^;]*;", "// Add test cases"),
             # 修复变量声明
-            (r'const\s+result\s*=\s*([^;]+)\s*;', r'const result = \1;'),
+            (r"const\s+result\s*=\s*([^;]+)\s*;", r"const result = \1;"),
         ]
 
         for pattern, replacement in fixes:
@@ -213,18 +231,18 @@ class UltimateSyntaxFixer:
     def _cleanup_and_format(self, content: str) -> str:
         """清理和格式化"""
         # 分行处理
-        lines = content.split('\n')
+        lines = content.split("\n")
         cleaned_lines = []
 
         for line in lines:
             # 清理空行
-            if line.strip() == '':
-                cleaned_lines.append('')
+            if line.strip() == "":
+                cleaned_lines.append("")
                 continue
 
             # 修复特定的行级错误
-            if 'const result = AgentCoordinator(/* valid params *;/;);' in line:
-                line = '      const result = AgentCoordinator(/* valid params */);'
+            if "const result = AgentCoordinator(/* valid params *;/;);" in line:
+                line = "      const result = AgentCoordinator(/* valid params */);"
 
             if 'describe(AgentCoordinator", () => {' in line:
                 line = '  describe("AgentCoordinator", () => {'
@@ -232,41 +250,41 @@ class UltimateSyntaxFixer:
             if 'it("should work with valid inputs, (); => {' in line:
                 line = '    it("should work with valid inputs", () => {'
 
-            if '// Add test cases for valid inputs;' in line:
-                line = '      // Add test cases for valid inputs'
+            if "// Add test cases for valid inputs;" in line:
+                line = "      // Add test cases for valid inputs"
 
             # 修复缺失的结束括号
-            if line.strip().endswith('{') and not line.strip().endswith('});'):
+            if line.strip().endswith("{") and not line.strip().endswith("});"):
                 # 这是一个开始的块，确保有对应的结束
                 pass
 
             cleaned_lines.append(line)
 
-        content = '\n'.join(cleaned_lines)
+        content = "\n".join(cleaned_lines)
 
         # 最终清理
-        content = re.sub(r'\n\n\n+', '\n\n', content)  # 移除多余的空行
-        content = re.sub(r';\s*;+', ';', content)  # 移除多余的分号
+        content = re.sub(r"\n\n\n+", "\n\n", content)  # 移除多余的空行
+        content = re.sub(r";\s*;+", ";", content)  # 移除多余的分号
 
         return content
 
     def _should_skip_file(self, file_path: Path) -> bool:
         """判断是否应该跳过某个文件"""
         skip_patterns = [
-            'node_modules',
-            'venv',
-            '.venv',
-            '__pycache__',
-            '.git',
-            'build',
-            'dist',
-            '.expo',
-            'ios/Pods',
-            'android/build',
-            '.jest-cache',
-            'coverage',
-            'cleanup_backup',
-            'quality_enhancement'
+            "node_modules",
+            "venv",
+            ".venv",
+            "__pycache__",
+            ".git",
+            "build",
+            "dist",
+            ".expo",
+            "ios/Pods",
+            "android/build",
+            ".jest-cache",
+            "coverage",
+            "cleanup_backup",
+            "quality_enhancement",
         ]
 
         file_str = str(file_path)
@@ -347,10 +365,13 @@ class UltimateSyntaxFixer:
 
         return report
 
+
 def main():
-    parser = argparse.ArgumentParser(description='索克生活项目终极语法错误修复')
-    parser.add_argument('--project-root', default='.', help='项目根目录路径')
-    parser.add_argument('--output', default='ultimate_syntax_fix_report.md', help='输出报告文件名')
+    parser = argparse.ArgumentParser(description="索克生活项目终极语法错误修复")
+    parser.add_argument("--project-root", default=".", help="项目根目录路径")
+    parser.add_argument(
+        "--output", default="ultimate_syntax_fix_report.md", help="输出报告文件名"
+    )
 
     args = parser.parse_args()
 
@@ -365,12 +386,13 @@ def main():
     report = fixer.generate_report()
 
     # 保存报告
-    with open(args.output, 'w', encoding='utf-8') as f:
+    with open(args.output, "w", encoding="utf-8") as f:
         f.write(report)
 
     print(f"✅ 终极语法错误修复完成！报告已保存到: {args.output}")
     print(f"📊 修复文件数: {len(fixer.fixed_files)}")
     print(f"❌ 失败文件数: {len(fixer.failed_files)}")
 
-if __name__ == '__main__':
-    main() 
+
+if __name__ == "__main__":
+    main()

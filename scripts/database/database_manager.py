@@ -7,24 +7,27 @@ Database Management Script for Suoke Life
 """
 
 import asyncio
+import datetime
+import json
 import logging
 import os
+import subprocess
 import sys
 from pathlib import Path
-from typing import List, Dict, Any
-import subprocess
-import json
-import datetime
+from typing import Any, Dict, List
 
 # 添加项目根目录到Python路径
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
-from config.database import get_database_config, ServiceDatabaseMapping
-import asyncpg
 import aiofiles
+import asyncpg
+from config.database import ServiceDatabaseMapping, get_database_config
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 logger = logging.getLogger(__name__)
+
 
 class DatabaseManager:
     """数据库管理器"""
@@ -44,7 +47,7 @@ class DatabaseManager:
                 port=self.config.primary_port,
                 user=self.config.primary_user,
                 password=self.config.primary_password,
-                database='postgres'  # 连接到默认数据库
+                database="postgres",  # 连接到默认数据库
             )
 
             # 获取所有需要创建的数据库
@@ -85,7 +88,7 @@ class DatabaseManager:
                 ["alembic", "upgrade", "head"],
                 capture_output=True,
                 text=True,
-                cwd=Path(__file__).parent.parent.parent
+                cwd=Path(__file__).parent.parent.parent,
             )
 
             if result.returncode == 0:
@@ -120,11 +123,11 @@ class DatabaseManager:
                 f"--dbname={database_name}",
                 f"--file={backup_path}",
                 "--verbose",
-                "--no-password"
+                "--no-password",
             ]
 
             env = os.environ.copy()
-            env['PGPASSWORD'] = self.config.primary_password
+            env["PGPASSWORD"] = self.config.primary_password
 
             result = subprocess.run(cmd, capture_output=True, text=True, env=env)
 
@@ -152,11 +155,11 @@ class DatabaseManager:
                 f"--username={self.config.primary_user}",
                 f"--dbname={database_name}",
                 f"--file={backup_path}",
-                "--quiet"
+                "--quiet",
             ]
 
             env = os.environ.copy()
-            env['PGPASSWORD'] = self.config.primary_password
+            env["PGPASSWORD"] = self.config.primary_password
 
             result = subprocess.run(cmd, capture_output=True, text=True, env=env)
 
@@ -177,7 +180,7 @@ class DatabaseManager:
         health_report = {
             "timestamp": datetime.now().isoformat(),
             "databases": {},
-            "overall_status": "healthy"
+            "overall_status": "healthy",
         }
 
         databases = self.service_mapping.get_all_databases()
@@ -190,7 +193,7 @@ class DatabaseManager:
                     port=self.config.primary_port,
                     user=self.config.primary_user,
                     password=self.config.primary_password,
-                    database=database
+                    database=database,
                 )
 
                 # 检查连接
@@ -209,7 +212,7 @@ class DatabaseManager:
                 health_report["databases"][database] = {
                     "status": "healthy",
                     "size": size,
-                    "connections": connections
+                    "connections": connections,
                 }
 
                 await conn.close()
@@ -218,7 +221,7 @@ class DatabaseManager:
             except Exception as e:
                 health_report["databases"][database] = {
                     "status": "unhealthy",
-                    "error": str(e)
+                    "error": str(e),
                 }
                 health_report["overall_status"] = "unhealthy"
                 logger.error(f"❌ 数据库不健康: {database} - {e}")
@@ -239,7 +242,7 @@ class DatabaseManager:
                     port=self.config.primary_port,
                     user=self.config.primary_user,
                     password=self.config.primary_password,
-                    database=database
+                    database=database,
                 )
 
                 # 运行VACUUM ANALYZE
@@ -263,63 +266,77 @@ class DatabaseManager:
             "config": {
                 "host": self.config.primary_host,
                 "port": self.config.primary_port,
-                "databases_count": len(self.service_mapping.get_all_databases()) + 1
+                "databases_count": len(self.service_mapping.get_all_databases()) + 1,
             },
             "health": await self.check_database_health(),
-            "services": self.service_mapping.SERVICES
+            "services": self.service_mapping.SERVICES,
         }
 
         # 保存报告
-        report_path = f"reports/database_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+        report_path = (
+            f"reports/database_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+        )
         Path(report_path).parent.mkdir(parents=True, exist_ok=True)
 
-        async with aiofiles.open(report_path, 'w', encoding='utf-8') as f:
+        async with aiofiles.open(report_path, "w", encoding="utf-8") as f:
             await f.write(json.dumps(report, indent=2, ensure_ascii=False))
 
         logger.info(f"📋 数据库报告已生成: {report_path}")
         return report
 
+
 async def main():
     """主函数"""
     import argparse
 
-    parser = argparse.ArgumentParser(description='索克生活数据库管理工具')
-    parser.add_argument('action', choices=[
-        'create', 'migrate', 'backup', 'restore', 'health', 'optimize', 'report'
-    ], help='执行的操作')
-    parser.add_argument('--database', help='数据库名称')
-    parser.add_argument('--backup-path', help='备份文件路径')
+    parser = argparse.ArgumentParser(description="索克生活数据库管理工具")
+    parser.add_argument(
+        "action",
+        choices=[
+            "create",
+            "migrate",
+            "backup",
+            "restore",
+            "health",
+            "optimize",
+            "report",
+        ],
+        help="执行的操作",
+    )
+    parser.add_argument("--database", help="数据库名称")
+    parser.add_argument("--backup-path", help="备份文件路径")
 
     args = parser.parse_args()
 
     manager = DatabaseManager()
 
     try:
-        if args.action == 'create':
+        if args.action == "create":
             await manager.create_databases()
-        elif args.action == 'migrate':
+        elif args.action == "migrate":
             await manager.run_migrations()
-        elif args.action == 'backup':
+        elif args.action == "backup":
             if not args.database:
                 logger.error("备份操作需要指定数据库名称")
                 return
             await manager.backup_database(args.database, args.backup_path)
-        elif args.action == 'restore':
+        elif args.action == "restore":
             if not args.database or not args.backup_path:
                 logger.error("恢复操作需要指定数据库名称和备份文件路径")
                 return
             await manager.restore_database(args.database, args.backup_path)
-        elif args.action == 'health':
+        elif args.action == "health":
             health = await manager.check_database_health()
             print(json.dumps(health, indent=2, ensure_ascii=False))
-        elif args.action == 'optimize':
+        elif args.action == "optimize":
             await manager.optimize_databases()
-        elif args.action == 'report':
+        elif args.action == "report":
             await manager.generate_database_report()
 
     except Exception as e:
         logger.error(f"操作失败: {e}")
         sys.exit(1)
 
+
 if __name__ == "__main__":
-    asyncio.run(main()) 
+    asyncio.run(main())

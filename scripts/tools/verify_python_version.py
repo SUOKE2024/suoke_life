@@ -2,10 +2,10 @@
 verify_python_version - 索克生活项目模块
 """
 
-from pathlib import Path
 import logging
 import re
 import sys
+from pathlib import Path
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
@@ -17,14 +17,14 @@ import sys
 
 # 配置日志
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 
 # 目标Python版本
 TARGET_PYTHON_VERSION = "3.13.3"
 TARGET_PYTHON_MAJOR_MINOR = "3.13"
+
 
 def verify_python_versions():
     """验证Python版本统一性"""
@@ -43,20 +43,25 @@ def verify_python_versions():
     for file_path in pyproject_files:
         total_files += 1
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
             file_issues = []
 
             # 检查requires-python
-            requires_python_match = re.search(r'requires-python\s*=\s*"([^"]*)"', content)
+            requires_python_match = re.search(
+                r'requires-python\s*=\s*"([^"]*)"', content
+            )
             if requires_python_match:
                 requires_python = requires_python_match.group(1)
                 if TARGET_PYTHON_VERSION not in requires_python:
                     file_issues.append(f"requires-python版本不匹配: {requires_python}")
 
             # 检查classifiers
-            if f'"Programming Language :: Python :: {TARGET_PYTHON_MAJOR_MINOR}"' not in content:
+            if (
+                f'"Programming Language :: Python :: {TARGET_PYTHON_MAJOR_MINOR}"'
+                not in content
+            ):
                 file_issues.append(f"缺少Python {TARGET_PYTHON_MAJOR_MINOR}分类器")
 
             if file_issues:
@@ -79,13 +84,15 @@ def verify_python_versions():
     for file_path in dockerfile_files:
         total_files += 1
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
             file_issues = []
 
             # 检查FROM python:版本
-            from_python_matches = re.findall(r'FROM python:(\d+\.\d+(?:\.\d+)?(?:-\w+)?)', content)
+            from_python_matches = re.findall(
+                r"FROM python:(\d+\.\d+(?:\.\d+)?(?:-\w+)?)", content
+            )
 
             if from_python_matches:
                 for version in from_python_matches:
@@ -106,9 +113,9 @@ def verify_python_versions():
     # 打印摘要
     success_rate = (passed_files / total_files * 100) if total_files > 0 else 0
 
-    logger.info("\n" + "="*60)
+    logger.info("\n" + "=" * 60)
     logger.info("Python版本验证报告")
-    logger.info("="*60)
+    logger.info("=" * 60)
     logger.info(f"目标版本: Python {TARGET_PYTHON_VERSION}")
     logger.info(f"验证文件总数: {total_files}")
     logger.info(f"通过验证: {passed_files}")
@@ -126,6 +133,7 @@ def verify_python_versions():
     else:
         logger.error(f"\n❌ 发现 {failed_files} 个文件存在版本问题")
         return False
+
 
 if __name__ == "__main__":
     success = verify_python_versions()

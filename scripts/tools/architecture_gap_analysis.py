@@ -2,9 +2,9 @@
 architecture_gap_analysis - 索克生活项目模块
 """
 
-from pathlib import Path
-from typing import Dict, List, Any
 import json
+from pathlib import Path
+from typing import Any, Dict, List
 
 #!/usr/bin/env python3
 """
@@ -20,7 +20,7 @@ class ArchitectureGapAnalyzer:
             "current_architecture": {},
             "best_practices_gaps": {},
             "recommendations": {},
-            "priority_matrix": {}
+            "priority_matrix": {},
         }
 
     def analyze_current_architecture(self) -> Dict:
@@ -35,7 +35,7 @@ class ArchitectureGapAnalyzer:
             "deployment": self._analyze_deployment(),
             "documentation": self._analyze_documentation(),
             "testing": self._analyze_testing(),
-            "ci_cd": self._analyze_ci_cd()
+            "ci_cd": self._analyze_ci_cd(),
         }
 
         self.analysis_result["current_architecture"] = current_arch
@@ -43,21 +43,21 @@ class ArchitectureGapAnalyzer:
 
     def _analyze_project_structure(self) -> Dict:
         """分析项目结构"""
-        structure = {
-            "root_directories": [],
-            "services_count": 0,
-            "patterns": []
-        }
+        structure = {"root_directories": [], "services_count": 0, "patterns": []}
 
         # 获取根目录结构
         for item in self.project_root.iterdir():
-            if item.is_dir() and not item.name.startswith('.'):
+            if item.is_dir() and not item.name.startswith("."):
                 structure["root_directories"].append(item.name)
 
         # 分析服务数量
         services_dir = self.project_root / "services"
         if services_dir.exists():
-            services = [d for d in services_dir.iterdir() if d.is_dir() and not d.name.startswith('.')]
+            services = [
+                d
+                for d in services_dir.iterdir()
+                if d.is_dir() and not d.name.startswith(".")
+            ]
             structure["services_count"] = len(services)
 
         # 识别架构模式
@@ -82,13 +82,13 @@ class ArchitectureGapAnalyzer:
             "backend": [],
             "database": [],
             "infrastructure": [],
-            "ai_ml": []
+            "ai_ml": [],
         }
 
         # 分析前端技术栈
         package_json = self.project_root / "package.json"
         if package_json.exists():
-            with open(package_json, 'r', encoding='utf-8') as f:
+            with open(package_json, "r", encoding="utf-8") as f:
                 package_data = json.load(f)
                 deps = package_data.get("dependencies", {})
 
@@ -104,7 +104,7 @@ class ArchitectureGapAnalyzer:
         # 分析后端技术栈
         requirements_files = [
             self.project_root / "requirements.txt",
-            self.project_root / "pyproject.toml"
+            self.project_root / "pyproject.toml",
         ]
 
         for req_file in requirements_files:
@@ -131,24 +131,25 @@ class ArchitectureGapAnalyzer:
 
     def _analyze_microservices(self) -> Dict:
         """分析微服务架构"""
-        microservices = {
-            "services": [],
-            "communication": [],
-            "patterns": []
-        }
+        microservices = {"services": [], "communication": [], "patterns": []}
 
         services_dir = self.project_root / "services"
         if services_dir.exists():
             for service_dir in services_dir.iterdir():
-                if service_dir.is_dir() and not service_dir.name.startswith('.'):
+                if service_dir.is_dir() and not service_dir.name.startswith("."):
                     service_info = {
                         "name": service_dir.name,
                         "language": self._detect_service_language(service_dir),
                         "has_api": (service_dir / "api").exists(),
-                        "has_tests": any((service_dir / test_dir).exists() for test_dir in ["test", "tests"]),
+                        "has_tests": any(
+                            (service_dir / test_dir).exists()
+                            for test_dir in ["test", "tests"]
+                        ),
                         "has_docker": (service_dir / "Dockerfile").exists(),
-                        "has_config": any((service_dir / config_file).exists()
-                                        for config_file in ["config", "config.yml", "config.json"])
+                        "has_config": any(
+                            (service_dir / config_file).exists()
+                            for config_file in ["config", "config.yml", "config.json"]
+                        ),
                     }
                     microservices["services"].append(service_info)
 
@@ -170,7 +171,9 @@ class ArchitectureGapAnalyzer:
         """检测服务使用的编程语言"""
         if (service_dir / "go.mod").exists():
             return "Go"
-        elif (service_dir / "requirements.txt").exists() or (service_dir / "pyproject.toml").exists():
+        elif (service_dir / "requirements.txt").exists() or (
+            service_dir / "pyproject.toml"
+        ).exists():
             return "Python"
         elif (service_dir / "package.json").exists():
             return "Node.js"
@@ -186,7 +189,7 @@ class ArchitectureGapAnalyzer:
             "structure": [],
             "state_management": [],
             "navigation": [],
-            "testing": []
+            "testing": [],
         }
 
         src_dir = self.project_root / "src"
@@ -198,7 +201,7 @@ class ArchitectureGapAnalyzer:
         # 检查状态管理
         package_json = self.project_root / "package.json"
         if package_json.exists():
-            with open(package_json, 'r', encoding='utf-8') as f:
+            with open(package_json, "r", encoding="utf-8") as f:
                 package_data = json.load(f)
                 deps = package_data.get("dependencies", {})
 
@@ -215,7 +218,7 @@ class ArchitectureGapAnalyzer:
             "containerization": False,
             "orchestration": [],
             "ci_cd": [],
-            "monitoring": []
+            "monitoring": [],
         }
 
         if (self.project_root / "Dockerfile").exists():
@@ -238,7 +241,7 @@ class ArchitectureGapAnalyzer:
             "readme": (self.project_root / "README.md").exists(),
             "docs_directory": (self.project_root / "docs").exists(),
             "api_docs": False,
-            "architecture_docs": False
+            "architecture_docs": False,
         }
 
         docs_dir = self.project_root / "docs"
@@ -257,7 +260,7 @@ class ArchitectureGapAnalyzer:
             "unit_tests": False,
             "integration_tests": False,
             "e2e_tests": False,
-            "test_frameworks": []
+            "test_frameworks": [],
         }
 
         # 检查测试目录
@@ -278,7 +281,7 @@ class ArchitectureGapAnalyzer:
         # 检查测试框架
         package_json = self.project_root / "package.json"
         if package_json.exists():
-            with open(package_json, 'r', encoding='utf-8') as f:
+            with open(package_json, "r", encoding="utf-8") as f:
                 package_data = json.load(f)
                 dev_deps = package_data.get("devDependencies", {})
 
@@ -294,14 +297,14 @@ class ArchitectureGapAnalyzer:
         ci_cd = {
             "github_actions": (self.project_root / ".github" / "workflows").exists(),
             "docker_support": (self.project_root / "Dockerfile").exists(),
-            "scripts": []
+            "scripts": [],
         }
 
         # 检查脚本
         scripts_dir = self.project_root / "scripts"
         if scripts_dir.exists():
             for script_file in scripts_dir.iterdir():
-                if script_file.suffix in ['.sh', '.py', '.js']:
+                if script_file.suffix in [".sh", ".py", ".js"]:
                     ci_cd["scripts"].append(script_file.name)
 
         return ci_cd
@@ -315,7 +318,7 @@ class ArchitectureGapAnalyzer:
             "frontend_gaps": self._identify_frontend_gaps(),
             "ai_ml_gaps": self._identify_ai_ml_gaps(),
             "infrastructure_gaps": self._identify_infrastructure_gaps(),
-            "quality_gaps": self._identify_quality_gaps()
+            "quality_gaps": self._identify_quality_gaps(),
         }
 
         self.analysis_result["best_practices_gaps"] = gaps
@@ -328,21 +331,25 @@ class ArchitectureGapAnalyzer:
 
         # 检查服务网格
         if "Service Mesh" not in current_ms.get("communication", []):
-            gaps.append({
-                "category": "Service Communication",
-                "gap": "缺少服务网格（Service Mesh）",
-                "impact": "高",
-                "recommendation": "考虑引入Istio或Aeraki进行服务间通信管理"
-            })
+            gaps.append(
+                {
+                    "category": "Service Communication",
+                    "gap": "缺少服务网格（Service Mesh）",
+                    "impact": "高",
+                    "recommendation": "考虑引入Istio或Aeraki进行服务间通信管理",
+                }
+            )
 
         # 检查API网关
         if "API Gateway" not in current_ms.get("communication", []):
-            gaps.append({
-                "category": "API Management",
-                "gap": "API网关功能不完善",
-                "impact": "中",
-                "recommendation": "基于go-zero或Kong优化API网关功能"
-            })
+            gaps.append(
+                {
+                    "category": "API Management",
+                    "gap": "API网关功能不完善",
+                    "impact": "中",
+                    "recommendation": "基于go-zero或Kong优化API网关功能",
+                }
+            )
 
         # 检查服务发现
         service_discovery_found = False
@@ -352,12 +359,14 @@ class ArchitectureGapAnalyzer:
                 break
 
         if not service_discovery_found:
-            gaps.append({
-                "category": "Service Discovery",
-                "gap": "缺少专门的服务发现机制",
-                "impact": "中",
-                "recommendation": "实现基于Consul或etcd的服务发现"
-            })
+            gaps.append(
+                {
+                    "category": "Service Discovery",
+                    "gap": "缺少专门的服务发现机制",
+                    "impact": "中",
+                    "recommendation": "实现基于Consul或etcd的服务发现",
+                }
+            )
 
         return gaps
 
@@ -368,31 +377,37 @@ class ArchitectureGapAnalyzer:
 
         # 检查性能优化
         if "react-native-screens" not in str(self.analysis_result):
-            gaps.append({
-                "category": "Performance",
-                "gap": "缺少原生屏幕优化",
-                "impact": "中",
-                "recommendation": "集成react-native-screens提升导航性能"
-            })
+            gaps.append(
+                {
+                    "category": "Performance",
+                    "gap": "缺少原生屏幕优化",
+                    "impact": "中",
+                    "recommendation": "集成react-native-screens提升导航性能",
+                }
+            )
 
         # 检查状态管理
         if not current_frontend.get("state_management"):
-            gaps.append({
-                "category": "State Management",
-                "gap": "状态管理方案不明确",
-                "impact": "高",
-                "recommendation": "采用Redux Toolkit或Zustand进行状态管理"
-            })
+            gaps.append(
+                {
+                    "category": "State Management",
+                    "gap": "状态管理方案不明确",
+                    "impact": "高",
+                    "recommendation": "采用Redux Toolkit或Zustand进行状态管理",
+                }
+            )
 
         # 检查测试覆盖
         current_testing = self.analysis_result["current_architecture"]["testing"]
         if not current_testing.get("e2e_tests"):
-            gaps.append({
-                "category": "Testing",
-                "gap": "缺少端到端测试",
-                "impact": "中",
-                "recommendation": "集成Detox进行E2E测试"
-            })
+            gaps.append(
+                {
+                    "category": "Testing",
+                    "gap": "缺少端到端测试",
+                    "impact": "中",
+                    "recommendation": "集成Detox进行E2E测试",
+                }
+            )
 
         return gaps
 
@@ -401,28 +416,34 @@ class ArchitectureGapAnalyzer:
         gaps = []
 
         # 检查多智能体框架
-        gaps.append({
-            "category": "Multi-Agent System",
-            "gap": "缺少统一的多智能体协作框架",
-            "impact": "高",
-            "recommendation": "集成PraisonAI或AutoGen实现智能体协作"
-        })
+        gaps.append(
+            {
+                "category": "Multi-Agent System",
+                "gap": "缺少统一的多智能体协作框架",
+                "impact": "高",
+                "recommendation": "集成PraisonAI或AutoGen实现智能体协作",
+            }
+        )
 
         # 检查LLM网关
-        gaps.append({
-            "category": "LLM Integration",
-            "gap": "缺少统一的LLM接口管理",
-            "impact": "高",
-            "recommendation": "使用LiteLLM作为统一的LLM网关"
-        })
+        gaps.append(
+            {
+                "category": "LLM Integration",
+                "gap": "缺少统一的LLM接口管理",
+                "impact": "高",
+                "recommendation": "使用LiteLLM作为统一的LLM网关",
+            }
+        )
 
         # 检查向量数据库
-        gaps.append({
-            "category": "Vector Database",
-            "gap": "缺少专门的向量数据库支持",
-            "impact": "中",
-            "recommendation": "集成Pinecone或Weaviate进行向量存储"
-        })
+        gaps.append(
+            {
+                "category": "Vector Database",
+                "gap": "缺少专门的向量数据库支持",
+                "impact": "中",
+                "recommendation": "集成Pinecone或Weaviate进行向量存储",
+            }
+        )
 
         return gaps
 
@@ -433,28 +454,34 @@ class ArchitectureGapAnalyzer:
 
         # 检查监控系统
         if not current_deployment.get("monitoring"):
-            gaps.append({
-                "category": "Monitoring",
-                "gap": "缺少完整的监控体系",
-                "impact": "高",
-                "recommendation": "部署Prometheus + Grafana监控栈"
-            })
+            gaps.append(
+                {
+                    "category": "Monitoring",
+                    "gap": "缺少完整的监控体系",
+                    "impact": "高",
+                    "recommendation": "部署Prometheus + Grafana监控栈",
+                }
+            )
 
         # 检查日志聚合
-        gaps.append({
-            "category": "Logging",
-            "gap": "缺少集中式日志管理",
-            "impact": "中",
-            "recommendation": "实现ELK或Loki日志聚合方案"
-            })
+        gaps.append(
+            {
+                "category": "Logging",
+                "gap": "缺少集中式日志管理",
+                "impact": "中",
+                "recommendation": "实现ELK或Loki日志聚合方案",
+            }
+        )
 
         # 检查配置管理
-        gaps.append({
-            "category": "Configuration",
-            "gap": "配置管理不够统一",
-            "impact": "中",
-            "recommendation": "使用ConfigMap和Secret进行配置管理"
-        })
+        gaps.append(
+            {
+                "category": "Configuration",
+                "gap": "配置管理不够统一",
+                "impact": "中",
+                "recommendation": "使用ConfigMap和Secret进行配置管理",
+            }
+        )
 
         return gaps
 
@@ -465,20 +492,24 @@ class ArchitectureGapAnalyzer:
 
         # 检查代码覆盖率
         if not current_testing.get("unit_tests"):
-            gaps.append({
-                "category": "Code Quality",
-                "gap": "单元测试覆盖不足",
-                "impact": "高",
-                "recommendation": "建立完整的单元测试体系"
-            })
+            gaps.append(
+                {
+                    "category": "Code Quality",
+                    "gap": "单元测试覆盖不足",
+                    "impact": "高",
+                    "recommendation": "建立完整的单元测试体系",
+                }
+            )
 
         # 检查代码规范
-        gaps.append({
-            "category": "Code Standards",
-            "gap": "缺少统一的代码规范检查",
-            "impact": "中",
-            "recommendation": "集成ESLint、Prettier、golangci-lint等工具"
-        })
+        gaps.append(
+            {
+                "category": "Code Standards",
+                "gap": "缺少统一的代码规范检查",
+                "impact": "中",
+                "recommendation": "集成ESLint、Prettier、golangci-lint等工具",
+            }
+        )
 
         return gaps
 
@@ -489,7 +520,7 @@ class ArchitectureGapAnalyzer:
         recommendations = {
             "immediate_actions": [],
             "short_term_goals": [],
-            "long_term_vision": []
+            "long_term_vision": [],
         }
 
         # 立即行动项（1-2周）
@@ -498,14 +529,14 @@ class ArchitectureGapAnalyzer:
                 "action": "建立代码规范检查",
                 "description": "配置ESLint、Prettier等代码质量工具",
                 "effort": "低",
-                "impact": "中"
+                "impact": "中",
             },
             {
                 "action": "完善项目文档",
                 "description": "更新README和API文档",
                 "effort": "低",
-                "impact": "中"
-            }
+                "impact": "中",
+            },
         ]
 
         # 短期目标（1-3个月）
@@ -514,20 +545,20 @@ class ArchitectureGapAnalyzer:
                 "goal": "微服务架构优化",
                 "description": "基于go-zero重构核心服务",
                 "effort": "高",
-                "impact": "高"
+                "impact": "高",
             },
             {
                 "goal": "前端性能优化",
                 "description": "集成react-native-screens和性能监控",
                 "effort": "中",
-                "impact": "高"
+                "impact": "高",
             },
             {
                 "goal": "AI智能体协作",
                 "description": "集成PraisonAI多智能体框架",
                 "effort": "高",
-                "impact": "极高"
-            }
+                "impact": "极高",
+            },
         ]
 
         # 长期愿景（3-12个月）
@@ -536,14 +567,14 @@ class ArchitectureGapAnalyzer:
                 "vision": "完整的DevOps体系",
                 "description": "建立CI/CD、监控、日志的完整体系",
                 "effort": "高",
-                "impact": "高"
+                "impact": "高",
             },
             {
                 "vision": "智能化健康管理平台",
                 "description": "实现四个智能体的深度协作和学习",
                 "effort": "极高",
-                "impact": "极高"
-            }
+                "impact": "极高",
+            },
         ]
 
         self.analysis_result["recommendations"] = recommendations
@@ -560,9 +591,9 @@ class ArchitectureGapAnalyzer:
         # 按影响和紧急程度分类
         priority_matrix = {
             "P0_critical": [],  # 高影响，高紧急
-            "P1_important": [], # 高影响，中紧急
-            "P2_normal": [],    # 中影响，中紧急
-            "P3_low": []        # 低影响，低紧急
+            "P1_important": [],  # 高影响，中紧急
+            "P2_normal": [],  # 中影响，中紧急
+            "P3_low": [],  # 低影响，低紧急
         }
 
         for gap in all_gaps:
@@ -666,6 +697,7 @@ class ArchitectureGapAnalyzer:
 
         return report
 
+
 def main():
     """主函数"""
     print("🚀 开始架构差距分析...")
@@ -705,6 +737,7 @@ def main():
     print(f"- P0级别差距: {len(priority_matrix['P0_critical'])}个")
     print(f"- P1级别差距: {len(priority_matrix['P1_important'])}个")
     print(f"- 立即行动项: {len(recommendations['immediate_actions'])}个")
+
 
 if __name__ == "__main__":
     main()

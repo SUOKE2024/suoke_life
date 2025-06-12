@@ -2,9 +2,9 @@
 fix_dependencies - 索克生活项目模块
 """
 
+import re
 from pathlib import Path
 from typing import Dict, List, Tuple
-import re
 
 #!/usr/bin/env python3
 """
@@ -23,7 +23,7 @@ class DependencyFixer:
         # 统一版本映射
         self.version_map = {
             "email-validator": ">=2.1.0",
-            "prometheus-client": ">=0.19.0", 
+            "prometheus-client": ">=0.19.0",
             "opentelemetry-api": ">=1.21.0",
             "opentelemetry-sdk": ">=1.21.0",
             "opentelemetry-exporter-otlp": ">=1.21.0",
@@ -54,7 +54,7 @@ class DependencyFixer:
 
         print(f"修复文件: {file_path}")
 
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, "r", encoding="utf-8") as f:
             lines = f.readlines()
 
         fixed_lines = []
@@ -62,12 +62,14 @@ class DependencyFixer:
             line = line.strip()
 
             # 跳过空行和注释
-            if not line or line.startswith('#'):
+            if not line or line.startswith("#"):
                 fixed_lines.append(line)
                 continue
 
             # 检查是否有格式错误（如HTML标签）
-            if '<' in line and not any(op in line for op in ['>=', '<=', '==', '!=', '~=']):
+            if "<" in line and not any(
+                op in line for op in [">=", "<=", "==", "!=", "~="]
+            ):
                 print(f"  跳过格式错误的行: {line}")
                 continue
 
@@ -75,7 +77,7 @@ class DependencyFixer:
             for package, new_version in self.version_map.items():
                 if line.startswith(package):
                     # 提取包名和版本
-                    match = re.match(r'^([a-zA-Z0-9\-_\[\]]+)([><=!~]+.*)?$', line)
+                    match = re.match(r"^([a-zA-Z0-9\-_\[\]]+)([><=!~]+.*)?$", line)
                     if match:
                         pkg_name = match.group(1)
                         if pkg_name == package:
@@ -86,9 +88,9 @@ class DependencyFixer:
             fixed_lines.append(line)
 
         # 写回文件
-        with open(file_path, 'w', encoding='utf-8') as f:
+        with open(file_path, "w", encoding="utf-8") as f:
             for line in fixed_lines:
-                f.write(line + '\n')
+                f.write(line + "\n")
 
         return True
 
@@ -101,7 +103,7 @@ class DependencyFixer:
         # 创建简化版本用于测试
         clean_requirements = service_path / "requirements-clean.txt"
 
-        with open(requirements_file, 'r', encoding='utf-8') as f:
+        with open(requirements_file, "r", encoding="utf-8") as f:
             lines = f.readlines()
 
         clean_lines = []
@@ -109,19 +111,27 @@ class DependencyFixer:
             line = line.strip()
 
             # 跳过空行、注释和测试依赖
-            if (not line or line.startswith('#') or 
-                any(test_pkg in line.lower() for test_pkg in ['pytest', 'black', 'isort', 'flake8', 'mypy'])):
+            if (
+                not line
+                or line.startswith("#")
+                or any(
+                    test_pkg in line.lower()
+                    for test_pkg in ["pytest", "black", "isort", "flake8", "mypy"]
+                )
+            ):
                 continue
 
             # 跳过格式错误的行
-            if '<' in line and not any(op in line for op in ['>=', '<=', '==', '!=', '~=']):
+            if "<" in line and not any(
+                op in line for op in [">=", "<=", "==", "!=", "~="]
+            ):
                 continue
 
             clean_lines.append(line)
 
-        with open(clean_requirements, 'w', encoding='utf-8') as f:
+        with open(clean_requirements, "w", encoding="utf-8") as f:
             for line in clean_lines:
-                f.write(line + '\n')
+                f.write(line + "\n")
 
         print(f"创建清理版本: {clean_requirements}")
         return True
@@ -150,7 +160,7 @@ class DependencyFixer:
 
     def fix_pyproject_dependencies(self, file_path: Path) -> bool:
         """修复pyproject.toml中的依赖版本"""
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, "r", encoding="utf-8") as f:
             content = f.read()
 
         # 更新依赖版本
@@ -160,7 +170,7 @@ class DependencyFixer:
             replacement = f'"{package}{new_version}"'
             content = re.sub(pattern, replacement, content)
 
-        with open(file_path, 'w', encoding='utf-8') as f:
+        with open(file_path, "w", encoding="utf-8") as f:
             f.write(content)
 
         print(f"  更新pyproject.toml: {file_path}")
@@ -172,14 +182,14 @@ class DependencyFixer:
 
         services_to_fix = [
             "auth-service",
-            "api-gateway", 
+            "api-gateway",
             "user-service",
             "blockchain-service",
             "health-data-service",
             "corn-maze-service",
             # 智能体服务
             "agent-services/xiaoai-service",
-            "agent-services/xiaoke-service", 
+            "agent-services/xiaoke-service",
             "agent-services/laoke-service",
             "agent-services/soer-service",
             # 其他需要修复的服务
@@ -190,6 +200,7 @@ class DependencyFixer:
             results[service] = self.fix_service(service)
 
         return results
+
 
 def main():
     fixer = DependencyFixer(".")
@@ -205,5 +216,6 @@ def main():
 
     print("\n✨ 依赖修复完成！")
 
+
 if __name__ == "__main__":
-    main() 
+    main()

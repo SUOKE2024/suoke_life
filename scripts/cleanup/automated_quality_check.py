@@ -1,10 +1,11 @@
                 import json
     import argparse
-from pathlib import Path
-from typing import Dict, List, Tuple
+
 import subprocess
 import sys
 import time
+from pathlib import Path
+from typing import Dict, List, Tuple
 
 
 def main():

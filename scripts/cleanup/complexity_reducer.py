@@ -2,12 +2,13 @@
 complexity_reducer - 索克生活项目模块
 """
 
-from pathlib import Path
-from radon.visitors import ComplexityVisitor
-from typing import List, Dict, Set, Tuple
 import ast
 import os
 import re
+from pathlib import Path
+from typing import Dict, List, Set, Tuple
+
+from radon.visitors import ComplexityVisitor
 
 #!/usr/bin/env python3
 """
@@ -33,15 +34,17 @@ class ComplexityReducer:
 
         # 合并结果
         total_result = {
-            'python': python_result,
-            'typescript': typescript_result,
-            'total_high_complexity_found': len(python_result['high_complexity']) + len(typescript_result['high_complexity']),
-            'total_functions_refactored': len(python_result['refactored']) + len(typescript_result['refactored'])
+            "python": python_result,
+            "typescript": typescript_result,
+            "total_high_complexity_found": len(python_result["high_complexity"])
+            + len(typescript_result["high_complexity"]),
+            "total_functions_refactored": len(python_result["refactored"])
+            + len(typescript_result["refactored"]),
         }
 
         # 生成报告
         report = self._generate_report(total_result)
-        total_result['report'] = report
+        total_result["report"] = report
 
         return total_result
 
@@ -62,7 +65,9 @@ class ComplexityReducer:
                 high_complexity.extend(file_complexity)
 
                 # 重构高复杂度函数
-                refactored_count = self._refactor_python_file(file_path, file_complexity)
+                refactored_count = self._refactor_python_file(
+                    file_path, file_complexity
+                )
                 if refactored_count > 0:
                     refactored.append(str(file_path))
 
@@ -70,9 +75,9 @@ class ComplexityReducer:
                 print(f"❌ 处理文件失败 {file_path}: {e}")
 
         return {
-            'files_processed': len(python_files),
-            'high_complexity': high_complexity,
-            'refactored': refactored
+            "files_processed": len(python_files),
+            "high_complexity": high_complexity,
+            "refactored": refactored,
         }
 
     def _process_typescript_files(self) -> Dict:
@@ -95,7 +100,9 @@ class ComplexityReducer:
                 high_complexity.extend(file_complexity)
 
                 # 重构高复杂度函数
-                refactored_count = self._refactor_typescript_file(file_path, file_complexity)
+                refactored_count = self._refactor_typescript_file(
+                    file_path, file_complexity
+                )
                 if refactored_count > 0:
                     refactored.append(str(file_path))
 
@@ -103,30 +110,30 @@ class ComplexityReducer:
                 print(f"❌ 处理文件失败 {file_path}: {e}")
 
         return {
-            'files_processed': len(ts_files),
-            'high_complexity': high_complexity,
-            'refactored': refactored
+            "files_processed": len(ts_files),
+            "high_complexity": high_complexity,
+            "refactored": refactored,
         }
 
     def _should_skip_file(self, file_path: Path) -> bool:
         """判断是否应该跳过文件"""
         skip_patterns = [
-            'node_modules',
-            '.git',
-            'dist',
-            'build',
-            'coverage',
-            '__pycache__',
-            '.pytest_cache',
-            'venv',
-            'env',
-            '.venv',
-            'Pods',
-            'android/app/build',
-            'ios/build',
-            '.test.',
-            '.spec.',
-            '__tests__'
+            "node_modules",
+            ".git",
+            "dist",
+            "build",
+            "coverage",
+            "__pycache__",
+            ".pytest_cache",
+            "venv",
+            "env",
+            ".venv",
+            "Pods",
+            "android/app/build",
+            "ios/build",
+            ".test.",
+            ".spec.",
+            "__tests__",
         ]
 
         file_str = str(file_path)
@@ -135,7 +142,7 @@ class ComplexityReducer:
     def _analyze_python_complexity(self, file_path: Path) -> List[Dict]:
         """分析Python文件的复杂度"""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
             # 使用radon分析复杂度
@@ -146,13 +153,19 @@ class ComplexityReducer:
                 high_complexity_functions = []
                 for item in visitor.functions + visitor.methods:
                     if item.complexity >= self.complexity_threshold:
-                        high_complexity_functions.append({
-                            'file': file_path,
-                            'name': item.name,
-                            'complexity': item.complexity,
-                            'lineno': item.lineno,
-                            'type': 'function' if hasattr(item, 'is_method') and not item.is_method else 'method'
-                        })
+                        high_complexity_functions.append(
+                            {
+                                "file": file_path,
+                                "name": item.name,
+                                "complexity": item.complexity,
+                                "lineno": item.lineno,
+                                "type": (
+                                    "function"
+                                    if hasattr(item, "is_method") and not item.is_method
+                                    else "method"
+                                ),
+                            }
+                        )
 
                 return high_complexity_functions
 
@@ -166,37 +179,41 @@ class ComplexityReducer:
     def _analyze_typescript_complexity(self, file_path: Path) -> List[Dict]:
         """分析TypeScript文件的复杂度（简化版）"""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
             high_complexity_functions = []
 
             # 使用正则表达式找函数
             function_patterns = [
-                r'(function\s+(\w+)\s*\([^)]*\)\s*\{[^}]*\})',
-                r'(const\s+(\w+)\s*=\s*\([^)]*\)\s*=>\s*\{[^}]*\})',
-                r'((\w+)\s*\([^)]*\)\s*\{[^}]*\})'  # 方法
+                r"(function\s+(\w+)\s*\([^)]*\)\s*\{[^}]*\})",
+                r"(const\s+(\w+)\s*=\s*\([^)]*\)\s*=>\s*\{[^}]*\})",
+                r"((\w+)\s*\([^)]*\)\s*\{[^}]*\})",  # 方法
             ]
 
             for pattern in function_patterns:
                 matches = re.finditer(pattern, content, re.MULTILINE | re.DOTALL)
                 for match in matches:
                     func_content = match.group(1)
-                    func_name = match.group(2) if len(match.groups()) > 1 else 'anonymous'
+                    func_name = (
+                        match.group(2) if len(match.groups()) > 1 else "anonymous"
+                    )
 
                     # 简单的复杂度计算
                     complexity = self._calculate_simple_complexity(func_content)
 
                     if complexity >= self.complexity_threshold:
-                        line_number = content[:match.start()].count('\n') + 1
-                        high_complexity_functions.append({
-                            'file': file_path,
-                            'name': func_name,
-                            'complexity': complexity,
-                            'lineno': line_number,
-                            'type': 'function',
-                            'content': func_content
-                        })
+                        line_number = content[: match.start()].count("\n") + 1
+                        high_complexity_functions.append(
+                            {
+                                "file": file_path,
+                                "name": func_name,
+                                "complexity": complexity,
+                                "lineno": line_number,
+                                "type": "function",
+                                "content": func_content,
+                            }
+                        )
 
             return high_complexity_functions
 
@@ -209,26 +226,28 @@ class ComplexityReducer:
         complexity = 1  # 基础复杂度
 
         # 计算控制流语句
-        complexity += len(re.findall(r'\bif\b', content))
-        complexity += len(re.findall(r'\belse\b', content))
-        complexity += len(re.findall(r'\bfor\b', content))
-        complexity += len(re.findall(r'\bwhile\b', content))
-        complexity += len(re.findall(r'\bswitch\b', content))
-        complexity += len(re.findall(r'\bcase\b', content))
-        complexity += len(re.findall(r'\bcatch\b', content))
-        complexity += len(re.findall(r'\b&&\b', content))
-        complexity += len(re.findall(r'\b\|\|\b', content))
-        complexity += len(re.findall(r'\?\s*.*?\s*:', content))
+        complexity += len(re.findall(r"\bif\b", content))
+        complexity += len(re.findall(r"\belse\b", content))
+        complexity += len(re.findall(r"\bfor\b", content))
+        complexity += len(re.findall(r"\bwhile\b", content))
+        complexity += len(re.findall(r"\bswitch\b", content))
+        complexity += len(re.findall(r"\bcase\b", content))
+        complexity += len(re.findall(r"\bcatch\b", content))
+        complexity += len(re.findall(r"\b&&\b", content))
+        complexity += len(re.findall(r"\b\|\|\b", content))
+        complexity += len(re.findall(r"\?\s*.*?\s*:", content))
 
         return complexity
 
-    def _refactor_python_file(self, file_path: Path, high_complexity_functions: List[Dict]) -> int:
+    def _refactor_python_file(
+        self, file_path: Path, high_complexity_functions: List[Dict]
+    ) -> int:
         """重构Python文件中的高复杂度函数"""
         if not high_complexity_functions:
             return 0
 
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
             original_content = content
@@ -236,21 +255,23 @@ class ComplexityReducer:
 
             for func_info in high_complexity_functions[:3]:  # 限制重构数量
                 # 添加复杂度注释
-                lines = content.split('\n')
-                line_index = func_info['lineno'] - 1
+                lines = content.split("\n")
+                line_index = func_info["lineno"] - 1
 
                 if line_index < len(lines):
                     # 在函数前添加复杂度警告注释
                     warning_comment = f"    # TODO: 高复杂度函数 (复杂度: {func_info['complexity']}) - 需要重构"
                     lines.insert(line_index, warning_comment)
-                    content = '\n'.join(lines)
+                    content = "\n".join(lines)
                     refactored_count += 1
 
             # 如果有修改，保存文件
             if content != original_content:
-                with open(file_path, 'w', encoding='utf-8') as f:
+                with open(file_path, "w", encoding="utf-8") as f:
                     f.write(content)
-                print(f"✅ 已标记Python高复杂度函数: {file_path} ({refactored_count}个函数)")
+                print(
+                    f"✅ 已标记Python高复杂度函数: {file_path} ({refactored_count}个函数)"
+                )
 
             return refactored_count
 
@@ -258,13 +279,15 @@ class ComplexityReducer:
             print(f"❌ Python重构失败 {file_path}: {e}")
             return 0
 
-    def _refactor_typescript_file(self, file_path: Path, high_complexity_functions: List[Dict]) -> int:
+    def _refactor_typescript_file(
+        self, file_path: Path, high_complexity_functions: List[Dict]
+    ) -> int:
         """重构TypeScript文件中的高复杂度函数"""
         if not high_complexity_functions:
             return 0
 
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
             original_content = content
@@ -272,21 +295,23 @@ class ComplexityReducer:
 
             for func_info in high_complexity_functions[:3]:  # 限制重构数量
                 # 添加复杂度注释
-                lines = content.split('\n')
-                line_index = func_info['lineno'] - 1
+                lines = content.split("\n")
+                line_index = func_info["lineno"] - 1
 
                 if line_index < len(lines):
                     # 在函数前添加复杂度警告注释
                     warning_comment = f"  // TODO: 高复杂度函数 (复杂度: {func_info['complexity']}) - 需要重构"
                     lines.insert(line_index, warning_comment)
-                    content = '\n'.join(lines)
+                    content = "\n".join(lines)
                     refactored_count += 1
 
             # 如果有修改，保存文件
             if content != original_content:
-                with open(file_path, 'w', encoding='utf-8') as f:
+                with open(file_path, "w", encoding="utf-8") as f:
                     f.write(content)
-                print(f"✅ 已标记TypeScript高复杂度函数: {file_path} ({refactored_count}个函数)")
+                print(
+                    f"✅ 已标记TypeScript高复杂度函数: {file_path} ({refactored_count}个函数)"
+                )
 
             return refactored_count
 
@@ -361,18 +386,18 @@ class ComplexityReducer:
 """
 
         # 添加Python高复杂度函数详情
-        if result['python']['high_complexity']:
+        if result["python"]["high_complexity"]:
             report += "### Python高复杂度函数\n\n"
-            for i, func in enumerate(result['python']['high_complexity'][:10], 1):
+            for i, func in enumerate(result["python"]["high_complexity"][:10], 1):
                 report += f"{i}. **{func['name']}** (复杂度: {func['complexity']})\n"
                 report += f"   - 文件: {func['file']}\n"
                 report += f"   - 行号: {func['lineno']}\n"
                 report += f"   - 类型: {func['type']}\n\n"
 
         # 添加TypeScript高复杂度函数详情
-        if result['typescript']['high_complexity']:
+        if result["typescript"]["high_complexity"]:
             report += "### TypeScript高复杂度函数\n\n"
-            for i, func in enumerate(result['typescript']['high_complexity'][:10], 1):
+            for i, func in enumerate(result["typescript"]["high_complexity"][:10], 1):
                 report += f"{i}. **{func['name']}** (复杂度: {func['complexity']})\n"
                 report += f"   - 文件: {func['file']}\n"
                 report += f"   - 行号: {func['lineno']}\n"
@@ -416,17 +441,18 @@ class ComplexityReducer:
 
         return report
 
+
 def main():
     print("🎯 开始函数复杂度降低...")
 
-    reducer = ComplexityReducer('.')
+    reducer = ComplexityReducer(".")
 
     # 执行复杂度分析和降低
     result = reducer.reduce_complexity()
 
     # 保存报告
-    with open('complexity_reduction_report.md', 'w', encoding='utf-8') as f:
-        f.write(result['report'])
+    with open("complexity_reduction_report.md", "w", encoding="utf-8") as f:
+        f.write(result["report"])
 
     print(f"✅ 函数复杂度分析完成！")
     print(f"📊 高复杂度函数: {result['total_high_complexity_found']} 个")
@@ -435,5 +461,6 @@ def main():
     print(f"📊 TypeScript高复杂度: {len(result['typescript']['high_complexity'])} 个")
     print(f"📄 报告已保存到: complexity_reduction_report.md")
 
-if __name__ == '__main__':
-    main() 
+
+if __name__ == "__main__":
+    main()

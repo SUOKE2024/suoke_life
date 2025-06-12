@@ -2,11 +2,11 @@
 unused_imports_cleaner - 索克生活项目模块
 """
 
-from pathlib import Path
-from typing import List, Dict, Set, Tuple
 import ast
 import os
 import re
+from pathlib import Path
+from typing import Dict, List, Set, Tuple
 
 #!/usr/bin/env python3
 """
@@ -30,15 +30,17 @@ class UnusedImportsCleaner:
 
         # 合并结果
         total_result = {
-            'python': python_result,
-            'typescript': typescript_result,
-            'total_files_cleaned': python_result['files_cleaned'] + typescript_result['files_cleaned'],
-            'total_imports_removed': python_result['imports_removed'] + typescript_result['imports_removed']
+            "python": python_result,
+            "typescript": typescript_result,
+            "total_files_cleaned": python_result["files_cleaned"]
+            + typescript_result["files_cleaned"],
+            "total_imports_removed": python_result["imports_removed"]
+            + typescript_result["imports_removed"],
         }
 
         # 生成报告
         report = self._generate_report(total_result)
-        total_result['report'] = report
+        total_result["report"] = report
 
         return total_result
 
@@ -59,9 +61,9 @@ class UnusedImportsCleaner:
                 imports_removed += removed_count
 
         return {
-            'files_processed': len(python_files),
-            'files_cleaned': files_cleaned,
-            'imports_removed': imports_removed
+            "files_processed": len(python_files),
+            "files_cleaned": files_cleaned,
+            "imports_removed": imports_removed,
         }
 
     def _clean_typescript_imports(self) -> Dict:
@@ -84,28 +86,28 @@ class UnusedImportsCleaner:
                 imports_removed += removed_count
 
         return {
-            'files_processed': len(ts_files),
-            'files_cleaned': files_cleaned,
-            'imports_removed': imports_removed
+            "files_processed": len(ts_files),
+            "files_cleaned": files_cleaned,
+            "imports_removed": imports_removed,
         }
 
     def _should_skip_file(self, file_path: Path) -> bool:
         """判断是否应该跳过文件"""
         skip_patterns = [
-            'node_modules',
-            '.git',
-            'dist',
-            'build',
-            'coverage',
-            '__pycache__',
-            '.pytest_cache',
-            'venv',
-            'env',
-            '.venv',
-            'Pods',
-            'android/app/build',
-            'ios/build',
-            '__init__.py'  # 保留__init__.py文件的导入
+            "node_modules",
+            ".git",
+            "dist",
+            "build",
+            "coverage",
+            "__pycache__",
+            ".pytest_cache",
+            "venv",
+            "env",
+            ".venv",
+            "Pods",
+            "android/app/build",
+            "ios/build",
+            "__init__.py",  # 保留__init__.py文件的导入
         ]
 
         file_str = str(file_path)
@@ -114,7 +116,7 @@ class UnusedImportsCleaner:
     def _clean_python_file_imports(self, file_path: Path) -> int:
         """清理Python文件的未使用导入"""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
             # 解析AST
@@ -130,31 +132,35 @@ class UnusedImportsCleaner:
             # 找出未使用的导入
             unused_imports = []
             for imp in imports:
-                if not any(name in used_names for name in imp['names']):
+                if not any(name in used_names for name in imp["names"]):
                     unused_imports.append(imp)
 
             if not unused_imports:
                 return 0
 
             # 移除未使用的导入
-            lines = content.split('\n')
+            lines = content.split("\n")
             lines_to_remove = set()
 
             for imp in unused_imports:
-                lines_to_remove.add(imp['line_number'] - 1)  # AST行号从1开始
+                lines_to_remove.add(imp["line_number"] - 1)  # AST行号从1开始
 
             # 重建文件内容
-            new_lines = [line for i, line in enumerate(lines) if i not in lines_to_remove]
-            new_content = '\n'.join(new_lines)
+            new_lines = [
+                line for i, line in enumerate(lines) if i not in lines_to_remove
+            ]
+            new_content = "\n".join(new_lines)
 
             # 清理多余的空行
-            new_content = re.sub(r'\n\s*\n\s*\n', '\n\n', new_content)
+            new_content = re.sub(r"\n\s*\n\s*\n", "\n\n", new_content)
 
             # 保存文件
-            with open(file_path, 'w', encoding='utf-8') as f:
+            with open(file_path, "w", encoding="utf-8") as f:
                 f.write(new_content)
 
-            print(f"✅ Python文件已清理 {len(unused_imports)} 个未使用导入: {file_path}")
+            print(
+                f"✅ Python文件已清理 {len(unused_imports)} 个未使用导入: {file_path}"
+            )
             return len(unused_imports)
 
         except Exception as e:
@@ -164,7 +170,7 @@ class UnusedImportsCleaner:
     def _clean_typescript_file_imports(self, file_path: Path) -> int:
         """清理TypeScript文件的未使用导入"""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
             original_content = content
@@ -174,7 +180,7 @@ class UnusedImportsCleaner:
                 r'import\s+\{[^}]*\}\s+from\s+[\'"][^\'"]*[\'"];?\s*\n?',
                 r'import\s+\*\s+as\s+\w+\s+from\s+[\'"][^\'"]*[\'"];?\s*\n?',
                 r'import\s+\w+\s+from\s+[\'"][^\'"]*[\'"];?\s*\n?',
-                r'import\s+[\'"][^\'"]*[\'"];?\s*\n?'
+                r'import\s+[\'"][^\'"]*[\'"];?\s*\n?',
             ]
 
             removed_count = 0
@@ -189,21 +195,25 @@ class UnusedImportsCleaner:
                     # 检查是否被使用（简单的字符串搜索）
                     is_used = False
                     for name in imported_names:
-                        if name and re.search(rf'\b{re.escape(name)}\b', content.replace(imp, '')):
+                        if name and re.search(
+                            rf"\b{re.escape(name)}\b", content.replace(imp, "")
+                        ):
                             is_used = True
                             break
 
                     if not is_used and imported_names:
-                        content = content.replace(imp, '')
+                        content = content.replace(imp, "")
                         removed_count += 1
 
             # 清理多余的空行
-            content = re.sub(r'\n\s*\n\s*\n', '\n\n', content)
+            content = re.sub(r"\n\s*\n\s*\n", "\n\n", content)
 
             if content != original_content:
-                with open(file_path, 'w', encoding='utf-8') as f:
+                with open(file_path, "w", encoding="utf-8") as f:
                     f.write(content)
-                print(f"✅ TypeScript文件已清理 {removed_count} 个未使用导入: {file_path}")
+                print(
+                    f"✅ TypeScript文件已清理 {removed_count} 个未使用导入: {file_path}"
+                )
                 return removed_count
 
             return 0
@@ -219,19 +229,19 @@ class UnusedImportsCleaner:
         for node in ast.walk(tree):
             if isinstance(node, ast.Import):
                 names = [alias.name for alias in node.names]
-                imports.append({
-                    'type': 'import',
-                    'names': names,
-                    'line_number': node.lineno
-                })
+                imports.append(
+                    {"type": "import", "names": names, "line_number": node.lineno}
+                )
             elif isinstance(node, ast.ImportFrom):
                 names = [alias.name for alias in node.names] if node.names else []
-                imports.append({
-                    'type': 'from_import',
-                    'module': node.module,
-                    'names': names,
-                    'line_number': node.lineno
-                })
+                imports.append(
+                    {
+                        "type": "from_import",
+                        "module": node.module,
+                        "names": names,
+                        "line_number": node.lineno,
+                    }
+                )
 
         return imports
 
@@ -254,18 +264,20 @@ class UnusedImportsCleaner:
         names = []
 
         # 处理 import { name1, name2 } from 'module'
-        match = re.search(r'import\s+\{([^}]*)\}', import_statement)
+        match = re.search(r"import\s+\{([^}]*)\}", import_statement)
         if match:
             imports_str = match.group(1)
-            names.extend([name.strip() for name in imports_str.split(',') if name.strip()])
+            names.extend(
+                [name.strip() for name in imports_str.split(",") if name.strip()]
+            )
 
         # 处理 import * as name from 'module'
-        match = re.search(r'import\s+\*\s+as\s+(\w+)', import_statement)
+        match = re.search(r"import\s+\*\s+as\s+(\w+)", import_statement)
         if match:
             names.append(match.group(1))
 
         # 处理 import name from 'module'
-        match = re.search(r'import\s+(\w+)\s+from', import_statement)
+        match = re.search(r"import\s+(\w+)\s+from", import_statement)
         if match:
             names.append(match.group(1))
 
@@ -335,24 +347,30 @@ class UnusedImportsCleaner:
 
         return report
 
+
 def main():
     print("🧹 开始未使用导入清理...")
 
-    cleaner = UnusedImportsCleaner('.')
+    cleaner = UnusedImportsCleaner(".")
 
     # 执行清理
     result = cleaner.clean_unused_imports()
 
     # 保存报告
-    with open('unused_imports_cleanup_report.md', 'w', encoding='utf-8') as f:
-        f.write(result['report'])
+    with open("unused_imports_cleanup_report.md", "w", encoding="utf-8") as f:
+        f.write(result["report"])
 
     print(f"✅ 未使用导入清理完成！")
     print(f"📊 总清理文件: {result['total_files_cleaned']}")
     print(f"📊 总移除导入: {result['total_imports_removed']}")
-    print(f"📊 Python文件: {result['python']['files_cleaned']} 个文件，{result['python']['imports_removed']} 个导入")
-    print(f"📊 TypeScript文件: {result['typescript']['files_cleaned']} 个文件，{result['typescript']['imports_removed']} 个导入")
+    print(
+        f"📊 Python文件: {result['python']['files_cleaned']} 个文件，{result['python']['imports_removed']} 个导入"
+    )
+    print(
+        f"📊 TypeScript文件: {result['typescript']['files_cleaned']} 个文件，{result['typescript']['imports_removed']} 个导入"
+    )
     print(f"📄 报告已保存到: unused_imports_cleanup_report.md")
 
-if __name__ == '__main__':
-    main() 
+
+if __name__ == "__main__":
+    main()

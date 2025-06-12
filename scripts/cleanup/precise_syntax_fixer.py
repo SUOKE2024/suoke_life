@@ -2,11 +2,11 @@
 precise_syntax_fixer - 索克生活项目模块
 """
 
-from pathlib import Path
-from typing import List, Dict, Tuple
 import argparse
 import os
 import re
+from pathlib import Path
+from typing import Dict, List, Tuple
 
 #!/usr/bin/env python3
 """
@@ -28,14 +28,14 @@ class PreciseSyntaxFixer:
         # 重点修复的文件模式
         critical_patterns = [
             "*.test.ts",
-            "*.test.tsx", 
+            "*.test.tsx",
             "*.spec.ts",
             "*.spec.tsx",
             "src/App.tsx",
             "src/index.js",
             "babel.config.js",
             "jest.config.js",
-            ".eslintrc.js"
+            ".eslintrc.js",
         ]
 
         critical_files = []
@@ -56,32 +56,34 @@ class PreciseSyntaxFixer:
                 self.failed_files.append(str(file_path))
 
         return {
-            'fixed_files': len(self.fixed_files),
-            'failed_files': len(self.failed_files),
-            'total_files': len(critical_files)
+            "fixed_files": len(self.fixed_files),
+            "failed_files": len(self.failed_files),
+            "total_files": len(critical_files),
         }
 
     def _fix_critical_file(self, file_path: Path) -> bool:
         """修复单个关键文件"""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
             original_content = content
 
             # 根据文件类型应用不同的修复策略
-            if str(file_path).endswith(('.test.ts', '.test.tsx', '.spec.ts', '.spec.tsx')):
+            if str(file_path).endswith(
+                (".test.ts", ".test.tsx", ".spec.ts", ".spec.tsx")
+            ):
                 content = self._fix_test_file_content(content)
-            elif str(file_path).endswith('.tsx'):
+            elif str(file_path).endswith(".tsx"):
                 content = self._fix_tsx_file_content(content)
-            elif str(file_path).endswith('.ts'):
+            elif str(file_path).endswith(".ts"):
                 content = self._fix_ts_file_content(content)
-            elif str(file_path).endswith('.js'):
+            elif str(file_path).endswith(".js"):
                 content = self._fix_js_file_content(content)
 
             # 如果内容有变化，保存文件
             if content != original_content:
-                with open(file_path, 'w', encoding='utf-8') as f:
+                with open(file_path, "w", encoding="utf-8") as f:
                     f.write(content)
                 return True
 
@@ -96,31 +98,38 @@ class PreciseSyntaxFixer:
         # 修复测试文件的常见语法错误
         fixes = [
             # 修复import语句
-            (r'import { performance } from perf_hooks";', 'import { performance } from "perf_hooks";'),
+            (
+                r'import { performance } from perf_hooks";',
+                'import { performance } from "perf_hooks";',
+            ),
             (r'import\s+([^;]+)from\s+"([^"]*)"([^;])', r'import \1 from "\2";\3'),
             (r'from\s+"([^"]*)"([^;])', r'from "\1";\2'),
-
             # 修复describe和test函数
             (r'describe\s*\(\s*"([^"]*)",\s*\(\)\s*;\s*=>', r'describe("\1", () =>'),
             (r'it\s*\(\s*"([^"]*)",\s*\(\)\s*;\s*=>', r'it("\1", () =>'),
             (r'test\s*\(\s*"([^"]*)",\s*\(\)\s*;\s*=>', r'test("\1", () =>'),
-            (r'beforeEach\s*\(\s*\(\)\s*;\s*=>', r'beforeEach(() =>'),
-            (r'afterEach\s*\(\s*\(\)\s*;\s*=>', r'afterEach(() =>'),
-
+            (r"beforeEach\s*\(\s*\(\)\s*;\s*=>", r"beforeEach(() =>"),
+            (r"afterEach\s*\(\s*\(\)\s*;\s*=>", r"afterEach(() =>"),
             # 修复expect语句
-            (r'expect\s*\(\s*([^)]+)\s*\)\s*\.\s*toBe\s*\(\s*([^)]+)\s*\)\s*;', r'expect(\1).toBe(\2);'),
-            (r'expect\s*\(\s*([^)]+)\s*\)\s*\.\s*toEqual\s*\(\s*([^)]+)\s*\)\s*;', r'expect(\1).toEqual(\2);'),
-
+            (
+                r"expect\s*\(\s*([^)]+)\s*\)\s*\.\s*toBe\s*\(\s*([^)]+)\s*\)\s*;",
+                r"expect(\1).toBe(\2);",
+            ),
+            (
+                r"expect\s*\(\s*([^)]+)\s*\)\s*\.\s*toEqual\s*\(\s*([^)]+)\s*\)\s*;",
+                r"expect(\1).toEqual(\2);",
+            ),
             # 修复性能测试
-            (r'performance\.now\s*;\s*\(\s*;\s*\);', 'performance.now();'),
-            (r'const\s+iterations\s*=\s*10\s*;\s*0\s*;\s*0\s*;', 'const iterations = 100;'),
-            (r'for\s*\(\s*let\s+i\s*=\s*;\s*0\s*;', 'for (let i = 0;'),
-            (r'iteratio\s*;\s*n\s*;\s*s\s*;', 'iterations'),
-
+            (r"performance\.now\s*;\s*\(\s*;\s*\);", "performance.now();"),
+            (
+                r"const\s+iterations\s*=\s*10\s*;\s*0\s*;\s*0\s*;",
+                "const iterations = 100;",
+            ),
+            (r"for\s*\(\s*let\s+i\s*=\s*;\s*0\s*;", "for (let i = 0;"),
+            (r"iteratio\s*;\s*n\s*;\s*s\s*;", "iterations"),
             # 修复多余的分号和字符
-            (r';\s*;\s*;+', ';'),
-            (r';\s*0\s*;\s*0\s*;', ''),
-
+            (r";\s*;\s*;+", ";"),
+            (r";\s*0\s*;\s*0\s*;", ""),
             # 修复字符串问题
             (r'it\s*\(\s*should\s+([^"]*)",\s*\(\)\s*;\s*=>', r'it("should \1", () =>'),
         ]
@@ -135,20 +144,25 @@ class PreciseSyntaxFixer:
         fixes = [
             # 修复React导入
             (r'import\s+React\s+from\s+"react"([^;])', r'import React from "react";\1'),
-            (r'import\s+\{\s*([^}]+)\s*\}\s+from\s+"react"([^;])', r'import { \1 } from "react";\2'),
-
+            (
+                r'import\s+\{\s*([^}]+)\s*\}\s+from\s+"react"([^;])',
+                r'import { \1 } from "react";\2',
+            ),
             # 修复React Native导入
-            (r'import\s+\{\s*([^}]+)\s*\}\s+from\s+"react-native"([^;])', r'import { \1 } from "react-native";\2'),
-
+            (
+                r'import\s+\{\s*([^}]+)\s*\}\s+from\s+"react-native"([^;])',
+                r'import { \1 } from "react-native";\2',
+            ),
             # 修复组件定义
-            (r'const\s+(\w+):\s*React\.FC<([^>]*)>\s*=\s*\(\s*([^)]*)\s*\)\s*=>', r'const \1: React.FC<\2> = (\3) =>'),
-
+            (
+                r"const\s+(\w+):\s*React\.FC<([^>]*)>\s*=\s*\(\s*([^)]*)\s*\)\s*=>",
+                r"const \1: React.FC<\2> = (\3) =>",
+            ),
             # 修复JSX语法
-            (r'<([A-Z]\w*)\s+([^>]*)/>', r'<\1 \2 />'),
-            (r'<([A-Z]\w*)\s*>', r'<\1>'),
-
+            (r"<([A-Z]\w*)\s+([^>]*)/>", r"<\1 \2 />"),
+            (r"<([A-Z]\w*)\s*>", r"<\1>"),
             # 修复export语句
-            (r'export\s+default\s+(\w+)([^;])', r'export default \1;\2'),
+            (r"export\s+default\s+(\w+)([^;])", r"export default \1;\2"),
         ]
 
         for pattern, replacement in fixes:
@@ -160,19 +174,25 @@ class PreciseSyntaxFixer:
         """修复TS文件内容"""
         fixes = [
             # 修复接口定义
-            (r'interface\s+(\w+)\s*\{', r'interface \1 {'),
-            (r'export\s+interface\s+(\w+)\s*\{', r'export interface \1 {'),
-
+            (r"interface\s+(\w+)\s*\{", r"interface \1 {"),
+            (r"export\s+interface\s+(\w+)\s*\{", r"export interface \1 {"),
             # 修复类型定义
-            (r'type\s+(\w+)\s*=\s*([^;]+)([^;])', r'type \1 = \2;\3'),
-            (r'export\s+type\s+(\w+)\s*=\s*([^;]+)([^;])', r'export type \1 = \2;\3'),
-
+            (r"type\s+(\w+)\s*=\s*([^;]+)([^;])", r"type \1 = \2;\3"),
+            (r"export\s+type\s+(\w+)\s*=\s*([^;]+)([^;])", r"export type \1 = \2;\3"),
             # 修复函数定义
-            (r'function\s+(\w+)\s*\(\s*([^)]*)\s*\):\s*([^{]+)\s*\{', r'function \1(\2): \3 {'),
-            (r'export\s+function\s+(\w+)\s*\(\s*([^)]*)\s*\):\s*([^{]+)\s*\{', r'export function \1(\2): \3 {'),
-
+            (
+                r"function\s+(\w+)\s*\(\s*([^)]*)\s*\):\s*([^{]+)\s*\{",
+                r"function \1(\2): \3 {",
+            ),
+            (
+                r"export\s+function\s+(\w+)\s*\(\s*([^)]*)\s*\):\s*([^{]+)\s*\{",
+                r"export function \1(\2): \3 {",
+            ),
             # 修复箭头函数
-            (r'const\s+(\w+)\s*=\s*\(\s*([^)]*)\s*\):\s*([^=]+)\s*=>', r'const \1 = (\2): \3 =>'),
+            (
+                r"const\s+(\w+)\s*=\s*\(\s*([^)]*)\s*\):\s*([^=]+)\s*=>",
+                r"const \1 = (\2): \3 =>",
+            ),
         ]
 
         for pattern, replacement in fixes:
@@ -184,18 +204,18 @@ class PreciseSyntaxFixer:
         """修复JS文件内容"""
         fixes = [
             # 修复模块导出
-            (r'module\.exports\s*=\s*\{', 'module.exports = {'),
-            (r'exports\.(\w+)\s*=\s*([^;]+)([^;])', r'exports.\1 = \2;\3'),
-
+            (r"module\.exports\s*=\s*\{", "module.exports = {"),
+            (r"exports\.(\w+)\s*=\s*([^;]+)([^;])", r"exports.\1 = \2;\3"),
             # 修复require语句
-            (r'const\s+(\w+)\s*=\s*require\s*\(\s*"([^"]*)"([^;])', r'const \1 = require("\2");\3'),
-
+            (
+                r'const\s+(\w+)\s*=\s*require\s*\(\s*"([^"]*)"([^;])',
+                r'const \1 = require("\2");\3',
+            ),
             # 修复对象语法
-            (r',\s*}', '}'),
-            (r',\s*]', ']'),
-
+            (r",\s*}", "}"),
+            (r",\s*]", "]"),
             # 修复函数定义
-            (r'function\s+(\w+)\s*\(\s*([^)]*)\s*\)\s*\{', r'function \1(\2) {'),
+            (r"function\s+(\w+)\s*\(\s*([^)]*)\s*\)\s*\{", r"function \1(\2) {"),
         ]
 
         for pattern, replacement in fixes:
@@ -206,20 +226,20 @@ class PreciseSyntaxFixer:
     def _should_skip_file(self, file_path: Path) -> bool:
         """判断是否应该跳过某个文件"""
         skip_patterns = [
-            'node_modules',
-            'venv',
-            '.venv',
-            '__pycache__',
-            '.git',
-            'build',
-            'dist',
-            '.expo',
-            'ios/Pods',
-            'android/build',
-            '.jest-cache',
-            'coverage',
-            'cleanup_backup',
-            'quality_enhancement'
+            "node_modules",
+            "venv",
+            ".venv",
+            "__pycache__",
+            ".git",
+            "build",
+            "dist",
+            ".expo",
+            "ios/Pods",
+            "android/build",
+            ".jest-cache",
+            "coverage",
+            "cleanup_backup",
+            "quality_enhancement",
         ]
 
         file_str = str(file_path)
@@ -290,10 +310,13 @@ class PreciseSyntaxFixer:
 
         return report
 
+
 def main():
-    parser = argparse.ArgumentParser(description='索克生活项目精准语法错误修复')
-    parser.add_argument('--project-root', default='.', help='项目根目录路径')
-    parser.add_argument('--output', default='precise_syntax_fix_report.md', help='输出报告文件名')
+    parser = argparse.ArgumentParser(description="索克生活项目精准语法错误修复")
+    parser.add_argument("--project-root", default=".", help="项目根目录路径")
+    parser.add_argument(
+        "--output", default="precise_syntax_fix_report.md", help="输出报告文件名"
+    )
 
     args = parser.parse_args()
 
@@ -308,12 +331,13 @@ def main():
     report = fixer.generate_report()
 
     # 保存报告
-    with open(args.output, 'w', encoding='utf-8') as f:
+    with open(args.output, "w", encoding="utf-8") as f:
         f.write(report)
 
     print(f"✅ 精准语法错误修复完成！报告已保存到: {args.output}")
     print(f"📊 修复文件数: {len(fixer.fixed_files)}")
     print(f"❌ 失败文件数: {len(fixer.failed_files)}")
 
-if __name__ == '__main__':
-    main() 
+
+if __name__ == "__main__":
+    main()

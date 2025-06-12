@@ -2,8 +2,8 @@
 final_agent_coordinator_fixer - 索克生活项目模块
 """
 
-from pathlib import Path
 import os
+from pathlib import Path
 
 #!/usr/bin/env python3
 """
@@ -18,14 +18,14 @@ class FinalAgentCoordinatorFixer:
 
     def fix_agent_coordinator_test(self) -> bool:
         """修复AgentCoordinator.test.tsx文件"""
-        file_path = 'src/core/coordination/__tests__/AgentCoordinator.test.tsx'
+        file_path = "src/core/coordination/__tests__/AgentCoordinator.test.tsx"
 
         if not os.path.exists(file_path):
             print(f"文件不存在: {file_path}")
             return False
 
         # 创建最终修复的测试文件内容
-        fixed_content = '''import { performance } from "perf_hooks";
+        fixed_content = """import { performance } from "perf_hooks";
 
 describe("AgentCoordinator", () => {
 beforeEach(() => {
@@ -191,10 +191,10 @@ if (!taskId) {
 }
 return { success: true, cancelled: true, taskId };
 }
-'''
+"""
 
         try:
-            with open(file_path, 'w', encoding='utf-8') as f:
+            with open(file_path, "w", encoding="utf-8") as f:
                 f.write(fixed_content)
             print(f"✅ 已修复: {file_path}")
             return True
@@ -202,10 +202,11 @@ return { success: true, cancelled: true, taskId };
             print(f"❌ 修复失败: {e}")
             return False
 
+
 def main():
     print("🔧 开始最终修复AgentCoordinator测试文件...")
 
-    fixer = FinalAgentCoordinatorFixer('.')
+    fixer = FinalAgentCoordinatorFixer(".")
 
     # 执行修复
     success = fixer.fix_agent_coordinator_test()
@@ -213,5 +214,6 @@ def main():
     print(f"✅ 最终AgentCoordinator测试文件修复完成！")
     print(f"📊 修复状态: {'成功' if success else '失败'}")
 
-if __name__ == '__main__':
-    main() 
+
+if __name__ == "__main__":
+    main()

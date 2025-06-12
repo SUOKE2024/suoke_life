@@ -2,22 +2,22 @@
 performance_regression_check - 索克生活项目模块
 """
 
+import json
+import os
+import subprocess
+import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional
-import json
+
 import matplotlib.pyplot as plt
-import os
 import pandas as pd
-import subprocess
-import sys
 
 #!/usr/bin/env python3
 """
 性能回归检测脚本
 用于CI/CD中自动检测性能回归问题
 """
-
 
 
 class PerformanceRegressionChecker:
@@ -33,7 +33,7 @@ class PerformanceRegressionChecker:
         """加载基线性能数据"""
         baseline_file = self.baseline_dir / f"{service}_baseline.json"
         if baseline_file.exists():
-            with open(baseline_file, 'r') as f:
+            with open(baseline_file, "r") as f:
                 return json.load(f)
         return None
 
@@ -46,7 +46,7 @@ class PerformanceRegressionChecker:
         auth_result = self._run_service_performance_test(
             "auth-service",
             "services/auth-service",
-            "tests/test_auth_advanced_fixed.py::TestAuthServicePerformance"
+            "tests/test_auth_advanced_fixed.py::TestAuthServicePerformance",
         )
         if auth_result:
             results["auth-service"] = auth_result
@@ -54,16 +54,18 @@ class PerformanceRegressionChecker:
         # User-Service性能测试
         print("运行User-Service性能测试...")
         user_result = self._run_service_performance_test(
-            "user-service", 
+            "user-service",
             "services/user-service",
-            "test/test_performance_simple.py::TestUserServicePerformanceSimple"
+            "test/test_performance_simple.py::TestUserServicePerformanceSimple",
         )
         if user_result:
             results["user-service"] = user_result
 
         return results
 
-    def _run_service_performance_test(self, service_name: str, service_path: str, test_path: str) -> Optional[Dict]:
+    def _run_service_performance_test(
+        self, service_name: str, service_path: str, test_path: str
+    ) -> Optional[Dict]:
         """运行单个服务的性能测试"""
         try:
             # 切换到服务目录
@@ -72,17 +74,20 @@ class PerformanceRegressionChecker:
 
             # 运行性能测试
             cmd = [
-                "python", "-m", "pytest", test_path,
+                "python",
+                "-m",
+                "pytest",
+                test_path,
                 "--benchmark-only",
                 "--benchmark-json=benchmark_results.json",
-                "-v"
+                "-v",
             ]
 
             result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
 
             # 读取结果
             if os.path.exists("benchmark_results.json"):
-                with open("benchmark_results.json", 'r') as f:
+                with open("benchmark_results.json", "r") as f:
                     benchmark_data = json.load(f)
 
                 # 解析性能指标
@@ -111,7 +116,7 @@ class PerformanceRegressionChecker:
                     "max": stats["max"],
                     "stddev": stats["stddev"],
                     "median": stats["median"],
-                    "ops_per_sec": 1.0 / stats["mean"] if stats["mean"] > 0 else 0
+                    "ops_per_sec": 1.0 / stats["mean"] if stats["mean"] > 0 else 0,
                 }
 
         return metrics
@@ -127,7 +132,7 @@ class PerformanceRegressionChecker:
                 print(f"警告: 没有找到{service}的基线数据")
                 comparison_results[service] = {
                     "status": "no_baseline",
-                    "message": "没有基线数据，将当前结果作为新基线"
+                    "message": "没有基线数据，将当前结果作为新基线",
                 }
                 self._save_baseline_data(service, current_metrics)
                 continue
@@ -140,7 +145,9 @@ class PerformanceRegressionChecker:
 
         return comparison_results
 
-    def _compare_service_metrics(self, baseline: Dict, current: Dict, service: str) -> Dict:
+    def _compare_service_metrics(
+        self, baseline: Dict, current: Dict, service: str
+    ) -> Dict:
         """比较单个服务的性能指标"""
         regressions = []
         improvements = []
@@ -157,26 +164,32 @@ class PerformanceRegressionChecker:
             change_percent = (current_mean - baseline_mean) / baseline_mean
 
             if change_percent > self.threshold_degradation:
-                regressions.append({
-                    "test": test_name,
-                    "baseline_mean": baseline_mean,
-                    "current_mean": current_mean,
-                    "degradation_percent": change_percent * 100
-                })
+                regressions.append(
+                    {
+                        "test": test_name,
+                        "baseline_mean": baseline_mean,
+                        "current_mean": current_mean,
+                        "degradation_percent": change_percent * 100,
+                    }
+                )
             elif change_percent < -0.05:  # 5%以上的改进
-                improvements.append({
-                    "test": test_name,
-                    "baseline_mean": baseline_mean,
-                    "current_mean": current_mean,
-                    "improvement_percent": abs(change_percent) * 100
-                })
+                improvements.append(
+                    {
+                        "test": test_name,
+                        "baseline_mean": baseline_mean,
+                        "current_mean": current_mean,
+                        "improvement_percent": abs(change_percent) * 100,
+                    }
+                )
             else:
-                stable.append({
-                    "test": test_name,
-                    "baseline_mean": baseline_mean,
-                    "current_mean": current_mean,
-                    "change_percent": change_percent * 100
-                })
+                stable.append(
+                    {
+                        "test": test_name,
+                        "baseline_mean": baseline_mean,
+                        "current_mean": current_mean,
+                        "change_percent": change_percent * 100,
+                    }
+                )
 
         # 确定整体状态
         if regressions:
@@ -191,7 +204,7 @@ class PerformanceRegressionChecker:
             "regressions": regressions,
             "improvements": improvements,
             "stable": stable,
-            "total_tests": len(current)
+            "total_tests": len(current),
         }
 
     def _save_baseline_data(self, service: str, metrics: Dict):
@@ -199,12 +212,9 @@ class PerformanceRegressionChecker:
         self.baseline_dir.mkdir(exist_ok=True)
         baseline_file = self.baseline_dir / f"{service}_baseline.json"
 
-        baseline_data = {
-            "timestamp": datetime.now().isoformat(),
-            "metrics": metrics
-        }
+        baseline_data = {"timestamp": datetime.now().isoformat(), "metrics": metrics}
 
-        with open(baseline_file, 'w') as f:
+        with open(baseline_file, "w") as f:
             json.dump(baseline_data, f, indent=2)
 
     def generate_performance_report(self, comparison_results: Dict[str, Dict]) -> str:
@@ -215,107 +225,114 @@ class PerformanceRegressionChecker:
             f"**检测时间**: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
             "",
             "## 📊 总体概况",
-            ""
+            "",
         ]
 
         # 总体状态统计
         total_services = len(comparison_results)
-        regression_services = sum(1 for r in comparison_results.values() if r["status"] == "regression")
-        improvement_services = sum(1 for r in comparison_results.values() if r["status"] == "improvement")
-        stable_services = sum(1 for r in comparison_results.values() if r["status"] == "stable")
+        regression_services = sum(
+            1 for r in comparison_results.values() if r["status"] == "regression"
+        )
+        improvement_services = sum(
+            1 for r in comparison_results.values() if r["status"] == "improvement"
+        )
+        stable_services = sum(
+            1 for r in comparison_results.values() if r["status"] == "stable"
+        )
 
-        report_lines.extend([
-            f"- 📈 **总服务数**: {total_services}",
-            f"- 🔴 **性能回归**: {regression_services}",
-            f"- 🟢 **性能改进**: {improvement_services}",
-            f"- 🟡 **性能稳定**: {stable_services}",
-            ""
-        ])
+        report_lines.extend(
+            [
+                f"- 📈 **总服务数**: {total_services}",
+                f"- 🔴 **性能回归**: {regression_services}",
+                f"- 🟢 **性能改进**: {improvement_services}",
+                f"- 🟡 **性能稳定**: {stable_services}",
+                "",
+            ]
+        )
 
         # 详细服务报告
         for service, results in comparison_results.items():
-            report_lines.extend([
-                f"## 🔧 {service.title()} 性能分析",
-                ""
-            ])
+            report_lines.extend([f"## 🔧 {service.title()} 性能分析", ""])
 
             if results["status"] == "no_baseline":
-                report_lines.extend([
-                    "ℹ️ **状态**: 新基线建立",
-                    "📝 **说明**: 没有历史基线数据，当前结果已保存为新基线",
-                    ""
-                ])
+                report_lines.extend(
+                    [
+                        "ℹ️ **状态**: 新基线建立",
+                        "📝 **说明**: 没有历史基线数据，当前结果已保存为新基线",
+                        "",
+                    ]
+                )
                 continue
 
             # 性能回归
             if results["regressions"]:
-                report_lines.extend([
-                    "### 🔴 性能回归",
-                    ""
-                ])
+                report_lines.extend(["### 🔴 性能回归", ""])
                 for reg in results["regressions"]:
-                    report_lines.extend([
-                        f"- **{reg['test']}**",
-                        f"  - 基线: {reg['baseline_mean']:.4f}s",
-                        f"  - 当前: {reg['current_mean']:.4f}s", 
-                        f"  - 🔻 下降: {reg['degradation_percent']:.1f}%",
-                        ""
-                    ])
+                    report_lines.extend(
+                        [
+                            f"- **{reg['test']}**",
+                            f"  - 基线: {reg['baseline_mean']:.4f}s",
+                            f"  - 当前: {reg['current_mean']:.4f}s",
+                            f"  - 🔻 下降: {reg['degradation_percent']:.1f}%",
+                            "",
+                        ]
+                    )
 
             # 性能改进
             if results["improvements"]:
-                report_lines.extend([
-                    "### 🟢 性能改进",
-                    ""
-                ])
+                report_lines.extend(["### 🟢 性能改进", ""])
                 for imp in results["improvements"]:
-                    report_lines.extend([
-                        f"- **{imp['test']}**",
-                        f"  - 基线: {imp['baseline_mean']:.4f}s",
-                        f"  - 当前: {imp['current_mean']:.4f}s",
-                        f"  - 🔺 改进: {imp['improvement_percent']:.1f}%",
-                        ""
-                    ])
+                    report_lines.extend(
+                        [
+                            f"- **{imp['test']}**",
+                            f"  - 基线: {imp['baseline_mean']:.4f}s",
+                            f"  - 当前: {imp['current_mean']:.4f}s",
+                            f"  - 🔺 改进: {imp['improvement_percent']:.1f}%",
+                            "",
+                        ]
+                    )
 
             # 稳定性能
             if results["stable"]:
-                report_lines.extend([
-                    "### 🟡 稳定性能",
-                    ""
-                ])
+                report_lines.extend(["### 🟡 稳定性能", ""])
                 for stable in results["stable"][:3]:  # 只显示前3个
-                    report_lines.extend([
-                        f"- **{stable['test']}**: {stable['current_mean']:.4f}s (变化: {stable['change_percent']:+.1f}%)",
-                        ""
-                    ])
+                    report_lines.extend(
+                        [
+                            f"- **{stable['test']}**: {stable['current_mean']:.4f}s (变化: {stable['change_percent']:+.1f}%)",
+                            "",
+                        ]
+                    )
 
                 if len(results["stable"]) > 3:
-                    report_lines.append(f"- ... 还有 {len(results['stable']) - 3} 个稳定测试")
+                    report_lines.append(
+                        f"- ... 还有 {len(results['stable']) - 3} 个稳定测试"
+                    )
                     report_lines.append("")
 
         # 建议和行动项
-        report_lines.extend([
-            "## 💡 建议和行动项",
-            ""
-        ])
+        report_lines.extend(["## 💡 建议和行动项", ""])
 
         if regression_services > 0:
-            report_lines.extend([
-                "⚠️ **发现性能回归，建议采取以下行动**:",
-                "1. 检查最近的代码变更",
-                "2. 分析性能瓶颈点",
-                "3. 考虑优化算法或数据结构",
-                "4. 增加性能监控和告警",
-                ""
-            ])
+            report_lines.extend(
+                [
+                    "⚠️ **发现性能回归，建议采取以下行动**:",
+                    "1. 检查最近的代码变更",
+                    "2. 分析性能瓶颈点",
+                    "3. 考虑优化算法或数据结构",
+                    "4. 增加性能监控和告警",
+                    "",
+                ]
+            )
         else:
-            report_lines.extend([
-                "✅ **性能表现良好**:",
-                "1. 继续保持当前的开发实践",
-                "2. 定期更新性能基线",
-                "3. 考虑进一步的性能优化机会",
-                ""
-            ])
+            report_lines.extend(
+                [
+                    "✅ **性能表现良好**:",
+                    "1. 继续保持当前的开发实践",
+                    "2. 定期更新性能基线",
+                    "3. 考虑进一步的性能优化机会",
+                    "",
+                ]
+            )
 
         return "\n".join(report_lines)
 
@@ -337,15 +354,14 @@ class PerformanceRegressionChecker:
         report = self.generate_performance_report(comparison_results)
 
         # 4. 保存报告
-        with open(self.report_file, 'w', encoding='utf-8') as f:
+        with open(self.report_file, "w", encoding="utf-8") as f:
             f.write(report)
 
         print(f"📊 性能报告已生成: {self.report_file}")
 
         # 5. 检查是否有性能回归
         has_regression = any(
-            r["status"] == "regression" 
-            for r in comparison_results.values()
+            r["status"] == "regression" for r in comparison_results.values()
         )
 
         if has_regression:
@@ -368,4 +384,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main() 
+    main()

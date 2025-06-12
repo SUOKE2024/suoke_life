@@ -2,11 +2,11 @@
 advanced_syntax_fixer - 索克生活项目模块
 """
 
-from pathlib import Path
-from typing import List, Dict, Tuple
 import argparse
 import os
 import re
+from pathlib import Path
+from typing import Dict, List, Tuple
 
 #!/usr/bin/env python3
 """
@@ -51,15 +51,15 @@ class AdvancedSyntaxFixer:
                 self.failed_files.append(str(file_path))
 
         return {
-            'fixed_files': len(self.fixed_files),
-            'failed_files': len(self.failed_files),
-            'total_files': len(files_to_fix)
+            "fixed_files": len(self.fixed_files),
+            "failed_files": len(self.failed_files),
+            "total_files": len(files_to_fix),
         }
 
     def _fix_file_advanced(self, file_path: Path) -> bool:
         """高级修复单个文件"""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
             original_content = content
@@ -76,7 +76,7 @@ class AdvancedSyntaxFixer:
 
             # 如果内容有变化，保存文件
             if content != original_content:
-                with open(file_path, 'w', encoding='utf-8') as f:
+                with open(file_path, "w", encoding="utf-8") as f:
                     f.write(content)
                 return True
 
@@ -90,19 +90,24 @@ class AdvancedSyntaxFixer:
         """修复关键语法错误"""
         fixes = [
             # 修复严重的语法错误
-            (r'for\s*\(\s*let\s+i\s*=\s*0\s+i\s*<', 'for (let i = 0; i <'),
-            (r'for\s*\(\s*let\s+i\s*=\s*;\s*0\s*;', 'for (let i = 0;'),
-            (r'const\s+iterations\s*=\s*10\s*0\s*0\s*;', 'const iterations = 100;'),
-            (r'const\s+iterations\s*=\s*10\s*;\s*0\s*;\s*0\s*;', 'const iterations = 100;'),
-
+            (r"for\s*\(\s*let\s+i\s*=\s*0\s+i\s*<", "for (let i = 0; i <"),
+            (r"for\s*\(\s*let\s+i\s*=\s*;\s*0\s*;", "for (let i = 0;"),
+            (r"const\s+iterations\s*=\s*10\s*0\s*0\s*;", "const iterations = 100;"),
+            (
+                r"const\s+iterations\s*=\s*10\s*;\s*0\s*;\s*0\s*;",
+                "const iterations = 100;",
+            ),
             # 修复缺失的分号
-            (r'const\s+(\w+)\s*=\s*([^;]+)([^;])\s*$', r'const \1 = \2\3;', re.MULTILINE),
-            (r'}\s*\)\s*$', '});', re.MULTILINE),
-
+            (
+                r"const\s+(\w+)\s*=\s*([^;]+)([^;])\s*$",
+                r"const \1 = \2\3;",
+                re.MULTILINE,
+            ),
+            (r"}\s*\)\s*$", "});", re.MULTILINE),
             # 修复错误的括号和分号组合
-            (r';\s*\(\s*;\s*\)\s*;', ''),
-            (r';\s*;\s*;+', ';'),
-            (r';\s*0\s*;\s*0\s*;', ''),
+            (r";\s*\(\s*;\s*\)\s*;", ""),
+            (r";\s*;\s*;+", ";"),
+            (r";\s*0\s*;\s*0\s*;", ""),
         ]
 
         for pattern, replacement, *flags in fixes:
@@ -117,29 +122,49 @@ class AdvancedSyntaxFixer:
             # 修复describe函数
             (r'describe\s*\(\s*"([^"]*)",\s*\(\)\s*;\s*=>', r'describe("\1", () => {'),
             (r'describe\s*\(\s*([^"]*)",\s*\(\)\s*;\s*=>', r'describe("\1", () => {'),
-            (r'describe\s*\(\s*([A-Za-z][^"]*)",\s*\(\)\s*;\s*=>', r'describe("\1", () => {'),
+            (
+                r'describe\s*\(\s*([A-Za-z][^"]*)",\s*\(\)\s*;\s*=>',
+                r'describe("\1", () => {',
+            ),
             (r'describe\s*\(([^"]*)",\s*\(\)\s*;\s*=>', r'describe("\1", () => {'),
-
             # 修复it函数
             (r'it\s*\(\s*"([^"]*)",\s*\(\)\s*;\s*=>', r'it("\1", () => {'),
             (r'it\s*\(\s*"([^"]*)",\s*;\s*\(\s*;\s*\)\s*;\s*=>', r'it("\1", () => {'),
-            (r'it\s*\(\s*should\s+([^"]*)",\s*\(\)\s*;\s*=>', r'it("should \1", () => {'),
-            (r'it\s*\(\s*"should\s+([^"]*)",\s*\(\)\s*;\s*=>', r'it("should \1", () => {'),
-
+            (
+                r'it\s*\(\s*should\s+([^"]*)",\s*\(\)\s*;\s*=>',
+                r'it("should \1", () => {',
+            ),
+            (
+                r'it\s*\(\s*"should\s+([^"]*)",\s*\(\)\s*;\s*=>',
+                r'it("should \1", () => {',
+            ),
             # 修复test函数
             (r'test\s*\(\s*"([^"]*)",\s*\(\)\s*;\s*=>', r'test("\1", () => {'),
-
             # 修复钩子函数
-            (r'beforeEach\s*\(\s*\(\)\s*;\s*=>', r'beforeEach(() => {'),
-            (r'afterEach\s*\(\s*\(\)\s*;\s*=>', r'afterEach(() => {'),
-
+            (r"beforeEach\s*\(\s*\(\)\s*;\s*=>", r"beforeEach(() => {"),
+            (r"afterEach\s*\(\s*\(\)\s*;\s*=>", r"afterEach(() => {"),
             # 修复expect语句
-            (r'expect\s*\(\s*\(\s*\)\s*;\s*=>', r'expect(() =>'),
-            (r'expect\s*\(\s*([^)]+)\s*\)\s*\.\s*toBe\s*\(\s*([^)]+)\s*\)\s*;', r'expect(\1).toBe(\2);'),
-            (r'expect\s*\(\s*([^)]+)\s*\)\s*\.\s*toEqual\s*\(\s*([^)]+)\s*\)\s*;', r'expect(\1).toEqual(\2);'),
-            (r'expect\s*\(\s*([^)]+)\s*\)\s*\.\s*toBeDefined\s*\(\s*\)\s*;', r'expect(\1).toBeDefined();'),
-            (r'expect\s*\(\s*([^)]+)\s*\)\s*\.\s*toBeLessThan\s*\(\s*([^)]+)\s*\)\s*;', r'expect(\1).toBeLessThan(\2);'),
-            (r'expect\s*\(\s*([^)]+)\s*\)\s*\.\s*not\s*\.\s*toThrow\s*\(\s*\)\s*;', r'expect(\1).not.toThrow();'),
+            (r"expect\s*\(\s*\(\s*\)\s*;\s*=>", r"expect(() =>"),
+            (
+                r"expect\s*\(\s*([^)]+)\s*\)\s*\.\s*toBe\s*\(\s*([^)]+)\s*\)\s*;",
+                r"expect(\1).toBe(\2);",
+            ),
+            (
+                r"expect\s*\(\s*([^)]+)\s*\)\s*\.\s*toEqual\s*\(\s*([^)]+)\s*\)\s*;",
+                r"expect(\1).toEqual(\2);",
+            ),
+            (
+                r"expect\s*\(\s*([^)]+)\s*\)\s*\.\s*toBeDefined\s*\(\s*\)\s*;",
+                r"expect(\1).toBeDefined();",
+            ),
+            (
+                r"expect\s*\(\s*([^)]+)\s*\)\s*\.\s*toBeLessThan\s*\(\s*([^)]+)\s*\)\s*;",
+                r"expect(\1).toBeLessThan(\2);",
+            ),
+            (
+                r"expect\s*\(\s*([^)]+)\s*\)\s*\.\s*not\s*\.\s*toThrow\s*\(\s*\)\s*;",
+                r"expect(\1).not.toThrow();",
+            ),
         ]
 
         for pattern, replacement in fixes:
@@ -151,16 +176,23 @@ class AdvancedSyntaxFixer:
         """修复TypeScript特定错误"""
         fixes = [
             # 修复import语句
-            (r'import { performance } from perf_hooks";', 'import { performance } from "perf_hooks";'),
-            (r'import\s+\{\s*([^}]+)\s*\}\s+from\s+"([^"]*)"([^;])', r'import { \1 } from "\2";\3'),
+            (
+                r'import { performance } from perf_hooks";',
+                'import { performance } from "perf_hooks";',
+            ),
+            (
+                r'import\s+\{\s*([^}]+)\s*\}\s+from\s+"([^"]*)"([^;])',
+                r'import { \1 } from "\2";\3',
+            ),
             (r'import\s+([^;]+)from\s+"([^"]*)"([^;])', r'import \1 from "\2";\3'),
-
             # 修复接口和类型
-            (r'interface\s+(\w+)\s*\{', r'interface \1 {'),
-            (r'type\s+(\w+)\s*=\s*([^;]+)([^;])', r'type \1 = \2;\3'),
-
+            (r"interface\s+(\w+)\s*\{", r"interface \1 {"),
+            (r"type\s+(\w+)\s*=\s*([^;]+)([^;])", r"type \1 = \2;\3"),
             # 修复函数定义
-            (r'const\s+(\w+):\s*([^=]+)\s*=\s*\(\s*([^)]*)\s*\)\s*=>', r'const \1: \2 = (\3) =>'),
+            (
+                r"const\s+(\w+):\s*([^=]+)\s*=\s*\(\s*([^)]*)\s*\)\s*=>",
+                r"const \1: \2 = (\3) =>",
+            ),
         ]
 
         for pattern, replacement in fixes:
@@ -172,12 +204,11 @@ class AdvancedSyntaxFixer:
         """修复JavaScript特定错误"""
         fixes = [
             # 修复函数调用
-            (r'(\w+)\s*\(\s*//\s*([^)]*)\s*\)\s*;', r'\1(/* \2 */);'),
-            (r'(\w+)\s*\(\s*/\*\s*([^*]*)\s*\*\s*/\s*\)\s*;', r'\1(/* \2 */);'),
-
+            (r"(\w+)\s*\(\s*//\s*([^)]*)\s*\)\s*;", r"\1(/* \2 */);"),
+            (r"(\w+)\s*\(\s*/\*\s*([^*]*)\s*\*\s*/\s*\)\s*;", r"\1(/* \2 */);"),
             # 修复注释
-            (r'/\*\s*([^*]*)\s*\*\s*/\s*;', r'/* \1 */'),
-            (r'//\s*([^;]*)\s*;', r'// \1'),
+            (r"/\*\s*([^*]*)\s*\*\s*/\s*;", r"/* \1 */"),
+            (r"//\s*([^;]*)\s*;", r"// \1"),
         ]
 
         for pattern, replacement in fixes:
@@ -189,17 +220,24 @@ class AdvancedSyntaxFixer:
         """修复字符串和引号错误"""
         fixes = [
             # 修复缺失的引号
-            (r'describe\s*\(\s*([A-Za-z][^"]*)",\s*\(\)\s*;\s*=>', r'describe("\1", () => {'),
-            (r'it\s*\(\s*should\s+([^"]*)",\s*\(\)\s*;\s*=>', r'it("should \1", () => {'),
-
+            (
+                r'describe\s*\(\s*([A-Za-z][^"]*)",\s*\(\)\s*;\s*=>',
+                r'describe("\1", () => {',
+            ),
+            (
+                r'it\s*\(\s*should\s+([^"]*)",\s*\(\)\s*;\s*=>',
+                r'it("should \1", () => {',
+            ),
             # 修复多余的引号
             (r'""([^"]*)"', r'"\1"'),
             (r'"([^"]*)""+', r'"\1"'),
-
             # 修复字符串中的特殊字符
-            (r'process\.memoryUsage\(\)\.heapUs;e;d;', 'process.memoryUsage().heapUsed'),
-            (r'initialMemo;r;y;', 'initialMemory'),
-            (r'iteratio;n;s;', 'iterations'),
+            (
+                r"process\.memoryUsage\(\)\.heapUs;e;d;",
+                "process.memoryUsage().heapUsed",
+            ),
+            (r"initialMemo;r;y;", "initialMemory"),
+            (r"iteratio;n;s;", "iterations"),
         ]
 
         for pattern, replacement in fixes:
@@ -211,18 +249,16 @@ class AdvancedSyntaxFixer:
         """修复标点符号错误"""
         fixes = [
             # 修复错误的分号和字符组合
-            (r';\s*\(\s*;\s*\)\s*;\s*=>', r' => {'),
-            (r';\s*\(\s*;\s*\)\s*;', r''),
-            (r',\s*;\s*\(\s*;\s*\)\s*;\s*=>', r', () => {'),
-            (r',\s*\(\s*\)\s*;\s*=>', r', () => {'),
-
+            (r";\s*\(\s*;\s*\)\s*;\s*=>", r" => {"),
+            (r";\s*\(\s*;\s*\)\s*;", r""),
+            (r",\s*;\s*\(\s*;\s*\)\s*;\s*=>", r", () => {"),
+            (r",\s*\(\s*\)\s*;\s*=>", r", () => {"),
             # 修复错误的括号组合
-            (r'\(\s*//\s*([^)]*)\s*\)', r'(/* \1 */)'),
-            (r'\(\s*/\*\s*([^*]*)\s*\*\s*/\s*\)', r'(/* \1 */)'),
-
+            (r"\(\s*//\s*([^)]*)\s*\)", r"(/* \1 */)"),
+            (r"\(\s*/\*\s*([^*]*)\s*\*\s*/\s*\)", r"(/* \1 */)"),
             # 修复错误的分号组合
-            (r';\s*/\s*;\s*\)', r');'),
-            (r'\*\s*/\s*;\s*\)', r'*/);'),
+            (r";\s*/\s*;\s*\)", r");"),
+            (r"\*\s*/\s*;\s*\)", r"*/);"),
         ]
 
         for pattern, replacement in fixes:
@@ -233,21 +269,21 @@ class AdvancedSyntaxFixer:
     def _fix_structure_errors(self, content: str) -> str:
         """修复结构错误"""
         # 分行处理，修复结构问题
-        lines = content.split('\n')
+        lines = content.split("\n")
         fixed_lines = []
 
         for i, line in enumerate(lines):
             # 修复特定的行级错误
-            if 'const result = AgentCoordinator(/* valid params *;/;);' in line:
-                line = '      const result = AgentCoordinator(/* valid params */);'
-            elif 'const result = agentCoordinator(/* valid params *;/;);' in line:
-                line = '      const result = agentCoordinator(/* valid params */);'
-            elif 'const result = submitTask(/* valid params *;/;);' in line:
-                line = '      const result = submitTask(/* valid params */);'
-            elif 'const result = getTaskStatus(/* valid params *;/;);' in line:
-                line = '      const result = getTaskStatus(/* valid params */);'
-            elif 'const result = cancelTask(/* valid params *;/;);' in line:
-                line = '      const result = cancelTask(/* valid params */);'
+            if "const result = AgentCoordinator(/* valid params *;/;);" in line:
+                line = "      const result = AgentCoordinator(/* valid params */);"
+            elif "const result = agentCoordinator(/* valid params *;/;);" in line:
+                line = "      const result = agentCoordinator(/* valid params */);"
+            elif "const result = submitTask(/* valid params *;/;);" in line:
+                line = "      const result = submitTask(/* valid params */);"
+            elif "const result = getTaskStatus(/* valid params *;/;);" in line:
+                line = "      const result = getTaskStatus(/* valid params */);"
+            elif "const result = cancelTask(/* valid params *;/;);" in line:
+                line = "      const result = cancelTask(/* valid params */);"
             elif 'describe(AgentCoordinator", () => {' in line:
                 line = '  describe("AgentCoordinator", () => {'
             elif 'describe(agentCoordinator", () => {' in line:
@@ -258,43 +294,48 @@ class AdvancedSyntaxFixer:
                 line = '  describe("getTaskStatus", () => {'
             elif 'describe(cancelTask", () => {' in line:
                 line = '  describe("cancelTask", () => {'
-            elif 'it("should not cause memory leaks\', (); => {' in line:
+            elif "it(\"should not cause memory leaks', (); => {" in line:
                 line = '  it("should not cause memory leaks", () => {'
             elif 'it("should handle large datasets efficiently, (); => {' in line:
                 line = '  it("should handle large datasets efficiently", () => {'
-            elif 'const largeDataset = new Array(10000).fill(0).map((_, ;i;); => i);' in line:
-                line = '    const largeDataset = new Array(10000).fill(0).map((_, i) => i);'
+            elif (
+                "const largeDataset = new Array(10000).fill(0).map((_, ;i;); => i);"
+                in line
+            ):
+                line = "    const largeDataset = new Array(10000).fill(0).map((_, i) => i);"
 
             fixed_lines.append(line)
 
-        return '\n'.join(fixed_lines)
+        return "\n".join(fixed_lines)
 
     def _final_cleanup(self, content: str) -> str:
         """最终清理"""
         # 最终的清理操作
-        content = re.sub(r'\n\n\n+', '\n\n', content)  # 移除多余的空行
-        content = re.sub(r';\s*;+', ';', content)  # 移除多余的分号
-        content = re.sub(r'}\s*\)\s*$', '});', content, flags=re.MULTILINE)  # 修复结束括号
+        content = re.sub(r"\n\n\n+", "\n\n", content)  # 移除多余的空行
+        content = re.sub(r";\s*;+", ";", content)  # 移除多余的分号
+        content = re.sub(
+            r"}\s*\)\s*$", "});", content, flags=re.MULTILINE
+        )  # 修复结束括号
 
         return content
 
     def _should_skip_file(self, file_path: Path) -> bool:
         """判断是否应该跳过某个文件"""
         skip_patterns = [
-            'node_modules',
-            'venv',
-            '.venv',
-            '__pycache__',
-            '.git',
-            'build',
-            'dist',
-            '.expo',
-            'ios/Pods',
-            'android/build',
-            '.jest-cache',
-            'coverage',
-            'cleanup_backup',
-            'quality_enhancement'
+            "node_modules",
+            "venv",
+            ".venv",
+            "__pycache__",
+            ".git",
+            "build",
+            "dist",
+            ".expo",
+            "ios/Pods",
+            "android/build",
+            ".jest-cache",
+            "coverage",
+            "cleanup_backup",
+            "quality_enhancement",
         ]
 
         file_str = str(file_path)
@@ -380,10 +421,13 @@ class AdvancedSyntaxFixer:
 
         return report
 
+
 def main():
-    parser = argparse.ArgumentParser(description='索克生活项目高级语法错误修复')
-    parser.add_argument('--project-root', default='.', help='项目根目录路径')
-    parser.add_argument('--output', default='advanced_syntax_fix_report.md', help='输出报告文件名')
+    parser = argparse.ArgumentParser(description="索克生活项目高级语法错误修复")
+    parser.add_argument("--project-root", default=".", help="项目根目录路径")
+    parser.add_argument(
+        "--output", default="advanced_syntax_fix_report.md", help="输出报告文件名"
+    )
 
     args = parser.parse_args()
 
@@ -398,12 +442,13 @@ def main():
     report = fixer.generate_report()
 
     # 保存报告
-    with open(args.output, 'w', encoding='utf-8') as f:
+    with open(args.output, "w", encoding="utf-8") as f:
         f.write(report)
 
     print(f"✅ 高级语法错误修复完成！报告已保存到: {args.output}")
     print(f"📊 修复文件数: {len(fixer.fixed_files)}")
     print(f"❌ 失败文件数: {len(fixer.failed_files)}")
 
-if __name__ == '__main__':
-    main() 
+
+if __name__ == "__main__":
+    main()

@@ -2,8 +2,8 @@
 simple_syntax_fixer - 索克生活项目模块
 """
 
-from pathlib import Path
 import os
+from pathlib import Path
 
 #!/usr/bin/env python3
 """
@@ -42,15 +42,15 @@ class SimpleSyntaxFixer:
                 self.failed_files.append(str(file_path))
 
         return {
-            'fixed_files': len(self.fixed_files),
-            'failed_files': len(self.failed_files),
-            'total_files': len(test_files)
+            "fixed_files": len(self.fixed_files),
+            "failed_files": len(self.failed_files),
+            "total_files": len(test_files),
         }
 
     def _fix_single_file(self, file_path: Path) -> bool:
         """修复单个文件"""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
             original_content = content
@@ -60,7 +60,7 @@ class SimpleSyntaxFixer:
 
             # 如果内容有变化，保存文件
             if content != original_content:
-                with open(file_path, 'w', encoding='utf-8') as f:
+                with open(file_path, "w", encoding="utf-8") as f:
                     f.write(content)
                 return True
 
@@ -73,7 +73,7 @@ class SimpleSyntaxFixer:
     def _fix_basic_syntax(self, content: str) -> str:
         """修复基本语法错误"""
         # 分行处理
-        lines = content.split('\n')
+        lines = content.split("\n")
         fixed_lines = []
 
         for line in lines:
@@ -81,61 +81,69 @@ class SimpleSyntaxFixer:
             fixed_line = self._fix_line_syntax(line)
             fixed_lines.append(fixed_line)
 
-        return '\n'.join(fixed_lines)
+        return "\n".join(fixed_lines)
 
     def _fix_line_syntax(self, line: str) -> str:
         """修复单行语法错误"""
         # 修复it函数语法错误
         if 'it("should handle large datasets efficiently, () => { {' in line:
             return '  it("should handle large datasets efficiently", () => {'
-        elif 'it("should not cause memory leaks\', () => { {' in line:
+        elif "it(\"should not cause memory leaks', () => { {" in line:
             return '  it("should not cause memory leaks", () => {'
 
         # 修复缺失分号的行
-        if line.strip().endswith('});') and not line.strip().endswith('});'):
+        if line.strip().endswith("});") and not line.strip().endswith("});"):
             # 检查前一行是否需要分号
             pass
 
         # 修复expect语句缺失分号
-        if 'expect(' in line and line.strip().endswith(')') and not line.strip().endswith(');'):
-            if '.toBeLessThan(' in line or '.toBe(' in line or '.toEqual(' in line:
-                return line.rstrip() + ';'
+        if (
+            "expect(" in line
+            and line.strip().endswith(")")
+            and not line.strip().endswith(");")
+        ):
+            if ".toBeLessThan(" in line or ".toBe(" in line or ".toEqual(" in line:
+                return line.rstrip() + ";"
 
         # 修复const声明缺失分号
-        if line.strip().startswith('const ') and '=' in line and not line.strip().endswith(';'):
-            return line.rstrip() + ';'
+        if (
+            line.strip().startswith("const ")
+            and "=" in line
+            and not line.strip().endswith(";")
+        ):
+            return line.rstrip() + ";"
 
         # 修复函数调用缺失分号
-        if 'performance.now()' in line and not line.strip().endswith(';'):
-            return line.rstrip() + ';'
-        elif 'global.gc()' in line and not line.strip().endswith(';'):
-            return line.rstrip() + ';'
-        elif 'someFunction(' in line and not line.strip().endswith(';'):
-            return line.rstrip() + ';'
+        if "performance.now()" in line and not line.strip().endswith(";"):
+            return line.rstrip() + ";"
+        elif "global.gc()" in line and not line.strip().endswith(";"):
+            return line.rstrip() + ";"
+        elif "someFunction(" in line and not line.strip().endswith(";"):
+            return line.rstrip() + ";"
 
         # 修复process.memoryUsage()调用
-        if 'process.memoryUsage().heapUsed' in line and not line.strip().endswith(';'):
-            return line.rstrip() + ';'
+        if "process.memoryUsage().heapUsed" in line and not line.strip().endswith(";"):
+            return line.rstrip() + ";"
 
         return line
 
     def _should_skip_file(self, file_path: Path) -> bool:
         """判断是否应该跳过某个文件"""
         skip_patterns = [
-            'node_modules',
-            'venv',
-            '.venv',
-            '__pycache__',
-            '.git',
-            'build',
-            'dist',
-            '.expo',
-            'ios/Pods',
-            'android/build',
-            '.jest-cache',
-            'coverage',
-            'cleanup_backup',
-            'quality_enhancement'
+            "node_modules",
+            "venv",
+            ".venv",
+            "__pycache__",
+            ".git",
+            "build",
+            "dist",
+            ".expo",
+            "ios/Pods",
+            "android/build",
+            ".jest-cache",
+            "coverage",
+            "cleanup_backup",
+            "quality_enhancement",
         ]
 
         file_str = str(file_path)
@@ -209,10 +217,11 @@ class SimpleSyntaxFixer:
 
         return report
 
+
 def main():
     print("🔧 开始简化语法错误修复...")
 
-    fixer = SimpleSyntaxFixer('.')
+    fixer = SimpleSyntaxFixer(".")
 
     # 执行修复
     result = fixer.fix_test_files()
@@ -221,7 +230,7 @@ def main():
     report = fixer.generate_report()
 
     # 保存报告
-    with open('simple_syntax_fix_report.md', 'w', encoding='utf-8') as f:
+    with open("simple_syntax_fix_report.md", "w", encoding="utf-8") as f:
         f.write(report)
 
     print(f"✅ 简化语法错误修复完成！")
@@ -229,5 +238,6 @@ def main():
     print(f"❌ 失败文件数: {result['failed_files']}")
     print(f"📄 报告已保存到: simple_syntax_fix_report.md")
 
-if __name__ == '__main__':
-    main() 
+
+if __name__ == "__main__":
+    main()

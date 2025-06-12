@@ -2,11 +2,11 @@
 comprehensive_syntax_fixer - 索克生活项目模块
 """
 
-from pathlib import Path
-from typing import List, Dict, Tuple
 import ast
 import os
 import re
+from pathlib import Path
+from typing import Dict, List, Tuple
 
 #!/usr/bin/env python3
 """
@@ -63,7 +63,7 @@ class ComprehensiveSyntaxFixer:
     def _fix_python_file(self, file_path: Path) -> bool:
         """修复单个Python文件"""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
             original_content = content
@@ -83,7 +83,7 @@ class ComprehensiveSyntaxFixer:
                 ast.parse(content)
                 # 语法正确，保存文件
                 if content != original_content:
-                    with open(file_path, 'w', encoding='utf-8') as f:
+                    with open(file_path, "w", encoding="utf-8") as f:
                         f.write(content)
                     return True
             except SyntaxError:
@@ -97,7 +97,7 @@ class ComprehensiveSyntaxFixer:
     def _fix_typescript_file(self, file_path: Path) -> bool:
         """修复单个TypeScript文件"""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
             original_content = content
@@ -107,7 +107,7 @@ class ComprehensiveSyntaxFixer:
 
             # 如果内容有变化，保存文件
             if content != original_content:
-                with open(file_path, 'w', encoding='utf-8') as f:
+                with open(file_path, "w", encoding="utf-8") as f:
                     f.write(content)
                 return True
 
@@ -118,93 +118,135 @@ class ComprehensiveSyntaxFixer:
 
     def _fix_python_syntax(self, content: str) -> str:
         """修复Python语法错误"""
-        lines = content.split('\n')
+        lines = content.split("\n")
         fixed_lines = []
 
         for i, line in enumerate(lines):
             # 修复缺失的冒号
-            if re.match(r'^\s*(if|elif|else|for|while|def|class|try|except|finally|with)\s+.*[^:]$', line.strip()):
-                if not line.strip().endswith(':'):
-                    line = line.rstrip() + ':'
+            if re.match(
+                r"^\s*(if|elif|else|for|while|def|class|try|except|finally|with)\s+.*[^:]$",
+                line.strip(),
+            ):
+                if not line.strip().endswith(":"):
+                    line = line.rstrip() + ":"
 
             # 修复缺失的引号
-            line = re.sub(r'import\s+([a-zA-Z_][a-zA-Z0-9_]*)\s+from\s+([a-zA-Z_][a-zA-Z0-9_./]*)', r'import \1 from "\2"', line)
+            line = re.sub(
+                r"import\s+([a-zA-Z_][a-zA-Z0-9_]*)\s+from\s+([a-zA-Z_][a-zA-Z0-9_./]*)",
+                r'import \1 from "\2"',
+                line,
+            )
 
             # 修复缺失的括号
-            if 'print ' in line and not 'print(' in line:
-                line = re.sub(r'print\s+(.+)', r'print(\1)', line)
+            if "print " in line and not "print(" in line:
+                line = re.sub(r"print\s+(.+)", r"print(\1)", line)
 
             fixed_lines.append(line)
 
-        return '\n'.join(fixed_lines)
+        return "\n".join(fixed_lines)
 
     def _fix_typescript_syntax(self, content: str) -> str:
         """修复TypeScript语法错误"""
-        lines = content.split('\n')
+        lines = content.split("\n")
         fixed_lines = []
 
         for i, line in enumerate(lines):
             # 修复import语句缺失引号
-            line = re.sub(r'import\s+([^"\']+)\s+from\s+([a-zA-Z_][a-zA-Z0-9_./\-@]*)', r'import \1 from "\2"', line)
+            line = re.sub(
+                r'import\s+([^"\']+)\s+from\s+([a-zA-Z_][a-zA-Z0-9_./\-@]*)',
+                r'import \1 from "\2"',
+                line,
+            )
 
             # 修复export语句缺失引号
-            line = re.sub(r'export\s+([^"\']+)\s+from\s+([a-zA-Z_][a-zA-Z0-9_./\-@]*)', r'export \1 from "\2"', line)
+            line = re.sub(
+                r'export\s+([^"\']+)\s+from\s+([a-zA-Z_][a-zA-Z0-9_./\-@]*)',
+                r'export \1 from "\2"',
+                line,
+            )
 
             # 修复缺失的分号
-            if (line.strip().startswith('const ') or 
-                line.strip().startswith('let ') or 
-                line.strip().startswith('var ')) and '=' in line and not line.strip().endswith(';'):
-                line = line.rstrip() + ';'
+            if (
+                (
+                    line.strip().startswith("const ")
+                    or line.strip().startswith("let ")
+                    or line.strip().startswith("var ")
+                )
+                and "=" in line
+                and not line.strip().endswith(";")
+            ):
+                line = line.rstrip() + ";"
 
             # 修复expect语句缺失分号
-            if 'expect(' in line and line.strip().endswith(')') and not line.strip().endswith(');'):
-                if any(method in line for method in ['.toBe(', '.toEqual(', '.toBeLessThan(', '.toBeGreaterThan(']):
-                    line = line.rstrip() + ';'
+            if (
+                "expect(" in line
+                and line.strip().endswith(")")
+                and not line.strip().endswith(");")
+            ):
+                if any(
+                    method in line
+                    for method in [
+                        ".toBe(",
+                        ".toEqual(",
+                        ".toBeLessThan(",
+                        ".toBeGreaterThan(",
+                    ]
+                ):
+                    line = line.rstrip() + ";"
 
             # 修复函数调用缺失分号
-            if any(call in line for call in ['performance.now()', 'jest.clearAllMocks()', 'global.gc()']) and not line.strip().endswith(';'):
-                line = line.rstrip() + ';'
+            if any(
+                call in line
+                for call in ["performance.now()", "jest.clearAllMocks()", "global.gc()"]
+            ) and not line.strip().endswith(";"):
+                line = line.rstrip() + ";"
 
             # 修复describe和it函数语法
-            if line.strip().startswith('describe(') or line.strip().startswith('it('):
-                if not line.strip().endswith('{') and not line.strip().endswith(') => {'):
+            if line.strip().startswith("describe(") or line.strip().startswith("it("):
+                if not line.strip().endswith("{") and not line.strip().endswith(
+                    ") => {"
+                ):
                     # 确保describe和it函数有正确的回调函数语法
-                    if line.strip().endswith(')'):
-                        line = line.rstrip() + ' => {'
+                    if line.strip().endswith(")"):
+                        line = line.rstrip() + " => {"
 
             # 修复for循环语法
-            if 'for (let i = 0; i < ' in line and not line.strip().endswith(') {'):
-                line = re.sub(r'for\s*\(\s*let\s+i\s*=\s*0\s*;\s*i\s*<\s*([^;]+)\s*;\s*i\+\+\s*\)', r'for (let i = 0; i < \1; i++)', line)
-                if not line.strip().endswith('{'):
-                    line = line.rstrip() + ' {'
+            if "for (let i = 0; i < " in line and not line.strip().endswith(") {"):
+                line = re.sub(
+                    r"for\s*\(\s*let\s+i\s*=\s*0\s*;\s*i\s*<\s*([^;]+)\s*;\s*i\+\+\s*\)",
+                    r"for (let i = 0; i < \1; i++)",
+                    line,
+                )
+                if not line.strip().endswith("{"):
+                    line = line.rstrip() + " {"
 
             # 修复if语句语法
-            if line.strip().startswith('if (') and not line.strip().endswith('{'):
-                if line.strip().endswith(')'):
-                    line = line.rstrip() + ' {'
+            if line.strip().startswith("if (") and not line.strip().endswith("{"):
+                if line.strip().endswith(")"):
+                    line = line.rstrip() + " {"
 
             fixed_lines.append(line)
 
-        return '\n'.join(fixed_lines)
+        return "\n".join(fixed_lines)
 
     def _should_skip_file(self, file_path: Path) -> bool:
         """判断是否应该跳过文件"""
         skip_patterns = [
-            'node_modules',
-            '.git',
-            '__pycache__',
-            '.pytest_cache',
-            'venv',
-            'env',
-            '.venv',
-            'build',
-            'dist',
-            '.next',
-            'coverage',
-            'htmlcov',
-            'Pods',
-            'android/app/build',
-            'ios/build'
+            "node_modules",
+            ".git",
+            "__pycache__",
+            ".pytest_cache",
+            "venv",
+            "env",
+            ".venv",
+            "build",
+            "dist",
+            ".next",
+            "coverage",
+            "htmlcov",
+            "Pods",
+            "android/app/build",
+            "ios/build",
         ]
 
         path_str = str(file_path)
@@ -216,11 +258,11 @@ class ComprehensiveSyntaxFixer:
 
         # 修复报告中提到的特定文件
         specific_files = [
-            'services/suoke-bench-service/internal/suokebench/evaluator.py',
-            'services/med-knowledge/app/services/knowledge_service.py',
-            'services/accessibility-service/accessibility_service/internal/model/health_data.py',
-            'services/rag-service/internal/service/intelligent_tcm_constitution_engine.py',
-            'services/rag-service/cmd/server/main.py'
+            "services/suoke-bench-service/internal/suokebench/evaluator.py",
+            "services/med-knowledge/app/services/knowledge_service.py",
+            "services/accessibility-service/accessibility_service/internal/model/health_data.py",
+            "services/rag-service/internal/service/intelligent_tcm_constitution_engine.py",
+            "services/rag-service/cmd/server/main.py",
         ]
 
         fixed_count = 0
@@ -249,11 +291,11 @@ class ComprehensiveSyntaxFixer:
         specific_fixed = self.fix_specific_syntax_errors()
 
         return {
-            'python_fixed': python_fixed,
-            'typescript_fixed': ts_fixed,
-            'specific_fixed': specific_fixed,
-            'total_fixed': len(self.fixed_files),
-            'total_failed': len(self.failed_files)
+            "python_fixed": python_fixed,
+            "typescript_fixed": ts_fixed,
+            "specific_fixed": specific_fixed,
+            "total_fixed": len(self.fixed_files),
+            "total_failed": len(self.failed_files),
         }
 
     def generate_report(self, results: Dict) -> str:
@@ -327,10 +369,11 @@ class ComprehensiveSyntaxFixer:
 
         return report
 
+
 def main():
     print("🔧 开始综合语法错误修复...")
 
-    fixer = ComprehensiveSyntaxFixer('.')
+    fixer = ComprehensiveSyntaxFixer(".")
 
     # 执行修复
     results = fixer.run_comprehensive_fix()
@@ -339,7 +382,7 @@ def main():
     report = fixer.generate_report(results)
 
     # 保存报告
-    with open('comprehensive_syntax_fix_report.md', 'w', encoding='utf-8') as f:
+    with open("comprehensive_syntax_fix_report.md", "w", encoding="utf-8") as f:
         f.write(report)
 
     print(f"✅ 综合语法错误修复完成！")
@@ -350,5 +393,6 @@ def main():
     print(f"❌ 修复失败文件: {results['total_failed']}")
     print(f"📄 报告已保存到: comprehensive_syntax_fix_report.md")
 
-if __name__ == '__main__':
-    main() 
+
+if __name__ == "__main__":
+    main()

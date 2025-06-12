@@ -2,9 +2,9 @@
 quick_finish_migration - 索克生活项目模块
 """
 
+import subprocess
 from pathlib import Path
 from typing import Dict, List
-import subprocess
 
 #!/usr/bin/env python3
 """
@@ -47,9 +47,11 @@ class QuickMigrationFinisher:
             "agent-services/soer-service",
         ]
 
-    def create_minimal_pyproject_for_service(self, service_path: Path, service_name: str) -> bool:
+    def create_minimal_pyproject_for_service(
+        self, service_path: Path, service_name: str
+    ) -> bool:
         """为服务创建最小化pyproject.toml"""
-        config = f'''[project]
+        config = f"""[project]
 name = "{service_name}"
 version = "1.0.0"
 description = "{service_name} - 索克生活微服务"
@@ -84,10 +86,10 @@ target-version = ['py311', 'py312', 'py313']
 [tool.isort]
 profile = "black"
 line_length = 88
-'''
+"""
 
         pyproject_path = service_path / "pyproject.toml"
-        with open(pyproject_path, 'w', encoding='utf-8') as f:
+        with open(pyproject_path, "w", encoding="utf-8") as f:
             f.write(config)
 
         return True
@@ -104,10 +106,14 @@ line_length = 88
         # 备份原始文件
         if (service_path / "requirements.txt").exists():
             backup_path = service_path / "requirements-backup.txt"
-            subprocess.run(["cp", str(service_path / "requirements.txt"), str(backup_path)])
+            subprocess.run(
+                ["cp", str(service_path / "requirements.txt"), str(backup_path)]
+            )
 
         # 创建最小化配置
-        self.create_minimal_pyproject_for_service(service_path, service_name.split('/')[-1])
+        self.create_minimal_pyproject_for_service(
+            service_path, service_name.split("/")[-1]
+        )
 
         # 初始化uv项目（如果需要）
         try:
@@ -116,7 +122,7 @@ line_length = 88
                 cwd=service_path,
                 capture_output=True,
                 text=True,
-                timeout=30
+                timeout=30,
             )
             if result.returncode != 0 and "already initialized" not in result.stderr:
                 print(f"  ⚠️  uv初始化警告: {result.stderr}")
@@ -130,7 +136,7 @@ line_length = 88
                 cwd=service_path,
                 capture_output=True,
                 text=True,
-                timeout=60
+                timeout=60,
             )
             if result.returncode == 0:
                 print(f"  ✅ 依赖锁定成功")
@@ -280,7 +286,7 @@ line_length = 88
 *项目: 索克生活 (Suoke Life)*
 """
 
-        with open(report_path, 'w', encoding='utf-8') as f:
+        with open(report_path, "w", encoding="utf-8") as f:
             f.write(report_content)
 
         return str(report_path)

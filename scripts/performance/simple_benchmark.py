@@ -2,16 +2,17 @@
 simple_benchmark - 索克生活项目模块
 """
 
-from concurrent.futures import ProcessPoolExecutor
-from dataclasses import dataclass
-from datetime import datetime
-from numba import jit
-from typing import Dict, List, Any
 import json
 import logging
 import multiprocessing
-import psutil
 import time
+from concurrent.futures import ProcessPoolExecutor
+from dataclasses import dataclass
+from datetime import datetime
+from typing import Any, Dict, List
+
+import psutil
+from numba import jit
 
 #!/usr/bin/env python3
 """
@@ -24,15 +25,18 @@ import time
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class BenchmarkResult:
     """基准测试结果"""
+
     test_name: str
     execution_time: float
     memory_usage: float
     throughput: float
     speedup: float
     additional_metrics: Dict[str, Any]
+
 
 @jit(nopython=True)
 def jit_vector_similarity(vec1: np.ndarray, vec2: np.ndarray) -> float:
@@ -42,16 +46,19 @@ def jit_vector_similarity(vec1: np.ndarray, vec2: np.ndarray) -> float:
     norm2 = np.linalg.norm(vec2)
     return dot_product / (norm1 * norm2)
 
+
 @jit(nopython=True)
 def jit_matrix_multiply(matrix1: np.ndarray, matrix2: np.ndarray) -> np.ndarray:
     """JIT优化的矩阵乘法"""
     return np.dot(matrix1, matrix2)
+
 
 def cpu_intensive_task(data_size: int) -> float:
     """CPU密集型任务"""
     data = np.random.rand(data_size, data_size)
     result = np.sum(np.dot(data, data.T))
     return result
+
 
 class SimpleBenchmark:
     """简化性能基准测试"""
@@ -114,19 +121,21 @@ class SimpleBenchmark:
 
         speedup = normal_time / jit_time if jit_time > 0 else 1.0
 
-        self.results.append(BenchmarkResult(
-            test_name="JIT编译优化",
-            execution_time=jit_time,
-            memory_usage=jit_memory,
-            throughput=iterations / jit_time,
-            speedup=speedup,
-            additional_metrics={
-                "normal_time": normal_time,
-                "jit_time": jit_time,
-                "iterations": iterations,
-                "vector_size": len(vec1)
-            }
-        ))
+        self.results.append(
+            BenchmarkResult(
+                test_name="JIT编译优化",
+                execution_time=jit_time,
+                memory_usage=jit_memory,
+                throughput=iterations / jit_time,
+                speedup=speedup,
+                additional_metrics={
+                    "normal_time": normal_time,
+                    "jit_time": jit_time,
+                    "iterations": iterations,
+                    "vector_size": len(vec1),
+                },
+            )
+        )
 
         logger.info(f"✅ JIT优化测试完成 - 加速比: {speedup:.2f}x")
 
@@ -156,23 +165,27 @@ class SimpleBenchmark:
             parallel_results = list(executor.map(cpu_intensive_task, data_sizes))
 
         parallel_time = time.time() - start_time
-        parallel_memory = psutil.Process().memory_info().rss / 1024 / 1024 - start_memory
+        parallel_memory = (
+            psutil.Process().memory_info().rss / 1024 / 1024 - start_memory
+        )
 
         speedup = serial_time / parallel_time if parallel_time > 0 else 1.0
 
-        self.results.append(BenchmarkResult(
-            test_name="进程池优化",
-            execution_time=parallel_time,
-            memory_usage=parallel_memory,
-            throughput=len(data_sizes) / parallel_time,
-            speedup=speedup,
-            additional_metrics={
-                "serial_time": serial_time,
-                "parallel_time": parallel_time,
-                "cpu_cores": multiprocessing.cpu_count(),
-                "tasks_count": len(data_sizes)
-            }
-        ))
+        self.results.append(
+            BenchmarkResult(
+                test_name="进程池优化",
+                execution_time=parallel_time,
+                memory_usage=parallel_memory,
+                throughput=len(data_sizes) / parallel_time,
+                speedup=speedup,
+                additional_metrics={
+                    "serial_time": serial_time,
+                    "parallel_time": parallel_time,
+                    "cpu_cores": multiprocessing.cpu_count(),
+                    "tasks_count": len(data_sizes),
+                },
+            )
+        )
 
         logger.info(f"✅ 进程池优化测试完成 - 加速比: {speedup:.2f}x")
 
@@ -201,7 +214,7 @@ class SimpleBenchmark:
             return {
                 "average": total_sum / count if count > 0 else 0.0,
                 "memory_used": end_memory - start_memory,
-                "processed_chunks": count
+                "processed_chunks": count,
             }
 
         start_time = time.time()
@@ -212,26 +225,36 @@ class SimpleBenchmark:
         execution_time = time.time() - start_time
         memory_usage = psutil.Process().memory_info().rss / 1024 / 1024 - start_memory
 
-        self.results.append(BenchmarkResult(
-            test_name="内存优化",
-            execution_time=execution_time,
-            memory_usage=memory_usage,
-            throughput=result["processed_chunks"] / execution_time,
-            speedup=1.0,  # 基准值
-            additional_metrics={
-                "processed_chunks": result["processed_chunks"],
-                "average_value": result["average"],
-                "memory_efficiency": result["processed_chunks"] / memory_usage if memory_usage > 0 else 0
-            }
-        ))
+        self.results.append(
+            BenchmarkResult(
+                test_name="内存优化",
+                execution_time=execution_time,
+                memory_usage=memory_usage,
+                throughput=result["processed_chunks"] / execution_time,
+                speedup=1.0,  # 基准值
+                additional_metrics={
+                    "processed_chunks": result["processed_chunks"],
+                    "average_value": result["average"],
+                    "memory_efficiency": (
+                        result["processed_chunks"] / memory_usage
+                        if memory_usage > 0
+                        else 0
+                    ),
+                },
+            )
+        )
 
-        logger.info(f"✅ 内存优化测试完成 - 处理了 {result['processed_chunks']} 个数据块")
+        logger.info(
+            f"✅ 内存优化测试完成 - 处理了 {result['processed_chunks']} 个数据块"
+        )
 
     def _generate_report(self) -> Dict[str, Any]:
         """生成性能报告"""
         logger.info("📋 生成性能报告...")
 
-        total_speedup = sum(result.speedup for result in self.results) / len(self.results)
+        total_speedup = sum(result.speedup for result in self.results) / len(
+            self.results
+        )
         total_memory = sum(result.memory_usage for result in self.results)
         total_throughput = sum(result.throughput for result in self.results)
 
@@ -243,7 +266,7 @@ class SimpleBenchmark:
                 "total_memory_usage_mb": total_memory,
                 "total_throughput": total_throughput,
                 "cpu_cores": multiprocessing.cpu_count(),
-                "system_memory_gb": psutil.virtual_memory().total / 1024 / 1024 / 1024
+                "system_memory_gb": psutil.virtual_memory().total / 1024 / 1024 / 1024,
             },
             "detailed_results": [
                 {
@@ -252,29 +275,33 @@ class SimpleBenchmark:
                     "memory_usage_mb": result.memory_usage,
                     "throughput": result.throughput,
                     "speedup": result.speedup,
-                    "additional_metrics": result.additional_metrics
+                    "additional_metrics": result.additional_metrics,
                 }
                 for result in self.results
             ],
-            "recommendations": self._generate_recommendations()
+            "recommendations": self._generate_recommendations(),
         }
 
         # 保存报告
-        report_file = f"performance_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-        with open(report_file, 'w', encoding='utf-8') as f:
+        report_file = (
+            f"performance_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+        )
+        with open(report_file, "w", encoding="utf-8") as f:
             json.dump(report, f, indent=2, ensure_ascii=False)
 
         logger.info(f"📊 性能报告已保存到: {report_file}")
 
         # 打印摘要
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
         print("🎯 索克生活 - 性能优化基准测试报告")
-        print("="*60)
+        print("=" * 60)
         print(f"📈 平均加速比: {total_speedup:.2f}x")
         print(f"💾 总内存使用: {total_memory:.2f} MB")
         print(f"⚡ 总吞吐量: {total_throughput:.2f} ops/s")
         print(f"🖥️  CPU核心数: {multiprocessing.cpu_count()}")
-        print(f"🧠 系统内存: {psutil.virtual_memory().total / 1024 / 1024 / 1024:.1f} GB")
+        print(
+            f"🧠 系统内存: {psutil.virtual_memory().total / 1024 / 1024 / 1024:.1f} GB"
+        )
         print("\n📋 详细结果:")
 
         for result in self.results:
@@ -288,7 +315,7 @@ class SimpleBenchmark:
         for i, recommendation in enumerate(report["recommendations"], 1):
             print(f"  {i}. {recommendation}")
 
-        print("="*60)
+        print("=" * 60)
 
         return report
 
@@ -297,26 +324,39 @@ class SimpleBenchmark:
         recommendations = []
 
         # 基于测试结果生成建议
-        jit_result = next((r for r in self.results if r.test_name == "JIT编译优化"), None)
+        jit_result = next(
+            (r for r in self.results if r.test_name == "JIT编译优化"), None
+        )
         if jit_result and jit_result.speedup > 2.0:
-            recommendations.append("JIT编译显著提升性能，建议在数值计算密集的模块中广泛使用")
+            recommendations.append(
+                "JIT编译显著提升性能，建议在数值计算密集的模块中广泛使用"
+            )
 
-        process_result = next((r for r in self.results if r.test_name == "进程池优化"), None)
+        process_result = next(
+            (r for r in self.results if r.test_name == "进程池优化"), None
+        )
         if process_result and process_result.speedup > 1.5:
-            recommendations.append("进程池优化效果良好，建议在CPU密集型任务中使用多进程")
+            recommendations.append(
+                "进程池优化效果良好，建议在CPU密集型任务中使用多进程"
+            )
 
-        memory_result = next((r for r in self.results if r.test_name == "内存优化"), None)
+        memory_result = next(
+            (r for r in self.results if r.test_name == "内存优化"), None
+        )
         if memory_result and memory_result.memory_usage < 100:
             recommendations.append("内存使用效率高，建议继续使用流式处理和生成器模式")
 
         # 通用建议
-        recommendations.extend([
-            "继续监控生产环境性能指标",
-            "定期运行基准测试验证优化效果",
-            "考虑使用缓存机制进一步提升性能"
-        ])
+        recommendations.extend(
+            [
+                "继续监控生产环境性能指标",
+                "定期运行基准测试验证优化效果",
+                "考虑使用缓存机制进一步提升性能",
+            ]
+        )
 
         return recommendations
+
 
 def main():
     """主函数"""
@@ -324,5 +364,6 @@ def main():
     report = benchmark.run_all_benchmarks()
     return report
 
+
 if __name__ == "__main__":
-    main() 
+    main()

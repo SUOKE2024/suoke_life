@@ -1,7 +1,11 @@
-from pathlib import Path
 import os
-import { AgentCoordinator } from "../AgentCoordinator";
-import { render, screen } from "@testing-library/react";
+from pathlib import Path
+
+import "../AgentCoordinator"
+import "@testing-library/react"
+import screen }
+import { AgentCoordinator }
+import { render
 
 
 def main():

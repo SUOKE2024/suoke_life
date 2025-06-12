@@ -2,9 +2,9 @@
 lightweight_migration - 索克生活项目模块
 """
 
-from pathlib import Path
-from typing import List, Dict
 import subprocess
+from pathlib import Path
+from typing import Dict, List
 
 #!/usr/bin/env python3
 """
@@ -52,7 +52,7 @@ class LightweightMigrator:
 
     def create_minimal_pyproject(self, service_path: Path, service_name: str) -> bool:
         """创建最小化的pyproject.toml"""
-        config = f'''[project]
+        config = f"""[project]
 name = "{service_name}"
 version = "1.0.0"
 description = "{service_name} - 索克生活智能体服务"
@@ -120,10 +120,10 @@ line_length = 88
 testpaths = ["test"]
 python_files = "test_*.py"
 asyncio_mode = "auto"
-'''
+"""
 
         pyproject_path = service_path / "pyproject-minimal.toml"
-        with open(pyproject_path, 'w', encoding='utf-8') as f:
+        with open(pyproject_path, "w", encoding="utf-8") as f:
             f.write(config)
 
         print(f"✅ 创建最小化配置: {pyproject_path}")
@@ -137,7 +137,9 @@ asyncio_mode = "auto"
         # 备份原始配置
         if (service_path / "pyproject.toml").exists():
             backup_path = service_path / "pyproject-original.toml"
-            subprocess.run(["cp", str(service_path / "pyproject.toml"), str(backup_path)])
+            subprocess.run(
+                ["cp", str(service_path / "pyproject.toml"), str(backup_path)]
+            )
             print(f"  📦 备份原始配置: {backup_path}")
 
         # 创建最小化配置
@@ -150,7 +152,7 @@ asyncio_mode = "auto"
                 cwd=service_path,
                 capture_output=True,
                 text=True,
-                timeout=30
+                timeout=30,
             )
             if result.returncode == 0:
                 print(f"  ✅ uv初始化成功")
@@ -169,7 +171,7 @@ asyncio_mode = "auto"
                 cwd=service_path,
                 capture_output=True,
                 text=True,
-                timeout=300  # 5分钟超时
+                timeout=300,  # 5分钟超时
             )
             if result.returncode == 0:
                 print(f"  ✅ 核心依赖安装成功")
@@ -180,7 +182,7 @@ asyncio_mode = "auto"
 
         # 创建AI依赖安装脚本
         install_ai_script = service_path / "install_ai_deps.sh"
-        script_content = f'''#!/bin/bash
+        script_content = f"""#!/bin/bash
 # {service_name} AI依赖安装脚本
 echo "🤖 开始安装AI/ML依赖..."
 echo "⚠️  这可能需要较长时间，请耐心等待..."
@@ -191,9 +193,9 @@ cd "{service_path}"
 uv sync --extra ai --no-dev
 
 echo "✅ AI依赖安装完成！"
-'''
+"""
 
-        with open(install_ai_script, 'w') as f:
+        with open(install_ai_script, "w") as f:
             f.write(script_content)
 
         # 设置执行权限
@@ -232,7 +234,7 @@ echo "✅ AI依赖安装完成！"
         """创建批量AI依赖安装脚本"""
         script_path = self.project_root / "install_all_ai_deps.sh"
 
-        script_content = '''#!/bin/bash
+        script_content = """#!/bin/bash
 # 索克生活项目 - 批量AI依赖安装脚本
 echo "🚀 开始批量安装所有智能体服务的AI依赖..."
 
@@ -261,13 +263,14 @@ for service in "${SERVICES[@]}"; do
 done
 
 echo "🎉 所有智能体服务AI依赖安装完成！"
-'''
+"""
 
-        with open(script_path, 'w') as f:
+        with open(script_path, "w") as f:
             f.write(script_content)
 
         subprocess.run(["chmod", "+x", str(script_path)])
         return str(script_path)
+
 
 def main():
     migrator = LightweightMigrator(".")
@@ -295,6 +298,7 @@ def main():
     success_count = sum(results.values())
     total_count = len(results)
     print(f"\n🎉 轻量级迁移完成: {success_count}/{total_count} 服务成功迁移")
+
 
 if __name__ == "__main__":
     main()

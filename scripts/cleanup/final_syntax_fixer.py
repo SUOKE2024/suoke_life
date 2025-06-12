@@ -2,11 +2,11 @@
 final_syntax_fixer - 索克生活项目模块
 """
 
-from pathlib import Path
-from typing import List, Dict, Tuple
 import argparse
 import os
 import re
+from pathlib import Path
+from typing import Dict, List, Tuple
 
 #!/usr/bin/env python3
 """
@@ -45,15 +45,15 @@ class FinalSyntaxFixer:
                 self.failed_files.append(str(file_path))
 
         return {
-            'fixed_files': len(self.fixed_files),
-            'failed_files': len(self.failed_files),
-            'total_files': len(test_files)
+            "fixed_files": len(self.fixed_files),
+            "failed_files": len(self.failed_files),
+            "total_files": len(test_files),
         }
 
     def _fix_file_final(self, file_path: Path) -> bool:
         """最终修复单个文件"""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
             original_content = content
@@ -70,7 +70,7 @@ class FinalSyntaxFixer:
 
             # 如果内容有变化，保存文件
             if content != original_content:
-                with open(file_path, 'w', encoding='utf-8') as f:
+                with open(file_path, "w", encoding="utf-8") as f:
                     f.write(content)
                 return True
 
@@ -84,19 +84,50 @@ class FinalSyntaxFixer:
         """修复关键剩余错误"""
         fixes = [
             # 修复缺失的分号
-            (r'const\s+iterations\s*=\s*10\s*$', 'const iterations = 10;', re.MULTILINE),
-            (r'const\s+averageTime\s*=\s*([^;]+)$', r'const averageTime = \1;', re.MULTILINE),
-            (r'const\s+startTime\s*=\s*([^;]+)$', r'const startTime = \1;', re.MULTILINE),
-            (r'const\s+endTime\s*=\s*([^;]+)$', r'const endTime = \1;', re.MULTILINE),
-            (r'const\s+largeDataset\s*=\s*([^;]+)$', r'const largeDataset = \1;', re.MULTILINE),
-            (r'const\s+initialMemory\s*=\s*([^;]+)$', r'const initialMemory = \1;', re.MULTILINE),
-            (r'const\s+finalMemory\s*=\s*([^;]+)$', r'const finalMemory = \1;', re.MULTILINE),
-            (r'const\s+memoryIncrease\s*=\s*([^;]+)$', r'const memoryIncrease = \1;', re.MULTILINE),
-
+            (
+                r"const\s+iterations\s*=\s*10\s*$",
+                "const iterations = 10;",
+                re.MULTILINE,
+            ),
+            (
+                r"const\s+averageTime\s*=\s*([^;]+)$",
+                r"const averageTime = \1;",
+                re.MULTILINE,
+            ),
+            (
+                r"const\s+startTime\s*=\s*([^;]+)$",
+                r"const startTime = \1;",
+                re.MULTILINE,
+            ),
+            (r"const\s+endTime\s*=\s*([^;]+)$", r"const endTime = \1;", re.MULTILINE),
+            (
+                r"const\s+largeDataset\s*=\s*([^;]+)$",
+                r"const largeDataset = \1;",
+                re.MULTILINE,
+            ),
+            (
+                r"const\s+initialMemory\s*=\s*([^;]+)$",
+                r"const initialMemory = \1;",
+                re.MULTILINE,
+            ),
+            (
+                r"const\s+finalMemory\s*=\s*([^;]+)$",
+                r"const finalMemory = \1;",
+                re.MULTILINE,
+            ),
+            (
+                r"const\s+memoryIncrease\s*=\s*([^;]+)$",
+                r"const memoryIncrease = \1;",
+                re.MULTILINE,
+            ),
             # 修复函数调用缺失分号
-            (r'someFunction\([^)]*\)$', r'someFunction(/* test params */);', re.MULTILINE),
-            (r'performance\.now\(\)$', r'performance.now();', re.MULTILINE),
-            (r'global\.gc\(\)$', r'global.gc();', re.MULTILINE),
+            (
+                r"someFunction\([^)]*\)$",
+                r"someFunction(/* test params */);",
+                re.MULTILINE,
+            ),
+            (r"performance\.now\(\)$", r"performance.now();", re.MULTILINE),
+            (r"global\.gc\(\)$", r"global.gc();", re.MULTILINE),
         ]
 
         for pattern, replacement, *flags in fixes:
@@ -113,13 +144,11 @@ class FinalSyntaxFixer:
             (r'it\s*\(\s*"([^"]*)",\s*\(\)\s*=>\s*\{\s*\{', r'it("\1", () => {'),
             (r'it\s*\(\s*"([^"]*)\'\s*,\s*\(\)\s*=>\s*\{', r'it("\1", () => {'),
             (r'it\s*\(\s*"([^"]*)",\s*\(\)\s*=>\s*\{\s*\{', r'it("\1", () => {'),
-
             # 修复describe函数
             (r'describe\s*\(\s*"([^"]*)",\s*\(\)\s*=>\s*\{', r'describe("\1", () => {'),
-
             # 修复beforeEach和afterEach
-            (r'beforeEach\s*\(\s*\(\)\s*=>\s*\{', r'beforeEach(() => {'),
-            (r'afterEach\s*\(\s*\(\)\s*=>\s*\{', r'afterEach(() => {'),
+            (r"beforeEach\s*\(\s*\(\)\s*=>\s*\{", r"beforeEach(() => {"),
+            (r"afterEach\s*\(\s*\(\)\s*=>\s*\{", r"afterEach(() => {"),
         ]
 
         for pattern, replacement in fixes:
@@ -131,13 +160,28 @@ class FinalSyntaxFixer:
         """修复expect语句"""
         fixes = [
             # 修复expect语句缺失分号
-            (r'expect\s*\(\s*([^)]+)\s*\)\s*\.\s*toBeLessThan\s*\(\s*([^)]+)\s*\)$', r'expect(\1).toBeLessThan(\2);', re.MULTILINE),
-            (r'expect\s*\(\s*([^)]+)\s*\)\s*\.\s*toBe\s*\(\s*([^)]+)\s*\)$', r'expect(\1).toBe(\2);', re.MULTILINE),
-            (r'expect\s*\(\s*([^)]+)\s*\)\s*\.\s*toEqual\s*\(\s*([^)]+)\s*\)$', r'expect(\1).toEqual(\2);', re.MULTILINE),
-            (r'expect\s*\(\s*([^)]+)\s*\)\s*\.\s*toBeDefined\s*\(\s*\)$', r'expect(\1).toBeDefined();', re.MULTILINE),
-
+            (
+                r"expect\s*\(\s*([^)]+)\s*\)\s*\.\s*toBeLessThan\s*\(\s*([^)]+)\s*\)$",
+                r"expect(\1).toBeLessThan(\2);",
+                re.MULTILINE,
+            ),
+            (
+                r"expect\s*\(\s*([^)]+)\s*\)\s*\.\s*toBe\s*\(\s*([^)]+)\s*\)$",
+                r"expect(\1).toBe(\2);",
+                re.MULTILINE,
+            ),
+            (
+                r"expect\s*\(\s*([^)]+)\s*\)\s*\.\s*toEqual\s*\(\s*([^)]+)\s*\)$",
+                r"expect(\1).toEqual(\2);",
+                re.MULTILINE,
+            ),
+            (
+                r"expect\s*\(\s*([^)]+)\s*\)\s*\.\s*toBeDefined\s*\(\s*\)$",
+                r"expect(\1).toBeDefined();",
+                re.MULTILINE,
+            ),
             # 修复expect开头缺失空格
-            (r'^expect\(', '    expect(', re.MULTILINE),
+            (r"^expect\(", "    expect(", re.MULTILINE),
         ]
 
         for pattern, replacement in fixes:
@@ -149,10 +193,13 @@ class FinalSyntaxFixer:
         """修复变量声明"""
         fixes = [
             # 修复process.memoryUsage()调用
-            (r'process\.memoryUsage\(\)\.heapUsed$', r'process.memoryUsage().heapUsed;', re.MULTILINE),
-
+            (
+                r"process\.memoryUsage\(\)\.heapUsed$",
+                r"process.memoryUsage().heapUsed;",
+                re.MULTILINE,
+            ),
             # 修复变量赋值缺失分号
-            (r'=\s*([^;]+)$', r'= \1;', re.MULTILINE),
+            (r"=\s*([^;]+)$", r"= \1;", re.MULTILINE),
         ]
 
         for pattern, replacement in fixes:
@@ -164,11 +211,22 @@ class FinalSyntaxFixer:
         """修复函数调用"""
         fixes = [
             # 修复someFunction调用
-            (r'someFunction\s*\(\s*largeDataset\s*\)$', r'someFunction(largeDataset);', re.MULTILINE),
-            (r'someFunction\s*\(\s*/\*\s*test\s+params\s*\*/\s*\)$', r'someFunction(/* test params */);', re.MULTILINE),
-
+            (
+                r"someFunction\s*\(\s*largeDataset\s*\)$",
+                r"someFunction(largeDataset);",
+                re.MULTILINE,
+            ),
+            (
+                r"someFunction\s*\(\s*/\*\s*test\s+params\s*\*/\s*\)$",
+                r"someFunction(/* test params */);",
+                re.MULTILINE,
+            ),
             # 修复if语句中的函数调用
-            (r'if\s*\(\s*global\.gc\s*\)\s*\{\s*global\.gc\(\)$', r'if (global.gc) {\n      global.gc();', re.MULTILINE),
+            (
+                r"if\s*\(\s*global\.gc\s*\)\s*\{\s*global\.gc\(\)$",
+                r"if (global.gc) {\n      global.gc();",
+                re.MULTILINE,
+            ),
         ]
 
         for pattern, replacement in fixes:
@@ -180,8 +238,14 @@ class FinalSyntaxFixer:
         """修复字符串字面量"""
         fixes = [
             # 修复字符串引号问题
-            (r'it\s*\(\s*"should not cause memory leaks\'\s*,', r'it("should not cause memory leaks",'),
-            (r'it\s*\(\s*"should handle large datasets efficiently,', r'it("should handle large datasets efficiently",'),
+            (
+                r'it\s*\(\s*"should not cause memory leaks\'\s*,',
+                r'it("should not cause memory leaks",',
+            ),
+            (
+                r'it\s*\(\s*"should handle large datasets efficiently,',
+                r'it("should handle large datasets efficiently",',
+            ),
         ]
 
         for pattern, replacement in fixes:
@@ -193,17 +257,17 @@ class FinalSyntaxFixer:
         """最终标点符号修复"""
         fixes = [
             # 修复多余的大括号
-            (r'\{\s*\{', '{'),
-            (r'\}\s*\}', '}'),
-
+            (r"\{\s*\{", "{"),
+            (r"\}\s*\}", "}"),
             # 修复缺失的大括号
-            (r'\(\)\s*=>\s*\{$', r'() => {', re.MULTILINE),
-
+            (r"\(\)\s*=>\s*\{$", r"() => {", re.MULTILINE),
             # 修复for循环语法
-            (r'for\s*\(\s*let\s+i\s*=\s*0\s*;\s*i\s*<\s*([^;]+)\s*;\s*i\+\+\s*\)\s*\{', r'for (let i = 0; i < \1; i++) {'),
-
+            (
+                r"for\s*\(\s*let\s+i\s*=\s*0\s*;\s*i\s*<\s*([^;]+)\s*;\s*i\+\+\s*\)\s*\{",
+                r"for (let i = 0; i < \1; i++) {",
+            ),
             # 修复if语句语法
-            (r'if\s*\(\s*([^)]+)\s*\)\s*\{', r'if (\1) {'),
+            (r"if\s*\(\s*([^)]+)\s*\)\s*\{", r"if (\1) {"),
         ]
 
         for pattern, replacement in fixes:
@@ -214,47 +278,60 @@ class FinalSyntaxFixer:
     def _final_structure_fix(self, content: str) -> str:
         """最终结构修复"""
         # 分行处理，修复特定的结构问题
-        lines = content.split('\n')
+        lines = content.split("\n")
         fixed_lines = []
 
         for i, line in enumerate(lines):
             # 修复特定的行级错误
             if 'it("should handle large datasets efficiently, () => { {' in line:
                 line = '  it("should handle large datasets efficiently", () => {'
-            elif 'it("should not cause memory leaks\', () => { {' in line:
+            elif "it(\"should not cause memory leaks', () => { {" in line:
                 line = '  it("should not cause memory leaks", () => {'
-            elif 'someFunction(largeDataset)' in line and not line.strip().endswith(';'):
-                line = line.rstrip() + ';'
-            elif 'expect(endTime - startTime).toBeLessThan(100)' in line and not line.strip().endswith(';'):
-                line = line.rstrip() + ';'
-            elif 'expect(memoryIncrease).toBeLessThan(10 * 1024 * 1024)' in line and not line.strip().endswith(';'):
-                line = line.rstrip() + ';'
-            elif line.strip() == '});' and i > 0 and not lines[i-1].strip().endswith(';') and not lines[i-1].strip().endswith('}'):
+            elif "someFunction(largeDataset)" in line and not line.strip().endswith(
+                ";"
+            ):
+                line = line.rstrip() + ";"
+            elif (
+                "expect(endTime - startTime).toBeLessThan(100)" in line
+                and not line.strip().endswith(";")
+            ):
+                line = line.rstrip() + ";"
+            elif (
+                "expect(memoryIncrease).toBeLessThan(10 * 1024 * 1024)" in line
+                and not line.strip().endswith(";")
+            ):
+                line = line.rstrip() + ";"
+            elif (
+                line.strip() == "});"
+                and i > 0
+                and not lines[i - 1].strip().endswith(";")
+                and not lines[i - 1].strip().endswith("}")
+            ):
                 # 在});前添加缺失的分号
-                if fixed_lines and not fixed_lines[-1].strip().endswith((';', '}')):
-                    fixed_lines[-1] = fixed_lines[-1].rstrip() + ';'
+                if fixed_lines and not fixed_lines[-1].strip().endswith((";", "}")):
+                    fixed_lines[-1] = fixed_lines[-1].rstrip() + ";"
 
             fixed_lines.append(line)
 
-        return '\n'.join(fixed_lines)
+        return "\n".join(fixed_lines)
 
     def _should_skip_file(self, file_path: Path) -> bool:
         """判断是否应该跳过某个文件"""
         skip_patterns = [
-            'node_modules',
-            'venv',
-            '.venv',
-            '__pycache__',
-            '.git',
-            'build',
-            'dist',
-            '.expo',
-            'ios/Pods',
-            'android/build',
-            '.jest-cache',
-            'coverage',
-            'cleanup_backup',
-            'quality_enhancement'
+            "node_modules",
+            "venv",
+            ".venv",
+            "__pycache__",
+            ".git",
+            "build",
+            "dist",
+            ".expo",
+            "ios/Pods",
+            "android/build",
+            ".jest-cache",
+            "coverage",
+            "cleanup_backup",
+            "quality_enhancement",
         ]
 
         file_str = str(file_path)
@@ -350,10 +427,13 @@ class FinalSyntaxFixer:
 
         return report
 
+
 def main():
-    parser = argparse.ArgumentParser(description='索克生活项目最终语法错误修复')
-    parser.add_argument('--project-root', default='.', help='项目根目录路径')
-    parser.add_argument('--output', default='final_syntax_fix_report.md', help='输出报告文件名')
+    parser = argparse.ArgumentParser(description="索克生活项目最终语法错误修复")
+    parser.add_argument("--project-root", default=".", help="项目根目录路径")
+    parser.add_argument(
+        "--output", default="final_syntax_fix_report.md", help="输出报告文件名"
+    )
 
     args = parser.parse_args()
 
@@ -368,12 +448,13 @@ def main():
     report = fixer.generate_report()
 
     # 保存报告
-    with open(args.output, 'w', encoding='utf-8') as f:
+    with open(args.output, "w", encoding="utf-8") as f:
         f.write(report)
 
     print(f"✅ 最终语法错误修复完成！报告已保存到: {args.output}")
     print(f"📊 修复文件数: {len(fixer.fixed_files)}")
     print(f"❌ 失败文件数: {len(fixer.failed_files)}")
 
-if __name__ == '__main__':
-    main() 
+
+if __name__ == "__main__":
+    main()

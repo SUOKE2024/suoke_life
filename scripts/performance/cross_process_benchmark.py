@@ -2,16 +2,17 @@
 cross_process_benchmark - 索克生活项目模块
 """
 
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
-from dataclasses import dataclass
-from multiprocessing import shared_memory
-from numba import jit
-from typing import List, Dict, Any, Callable
 import asyncio
 import json
 import multiprocessing
-import psutil
 import time
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+from dataclasses import dataclass
+from multiprocessing import shared_memory
+from typing import Any, Callable, Dict, List
+
+import psutil
+from numba import jit
 
 #!/usr/bin/env python3
 """
@@ -28,6 +29,7 @@ class BenchmarkResult:
     cpu_utilization: float
     throughput: float
     scalability_score: float
+
 
 class CrossProcessBenchmark:
     """跨进程性能基准测试"""
@@ -76,7 +78,9 @@ class CrossProcessBenchmark:
         await asyncio.sleep(delay)
         return f"Async IO task completed after {delay}s"
 
-    def benchmark_single_thread(self, task_func: Callable, *args, **kwargs) -> BenchmarkResult:
+    def benchmark_single_thread(
+        self, task_func: Callable, *args, **kwargs
+    ) -> BenchmarkResult:
         """单线程基准测试"""
         start_time = time.time()
         start_memory = psutil.Process().memory_info().rss / 1024 / 1024
@@ -103,10 +107,12 @@ class CrossProcessBenchmark:
             memory_usage=memory_usage,
             cpu_utilization=cpu_utilization,
             throughput=throughput,
-            scalability_score=1.0  # 基准分数
+            scalability_score=1.0,  # 基准分数
         )
 
-    def benchmark_thread_pool(self, task_func: Callable, *args, **kwargs) -> BenchmarkResult:
+    def benchmark_thread_pool(
+        self, task_func: Callable, *args, **kwargs
+    ) -> BenchmarkResult:
         """线程池基准测试"""
         start_time = time.time()
         start_memory = psutil.Process().memory_info().rss / 1024 / 1024
@@ -131,10 +137,12 @@ class CrossProcessBenchmark:
             memory_usage=memory_usage,
             cpu_utilization=cpu_utilization,
             throughput=throughput,
-            scalability_score=throughput / single_thread_result.throughput
+            scalability_score=throughput / single_thread_result.throughput,
         )
 
-    def benchmark_process_pool(self, task_func: Callable, *args, **kwargs) -> BenchmarkResult:
+    def benchmark_process_pool(
+        self, task_func: Callable, *args, **kwargs
+    ) -> BenchmarkResult:
         """进程池基准测试"""
         start_time = time.time()
         start_memory = psutil.Process().memory_info().rss / 1024 / 1024
@@ -159,10 +167,12 @@ class CrossProcessBenchmark:
             memory_usage=memory_usage,
             cpu_utilization=cpu_utilization,
             throughput=throughput,
-            scalability_score=throughput / single_thread_result.throughput
+            scalability_score=throughput / single_thread_result.throughput,
         )
 
-    async def benchmark_async_io(self, task_func: Callable, *args, **kwargs) -> BenchmarkResult:
+    async def benchmark_async_io(
+        self, task_func: Callable, *args, **kwargs
+    ) -> BenchmarkResult:
         """异步I/O基准测试"""
         start_time = time.time()
         start_memory = psutil.Process().memory_info().rss / 1024 / 1024
@@ -184,7 +194,7 @@ class CrossProcessBenchmark:
             memory_usage=memory_usage,
             cpu_utilization=cpu_utilization,
             throughput=throughput,
-            scalability_score=throughput / 8.0  # 理论最优为并发执行
+            scalability_score=throughput / 8.0,  # 理论最优为并发执行
         )
 
     def benchmark_shared_memory(self, size: int = 5000) -> BenchmarkResult:
@@ -235,7 +245,7 @@ class CrossProcessBenchmark:
             memory_usage=memory_usage,
             cpu_utilization=cpu_utilization,
             throughput=throughput,
-            scalability_score=throughput / 2.0  # 相对基准
+            scalability_score=throughput / 2.0,  # 相对基准
         )
 
     def benchmark_hybrid_approach(self) -> BenchmarkResult:
@@ -256,10 +266,7 @@ class CrossProcessBenchmark:
                 for _ in range(4)
             ]
 
-            io_tasks = [
-                self.async_io_task(0.05)
-                for _ in range(4)
-            ]
+            io_tasks = [self.async_io_task(0.05) for _ in range(4)]
 
             # 等待所有任务完成
             cpu_results = await asyncio.gather(*cpu_tasks)
@@ -284,7 +291,7 @@ class CrossProcessBenchmark:
             memory_usage=memory_usage,
             cpu_utilization=cpu_utilization,
             throughput=throughput,
-            scalability_score=throughput / 4.0  # 相对基准
+            scalability_score=throughput / 4.0,  # 相对基准
         )
 
     def run_comprehensive_benchmark(self) -> Dict[str, Dict[str, BenchmarkResult]]:
@@ -297,18 +304,18 @@ class CrossProcessBenchmark:
             "CPU密集型任务": {
                 "function": self.cpu_intensive_task,
                 "args": (1000000,),
-                "kwargs": {}
+                "kwargs": {},
             },
             "内存密集型任务": {
                 "function": self.memory_intensive_task,
                 "args": (3000,),
-                "kwargs": {}
+                "kwargs": {},
             },
             "I/O模拟任务": {
                 "function": self.io_simulation_task,
                 "args": (0.05,),
-                "kwargs": {}
-            }
+                "kwargs": {},
+            },
         }
 
         all_results = {}
@@ -322,7 +329,7 @@ class CrossProcessBenchmark:
             scenario_results["single_thread"] = self.benchmark_single_thread(
                 scenario_config["function"],
                 *scenario_config["args"],
-                **scenario_config["kwargs"]
+                **scenario_config["kwargs"],
             )
 
             # 线程池测试
@@ -330,7 +337,7 @@ class CrossProcessBenchmark:
             scenario_results["thread_pool"] = self.benchmark_thread_pool(
                 scenario_config["function"],
                 *scenario_config["args"],
-                **scenario_config["kwargs"]
+                **scenario_config["kwargs"],
             )
 
             # 进程池测试
@@ -338,7 +345,7 @@ class CrossProcessBenchmark:
             scenario_results["process_pool"] = self.benchmark_process_pool(
                 scenario_config["function"],
                 *scenario_config["args"],
-                **scenario_config["kwargs"]
+                **scenario_config["kwargs"],
             )
 
             all_results[scenario_name] = scenario_results
@@ -361,25 +368,27 @@ class CrossProcessBenchmark:
         self.results = all_results
         return all_results
 
-    def generate_performance_report(self, output_file: str = "cross_process_benchmark_report.json"):
+    def generate_performance_report(
+        self, output_file: str = "cross_process_benchmark_report.json"
+    ):
         """生成性能报告"""
         # 计算性能指标
         performance_summary = self._calculate_performance_metrics()
 
         report = {
-            "benchmark_timestamp": time.strftime('%Y-%m-%d %H:%M:%S'),
+            "benchmark_timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
             "system_info": {
                 "cpu_count": self.cpu_count,
                 "total_memory_gb": psutil.virtual_memory().total / 1024 / 1024 / 1024,
-                "python_version": f"{multiprocessing.sys.version_info.major}.{multiprocessing.sys.version_info.minor}"
+                "python_version": f"{multiprocessing.sys.version_info.major}.{multiprocessing.sys.version_info.minor}",
             },
             "detailed_results": self._serialize_results(),
             "performance_summary": performance_summary,
-            "recommendations": self._generate_recommendations(performance_summary)
+            "recommendations": self._generate_recommendations(performance_summary),
         }
 
         # 保存报告
-        with open(output_file, 'w', encoding='utf-8') as f:
+        with open(output_file, "w", encoding="utf-8") as f:
             json.dump(report, f, indent=2, ensure_ascii=False, default=str)
 
         print(f"\n📄 性能报告已保存到: {output_file}")
@@ -396,7 +405,7 @@ class CrossProcessBenchmark:
                     "memory_usage": result.memory_usage,
                     "cpu_utilization": result.cpu_utilization,
                     "throughput": result.throughput,
-                    "scalability_score": result.scalability_score
+                    "scalability_score": result.scalability_score,
                 }
         return serialized
 
@@ -409,21 +418,26 @@ class CrossProcessBenchmark:
                 continue
 
             # 找到最佳策略
-            best_strategy = max(strategies.items(), key=lambda x: x[1].scalability_score)
-            worst_strategy = min(strategies.items(), key=lambda x: x[1].scalability_score)
+            best_strategy = max(
+                strategies.items(), key=lambda x: x[1].scalability_score
+            )
+            worst_strategy = min(
+                strategies.items(), key=lambda x: x[1].scalability_score
+            )
 
             metrics[scenario] = {
                 "best_strategy": {
                     "name": best_strategy[0],
                     "scalability_score": best_strategy[1].scalability_score,
-                    "throughput": best_strategy[1].throughput
+                    "throughput": best_strategy[1].throughput,
                 },
                 "worst_strategy": {
                     "name": worst_strategy[0],
                     "scalability_score": worst_strategy[1].scalability_score,
-                    "throughput": worst_strategy[1].throughput
+                    "throughput": worst_strategy[1].throughput,
                 },
-                "performance_gap": best_strategy[1].scalability_score / worst_strategy[1].scalability_score
+                "performance_gap": best_strategy[1].scalability_score
+                / worst_strategy[1].scalability_score,
             }
 
         return metrics
@@ -445,9 +459,7 @@ class CrossProcessBenchmark:
                     f"{scenario}: 建议考虑使用{best_strategy}，性能提升{performance_gap:.1f}倍"
                 )
             else:
-                recommendations.append(
-                    f"{scenario}: 当前策略已较优，性能差异不大"
-                )
+                recommendations.append(f"{scenario}: 当前策略已较优，性能差异不大")
 
         # 总体建议
         recommendations.append("总体建议: 采用混合架构，根据任务类型选择最优策略")
@@ -456,18 +468,16 @@ class CrossProcessBenchmark:
 
     def print_summary(self):
         """打印测试摘要"""
-        print("\n" + "="*80)
+        print("\n" + "=" * 80)
         print("🎯 跨进程内存隔离性能基准测试摘要")
-        print("="*80)
+        print("=" * 80)
 
         for scenario, strategies in self.results.items():
             print(f"\n📊 {scenario}:")
 
             # 按性能排序
             sorted_strategies = sorted(
-                strategies.items(),
-                key=lambda x: x[1].scalability_score,
-                reverse=True
+                strategies.items(), key=lambda x: x[1].scalability_score, reverse=True
             )
 
             for i, (strategy, result) in enumerate(sorted_strategies, 1):
@@ -477,6 +487,7 @@ class CrossProcessBenchmark:
                 print(f"    吞吐量: {result.throughput:.2f} tasks/s")
                 print(f"    可扩展性: {result.scalability_score:.2f}x")
                 print(f"    内存使用: {result.memory_usage:.1f}MB")
+
 
 def main():
     """主函数"""
@@ -493,8 +504,9 @@ def main():
 
     # 打印建议
     print("\n💡 优化建议:")
-    for i, recommendation in enumerate(report['recommendations'], 1):
+    for i, recommendation in enumerate(report["recommendations"], 1):
         print(f"  {i}. {recommendation}")
 
+
 if __name__ == "__main__":
-    main() 
+    main()

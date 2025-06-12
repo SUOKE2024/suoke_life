@@ -2,13 +2,13 @@
 migrate_to_uv - 索克生活项目模块
 """
 
-from pathlib import Path
-from typing import List, Dict, Optional
 import argparse
 import shutil
 import subprocess
 import sys
 import time
+from pathlib import Path
+from typing import Dict, List, Optional
 
 #!/usr/bin/env python3
 """
@@ -40,13 +40,15 @@ class UVMigrator:
                 cwd=cwd or self.project_root,
                 capture_output=True,
                 text=True,
-                timeout=300
+                timeout=300,
             )
             if result.returncode == 0:
                 self.log(f"命令执行成功: {' '.join(cmd)}")
                 return True
             else:
-                self.log(f"命令执行失败: {' '.join(cmd)}, 错误: {result.stderr}", "ERROR")
+                self.log(
+                    f"命令执行失败: {' '.join(cmd)}, 错误: {result.stderr}", "ERROR"
+                )
                 return False
         except subprocess.TimeoutExpired:
             self.log(f"命令执行超时: {' '.join(cmd)}", "ERROR")
@@ -80,7 +82,7 @@ class UVMigrator:
             "pyproject.toml",
             "poetry.lock",
             "requirements.txt",
-            "Dockerfile"
+            "Dockerfile",
         ]
 
         for file_name in files_to_backup:
@@ -98,7 +100,7 @@ class UVMigrator:
             return False
 
         # 读取现有配置
-        with open(pyproject_path, 'r', encoding='utf-8') as f:
+        with open(pyproject_path, "r", encoding="utf-8") as f:
             content = f.read()
 
         # 如果包含Poetry配置，进行转换
@@ -112,16 +114,23 @@ class UVMigrator:
             # 生成requirements.txt从poetry.lock
             if (service_path / "poetry.lock").exists():
                 self.run_command(
-                    ["poetry", "export", "-f", "requirements.txt",
-                    "--output", "requirements.txt", "--without-hashes"],
-                    cwd=service_path
+                    [
+                        "poetry",
+                        "export",
+                        "-f",
+                        "requirements.txt",
+                        "--output",
+                        "requirements.txt",
+                        "--without-hashes",
+                    ],
+                    cwd=service_path,
                 )
 
         return True
 
     def create_uv_config(self, service_path: Path, service_name: str) -> bool:
         """为服务创建uv兼容的pyproject.toml"""
-        config_template = f'''[build-system]
+        config_template = f"""[build-system]
 requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
@@ -163,10 +172,10 @@ line_length = 88
 testpaths = ["test"]
 python_files = "test_*.py"
 asyncio_mode = "auto"
-'''
+"""
 
         pyproject_path = service_path / "pyproject.toml"
-        with open(pyproject_path, 'w', encoding='utf-8') as f:
+        with open(pyproject_path, "w", encoding="utf-8") as f:
             f.write(config_template)
 
         self.log(f"创建uv配置: {pyproject_path}")
@@ -191,7 +200,9 @@ asyncio_mode = "auto"
         # 安装依赖
         requirements_file = service_path / "requirements.txt"
         if requirements_file.exists():
-            if not self.run_command(["uv", "add", "-r", "requirements.txt"], cwd=service_path):
+            if not self.run_command(
+                ["uv", "add", "-r", "requirements.txt"], cwd=service_path
+            ):
                 self.log(f"依赖安装失败: {service_name}", "WARNING")
 
         # 生成锁定文件
@@ -207,7 +218,7 @@ asyncio_mode = "auto"
             return False
 
         # 创建使用uv的新Dockerfile
-        dockerfile_uv_content = '''# 使用uv的Dockerfile
+        dockerfile_uv_content = """# 使用uv的Dockerfile
 FROM python:3.12-slim
 
 WORKDIR /app
@@ -229,10 +240,10 @@ ENV PATH="/app/.venv/bin:$PATH"
 
 # 运行应用
 CMD ["python", "-m", "main"]
-'''
+"""
 
         dockerfile_uv_path = service_path / "Dockerfile.uv"
-        with open(dockerfile_uv_path, 'w', encoding='utf-8') as f:
+        with open(dockerfile_uv_path, "w", encoding="utf-8") as f:
             f.write(dockerfile_uv_content)
 
         self.log(f"创建uv Dockerfile: {dockerfile_uv_path}")
@@ -247,7 +258,7 @@ CMD ["python", "-m", "main"]
             return results
 
         for service_dir in self.services_dir.iterdir():
-            if service_dir.is_dir() and not service_dir.name.startswith('.'):
+            if service_dir.is_dir() and not service_dir.name.startswith("."):
                 try:
                     success = self.migrate_service(service_dir)
                     results[service_dir.name] = success
@@ -321,7 +332,7 @@ CMD ["python", "-m", "main"]
         # 生成报告
         report = self.generate_migration_report(results)
         report_path = self.project_root / "uv_migration_report.md"
-        with open(report_path, 'w', encoding='utf-8') as f:
+        with open(report_path, "w", encoding="utf-8") as f:
             f.write(report)
 
         self.log(f"迁移报告已生成: {report_path}")
@@ -331,6 +342,7 @@ CMD ["python", "-m", "main"]
         self.log(f"迁移完成: {success_count}/{total_count} 服务成功迁移")
 
         return success_count == total_count
+
 
 def main():
     parser = argparse.ArgumentParser(description="索克生活项目uv迁移工具")
@@ -348,6 +360,7 @@ def main():
 
     success = migrator.run_migration(args.services)
     sys.exit(0 if success else 1)
+
 
 if __name__ == "__main__":
     main()

@@ -2,10 +2,10 @@
 verify_migration - 索克生活项目模块
 """
 
-from pathlib import Path
-from typing import Dict, List
 import subprocess
 import time
+from pathlib import Path
+from typing import Dict, List
 
 #!/usr/bin/env python3
 """
@@ -54,7 +54,7 @@ class MigrationVerifier:
             "has_lockfile": False,
             "fastapi_import": False,
             "install_time": 0,
-            "status": "❌"
+            "status": "❌",
         }
 
         if not service_path.exists():
@@ -77,7 +77,7 @@ class MigrationVerifier:
                 cwd=service_path,
                 capture_output=True,
                 text=True,
-                timeout=30
+                timeout=30,
             )
             end_time = time.time()
 
@@ -90,7 +90,11 @@ class MigrationVerifier:
             pass
 
         # 计算状态
-        if result["has_pyproject"] and result["has_lockfile"] and result["fastapi_import"]:
+        if (
+            result["has_pyproject"]
+            and result["has_lockfile"]
+            and result["fastapi_import"]
+        ):
             result["status"] = "✅"
         elif result["has_pyproject"] and result["has_lockfile"]:
             result["status"] = "⚠️"
@@ -146,7 +150,9 @@ class MigrationVerifier:
 """
 
         for result in successful:
-            report_content += f"- ✅ **{result['service']}** - {result['install_time']}s\n"
+            report_content += (
+                f"- ✅ **{result['service']}** - {result['install_time']}s\n"
+            )
 
         if warning:
             report_content += f"\n## ⚠️ 部分成功的服务 ({len(warning)}个)\n\n"
@@ -206,7 +212,7 @@ class MigrationVerifier:
 *项目: 索克生活 (Suoke Life)*
 """
 
-        with open(report_path, 'w', encoding='utf-8') as f:
+        with open(report_path, "w", encoding="utf-8") as f:
             f.write(report_content)
 
         return str(report_path)
