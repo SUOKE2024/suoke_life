@@ -27,5 +27,5 @@ def create_grpc_server():
     """创建gRPC服务器"""
     return BlockchainServicer()
 
-if __name__ == "__main__":
+if __name__=="__main__":
     print("gRPC服务器模块已加载")

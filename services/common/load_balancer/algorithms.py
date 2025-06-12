@@ -40,7 +40,7 @@ class RoundRobinBalancer(LoadBalancingAlgorithm):
 
         async with self.lock:
             endpoint = endpoints[self.current_index % len(endpoints)]
-            self.current_index += 1
+            self.current_index+=1
             return endpoint
 
 
@@ -74,7 +74,7 @@ class WeightedRoundRobinBalancer(LoadBalancingAlgorithm):
                 addr = endpoint.address
                 if addr not in self.current_weights:
                     self.current_weights[addr] = 0
-                self.current_weights[addr] += endpoint.weight
+                self.current_weights[addr]+=endpoint.weight
 
             # 选择权重最高的端点
             selected_endpoint = max(
@@ -82,7 +82,7 @@ class WeightedRoundRobinBalancer(LoadBalancingAlgorithm):
             )
 
             # 减少选中端点的权重
-            self.current_weights[selected_endpoint.address] -= total_weight
+            self.current_weights[selected_endpoint.address]-=total_weight
 
             return selected_endpoint
 
@@ -210,7 +210,7 @@ class ConsistentHashBalancer(LoadBalancingAlgorithm):
         # 找到第一个大于等于客户端哈希值的节点
         sorted_hashes = sorted(self.hash_ring.keys())
         for hash_value in sorted_hashes:
-            if hash_value >= client_hash:
+            if hash_value>=client_hash:
                 return self.hash_ring[hash_value]
 
         # 如果没找到，返回第一个节点（环形结构）

@@ -54,9 +54,9 @@ class InputValidator:
         dangerous_patterns = [
             r'<script',
             r'javascript:',
-            r'onload\s *= ',
-            r'onerror\s *= ',
-            r'onclick\s *= ',
+            r'onload\s*=',
+            r'onerror\s*=',
+            r'onclick\s*=',
         ]
 
         text_lower = text.lower()

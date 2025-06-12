@@ -98,7 +98,7 @@ method: str,
     status_code: int,
     duration: float,
     user_id: Optional[str] = None,
-    **kwargs: Any,
+   **kwargs: Any,
 ) -> None:
     """记录HTTP请求日志
 
@@ -119,12 +119,12 @@ user_id: 用户ID
 **kwargs,
     }
 
-    if status_code > = 500:
-    logger.error("HTTP Request", **extra_data)
-    elif status_code > = 400:
-    logger.warning("HTTP Request", **extra_data)
+    if status_code >=500:
+    logger.error("HTTP Request",**extra_data)
+    elif status_code >=400:
+    logger.warning("HTTP Request",**extra_data)
     else:
-    logger.info("HTTP Request", **extra_data)
+    logger.info("HTTP Request",**extra_data)
 
 
 def log_database_operation(
@@ -134,7 +134,7 @@ operation: str,
     affected_rows: Optional[int] = None,
     service: Optional[str] = None,
     error: Optional[str] = None,
-    **kwargs: Any,
+   **kwargs: Any,
 ) -> None:
     """记录数据库操作日志"""
     log_data = {
@@ -160,7 +160,7 @@ model_name: str,
     duration: float,
     success: bool = True,
     error: Optional[str] = None,
-    **kwargs: Any,
+   **kwargs: Any,
 ) -> None:
     """记录机器学习推理日志
 
@@ -182,11 +182,11 @@ error: 错误信息
     }
 
     if not success:
-    logger.error("ML Inference Failed", **extra_data)
+    logger.error("ML Inference Failed",**extra_data)
     elif duration > 5.0:  # 慢推理
-logger.warning("Slow ML Inference", **extra_data)
+logger.warning("Slow ML Inference",**extra_data)
     else:
-    logger.info("ML Inference", **extra_data)
+    logger.info("ML Inference",**extra_data)
 
 
 def log_cache_operation(
@@ -194,7 +194,7 @@ operation: str,
     key: str,
     hit: Optional[bool] = None,
     duration: Optional[float] = None,
-    **kwargs: Any,
+   **kwargs: Any,
 ) -> None:
     """记录缓存操作日志
 
@@ -213,7 +213,7 @@ duration: 操作耗时(秒)
 **kwargs,
     }
 
-    logger.debug("Cache Operation", **extra_data)
+    logger.debug("Cache Operation",**extra_data)
 
 
 # 初始化日志

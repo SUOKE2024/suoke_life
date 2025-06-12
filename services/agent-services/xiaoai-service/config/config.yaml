@@ -152,6 +152,10 @@ five_diagnosis:
   palpation:
     enabled: true
     base_weight: 1.0
+    
+  calculation:
+    enabled: true
+    base_weight: 1.0
 
 # 集成服务配置
 integrations:
@@ -202,6 +206,13 @@ integrations:
     port: 50058
     timeout_ms: 2000
     retry_count: 2
+    connection_pool_size: 5
+    
+  calculation_service:
+    host: "calculation-service"
+    port: 50059
+    timeout_ms: 5000
+    retry_count: 3
     connection_pool_size: 5
 
 # 无障碍服务配置

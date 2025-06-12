@@ -84,9 +84,9 @@ class OptimizationExecutor:
             ], cwd="communication-service", capture_output=True, text=True)
             
             self.results["short_term_optimizations"]["communication_service"] = {
-                "status": "completed" if result.returncode == 0 else "failed",
+                "status": "completed" if result.returncode==0 else "failed",
                 "message": "MessageBus导入问题已修复",
-                "details": result.stdout if result.returncode == 0 else result.stderr
+                "details": result.stdout if result.returncode==0 else result.stderr
             }
             
         except Exception as e:
@@ -107,9 +107,9 @@ class OptimizationExecutor:
             ], cwd="ai-model-service", capture_output=True, text=True)
             
             self.results["short_term_optimizations"]["ai_model_service"] = {
-                "status": "completed" if result.returncode == 0 else "failed",
+                "status": "completed" if result.returncode==0 else "failed",
                 "message": "kubernetes依赖问题已修复",
-                "details": result.stdout if result.returncode == 0 else result.stderr
+                "details": result.stdout if result.returncode==0 else result.stderr
             }
             
         except Exception as e:
@@ -249,7 +249,7 @@ class OptimizationExecutor:
             "summary": {
                 "short_term_completed": len([
                     k for k, v in self.results["short_term_optimizations"].items()
-                    if v.get("status") == "completed"
+                    if v.get("status")=="completed"
                 ]),
                 "medium_term_planned": len(self.results["medium_term_optimizations"]),
                 "overall_status": "in_progress"
@@ -295,5 +295,5 @@ async def main():
         logger.error(f"执行失败: {str(e)}")
         sys.exit(1)
 
-if __name__ == "__main__":
+if __name__=="__main__":
     asyncio.run(main())

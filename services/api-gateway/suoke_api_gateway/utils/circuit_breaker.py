@@ -71,14 +71,14 @@ self.total_successes = 0
 self.total_timeouts = 0
 self.total_circuit_breaker_errors = 0
 
-    async def call(self, func: Callable, * args, **kwargs) -> Any:
+    async def call(self, func: Callable, * args,**kwargs) -> Any:
 """
 通过熔断器调用函数
 
 Args:
             func: 要调用的函数
             * args: 函数参数
-            **kwargs: 函数关键字参数
+           **kwargs: 函数关键字参数
 
 Returns:
             函数返回值
@@ -86,32 +86,32 @@ Returns:
 Raises:
             CircuitBreakerError: 熔断器开启时
 """
-self.total_requests += 1
+self.total_requests+=1
 
 # 检查熔断器状态
-if self.state == CircuitState.OPEN:
+if self.state==CircuitState.OPEN:
             if self._should_attempt_reset():
                 self._reset_to_half_open()
             else:
-                self.total_circuit_breaker_errors += 1
+                self.total_circuit_breaker_errors+=1
                 raise CircuitBreakerError("Circuit breaker is OPEN")
 
 try:
             # 执行函数调用
             if asyncio.iscoroutinefunction(func):
                 result = await asyncio.wait_for(
-                    func( * args, **kwargs),
+                    func( * args,**kwargs),
                     timeout = self.timeout
                 )
             else:
-                result = func( * args, **kwargs)
+                result = func( * args,**kwargs)
 
             # 调用成功
             self._on_success()
             return result
 
 except asyncio.TimeoutError:
-            self.total_timeouts += 1
+            self.total_timeouts+=1
             self._on_failure()
             raise
 
@@ -132,7 +132,7 @@ except Exception as e:
 """检查是否应该尝试重置熔断器"""
 return (
             self.last_failure_time is not None and
-            time.time() - self.last_failure_time > = self.recovery_timeout
+            time.time() - self.last_failure_time >=self.recovery_timeout
 )
 
     def _reset_to_half_open(self) -> None:
@@ -143,28 +143,28 @@ logger.info("Circuit breaker reset to HALF_OPEN")
 
     def _on_success(self) -> None:
 """处理成功调用"""
-self.total_successes += 1
+self.total_successes+=1
 
-if self.state == CircuitState.HALF_OPEN:
-            self.success_count += 1
-            if self.success_count > = self.success_threshold:
+if self.state==CircuitState.HALF_OPEN:
+            self.success_count+=1
+            if self.success_count >=self.success_threshold:
                 self._reset_to_closed()
-elif self.state == CircuitState.CLOSED:
+elif self.state==CircuitState.CLOSED:
             # 重置失败计数
             self.failure_count = 0
 
     def _on_failure(self) -> None:
 """处理失败调用"""
-self.total_failures += 1
-self.failure_count += 1
+self.total_failures+=1
+self.failure_count+=1
 self.last_failure_time = time.time()
 
-if self.state == CircuitState.HALF_OPEN:
+if self.state==CircuitState.HALF_OPEN:
             # 半开状态下失败，直接回到开启状态
             self._trip_to_open()
 elif (
-            self.state == CircuitState.CLOSED and
-            self.failure_count > = self.failure_threshold
+            self.state==CircuitState.CLOSED and
+            self.failure_count >=self.failure_threshold
 ):
             # 关闭状态下失败次数超过阈值，进入开启状态
             self._trip_to_open()
@@ -278,12 +278,12 @@ breaker = circuit_breaker_manager.get_circuit_breaker(
             expected_exception = expected_exception,
 )
 
-async def async_wrapper( * args, **kwargs):
-            return await breaker.call(func, * args, **kwargs)
+async def async_wrapper( * args,**kwargs):
+            return await breaker.call(func, * args,**kwargs)
 
-def sync_wrapper( * args, **kwargs):
+def sync_wrapper( * args,**kwargs):
             """TODO: 添加文档字符串"""
-            return asyncio.run(breaker.call(func, * args, **kwargs))
+            return asyncio.run(breaker.call(func, * args,**kwargs))
 
 if asyncio.iscoroutinefunction(func):
             return async_wrapper

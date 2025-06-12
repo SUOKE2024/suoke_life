@@ -23,7 +23,7 @@
 - ✅ AndroidManifest.xml完整权限配置
 - ✅ 资源文件和样式配置
 - ✅ Proguard混淆规则
-- ✅ 包名配置: `com.suokelife`
+- ✅ 包名配置: `life.suoke`
 
 **iOS配置 (100% 完成):**
 - ✅ Xcode项目结构完整
@@ -154,7 +154,7 @@
 ```
 
 ### 构建配置 ✅ (100%)
-- **Android**: Gradle 8.0.1, Kotlin支持, 包名 `com.suokelife`
+- **Android**: Gradle 8.0.1, Kotlin支持, 包名 `life.suoke`
 - **iOS**: Xcode项目, CocoaPods依赖管理, Bundle ID配置
 - **React Native**: 0.79.2, TypeScript 5.0.4
 - **Metro**: 配置优化, 缓存管理
@@ -215,7 +215,7 @@ npm run test:native
 ### 应用配置 ✅
 - **应用名称**: SuokeLife
 - **显示名称**: 索克生活
-- **Android包名**: com.suokelife
+- **Android包名**: life.suoke
 - **iOS Bundle ID**: 待发布配置
 - **版本**: 1.0 (versionCode: 1)
 

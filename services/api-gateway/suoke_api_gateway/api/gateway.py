@@ -50,7 +50,7 @@ if not service_instance:
 # 构建目标URL
 target_url = f"http: / /{service_instance.host}:{service_instance.port} / {path}"
 if request.url.query:
-            target_url += f"?{request.url.query}"
+            target_url+=f"?{request.url.query}"
 
 # 准备请求头
 headers = dict(request.headers)
@@ -186,7 +186,7 @@ async def get_service_health(service_name: str, request: Request):
     service_registry: ServiceRegistry = request.app.state.service_registry
     health_info = service_registry.get_service_health(service_name)
 
-    if health_info["status"] == "not_found":
+    if health_info["status"]=="not_found":
 raise HTTPException(
             status_code = status.HTTP_404_NOT_FOUND,
             detail = f"Service '{service_name}' not found"

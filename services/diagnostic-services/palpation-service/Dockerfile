@@ -128,7 +128,7 @@ RUN uv run pytest --cov=palpation_service --cov-report=xml
 # ============================================================================
 # 构建信息
 # ============================================================================
-LABEL maintainer="Suoke Life Team <dev@suokelife.com>" \
+LABEL maintainer="Suoke Life Team <dev@suoke.life>" \
       version="1.0.0" \
       description="索克生活触诊服务 - 基于AI的中医触诊智能分析微服务" \
       org.opencontainers.image.title="palpation-service" \
@@ -136,4 +136,4 @@ LABEL maintainer="Suoke Life Team <dev@suokelife.com>" \
       org.opencontainers.image.version="1.0.0" \
       org.opencontainers.image.vendor="Suoke Life" \
       org.opencontainers.image.licenses="MIT" \
-      org.opencontainers.image.source="https://github.com/suokelife/suoke_life" 
+      org.opencontainers.image.source="https://github.com/SUOKE2024/suoke_life" 

@@ -85,7 +85,7 @@ EXPOSE 50055 8080 9090
 CMD ["uv", "run", "python", "-m", "suoke_blockchain_service.main", "serve"]
 
 # 元数据标签
-LABEL maintainer="SuoKe Life Team <dev@suokelife.com>" \
+LABEL maintainer="SuoKe Life Team <dev@suoke.life>" \
       version="0.1.0" \
       description="索克生活区块链服务" \
       org.opencontainers.image.title="SuoKe Blockchain Service" \

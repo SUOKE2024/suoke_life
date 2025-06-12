@@ -80,7 +80,7 @@ return self.version
     def __eq__(self, other) -> bool:
 """TODO: 添加文档字符串"""
 if isinstance(other, VersionInfo):
-            return (self.major, self.minor, self.patch) == (other.major, other.minor, other.patch)
+            return (self.major, self.minor, self.patch)==(other.major, other.minor, other.patch)
 return False
 
     def __lt__(self, other) -> bool:
@@ -91,11 +91,11 @@ return False
 
     def __le__(self, other) -> bool:
 """TODO: 添加文档字符串"""
-return self == other or self < other
+return self==other or self < other
 
     def __gt__(self, other) -> bool:
 """TODO: 添加文档字符串"""
-return not self < = other
+return not self <=other
 
     def __ge__(self, other) -> bool:
 """TODO: 添加文档字符串"""
@@ -149,13 +149,13 @@ if requested_version is None:
 
 # 查找精确匹配
 for version in matching_versions:
-            if version == requested_version:
+            if version==requested_version:
                 return version
 
 # 查找兼容版本（同主版本号的最新版本）
 compatible_versions = [
             v for v in matching_versions
-            if v.major == requested_version.major and v > = requested_version
+            if v.major==requested_version.major and v >=requested_version
 ]
 
 if compatible_versions:
@@ -256,15 +256,15 @@ except Exception as e:
     def _extract_version(self, request: Request) -> Optional[VersionInfo]:
 """提取请求的版本信息"""
 try:
-            if self.strategy == VersionStrategy.URL_PATH:
+            if self.strategy==VersionStrategy.URL_PATH:
                 return self._extract_version_from_path(request)
-            elif self.strategy == VersionStrategy.QUERY_PARAM:
+            elif self.strategy==VersionStrategy.QUERY_PARAM:
                 return self._extract_version_from_query(request)
-            elif self.strategy == VersionStrategy.HEADER:
+            elif self.strategy==VersionStrategy.HEADER:
                 return self._extract_version_from_accept_header(request)
-            elif self.strategy == VersionStrategy.CUSTOM_HEADER:
+            elif self.strategy==VersionStrategy.CUSTOM_HEADER:
                 return self._extract_version_from_custom_header(request)
-            elif self.strategy == VersionStrategy.SUBDOMAIN:
+            elif self.strategy==VersionStrategy.SUBDOMAIN:
                 return self._extract_version_from_subdomain(request)
 
 except Exception as e:
@@ -339,7 +339,7 @@ return None
 """获取移除版本信息后的原始路径"""
 path = request.url.path
 
-if self.strategy == VersionStrategy.URL_PATH:
+if self.strategy==VersionStrategy.URL_PATH:
             # 移除路径中的版本信息
             path = re.sub(r'^ / v\d + (?:\.\d + )?(?:\.\d + )?', '', path)
             if not path.startswith(' / '):
@@ -354,7 +354,7 @@ request.state.api_version = version
 request.state.original_path = original_path
 
 # 如果使用 URL 路径策略，更新路径
-if self.strategy == VersionStrategy.URL_PATH:
+if self.strategy==VersionStrategy.URL_PATH:
             # 创建新的 URL
             new_url = request.url.replace(path = original_path)
             request._url = new_url
@@ -368,7 +368,7 @@ requested_version: Optional[VersionInfo]
 """添加版本信息到响应头"""
 response.headers["X - API - Version"] = str(used_version)
 
-if requested_version and requested_version ! = used_version:
+if requested_version and requested_version !=used_version:
             response.headers["X - API - Version - Requested"] = str(requested_version)
 
 # 添加支持的版本列表
@@ -379,7 +379,7 @@ response.headers["X - API - Versions - Supported"] = ",".join(supported_versions
 if used_version.is_deprecated:
             warning_msg = f"API version {used_version} is deprecated"
             if used_version.sunset_date:
-                warning_msg += f" and will be removed on {used_version.sunset_date}"
+                warning_msg+=f" and will be removed on {used_version.sunset_date}"
             response.headers["Warning"] = f'299 - "{warning_msg}"'
 
     def _create_error_response(self, message: str, status_code: int) -> JSONResponse:
@@ -406,7 +406,7 @@ sunset_date: Optional[str] = None
     ) -> None:
 """标记版本为已弃用"""
 for supported_version in self.matcher.supported_versions:
-            if str(supported_version) == version:
+            if str(supported_version)==version:
                 supported_version.is_deprecated = True
                 supported_version.deprecation_date = deprecation_date
                 supported_version.sunset_date = sunset_date
@@ -416,7 +416,7 @@ def create_versioning_middleware(
     strategy: VersionStrategy = VersionStrategy.URL_PATH,
     default_version: str = "v1",
     supported_versions: Optional[List[str]] = None,
-    **kwargs
+   **kwargs
 ) -> APIVersioningMiddleware:
     """创建 API 版本管理中间件"""
 
@@ -430,7 +430,7 @@ return APIVersioningMiddleware(
             strategy = strategy,
             default_version = default_version,
             supported_versions = supported_versions,
-            **kwargs
+           **kwargs
 )
 
     return middleware_factory

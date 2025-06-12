@@ -115,13 +115,13 @@ class RedisCache:
         """设置缓存值"""
         try:
             # 序列化值
-            if serialize_method == "json":
+            if serialize_method=="json":
                 try:
                     serialized_value = json.dumps(value, ensure_ascii=False)
                 except (TypeError, ValueError):
                     # JSON序列化失败，使用pickle
                     serialized_value = pickle.dumps(value)
-            elif serialize_method == "pickle":
+            elif serialize_method=="pickle":
                 serialized_value = pickle.dumps(value)
             else:
                 serialized_value = str(value)
@@ -201,7 +201,7 @@ class UserCache(RedisCache):
         """生成用户缓存键"""
         key = f"{self.prefix}{user_id}"
         if suffix:
-            key += f":{suffix}"
+            key+=f":{suffix}"
         return key
     
     async def get_user(self, user_id: str) -> Optional[Dict[str, Any]]:

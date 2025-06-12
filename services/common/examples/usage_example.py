@@ -142,5 +142,5 @@ async def main():
     print("📖 更多信息请参考: services/common/README.md")
 
 
-if __name__ == "__main__":
+if __name__=="__main__":
     asyncio.run(main()) 

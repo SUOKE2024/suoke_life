@@ -165,7 +165,7 @@ try:
             # 获取当前窗口内的请求数
             current_requests = await self.redis_client.zcard(key)
 
-            if current_requests > = limit.amount:
+            if current_requests >=limit.amount:
                 return False
 
             # 记录当前请求

@@ -53,7 +53,7 @@
 ### 应用信息
 - **应用名称**: SuokeLife
 - **显示名称**: 索克生活
-- **Android包名**: com.suokelife
+- **Android包名**: life.suoke
 - **iOS Bundle ID**: 待配置
 
 ### 权限配置

@@ -29,7 +29,7 @@
 ### 测试用户信息
 ```
 用户名：测试用户
-邮箱：test@suokelife.com
+邮箱：test@suoke.life
 年龄：30岁
 体质：平和质
 ```

@@ -135,7 +135,7 @@ docker run -d --name postgres \
 ### 5. 克隆项目
 
 ```bash
-git clone https://github.com/suokelife/suoke_life.git
+git clone https://github.com/SUOKE2024/suoke_life.git
 cd suoke_life/services/diagnostic-services/palpation-service
 ```
 
@@ -298,8 +298,8 @@ make run-dev
 如果遇到其他问题，请：
 
 1. 查看[故障排除文档](../troubleshooting.md)
-2. 检查[GitHub Issues](https://github.com/suokelife/suoke_life/issues)
-3. 联系开发团队：dev@suokelife.com
+2. 检查[GitHub Issues](https://github.com/SUOKE2024/suoke_life/issues)
+3. 联系开发团队：dev@suoke.life
 
 ## 下一步
 

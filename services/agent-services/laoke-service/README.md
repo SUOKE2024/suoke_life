@@ -42,7 +42,7 @@
 
 1. **克隆项目**
 ```bash
-git clone https://github.com/suokelife/suoke_life.git
+git clone https://github.com/SUOKE2024/suoke_life.git
 cd suoke_life/services/agent-services/laoke-service
 ```
 
@@ -286,9 +286,9 @@ kubectl apply -f deploy/kubernetes/
 
 ## 🆘 支持
 
-- **文档**: https://docs.suokelife.com/laoke-service
-- **问题反馈**: https://github.com/suokelife/suoke_life/issues
-- **讨论**: https://github.com/suokelife/suoke_life/discussions
+- **文档**: https://docs.suoke.life/laoke-service
+- **问题反馈**: https://github.com/SUOKE2024/suoke_life/issues
+- **讨论**: https://github.com/SUOKE2024/suoke_life/discussions
 
 ## 🙏 致谢
 

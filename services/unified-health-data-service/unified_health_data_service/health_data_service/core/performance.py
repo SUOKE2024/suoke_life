@@ -52,7 +52,7 @@ self.config = config
     def __call__(self, func: Callable[..., T]) -> Callable[..., T]:
     """TODO: 添加文档字符串"""
 @functools.wraps(func)
-async def wrapper( * args, **kwargs) -> T:
+async def wrapper( * args,**kwargs) -> T:
     # 生成缓存键
 cache_key = self._generate_cache_key(func.__name__, args, kwargs)
 
@@ -71,7 +71,7 @@ return cached_result
 record_cache_metrics("get", success = False)
 
 # 缓存未命中，执行函数
-result = await func( * args, **kwargs)
+result = await func( * args,**kwargs)
 
 # 存储到缓存
 await cache_manager.set(
@@ -88,7 +88,7 @@ except Exception as e:
     logger.warning(f"缓存操作失败: {e}")
 record_cache_metrics("get", success = False)
 # 缓存失败时直接执行函数
-return await func( * args, **kwargs)
+return await func( * args,**kwargs)
 
 return wrapper
 
@@ -124,7 +124,7 @@ self._processing = False
     """添加项目到批处理队列"""
 self._queue.append(item)
 
-if len(self._queue) > = self.batch_size:
+if len(self._queue) >=self.batch_size:
     await self._process_batch()
 
     async def _process_batch(self) -> None:
@@ -235,7 +235,7 @@ for attempt in range(self.config.retry_count):
 
 # 设置超时
 result = await asyncio.wait_for(
-operation( * args, **kwargs),
+operation( * args,**kwargs),
 timeout = self.config.timeout
 )
 

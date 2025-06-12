@@ -12,7 +12,7 @@ NC='\033[0m' # No Color
 
 # 配置变量
 ENVIRONMENT="production"
-DOCKER_REGISTRY="registry.suokelife.com"
+DOCKER_REGISTRY="registry.suoke.life"
 APP_VERSION=$(date +%Y%m%d-%H%M%S)
 BACKUP_DIR="/backup/suokelife"
 LOG_DIR="/var/log/suokelife"
@@ -87,8 +87,8 @@ DATABASE_URL=postgresql://suokelife:password@postgres:5432/suokelife_prod
 REDIS_URL=redis://redis:6379/0
 
 # API配置
-API_BASE_URL=https://api.suokelife.com
-WS_URL=wss://ws.suokelife.com
+API_BASE_URL=https://api.suoke.life
+WS_URL=wss://ws.suoke.life
 
 # 智能体服务配置
 XIAOAI_SERVICE_URL=http://xiaoai-service:50053
@@ -389,10 +389,10 @@ echo "环境: $ENVIRONMENT"
 echo ""
 
 echo -e "${BLUE}🔗 访问地址${NC}"
-echo "前端应用: https://suokelife.com"
-echo "API网关: https://api.suokelife.com"
-echo "监控面板: https://monitor.suokelife.com:3000"
-echo "系统监控: https://monitor.suokelife.com:9090"
+echo "前端应用: https://suoke.life"
+echo "API网关: https://api.suoke.life"
+echo "监控面板: https://monitor.suoke.life:3000"
+echo "系统监控: https://monitor.suoke.life:9090"
 echo ""
 
 echo -e "${BLUE}📊 服务状态${NC}"

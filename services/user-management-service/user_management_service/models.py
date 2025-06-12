@@ -278,5 +278,5 @@ def main() -> None:
     print(f"用户字典: {user.to_dict()}")
 
 
-if __name__ == "__main__":
+if __name__=="__main__":
     main() 

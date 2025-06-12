@@ -17,10 +17,10 @@ import platform
 numpy_include = np.get_include()
 
 # 根据平台设置编译选项
-if platform.system() == "Windows":
+if platform.system()=="Windows":
     extra_compile_args = [" / O2", " / openmp"]
     extra_link_args = []
-elif platform.system() == "Darwin":  # macOS
+elif platform.system()=="Darwin":  # macOS
     extra_compile_args = [" - O3", " - Xpreprocessor", " - fopenmp"]
     extra_link_args = [" - lomp"]
 else:  # Linux
@@ -45,12 +45,12 @@ setup(
     version = "1.0.0",
     description = "索克生活高性能C扩展模块",
     author = "索克生活团队",
-    author_email = "dev@suokelife.com",
+    author_email = "dev@suoke.life",
     ext_modules = extensions,
     zip_safe = False,
-    python_requires = "> = 3.8",
+    python_requires = ">=3.8",
     install_requires = [
-        "numpy> = 1.19.0",
+        "numpy>=1.19.0",
     ],
     classifiers = [
         "Development Status :: 4 - Beta",

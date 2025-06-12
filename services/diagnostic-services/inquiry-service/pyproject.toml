@@ -9,10 +9,10 @@ description = "问诊服务 - 索克生活智能健康管理平台的核心诊�
 readme = "README.md"
 license = { text = "MIT" }
 authors = [
-    { name = "Suoke Life Team", email = "dev@suokelife.com" }
+    { name = "Suoke Life Team", email = "dev@suoke.life" }
 ]
 maintainers = [
-    { name = "Suoke Life Team", email = "dev@suokelife.com" }
+    { name = "Suoke Life Team", email = "dev@suoke.life" }
 ]
 keywords = ["tcm", "health", "diagnosis", "ai", "grpc"]
 classifiers = [
@@ -120,11 +120,11 @@ production = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/suokelife/suoke_life"
-Documentation = "https://docs.suokelife.com/services/inquiry-service"
-Repository = "https://github.com/suokelife/suoke_life"
-Issues = "https://github.com/suokelife/suoke_life/issues"
-Changelog = "https://github.com/suokelife/suoke_life/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/SUOKE2024/suoke_life"
+Documentation = "https://docs.suoke.life/services/inquiry-service"
+Repository = "https://github.com/SUOKE2024/suoke_life"
+Issues = "https://github.com/SUOKE2024/suoke_life/issues"
+Changelog = "https://github.com/SUOKE2024/suoke_life/blob/main/CHANGELOG.md"
 
 [project.scripts]
 inquiry-service = "inquiry_service.cmd.server:main"

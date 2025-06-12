@@ -120,7 +120,7 @@ def fix_indentation_issues():
                             fixed_lines.append('    ' + stripped)
                         else:
                             fixed_lines.append(stripped)
-                    elif stripped == '':
+                    elif stripped=='':
                         # 空行
                         fixed_lines.append('')
                     elif stripped.startswith('"""') or stripped.startswith("'''"):
@@ -163,7 +163,7 @@ def create_missing_init_files():
     directories = []
     for root, dirs, files in os.walk('.'):
         for dir_name in dirs:
-            if not dir_name.startswith('.') and dir_name != '__pycache__':
+            if not dir_name.startswith('.') and dir_name!='__pycache__':
                 dir_path = os.path.join(root, dir_name)
                 init_file = os.path.join(dir_path, '__init__.py')
                 if not os.path.exists(init_file):
@@ -222,5 +222,5 @@ def main():
     print("\n📊 检查优化效果...")
     os.system("ruff check . | wc -l")
 
-if __name__ == "__main__":
+if __name__=="__main__":
     main() 

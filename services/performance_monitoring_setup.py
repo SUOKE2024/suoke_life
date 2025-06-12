@@ -244,7 +244,7 @@ class PerformanceMonitor:
             "alerts": {
                 "total": len(self.metrics_data["alerts"]),
                 "recent": len(recent_alerts),
-                "critical": len([a for a in recent_alerts if a["level"] == "critical"])
+                "critical": len([a for a in recent_alerts if a["level"]=="critical"])
             },
             "monitoring_active": self.monitoring_active
         }
@@ -335,7 +335,7 @@ async def main():
             await asyncio.sleep(10)
             
             # 收集业务指标
-            if i % 3 == 0:  # 每30秒收集一次业务指标
+            if i % 3==0:  # 每30秒收集一次业务指标
                 business_collector.collect_user_activity_metrics()
                 business_collector.collect_ai_performance_metrics()
             
@@ -366,5 +366,5 @@ async def main():
     finally:
         monitor.stop_monitoring()
 
-if __name__ == "__main__":
+if __name__=="__main__":
     asyncio.run(main())

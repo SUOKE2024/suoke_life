@@ -9,10 +9,10 @@ description = "索克生活人工审核微服务 - 确保医疗健康建议的�
 readme = "README.md"
 license = { text = "MIT" }
 authors = [
-    { name = "Suoke Life Team", email = "dev@suokelife.com" }
+    { name = "Suoke Life Team", email = "dev@suoke.life" }
 ]
 maintainers = [
-    { name = "Suoke Life Team", email = "dev@suokelife.com" }
+    { name = "Suoke Life Team", email = "dev@suoke.life" }
 ]
 keywords = [
     "healthcare",
@@ -119,10 +119,10 @@ production = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/suokelife/suoke_life"
-Documentation = "https://docs.suokelife.com/human-review-service"
-Repository = "https://github.com/suokelife/suoke_life"
-Issues = "https://github.com/suokelife/suoke_life/issues"
+Homepage = "https://github.com/SUOKE2024/suoke_life"
+Documentation = "https://docs.suoke.life/human-review-service"
+Repository = "https://github.com/SUOKE2024/suoke_life"
+Issues = "https://github.com/SUOKE2024/suoke_life/issues"
 
 [project.scripts]
 human-review-service = "human_review_service.cli:main"

@@ -36,5 +36,5 @@ async def main():
     except Exception as e:
         print(f'❌ 小艾智能体测试失败: {e}')
 
-if __name__ == "__main__":
+if __name__=="__main__":
     asyncio.run(main()) 

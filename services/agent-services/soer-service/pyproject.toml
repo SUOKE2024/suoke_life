@@ -12,10 +12,10 @@ description = "索儿智能体服务 - 索克生活平台的营养与生活方�
 readme = "README.md"
 license = { text = "MIT" }
 authors = [
-    { name = "Suoke Life Team", email = "dev@suokelife.com" }
+    { name = "Suoke Life Team", email = "dev@suoke.life" }
 ]
 maintainers = [
-    { name = "Suoke Life Team", email = "dev@suokelife.com" }
+    { name = "Suoke Life Team", email = "dev@suoke.life" }
 ]
 keywords = [
     "health",
@@ -161,11 +161,11 @@ ml = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/suokelife/suoke_life"
-Documentation = "https://docs.suokelife.com"
-Repository = "https://github.com/suokelife/suoke_life"
-Issues = "https://github.com/suokelife/suoke_life/issues"
-Changelog = "https://github.com/suokelife/suoke_life/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/SUOKE2024/suoke_life"
+Documentation = "https://docs.suoke.life"
+Repository = "https://github.com/SUOKE2024/suoke_life"
+Issues = "https://github.com/SUOKE2024/suoke_life/issues"
+Changelog = "https://github.com/SUOKE2024/suoke_life/blob/main/CHANGELOG.md"
 
 [project.scripts]
 soer-service = "soer_service.main:main"

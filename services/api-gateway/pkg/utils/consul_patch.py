@@ -18,7 +18,7 @@ import sys
 
 
 # 检查Python版本，仅当Python 3.10+并且缺少coroutine装饰器时执行修补
-if sys.version_info >= (3, 10) and not hasattr(asyncio, 'coroutine'):
+if sys.version_info>=(3, 10) and not hasattr(asyncio, 'coroutine'):
     # 创建一个兼容性修补，模拟旧的coroutine装饰器的行为
     def async_coroutine_patch(func):
         """
@@ -26,8 +26,8 @@ if sys.version_info >= (3, 10) and not hasattr(asyncio, 'coroutine'):
         将普通函数标记为协程函数
         """
         @functools.wraps(func)
-        async def wrapper(*args, **kwargs):
-            return await func(*args, **kwargs)
+        async def wrapper(*args,**kwargs):
+            return await func(*args,**kwargs)
         return wrapper
 
     # 将修补版本添加到asyncio模块

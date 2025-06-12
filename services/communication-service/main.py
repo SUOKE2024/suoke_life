@@ -67,7 +67,7 @@ async def main() -> None:
     
     logger.info("通信服务已停止")
 
-if __name__ == "__main__":
+if __name__=="__main__":
     try:
         asyncio.run(main())
     except KeyboardInterrupt:

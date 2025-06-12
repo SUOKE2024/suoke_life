@@ -47,9 +47,9 @@ export const deepLinkConfig: LinkingOptions<RootStackParamList>['config'] = {
 // 完整的链接配置
 export const linkingConfig: LinkingOptions<RootStackParamList> = {
   prefixes: [
-    "suokelife://",
-    "https://suokelife.com",
-    'https://app.suokelife.com'
+    "suoke://",
+    "https://suoke.life",
+    'https://app.suoke.life'
   ],
   config: deepLinkConfig,
   
@@ -119,25 +119,25 @@ export class DeepLinkHandler {
 
   // 处理智能体深度链接
   handleAgentLink(agentId: string, action?: string): string {
-    const baseUrl = 'suokelife://agent/';
+    const baseUrl = 'suoke://agent/';
     return action ? `${baseUrl}${agentId}/${action}` : `${baseUrl}${agentId}`;
   }
 
   // 处理聊天深度链接
   handleChatLink(chatId: string, chatType: string, chatName?: string): string {
-    const baseUrl = 'suokelife://chat/';
+    const baseUrl = 'suoke://chat/';
     return `${baseUrl}${chatId}/${chatType}${chatName ? `?name=${encodeURIComponent(chatName)}` : ''}`;
   }
 
   // 处理健康数据深度链接
   handleHealthLink(dataType: string, dateRange?: string): string {
-    const baseUrl = 'suokelife://health/';
+    const baseUrl = 'suoke://health/';
     return dateRange ? `${baseUrl}${dataType}?range=${dateRange}` : `${baseUrl}${dataType}`;
   }
 
   // 处理诊断深度链接
   handleDiagnosisLink(diagnosisType: string, sessionId?: string): string {
-    const baseUrl = 'suokelife://diagnosis/';
+    const baseUrl = 'suoke://diagnosis/';
     return sessionId ? `${baseUrl}${diagnosisType}/${sessionId}` : `${baseUrl}${diagnosisType}`;
   }
 

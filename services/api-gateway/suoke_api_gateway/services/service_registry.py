@@ -107,7 +107,7 @@ if service_name not in self.services:
 # 检查是否已存在相同实例
 existing_instance = None
 for i, existing in enumerate(self.services[service_name]):
-            if existing.id == instance_id:
+            if existing.id==instance_id:
                 existing_instance = i
                 break
 
@@ -128,7 +128,7 @@ if service_name not in self.services:
             return False
 
 for i, instance in enumerate(self.services[service_name]):
-            if instance.id == instance_id:
+            if instance.id==instance_id:
                 del self.services[service_name][i]
                 logger.info("Service instance deregistered", service = service_name, instance_id = instance_id)
 
@@ -160,11 +160,11 @@ if not healthy_instances:
             return None
 
 # 根据策略选择实例
-if strategy == "round_robin":
+if strategy=="round_robin":
             return self._round_robin_select(healthy_instances)
-elif strategy == "random":
+elif strategy=="random":
             return random.choice(healthy_instances)
-elif strategy == "weighted":
+elif strategy=="weighted":
             return self._weighted_select(healthy_instances)
 else:
             # 默认使用轮询
@@ -238,12 +238,12 @@ try:
             async with httpx.AsyncClient(timeout = 5.0) as client:
                 response = await client.get(url)
 
-                if response.status_code == 200:
+                if response.status_code==200:
                     # 健康检查成功
                     if not instance.healthy:
                         # 从不健康恢复
                         instance.failure_count = max(0, instance.failure_count - 1)
-                        if instance.failure_count < = self.recovery_threshold:
+                        if instance.failure_count <=self.recovery_threshold:
                             instance.healthy = True
                             logger.info(
                                 "Service instance recovered",
@@ -273,9 +273,9 @@ finally:
 
     def _handle_health_check_failure(self, instance: ServiceInstance, error: str) -> None:
 """处理健康检查失败"""
-instance.failure_count += 1
+instance.failure_count+=1
 
-if instance.healthy and instance.failure_count > = self.failure_threshold:
+if instance.healthy and instance.failure_count >=self.failure_threshold:
             instance.healthy = False
             logger.warning(
                 "Service instance marked unhealthy",
@@ -293,15 +293,15 @@ return instances[int(time.time()) % len(instances)]
     def _weighted_select(self, instances: List[ServiceInstance]) -> ServiceInstance:
 """加权选择"""
 total_weight = sum(instance.weight for instance in instances)
-if total_weight == 0:
+if total_weight==0:
             return random.choice(instances)
 
 random_weight = random.randint(1, total_weight)
 current_weight = 0
 
 for instance in instances:
-            current_weight += instance.weight
-            if current_weight > = random_weight:
+            current_weight+=instance.weight
+            if current_weight >=random_weight:
                 return instance
 
 return instances[ - 1]  # 回退

@@ -52,7 +52,7 @@ class Event:
         """从字典创建"""
         data = data.copy()
         data["timestamp"] = datetime.fromisoformat(data["timestamp"])
-        return cls( ***data)
+        return cls(***data)
 
 
 class EventStore(ABC):
@@ -116,11 +116,11 @@ class InMemoryEventStore(EventStore):
             events = [
                 e
                 for e in self.events
-                if e.aggregate_id == aggregate_id and e.version > from_version
+                if e.aggregate_id==aggregate_id and e.version > from_version
             ]
 
             if to_version is not None:
-                events = [e for e in events if e.version <= to_version]
+                events = [e for e in events if e.version<=to_version]
 
             return sorted(events, key = lambda e: e.version)
 
@@ -132,7 +132,7 @@ class InMemoryEventStore(EventStore):
     ) -> list[Event]:
         """根据类型获取事件"""
         async with self._lock:
-            events = [e for e in self.events if e.event_type == event_type]
+            events = [e for e in self.events if e.event_type==event_type]
 
             if after_timestamp:
                 events = [e for e in events if e.timestamp > after_timestamp]
@@ -288,7 +288,7 @@ class EventSourcingRepository:
                 await self.event_bus.publish(event)
 
         # 检查是否需要创建快照
-        if aggregate.version % self.snapshot_frequency == 0:
+        if aggregate.version % self.snapshot_frequency==0:
             await self.event_store.save_snapshot(
                 aggregate.aggregate_id, aggregate.get_snapshot(), aggregate.version
             )
@@ -374,7 +374,7 @@ class ReadModelProjection(EventProjection):
         results = []
 
         for _model_id, model in self.read_models.items():
-            match = all(model.get(key) == value for key, value in criteria.items())
+            match = all(model.get(key)==value for key, value in criteria.items())
 
             if match:
                 results.append(model)

@@ -186,7 +186,7 @@ SMTP_PASSWORD="your_email_password"
 SMTP_USE_TLS=true
 
 # 发件人邮箱
-FROM_EMAIL="noreply@suokelife.com"
+FROM_EMAIL="noreply@suoke.life"
 
 # 是否启用邮件通知
 EMAIL_NOTIFICATIONS_ENABLED=true

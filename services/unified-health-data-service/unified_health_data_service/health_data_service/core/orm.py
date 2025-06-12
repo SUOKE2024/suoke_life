@@ -53,7 +53,7 @@ try:
     # 构建异步连接URL
 db_config = self.config.get('database', {})
 async_url = (
-f"postgresql+asyncpg: // "
+f"postgresql+asyncpg://"
 f"{db_config.get('user', 'suoke_user')}:"
 f"{db_config.get('password', 'suoke_password')}@"
 f"{db_config.get('host', 'localhost')}:"
@@ -82,7 +82,7 @@ if ssl_config.get('enabled', False):
 'sslrootcert': ssl_config.get('ca')
 }
 
-self.async_engine = create_async_engine(async_url, **engine_config)
+self.async_engine = create_async_engine(async_url,**engine_config)
 
 # 测试连接
 async with self.async_engine.begin() as conn:
@@ -100,7 +100,7 @@ try:
     # 构建同步连接URL
 db_config = self.config.get('database', {})
 sync_url = (
-f"postgresql: // "
+f"postgresql://"
 f"{db_config.get('user', 'suoke_user')}:"
 f"{db_config.get('password', 'suoke_password')}@"
 f"{db_config.get('host', 'localhost')}:"
@@ -118,7 +118,7 @@ engine_config = {
 'pool_pre_ping': True
 }
 
-self.sync_engine = create_engine(sync_url, **engine_config)
+self.sync_engine = create_engine(sync_url,**engine_config)
 
 # 测试连接
 with self.sync_engine.begin() as conn:

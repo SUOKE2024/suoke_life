@@ -1,4 +1,4 @@
-from typing import Any, Optional, Union, dict, list
+# 导入已移除 - 使用内置类型
 
 """
 __init__ - 索克生活项目模块

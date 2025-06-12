@@ -168,7 +168,7 @@ def verify_refresh_token(token: str) -> TokenData:
         )
 
         token_type: str = payload.get("type")
-        if token_type != "refresh":
+        if token_type!="refresh":
             raise credentials_exception
 
         user_id: str = payload.get("sub")
@@ -230,7 +230,7 @@ class OAuth2PasswordBearerWithCookie:
         if authorization:
             scheme, param = authorization.split(" ", 1) if " " in authorization else (authorization, "")
 
-        if scheme and scheme.lower() == "bearer":
+        if scheme and scheme.lower()=="bearer":
             return param
 
         # 尝试从Cookie中获取令牌
@@ -281,7 +281,7 @@ def verify_api_key(api_key: str) -> Dict[str, Any]:
             algorithms = [settings.algorithm]
         )
 
-        if payload.get("type") != "api_key":
+        if payload.get("type")!="api_key":
             raise HTTPException(
                 status_code = status.HTTP_401_UNAUTHORIZED,
                 detail = "无效的API密钥类型"

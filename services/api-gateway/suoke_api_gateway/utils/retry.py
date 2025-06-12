@@ -68,7 +68,7 @@ self.jitter = jitter
 
     def get_delay(self, attempt: int) -> float:
 """TODO: 添加文档字符串"""
-delay = self.initial_delay * (self.multiplier ** (attempt - 1))
+delay = self.initial_delay * (self.multiplier**(attempt - 1))
 delay = min(delay, self.max_delay)
 
 if self.jitter:
@@ -129,14 +129,14 @@ self.total_attempts = 0
 self.total_successes = 0
 self.total_failures = 0
 
-    async def execute(self, func: Callable, * args, **kwargs) -> Any:
+    async def execute(self, func: Callable, * args,**kwargs) -> Any:
 """
 执行函数并在失败时重试
 
 Args:
             func: 要执行的函数
             * args: 函数参数
-            **kwargs: 函数关键字参数
+           **kwargs: 函数关键字参数
 
 Returns:
             函数返回值
@@ -148,7 +148,7 @@ start_time = time.time()
 last_exception = None
 
 for attempt in range(1, self.max_attempts + 1):
-            self.total_attempts += 1
+            self.total_attempts+=1
 
             try:
                 # 检查超时
@@ -161,11 +161,11 @@ for attempt in range(1, self.max_attempts + 1):
 
                 # 执行函数
                 if asyncio.iscoroutinefunction(func):
-                    result = await func( * args, **kwargs)
+                    result = await func( * args,**kwargs)
                 else:
-                    result = func( * args, **kwargs)
+                    result = func( * args,**kwargs)
 
-                self.total_successes += 1
+                self.total_successes+=1
 
                 if attempt > 1:
                     logger.info(
@@ -198,8 +198,8 @@ for attempt in range(1, self.max_attempts + 1):
                     raise e
 
                 # 如果是最后一次尝试，抛出重试错误
-                if attempt == self.max_attempts:
-                    self.total_failures += 1
+                if attempt==self.max_attempts:
+                    self.total_failures+=1
                     raise RetryError(
                         f"Failed after {attempt} attempts",
                         attempt,
@@ -222,7 +222,7 @@ for attempt in range(1, self.max_attempts + 1):
                 await asyncio.sleep(delay)
 
 # 这里不应该到达
-self.total_failures += 1
+self.total_failures+=1
 raise RetryError(
             f"Failed after {self.max_attempts} attempts",
             self.max_attempts,
@@ -270,12 +270,12 @@ retry_manager = RetryManager(
             retry_on = retry_on,
 )
 
-async def async_wrapper( * args, **kwargs):
-            return await retry_manager.execute(func, * args, **kwargs)
+async def async_wrapper( * args,**kwargs):
+            return await retry_manager.execute(func, * args,**kwargs)
 
-def sync_wrapper( * args, **kwargs):
+def sync_wrapper( * args,**kwargs):
             """TODO: 添加文档字符串"""
-            return asyncio.run(retry_manager.execute(func, * args, **kwargs))
+            return asyncio.run(retry_manager.execute(func, * args,**kwargs))
 
 if asyncio.iscoroutinefunction(func):
             return async_wrapper

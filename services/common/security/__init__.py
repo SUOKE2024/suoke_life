@@ -52,5 +52,5 @@ def main() -> None:
         print(f"安全模块测试失败: {e}")
 
 
-if __name__ == "__main__":
+if __name__=="__main__":
     main()

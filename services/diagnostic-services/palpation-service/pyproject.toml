@@ -10,7 +10,7 @@ readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.13.3"
 authors = [
-    { name = "Suoke Life Team", email = "dev@suokelife.com" }
+    { name = "Suoke Life Team", email = "dev@suoke.life" }
 ]
 keywords = ["tcm", "palpation", "ai", "health", "microservice", "traditional-chinese-medicine"]
 classifiers = [
@@ -167,11 +167,11 @@ production = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/suokelife/suoke_life"
-Documentation = "https://docs.suokelife.com/services/palpation"
-Repository = "https://github.com/suokelife/suoke_life"
-Issues = "https://github.com/suokelife/suoke_life/issues"
-Changelog = "https://github.com/suokelife/suoke_life/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/SUOKE2024/suoke_life"
+Documentation = "https://docs.suoke.life/services/palpation"
+Repository = "https://github.com/SUOKE2024/suoke_life"
+Issues = "https://github.com/SUOKE2024/suoke_life/issues"
+Changelog = "https://github.com/SUOKE2024/suoke_life/blob/main/CHANGELOG.md"
 
 [project.scripts]
 palpation-service = "palpation_service.main:main"

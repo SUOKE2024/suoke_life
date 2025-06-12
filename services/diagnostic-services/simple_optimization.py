@@ -246,5 +246,5 @@ def print_optimization_results(report):
     print("🚀 索克生活平台已达到100%完成度，生产就绪！")
     print("="*60)
 
-if __name__ == "__main__":
+if __name__=="__main__":
     optimize_diagnosis_services() 

@@ -69,7 +69,7 @@ await this.generateDeploymentChecklist();
     } else {
       envTemplate = `# 索克生活生产环境配置;
 NODE_ENV=production;
-API_BASE_URL=https:// api.suokelife.com
+API_BASE_URL=https:// api.suoke.life
 DATABASE_URL=postgresql:// user:password@localhost:5432/suokelife_prod
 REDIS_URL=redis:// localhost:6379
 JWT_SECRET=your-super-secret-jwt-key;
@@ -222,9 +222,9 @@ metadata: name: suokelife-ingress;,
     kubernetes.io/ingress.class: nginx;
 cert-manager.io/cluster-issuer: letsencrypt-prod;,
   spec:
-  tls: - hosts: - suokelife.com;,
+  tls: - hosts: - suoke.life;,
   secretName: suokelife-tls;
-rules: - host: suokelife.com;,
+rules: - host: suoke.life;,
   http:
       paths: - path: /,
   pathType: Prefix;,
@@ -264,12 +264,12 @@ upstream suokelife_backend {
 }
 server {
     listen 80;
-    server_name suokelife.com www.suokelife.com;
+    server_name suoke.life www.suoke.life;
     return 301 https:// $server_name$request_uri
 }
 server {
     listen 443 ssl http2;
-    server_name suokelife.com www.suokelife.com;
+    server_name suoke.life www.suoke.life;
     ssl_certificate /etc/ssl/certs/suokelife.crt;
     ssl_certificate_key /etc/ssl/private/suokelife.key;
     ssl_protocols TLSv1.2 TLSv1.3;

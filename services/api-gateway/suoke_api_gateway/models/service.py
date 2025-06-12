@@ -59,7 +59,7 @@ return f"http: / /{self.host}:{self.port}"
     @property
     def is_healthy(self) -> bool:
 """检查服务是否健康"""
-return self.status == ServiceStatus.HEALTHY
+return self.status==ServiceStatus.HEALTHY
 
     def update_status(self, status: ServiceStatus) -> None:
 """更新服务状态"""
@@ -120,13 +120,13 @@ class LoadBalancerStats(BaseModel):
     @property
     def success_rate(self) -> float:
 """计算成功率"""
-if self.total_requests == 0:
+if self.total_requests==0:
             return 0.0
 return self.successful_requests / self.total_requests
 
     @property
     def error_rate(self) -> float:
 """计算错误率"""
-if self.total_requests == 0:
+if self.total_requests==0:
             return 0.0
 return self.failed_requests / self.total_requests

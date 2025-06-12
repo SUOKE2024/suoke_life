@@ -24,7 +24,7 @@ from typing import Any
 
 __version__ = "1.0.0"
 __author__ = "Suoke Life Team"
-__email__ = "dev@suokelife.com"
+__email__ = "dev@suoke.life"
 
 # 配置日志
 logging.basicConfig(

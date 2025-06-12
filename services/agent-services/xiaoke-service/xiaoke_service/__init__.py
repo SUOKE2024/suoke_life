@@ -16,7 +16,7 @@ from xiaoke_service.core.logging import get_logger
 
 __version__ = "1.0.0"
 __author__ = "Suoke Life Team"
-__email__ = "dev@suokelife.com"
+__email__ = "dev@suoke.life"
 
 
 __all__ = [

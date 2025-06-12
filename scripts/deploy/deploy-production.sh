@@ -14,7 +14,7 @@ NC='\033[0m' # No Color
 
 # 配置变量
 PROJECT_NAME="suoke-life"
-DOCKER_REGISTRY="registry.suokelife.com"
+DOCKER_REGISTRY="registry.suoke.life"
 NAMESPACE="suoke-production"
 DEPLOYMENT_ENV="production"
 BACKUP_DIR="/opt/backups/suoke-life"

@@ -76,28 +76,28 @@ class PasswordManager:
             result["valid"] = False
             result["errors"].append(f"密码长度至少{settings.auth.password_min_length}位")
         else:
-            result["score"] += 1
+            result["score"]+=1
         
         # 大写字母检查
         if settings.auth.password_require_uppercase and not any(c.isupper() for c in password):
             result["valid"] = False
             result["errors"].append("密码必须包含大写字母")
         else:
-            result["score"] += 1
+            result["score"]+=1
         
         # 小写字母检查
         if settings.auth.password_require_lowercase and not any(c.islower() for c in password):
             result["valid"] = False
             result["errors"].append("密码必须包含小写字母")
         else:
-            result["score"] += 1
+            result["score"]+=1
         
         # 数字检查
         if settings.auth.password_require_numbers and not any(c.isdigit() for c in password):
             result["valid"] = False
             result["errors"].append("密码必须包含数字")
         else:
-            result["score"] += 1
+            result["score"]+=1
         
         # 特殊字符检查
         if settings.auth.password_require_special:
@@ -106,7 +106,7 @@ class PasswordManager:
                 result["valid"] = False
                 result["errors"].append("密码必须包含特殊字符")
             else:
-                result["score"] += 1
+                result["score"]+=1
         
         return result
     
@@ -173,7 +173,7 @@ class TokenManager:
             payload = jwt.decode(token, settings.auth.secret_key, algorithms=[settings.auth.algorithm])
             
             # 检查令牌类型
-            if payload.get("type") != token_type:
+            if payload.get("type")!=token_type:
                 return None
             
             return payload
@@ -257,7 +257,7 @@ class SecurityUtils:
             return email
         
         local, domain = email.split("@", 1)
-        if len(local) <= 2:
+        if len(local)<=2:
             masked_local = "*" * len(local)
         else:
             masked_local = local[0] + "*" * (len(local) - 2) + local[-1]
@@ -267,7 +267,7 @@ class SecurityUtils:
     @staticmethod
     def mask_phone(phone: str) -> str:
         """掩码手机号"""
-        if len(phone) <= 4:
+        if len(phone)<=4:
             return "*" * len(phone)
         
         return phone[:3] + "*" * (len(phone) - 6) + phone[-3:]

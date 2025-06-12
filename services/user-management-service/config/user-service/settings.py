@@ -17,7 +17,7 @@ class DatabaseSettings(BaseSettings):
 
     # SQLite配置
     sqlite_url: str = Field(
-        default = "sqlite + aiosqlite: // / . / data / user_service.db",
+        default = "sqlite + aiosqlite:/// . / data / user_service.db",
         env = "DATABASE_SQLITE_URL"
     )
 
@@ -226,12 +226,12 @@ class AppSettings(BaseSettings):
     @property
     def is_development(self) -> bool:
         """TODO: 添加文档字符串"""
-        return self.environment == "development"
+        return self.environment=="development"
 
     @property
     def is_production(self) -> bool:
         """TODO: 添加文档字符串"""
-        return self.environment == "production"
+        return self.environment=="production"
 
     class Config:
         """TODO: 添加文档字符串"""

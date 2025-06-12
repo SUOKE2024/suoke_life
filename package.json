@@ -163,7 +163,7 @@
       }
     },
     "android": {
-      "javaPackageName": "com.suokelife.app"
+      "javaPackageName": "life.suoke.app"
     }
   },
   "husky": {

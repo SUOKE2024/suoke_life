@@ -245,7 +245,7 @@ class ConfigurationManager {
   private loadDefaultConfig(): AppConfig {
     return {
       api: {,"
-  baseUrl: "https:// api.suokelife.com",
+  baseUrl: "https:// api.suoke.life",
         timeout: 10000,
         retryAttempts: 3
       },

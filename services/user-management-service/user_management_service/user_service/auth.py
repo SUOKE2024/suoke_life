@@ -77,7 +77,7 @@ class AuthService:
                     timeout = 10.0
                 )
 
-                if response.status_code == 200:
+                if response.status_code==200:
                     user_data = response.json()
                     # 缓存结果
                     self._token_cache[cache_key] = (user_data, datetime.utcnow())
@@ -180,7 +180,7 @@ async def get_current_superuser(
 def require_auth(func):
     """认证装饰器"""
     @wraps(func)
-    async def wrapper( * args, **kwargs):
+    async def wrapper( * args,**kwargs):
         # 从kwargs中获取request对象
         request = kwargs.get('request') or (args[0] if args and hasattr(args[0], 'headers') else None)
 
@@ -213,7 +213,7 @@ def require_auth(func):
         # 将用户信息添加到kwargs
         kwargs['current_user'] = user
 
-        return await func( * args, **kwargs)
+        return await func( * args,**kwargs)
 
     return wrapper
 
@@ -221,9 +221,9 @@ def require_auth(func):
 def require_superuser(func):
     """超级用户权限装饰器"""
     @wraps(func)
-    async def wrapper( * args, **kwargs):
+    async def wrapper( * args,**kwargs):
         # 首先进行认证
-        await require_auth(func)( * args, **kwargs)
+        await require_auth(func)( * args,**kwargs)
 
         current_user = kwargs.get('current_user')
         if not current_user or not current_user.get("is_superuser"):
@@ -232,7 +232,7 @@ def require_superuser(func):
                 detail = "权限不足"
             )
 
-        return await func( * args, **kwargs)
+        return await func( * args,**kwargs)
 
     return wrapper
 
@@ -246,7 +246,7 @@ class AuthMiddleware:
         self.auth_service = get_auth_service()
 
     async def __call__(self, scope, receive, send):
-        if scope["type"] == "http":
+        if scope["type"]=="http":
             request = Request(scope, receive)
 
             # 跳过健康检查和文档路径

@@ -50,7 +50,7 @@ class IntelligentRedundancyCleaner:
             
             for file in files:
                 file_path = Path(root) / file
-                self.cleanup_stats['total_files_scanned'] += 1
+                self.cleanup_stats['total_files_scanned']+=1
                 
                 # 检查备份文件
                 if self._is_backup_file(file):
@@ -115,7 +115,7 @@ class IntelligentRedundancyCleaner:
     def _is_empty_file(self, file_path: Path) -> bool:
         """检查是否为空文件"""
         try:
-            return file_path.stat().st_size == 0
+            return file_path.stat().st_size==0
         except Exception:
             return False
     
@@ -228,7 +228,7 @@ class IntelligentRedundancyCleaner:
                             'category': category,
                             'size': file_size
                         })
-                        cleanup_results['total_size_saved'] += file_size
+                        cleanup_results['total_size_saved']+=file_size
                         
                 except Exception as e:
                     cleanup_results['failed_removals'].append({
@@ -288,7 +288,7 @@ def main():
         
         # 询问是否执行实际清理
         response = input("\n是否执行实际清理? (y/N): ").strip().lower()
-        if response == 'y':
+        if response=='y':
             cleanup_results = cleaner.execute_cleanup(dry_run=False)
             cleaner.save_cleanup_record(cleanup_results)
             print("✅ 清理完成!")
@@ -298,5 +298,5 @@ def main():
         print("✨ 未发现冗余文件，services目录很干净!")
 
 
-if __name__ == "__main__":
+if __name__=="__main__":
     main() 

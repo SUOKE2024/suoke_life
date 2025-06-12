@@ -129,37 +129,37 @@ class EventStore:
             param_count = 0
             
             if event_type:
-                param_count += 1
+                param_count+=1
                 conditions.append(f"type = ${param_count}")
                 params.append(event_type)
             
             if source:
-                param_count += 1
+                param_count+=1
                 conditions.append(f"source = ${param_count}")
                 params.append(source)
             
             if correlation_id:
-                param_count += 1
+                param_count+=1
                 conditions.append(f"correlation_id = ${param_count}")
                 params.append(correlation_id)
             
             if start_time:
-                param_count += 1
-                conditions.append(f"timestamp >= ${param_count}")
+                param_count+=1
+                conditions.append(f"timestamp>=${param_count}")
                 params.append(start_time)
             
             if end_time:
-                param_count += 1
-                conditions.append(f"timestamp <= ${param_count}")
+                param_count+=1
+                conditions.append(f"timestamp<=${param_count}")
                 params.append(end_time)
             
             where_clause = "WHERE " + " AND ".join(conditions) if conditions else ""
             
-            param_count += 1
+            param_count+=1
             limit_clause = f"LIMIT ${param_count}"
             params.append(limit)
             
-            param_count += 1
+            param_count+=1
             offset_clause = f"OFFSET ${param_count}"
             params.append(offset)
             
@@ -314,7 +314,7 @@ class EventStore:
                 recent_events = await conn.fetchval(
                     """
                     SELECT COUNT(*) FROM events
-                    WHERE timestamp >= NOW() - INTERVAL '24 hours'
+                    WHERE timestamp>=NOW() - INTERVAL '24 hours'
                     """
                 )
             

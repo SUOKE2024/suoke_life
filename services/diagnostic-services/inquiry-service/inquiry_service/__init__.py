@@ -22,7 +22,7 @@ from inquiry_service.core.exceptions import InquiryServiceError
 
 __version__ = "1.0.0"
 __author__ = "Suoke Life Team"
-__email__ = "dev@suokelife.com"
+__email__ = "dev@suoke.life"
 
 
 __all__ = [

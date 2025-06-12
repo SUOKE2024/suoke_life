@@ -75,19 +75,19 @@ class TestRateLimitMiddleware:
         # 发送少于最大请求数的请求
         for _ in range(3):
             response = client.get("/test")
-            assert response.status_code == 200
-            assert response.json() == {"message": "test passed"}
+            assert response.status_code==200
+            assert response.json()=={"message": "test passed"}
 
     def test_at_limit(self, client):
         """测试刚好到达限制的情况"""
         # 发送最大请求数的请求
         for _ in range(5):
             response = client.get("/test")
-            assert response.status_code == 200
+            assert response.status_code==200
 
         # 发送超出限制的请求
         response = client.get("/test")
-        assert response.status_code == 429
+        assert response.status_code==429
         assert "请求过于频繁" in response.json()["detail"]
 
     def test_limit_reset(self, client):
@@ -95,19 +95,19 @@ class TestRateLimitMiddleware:
         # 发送最大请求数的请求
         for _ in range(5):
             response = client.get("/test")
-            assert response.status_code == 200
+            assert response.status_code==200
 
         # 发送超出限制的请求
         response = client.get("/test")
-        assert response.status_code == 429
+        assert response.status_code==429
 
         # 等待重置间隔
         time.sleep(1.1)
 
         # 发送新的请求，应该成功
         response = client.get("/test")
-        assert response.status_code == 200
-        assert response.json() == {"message": "test passed"}
+        assert response.status_code==200
+        assert response.json()=={"message": "test passed"}
 
     def test_different_endpoints(self, client, middleware_config):
         """测试不同端点的限制（全局限制）"""
@@ -116,27 +116,27 @@ class TestRateLimitMiddleware:
         # 发送部分请求到第一个端点
         for _ in range(3):
             response = client.get("/test")
-            assert response.status_code == 200
+            assert response.status_code==200
 
         # 发送部分请求到第二个端点
         for _ in range(2):
             response = client.get("/another")
-            assert response.status_code == 200
+            assert response.status_code==200
 
         # 总共5个请求，再发送一个应该被限制
         response = client.get("/test")
-        assert response.status_code == 429
+        assert response.status_code==429
 
     def test_different_clients(self, client, test_app):
         """测试不同客户端的限制"""
         # 使用第一个客户端发送请求
         for _ in range(5):
             response = client.get("/test")
-            assert response.status_code == 200
+            assert response.status_code==200
 
         # 第一个客户端应该被限制
         response = client.get("/test")
-        assert response.status_code == 429
+        assert response.status_code==429
 
         # 创建一个新客户端（模拟不同IP）
         # 注意：TestClient不能真正模拟不同IP，这里只是概念演示
@@ -148,7 +148,7 @@ class TestRateLimitMiddleware:
         # 这里留下这个测试用例，但在CI环境中可能需要跳过
         response = another_client.get("/test")
         # 实际上这里可能会失败，因为TestClient不会真正改变客户端IP
-        # assert response.status_code == 200
+        # assert response.status_code==200
 
     def test_disabled_rate_limit(self, test_app):
         """测试禁用速率限制"""
@@ -178,11 +178,11 @@ class TestRateLimitMiddleware:
         # 发送超过限制的请求，但不应该被限制
         for _ in range(10):  # 是限制的两倍
             response = disabled_client.get("/test")
-            assert response.status_code == 200
+            assert response.status_code==200
 
 def main() -> None:
     """主函数 - 自动生成的最小可用版本"""
     pass
 
-if __name__ == "__main__":
+if __name__=="__main__":
     main()

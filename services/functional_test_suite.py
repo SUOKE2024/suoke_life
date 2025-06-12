@@ -81,33 +81,33 @@ class FunctionalTestSuite:
                 sys.path.insert(0, "agent-services/xiaoai-service")
                 from xiaoai.core import XiaoaiAgent
                 test_result["tests"].append({"name": test_name, "status": "passed", "message": "成功导入"})
-                self.passed_tests += 1
+                self.passed_tests+=1
             except Exception as e:
                 test_result["tests"].append({"name": test_name, "status": "failed", "message": str(e)})
-                self.failed_tests += 1
-            self.total_tests += 1
+                self.failed_tests+=1
+            self.total_tests+=1
             
             # 测试2: 创建智能体实例
             test_name = "创建智能体实例"
             try:
                 agent = XiaoaiAgent()
                 test_result["tests"].append({"name": test_name, "status": "passed", "message": "实例创建成功"})
-                self.passed_tests += 1
+                self.passed_tests+=1
             except Exception as e:
                 test_result["tests"].append({"name": test_name, "status": "failed", "message": str(e)})
-                self.failed_tests += 1
-            self.total_tests += 1
+                self.failed_tests+=1
+            self.total_tests+=1
             
             # 测试3: 初始化智能体
             test_name = "初始化智能体"
             try:
                 await agent.initialize()
                 test_result["tests"].append({"name": test_name, "status": "passed", "message": "初始化成功"})
-                self.passed_tests += 1
+                self.passed_tests+=1
             except Exception as e:
                 test_result["tests"].append({"name": test_name, "status": "failed", "message": str(e)})
-                self.failed_tests += 1
-            self.total_tests += 1
+                self.failed_tests+=1
+            self.total_tests+=1
             
             # 测试4: 处理消息
             test_name = "处理用户消息"
@@ -115,18 +115,18 @@ class FunctionalTestSuite:
                 response = await agent.process_message("你好，小艾")
                 if response and isinstance(response, str):
                     test_result["tests"].append({"name": test_name, "status": "passed", "message": f"响应: {response[:50]}..."})
-                    self.passed_tests += 1
+                    self.passed_tests+=1
                 else:
                     test_result["tests"].append({"name": test_name, "status": "failed", "message": "无效响应"})
-                    self.failed_tests += 1
+                    self.failed_tests+=1
             except Exception as e:
                 test_result["tests"].append({"name": test_name, "status": "failed", "message": str(e)})
-                self.failed_tests += 1
-            self.total_tests += 1
+                self.failed_tests+=1
+            self.total_tests+=1
             
             # 确定整体状态
-            passed_count = sum(1 for test in test_result["tests"] if test["status"] == "passed")
-            test_result["status"] = "passed" if passed_count == len(test_result["tests"]) else "partial"
+            passed_count = sum(1 for test in test_result["tests"] if test["status"]=="passed")
+            test_result["status"] = "passed" if passed_count==len(test_result["tests"]) else "partial"
             
         except Exception as e:
             test_result["status"] = "failed"
@@ -151,11 +151,11 @@ class FunctionalTestSuite:
                 # 尝试导入可能的模块
                 import xiaoke
                 test_result["tests"].append({"name": test_name, "status": "passed", "message": "模块导入成功"})
-                self.passed_tests += 1
+                self.passed_tests+=1
             except Exception as e:
                 test_result["tests"].append({"name": test_name, "status": "failed", "message": str(e)})
-                self.failed_tests += 1
-            self.total_tests += 1
+                self.failed_tests+=1
+            self.total_tests+=1
             
             test_result["status"] = "partial"
             
@@ -181,11 +181,11 @@ class FunctionalTestSuite:
                 sys.path.insert(0, "agent-services/laoke-service")
                 import laoke
                 test_result["tests"].append({"name": test_name, "status": "passed", "message": "模块导入成功"})
-                self.passed_tests += 1
+                self.passed_tests+=1
             except Exception as e:
                 test_result["tests"].append({"name": test_name, "status": "failed", "message": str(e)})
-                self.failed_tests += 1
-            self.total_tests += 1
+                self.failed_tests+=1
+            self.total_tests+=1
             
             test_result["status"] = "partial"
             
@@ -211,11 +211,11 @@ class FunctionalTestSuite:
                 sys.path.insert(0, "agent-services/soer-service")
                 import soer
                 test_result["tests"].append({"name": test_name, "status": "passed", "message": "模块导入成功"})
-                self.passed_tests += 1
+                self.passed_tests+=1
             except Exception as e:
                 test_result["tests"].append({"name": test_name, "status": "failed", "message": str(e)})
-                self.failed_tests += 1
-            self.total_tests += 1
+                self.failed_tests+=1
+            self.total_tests+=1
             
             test_result["status"] = "partial"
             
@@ -260,33 +260,33 @@ class FunctionalTestSuite:
                 sys.path.insert(0, "api-gateway")
                 from suoke_api_gateway.core.gateway import APIGateway
                 test_result["tests"].append({"name": test_name, "status": "passed", "message": "成功导入"})
-                self.passed_tests += 1
+                self.passed_tests+=1
             except Exception as e:
                 test_result["tests"].append({"name": test_name, "status": "failed", "message": str(e)})
-                self.failed_tests += 1
-            self.total_tests += 1
+                self.failed_tests+=1
+            self.total_tests+=1
             
             # 测试2: 创建网关实例
             test_name = "创建网关实例"
             try:
                 gateway = APIGateway()
                 test_result["tests"].append({"name": test_name, "status": "passed", "message": "实例创建成功"})
-                self.passed_tests += 1
+                self.passed_tests+=1
             except Exception as e:
                 test_result["tests"].append({"name": test_name, "status": "failed", "message": str(e)})
-                self.failed_tests += 1
-            self.total_tests += 1
+                self.failed_tests+=1
+            self.total_tests+=1
             
             # 测试3: 初始化网关
             test_name = "初始化网关"
             try:
                 await gateway.initialize()
                 test_result["tests"].append({"name": test_name, "status": "passed", "message": "初始化成功"})
-                self.passed_tests += 1
+                self.passed_tests+=1
             except Exception as e:
                 test_result["tests"].append({"name": test_name, "status": "failed", "message": str(e)})
-                self.failed_tests += 1
-            self.total_tests += 1
+                self.failed_tests+=1
+            self.total_tests+=1
             
             # 测试4: 处理请求
             test_name = "处理API请求"
@@ -299,18 +299,18 @@ class FunctionalTestSuite:
                 response = await gateway.handle_request(test_request)
                 if response and isinstance(response, dict):
                     test_result["tests"].append({"name": test_name, "status": "passed", "message": f"状态码: {response.get('status')}"})
-                    self.passed_tests += 1
+                    self.passed_tests+=1
                 else:
                     test_result["tests"].append({"name": test_name, "status": "failed", "message": "无效响应"})
-                    self.failed_tests += 1
+                    self.failed_tests+=1
             except Exception as e:
                 test_result["tests"].append({"name": test_name, "status": "failed", "message": str(e)})
-                self.failed_tests += 1
-            self.total_tests += 1
+                self.failed_tests+=1
+            self.total_tests+=1
             
             # 确定整体状态
-            passed_count = sum(1 for test in test_result["tests"] if test["status"] == "passed")
-            test_result["status"] = "passed" if passed_count == len(test_result["tests"]) else "partial"
+            passed_count = sum(1 for test in test_result["tests"] if test["status"]=="passed")
+            test_result["status"] = "passed" if passed_count==len(test_result["tests"]) else "partial"
             
         except Exception as e:
             test_result["status"] = "failed"
@@ -334,22 +334,22 @@ class FunctionalTestSuite:
                 sys.path.insert(0, "user-management-service")
                 from user_management_service import UserManagementService
                 test_result["tests"].append({"name": test_name, "status": "passed", "message": "成功导入"})
-                self.passed_tests += 1
+                self.passed_tests+=1
             except Exception as e:
                 test_result["tests"].append({"name": test_name, "status": "failed", "message": str(e)})
-                self.failed_tests += 1
-            self.total_tests += 1
+                self.failed_tests+=1
+            self.total_tests+=1
             
             # 测试2: 导入用户模型
             test_name = "导入User模型"
             try:
                 from user_management_service.models import User
                 test_result["tests"].append({"name": test_name, "status": "passed", "message": "模型导入成功"})
-                self.passed_tests += 1
+                self.passed_tests+=1
             except Exception as e:
                 test_result["tests"].append({"name": test_name, "status": "failed", "message": str(e)})
-                self.failed_tests += 1
-            self.total_tests += 1
+                self.failed_tests+=1
+            self.total_tests+=1
             
             # 测试3: 创建用户实例
             test_name = "创建用户实例"
@@ -361,11 +361,11 @@ class FunctionalTestSuite:
                     password_hash="hashed_password"
                 )
                 test_result["tests"].append({"name": test_name, "status": "passed", "message": "用户实例创建成功"})
-                self.passed_tests += 1
+                self.passed_tests+=1
             except Exception as e:
                 test_result["tests"].append({"name": test_name, "status": "failed", "message": str(e)})
-                self.failed_tests += 1
-            self.total_tests += 1
+                self.failed_tests+=1
+            self.total_tests+=1
             
             # 测试4: 用户数据序列化
             test_name = "用户数据序列化"
@@ -373,18 +373,18 @@ class FunctionalTestSuite:
                 user_dict = user.to_dict()
                 if isinstance(user_dict, dict) and "username" in user_dict:
                     test_result["tests"].append({"name": test_name, "status": "passed", "message": "序列化成功"})
-                    self.passed_tests += 1
+                    self.passed_tests+=1
                 else:
                     test_result["tests"].append({"name": test_name, "status": "failed", "message": "序列化结果无效"})
-                    self.failed_tests += 1
+                    self.failed_tests+=1
             except Exception as e:
                 test_result["tests"].append({"name": test_name, "status": "failed", "message": str(e)})
-                self.failed_tests += 1
-            self.total_tests += 1
+                self.failed_tests+=1
+            self.total_tests+=1
             
             # 确定整体状态
-            passed_count = sum(1 for test in test_result["tests"] if test["status"] == "passed")
-            test_result["status"] = "passed" if passed_count == len(test_result["tests"]) else "partial"
+            passed_count = sum(1 for test in test_result["tests"] if test["status"]=="passed")
+            test_result["status"] = "passed" if passed_count==len(test_result["tests"]) else "partial"
             
         except Exception as e:
             test_result["status"] = "failed"
@@ -408,11 +408,11 @@ class FunctionalTestSuite:
                 sys.path.insert(0, "blockchain-service")
                 from suoke_blockchain_service.exceptions import BlockchainServiceError
                 test_result["tests"].append({"name": test_name, "status": "passed", "message": "模块导入成功"})
-                self.passed_tests += 1
+                self.passed_tests+=1
             except Exception as e:
                 test_result["tests"].append({"name": test_name, "status": "failed", "message": str(e)})
-                self.failed_tests += 1
-            self.total_tests += 1
+                self.failed_tests+=1
+            self.total_tests+=1
             
             test_result["status"] = "partial"
             
@@ -440,11 +440,11 @@ class FunctionalTestSuite:
                 import ai_model_service
                 version = getattr(ai_model_service, '__version__', 'unknown')
                 test_result["tests"].append({"name": test_name, "status": "passed", "message": f"版本: {version}"})
-                self.passed_tests += 1
+                self.passed_tests+=1
             except Exception as e:
                 test_result["tests"].append({"name": test_name, "status": "failed", "message": str(e)})
-                self.failed_tests += 1
-            self.total_tests += 1
+                self.failed_tests+=1
+            self.total_tests+=1
             
             test_result["status"] = "partial"
             
@@ -486,11 +486,11 @@ class FunctionalTestSuite:
                 sys.path.insert(0, "unified-health-data-service")
                 from unified_health_data_service import UnifiedHealthDataService
                 test_result["tests"].append({"name": test_name, "status": "passed", "message": "模块导入成功"})
-                self.passed_tests += 1
+                self.passed_tests+=1
             except Exception as e:
                 test_result["tests"].append({"name": test_name, "status": "failed", "message": str(e)})
-                self.failed_tests += 1
-            self.total_tests += 1
+                self.failed_tests+=1
+            self.total_tests+=1
             
             test_result["status"] = "partial"
             
@@ -516,11 +516,11 @@ class FunctionalTestSuite:
                 sys.path.insert(0, "unified-knowledge-service")
                 from unified_knowledge_service import UnifiedKnowledgeService
                 test_result["tests"].append({"name": test_name, "status": "passed", "message": "模块导入成功"})
-                self.passed_tests += 1
+                self.passed_tests+=1
             except Exception as e:
                 test_result["tests"].append({"name": test_name, "status": "failed", "message": str(e)})
-                self.failed_tests += 1
-            self.total_tests += 1
+                self.failed_tests+=1
+            self.total_tests+=1
             
             test_result["status"] = "partial"
             
@@ -546,11 +546,11 @@ class FunctionalTestSuite:
                 sys.path.insert(0, "communication-service")
                 from communication_service import CommunicationService, MessageBus
                 test_result["tests"].append({"name": test_name, "status": "passed", "message": "模块导入成功"})
-                self.passed_tests += 1
+                self.passed_tests+=1
             except Exception as e:
                 test_result["tests"].append({"name": test_name, "status": "failed", "message": str(e)})
-                self.failed_tests += 1
-            self.total_tests += 1
+                self.failed_tests+=1
+            self.total_tests+=1
             
             test_result["status"] = "partial"
             
@@ -592,11 +592,11 @@ class FunctionalTestSuite:
                 sys.path.insert(0, "unified-support-service")
                 from unified_support_service import UnifiedSupportService
                 test_result["tests"].append({"name": test_name, "status": "passed", "message": "模块导入成功"})
-                self.passed_tests += 1
+                self.passed_tests+=1
             except Exception as e:
                 test_result["tests"].append({"name": test_name, "status": "failed", "message": str(e)})
-                self.failed_tests += 1
-            self.total_tests += 1
+                self.failed_tests+=1
+            self.total_tests+=1
             
             test_result["status"] = "partial"
             
@@ -622,11 +622,11 @@ class FunctionalTestSuite:
                 sys.path.insert(0, "utility-services")
                 import utility_services
                 test_result["tests"].append({"name": test_name, "status": "passed", "message": "模块导入成功"})
-                self.passed_tests += 1
+                self.passed_tests+=1
             except Exception as e:
                 test_result["tests"].append({"name": test_name, "status": "failed", "message": str(e)})
-                self.failed_tests += 1
-            self.total_tests += 1
+                self.failed_tests+=1
+            self.total_tests+=1
             
             test_result["status"] = "partial"
             
@@ -652,11 +652,11 @@ class FunctionalTestSuite:
                 sys.path.insert(0, "diagnostic-services")
                 # 诊断服务可能有多个子服务
                 test_result["tests"].append({"name": test_name, "status": "passed", "message": "目录结构存在"})
-                self.passed_tests += 1
+                self.passed_tests+=1
             except Exception as e:
                 test_result["tests"].append({"name": test_name, "status": "failed", "message": str(e)})
-                self.failed_tests += 1
-            self.total_tests += 1
+                self.failed_tests+=1
+            self.total_tests+=1
             
             test_result["status"] = "partial"
             
@@ -709,7 +709,7 @@ class FunctionalTestSuite:
                         }.get(status, "❓")
                         
                         test_count = len(service_result.get("tests", []))
-                        passed_count = sum(1 for test in service_result.get("tests", []) if test.get("status") == "passed")
+                        passed_count = sum(1 for test in service_result.get("tests", []) if test.get("status")=="passed")
                         
                         print(f"    {status_emoji} {service_result.get('service', service_name)}: {status} ({passed_count}/{test_count})")
             else:
@@ -733,14 +733,14 @@ async def main():
     
     # 总体评估
     success_rate = report["summary"]["success_rate"]
-    if success_rate >= 90:
+    if success_rate>=90:
         print(f"\n🎉 微服务功能测试表现优秀！")
-    elif success_rate >= 70:
+    elif success_rate>=70:
         print(f"\n👍 微服务功能基本正常，部分需要优化")
-    elif success_rate >= 50:
+    elif success_rate>=50:
         print(f"\n🔧 微服务功能需要进一步完善")
     else:
         print(f"\n⚠️ 微服务功能存在较多问题，需要重点修复")
 
-if __name__ == "__main__":
+if __name__=="__main__":
     asyncio.run(main()) 

@@ -161,7 +161,7 @@ class HealthEventHandlers:
             if anomaly_result['is_anomaly']:
                 severity = anomaly_result['severity']
                 
-                if severity == 'critical':
+                if severity=='critical':
                     # 发布危急值事件
                     await self.event_bus.publish(
                         HealthDataEvents.VITAL_SIGNS_CRITICAL,
@@ -176,7 +176,7 @@ class HealthEventHandlers:
                         },
                         correlation_id=event.correlation_id
                     )
-                elif severity == 'abnormal':
+                elif severity=='abnormal':
                     # 发布异常值事件
                     await self.event_bus.publish(
                         HealthDataEvents.VITAL_SIGNS_ABNORMAL,
@@ -276,7 +276,7 @@ class HealthEventHandlers:
             tcm_data = event.data.get('tcm_data')
             
             # 中医数据特殊处理
-            if tcm_type == 'constitution':
+            if tcm_type=='constitution':
                 # 体质分析完成
                 await self.event_bus.publish(
                     HealthDataEvents.TCM_CONSTITUTION_ANALYZED,
@@ -289,7 +289,7 @@ class HealthEventHandlers:
                     },
                     correlation_id=event.correlation_id
                 )
-            elif tcm_type == 'syndrome':
+            elif tcm_type=='syndrome':
                 # 证候识别完成
                 await self.event_bus.publish(
                     HealthDataEvents.TCM_SYNDROME_IDENTIFIED,
@@ -355,7 +355,7 @@ class HealthEventHandlers:
             logger.info("数据同步完成", 
                        user_id=user_id,
                        sync_type=sync_type,
-                       success_count=len([r for r in sync_results if r['status'] == 'success']))
+                       success_count=len([r for r in sync_results if r['status']=='success']))
             
         except Exception as e:
             logger.error("处理数据同步事件失败", 
@@ -385,16 +385,16 @@ class HealthEventHandlers:
             if isinstance(data_value, (int, float)):
                 if data_value < thresholds['min']:
                     errors.append(f"值 {data_value} 低于最小阈值 {thresholds['min']}")
-                    score -= 0.5
+                    score-=0.5
                 elif data_value > thresholds['max']:
                     errors.append(f"值 {data_value} 超过最大阈值 {thresholds['max']}")
-                    score -= 0.5
+                    score-=0.5
             else:
                 errors.append(f"数据类型错误，期望数值类型，得到 {type(data_value)}")
                 score = 0.0
         
         return {
-            'valid': len(errors) == 0,
+            'valid': len(errors)==0,
             'score': max(0.0, score),
             'errors': errors
         }
@@ -405,7 +405,7 @@ class HealthEventHandlers:
         anomaly_type = None
         severity = 'normal'
         
-        if data_type == 'heart_rate':
+        if data_type=='heart_rate':
             if data_value > self.anomaly_rules['heart_rate_high']:
                 is_anomaly = True
                 anomaly_type = 'tachycardia'
@@ -415,29 +415,29 @@ class HealthEventHandlers:
                 anomaly_type = 'bradycardia'
                 severity = 'critical' if data_value < 40 else 'abnormal'
         
-        elif data_type == 'blood_pressure':
+        elif data_type=='blood_pressure':
             systolic = data_value.get('systolic', 0) if isinstance(data_value, dict) else 0
             diastolic = data_value.get('diastolic', 0) if isinstance(data_value, dict) else 0
             
             high_bp = self.anomaly_rules['blood_pressure_high']
             low_bp = self.anomaly_rules['blood_pressure_low']
             
-            if systolic >= high_bp['systolic'] or diastolic >= high_bp['diastolic']:
+            if systolic>=high_bp['systolic'] or diastolic>=high_bp['diastolic']:
                 is_anomaly = True
                 anomaly_type = 'hypertension'
                 severity = 'critical' if systolic > 180 or diastolic > 110 else 'abnormal'
-            elif systolic <= low_bp['systolic'] or diastolic <= low_bp['diastolic']:
+            elif systolic<=low_bp['systolic'] or diastolic<=low_bp['diastolic']:
                 is_anomaly = True
                 anomaly_type = 'hypotension'
                 severity = 'critical' if systolic < 80 or diastolic < 50 else 'abnormal'
         
-        elif data_type == 'temperature':
-            if data_value >= self.anomaly_rules['fever_threshold']:
+        elif data_type=='temperature':
+            if data_value>=self.anomaly_rules['fever_threshold']:
                 is_anomaly = True
                 anomaly_type = 'fever'
                 severity = 'critical' if data_value > 39.0 else 'abnormal'
         
-        elif data_type == 'oxygen_saturation':
+        elif data_type=='oxygen_saturation':
             if data_value < self.anomaly_rules['oxygen_low']:
                 is_anomaly = True
                 anomaly_type = 'hypoxemia'

@@ -197,7 +197,7 @@ async def start_health_diagnosis(
     """启动健康诊断协同"""
     try:
         # 根据紧急程度选择协同场景
-        scenario = "emergency_health_support" if request.urgency == "high" else "comprehensive_health_diagnosis"
+        scenario = "emergency_health_support" if request.urgency=="high" else "comprehensive_health_diagnosis"
         
         context = {
             "symptoms": request.symptoms,
@@ -305,7 +305,7 @@ async def get_agents_status(
         return {
             "agents": status_data,
             "total_agents": len(agents),
-            "active_agents": len([s for s in status_data.values() if s.get("status") == "active"])
+            "active_agents": len([s for s in status_data.values() if s.get("status")=="active"])
         }
     
     except Exception as e:

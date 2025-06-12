@@ -108,14 +108,14 @@ return time.time() > self.expires_at
 if not self.code_challenge:
             return True  # 没有 PKCE 挑战
 
-if self.code_challenge_method == "S256":
+if self.code_challenge_method=="S256":
             # SHA256 哈希
             digest = hashlib.sha256(code_verifier.encode()).digest()
             challenge = base64.urlsafe_b64encode(digest).decode().rstrip(" = ")
-            return challenge == self.code_challenge
-elif self.code_challenge_method == "plain":
+            return challenge==self.code_challenge
+elif self.code_challenge_method=="plain":
             # 明文
-            return code_verifier == self.code_challenge
+            return code_verifier==self.code_challenge
 
 return False
 
@@ -295,7 +295,7 @@ client = self.get_client(client_id)
 if not client or not client.is_active:
             return False
 
-return client.client_secret == client_secret
+return client.client_secret==client_secret
 
     def create_authorization_url(
 self,
@@ -349,7 +349,7 @@ if not client.validate_redirect_uri(redirect_uri):
 if not client.validate_response_type(response_type):
             return {"error": "unsupported_response_type"}
 
-if response_type == "code":
+if response_type=="code":
             # 授权码流程
             code = secrets.token_urlsafe(32)
             auth_code = AuthorizationCode(
@@ -377,7 +377,7 @@ if response_type == "code":
                 "code": code,
             }
 
-elif response_type == "token":
+elif response_type=="token":
             # 隐式流程
             access_token = self._create_access_token(client_id, user_id, scope)
 
@@ -424,11 +424,11 @@ if auth_code.is_expired() or auth_code.is_used:
             return {"error": "invalid_grant"}
 
 # 验证客户端ID
-if auth_code.client_id ! = client_id:
+if auth_code.client_id !=client_id:
             return {"error": "invalid_grant"}
 
 # 验证重定向URI
-if auth_code.redirect_uri ! = redirect_uri:
+if auth_code.redirect_uri !=redirect_uri:
             return {"error": "invalid_grant"}
 
 # 验证 PKCE
@@ -447,7 +447,7 @@ refresh_token = self._create_refresh_token(
 )
 
 result = {
-            **access_token.to_dict(),
+           **access_token.to_dict(),
             "refresh_token": refresh_token.token,
 }
 
@@ -480,7 +480,7 @@ if refresh_token_obj.is_expired():
             return {"error": "invalid_grant"}
 
 # 验证客户端ID
-if refresh_token_obj.client_id ! = client_id:
+if refresh_token_obj.client_id !=client_id:
             return {"error": "invalid_grant"}
 
 # 使用原始 scope 或请求的 scope（不能超出原始范围）

@@ -10,5 +10,5 @@ def main() -> None:
     """主函数"""
     logger.info(f"monitoring模块已加载")
 
-if __name__ == "__main__":
+if __name__=="__main__":
     main()

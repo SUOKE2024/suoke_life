@@ -158,7 +158,7 @@ export class MedKnowledgeService {private baseUrl: string;
 private timeout: number;
 constructor() {'this.baseUrl ='
 process.env.NODE_ENV === 'production'
-        ? 'https: //api.suokelife.com/med-knowledge/api/v1''/;'/g'/;
+        ? 'https: //api.suoke.life/med-knowledge/api/v1''/;'/g'/;
         : 'http://localhost:8007/api/v1/;'/g'/;
 }
 }

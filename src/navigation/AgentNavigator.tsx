@@ -1,9 +1,18 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import React from "react"
-import {  StyleSheet, Text, View  } from "react-native"
-import { AgentStackParamList } from "./types"/,'/g'/;
-const AgentListScreen = React.lazy(() () () => import('../screens/agents/AgentListScreen'));'/,'/g'/;
-const AgentChatScreen = React.lazy(() () () => import('../screens/agents/AgentChatScreen'));'/;'/g'/;
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import React, { Suspense } from "react";
+import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
+import { AgentStackParamList } from "./types";
+
+const AgentListScreen = React.lazy(() => import('../screens/agents/AgentListScreen'));
+const AgentChatScreen = React.lazy(() => import('../screens/agents/AgentChatScreen'));
+
+// 加载指示器组件
+const LoadingSpinner = () => (
+  <View style={styles.loadingContainer}>
+    <ActivityIndicator size="large" color="#2196F3" />
+    <Text style={styles.loadingText}>正在加载...</Text>
+  </View>
+);
 // 临时占位组件
 const PlaceholderScreen = ({ title }: { title: string ;}) => (<View style={styles.container}>;)    <Text style={styles.title}>{title}</Text>)
     <Text style={styles.subtitle}>该功能正在开发中，敬请期待</Text>)
@@ -17,78 +26,108 @@ const AgentAnalyticsScreen = () => <Suspense fallback={<LoadingSpinner  />}><Pla
 const Stack = createNativeStackNavigator<AgentStackParamList>();
 /* 航 */
  */"
-export const AgentNavigator: React.FC = () => {"return (<Stack.Navigator,"  />/,)initialRouteName="AgentList"","/g"/;
-screenOptions={{"headerShown: false,","
-animation: 'slide_from_right,'';
-gestureEnabled: true,
-}
-        const gestureDirection = 'horizontal}
-      }
-    >'
-      <Stack.Screen,'  />/,'/g'/;
-name="AgentList";
-component={AgentListScreen}
-        options={{}
-          const gestureEnabled = false}
-        }
-      />"
-      <Stack.Screen,"  />"
-name="AgentManagement
-component={AgentManagementScreen}","
-options={{";}}
-          const animation = 'slide_from_right}
-        }
-      />'
-      <Stack.Screen,'  />/,'/g'/;
-name="AgentChat
-component={AgentChatScreen}","
-options={{"animation: 'slide_from_bottom,'
-}
-          const presentation = 'modal}
-        }
-      />'
-      <Stack.Screen,'  />/,'/g'/;
-name="AgentProfile
-component={AgentProfileScreen}","
-options={{";}}
-          const animation = 'slide_from_right}
-        }
-      />'
-      <Stack.Screen,'  />/,'/g'/;
-name="AgentConfig
-component={AgentConfigScreen}","
-options={{";}}
-          const animation = 'slide_from_right}
-        }
-      />'
-      <Stack.Screen,'  />/,'/g'/;
-name="AgentAnalytics
-component={AgentAnalyticsScreen}","
-options={{";}}
-          const animation = 'slide_from_right}
-        }});
-      />)
-    </Stack.Navigator>)
+export const AgentNavigator: React.FC = () => {
+  return (
+    <Stack.Navigator
+      initialRouteName="AgentList"
+      screenOptions={{
+        headerShown: false,
+        animation: 'slide_from_right',
+        gestureEnabled: true,
+        gestureDirection: 'horizontal',
+      }}
+    >
+      <Stack.Screen
+        name="AgentList"
+        options={{
+          gestureEnabled: false,
+        }}
+      >
+        {() => (
+          <Suspense fallback={<LoadingSpinner />}>
+            <AgentListScreen />
+          </Suspense>
+        )}
+      </Stack.Screen>
+      
+      <Stack.Screen
+        name="AgentManagement"
+        component={AgentManagementScreen}
+        options={{
+          animation: 'slide_from_right',
+        }}
+      />
+      
+      <Stack.Screen
+        name="AgentChat"
+        options={{
+          animation: 'slide_from_bottom',
+          presentation: 'modal',
+        }}
+      >
+        {() => (
+          <Suspense fallback={<LoadingSpinner />}>
+            <AgentChatScreen />
+          </Suspense>
+        )}
+      </Stack.Screen>
+      
+      <Stack.Screen
+        name="AgentProfile"
+        component={AgentProfileScreen}
+        options={{
+          animation: 'slide_from_right',
+        }}
+      />
+      
+      <Stack.Screen
+        name="AgentConfig"
+        component={AgentConfigScreen}
+        options={{
+          animation: 'slide_from_right',
+        }}
+      />
+      
+      <Stack.Screen
+        name="AgentAnalytics"
+        component={AgentAnalyticsScreen}
+        options={{
+          animation: 'slide_from_right',
+        }}
+      />
+    </Stack.Navigator>
   );
 };
-const  styles = StyleSheet.create({)container: {,'flex: 1,'
-justifyContent: 'center,'
-alignItems: 'center,'
-backgroundColor: '#f5f5f5,'
-}
-    const padding = 20}
-  }
-title: {,'fontSize: 24,'
-fontWeight: 'bold,'
-color: '#333333,'
-}
-    const marginBottom = 16}
-  }
-subtitle: {,'fontSize: 16,'
-color: '#666666,'
-textAlign: 'center,)'
-}
-    const lineHeight = 24;)}
-  },);
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f5f5f5',
+    padding: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#333333',
+    marginBottom: 16,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#666666',
+    textAlign: 'center',
+    lineHeight: 24,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f5f5f5',
+  },
+  loadingText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: '#666666',
+  },
 });
 export default AgentNavigator;

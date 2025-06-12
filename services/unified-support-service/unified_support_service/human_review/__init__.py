@@ -17,7 +17,7 @@ Suoke Life Human Review Service
 
 __version__ = "1.0.0"
 __author__ = "Suoke Life Team"
-__email__ = "dev@suokelife.com"
+__email__ = "dev@suoke.life"
 __description__ = "索克生活人工审核微服务 - 确保医疗健康建议的安全性和准确性"
 
 

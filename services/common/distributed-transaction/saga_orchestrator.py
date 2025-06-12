@@ -162,7 +162,7 @@ class SagaOrchestrator:
 
                 # 准备输入数据（包含上下文）
                 input_data = {
-                    ***step.input_data,
+                   ***step.input_data,
                     "saga_id": saga.saga_id,
                     "step_id": step.step_id,
                     "context": saga.context or {},
@@ -192,7 +192,7 @@ class SagaOrchestrator:
             except TimeoutError:
                 logger.warning(f"Step timeout: {step.step_id} (attempt {attempt + 1})")
                 if attempt < step.retry_count:
-                    await asyncio.sleep(2 ***attempt)  # 指数退避
+                    await asyncio.sleep(2***attempt)  # 指数退避
                     continue
                 else:
                     step.status = StepStatus.FAILED
@@ -204,7 +204,7 @@ class SagaOrchestrator:
                     f"Step failed: {step.step_id} (attempt {attempt + 1}), error: {e}"
                 )
                 if attempt < step.retry_count:
-                    await asyncio.sleep(2 ***attempt)
+                    await asyncio.sleep(2***attempt)
                     continue
                 else:
                     step.status = StepStatus.FAILED
@@ -225,7 +225,7 @@ class SagaOrchestrator:
         for i in range(failed_step_index - 1, - 1, - 1):
             step = saga.steps[i]
 
-            if step.status == StepStatus.COMPLETED:
+            if step.status==StepStatus.COMPLETED:
                 await self._compensate_step(saga, step)
 
         saga.status = SagaStatus.COMPENSATED
@@ -321,9 +321,9 @@ class SagaOrchestrator:
 
             # 重建SagaTransaction对象
             saga_data["status"] = SagaStatus(saga_data["status"])
-            saga_data["steps"] = [SagaStep( ***step) for step in saga_data["steps"]]
+            saga_data["steps"] = [SagaStep(***step) for step in saga_data["steps"]]
 
-            return SagaTransaction( ***saga_data)
+            return SagaTransaction(***saga_data)
 
         except Exception as e:
             logger.error(f"Failed to get saga status: {saga_id}, error: {e}")
@@ -344,7 +344,7 @@ class SagaOrchestrator:
                 return False
 
             # 如果Saga正在运行，开始补偿
-            if saga.status == SagaStatus.RUNNING:
+            if saga.status==SagaStatus.RUNNING:
                 await self._compensate_saga(saga, saga.current_step)
 
             return True

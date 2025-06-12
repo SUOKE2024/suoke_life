@@ -117,7 +117,7 @@ class SamsungHealthConnector(BaseDeviceConnector):
             
             async with aiohttp.ClientSession() as session:
                 async with session.get(f"{self.api_base_url}/user/profile", headers=headers) as response:
-                    if response.status == 200:
+                    if response.status==200:
                         self.is_connected = True
                         logger.info("三星健康连接成功")
                         return True
@@ -166,7 +166,7 @@ class SamsungHealthConnector(BaseDeviceConnector):
         
         async with aiohttp.ClientSession() as session:
             async with session.get(f"{self.api_base_url}/steps", headers=headers, params=params) as response:
-                if response.status == 200:
+                if response.status==200:
                     data = await response.json()
                     return [
                         ExtendedDeviceData(
@@ -207,7 +207,7 @@ class GarminConnector(BaseDeviceConnector):
             
             async with aiohttp.ClientSession() as session:
                 async with session.get(f"{self.api_base_url}/userprofile-service/userprofile", headers=headers) as response:
-                    if response.status == 200:
+                    if response.status==200:
                         self.is_connected = True
                         logger.info("佳明设备连接成功")
                         return True
@@ -256,7 +256,7 @@ class GarminConnector(BaseDeviceConnector):
         
         async with aiohttp.ClientSession() as session:
             async with session.get(f"{self.api_base_url}/hrv-service/hrv", headers=headers, params=params) as response:
-                if response.status == 200:
+                if response.status==200:
                     data = await response.json()
                     return [
                         ExtendedDeviceData(
@@ -297,7 +297,7 @@ class OuraConnector(BaseDeviceConnector):
             
             async with aiohttp.ClientSession() as session:
                 async with session.get(f"{self.api_base_url}/usercollection/personal_info", headers=headers) as response:
-                    if response.status == 200:
+                    if response.status==200:
                         self.is_connected = True
                         logger.info("Oura设备连接成功")
                         return True
@@ -346,7 +346,7 @@ class OuraConnector(BaseDeviceConnector):
         
         async with aiohttp.ClientSession() as session:
             async with session.get(f"{self.api_base_url}/usercollection/daily_readiness", headers=headers, params=params) as response:
-                if response.status == 200:
+                if response.status==200:
                     data = await response.json()
                     return [
                         ExtendedDeviceData(
@@ -387,7 +387,7 @@ class WHOOPConnector(BaseDeviceConnector):
             
             async with aiohttp.ClientSession() as session:
                 async with session.get(f"{self.api_base_url}/user/profile/basic", headers=headers) as response:
-                    if response.status == 200:
+                    if response.status==200:
                         self.is_connected = True
                         logger.info("WHOOP设备连接成功")
                         return True
@@ -436,7 +436,7 @@ class WHOOPConnector(BaseDeviceConnector):
         
         async with aiohttp.ClientSession() as session:
             async with session.get(f"{self.api_base_url}/activity/strain", headers=headers, params=params) as response:
-                if response.status == 200:
+                if response.status==200:
                     data = await response.json()
                     return [
                         ExtendedDeviceData(
@@ -478,7 +478,7 @@ class ExtendedDeviceManager:
             connector = self._create_connector(device_type, config)
             if connector and await connector.connect():
                 self.connectors[device_type.value] = connector
-                self.sync_performance_metrics["total_devices"] += 1
+                self.sync_performance_metrics["total_devices"]+=1
                 logger.info(f"设备注册成功: {device_type.value}")
                 return True
         except Exception as e:
@@ -523,11 +523,11 @@ class ExtendedDeviceManager:
             device_type = list(self.connectors.keys())[i]
             if isinstance(result, Exception):
                 logger.error(f"设备同步失败: {device_type}, {str(result)}")
-                failed_syncs += 1
+                failed_syncs+=1
                 all_data[device_type] = []
             else:
                 all_data[device_type] = result
-                successful_syncs += 1
+                successful_syncs+=1
                 
         # 更新性能指标
         sync_duration = (datetime.utcnow() - sync_start).total_seconds()
@@ -573,8 +573,8 @@ class ExtendedDeviceManager:
         for device_data in all_data.values():
             for item in device_data:
                 if hasattr(item, 'quality_score'):
-                    total_quality += item.quality_score
-                    total_items += 1
+                    total_quality+=item.quality_score
+                    total_items+=1
                     
         return total_quality / total_items if total_items > 0 else 0.0
         

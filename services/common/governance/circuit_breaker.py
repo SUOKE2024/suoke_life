@@ -76,14 +76,14 @@ class CircuitBreaker:
 
         logger.info(f"断路器初始化完成，配置: {config}")
 
-    async def call(self, func: Callable, *args, **kwargs) -> Any:
+    async def call(self, func: Callable, *args,**kwargs) -> Any:
         """
         通过断路器调用函数
 
         Args:
             func: 要调用的函数
             *args: 函数参数
-            **kwargs: 函数关键字参数
+           **kwargs: 函数关键字参数
 
         Returns:
             函数调用结果
@@ -93,13 +93,13 @@ class CircuitBreaker:
             Exception: 函数调用异常
         """
         async with self._lock:
-            self.stats["total_calls"] += 1
+            self.stats["total_calls"]+=1
 
             # 检查断路器状态
             await self._check_state()
 
-            if self.state == CircuitState.OPEN:
-                self.stats["circuit_open_count"] += 1
+            if self.state==CircuitState.OPEN:
+                self.stats["circuit_open_count"]+=1
                 raise CircuitBreakerOpenError(
                     f"断路器开启状态，下次尝试时间: {self.next_attempt_time}"
                 )
@@ -108,9 +108,9 @@ class CircuitBreaker:
         try:
             # 添加超时控制
             result = await asyncio.wait_for(
-                func( *args, **kwargs)
+                func( *args,**kwargs)
                 if asyncio.iscoroutinefunction(func)
-                else func( *args, **kwargs),
+                else func( *args,**kwargs),
                 timeout = self.config.timeout,
             )
 
@@ -141,11 +141,11 @@ class CircuitBreaker:
                 result = await some_function()
         """
         async with self._lock:
-            self.stats["total_calls"] += 1
+            self.stats["total_calls"]+=1
             await self._check_state()
 
-            if self.state == CircuitState.OPEN:
-                self.stats["circuit_open_count"] += 1
+            if self.state==CircuitState.OPEN:
+                self.stats["circuit_open_count"]+=1
                 raise CircuitBreakerOpenError("断路器开启状态")
 
         try:
@@ -162,9 +162,9 @@ class CircuitBreaker:
         """检查并更新断路器状态"""
         current_time = time.time()
 
-        if self.state == CircuitState.OPEN:
+        if self.state==CircuitState.OPEN:
             # 检查是否可以尝试恢复
-            if current_time >= self.next_attempt_time:
+            if current_time>=self.next_attempt_time:
                 await self._change_state(CircuitState.HALF_OPEN)
                 self.success_count = 0
                 logger.info("断路器进入半开状态，尝试恢复")
@@ -172,28 +172,28 @@ class CircuitBreaker:
     async def _on_success(self) -> None:
         """处理成功调用"""
         async with self._lock:
-            self.stats["successful_calls"] += 1
+            self.stats["successful_calls"]+=1
 
-            if self.state == CircuitState.HALF_OPEN:
-                self.success_count += 1
-                if self.success_count >= self.config.success_threshold:
+            if self.state==CircuitState.HALF_OPEN:
+                self.success_count+=1
+                if self.success_count>=self.config.success_threshold:
                     await self._change_state(CircuitState.CLOSED)
                     self.failure_count = 0
                     logger.info("断路器恢复到关闭状态")
-            elif self.state == CircuitState.CLOSED:
+            elif self.state==CircuitState.CLOSED:
                 # 重置失败计数
                 self.failure_count = 0
 
     async def _on_failure(self) -> None:
         """处理失败调用"""
         async with self._lock:
-            self.stats["failed_calls"] += 1
-            self.failure_count += 1
+            self.stats["failed_calls"]+=1
+            self.failure_count+=1
             self.last_failure_time = time.time()
 
             if (
                 self.state in (CircuitState.CLOSED, CircuitState.HALF_OPEN)
-            ) and self.failure_count >= self.config.failure_threshold:
+            ) and self.failure_count>=self.config.failure_threshold:
                 await self._change_state(CircuitState.OPEN)
                 self.next_attempt_time = time.time() + self.config.recovery_timeout
                 logger.warning(f"断路器开启，失败次数: {self.failure_count}")
@@ -213,7 +213,7 @@ class CircuitBreaker:
     def get_stats(self) -> dict[str, Any]:
         """获取统计信息"""
         return {
-            **self.stats,
+           **self.stats,
             "current_state": self.state.value,
             "failure_count": self.failure_count,
             "success_count": self.success_count,
@@ -223,7 +223,7 @@ class CircuitBreaker:
                 else 0
             ),
             "next_attempt_time": self.next_attempt_time
-            if self.state == CircuitState.OPEN
+            if self.state==CircuitState.OPEN
             else None,
         }
 

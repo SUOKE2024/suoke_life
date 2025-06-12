@@ -366,7 +366,7 @@ class AgentEventHandlers:
             'agents': self.agent_status,
             'active_sessions': len([
                 s for s in self.diagnosis_sessions.values() 
-                if s['status'] == 'in_progress'
+                if s['status']=='in_progress'
             ]),
             'total_sessions': len(self.diagnosis_sessions)
         }

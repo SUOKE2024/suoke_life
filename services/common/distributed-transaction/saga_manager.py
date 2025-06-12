@@ -246,7 +246,7 @@ class SagaManager:
 
         # 反向执行补偿
         for step_name in reversed(self.completed_steps):
-            step = next(s for s in self.steps if s.name == step_name)
+            step = next(s for s in self.steps if s.name==step_name)
 
             try:
                 logger.info(f"执行补偿: {step.name}")

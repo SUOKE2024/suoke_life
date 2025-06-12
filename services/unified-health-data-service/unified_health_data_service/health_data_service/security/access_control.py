@@ -305,9 +305,9 @@ class RuntimeIsolator:
         usage = session["resource_usage"]
         
         # 模拟资源使用更新
-        usage["memory_mb"] += result.get("data_processed", 0) * 0.1
-        usage["cpu_percent"] += result.get("execution_time", 0) * 10
-        usage["data_size_mb"] += result.get("data_processed", 0)
+        usage["memory_mb"]+=result.get("data_processed", 0) * 0.1
+        usage["cpu_percent"]+=result.get("execution_time", 0) * 10
+        usage["data_size_mb"]+=result.get("data_processed", 0)
 
 class SecureHealthProxy:
     """安全健康数据代理"""
@@ -454,16 +454,16 @@ class SecureHealthProxy:
         filtered_logs = self.audit_logs
         
         if user_id:
-            filtered_logs = [log for log in filtered_logs if log.user_id == user_id]
+            filtered_logs = [log for log in filtered_logs if log.user_id==user_id]
             
         if agent_id:
-            filtered_logs = [log for log in filtered_logs if log.agent_id == agent_id]
+            filtered_logs = [log for log in filtered_logs if log.agent_id==agent_id]
             
         if start_time:
-            filtered_logs = [log for log in filtered_logs if log.timestamp >= start_time]
+            filtered_logs = [log for log in filtered_logs if log.timestamp>=start_time]
             
         if end_time:
-            filtered_logs = [log for log in filtered_logs if log.timestamp <= end_time]
+            filtered_logs = [log for log in filtered_logs if log.timestamp<=end_time]
             
         return filtered_logs
         

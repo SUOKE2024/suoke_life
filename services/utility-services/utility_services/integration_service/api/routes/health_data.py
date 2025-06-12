@@ -164,7 +164,7 @@ async def get_health_data_detail(
             )
 
         # 验证数据所有权
-        if health_data.user_id != current_user.user_id:
+        if health_data.user_id!=current_user.user_id:
             raise HTTPException(
                 status_code = status.HTTP_403_FORBIDDEN,
                 detail = "无权访问此健康数据"
@@ -304,7 +304,7 @@ async def update_health_data(
                 detail = "健康数据不存在"
             )
 
-        if health_data.user_id != current_user.user_id:
+        if health_data.user_id!=current_user.user_id:
             raise HTTPException(
                 status_code = status.HTTP_403_FORBIDDEN,
                 detail = "无权修改此健康数据"
@@ -361,7 +361,7 @@ async def delete_health_data(
                 detail = "健康数据不存在"
             )
 
-        if health_data.user_id != current_user.user_id:
+        if health_data.user_id!=current_user.user_id:
             raise HTTPException(
                 status_code = status.HTTP_403_FORBIDDEN,
                 detail = "无权删除此健康数据"

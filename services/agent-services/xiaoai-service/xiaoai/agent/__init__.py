@@ -4,7 +4,7 @@
 提供小艾智能体的核心功能和接口
 """
 
-from typing import Any, Optional, Union, dict, list
+# 导入已移除 - 使用内置类型
 
 from .xiaoai_agent import XiaoaiAgent
 

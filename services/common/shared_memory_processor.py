@@ -116,7 +116,7 @@ class SharedMemoryManager:
 
             self.blocks[block_id] = block_info
             self.shared_memories[block_id] = shm
-            self.total_allocated += size
+            self.total_allocated+=size
             self.peak_usage = max(self.peak_usage, self.total_allocated)
 
             logger.info(f"创建共享内存块: {block_id}, 大小: {size} 字节, 形状: {shape}")
@@ -132,7 +132,7 @@ class SharedMemoryManager:
 
             # 更新访问信息
             block_info.last_accessed = datetime.now()
-            block_info.access_count += 1
+            block_info.access_count+=1
 
             # 获取共享内存
             if block_id in self.shared_memories:
@@ -171,7 +171,7 @@ class SharedMemoryManager:
                 del self.shared_memories[block_id]
 
             # 更新统计
-            self.total_allocated -= block_info.size
+            self.total_allocated-=block_info.size
             del self.blocks[block_id]
 
             logger.info(f"删除共享内存块: {block_id}")
@@ -245,14 +245,14 @@ class BigDataProcessor:
     @jit(nopython = True, parallel = True)
     def _jit_matrix_operations(self, data: np.ndarray, operation: str) -> np.ndarray:
         """JIT优化的矩阵运算"""
-        if operation == "normalize":
+        if operation=="normalize":
             # 标准化
             mean = np.mean(data)
             std = np.std(data)
             return (data - mean) / std if std > 0 else data
-        elif operation == "square":
-            return data *** 2
-        elif operation == "sqrt":
+        elif operation=="square":
+            return data***2
+        elif operation=="sqrt":
             return np.sqrt(np.abs(data))
         else:
             return data

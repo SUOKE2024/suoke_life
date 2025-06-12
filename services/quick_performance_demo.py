@@ -86,5 +86,5 @@ async def quick_performance_demo():
     
     return report_file
 
-if __name__ == "__main__":
+if __name__=="__main__":
     asyncio.run(quick_performance_demo())

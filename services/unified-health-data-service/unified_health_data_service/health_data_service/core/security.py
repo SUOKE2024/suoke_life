@@ -165,7 +165,7 @@ decrypted_bytes = self._symmetric_key.decrypt(encrypted_bytes)
 
 # 验证校验和
 checksum = hashlib.sha256(decrypted_bytes).hexdigest()
-if checksum ! = encrypted_data.checksum:
+if checksum !=encrypted_data.checksum:
     raise ValueError("数据校验和不匹配")
 
 # 反序列化
@@ -241,11 +241,11 @@ data_json = json.dumps(data, ensure_ascii = False, sort_keys = True)
 data_bytes = data_json.encode('utf - 8')
 
 # 计算哈希
-if algorithm == "sha256":
+if algorithm=="sha256":
     hash_obj = hashlib.sha256(data_bytes)
-elif algorithm == "sha512":
+elif algorithm=="sha512":
     hash_obj = hashlib.sha512(data_bytes)
-elif algorithm == "md5":
+elif algorithm=="md5":
     hash_obj = hashlib.md5(data_bytes)
 else:
     raise ValueError(f"不支持的哈希算法: {algorithm}")
@@ -368,12 +368,12 @@ public_inputs = {
 }
 
 # 根据数据类型添加特定的公共输入
-if data_type == "vital_signs":
+if data_type=="vital_signs":
     public_inputs.update({
 "bp_range": validation_params.get("bp_range", [70, 200]),
 "hr_range": validation_params.get("hr_range", [40, 200])
 })
-elif data_type == "lab_results":
+elif data_type=="lab_results":
     public_inputs.update({
 "glucose_range": validation_params.get("glucose_range", [70, 200]),
 "cholesterol_range": validation_params.get("cholesterol_range", [100, 300])
@@ -405,9 +405,9 @@ validation_result = {
 }
 
 try:
-    if data_type == "vital_signs":
+    if data_type=="vital_signs":
     validation_result = self._validate_vital_signs(health_data, validation_params)
-elif data_type == "lab_results":
+elif data_type=="lab_results":
     validation_result = self._validate_lab_results(health_data, validation_params)
 elif data_type.startswith("tcm_"):
     validation_result = self._validate_tcm_data(data_type, health_data, validation_params)
@@ -427,22 +427,22 @@ if "systolic_bp" in data and "diastolic_bp" in data:
     systolic = data["systolic_bp"]
 diastolic = data["diastolic_bp"]
 
-if not (70 < = systolic < = 250):
+if not (70 <=systolic <=250):
     result["errors"].append("收缩压超出正常范围")
 result["valid"] = False
 
-if not (40 < = diastolic < = 150):
+if not (40 <=diastolic <=150):
     result["errors"].append("舒张压超出正常范围")
 result["valid"] = False
 
-if systolic < = diastolic:
+if systolic <=diastolic:
     result["errors"].append("收缩压必须大于舒张压")
 result["valid"] = False
 
 # 心率验证
 if "heart_rate" in data:
     hr = data["heart_rate"]
-if not (30 < = hr < = 220):
+if not (30 <=hr <=220):
     result["errors"].append("心率超出正常范围")
 result["valid"] = False
 
@@ -455,14 +455,14 @@ result = {"valid": True, "errors": [], "warnings": []}
 # 血糖验证
 if "glucose" in data:
     glucose = data["glucose"]
-if not (30 < = glucose < = 600):
+if not (30 <=glucose <=600):
     result["errors"].append("血糖值超出正常范围")
 result["valid"] = False
 
 # 胆固醇验证
 if "cholesterol_total" in data:
     cholesterol = data["cholesterol_total"]
-if not (100 < = cholesterol < = 500):
+if not (100 <=cholesterol <=500):
     result["warnings"].append("总胆固醇值需要关注")
 
 return result
@@ -478,15 +478,15 @@ result["valid"] = False
 return result
 
 # 根据诊断类型进行特定验证
-if data_type == "tcm_look":
+if data_type=="tcm_look":
     required_fields = ["face_color", "tongue_color"]
-elif data_type == "tcm_listen":
+elif data_type=="tcm_listen":
     required_fields = ["voice_strength", "breathing_sound"]
-elif data_type == "tcm_inquiry":
+elif data_type=="tcm_inquiry":
     required_fields = ["chief_complaint"]
-elif data_type == "tcm_palpation":
+elif data_type=="tcm_palpation":
     required_fields = ["pulse_position", "pulse_rate"]
-elif data_type == "tcm_calculation":
+elif data_type=="tcm_calculation":
     required_fields = ["birth_year", "birth_month"]
 else:
     required_fields = []
@@ -566,7 +566,7 @@ try:
     payload = jwt.decode(token, self.secret_key, algorithms = [self.algorithm])
 
 # 检查令牌类型
-if payload.get("type") ! = token_type:
+if payload.get("type") !=token_type:
     raise HTTPException(
 status_code = status.HTTP_401_UNAUTHORIZED,
 detail = "Invalid token type",
@@ -706,7 +706,7 @@ def get_current_active_user(current_user: TokenData = require_auth) -> TokenData
 def check_user_access(user_id: int, current_user: TokenData) -> bool:
 """检查用户访问权限"""
     # 用户只能访问自己的数据，除非是管理员
-    if current_user.user_id == user_id or "admin" in current_user.scopes:
+    if current_user.user_id==user_id or "admin" in current_user.scopes:
     return True
     return False
 

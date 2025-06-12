@@ -91,15 +91,15 @@ class ThreatDetector:
                 r"(\binsert\b. * \binto\b)",
                 r"(\bdelete\b. * \bfrom\b)",
                 r"(\bupdate\b. * \bset\b)",
-                r"(\bor\b. * 1\s *= \s * 1)",
-                r"(\band\b. * 1\s *= \s * 1)",
-                r"(\bor\b. * '. * '. *= . * '. * ')",
+                r"(\bor\b. * 1\s*=\s * 1)",
+                r"(\band\b. * 1\s*=\s * 1)",
+                r"(\bor\b. * '. * '.*=. * '. * ')",
                 r"(\bunion\b. * \ball\b. * \bselect\b)"
             ],
             "xss": [
                 r"<script[^>] * >. * ?< / script>",
                 r"javascript:",
-                r"on\w + \s *= ",
+                r"on\w + \s*=",
                 r"<iframe[^>] * >",
                 r"<object[^>] * >",
                 r"<embed[^>] * >",
@@ -231,19 +231,19 @@ class ThreatDetector:
         for threat in threats:
             for pattern, points in threat_scores.items():
                 if pattern in threat:
-                    score += points
+                    score+=points
 
         # 敏感端点加分
         if endpoint in self.sensitive_endpoints:
-            score += 10
+            score+=10
 
         # 错误状态码加分
-        if status_code >= 400:
-            score += 5
+        if status_code>=400:
+            score+=5
 
         # 危险方法加分
         if method in ["DELETE", "PUT", "PATCH"]:
-            score += 5
+            score+=5
 
         return min(score, 100)
 
@@ -331,11 +331,11 @@ class SecurityAuditor:
 
     def _determine_security_level(self, risk_score: int, threats: List[str]) -> SecurityLevel:
         """确定安全级别"""
-        if risk_score >= 80 or any("injection" in threat for threat in threats):
+        if risk_score>=80 or any("injection" in threat for threat in threats):
             return SecurityLevel.CRITICAL
-        elif risk_score >= 60 or any("suspicious" in threat for threat in threats):
+        elif risk_score>=60 or any("suspicious" in threat for threat in threats):
             return SecurityLevel.HIGH
-        elif risk_score >= 30:
+        elif risk_score>=30:
             return SecurityLevel.MEDIUM
         else:
             return SecurityLevel.LOW
@@ -421,7 +421,7 @@ class SecurityAuditor:
         current_time = event.timestamp
 
         # 检测暴力破解攻击
-        if event.event_type == SecurityEventType.LOGIN_FAILURE:
+        if event.event_type==SecurityEventType.LOGIN_FAILURE:
             await self._detect_brute_force(event.ip_address, current_time)
 
         # 检测异常活动
@@ -435,12 +435,12 @@ class SecurityAuditor:
         # 获取时间窗口内的失败登录次数
         failed_attempts = 0
         for activity in self.ip_activity[ip_address]:
-            if (current_time - activity["timestamp"]) <= time_window:
-                if activity["event_type"] == SecurityEventType.LOGIN_FAILURE:
-                    failed_attempts += 1
+            if (current_time - activity["timestamp"])<=time_window:
+                if activity["event_type"]==SecurityEventType.LOGIN_FAILURE:
+                    failed_attempts+=1
 
         # 如果超过阈值，记录暴力破解事件
-        if failed_attempts >= threshold["failed_attempts"]:
+        if failed_attempts>=threshold["failed_attempts"]:
             await self._create_attack_event(
                 SecurityEventType.BRUTE_FORCE_ATTACK,
                 ip_address,
@@ -450,14 +450,14 @@ class SecurityAuditor:
     async def _detect_anomalous_activity(self, event: SecurityEvent):
         """检测异常活动"""
         # 检测高风险评分的连续事件
-        if event.risk_score >= 70:
+        if event.risk_score>=70:
             recent_high_risk = 0
             for activity in self.ip_activity[event.ip_address]:
-                if (event.timestamp - activity["timestamp"]).seconds <= 300:  # 5分钟内
-                    if activity["risk_score"] >= 70:
-                        recent_high_risk += 1
+                if (event.timestamp - activity["timestamp"]).seconds<=300:  # 5分钟内
+                    if activity["risk_score"]>=70:
+                        recent_high_risk+=1
 
-            if recent_high_risk >= 3:
+            if recent_high_risk>=3:
                 await self._create_attack_event(
                     SecurityEventType.SUSPICIOUS_ACTIVITY,
                     event.ip_address,
@@ -597,13 +597,13 @@ class SecurityAuditMiddleware(BaseHTTPMiddleware):
 
         # 登录相关
         if " / auth / login" in path:
-            return SecurityEventType.LOGIN_SUCCESS if status == 200 else SecurityEventType.LOGIN_FAILURE
+            return SecurityEventType.LOGIN_SUCCESS if status==200 else SecurityEventType.LOGIN_FAILURE
 
         if " / auth / logout" in path:
             return SecurityEventType.LOGOUT
 
         # 数据访问
-        if method == "GET":
+        if method=="GET":
             return SecurityEventType.DATA_ACCESS
 
         # 数据修改
@@ -611,7 +611,7 @@ class SecurityAuditMiddleware(BaseHTTPMiddleware):
             return SecurityEventType.DATA_MODIFICATION
 
         # 未授权访问
-        if status == 401:
+        if status==401:
             return SecurityEventType.UNAUTHORIZED_ACCESS
 
         # 默认为可疑活动

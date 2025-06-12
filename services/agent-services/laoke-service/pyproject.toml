@@ -7,7 +7,7 @@ name = "laoke-service"
 version = "1.0.0"
 description = "老克智能体服务 - 索克生活平台的知识传播和社区管理智能体"
 authors = [
-    {name = "索克生活团队", email = "dev@suokelife.com"},
+    {name = "索克生活团队", email = "dev@suoke.life"},
 ]
 readme = "README.md"
 license = {text = "MIT"}
@@ -48,6 +48,11 @@ dependencies = [
     # 时间处理
     "python-dateutil>=2.9.0,<3.0.0",
     "pytz>=2024.2",
+    
+    # 无障碍服务
+    "grpcio>=1.68.0,<2.0.0",
+    "grpcio-tools>=1.68.0,<2.0.0",
+    "protobuf>=5.29.0,<6.0.0",
 ]
 
 [project.optional-dependencies]

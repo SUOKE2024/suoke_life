@@ -21,7 +21,7 @@ from .main import create_app
 
 __version__ = "0.1.0"
 __author__ = "Suoke Life Team"
-__email__ = "dev@suokelife.com"
+__email__ = "dev@suoke.life"
 
 
 __all__ = ["create_app"]

@@ -246,7 +246,7 @@ const productionConfig: AppConfiguration = {
   version: '1.0.0',
   buildNumber: '1',
   api: {
-    baseUrl: 'https://api.suokelife.com',
+    baseUrl: 'https://api.suoke.life',
     timeout: 30000,
     retryAttempts: 3,
     retryDelay: 1000,
@@ -255,25 +255,25 @@ const productionConfig: AppConfiguration = {
   agents: {
     xiaoai: {
       enabled: true,
-      endpoint: 'https://xiaoai.suokelife.com',
+      endpoint: 'https://xiaoai.suoke.life',
       timeout: 30000,
       maxSessions: 100
     },
     xiaoke: {
       enabled: true,
-      endpoint: 'https://xiaoke.suokelife.com',
+      endpoint: 'https://xiaoke.suoke.life',
       timeout: 30000,
       maxSessions: 100
     },
     laoke: {
       enabled: true,
-      endpoint: 'https://laoke.suokelife.com',
+      endpoint: 'https://laoke.suoke.life',
       timeout: 30000,
       maxSessions: 100
     },
     soer: {
       enabled: true,
-      endpoint: 'https://soer.suokelife.com',
+      endpoint: 'https://soer.suoke.life',
       timeout: 30000,
       maxSessions: 100
     }
@@ -281,27 +281,27 @@ const productionConfig: AppConfiguration = {
   diagnosis: {
     looking: {
       enabled: true,
-      aiModelEndpoint: 'https://ai.suokelife.com/diagnosis/looking',
+      aiModelEndpoint: 'https://ai.suoke.life/diagnosis/looking',
       confidenceThreshold: 0.8
     },
     listening: {
       enabled: true,
-      aiModelEndpoint: 'https://ai.suokelife.com/diagnosis/listening',
+      aiModelEndpoint: 'https://ai.suoke.life/diagnosis/listening',
       confidenceThreshold: 0.8
     },
     inquiry: {
       enabled: true,
-      aiModelEndpoint: 'https://ai.suokelife.com/diagnosis/inquiry',
+      aiModelEndpoint: 'https://ai.suoke.life/diagnosis/inquiry',
       confidenceThreshold: 0.8
     },
     palpation: {
       enabled: true,
-      aiModelEndpoint: 'https://ai.suokelife.com/diagnosis/palpation',
+      aiModelEndpoint: 'https://ai.suoke.life/diagnosis/palpation',
       confidenceThreshold: 0.8
     },
     calculation: {
       enabled: true,
-      aiModelEndpoint: 'https://ai.suokelife.com/diagnosis/calculation',
+      aiModelEndpoint: 'https://ai.suoke.life/diagnosis/calculation',
       confidenceThreshold: 0.9
     }
   },
@@ -312,7 +312,7 @@ const productionConfig: AppConfiguration = {
     memoryThreshold: 200,
     networkThreshold: 10000,
     enableReporting: true,
-    reportingEndpoint: 'https://analytics.suokelife.com/performance'
+    reportingEndpoint: 'https://analytics.suoke.life/performance'
   },
   security: {
     enableEncryption: true,
@@ -336,7 +336,7 @@ const productionConfig: AppConfiguration = {
     level: 'error',
     enableConsole: false,
     enableRemote: true,
-    remoteEndpoint: 'https://logs.suokelife.com'
+    remoteEndpoint: 'https://logs.suoke.life'
   },
   cache: {
     enableCache: true,

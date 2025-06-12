@@ -116,7 +116,7 @@ RUN python -m pytest test/ -v --cov=internal --cov-report=html
 FROM production as final
 
 # 元数据标签
-LABEL maintainer="Suoke Life Team <dev@suokelife.com>" \
+LABEL maintainer="Suoke Life Team <dev@suoke.life>" \
       version="1.2.0" \
       description="索克生活RAG服务 - 中医智能检索增强生成服务" \
       org.opencontainers.image.title="Suoke Life RAG Service" \
@@ -124,4 +124,4 @@ LABEL maintainer="Suoke Life Team <dev@suokelife.com>" \
       org.opencontainers.image.version="1.2.0" \
       org.opencontainers.image.vendor="Suoke Life" \
       org.opencontainers.image.licenses="MIT" \
-      org.opencontainers.image.source="https://github.com/suokelife/suoke_life"
+      org.opencontainers.image.source="https://github.com/SUOKE2024/suoke_life"

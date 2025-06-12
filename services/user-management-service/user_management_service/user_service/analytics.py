@@ -219,7 +219,7 @@ class HealthDataAnalyzer:
 
         # 计算体重变化趋势
         recent_weights = sorted(weight_data, key = lambda x: x["date"])[ - 7:]  # 最近7天
-        if len(recent_weights) >= 2:
+        if len(recent_weights)>=2:
             weight_change = recent_weights[ - 1]["value"] - recent_weights[0]["value"]
 
             if weight_change > 2:  # 一周增重超过2kg
@@ -304,14 +304,14 @@ class HealthDataAnalyzer:
 
         # 根据洞察调整评分
         for insight in insights:
-            if insight.risk_level == RiskLevel.CRITICAL:
-                base_score -= 20 * insight.confidence
-            elif insight.risk_level == RiskLevel.HIGH:
-                base_score -= 15 * insight.confidence
-            elif insight.risk_level == RiskLevel.MEDIUM:
-                base_score -= 10 * insight.confidence
-            elif insight.risk_level == RiskLevel.LOW:
-                base_score += 5 * insight.confidence
+            if insight.risk_level==RiskLevel.CRITICAL:
+                base_score-=20 * insight.confidence
+            elif insight.risk_level==RiskLevel.HIGH:
+                base_score-=15 * insight.confidence
+            elif insight.risk_level==RiskLevel.MEDIUM:
+                base_score-=10 * insight.confidence
+            elif insight.risk_level==RiskLevel.LOW:
+                base_score+=5 * insight.confidence
 
         return max(0, min(100, base_score))
 
@@ -459,8 +459,8 @@ class UserProfileAnalyzer:
         daily_steps = [data.get("steps", 0) for data in activity_data]
         if daily_steps:
             avg_steps = sum(daily_steps) / len(daily_steps)
-            variance = sum((steps - avg_steps) ** 2 for steps in daily_steps) / len(daily_steps)
-            consistency = max(0, 1 - (variance / (avg_steps ** 2)) if avg_steps > 0 else 0)
+            variance = sum((steps - avg_steps)**2 for steps in daily_steps) / len(daily_steps)
+            consistency = max(0, 1 - (variance / (avg_steps**2)) if avg_steps > 0 else 0)
             preferences["activity_consistency"] = consistency
 
         return preferences
@@ -477,11 +477,11 @@ class UserProfileAnalyzer:
         quality_score = 0.0
         for data in activity_data:
             if data.get("steps", 0) > 0:
-                quality_score += 0.3
+                quality_score+=0.3
             if data.get("sleep_hours", 0) > 0:
-                quality_score += 0.3
+                quality_score+=0.3
             if data.get("exercise_minutes", 0) > 0:
-                quality_score += 0.4
+                quality_score+=0.4
 
         quality_score = quality_score / len(activity_data) if activity_data else 0
 
@@ -504,7 +504,7 @@ class RecommendationEngine:
         recommendations = []
 
         # 基于活动水平的推荐
-        if user_profile.activity_level == "sedentary":
+        if user_profile.activity_level=="sedentary":
             recommendations.append({
                 "type": "activity",
                 "title": "增加日常活动",

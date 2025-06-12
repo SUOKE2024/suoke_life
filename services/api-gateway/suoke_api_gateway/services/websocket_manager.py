@@ -159,7 +159,7 @@ try:
                 self.user_connections[user_id].add(connection_id)
 
             # 更新统计
-            self.stats["total_connections"] += 1
+            self.stats["total_connections"]+=1
             self.stats["active_connections"] = len(self.connections)
 
             # 启动心跳检查
@@ -210,7 +210,7 @@ try:
                     del self.user_connections[connection.user_id]
 
             # 关闭 WebSocket 连接
-            if connection.websocket.client_state == WebSocketState.CONNECTED:
+            if connection.websocket.client_state==WebSocketState.CONNECTED:
                 await connection.websocket.close()
 
             # 移除连接
@@ -244,9 +244,9 @@ if not connection:
             return False
 
 try:
-            if connection.websocket.client_state == WebSocketState.CONNECTED:
+            if connection.websocket.client_state==WebSocketState.CONNECTED:
                 await connection.websocket.send_text(json.dumps(message.to_dict()))
-                self.stats["total_messages"] += 1
+                self.stats["total_messages"]+=1
                 return True
             else:
                 # 连接已断开，清理连接
@@ -273,7 +273,7 @@ sent_count = 0
 
 for connection_id in list(connection_ids):
             if await self.send_to_connection(connection_id, message):
-                sent_count += 1
+                sent_count+=1
 
 return sent_count
 
@@ -288,9 +288,9 @@ connection_ids = self.room_connections.get(room, set())
 sent_count = 0
 
 for connection_id in list(connection_ids):
-            if connection_id ! = exclude_connection_id:
+            if connection_id !=exclude_connection_id:
                 if await self.send_to_connection(connection_id, message):
-                    sent_count += 1
+                    sent_count+=1
 
 return sent_count
 
@@ -303,9 +303,9 @@ exclude_connection_id: Optional[str] = None,
 sent_count = 0
 
 for connection_id in list(self.connections.keys()):
-            if connection_id ! = exclude_connection_id:
+            if connection_id !=exclude_connection_id:
                 if await self.send_to_connection(connection_id, message):
-                    sent_count += 1
+                    sent_count+=1
 
 return sent_count
 
@@ -429,7 +429,7 @@ try:
                         error = str(e)
                     )
 
-            self.stats["total_messages"] += 1
+            self.stats["total_messages"]+=1
 
 except Exception as e:
             logger.error(
@@ -506,7 +506,7 @@ while self.connections:
     def get_stats(self) -> Dict[str, Any]:
 """获取统计信息"""
 return {
-            **self.stats,
+           **self.stats,
             "rooms": {
                 room: len(connections)
                 for room, connections in self.room_connections.items()

@@ -63,7 +63,7 @@ if not self.config.enabled:
 
 current_time = time.time()
 
-if self.state == CircuitState.OPEN:
+if self.state==CircuitState.OPEN:
             # 检查是否达到重试超时时间
             if current_time - self.last_failure_time > self.config.recovery_timeout:
                 logger.info(f"熔断器 {self.service_name} 从OPEN切换到HALF_OPEN状态")
@@ -88,28 +88,28 @@ if not self.config.enabled:
 
 current_time = time.time()
 
-if self.state == CircuitState.CLOSED:
+if self.state==CircuitState.CLOSED:
             if success:
                 # 成功请求，重置失败计数
                 self.failure_count = 0
             else:
                 # 失败请求，增加失败计数
-                self.failure_count += 1
+                self.failure_count+=1
                 self.last_failure_time = current_time
 
                 # 检查是否达到失败阈值
-                if self.failure_count > = self.config.failure_threshold:
+                if self.failure_count >=self.config.failure_threshold:
                     logger.warning(f"熔断器 {self.service_name} 从CLOSED切换到OPEN状态, 失败次数: {self.failure_count}")
                     self.state = CircuitState.OPEN
                     self.last_state_change_time = current_time
 
-elif self.state == CircuitState.HALF_OPEN:
+elif self.state==CircuitState.HALF_OPEN:
             if success:
                 # 成功请求，增加成功计数
-                self.success_count += 1
+                self.success_count+=1
 
                 # 检查是否达到成功阈值
-                if self.success_count > = self.config.half_open_success:
+                if self.success_count >=self.config.half_open_success:
                     logger.info(f"熔断器 {self.service_name} 从HALF_OPEN切换到CLOSED状态, 成功次数: {self.success_count}")
                     self.state = CircuitState.CLOSED
                     self.failure_count = 0

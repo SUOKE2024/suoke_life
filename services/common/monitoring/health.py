@@ -25,7 +25,7 @@ class HealthMonitor:
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.get(f"{service_url} / health", timeout = 5) as response:
-                    if response.status == 200:
+                    if response.status==200:
                         data = await response.json()
                         return {
                             "service": service_url,
@@ -54,11 +54,11 @@ class HealthMonitor:
         tasks = [self.check_service_health(service) for service in self.services]
         results = await asyncio.gather( * tasks)
 
-        healthy_count = sum(1 for result in results if result["status"] == "healthy")
+        healthy_count = sum(1 for result in results if result["status"]=="healthy")
         total_count = len(results)
 
         return {
-            "overall_health": "healthy" if healthy_count == total_count else "degraded",
+            "overall_health": "healthy" if healthy_count==total_count else "degraded",
             "healthy_services": healthy_count,
             "total_services": total_count,
             "services": results,

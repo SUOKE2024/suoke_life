@@ -34,21 +34,21 @@ description = """
 
 ### 核心功能
 
-- **健康数据管理 * *：收集、存储和检索各类健康数据
-- **生命体征监测 * *：实时监测和分析生命体征数据
-- **中医体质分析 * *：基于中医理论的体质辨识和分析
-- **数据处理管道 * *：自动化的数据验证、清洗和标准化
-- **安全认证 * *：JWT令牌认证和权限控制
-- **缓存优化 * *：Redis缓存提升性能
-- **监控告警 * *：完整的监控和指标体系
+-**健康数据管理 * *：收集、存储和检索各类健康数据
+-**生命体征监测 * *：实时监测和分析生命体征数据
+-**中医体质分析 * *：基于中医理论的体质辨识和分析
+-**数据处理管道 * *：自动化的数据验证、清洗和标准化
+-**安全认证 * *：JWT令牌认证和权限控制
+-**缓存优化 * *：Redis缓存提升性能
+-**监控告警 * *：完整的监控和指标体系
 
 ### 技术特性
 
-- **高性能 * *：基于FastAPI的异步架构
-- **可扩展 * *：微服务架构，支持水平扩展
-- **安全可靠 * *：完整的认证授权和数据加密
-- **监控完善 * *：Prometheus指标和健康检查
-- **文档完整 * *：自动生成的API文档和示例
+-**高性能 * *：基于FastAPI的异步架构
+-**可扩展 * *：微服务架构，支持水平扩展
+-**安全可靠 * *：完整的认证授权和数据加密
+-**监控完善 * *：Prometheus指标和健康检查
+-**文档完整 * *：自动生成的API文档和示例
 
 ### 认证方式
 
@@ -75,18 +75,18 @@ API实施限流保护：
 
 ### 联系方式
 
-- **开发团队 * *：索克生活技术团队
-- **邮箱 * *：dev@suoke.life
-- **文档 * *：https: // github.com / SUOKE2024 / suoke_life
+-**开发团队 * *：索克生活技术团队
+-**邮箱 * *：dev@suoke.life
+-**文档 * *：https://github.com / SUOKE2024 / suoke_life
 """,
 routes = app.routes,
 servers = [
 {
-"url": f"http: // localhost:{settings.api.port}",
+"url": f"http://localhost:{settings.api.port}",
 "description": "开发环境"
 },
 {
-"url": "https: // api.suoke.life",
+"url": "https://api.suoke.life",
 "description": "生产环境"
 }
 ]
@@ -241,9 +241,9 @@ if "requestBody" in post_operation:
 def get_custom_swagger_ui_html(
 openapi_url: str,
     title: str,
-    swagger_js_url: str = "https: // cdn.jsdelivr.net / npm / swagger - ui - dist@5.9.0 / swagger - ui - bundle.js",
-    swagger_css_url: str = "https: // cdn.jsdelivr.net / npm / swagger - ui - dist@5.9.0 / swagger - ui.css",
-    swagger_favicon_url: str = "https: // fastapi.tiangolo.com / img / favicon.png",
+    swagger_js_url: str = "https://cdn.jsdelivr.net / npm / swagger - ui - dist@5.9.0 / swagger - ui - bundle.js",
+    swagger_css_url: str = "https://cdn.jsdelivr.net / npm / swagger - ui - dist@5.9.0 / swagger - ui.css",
+    swagger_favicon_url: str = "https://fastapi.tiangolo.com / img / favicon.png",
 ) -> HTMLResponse:
     """生成自定义Swagger UI HTML"""
 
@@ -289,14 +289,14 @@ deepLinking: true,
 showExtensions: true,
 showCommonExtensions: true,
 tryItOutEnabled: true,
-requestInterceptor: function(request) {{ // 自动添加认证头
+requestInterceptor: function(request) {{//自动添加认证头
 const token = localStorage.getItem('jwt_token');
 if (token) {{
 request.headers['Authorization'] = 'Bearer ' + token;
 }}
 return request;
 }},
-onComplete: function() {{ // 添加认证按钮
+onComplete: function() {{//添加认证按钮
 const authButton = document.createElement('button');
 authButton.innerHTML = '设置JWT令牌';
 authButton.style.cssText = 'position: fixed; top: 10px; right: 10px; z - index: 9999; padding: 8px 16px; background: #007bff; color: white; border: none; border - radius: 4px; cursor: pointer;';
@@ -321,8 +321,8 @@ document.body.appendChild(authButton);
 def get_custom_redoc_html(
 openapi_url: str,
     title: str,
-    redoc_js_url: str = "https: // cdn.jsdelivr.net / npm / redoc@2.1.3 / bundles / redoc.standalone.js",
-    redoc_favicon_url: str = "https: // fastapi.tiangolo.com / img / favicon.png",
+    redoc_js_url: str = "https://cdn.jsdelivr.net / npm / redoc@2.1.3 / bundles / redoc.standalone.js",
+    redoc_favicon_url: str = "https://fastapi.tiangolo.com / img / favicon.png",
 ) -> HTMLResponse:
     """生成自定义ReDoc HTML"""
 

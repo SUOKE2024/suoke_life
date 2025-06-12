@@ -131,7 +131,7 @@ version = "1.0.0"
 description = "{service_name} - 索克生活平台微服务"
 readme = "README.md"
 authors = [
-    {{name = "Suoke Life Team", email = "team@suokelife.com"}}
+    {{name = "Suoke Life Team", email = "team@suoke.life"}}
 ]
 requires-python = ">=3.11"
 dependencies = [

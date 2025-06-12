@@ -64,14 +64,14 @@ class ServiceAnalyzer:
             category_results = {}
             
             for service_name, service_path in service_list.items():
-                total_services += 1
+                total_services+=1
                 print(f"  📦 分析 {service_name}...")
                 
                 service_analysis = self.analyze_single_service(service_name, service_path)
                 category_results[service_name] = service_analysis
                 
                 if service_analysis["status"] in ["functional", "excellent"]:
-                    functional_services += 1
+                    functional_services+=1
                     
             analysis_report["services"][category] = category_results
         
@@ -144,13 +144,13 @@ class ServiceAnalyzer:
             for root, dirs, files in os.walk(service_path):
                 # 记录目录
                 rel_path = os.path.relpath(root, service_path)
-                if rel_path != ".":
+                if rel_path!=".":
                     structure["directories"].append(rel_path)
                 
                 # 检查关键文件
                 for file in files:
                     if file.endswith(".py"):
-                        structure["python_files_count"] += 1
+                        structure["python_files_count"]+=1
                         
                         # 检查主模块
                         if file in ["__init__.py", "main.py", "app.py"]:
@@ -234,7 +234,7 @@ class ServiceAnalyzer:
                                     implementation["main_classes"].append(class_name)
                                     
                     except SyntaxError as e:
-                        implementation["syntax_errors"] += 1
+                        implementation["syntax_errors"]+=1
                         
         except Exception as e:
             implementation["import_error"] = str(e)
@@ -281,7 +281,7 @@ class ServiceAnalyzer:
                 for root, dirs, files in os.walk(test_path):
                     for file in files:
                         if file.startswith("test_") and file.endswith(".py"):
-                            tests["test_files_count"] += 1
+                            tests["test_files_count"]+=1
         
         # 检查测试框架
         config_files = [
@@ -316,40 +316,40 @@ class ServiceAnalyzer:
         
         # 结构分数 (40%)
         if structure.get("has_main_module"):
-            score += 10
+            score+=10
         if structure.get("has_config"):
-            score += 5
+            score+=5
         if structure.get("has_dockerfile"):
-            score += 5
+            score+=5
         if structure.get("has_requirements"):
-            score += 5
+            score+=5
         if structure.get("python_files_count", 0) > 5:
-            score += 10
+            score+=10
         if structure.get("has_docs"):
-            score += 5
+            score+=5
         
         # 实现分数 (40%)
         if implementation.get("import_success"):
-            score += 20
-        if implementation.get("syntax_errors", 0) == 0:
-            score += 10
+            score+=20
+        if implementation.get("syntax_errors", 0)==0:
+            score+=10
         if len(implementation.get("dependencies", [])) > 0:
-            score += 10
+            score+=10
         
         # 测试分数 (20%)
         if tests.get("has_tests"):
-            score += 10
+            score+=10
         if tests.get("test_files_count", 0) > 0:
-            score += 10
+            score+=10
         
         # 确定状态
-        if score >= 80:
+        if score>=80:
             return "excellent"
-        elif score >= 60:
+        elif score>=60:
             return "functional"
-        elif score >= 40:
+        elif score>=40:
             return "developing"
-        elif score >= 20:
+        elif score>=20:
             return "basic"
         else:
             return "incomplete"
@@ -504,14 +504,14 @@ def main():
     
     # 总体评估
     functionality_rate = summary['functionality_rate']
-    if functionality_rate >= 80:
+    if functionality_rate>=80:
         print(f"\n🎉 微服务架构整体状况良好！")
-    elif functionality_rate >= 60:
+    elif functionality_rate>=60:
         print(f"\n👍 微服务架构基本可用，继续优化中...")
-    elif functionality_rate >= 40:
+    elif functionality_rate>=40:
         print(f"\n🔧 微服务架构需要进一步完善")
     else:
         print(f"\n⚠️ 微服务架构需要大量开发工作")
 
-if __name__ == "__main__":
+if __name__=="__main__":
     main() 

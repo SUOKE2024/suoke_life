@@ -163,7 +163,7 @@ class HealthAggregator:
         # 统计告警
         total_alerts = sum(len(service.alerts) for service in self.services.values())
         critical_alerts = sum(
-            len([a for a in service.alerts if a.level == AlertLevel.CRITICAL])
+            len([a for a in service.alerts if a.level==AlertLevel.CRITICAL])
             for service in self.services.values()
         )
 
@@ -199,7 +199,7 @@ class HealthAggregator:
         for service_name in critical_services:
             if service_name in self.services:
                 service = self.services[service_name]
-                if service.status == HealthStatus.UNHEALTHY:
+                if service.status==HealthStatus.UNHEALTHY:
                     return HealthStatus.UNHEALTHY
 
         # 统计各状态的服务
@@ -213,13 +213,13 @@ class HealthAggregator:
 
             # 计算加权得分
             weight = self.service_weights.get(service.service_name, 1.0)
-            total_weight += weight
+            total_weight+=weight
 
-            if status == HealthStatus.HEALTHY:
+            if status==HealthStatus.HEALTHY:
                 score = 1.0
-            elif status == HealthStatus.DEGRADED:
+            elif status==HealthStatus.DEGRADED:
                 score = 0.5
-            elif status == HealthStatus.UNHEALTHY:
+            elif status==HealthStatus.UNHEALTHY:
                 score = 0.0
             else:
                 score = 0.25  # UNKNOWN
@@ -233,9 +233,9 @@ class HealthAggregator:
             overall_score = 0.0
 
         # 根据得分确定状态
-        if overall_score >= 0.8:
+        if overall_score>=0.8:
             return HealthStatus.HEALTHY
-        elif overall_score >= 0.5 or overall_score > 0:
+        elif overall_score>=0.5 or overall_score > 0:
             return HealthStatus.DEGRADED
         else:
             return HealthStatus.UNHEALTHY
@@ -259,10 +259,10 @@ class HealthAggregator:
 
             # 分析依赖影响
             unhealthy_deps = [
-                s for s in dependency_statuses if s == HealthStatus.UNHEALTHY
+                s for s in dependency_statuses if s==HealthStatus.UNHEALTHY
             ]
             degraded_deps = [
-                s for s in dependency_statuses if s == HealthStatus.DEGRADED
+                s for s in dependency_statuses if s==HealthStatus.DEGRADED
             ]
 
             dependency_health[service_name] = {
@@ -295,7 +295,7 @@ class HealthAggregator:
                     dependency_status[dep_name] = "unknown"
 
         return {
-            ***service.to_dict(),
+           ***service.to_dict(),
             "dependencies": dependency_status,
             "weight": self.service_weights.get(service_name, 1.0),
             "is_critical": service_name
@@ -309,7 +309,7 @@ class HealthAggregator:
         services = []
 
         for service in self.services.values():
-            if service.status == status:
+            if service.status==status:
                 services.append(service.to_dict())
 
         return services
@@ -333,7 +333,7 @@ class HealthAggregator:
             # 关键服务故障
             if (
                 service_name in critical_services
-                and service.status == HealthStatus.UNHEALTHY
+                and service.status==HealthStatus.UNHEALTHY
             ):
                 issues["critical_service_failures"].append(
                     {
@@ -345,7 +345,7 @@ class HealthAggregator:
 
             # 高告警服务
             critical_alerts = [
-                a for a in service.alerts if a.level == AlertLevel.CRITICAL
+                a for a in service.alerts if a.level==AlertLevel.CRITICAL
             ]
             if len(critical_alerts) > 0:
                 issues["high_alert_services"].append(
@@ -377,10 +377,10 @@ class HealthAggregator:
             for dep_name in dependencies:
                 if dep_name in self.services:
                     dep_service = self.services[dep_name]
-                    if dep_service.status == HealthStatus.UNHEALTHY:
+                    if dep_service.status==HealthStatus.UNHEALTHY:
                         failed_deps.append(dep_name)
 
-            if failed_deps and service.status == HealthStatus.UNHEALTHY:
+            if failed_deps and service.status==HealthStatus.UNHEALTHY:
                 issues["cascade_failures"].append(
                     {
                         "service": service_name,

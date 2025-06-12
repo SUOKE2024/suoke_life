@@ -161,17 +161,17 @@ class Settings(BaseSettings):
     @property
     def is_development(self) -> bool:
         """是否为开发环境"""
-        return self.environment == "development"
+        return self.environment=="development"
 
     @property
     def is_production(self) -> bool:
         """是否为生产环境"""
-        return self.environment == "production"
+        return self.environment=="production"
 
     @property
     def is_testing(self) -> bool:
         """是否为测试环境"""
-        return self.environment == "testing"
+        return self.environment=="testing"
 
 
 @lru_cache()

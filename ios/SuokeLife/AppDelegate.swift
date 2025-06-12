@@ -1,5 +1,5 @@
 import UIKit
-import React
+import React_RCTAppDelegate
 
 @main
 class AppDelegate: RCTAppDelegate {

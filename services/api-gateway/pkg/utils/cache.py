@@ -161,7 +161,7 @@ self.lru_keys: List[str] = []  # 简单LRU实现
 self.redis_client = None
 
 # 如果使用Redis，初始化Redis客户端
-if config.enabled and config.type == "redis" and config.redis_url:
+if config.enabled and config.type=="redis" and config.redis_url:
             # 暂时不初始化Redis，仅使用内存缓存
             logger.warning("Redis缓存暂时禁用，使用内存缓存代替")
             # self._init_redis()
@@ -239,7 +239,7 @@ if not self.config.enabled:
 
 key_str = key.to_string()
 
-if self.config.type == "redis" and self.redis_client:
+if self.config.type=="redis" and self.redis_client:
             return await self._get_from_redis(key_str)
 else:
             return self._get_from_memory(key_str)
@@ -294,7 +294,7 @@ if not self.config.enabled:
 
 key_str = key.to_string()
 
-if self.config.type == "redis" and self.redis_client:
+if self.config.type=="redis" and self.redis_client:
             return await self._set_to_redis(key_str, item)
 else:
             return self._set_to_memory(key_str, item)
@@ -314,7 +314,7 @@ Returns:
 self._cleanup_expired()
 
 # 检查缓存容量限制
-if len(self.memory_cache) > = self.config.max_size:
+if len(self.memory_cache) >=self.config.max_size:
             # 删除最旧的缓存项
             if self.lru_keys:
                 oldest_key = self.lru_keys[0]  # 使用LRU列表中的第一个键
@@ -354,7 +354,7 @@ self.memory_cache.clear()
 self.lru_keys.clear()
 
 # 清空Redis缓存
-if self.config.type == "redis" and self.redis_client:
+if self.config.type=="redis" and self.redis_client:
             try:
                 # 使用键模式匹配清除所有缓存项
                 cursor = 0
@@ -370,7 +370,7 @@ if self.config.type == "redis" and self.redis_client:
                     if keys:
                         await self.redis_client.delete( * keys)
 
-                    if cursor == 0:
+                    if cursor==0:
                         break
             except Exception as e:
                 logger.error(f"清空Redis缓存失败: {str(e)}", exc_info = True)

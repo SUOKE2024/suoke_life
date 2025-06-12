@@ -92,12 +92,12 @@ class UnifiedHealthDataServiceManager:
                 status = self.service.get_health_status()
                 
                 # 检查服务状态
-                if status['status'] != 'running':
+                if status['status']!='running':
                     logger.warning(f"⚠️  服务状态异常: {status}")
                 
                 # 检查组件状态
                 for component, component_status in status['components'].items():
-                    if component_status['status'] != 'running':
+                    if component_status['status']!='running':
                         logger.warning(f"⚠️  组件 {component} 状态异常: {component_status}")
                 
                 # 等待下次检查
@@ -154,7 +154,7 @@ async def main():
     
     logger.info("👋 统一健康数据服务已退出")
 
-if __name__ == "__main__":
+if __name__=="__main__":
     # 检查Python版本
     if sys.version_info < (3, 8):
         print("❌ 需要Python 3.8或更高版本")

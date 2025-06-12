@@ -118,7 +118,7 @@ value_size = len(serialized_value)
 async with self._lock:
             # 检查是否需要清理空间
             while (self._size + value_size > self.max_size or
-                len(self._cache) > = self.max_items) and self._cache:
+                len(self._cache) >=self.max_items) and self._cache:
                 oldest_key = next(iter(self._cache))
                 oldest_value, _ = self._cache.pop(oldest_key)
                 self._size - = len(pickle.dumps(oldest_value))
@@ -133,7 +133,7 @@ async with self._lock:
                 self._size - = len(pickle.dumps(old_value))
 
             self._cache[key] = (value, expire_time)
-            self._size += value_size
+            self._size+=value_size
 
             return True
 
@@ -159,7 +159,7 @@ expired_keys = []
 
 async with self._lock:
             for key, (value, expire_time) in self._cache.items():
-                if expire_time < = current_time:
+                if expire_time <=current_time:
                     expired_keys.append(key)
 
             for key in expired_keys:
@@ -270,7 +270,7 @@ except Exception as e:
             logger.error(f"Redis连接失败: {e}")
             self.redis_client = None
 
-    def add_cache_rule(self, pattern: str, ttl: int, **kwargs):
+    def add_cache_rule(self, pattern: str, ttl: int,**kwargs):
 """添加缓存规则"""
 rule = CacheRule(
             pattern = re.compile(pattern),
@@ -313,13 +313,13 @@ conditions = rule.conditions
 # 检查头部条件
 if 'headers' in conditions:
             for header_name, expected_value in conditions['headers'].items():
-                if headers.get(header_name) ! = expected_value:
+                if headers.get(header_name) !=expected_value:
                     return False
 
 # 可以添加更多条件检查
 return True
 
-    def _generate_cache_key(self, key: str, **kwargs) -> str:
+    def _generate_cache_key(self, key: str,**kwargs) -> str:
 """生成缓存键"""
 # 添加前缀
 cache_key = f"suoke:gateway:{key}"
@@ -328,7 +328,7 @@ cache_key = f"suoke:gateway:{key}"
 if kwargs:
             params_str = json.dumps(kwargs, sort_keys = True)
             params_hash = hashlib.md5(params_str.encode()).hexdigest()[:8]
-            cache_key += f":{params_hash}"
+            cache_key+=f":{params_hash}"
 
 return cache_key
 
@@ -360,7 +360,7 @@ try:
             result = await self.memory_cache.get(cache_key)
             if result:
                 value, _ = result
-                self.stats.hits += 1
+                self.stats.hits+=1
                 return value
 
             # 再查Redis缓存
@@ -376,15 +376,15 @@ try:
                     ttl = rule.ttl if rule else self.config.default_ttl
                     await self.memory_cache.set(cache_key, value, ttl)
 
-                    self.stats.hits += 1
+                    self.stats.hits+=1
                     return value
 
-            self.stats.misses += 1
+            self.stats.misses+=1
             return None
 
 except Exception as e:
             logger.error(f"缓存获取失败 {cache_key}: {e}")
-            self.stats.misses += 1
+            self.stats.misses+=1
             return None
 
 finally:
@@ -414,7 +414,7 @@ try:
                 else:
                     await self._write_to_redis(cache_key, value, ttl)
 
-            self.stats.sets += 1
+            self.stats.sets+=1
 
 except Exception as e:
             logger.error(f"缓存设置失败 {cache_key}: {e}")
@@ -444,7 +444,7 @@ try:
             if self.redis_client:
                 await self.redis_client.delete(cache_key)
 
-            self.stats.deletes += 1
+            self.stats.deletes+=1
 
 except Exception as e:
             logger.error(f"缓存删除失败 {cache_key}: {e}")
@@ -505,7 +505,7 @@ while self._running:
                     pass
 
                 # 批量写入
-                if batch and len(batch) > = self.config.batch_write_size:
+                if batch and len(batch) >=self.config.batch_write_size:
                     await self._batch_write_to_redis(batch)
                     batch.clear()
 

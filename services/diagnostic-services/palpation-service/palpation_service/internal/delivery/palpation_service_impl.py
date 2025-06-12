@@ -266,16 +266,16 @@ class PalpationServiceImpl:
                 if rate_condition.startswith(">"):
                     target_rate = int(rate_condition[1:])
                     if pulse.rate > target_rate:
-                        score += 1.0
+                        score +=1.0
                 elif rate_condition.startswith("<"):
                     target_rate = int(rate_condition[1:])
                     if pulse.rate < target_rate:
-                        score += 1.0
-            total_weight += 1.0
+                        score +=1.0
+            total_weight +=1.0
         
         # 检查其他特征
         for char_name, target_value in characteristics.items():
-            if char_name == "rate":
+            if char_name=="rate":
                 continue
             
             if hasattr(pulse, char_name):
@@ -283,8 +283,8 @@ class PalpationServiceImpl:
                 if isinstance(target_value, (int, float)):
                     # 计算相似度
                     similarity = 1.0 - abs(actual_value - target_value)
-                    score += max(0, similarity)
-                    total_weight += 1.0
+                    score +=max(0, similarity)
+                    total_weight +=1.0
         
         return score / total_weight if total_weight > 0 else 0.0
     
@@ -342,8 +342,8 @@ class PalpationServiceImpl:
             if hasattr(touch, char_name):
                 actual_value = getattr(touch, char_name)
                 similarity = 1.0 - abs(actual_value - target_value)
-                score += max(0, similarity)
-                total_weight += 1.0
+                score +=max(0, similarity)
+                total_weight +=1.0
         
         return score / total_weight if total_weight > 0 else 0.0
     
@@ -354,7 +354,7 @@ class PalpationServiceImpl:
         
         for result in touch_results:
             areas_examined.append(result["area"])
-            if result["detected_pattern"] != "正常":
+            if result["detected_pattern"]!="正常":
                 abnormal_findings.append({
                     "area": result["area"],
                     "finding": result["detected_pattern"],
@@ -385,7 +385,7 @@ class PalpationServiceImpl:
                 pulse_indicators = syndrome_info["pulse_indicators"]
                 dominant_pulse = pulse_analysis.get("dominant_pattern", "")
                 if dominant_pulse in pulse_indicators:
-                    score += 0.4
+                    score +=0.4
                     evidence.append(f"脉象: {dominant_pulse}")
                 
                 # 检查触诊指标
@@ -393,14 +393,14 @@ class PalpationServiceImpl:
                 touch_findings = touch_analysis.get("summary", {}).get("abnormal_findings", [])
                 for finding in touch_findings:
                     if any(indicator in finding["finding"] for indicator in touch_indicators):
-                        score += 0.3
+                        score +=0.3
                         evidence.append(f"触诊: {finding['finding']}")
                 
                 # 检查症状
                 syndrome_symptoms = syndrome_info["symptoms"]
                 matching_symptoms = [s for s in symptoms if s in syndrome_symptoms]
                 if matching_symptoms:
-                    score += 0.3 * (len(matching_symptoms) / len(syndrome_symptoms))
+                    score +=0.3 * (len(matching_symptoms) / len(syndrome_symptoms))
                     evidence.extend([f"症状: {s}" for s in matching_symptoms])
                 
                 # 应用置信度权重
@@ -559,5 +559,5 @@ def main():
     logger.info("切诊服务启动")
     # 这里可以添加服务启动逻辑
 
-if __name__ == "__main__":
+if __name__=="__main__":
     main()

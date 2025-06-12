@@ -287,13 +287,13 @@ class AgentOrchestrator:
                 # 找到可以执行的任务
                 ready_tasks = []
                 for task in session.tasks:
-                    if (task.status == "pending" and 
+                    if (task.status=="pending" and 
                         all(dep in completed_tasks for dep in task.dependencies)):
                         ready_tasks.append(task)
                 
                 if not ready_tasks:
                     # 检查是否有任务失败导致死锁
-                    failed_tasks = [t for t in session.tasks if t.status == "failed"]
+                    failed_tasks = [t for t in session.tasks if t.status=="failed"]
                     if failed_tasks:
                         session.state = CollaborationState.FAILED
                         break
@@ -310,11 +310,11 @@ class AgentOrchestrator:
                 
                 # 更新完成的任务
                 for task in ready_tasks:
-                    if task.status == "completed":
+                    if task.status=="completed":
                         completed_tasks.add(f"{task.agent_id}.{task.task_type}")
             
             # 检查最终状态
-            if all(task.status == "completed" for task in session.tasks):
+            if all(task.status=="completed" for task in session.tasks):
                 session.state = CollaborationState.COMPLETED
                 session.completed_at = datetime.now()
                 
@@ -379,14 +379,14 @@ class AgentOrchestrator:
                     }
                     break
             
-            if task.status != "completed":
+            if task.status!="completed":
                 # 任务超时
                 task.status = "timeout"
                 task.error = f"任务超时: {task.timeout}秒"
                 
                 # 重试机制
                 if task.retry_count < task.max_retries:
-                    task.retry_count += 1
+                    task.retry_count+=1
                     task.status = "pending"
                     self.logger.warning(f"任务超时，准备重试: {task.agent_id}.{task.task_type}")
                 else:
@@ -407,8 +407,8 @@ class AgentOrchestrator:
             "participating_agents": session.participating_agents,
             "execution_summary": {
                 "total_tasks": len(session.tasks),
-                "completed_tasks": len([t for t in session.tasks if t.status == "completed"]),
-                "failed_tasks": len([t for t in session.tasks if t.status == "failed"]),
+                "completed_tasks": len([t for t in session.tasks if t.status=="completed"]),
+                "failed_tasks": len([t for t in session.tasks if t.status=="failed"]),
                 "total_duration": (session.completed_at - session.created_at).total_seconds()
             },
             "agent_contributions": {},
@@ -418,14 +418,14 @@ class AgentOrchestrator:
         
         # 收集各智能体的贡献
         for task in session.tasks:
-            if task.status == "completed" and task.result:
+            if task.status=="completed" and task.result:
                 agent_id = task.agent_id
                 if agent_id not in result["agent_contributions"]:
                     result["agent_contributions"][agent_id] = []
                 result["agent_contributions"][agent_id].append(task.result)
         
         # 根据场景生成推荐和后续行动
-        if session.scenario == "comprehensive_health_diagnosis":
+        if session.scenario=="comprehensive_health_diagnosis":
             result["recommendations"] = [
                 "基于四诊合参结果，建议定期监测相关健康指标",
                 "结合生活数据分析，调整日常作息和饮食习惯",
@@ -436,7 +436,7 @@ class AgentOrchestrator:
                 "设置健康监测提醒",
                 "安排后续复查时间"
             ]
-        elif session.scenario == "personalized_wellness_plan":
+        elif session.scenario=="personalized_wellness_plan":
             result["recommendations"] = [
                 "根据体质分析结果，采用个性化养生方案",
                 "选择推荐的健康产品和服务",
@@ -463,9 +463,9 @@ class AgentOrchestrator:
             "participating_agents": session.participating_agents,
             "progress": {
                 "total_tasks": len(session.tasks),
-                "completed_tasks": len([t for t in session.tasks if t.status == "completed"]),
-                "running_tasks": len([t for t in session.tasks if t.status == "running"]),
-                "failed_tasks": len([t for t in session.tasks if t.status == "failed"])
+                "completed_tasks": len([t for t in session.tasks if t.status=="completed"]),
+                "running_tasks": len([t for t in session.tasks if t.status=="running"]),
+                "failed_tasks": len([t for t in session.tasks if t.status=="failed"])
             },
             "created_at": session.created_at.isoformat(),
             "updated_at": session.updated_at.isoformat(),
@@ -483,7 +483,7 @@ class AgentOrchestrator:
         
         # 取消所有运行中的任务
         for task in session.tasks:
-            if task.status == "running":
+            if task.status=="running":
                 task.status = "cancelled"
         
         self.logger.info(f"取消智能体协同会话: {session_id}")
@@ -492,7 +492,7 @@ class AgentOrchestrator:
     async def update_agent_status(self, agent_id: str, status: Dict[str, Any]):
         """更新智能体状态"""
         self.agent_status[agent_id] = {
-            **status,
+           **status,
             "updated_at": datetime.now().isoformat()
         }
     

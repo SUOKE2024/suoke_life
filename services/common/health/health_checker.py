@@ -227,9 +227,9 @@ class HealthChecker:
                 details = {
                     "memory_percent": memory.percent,
                     "threshold": threshold,
-                    "total_gb": round(memory.total / (1024 ***3), 2),
-                    "available_gb": round(memory.available / (1024 ***3), 2),
-                    "used_gb": round(memory.used / (1024 ***3), 2),
+                    "total_gb": round(memory.total / (1024***3), 2),
+                    "available_gb": round(memory.available / (1024***3), 2),
+                    "used_gb": round(memory.used / (1024***3), 2),
                 },
             )
 
@@ -261,9 +261,9 @@ class HealthChecker:
                 details = {
                     "disk_percent": round(disk_percent, 1),
                     "threshold": threshold,
-                    "total_gb": round(disk.total / (1024 ***3), 2),
-                    "free_gb": round(disk.free / (1024 ***3), 2),
-                    "used_gb": round(disk.used / (1024 ***3), 2),
+                    "total_gb": round(disk.total / (1024***3), 2),
+                    "free_gb": round(disk.free / (1024***3), 2),
+                    "used_gb": round(disk.used / (1024***3), 2),
                 },
             )
 
@@ -358,7 +358,7 @@ class HealthChecker:
                 timeout = aiohttp.ClientTimeout(total = timeout)
             ) as session:
                 async with session.get(url) as response:
-                    if response.status == expected_status:
+                    if response.status==expected_status:
                         status = HealthStatus.HEALTHY
                         message = f"HTTP服务正常 (状态码: {response.status})"
                     else:
@@ -392,11 +392,11 @@ class HealthChecker:
 
         statuses = [result.status for result in check_results.values()]
 
-        if all(status == HealthStatus.HEALTHY for status in statuses):
+        if all(status==HealthStatus.HEALTHY for status in statuses):
             return HealthStatus.HEALTHY
-        elif any(status == HealthStatus.UNHEALTHY for status in statuses):
+        elif any(status==HealthStatus.UNHEALTHY for status in statuses):
             return HealthStatus.UNHEALTHY
-        elif any(status == HealthStatus.DEGRADED for status in statuses):
+        elif any(status==HealthStatus.DEGRADED for status in statuses):
             return HealthStatus.DEGRADED
         else:
             return HealthStatus.UNKNOWN
@@ -418,21 +418,21 @@ class HealthChecker:
                     [
                         r
                         for r in check_results.values()
-                        if r.status == HealthStatus.HEALTHY
+                        if r.status==HealthStatus.HEALTHY
                     ]
                 ),
                 "unhealthy_checks": len(
                     [
                         r
                         for r in check_results.values()
-                        if r.status == HealthStatus.UNHEALTHY
+                        if r.status==HealthStatus.UNHEALTHY
                     ]
                 ),
                 "degraded_checks": len(
                     [
                         r
                         for r in check_results.values()
-                        if r.status == HealthStatus.DEGRADED
+                        if r.status==HealthStatus.DEGRADED
                     ]
                 ),
             },

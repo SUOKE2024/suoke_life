@@ -182,7 +182,7 @@ metadata:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   rules:
-  - host: api.suokelife.com
+  - host: api.suoke.life
     http:
       paths:
       - path: /rag(/|$)(.*)

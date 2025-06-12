@@ -65,7 +65,7 @@ body: request.description,
 out_trade_no: request.orderId,'
 total_fee: Math.round(request.amount * 100), // 微信支付金额单位为分'/,'/g,'/;
   spbill_create_ip: '127.0.0.1,'
-notify_url: process.env.WECHAT_NOTIFY_URL || 'https://api.suokelife.com/payment/wechat/notify,''/;'/g'/;
+notify_url: process.env.WECHAT_NOTIFY_URL || 'https://api.suoke.life/payment/wechat/notify,''/;'/g'/;
 }
       const trade_type = 'APP}
     };

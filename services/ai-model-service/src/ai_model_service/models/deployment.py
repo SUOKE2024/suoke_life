@@ -46,12 +46,12 @@ class DeploymentInfo(BaseModel):
     @property
     def is_ready(self) -> bool:
         """检查部署是否就绪"""
-        return self.status == DeploymentStatus.RUNNING and self.ready_replicas > 0
+        return self.status==DeploymentStatus.RUNNING and self.ready_replicas > 0
 
     @property
     def health_ratio(self) -> float:
         """计算健康副本比例"""
-        if self.replicas == 0:
+        if self.replicas==0:
             return 0.0
         return self.ready_replicas / self.replicas
 

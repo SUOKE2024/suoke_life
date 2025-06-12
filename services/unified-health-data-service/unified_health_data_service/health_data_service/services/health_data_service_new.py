@@ -80,7 +80,7 @@ return data
 data['processed_at'] = datetime.utcnow()
 
 # 数据标准化
-if data.get('data_type') == 'vital_signs':
+if data.get('data_type')=='vital_signs':
     data = self._normalize_vital_signs(data)
 
 return data
@@ -112,11 +112,11 @@ try:
     # 根据数据类型选择存储策略
 data_type = data.get('data_type', 'general')
 
-if data_type == 'vital_signs':
+if data_type=='vital_signs':
     return await self._store_vital_signs(data)
-elif data_type == 'diagnostic':
+elif data_type=='diagnostic':
     return await self._store_diagnostic_data(data)
-elif data_type == 'tcm':
+elif data_type=='tcm':
     return await self._store_tcm_data(data)
 else:
     return await self._store_general_health_data(data)

@@ -31,7 +31,7 @@ class HealthDataService(BaseService[HealthData]):
     def get_health_data_by_id(self, data_id: int) -> Optional[HealthData]:
         """根据ID获取健康数据"""
         try:
-            return self.db.query(HealthData).filter(HealthData.id == data_id).first()
+            return self.db.query(HealthData).filter(HealthData.id==data_id).first()
         except Exception as e:
             logger.error(f"获取健康数据失败: {e}")
             return None
@@ -48,21 +48,21 @@ class HealthDataService(BaseService[HealthData]):
     ) -> List[HealthData]:
         """获取用户健康数据列表"""
         try:
-            query = self.db.query(HealthData).filter(HealthData.user_id == user_id)
+            query = self.db.query(HealthData).filter(HealthData.user_id==user_id)
 
             # 平台筛选
             if platform_id:
-                query = query.filter(HealthData.platform_id == platform_id)
+                query = query.filter(HealthData.platform_id==platform_id)
 
             # 数据类型筛选
             if data_type:
-                query = query.filter(HealthData.data_type == data_type)
+                query = query.filter(HealthData.data_type==data_type)
 
             # 日期范围筛选
             if start_date:
-                query = query.filter(HealthData.created_at >=== start_date)
+                query = query.filter(HealthData.created_at >=start_date)
             if end_date:
-                query = query.filter(HealthData.created_at <= end_date)
+                query = query.filter(HealthData.created_at<=end_date)
 
             # 排序和分页
             query = query.order_by(HealthData.created_at.desc())
@@ -141,7 +141,7 @@ class HealthDataService(BaseService[HealthData]):
                     )
 
                     self.db.add(health_data)
-                    created_count +== 1
+                    created_count +=1
 
                 except Exception as item_error:
                     logger.warning(f"跳过无效数据项: {item_error}")
@@ -213,15 +213,15 @@ class HealthDataService(BaseService[HealthData]):
     ) -> Dict[str, Any]:
         """获取用户健康数据统计"""
         try:
-            query = self.db.query(HealthData).filter(HealthData.user_id == user_id)
+            query = self.db.query(HealthData).filter(HealthData.user_id==user_id)
 
             # 应用筛选条件
             if platform_id:
-                query = query.filter(HealthData.platform_id == platform_id)
+                query = query.filter(HealthData.platform_id==platform_id)
             if start_date:
-                query = query.filter(HealthData.created_at >=== start_date)
+                query = query.filter(HealthData.created_at >=start_date)
             if end_date:
-                query = query.filter(HealthData.created_at <= end_date)
+                query = query.filter(HealthData.created_at<=end_date)
 
             # 总数统计
             total_count = query.count()
@@ -230,14 +230,14 @@ class HealthDataService(BaseService[HealthData]):
             data_type_stats = self.db.query(
                 HealthData.data_type,
                 func.count(HealthData.id).label('count')
-            ).filter(HealthData.user_id == user_id)
+            ).filter(HealthData.user_id==user_id)
 
             if platform_id:
-                data_type_stats = data_type_stats.filter(HealthData.platform_id == platform_id)
+                data_type_stats = data_type_stats.filter(HealthData.platform_id==platform_id)
             if start_date:
-                data_type_stats = data_type_stats.filter(HealthData.created_at >=== start_date)
+                data_type_stats = data_type_stats.filter(HealthData.created_at >=start_date)
             if end_date:
-                data_type_stats = data_type_stats.filter(HealthData.created_at <= end_date)
+                data_type_stats = data_type_stats.filter(HealthData.created_at<=end_date)
 
             data_type_counts = {
                 item.data_type.value: item.count
@@ -248,14 +248,14 @@ class HealthDataService(BaseService[HealthData]):
             platform_stats = self.db.query(
                 HealthData.platform_id,
                 func.count(HealthData.id).label('count')
-            ).filter(HealthData.user_id == user_id)
+            ).filter(HealthData.user_id==user_id)
 
             if platform_id:
-                platform_stats = platform_stats.filter(HealthData.platform_id == platform_id)
+                platform_stats = platform_stats.filter(HealthData.platform_id==platform_id)
             if start_date:
-                platform_stats = platform_stats.filter(HealthData.created_at >=== start_date)
+                platform_stats = platform_stats.filter(HealthData.created_at >=start_date)
             if end_date:
-                platform_stats = platform_stats.filter(HealthData.created_at <= end_date)
+                platform_stats = platform_stats.filter(HealthData.created_at<=end_date)
 
             platform_counts = {
                 item.platform_id: item.count
@@ -266,10 +266,10 @@ class HealthDataService(BaseService[HealthData]):
             date_range_query = self.db.query(
                 func.min(HealthData.created_at).label('min_date'),
                 func.max(HealthData.created_at).label('max_date')
-            ).filter(HealthData.user_id == user_id)
+            ).filter(HealthData.user_id==user_id)
 
             if platform_id:
-                date_range_query = date_range_query.filter(HealthData.platform_id == platform_id)
+                date_range_query = date_range_query.filter(HealthData.platform_id==platform_id)
 
             date_range_result = date_range_query.first()
             date_range = {}
@@ -350,13 +350,13 @@ class HealthDataService(BaseService[HealthData]):
         try:
             query = self.db.query(HealthData).filter(
                 and_(
-                    HealthData.user_id == user_id,
-                    HealthData.data_type == data_type
+                    HealthData.user_id==user_id,
+                    HealthData.data_type==data_type
                 )
             )
 
             if platform_id:
-                query = query.filter(HealthData.platform_id == platform_id)
+                query = query.filter(HealthData.platform_id==platform_id)
 
             return query.order_by(HealthData.created_at.desc()).first()
 
@@ -378,15 +378,15 @@ class HealthDataService(BaseService[HealthData]):
 
             query = self.db.query(HealthData).filter(
                 and_(
-                    HealthData.user_id == user_id,
-                    HealthData.data_type == data_type,
-                    HealthData.created_at >=== start_date,
-                    HealthData.created_at <= end_date
+                    HealthData.user_id==user_id,
+                    HealthData.data_type==data_type,
+                    HealthData.created_at >=start_date,
+                    HealthData.created_at<=end_date
                 )
             )
 
             if platform_id:
-                query = query.filter(HealthData.platform_id == platform_id)
+                query = query.filter(HealthData.platform_id==platform_id)
 
             data_list = query.order_by(HealthData.created_at.asc()).all()[:1000]  # 限制查询结果数量
 

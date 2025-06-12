@@ -53,7 +53,7 @@ class HealthMetric:
     def is_abnormal(self) -> bool:
         """判断是否异常"""
         if isinstance(self.value, (int, float)):
-            return not (self.normal_range[0] <= self.value <= self.normal_range[1])
+            return not (self.normal_range[0]<=self.value<=self.normal_range[1])
         return False
         
     def get_deviation_score(self) -> float:
@@ -158,8 +158,8 @@ class HealthDataProcessor:
         patterns = []
         
         # 检测心率变异性模式
-        heart_rate_metrics = [m for m in metrics if m.metric_name == "heart_rate"]
-        if len(heart_rate_metrics) >= 5:
+        heart_rate_metrics = [m for m in metrics if m.metric_name=="heart_rate"]
+        if len(heart_rate_metrics)>=5:
             pattern = await self._detect_heart_rate_pattern(user_id, heart_rate_metrics)
             if pattern:
                 patterns.append(pattern)
@@ -206,8 +206,8 @@ class HealthDataProcessor:
         
     async def _detect_sleep_pattern(self, user_id: str, metrics: List[HealthMetric]) -> Optional[HealthPattern]:
         """检测睡眠模式"""
-        sleep_duration_metrics = [m for m in metrics if m.metric_name == "sleep_duration"]
-        sleep_quality_metrics = [m for m in metrics if m.metric_name == "sleep_quality"]
+        sleep_duration_metrics = [m for m in metrics if m.metric_name=="sleep_duration"]
+        sleep_quality_metrics = [m for m in metrics if m.metric_name=="sleep_quality"]
         
         if not sleep_duration_metrics:
             return None
@@ -231,7 +231,7 @@ class HealthDataProcessor:
         
     async def _detect_activity_pattern(self, user_id: str, metrics: List[HealthMetric]) -> Optional[HealthPattern]:
         """检测活动模式"""
-        steps_metrics = [m for m in metrics if m.metric_name == "steps"]
+        steps_metrics = [m for m in metrics if m.metric_name=="steps"]
         
         if not steps_metrics:
             return None
@@ -263,9 +263,9 @@ class HealthDataProcessor:
                 continue
                 
             metric_name = key.split("_", 1)[1]
-            if len(history) >= 7:  # 至少7个数据点
+            if len(history)>=7:  # 至少7个数据点
                 values = [m.value for m in list(history)[-7:] if isinstance(m.value, (int, float))]
-                if len(values) >= 5:
+                if len(values)>=5:
                     # 计算趋势
                     x = np.arange(len(values))
                     slope = np.polyfit(x, values, 1)[0]
@@ -367,8 +367,8 @@ class RiskAssessmentEngine:
         for factor, weight in weight_factors.items():
             factor_score = await self._get_factor_score(factor, health_data, patterns)
             if factor_score is not None:
-                risk_score += factor_score * weight
-                available_factors += 1
+                risk_score+=factor_score * weight
+                available_factors+=1
                 
                 if factor_score > 0.6:  # 高风险因子
                     risk_factors.append({
@@ -377,7 +377,7 @@ class RiskAssessmentEngine:
                         "description": self._get_factor_description(factor, factor_score)
                     })
                     
-        if available_factors == 0:
+        if available_factors==0:
             return None
             
         # 调整风险分数
@@ -386,9 +386,9 @@ class RiskAssessmentEngine:
         
         # 确定风险等级
         thresholds = model["risk_thresholds"]
-        if risk_score >= thresholds["high"]:
+        if risk_score>=thresholds["high"]:
             risk_level = HealthRiskLevel.HIGH
-        elif risk_score >= thresholds["moderate"]:
+        elif risk_score>=thresholds["moderate"]:
             risk_level = HealthRiskLevel.MODERATE
         else:
             risk_level = HealthRiskLevel.LOW
@@ -422,20 +422,20 @@ class RiskAssessmentEngine:
         # 检查异常
         for anomaly in anomalies:
             if factor in anomaly["metric_name"]:
-                base_score += anomaly["deviation_score"] * 0.3
+                base_score+=anomaly["deviation_score"] * 0.3
                 
         # 检查趋势
         if factor in trends:
             trend = trends[factor]
-            if trend["direction"] == "increasing" and factor in ["heart_rate", "blood_pressure", "stress_level"]:
-                base_score += abs(trend["slope"]) * 0.2
-            elif trend["direction"] == "decreasing" and factor in ["activity_level", "sleep_quality"]:
-                base_score += abs(trend["slope"]) * 0.2
+            if trend["direction"]=="increasing" and factor in ["heart_rate", "blood_pressure", "stress_level"]:
+                base_score+=abs(trend["slope"]) * 0.2
+            elif trend["direction"]=="decreasing" and factor in ["activity_level", "sleep_quality"]:
+                base_score+=abs(trend["slope"]) * 0.2
                 
         # 检查模式
         for pattern in patterns:
             if factor in pattern.indicators or factor in pattern.risk_factors:
-                base_score += pattern.confidence_score * 0.3
+                base_score+=pattern.confidence_score * 0.3
                 
         return min(base_score, 1.0)  # 限制在0-1范围内
         
@@ -456,7 +456,7 @@ class RiskAssessmentEngine:
         """预测健康结果"""
         outcomes = []
         
-        if risk_type == "cardiovascular":
+        if risk_type=="cardiovascular":
             if risk_score > 0.8:
                 outcomes.append({
                     "outcome": "心血管事件风险",
@@ -472,7 +472,7 @@ class RiskAssessmentEngine:
                     "severity": "中等"
                 })
                 
-        elif risk_type == "diabetes":
+        elif risk_type=="diabetes":
             if risk_score > 0.7:
                 outcomes.append({
                     "outcome": "糖尿病前期或糖尿病",
@@ -481,7 +481,7 @@ class RiskAssessmentEngine:
                     "severity": "高"
                 })
                 
-        elif risk_type == "mental_health":
+        elif risk_type=="mental_health":
             if risk_score > 0.6:
                 outcomes.append({
                     "outcome": "心理健康问题",
@@ -582,7 +582,7 @@ class InterventionEngine:
     async def _generate_risk_based_intervention(self, user_id: str, 
                                              assessment: RiskAssessment) -> Optional[HealthIntervention]:
         """基于风险评估生成干预"""
-        if assessment.risk_level == HealthRiskLevel.HIGH:
+        if assessment.risk_level==HealthRiskLevel.HIGH:
             # 高风险需要医疗干预
             template_key = f"{assessment.affected_systems[0]}_high_risk"
             template = self.intervention_templates.get(template_key)
@@ -670,7 +670,7 @@ class ProactiveHealthMonitor:
             return
             
         try:
-            while session["status"] == "active":
+            while session["status"]=="active":
                 # 获取健康数据
                 health_metrics = await self._collect_health_data(session["user_id"])
                 
@@ -694,7 +694,7 @@ class ProactiveHealthMonitor:
                         
                         # 发送干预建议
                         await self._send_interventions(session["user_id"], interventions)
-                        session["alert_count"] += len(interventions)
+                        session["alert_count"]+=len(interventions)
                         
                     session["last_assessment"] = datetime.utcnow()
                     
@@ -751,12 +751,12 @@ class ProactiveHealthMonitor:
         for assessment in risk_assessments:
             if assessment.risk_level in [HealthRiskLevel.HIGH, HealthRiskLevel.CRITICAL]:
                 return True
-            if assessment.risk_score >= self.alert_thresholds["high_risk"]:
+            if assessment.risk_score>=self.alert_thresholds["high_risk"]:
                 return True
                 
         # 检查高置信度模式
         for pattern in patterns:
-            if pattern.confidence_score >= self.alert_thresholds["pattern_confidence"]:
+            if pattern.confidence_score>=self.alert_thresholds["pattern_confidence"]:
                 return True
                 
         return False
@@ -817,24 +817,24 @@ class ProactiveHealthMonitor:
         # 获取风险评估历史
         user_assessments = [
             a for a in self.risk_engine.assessment_history
-            if a.user_id == user_id and start_time <= a.assessment_time <= end_time
+            if a.user_id==user_id and start_time<=a.assessment_time<=end_time
         ]
         
         # 获取干预历史
         user_interventions = self.intervention_engine.active_interventions.get(user_id, [])
         recent_interventions = [
             i for i in user_interventions
-            if start_time <= i.created_at <= end_time
+            if start_time<=i.created_at<=end_time
         ]
         
         # 统计分析
         risk_distribution = defaultdict(int)
         for assessment in user_assessments:
-            risk_distribution[assessment.risk_level.value] += 1
+            risk_distribution[assessment.risk_level.value]+=1
             
         intervention_types = defaultdict(int)
         for intervention in recent_interventions:
-            intervention_types[intervention.intervention_type.value] += 1
+            intervention_types[intervention.intervention_type.value]+=1
             
         summary = {
             "user_id": user_id,
@@ -849,11 +849,11 @@ class ProactiveHealthMonitor:
             "interventions": {
                 "total": len(recent_interventions),
                 "types": dict(intervention_types),
-                "pending": len([i for i in recent_interventions if i.status == "pending"])
+                "pending": len([i for i in recent_interventions if i.status=="pending"])
             },
             "health_trends": {
-                "improving": len([a for a in user_assessments if a.risk_level == HealthRiskLevel.LOW]),
-                "stable": len([a for a in user_assessments if a.risk_level == HealthRiskLevel.MODERATE]),
+                "improving": len([a for a in user_assessments if a.risk_level==HealthRiskLevel.LOW]),
+                "stable": len([a for a in user_assessments if a.risk_level==HealthRiskLevel.MODERATE]),
                 "concerning": len([a for a in user_assessments if a.risk_level in [HealthRiskLevel.HIGH, HealthRiskLevel.CRITICAL]])
             }
         }

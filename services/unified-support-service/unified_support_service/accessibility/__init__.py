@@ -22,7 +22,7 @@ Provides comprehensive accessibility features including:
 
 __version__ = "1.0.0"
 __author__ = "Suoke Life Team"
-__email__ = "dev@suokelife.com"
+__email__ = "dev@suoke.life"
 
 # Import main components
 

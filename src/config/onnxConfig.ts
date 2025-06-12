@@ -115,7 +115,7 @@ level: 'info,'
 }
     const maxLogFiles = 5}
   },'
-models: {,'baseUrl: 'https://models.suokelife.com,''/,'/g,'/;
+models: {,'baseUrl: 'https://models.suoke.life,''/,'/g,'/;
   downloadTimeout: 60000,
 retryAttempts: 3,
 }

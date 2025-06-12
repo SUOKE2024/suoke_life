@@ -112,7 +112,7 @@ class OAuthManager:
         }
 
         # 特殊处理不同提供商的参数
-        if provider == OAuthProvider.WECHAT:
+        if provider==OAuthProvider.WECHAT:
             params["appid"] = config["client_id"]
             params.pop("client_id")
 
@@ -149,7 +149,7 @@ class OAuthManager:
         # 特殊处理不同提供商的参数
         if provider in [OAuthProvider.GOOGLE, OAuthProvider.GITHUB]:
             data["grant_type"] = "authorization_code"
-        elif provider == OAuthProvider.WECHAT:
+        elif provider==OAuthProvider.WECHAT:
             data["appid"] = config["client_id"]
             data["secret"] = config["client_secret"]
             data.pop("client_id")
@@ -159,7 +159,7 @@ class OAuthManager:
         async with httpx.AsyncClient() as client:
             headers = {"Accept": "application / json"}
 
-            if provider == OAuthProvider.GITHUB:
+            if provider==OAuthProvider.GITHUB:
                 headers["Accept"] = "application / vnd.github.v3 + json"
 
             response = await client.post(
@@ -169,7 +169,7 @@ class OAuthManager:
                 timeout = 30.0
             )
 
-            if response.status_code != 200:
+            if response.status_code!=200:
                 raise Exception(f"获取访问令牌失败: {response.text}")
 
             token_data = response.json()
@@ -194,12 +194,12 @@ class OAuthManager:
         }
 
         # 特殊处理不同提供商的认证方式
-        if provider == OAuthProvider.QQ:
+        if provider==OAuthProvider.QQ:
             # QQ需要先获取OpenID
             openid = await self._get_qq_openid(access_token)
             url = f"{config['user_info_url']}?access_token = {access_token}&oauth_consumer_key = {config['client_id']}&openid = {openid}"
             headers.pop("Authorization")
-        elif provider == OAuthProvider.WECHAT:
+        elif provider==OAuthProvider.WECHAT:
             # 微信需要OpenID
             openid = await self._get_wechat_openid(access_token)
             url = f"{config['user_info_url']}?access_token = {access_token}&openid = {openid}"
@@ -211,7 +211,7 @@ class OAuthManager:
         async with httpx.AsyncClient() as client:
             response = await client.get(url, headers = headers, timeout = 30.0)
 
-            if response.status_code != 200:
+            if response.status_code!=200:
                 raise Exception(f"获取用户信息失败: {response.text}")
 
             user_data = response.json()
@@ -231,7 +231,7 @@ class OAuthManager:
             "raw_data": user_data
         }
 
-        if provider == OAuthProvider.GOOGLE:
+        if provider==OAuthProvider.GOOGLE:
             normalized.update({
                 "id": user_data.get("id"),
                 "username": user_data.get("email"),
@@ -239,7 +239,7 @@ class OAuthManager:
                 "name": user_data.get("name"),
                 "avatar_url": user_data.get("picture")
             })
-        elif provider == OAuthProvider.GITHUB:
+        elif provider==OAuthProvider.GITHUB:
             normalized.update({
                 "id": str(user_data.get("id")),
                 "username": user_data.get("login"),
@@ -247,21 +247,21 @@ class OAuthManager:
                 "name": user_data.get("name"),
                 "avatar_url": user_data.get("avatar_url")
             })
-        elif provider == OAuthProvider.WECHAT:
+        elif provider==OAuthProvider.WECHAT:
             normalized.update({
                 "id": user_data.get("openid"),
                 "username": user_data.get("nickname"),
                 "name": user_data.get("nickname"),
                 "avatar_url": user_data.get("headimgurl")
             })
-        elif provider == OAuthProvider.QQ:
+        elif provider==OAuthProvider.QQ:
             normalized.update({
                 "id": user_data.get("openid"),
                 "username": user_data.get("nickname"),
                 "name": user_data.get("nickname"),
                 "avatar_url": user_data.get("figureurl_qq_2") or user_data.get("figureurl_qq_1")
             })
-        elif provider == OAuthProvider.WEIBO:
+        elif provider==OAuthProvider.WEIBO:
             normalized.update({
                 "id": str(user_data.get("id")),
                 "username": user_data.get("screen_name"),
@@ -278,7 +278,7 @@ class OAuthManager:
         async with httpx.AsyncClient() as client:
             response = await client.get(url, timeout = 30.0)
 
-            if response.status_code != 200:
+            if response.status_code!=200:
                 raise Exception(f"获取QQ OpenID失败: {response.text}")
 
             # QQ返回的是JSONP格式，需要解析
@@ -297,7 +297,7 @@ class OAuthManager:
 
     def validate_state(self, received_state: str, expected_state: str) -> bool:
         """验证OAuth状态参数"""
-        return received_state == expected_state
+        return received_state==expected_state
 
     def generate_state(self) -> str:
         """生成OAuth状态参数"""

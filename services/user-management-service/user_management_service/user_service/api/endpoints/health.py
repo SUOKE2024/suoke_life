@@ -87,7 +87,7 @@ async def record_health_data(
         for data_point in health_data.data_points:
             # 这里应该调用实际的数据存储服务
             # await health_data_service.store_data_point(user_id, data_point)
-            recorded_count += 1
+            recorded_count+=1
 
         return {
             "message": "健康数据记录成功",
@@ -129,7 +129,7 @@ async def get_health_data(
         # 模拟数据查询
         # 实际实现中应该从数据库查询
         mock_data = []
-        if not metric_type or metric_type == "heart_rate":
+        if not metric_type or metric_type=="heart_rate":
             mock_data.extend([
                 {
                     "metric_type": "heart_rate",
@@ -138,10 +138,10 @@ async def get_health_data(
                     "timestamp": (end_date - timedelta(hours = i)).isoformat(),
                     "metadata": {"device": "smartwatch"}
                 }
-                for i in range(min(limit // 4, 24))
+                for i in range(min(limit//4, 24))
             ])
 
-        if not metric_type or metric_type == "steps":
+        if not metric_type or metric_type=="steps":
             mock_data.extend([
                 {
                     "metric_type": "steps",
@@ -150,7 +150,7 @@ async def get_health_data(
                     "timestamp": (end_date - timedelta(days = i)).isoformat(),
                     "metadata": {"device": "smartphone"}
                 }
-                for i in range(min(limit // 4, 7))
+                for i in range(min(limit//4, 7))
             ])
 
         return {
@@ -191,12 +191,12 @@ async def query_health_data(
         aggregated_data = {}
 
         for metric_type in query.metric_types:
-            if query.aggregation == "daily":
+            if query.aggregation=="daily":
                 # 模拟每日聚合数据
                 daily_data = []
                 for i in range((end_date - start_date).days + 1):
                     date = start_date + timedelta(days = i)
-                    if metric_type == "heart_rate":
+                    if metric_type=="heart_rate":
                         daily_data.append({
                             "date": date.date().isoformat(),
                             "avg": 72 + (i % 5),
@@ -204,7 +204,7 @@ async def query_health_data(
                             "max": 85 + (i % 7),
                             "count": 24
                         })
-                    elif metric_type == "steps":
+                    elif metric_type=="steps":
                         daily_data.append({
                             "date": date.date().isoformat(),
                             "total": 8000 + (i * 200),
@@ -213,13 +213,13 @@ async def query_health_data(
 
                 aggregated_data[metric_type] = daily_data
 
-            elif query.aggregation == "weekly":
+            elif query.aggregation=="weekly":
                 # 模拟每周聚合数据
-                weeks = (end_date - start_date).days // 7 + 1
+                weeks = (end_date - start_date).days//7 + 1
                 weekly_data = []
                 for i in range(weeks):
                     week_start = start_date + timedelta(weeks = i)
-                    if metric_type == "heart_rate":
+                    if metric_type=="heart_rate":
                         weekly_data.append({
                             "week_start": week_start.date().isoformat(),
                             "avg": 72 + (i % 3),
@@ -227,7 +227,7 @@ async def query_health_data(
                             "max": 85,
                             "count": 168  # 24 * 7
                         })
-                    elif metric_type == "steps":
+                    elif metric_type=="steps":
                         weekly_data.append({
                             "week_start": week_start.date().isoformat(),
                             "total": 56000 + (i * 1000),
@@ -501,7 +501,7 @@ async def get_health_summary(
         user_id = current_user["id"]
 
         # 根据周期生成摘要
-        if period == "day":
+        if period=="day":
             summary = {
                 "period": "today",
                 "metrics": {
@@ -511,7 +511,7 @@ async def get_health_summary(
                     "heart_rate": {"avg": 72, "min": 65, "max": 85}
                 }
             }
-        elif period == "week":
+        elif period=="week":
             summary = {
                 "period": "this_week",
                 "metrics": {

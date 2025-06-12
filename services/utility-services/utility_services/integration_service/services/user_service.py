@@ -33,7 +33,7 @@ class UserService(BaseService[User]):
     def get_user_by_id(self, user_id: str) -> Optional[User]:
         """根据用户ID获取用户"""
         try:
-            return self.db.query(User).filter(User.id == user_id).first()
+            return self.db.query(User).filter(User.id==user_id).first()
         except Exception as e:
             logger.error(f"获取用户失败: {e}")
             return None
@@ -41,7 +41,7 @@ class UserService(BaseService[User]):
     def get_user_by_username(self, username: str) -> Optional[User]:
         """根据用户名获取用户"""
         try:
-            return self.db.query(User).filter(User.username == username).first()
+            return self.db.query(User).filter(User.username==username).first()
         except Exception as e:
             logger.error(f"根据用户名获取用户失败: {e}")
             return None
@@ -49,7 +49,7 @@ class UserService(BaseService[User]):
     def get_user_by_email(self, email: str) -> Optional[User]:
         """根据邮箱获取用户"""
         try:
-            return self.db.query(User).filter(User.email == email).first()
+            return self.db.query(User).filter(User.email==email).first()
         except Exception as e:
             logger.error(f"根据邮箱获取用户失败: {e}")
             return None
@@ -113,7 +113,7 @@ class UserService(BaseService[User]):
             if password:
                 user_data["password_hash"] = get_password_hash(password)
 
-            user = User( * *user_data)
+            user = User(**user_data)
 
             self.db.add(user)
             self.db.commit()
@@ -305,8 +305,8 @@ class UserService(BaseService[User]):
         return (
             self.db.query(UserPlatformAuth)
             .filter(
-                UserPlatformAuth.user_id == user_id,
-                UserPlatformAuth.platform_id == platform_id
+                UserPlatformAuth.user_id==user_id,
+                UserPlatformAuth.platform_id==platform_id
             )
             .first()
         )
@@ -356,7 +356,7 @@ class UserService(BaseService[User]):
         return (
             self.db.query(UserPlatformAuth)
             .filter(
-                UserPlatformAuth.user_id == user_id,
+                UserPlatformAuth.user_id==user_id,
                 UserPlatformAuth.is_active
             )
             .all()[:1000]  # 限制查询结果数量

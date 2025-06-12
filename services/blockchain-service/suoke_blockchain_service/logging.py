@@ -28,6 +28,6 @@ class LoggerMixin:
         """获取当前类的日志记录器"""
         return get_logger(self.__class__.__name__)
 
-if __name__ == "__main__":
+if __name__=="__main__":
     configure_logging()
     print("日志模块已配置")

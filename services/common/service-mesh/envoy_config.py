@@ -115,7 +115,7 @@ class ClusterConfig:
                 "name": "envoy.transport_sockets.tls",
                 "typed_config": {
                     "@type": "type.googleapis.com / envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext",
-                    ***self.tls_context,
+                   ***self.tls_context,
                 },
             }
 
@@ -234,7 +234,7 @@ class RouteConfig:
 
         # 查找虚拟主机并添加路由
         for vh in self.virtual_hosts:
-            if vh["name"] == virtual_host_name:
+            if vh["name"]==virtual_host_name:
                 vh["routes"].append(route)
                 break
 
@@ -299,9 +299,9 @@ class EnvoyConfigManager:
 
     def save_config(self, file_path: str, format: str = "yaml"):
         """保存配置到文件"""
-        if format.lower() == "json":
+        if format.lower()=="json":
             content = self.generate_json_config()
-        elif format.lower() == "yaml":
+        elif format.lower()=="yaml":
             content = self.generate_yaml_config()
         else:
             raise ValueError("格式必须是 'json' 或 'yaml'")

@@ -10,8 +10,8 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-// 懒加载屏幕组件
-const HomeScreen = React.lazy(() => import('./screens/main/HomeScreen'));
+// 懒加载屏幕组件和导航器
+const MainNavigator = React.lazy(() => import('./navigation/MainNavigator'));
 const LifeOverviewScreen = React.lazy(
   () => import('./screens/health/LifeOverviewScreen')
 );

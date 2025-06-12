@@ -26,9 +26,9 @@ class ServiceUnavailableError(DiagnosticError):
 def error_handler(func):
     """错误处理装饰器"""
     @wraps(func)
-    async def wrapper(*args, **kwargs):
+    async def wrapper(*args,**kwargs):
         try:
-            return await func(*args, **kwargs)
+            return await func(*args,**kwargs)
         except ValidationError as e:
             logging.error(f"Validation error in {func.__name__}: {e}")
             return {"error": "validation_error", "message": str(e)}
@@ -60,7 +60,7 @@ class ErrorHandler:
         if not isinstance(data["symptoms"], list):
             raise ValidationError("Symptoms must be a list")
         
-        if len(data["symptoms"]) == 0:
+        if len(data["symptoms"])==0:
             raise ValidationError("At least one symptom is required")
     
     @staticmethod
@@ -113,5 +113,5 @@ class TestErrorHandling:
         
         import asyncio
         result = asyncio.run(test_function())
-        assert result["error"] == "validation_error"
+        assert result["error"]=="validation_error"
         assert "Test validation error" in result["message"]

@@ -127,7 +127,7 @@ span.set_attribute("http.response_size",
 span.set_attribute("http.response_time_ms", round(process_time * 1000, 2))
 
 # 设置状态
-if response.status_code > = 400:
+if response.status_code >=400:
             span.set_status(Status(StatusCode.ERROR, f"HTTP {response.status_code}"))
 else:
             span.set_status(Status(StatusCode.OK))

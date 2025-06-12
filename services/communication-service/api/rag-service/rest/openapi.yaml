@@ -6,7 +6,7 @@ info:
   version: 1.0.0
   contact:
     name: 索克生活技术团队
-    email: tech@suokelife.com
+    email: tech@suoke.life
 
 servers:
   - url: /api/v1

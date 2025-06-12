@@ -212,7 +212,7 @@ response = GetRoutesResponse()
 # 筛选路由
 routes = self.config.routes
 if request.service_name:
-            routes = [r for r in routes if r.service == request.service_name]
+            routes = [r for r in routes if r.service==request.service_name]
 
 # 填充路由信息
 for route in routes:

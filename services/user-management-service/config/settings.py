@@ -196,7 +196,7 @@ class Settings(PydanticBaseSettings):
     @validator("debug")
     def validate_debug(cls, v, values):
         """验证调试模式"""
-        if values.get("environment") == "production" and v:
+        if values.get("environment")=="production" and v:
             raise ValueError("生产环境不能启用调试模式")
         return v
     

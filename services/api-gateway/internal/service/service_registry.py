@@ -132,7 +132,7 @@ try:
             # 获取每个服务的详情
             for service_name in services:
                 # 跳过consul服务
-                if service_name == "consul":
+                if service_name=="consul":
                     continue
 
                 # 获取服务实例
@@ -277,9 +277,9 @@ config: 服务发现配置
     """
     discovery_type = config.type.lower()
 
-    if discovery_type == "consul":
+    if discovery_type=="consul":
 return ConsulServiceRegistry(config)
-    elif discovery_type == "kubernetes":
+    elif discovery_type=="kubernetes":
 return KubernetesServiceRegistry(config)
     else:
 # 默认使用静态配置

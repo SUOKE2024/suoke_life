@@ -82,15 +82,15 @@ class CircuitBreaker:
     def call(self, func: Callable) -> Callable:
         """装饰器：熔断器调用"""
         @wraps(func)
-        async def wrapper(*args, **kwargs):
-            if self.state == "OPEN":
+        async def wrapper(*args,**kwargs):
+            if self.state=="OPEN":
                 if self._should_attempt_reset():
                     self.state = "HALF_OPEN"
                 else:
                     raise Exception("Circuit breaker is OPEN")
 
             try:
-                result = await func(*args, **kwargs)
+                result = await func(*args,**kwargs)
                 self._on_success()
                 return result
             except Exception as e:
@@ -113,10 +113,10 @@ class CircuitBreaker:
 
     def _on_failure(self) -> None:
         """失败时的处理"""
-        self.failure_count += 1
+        self.failure_count+=1
         self.last_failure_time = datetime.now()
 
-        if self.failure_count >= self.failure_threshold:
+        if self.failure_count>=self.failure_threshold:
             self.state = "OPEN"
 
 class LoadBalancer:
@@ -146,11 +146,11 @@ class LoadBalancer:
         if not healthy_endpoints:
             return None
 
-        if self.strategy == "round_robin":
+        if self.strategy=="round_robin":
             return self._round_robin_select(service_name, healthy_endpoints)
-        elif self.strategy == "weighted_round_robin":
+        elif self.strategy=="weighted_round_robin":
             return self._weighted_round_robin_select(service_name, healthy_endpoints)
-        elif self.strategy == "least_response_time":
+        elif self.strategy=="least_response_time":
             return self._least_response_time_select(healthy_endpoints)
         else:
             return healthy_endpoints[0]
@@ -158,13 +158,13 @@ class LoadBalancer:
     def _round_robin_select(self, service_name: str, endpoints: List[ServiceEndpoint]) -> ServiceEndpoint:
         """轮询选择"""
         index = self.current_index[service_name] % len(endpoints)
-        self.current_index[service_name] += 1
+        self.current_index[service_name]+=1
         return endpoints[index]
 
     def _weighted_round_robin_select(self, service_name: str, endpoints: List[ServiceEndpoint]) -> ServiceEndpoint:
         """加权轮询选择"""
         total_weight = sum(ep.weight for ep in endpoints)
-        if total_weight == 0:
+        if total_weight==0:
             return endpoints[0]
 
         # 简化的加权轮询实现
@@ -172,9 +172,9 @@ class LoadBalancer:
         cumulative_weight = 0
 
         for endpoint in endpoints:
-            cumulative_weight += endpoint.weight
+            cumulative_weight+=endpoint.weight
             if current < cumulative_weight:
-                self.current_index[service_name] += 1
+                self.current_index[service_name]+=1
                 return endpoint
 
         return endpoints[0]
@@ -192,14 +192,14 @@ class LoadBalancer:
     def record_response_time(self, service_name: str, endpoint_url: str, response_time: float):
         """记录响应时间"""
         for endpoint in self.services[service_name]:
-            if endpoint.url == endpoint_url:
+            if endpoint.url==endpoint_url:
                 endpoint.response_times.append(response_time)
                 break
 
     def mark_unhealthy(self, service_name: str, endpoint_url: str):
         """标记端点为不健康"""
         for endpoint in self.services[service_name]:
-            if endpoint.url == endpoint_url:
+            if endpoint.url==endpoint_url:
                 endpoint.is_healthy = False
                 logger.warning(f"标记端点为不健康: {service_name} -> {endpoint_url}")
                 break
@@ -207,7 +207,7 @@ class LoadBalancer:
     def mark_healthy(self, service_name: str, endpoint_url: str):
         """标记端点为健康"""
         for endpoint in self.services[service_name]:
-            if endpoint.url == endpoint_url:
+            if endpoint.url==endpoint_url:
                 endpoint.is_healthy = True
                 logger.info(f"标记端点为健康: {service_name} -> {endpoint_url}")
                 break
@@ -307,7 +307,7 @@ class MetricsCollector:
                 return {}
 
             total_requests = len(recent_metrics)
-            successful_requests = len([m for m in recent_metrics if 200 <= m.status_code < 400])
+            successful_requests = len([m for m in recent_metrics if 200<=m.status_code < 400])
             failed_requests = total_requests - successful_requests
 
             response_times = [m.response_time for m in recent_metrics if m.response_time > 0]
@@ -316,10 +316,10 @@ class MetricsCollector:
             # 按服务统计
             service_stats = defaultdict(lambda: {"count": 0, "errors": 0, "total_time": 0})
             for metric in recent_metrics:
-                service_stats[metric.service]["count"] += 1
-                if metric.status_code >= 400:
-                    service_stats[metric.service]["errors"] += 1
-                service_stats[metric.service]["total_time"] += metric.response_time
+                service_stats[metric.service]["count"]+=1
+                if metric.status_code>=400:
+                    service_stats[metric.service]["errors"]+=1
+                service_stats[metric.service]["total_time"]+=metric.response_time
 
             return {
                 "time_window": time_window,
@@ -501,7 +501,7 @@ class OptimizedAsyncGateway:
     async def _cache_middleware(self, request: web.Request, handler: Callable) -> web.Response:
         """缓存中间件"""
         # 只缓存GET请求
-        if request.method != "GET":
+        if request.method!="GET":
             return await handler(request)
 
         # 生成缓存键
@@ -520,7 +520,7 @@ class OptimizedAsyncGateway:
         response = await handler(request)
 
         # 缓存成功响应
-        if response.status == 200 and response.content_type == "application / json":
+        if response.status==200 and response.content_type=="application / json":
             try:
                 response_data = json.loads(response.text)
                 await self.cache_manager.set(cache_key, response_data, ttl = 300)
@@ -539,7 +539,7 @@ class OptimizedAsyncGateway:
         service_name = "unknown"
         if request.path.startswith("/api/"):
             path_parts = request.path.split("/")
-            if len(path_parts) >= 3:
+            if len(path_parts)>=3:
                 service_name = path_parts[2]
 
         try:
@@ -610,7 +610,7 @@ class OptimizedAsyncGateway:
         # 构建目标URL
         target_url = f"{endpoint.url} / {path}"
         if request.query_string:
-            target_url += f"?{request.query_string}"
+            target_url+=f"?{request.query_string}"
 
         # 准备请求数据
         headers = dict(request.headers)
@@ -730,7 +730,7 @@ class OptimizedAsyncGateway:
                 health_url,
                 timeout = ClientTimeout(total = 5)
             ) as response:
-                if response.status == 200:
+                if response.status==200:
                     if not endpoint.is_healthy:
                         self.load_balancer.mark_healthy(service_name, endpoint.url)
                 else:
@@ -788,5 +788,5 @@ async def main() -> None:
 
     await gateway.start_server(host = "0.0.0.0", port = 8000)
 
-if __name__ == "__main__":
+if __name__=="__main__":
     asyncio.run(main())

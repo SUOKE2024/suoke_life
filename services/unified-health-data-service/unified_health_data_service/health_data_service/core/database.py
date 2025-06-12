@@ -35,19 +35,19 @@ self.connected = False
     """获取默认配置"""
 return {
 "postgresql": {
-"url": "postgresql+asyncpg: // postgres:password@localhost:5432/suoke_health",
+"url": "postgresql+asyncpg://postgres:password@localhost:5432/suoke_health",
 "pool_size": 20,
 "max_overflow": 30,
 "pool_timeout": 30,
 "pool_recycle": 3600
 },
 "redis": {
-"url": "redis: // localhost:6379/0",
+"url": "redis://localhost:6379/0",
 "max_connections": 20,
 "retry_on_timeout": True
 },
 "mongodb": {
-"url": "mongodb: // localhost:27017",
+"url": "mongodb://localhost:27017",
 "database": "suoke_health"
 }
 }
@@ -166,13 +166,13 @@ if conditions:
 for key, value in conditions.items():
     where_clauses.append(f"{key} = :{key}")
 params[key] = value
-query += f" WHERE {' AND '.join(where_clauses)}"
+query+=f" WHERE {' AND '.join(where_clauses)}"
 
 if limit:
-    query += f" LIMIT {limit}"
+    query+=f" LIMIT {limit}"
 
 if offset:
-    query += f" OFFSET {offset}"
+    query+=f" OFFSET {offset}"
 
 return await self.execute_query(query, params)
 
@@ -187,7 +187,7 @@ SET {', '.join(set_clauses)}
 WHERE {' AND '.join(where_clauses)}
 """
 
-params = {**data, **{f"where_{k}": v for k, v in conditions.items()}}
+params = {**data,**{f"where_{k}": v for k, v in conditions.items()}}
 return await self.execute_command(query, params)
 
     async def delete_data(self, table: str, conditions: dict[str, Any]) -> int:
@@ -318,5 +318,5 @@ return {
     """主函数 - 自动生成的最小可用版本"""
     pass
 
-if __name__ == "__main__":
+if __name__=="__main__":
     main()

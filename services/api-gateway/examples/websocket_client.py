@@ -132,26 +132,26 @@ finally:
 """处理收到的消息"""
 msg_type = data.get("type", "unknown")
 
-if msg_type == "connect":
+if msg_type=="connect":
             print(f"← 连接确认: {data}")
-elif msg_type == "pong":
+elif msg_type=="pong":
             print(f"← Pong: {data}")
-elif msg_type == "message":
+elif msg_type=="message":
             sender = data.get("sender", "unknown")
             content = data.get("content", "")
             room = data.get("room", "")
             room_info = f" [房间: {room}]" if room else ""
             print(f"← 消息{room_info}: {sender}: {content}")
-elif msg_type == "broadcast":
+elif msg_type=="broadcast":
             content = data.get("content", "")
             print(f"← 广播: {content}")
-elif msg_type == "room_joined":
+elif msg_type=="room_joined":
             room = data.get("room", "")
             print(f"← 已加入房间: {room}")
-elif msg_type == "room_left":
+elif msg_type=="room_left":
             room = data.get("room", "")
             print(f"← 已离开房间: {room}")
-elif msg_type == "error":
+elif msg_type=="error":
             error = data.get("error", "")
             print(f"← 错误: {error}")
 else:
@@ -224,14 +224,14 @@ async def handle_command(client: WebSocketClient, command: str):
     parts = command.split()
     cmd = parts[0].lower()
 
-    if cmd == " / quit":
+    if cmd==" / quit":
 await client.disconnect()
-    elif cmd == " / ping":
+    elif cmd==" / ping":
 await client.ping()
-    elif cmd == " / join" and len(parts) > 1:
+    elif cmd==" / join" and len(parts) > 1:
 room = parts[1]
 await client.join_room(room)
-    elif cmd == " / leave" and len(parts) > 1:
+    elif cmd==" / leave" and len(parts) > 1:
 room = parts[1]
 await client.leave_room(room)
     else:
@@ -336,17 +336,17 @@ async def main() -> None:
 
     choice = input("选择模式 (1 - 3): ").strip()
 
-    if choice == "1":
+    if choice=="1":
 await interactive_client()
-    elif choice == "2":
+    elif choice=="2":
 await demo_multiple_clients()
-    elif choice == "3":
+    elif choice=="3":
 await stress_test()
     else:
 print("无效选择")
 
 
-if __name__ == "__main__":
+if __name__=="__main__":
     try:
 asyncio.run(main())
     except KeyboardInterrupt:

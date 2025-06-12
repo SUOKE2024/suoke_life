@@ -119,7 +119,7 @@ async def main():
                 result = test_func()
             
             if result:
-                passed += 1
+                passed+=1
         except Exception as e:
             print(f"❌ {test_name} 测试异常: {e}")
     
@@ -127,12 +127,12 @@ async def main():
     print(f"  通过: {passed}/{total}")
     print(f"  成功率: {passed/total*100:.1f}%")
     
-    if passed == total:
+    if passed==total:
         print(f"\n🎉 所有核心服务测试通过！")
-    elif passed >= total * 0.7:
+    elif passed>=total * 0.7:
         print(f"\n👍 大部分服务功能正常")
     else:
         print(f"\n⚠️ 部分服务需要修复")
 
-if __name__ == "__main__":
+if __name__=="__main__":
     asyncio.run(main()) 

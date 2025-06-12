@@ -268,7 +268,7 @@ const { progress, isComplete } = useImagePreloader(imageUrls);
 **配置示例**:
 ```typescript
 const linking = {
-  prefixes: ['suokelife://', 'https://suokelife.com'],
+  prefixes: ['suoke://', 'https://suoke.life'],
   config: {
     screens: {
       Home: 'home',
@@ -489,9 +489,9 @@ const performanceConfig = {
 ## 技术支持
 
 如有问题或建议，请联系开发团队：
-- 邮箱：dev@suokelife.com
-- 文档：https://docs.suokelife.com
-- 问题反馈：https://github.com/suokelife/issues
+- 邮箱：dev@suoke.life
+- 文档：https://docs.suoke.life
+- 问题反馈：https://github.com/SUOKE2024/issues
 
 ---
 

@@ -59,9 +59,9 @@ class PerformanceMetrics:
         """记录响应"""
         self.response_times.append(response_time)
         if success:
-            self.success_count += 1
+            self.success_count+=1
         else:
-            self.error_count += 1
+            self.error_count+=1
 
     def record_system_metrics(self) -> None:
         """记录系统指标"""
@@ -153,7 +153,7 @@ class TestConcurrencyPerformance:
             """缓存操作"""
             start_time = time.time()
 
-            if operation_id % 2 == 0:
+            if operation_id % 2==0:
                 # 写操作
                 cache_data[f"key_{operation_id}"] = f"value_{operation_id}"
             else:
@@ -171,7 +171,7 @@ class TestConcurrencyPerformance:
         summary = metrics.get_summary()
 
         # 性能断言
-        assert summary["success_rate"] == 100.0
+        assert summary["success_rate"]==100.0
         assert summary["response_times"]["mean"] < 0.001  # 1ms
 
         print(f"并发缓存操作性能: {summary}")
@@ -192,14 +192,14 @@ class TestConcurrencyPerformance:
             end_time = time.time()
             metrics.record_response(end_time - start_time, True)
 
-            if i % 10 == 0:
+            if i % 10==0:
                 metrics.record_system_metrics()
 
         metrics.stop_monitoring()
         summary = metrics.get_summary()
 
         # 验证性能稳定性
-        assert summary["success_rate"] == 100.0
+        assert summary["success_rate"]==100.0
         assert summary["response_times"]["p95"] < 0.01  # 10ms
 
         print(f"持续负载测试: {summary}")
@@ -258,7 +258,7 @@ class TestMemoryPerformance:
         metrics.stop_monitoring()
         summary = metrics.get_summary()
 
-        assert summary["success_rate"] == 100.0
+        assert summary["success_rate"]==100.0
         print(f"大数据处理性能: {summary}")
 
 
@@ -298,7 +298,7 @@ class TestRateLimitPerformance:
             end_time = time.time()
             metrics.record_response(end_time - start_time, allowed)
 
-            if i % 100 == 0:
+            if i % 100==0:
                 metrics.record_system_metrics()
 
         metrics.stop_monitoring()
@@ -339,13 +339,13 @@ class TestServiceDiscoveryPerformance:
             end_time = time.time()
             metrics.record_response(end_time - start_time, service_info is not None)
 
-            if i % 100 == 0:
+            if i % 100==0:
                 metrics.record_system_metrics()
 
         metrics.stop_monitoring()
         summary = metrics.get_summary()
 
-        assert summary["success_rate"] == 100.0
+        assert summary["success_rate"]==100.0
         assert summary["response_times"]["mean"] < 0.0001
         print(f"服务发现性能: {summary}")
 
@@ -370,7 +370,7 @@ async def test_end_to_end_performance() -> None:
         end_time = time.time()
         metrics.record_response(end_time - start_time, True)
 
-        if i % 10 == 0:
+        if i % 10==0:
             metrics.record_system_metrics()
 
     metrics.stop_monitoring()
@@ -379,10 +379,10 @@ async def test_end_to_end_performance() -> None:
     # 端到端性能要求
     assert summary["response_times"]["mean"] < 0.01  # 10ms
     assert summary["response_times"]["p95"] < 0.02   # 20ms
-    assert summary["success_rate"] == 100.0
+    assert summary["success_rate"]==100.0
 
     print(f"端到端性能测试: {summary}")
 
 
-if __name__ == "__main__":
+if __name__=="__main__":
     pytest.main([__file__, " - v", " - s"])

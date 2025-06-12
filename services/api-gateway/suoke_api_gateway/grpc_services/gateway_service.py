@@ -131,7 +131,7 @@ try:
 
             health_info = self.service_registry.get_service_health(service_name)
 
-            if health_info["status"] == "not_found":
+            if health_info["status"]=="not_found":
                 context.set_code(grpc.StatusCode.NOT_FOUND)
                 context.set_details(f"Service '{service_name}' not found")
                 return
@@ -191,7 +191,7 @@ try:
                     #     data = json.dumps(event["data"]),
                     # )
 
-                    counter += 1
+                    counter+=1
                     await asyncio.sleep(5)  # 每5秒发送一个事件
 
                 except Exception as e:

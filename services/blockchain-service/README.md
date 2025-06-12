@@ -90,13 +90,13 @@ blockchain-service/
 
 ```bash
 # 构建镜像
-docker build -t suokelife/blockchain-service:latest -f deploy/docker/Dockerfile .
+docker build -t suoke/blockchain-service:latest -f deploy/docker/Dockerfile .
 
 # 运行容器
 docker run -d --name blockchain-service \
   -p 50055:50055 -p 9090:9090 \
   -v $(pwd)/config:/app/config \
-  suokelife/blockchain-service:latest
+  suoke/blockchain-service:latest
 ```
 
 ### 直接运行

@@ -326,9 +326,9 @@ pre-commit install
 
 ## 📞 支持
 
-- 📧 邮箱: tech@suokelife.com
+- 📧 邮箱: tech@suoke.life
 - 💬 微信群: 索克生活技术交流群
-- 📖 文档: https://docs.suokelife.com
+- 📖 文档: https://docs.suoke.life
 - 🐛 问题反馈: https://github.com/SUOKE2024/suoke_life/issues
 
 ---

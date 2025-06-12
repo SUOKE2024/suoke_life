@@ -147,7 +147,7 @@ payload = jwt.decode(
             options = {"verify_signature": True}
 )
 
-return TokenPayload( **payload)
+return TokenPayload(**payload)
 
     def refresh_access_token(self, refresh_token: str) -> str:
 """
@@ -166,7 +166,7 @@ try:
             payload = self.decode_token(refresh_token)
 
             # 验证令牌类型
-            if payload.type ! = "refresh":
+            if payload.type !="refresh":
                 raise ValueError("不是有效的刷新令牌")
 
             # 创建新的访问令牌
@@ -231,7 +231,7 @@ ValueError: 无效的认证头格式
 raise ValueError("未提供认证令牌")
 
     parts = authorization.split()
-    if len(parts) ! = 2 or parts[0].lower() ! = "bearer":
+    if len(parts) !=2 or parts[0].lower() !="bearer":
 raise ValueError("无效的认证头部格式")
 
     return parts[1]

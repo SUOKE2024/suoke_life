@@ -200,7 +200,7 @@ class BlockchainIntegration:
             await asyncio.sleep(0.1)  # 模拟网络延迟
 
             # 简单验证逻辑
-            return tx_hash.startswith('0x') and len(tx_hash) == 66
+            return tx_hash.startswith('0x') and len(tx_hash)==66
 
         except Exception as e:
             logger.error(f"数据完整性验证失败: {e}")
@@ -211,8 +211,8 @@ class IPFSIntegration:
 
     def __init__(self) -> None:
         """TODO: 添加文档字符串"""
-        self.ipfs_gateway = "https: //ipfs.io / ipfs / "
-        self.local_node = "http: //localhost:5001"
+        self.ipfs_gateway = "https: / /ipfs.io / ipfs / "
+        self.local_node = "http: / /localhost:5001"
 
     async def store_encrypted_data(self, encrypted_data: str) -> str:
         """在IPFS上存储加密数据"""
@@ -284,7 +284,7 @@ class EnhancedHealthDataManager:
 
             # 生成零知识证明（如果需要）
             zkp_proof_id = None
-            if privacy_level == 'high':
+            if privacy_level=='high':
                 zkp_proof_id = await self._generate_privacy_proof(
                     user_id, data_type, health_data, data_hash
                 )
@@ -335,13 +335,13 @@ class EnhancedHealthDataManager:
         """生成隐私保护证明"""
         try:
             # 根据数据类型确定证明类型
-            if data_type == 'tongue_analysis':
+            if data_type=='tongue_analysis':
                 claim_type = 'membership_proof'  # 证明舌象分析结果属于有效范围
                 metadata = {
                     'value': health_data.get('tongue_color', 'normal'),
                     'valid_set': ['pale', 'red', 'purple', 'normal', 'dark']
                 }
-            elif data_type == 'health_metrics':
+            elif data_type=='health_metrics':
                 claim_type = 'range_proof'  # 证明健康指标在正常范围内
                 metadata = {
                     'value': health_data.get('blood_pressure_systolic', 120),
@@ -417,7 +417,7 @@ class EnhancedHealthDataManager:
                                     requester_id: str) -> bool:
         """检查访问权限"""
         # 数据所有者总是有权限
-        if requester_id == record.user_id:
+        if requester_id==record.user_id:
             return True
 
         # 检查显式权限
@@ -426,9 +426,9 @@ class EnhancedHealthDataManager:
 
         # 检查临时访问请求
         for request in self.access_requests.values():
-            if (request.requester_id == requester_id and
+            if (request.requester_id==requester_id and
                 record.record_id in request.record_ids and
-                request.status == 'approved' and
+                request.status=='approved' and
                 datetime.utcnow() < request.expires_at):
                 return True
 
@@ -498,7 +498,7 @@ class EnhancedHealthDataManager:
                 return False
 
             # 检查批准者权限
-            if approver_id ! = request.data_owner_id:
+            if approver_id !=request.data_owner_id:
                 logger.warning(f"无权批准请求: {approver_id} -> {request_id}")
                 return False
 
@@ -541,7 +541,7 @@ class EnhancedHealthDataManager:
 
     def get_user_data_summary(self, user_id: str) -> Dict[str, Any]:
         """获取用户数据摘要"""
-        user_records = [r for r in self.records.values() if r.user_id == user_id]
+        user_records = [r for r in self.records.values() if r.user_id==user_id]
 
         # 按数据类型统计
         type_stats = {}
@@ -579,9 +579,9 @@ class EnhancedHealthDataManager:
         # 访问请求统计
         access_stats = {
             'total_requests': len(self.access_requests),
-            'pending': len([r for r in self.access_requests.values() if r.status == 'pending']),
-            'approved': len([r for r in self.access_requests.values() if r.status == 'approved']),
-            'denied': len([r for r in self.access_requests.values() if r.status == 'denied'])
+            'pending': len([r for r in self.access_requests.values() if r.status=='pending']),
+            'approved': len([r for r in self.access_requests.values() if r.status=='approved']),
+            'denied': len([r for r in self.access_requests.values() if r.status=='denied'])
         }
 
         return {

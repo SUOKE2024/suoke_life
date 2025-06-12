@@ -111,7 +111,7 @@ async def readiness_probe(request: Request) -> HealthResponse:
 
     # 如果任何关键组件不健康，返回503状态码
     status_code = status.HTTP_200_OK
-    if overall_status == "unhealthy":
+    if overall_status=="unhealthy":
         status_code = status.HTTP_503_SERVICE_UNAVAILABLE
 
     response = HealthResponse(
@@ -123,7 +123,7 @@ async def readiness_probe(request: Request) -> HealthResponse:
         checks=checks,
     )
 
-    if status_code != status.HTTP_200_OK:
+    if status_code!=status.HTTP_200_OK:
         logger.warning("就绪检查失败", status=overall_status, checks=checks)
 
     return response
@@ -160,7 +160,7 @@ async def startup_probe(request: Request) -> HealthResponse:
 
     # 启动检查失败时返回503
     status_code = status.HTTP_200_OK
-    if overall_status == "starting":
+    if overall_status=="starting":
         status_code = status.HTTP_503_SERVICE_UNAVAILABLE
 
     response = HealthResponse(
@@ -172,7 +172,7 @@ async def startup_probe(request: Request) -> HealthResponse:
         checks=checks,
     )
 
-    if status_code != status.HTTP_200_OK:
+    if status_code!=status.HTTP_200_OK:
         logger.debug("启动检查进行中", status=overall_status, checks=checks)
 
     return response

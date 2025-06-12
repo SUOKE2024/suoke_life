@@ -244,7 +244,7 @@ try:
             if span_data:
                 span_data.end_time = time.time()
                 span_data.duration = span_data.end_time - span_data.start_time
-                span_data.status = "finished" if status == StatusCode.OK else "error"
+                span_data.status = "finished" if status==StatusCode.OK else "error"
 
                 if error:
                     span_data.tags["error"] = True
@@ -298,7 +298,7 @@ try:
                 "timestamp": time.time(),
                 "level": level,
                 "message": message,
-                **kwargs
+               **kwargs
             }
 
             # 更新本地存储
@@ -404,10 +404,10 @@ results = []
 
 for span_data in self.spans.values():
             # 过滤条件
-            if service_name and service_name ! = self.service_name:
+            if service_name and service_name !=self.service_name:
                 continue
 
-            if operation_name and operation_name ! = span_data.operation_name:
+            if operation_name and operation_name !=span_data.operation_name:
                 continue
 
             if start_time and span_data.start_time < start_time:
@@ -419,7 +419,7 @@ for span_data in self.spans.values():
             if tags:
                 match = True
                 for key, value in tags.items():
-                    if key not in span_data.tags or span_data.tags[key] ! = value:
+                    if key not in span_data.tags or span_data.tags[key] !=value:
                         match = False
                         break
                 if not match:
@@ -427,7 +427,7 @@ for span_data in self.spans.values():
 
             results.append(span_data)
 
-            if len(results) > = limit:
+            if len(results) >=limit:
                 break
 
 # 按开始时间倒序排序
@@ -444,7 +444,7 @@ durations = [span.duration for span in self.spans.values() if span.duration]
 avg_duration = sum(durations) / len(durations) if durations else 0
 
 # 统计错误数量
-error_spans = [span for span in self.spans.values() if span.status == "error"]
+error_spans = [span for span in self.spans.values() if span.status=="error"]
 error_rate = len(error_spans) / total_spans if total_spans > 0 else 0
 
 # 统计操作类型
@@ -483,7 +483,7 @@ for span_id in spans_to_delete:
             trace_id = span_data.trace_id
             if trace_id in self.traces:
                 self.traces[trace_id] = [
-                    sid for sid in self.traces[trace_id] if sid ! = span_id
+                    sid for sid in self.traces[trace_id] if sid !=span_id
                 ]
                 # 如果 trace 为空，删除它
                 if not self.traces[trace_id]:
@@ -514,7 +514,7 @@ def trace_function(
     """函数装饰器，用于自动追踪函数调用"""
     def decorator(func: Callable) -> Callable:
 """TODO: 添加文档字符串"""
-def wrapper( * args, **kwargs):
+def wrapper( * args,**kwargs):
             """TODO: 添加文档字符串"""
             op_name = operation_name or f"{func.__module__}.{func.__name__}"
 
@@ -530,7 +530,7 @@ def wrapper( * args, **kwargs):
                     tracing_service.add_span_tag(span_context, "kwargs.count", len(kwargs))
 
                 try:
-                    result = func( * args, **kwargs)
+                    result = func( * args,**kwargs)
                     tracing_service.add_span_tag(span_context, "result.type", type(result).__name__)
                     return result
                 except Exception as e:

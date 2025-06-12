@@ -114,11 +114,11 @@ class ServiceMeshManager:
         self.mesh_type = config.mesh_type
 
         # 初始化对应的客户端
-        if self.mesh_type == MeshType.ISTIO:
+        if self.mesh_type==MeshType.ISTIO:
             self.client = IstioClient()
-        elif self.mesh_type == MeshType.LINKERD:
+        elif self.mesh_type==MeshType.LINKERD:
             self.client = LinkerdClient()
-        elif self.mesh_type == MeshType.ENVOY:
+        elif self.mesh_type==MeshType.ENVOY:
             self.client = EnvoyConfigManager()
         else:
             raise ValueError(f"不支持的服务网格类型: {self.mesh_type}")
@@ -133,11 +133,11 @@ class ServiceMeshManager:
             logger.info(f"初始化{self.mesh_type.value}服务网格...")
 
             # 根据网格类型执行初始化
-            if self.mesh_type == MeshType.ISTIO:
+            if self.mesh_type==MeshType.ISTIO:
                 await self._initialize_istio()
-            elif self.mesh_type == MeshType.LINKERD:
+            elif self.mesh_type==MeshType.LINKERD:
                 await self._initialize_linkerd()
-            elif self.mesh_type == MeshType.ENVOY:
+            elif self.mesh_type==MeshType.ENVOY:
                 await self._initialize_envoy()
 
             logger.info("服务网格初始化完成")
@@ -183,11 +183,11 @@ class ServiceMeshManager:
         try:
             self.traffic_policies[policy.name] = policy
 
-            if self.mesh_type == MeshType.ISTIO:
+            if self.mesh_type==MeshType.ISTIO:
                 return await self._apply_istio_traffic_policy(policy)
-            elif self.mesh_type == MeshType.LINKERD:
+            elif self.mesh_type==MeshType.LINKERD:
                 return await self._apply_linkerd_traffic_policy(policy)
-            elif self.mesh_type == MeshType.ENVOY:
+            elif self.mesh_type==MeshType.ENVOY:
                 return await self._apply_envoy_traffic_policy(policy)
 
             return False
@@ -206,20 +206,20 @@ class ServiceMeshManager:
         )
 
         # 设置负载均衡策略
-        if policy.policy_type == TrafficPolicyType.ROUND_ROBIN:
+        if policy.policy_type==TrafficPolicyType.ROUND_ROBIN:
             destination_rule.set_load_balancer(simple = "ROUND_ROBIN")
-        elif policy.policy_type == TrafficPolicyType.LEAST_CONN:
+        elif policy.policy_type==TrafficPolicyType.LEAST_CONN:
             destination_rule.set_load_balancer(simple = "LEAST_CONN")
-        elif policy.policy_type == TrafficPolicyType.RANDOM:
+        elif policy.policy_type==TrafficPolicyType.RANDOM:
             destination_rule.set_load_balancer(simple = "RANDOM")
-        elif policy.policy_type == TrafficPolicyType.CONSISTENT_HASH:
+        elif policy.policy_type==TrafficPolicyType.CONSISTENT_HASH:
             destination_rule.set_load_balancer(
                 consistent_hash = policy.load_balancer_config
             )
 
         # 设置熔断器
         if policy.circuit_breaker_config:
-            destination_rule.set_circuit_breaker( ***policy.circuit_breaker_config)
+            destination_rule.set_circuit_breaker(***policy.circuit_breaker_config)
 
         return await self.client.create_destination_rule(destination_rule)
 
@@ -238,11 +238,11 @@ class ServiceMeshManager:
         try:
             self.security_policies[policy.name] = policy
 
-            if self.mesh_type == MeshType.ISTIO:
+            if self.mesh_type==MeshType.ISTIO:
                 return await self._apply_istio_security_policy(policy)
-            elif self.mesh_type == MeshType.LINKERD:
+            elif self.mesh_type==MeshType.LINKERD:
                 return await self._apply_linkerd_security_policy(policy)
-            elif self.mesh_type == MeshType.ENVOY:
+            elif self.mesh_type==MeshType.ENVOY:
                 return await self._apply_envoy_security_policy(policy)
 
             return False
@@ -270,11 +270,11 @@ class ServiceMeshManager:
         try:
             self.canary_deployments[canary.name] = canary
 
-            if self.mesh_type == MeshType.ISTIO:
+            if self.mesh_type==MeshType.ISTIO:
                 return await self._create_istio_canary(canary)
-            elif self.mesh_type == MeshType.LINKERD:
+            elif self.mesh_type==MeshType.LINKERD:
                 return await self._create_linkerd_canary(canary)
-            elif self.mesh_type == MeshType.ENVOY:
+            elif self.mesh_type==MeshType.ENVOY:
                 return await self._create_envoy_canary(canary)
 
             return False
@@ -332,11 +332,11 @@ class ServiceMeshManager:
             canary = self.canary_deployments[canary_name]
             canary.canary_weight = new_weight
 
-            if self.mesh_type == MeshType.ISTIO:
+            if self.mesh_type==MeshType.ISTIO:
                 return await self._update_istio_canary_weight(canary)
-            elif self.mesh_type == MeshType.LINKERD:
+            elif self.mesh_type==MeshType.LINKERD:
                 return await self._update_linkerd_canary_weight(canary)
-            elif self.mesh_type == MeshType.ENVOY:
+            elif self.mesh_type==MeshType.ENVOY:
                 return await self._update_envoy_canary_weight(canary)
 
             return False
@@ -358,9 +358,9 @@ class ServiceMeshManager:
                     destination = route.get("destination", {})
                     subset = destination.get("subset")
 
-                    if subset == "stable":
+                    if subset=="stable":
                         route["weight"] = 100 - canary.canary_weight
-                    elif subset == "canary":
+                    elif subset=="canary":
                         route["weight"] = canary.canary_weight
 
             # 更新VirtualService

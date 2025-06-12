@@ -22,7 +22,7 @@ import logging
 # 版本信息
 __version__ = "1.0.0"
 __author__ = "索克生活技术团队"
-__email__ = "tech@suokelife.com"
+__email__ = "tech@suoke.life"
 
 # 核心组件导入
 try:
@@ -375,5 +375,5 @@ def main() -> None:
     asyncio.run(demo())
 
 
-if __name__ == "__main__":
+if __name__=="__main__":
     main()

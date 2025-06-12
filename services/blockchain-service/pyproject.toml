@@ -9,10 +9,10 @@ description = "索克生活区块链服务 - 健康数据的区块链存储、�
 readme = "README.md"
 license = { text = "Proprietary" }
 authors = [
-    { name = "SuoKe Life Team", email = "dev@suokelife.com" }
+    { name = "SuoKe Life Team", email = "dev@suoke.life" }
 ]
 maintainers = [
-    { name = "SuoKe Life Team", email = "dev@suokelife.com" }
+    { name = "SuoKe Life Team", email = "dev@suoke.life" }
 ]
 keywords = ["blockchain", "health", "data", "privacy", "zkp"]
 classifiers = [
@@ -148,10 +148,10 @@ blockchain-service = "suoke_blockchain_service.main:app"
 blockchain-cli = "suoke_blockchain_service.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/suokelife/suoke_life"
-Documentation = "https://docs.suokelife.com/blockchain-service"
-Repository = "https://github.com/suokelife/suoke_life"
-Issues = "https://github.com/suokelife/suoke_life/issues"
+Homepage = "https://github.com/SUOKE2024/suoke_life"
+Documentation = "https://docs.suoke.life/blockchain-service"
+Repository = "https://github.com/SUOKE2024/suoke_life"
+Issues = "https://github.com/SUOKE2024/suoke_life/issues"
 
 # Hatch 构建配置
 [tool.hatch.build.targets.wheel]

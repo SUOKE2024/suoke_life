@@ -195,7 +195,7 @@ class PasswordManager:
     async def verify_password(self, password: str, password_hash: str) -> bool:
         """验证密码"""
         computed_hash = await self.hash_password(password)
-        return computed_hash == password_hash
+        return computed_hash==password_hash
 
 
 # 全局认证服务实例
@@ -216,5 +216,5 @@ def main() -> None:
     pass
 
 
-if __name__ == "__main__":
+if __name__=="__main__":
     main() 

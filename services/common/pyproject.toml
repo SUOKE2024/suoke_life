@@ -7,7 +7,7 @@ name = "suoke-common"
 version = "1.0.0"
 description = "索克生活平台通用组件库 - 提供微服务架构所需的所有基础组件"
 authors = [
-    {name = "索克生活技术团队", email = "tech@suokelife.com"}
+    {name = "索克生活技术团队", email = "tech@suoke.life"}
 ]
 readme = "README.md"
 license = {text = "MIT"}
@@ -106,10 +106,10 @@ docs = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/suokelife/suoke_life"
-Documentation = "https://docs.suokelife.com"
-Repository = "https://github.com/suokelife/suoke_life"
-Issues = "https://github.com/suokelife/suoke_life/issues"
+Homepage = "https://github.com/SUOKE2024/suoke_life"
+Documentation = "https://docs.suoke.life"
+Repository = "https://github.com/SUOKE2024/suoke_life"
+Issues = "https://github.com/SUOKE2024/suoke_life/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["suoke_common"]

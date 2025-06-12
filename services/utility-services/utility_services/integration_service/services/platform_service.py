@@ -25,7 +25,7 @@ class PlatformService(BaseService[Platform]):
 
     async def get_by_name(self, name: str) -> Platform | None:
         """根据名称获取平台"""
-        return self.db.query(self.model).filter(self.model.name == name).first()
+        return self.db.query(self.model).filter(self.model.name==name).first()
 
     async def get_enabled_platforms(self) -> list[Platform]:
         """获取启用的平台列表"""
@@ -36,8 +36,8 @@ class PlatformService(BaseService[Platform]):
         return (
             self.db.query(PlatformConfig)
             .filter(
-                PlatformConfig.platform_id == platform_id,
-                PlatformConfig.config_key == config_key
+                PlatformConfig.platform_id==platform_id,
+                PlatformConfig.config_key==config_key
             )
             .first()
         )

@@ -111,7 +111,7 @@ config_dict = _merge_configs(config_dict, config_data)
 
     # 转换为配置对象
     try:
-return GatewayConfig( **merged_config)
+return GatewayConfig(**merged_config)
     except Exception as e:
 logger.error(f"配置验证错误: {e}")
 raise ValueError(f"配置验证错误: {e}") from e
@@ -142,7 +142,7 @@ if key.startswith(prefix):
             typed_value = _parse_env_value(value)
 
             # 特殊处理JWT相关配置
-            if key == f"{prefix}JWT_SECRET_KEY":
+            if key==f"{prefix}JWT_SECRET_KEY":
                 if "middleware" not in result:
                     result["middleware"] = {}
                 if "auth" not in result["middleware"]:

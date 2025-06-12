@@ -42,7 +42,7 @@ cors_config = self.config.middleware.cors
 headers = {}
 
 if cors_config.allow_origins:
-            if len(cors_config.allow_origins) == 1 and cors_config.allow_origins[0] == " * ":
+            if len(cors_config.allow_origins)==1 and cors_config.allow_origins[0]==" * ":
                 headers["Access - Control - Allow - Origin"] = " * "
             else:
                 # 实际使用时会根据请求动态设置

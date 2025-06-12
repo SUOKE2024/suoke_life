@@ -1,187 +1,157 @@
+# 老克智能体服务 - Docker Compose配置
+# 索克生活项目 v1.0.0
+
 version: '3.8'
 
 services:
+  # 老克智能体服务
   laoke-service:
     build:
       context: .
       dockerfile: Dockerfile
-    image: suoke/laoke-service:latest
     container_name: laoke-service
     restart: unless-stopped
     ports:
-      - "8080:8080"     # GraphQL API端口
-      - "50051:50051"   # gRPC 服务端口
-      - "51051:51051"   # Prometheus 指标端口
-    volumes:
-      - ./config:/app/config
-      - ./logs:/app/logs
-      - ./data:/app/data
-    env_file:
-      - .env
+      - "8080:8080"    # HTTP API
+      - "50051:50051"  # gRPC
+      - "9091:9091"    # Metrics
     environment:
-      - SERVICE_ENV=production
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-laokepassword}
-      - MONGO_PASSWORD=${MONGO_PASSWORD:-laokepassword}
-      - REDIS_PASSWORD=${REDIS_PASSWORD:-laokepassword}
-      - NEO4J_PASSWORD=${NEO4J_PASSWORD:-laokepassword}
-      - LLM_API_KEY=${LLM_API_KEY:-}
+      - SERVICE__ENVIRONMENT=production
+      - SERVICE__DEBUG=false
+      - SERVICE__HOST=0.0.0.0
+      - SERVICE__PORT=8080
+      - SERVICE__GRPC_PORT=50051
+      - SERVICE__METRICS_PORT=9091
+      - MONGODB_URI=mongodb://mongodb:27017/laoke_db
+      - NEO4J_URI=bolt://neo4j:7687
+      - NEO4J_USER=neo4j
+      - NEO4J_PASSWORD=laoke_password
+      - REDIS_URL=redis://redis:6379/0
+      - MODELS__API_KEY=${DEEPSEEK_API_KEY:-sk-26ac526b8c3b41c2a39bd80a156aaa68}
+      - MODELS__BASE_URL=https://api.deepseek.com/v1
+      - MODELS__MODEL_NAME=deepseek-chat
     depends_on:
       - mongodb
-      - postgres
-      - redis
       - neo4j
+      - redis
+    volumes:
+      - ./logs:/app/logs
+      - ./data:/app/data
     networks:
-      - suoke-network
-    deploy:
-      resources:
-        limits:
-          cpus: '2'
-          memory: 4G
-        reservations:
-          cpus: '1'
-          memory: 2G
+      - laoke-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
-  # Neo4j 图数据库
+  # MongoDB数据库
+  mongodb:
+    image: mongo:7.0
+    container_name: laoke-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=laoke_admin_password
+      - MONGO_INITDB_DATABASE=laoke_db
+    volumes:
+      - mongodb_data:/data/db
+      - ./scripts/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    networks:
+      - laoke-network
+
+  # Neo4j图数据库
   neo4j:
-    image: neo4j:5.18-community
+    image: neo4j:5.15
     container_name: laoke-neo4j
     restart: unless-stopped
     ports:
       - "7474:7474"  # HTTP
       - "7687:7687"  # Bolt
+    environment:
+      - NEO4J_AUTH=neo4j/laoke_password
+      - NEO4J_PLUGINS=["apoc"]
+      - NEO4J_dbms_security_procedures_unrestricted=apoc.*
+      - NEO4J_dbms_memory_heap_initial__size=512m
+      - NEO4J_dbms_memory_heap_max__size=2G
     volumes:
       - neo4j_data:/data
       - neo4j_logs:/logs
-      - ./config/neo4j.conf:/conf/neo4j.conf
-    environment:
-      - NEO4J_AUTH=neo4j/${NEO4J_PASSWORD:-laokepassword}
-      - NEO4J_dbms_memory_heap_initial__size=512m
-      - NEO4J_dbms_memory_heap_max__size=2G
+      - ./scripts/init-neo4j.cypher:/var/lib/neo4j/import/init.cypher:ro
     networks:
-      - suoke-network
-    deploy:
-      resources:
-        limits:
-          memory: 2G
+      - laoke-network
 
-  # MongoDB 数据库
-  mongodb:
-    image: mongo:6.0
-    container_name: laoke-mongodb
-    restart: unless-stopped
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongodb_data:/data/db
-      - ./config/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ADMIN_PASSWORD:-adminpassword}
-      - MONGO_INITDB_DATABASE=laoke_db
-    command: ["--auth", "--bind_ip_all"]
-    networks:
-      - suoke-network
-    deploy:
-      resources:
-        limits:
-          memory: 1G
-
-  # PostgreSQL 数据库
-  postgres:
-    image: postgres:15
-    container_name: laoke-postgres
-    restart: unless-stopped
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./config/postgres-init.sql:/docker-entrypoint-initdb.d/postgres-init.sql:ro
-    environment:
-      - POSTGRES_USER=laoke
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-laokepassword}
-      - POSTGRES_DB=laoke_db
-    networks:
-      - suoke-network
-    deploy:
-      resources:
-        limits:
-          memory: 1G
-
-  # Redis 缓存
+  # Redis缓存
   redis:
-    image: redis:7.0-alpine
+    image: redis:7.2-alpine
     container_name: laoke-redis
     restart: unless-stopped
     ports:
       - "6379:6379"
+    command: redis-server --appendonly yes --requirepass laoke_redis_password
     volumes:
       - redis_data:/data
-      - ./config/redis.conf:/usr/local/etc/redis/redis.conf:ro
-    command: ["redis-server", "/usr/local/etc/redis/redis.conf", "--requirepass", "${REDIS_PASSWORD:-laokepassword}"]
     networks:
-      - suoke-network
-    deploy:
-      resources:
-        limits:
-          memory: 512M
+      - laoke-network
 
-  # Prometheus 监控
+  # Prometheus监控
   prometheus:
-    image: prom/prometheus:v2.45.0
+    image: prom/prometheus:latest
     container_name: laoke-prometheus
     restart: unless-stopped
     ports:
-      - "9091:9090"
+      - "9090:9090"
     volumes:
-      - ./deploy/prometheus:/etc/prometheus
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus_data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
       - '--web.console.libraries=/etc/prometheus/console_libraries'
       - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
       - '--web.enable-lifecycle'
     networks:
-      - suoke-network
-    deploy:
-      resources:
-        limits:
-          memory: 512M
+      - laoke-network
 
-  # Grafana 仪表盘
+  # Grafana可视化
   grafana:
-    image: grafana/grafana:10.0.3
+    image: grafana/grafana:latest
     container_name: laoke-grafana
     restart: unless-stopped
     ports:
-      - "3001:3000"
-    volumes:
-      - ./deploy/grafana/provisioning:/etc/grafana/provisioning
-      - ./deploy/grafana/dashboards:/var/lib/grafana/dashboards
-      - grafana_data:/var/lib/grafana
+      - "3000:3000"
     environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
-      - GF_INSTALL_PLUGINS=grafana-piechart-panel,grafana-clock-panel
+      - GF_SECURITY_ADMIN_PASSWORD=laoke_grafana_password
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources:ro
     networks:
-      - suoke-network
-    depends_on:
-      - prometheus
-    deploy:
-      resources:
-        limits:
-          memory: 256M
+      - laoke-network
 
-networks:
-  suoke-network:
-    name: suoke-network
-    external: true
-
+# 数据卷
 volumes:
-  neo4j_data:
-  neo4j_logs:
   mongodb_data:
-  postgres_data:
+    driver: local
+  neo4j_data:
+    driver: local
+  neo4j_logs:
+    driver: local
   redis_data:
+    driver: local
   prometheus_data:
-  grafana_data: 
+    driver: local
+  grafana_data:
+    driver: local
+
+# 网络
+networks:
+  laoke-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16 

@@ -10,7 +10,7 @@ readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.13.3"
 authors = [
-    { name = "Suoke Life Team", email = "dev@suokelife.com" },
+    { name = "Suoke Life Team", email = "dev@suoke.life" },
 ]
 keywords = ["ai", "health", "tcm", "agent", "fastapi"]
 classifiers = [
@@ -153,10 +153,10 @@ all = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/suokelife/suoke_life"
-Documentation = "https://docs.suokelife.com"
-Repository = "https://github.com/suokelife/suoke_life"
-Issues = "https://github.com/suokelife/suoke_life/issues"
+Homepage = "https://github.com/SUOKE2024/suoke_life"
+Documentation = "https://docs.suoke.life"
+Repository = "https://github.com/SUOKE2024/suoke_life"
+Issues = "https://github.com/SUOKE2024/suoke_life/issues"
 
 [project.scripts]
 xiaoke-service = "xiaoke_service.main:main"

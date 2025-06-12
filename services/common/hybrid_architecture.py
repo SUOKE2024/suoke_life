@@ -125,14 +125,14 @@ class LocalProcessor:
         try:
             with self.lock:
                 self.active_tasks[task.task_id] = task
-                self.stats['total_tasks'] += 1
+                self.stats['total_tasks']+=1
 
             # 根据任务类型选择处理方式
-            if task.task_type == TaskType.IO_INTENSIVE:
+            if task.task_type==TaskType.IO_INTENSIVE:
                 result = await self._process_io_intensive_async(task)
-            elif task.task_type == TaskType.CPU_INTENSIVE:
+            elif task.task_type==TaskType.CPU_INTENSIVE:
                 result = await self._process_cpu_intensive_async(task)
-            elif task.task_type == TaskType.MEMORY_INTENSIVE:
+            elif task.task_type==TaskType.MEMORY_INTENSIVE:
                 result = await self._process_memory_intensive_async(task)
             else:
                 result = await self._process_mixed_async(task)
@@ -143,7 +143,7 @@ class LocalProcessor:
             task.result = result
 
             with self.lock:
-                self.stats['completed_tasks'] += 1
+                self.stats['completed_tasks']+=1
                 self._update_avg_execution_time(task.execution_time)
 
             logger.info(f"任务完成: {task.task_id}, 耗时: {task.execution_time:.2f}s")
@@ -152,7 +152,7 @@ class LocalProcessor:
         except Exception as e:
             task.error_message = str(e)
             with self.lock:
-                self.stats['failed_tasks'] += 1
+                self.stats['failed_tasks']+=1
             logger.error(f"任务失败: {task.task_id}, 错误: {e}")
             raise
         finally:
@@ -167,14 +167,14 @@ class LocalProcessor:
         try:
             with self.lock:
                 self.active_tasks[task.task_id] = task
-                self.stats['total_tasks'] += 1
+                self.stats['total_tasks']+=1
 
             # 根据任务类型选择处理方式
-            if task.task_type == TaskType.IO_INTENSIVE:
+            if task.task_type==TaskType.IO_INTENSIVE:
                 result = self._process_io_intensive_sync(task)
-            elif task.task_type == TaskType.CPU_INTENSIVE:
+            elif task.task_type==TaskType.CPU_INTENSIVE:
                 result = self._process_cpu_intensive_sync(task)
-            elif task.task_type == TaskType.MEMORY_INTENSIVE:
+            elif task.task_type==TaskType.MEMORY_INTENSIVE:
                 result = self._process_memory_intensive_sync(task)
             else:
                 result = self._process_mixed_sync(task)
@@ -185,7 +185,7 @@ class LocalProcessor:
             task.result = result
 
             with self.lock:
-                self.stats['completed_tasks'] += 1
+                self.stats['completed_tasks']+=1
                 self._update_avg_execution_time(task.execution_time)
 
             logger.info(f"任务完成: {task.task_id}, 耗时: {task.execution_time:.2f}s")
@@ -194,7 +194,7 @@ class LocalProcessor:
         except Exception as e:
             task.error_message = str(e)
             with self.lock:
-                self.stats['failed_tasks'] += 1
+                self.stats['failed_tasks']+=1
             logger.error(f"任务失败: {task.task_id}, 错误: {e}")
             raise
         finally:
@@ -326,7 +326,7 @@ class LocalProcessor:
 
     def _update_avg_execution_time(self, execution_time: float):
         """更新平均执行时间"""
-        if self.stats['avg_execution_time'] == 0:
+        if self.stats['avg_execution_time']==0:
             self.stats['avg_execution_time'] = execution_time
         else:
             self.stats['avg_execution_time'] = (
@@ -337,7 +337,7 @@ class LocalProcessor:
         """获取处理器统计信息"""
         with self.lock:
             return {
-                ***self.stats,
+               ***self.stats,
                 'active_tasks': len(self.active_tasks),
                 'thread_pool_size': self.thread_pool._max_workers,
                 'process_pool_size': self.process_pool._max_workers
@@ -403,7 +403,7 @@ class DistributedProcessor:
 
         try:
             with self.lock:
-                self.stats['total_distributed_tasks'] += 1
+                self.stats['total_distributed_tasks']+=1
 
             # 选择最佳工作节点
             worker_node = self._select_best_worker(task.task_type)
@@ -432,13 +432,13 @@ class DistributedProcessor:
             self._update_network_latency(network_latency)
 
             with self.lock:
-                self.stats['completed_distributed_tasks'] += 1
+                self.stats['completed_distributed_tasks']+=1
 
             return result
 
         except Exception as e:
             with self.lock:
-                self.stats['failed_distributed_tasks'] += 1
+                self.stats['failed_distributed_tasks']+=1
             logger.error(f"分布式任务失败: {task.task_id}, 错误: {e}")
             raise
 
@@ -448,7 +448,7 @@ class DistributedProcessor:
             available_workers = [
                 worker for worker in self.worker_nodes.values()
                 if (task_type in worker.capabilities and
-                    worker.status == "active" and
+                    worker.status=="active" and
                     worker.current_load < worker.max_capacity)
             ]
 
@@ -460,7 +460,7 @@ class DistributedProcessor:
                             key = lambda w: (w.current_load / w.max_capacity,
                                         w.avg_response_time))
 
-            best_worker.current_load += 1
+            best_worker.current_load+=1
             return best_worker
 
     async def _wait_for_result(self, task_id: str, timeout: float) -> Dict[str, Any]:
@@ -476,7 +476,7 @@ class DistributedProcessor:
             if result_data:
                 try:
                     result = json.loads(result_data[1])
-                    if result.get('task_id') == task_id:
+                    if result.get('task_id')==task_id:
                         return result
                     else:
                         # 不是我们要的结果，放回队列
@@ -493,7 +493,7 @@ class DistributedProcessor:
 
     def _update_network_latency(self, latency: float):
         """更新网络延迟"""
-        if self.stats['avg_network_latency'] == 0:
+        if self.stats['avg_network_latency']==0:
             self.stats['avg_network_latency'] = latency
         else:
             self.stats['avg_network_latency'] = (
@@ -504,10 +504,10 @@ class DistributedProcessor:
         """获取分布式处理器统计信息"""
         with self.lock:
             return {
-                ***self.stats,
+               ***self.stats,
                 'worker_nodes': len(self.worker_nodes),
                 'active_workers': len([w for w in self.worker_nodes.values()
-                                    if w.status == "active"])
+                                    if w.status=="active"])
             }
 
 class TaskRouter:
@@ -539,15 +539,15 @@ class TaskRouter:
 
         # 基于系统负载调整路由策略
         if cpu_percent > self.load_thresholds['cpu_threshold']:
-            if task.task_type == TaskType.CPU_INTENSIVE:
+            if task.task_type==TaskType.CPU_INTENSIVE:
                 return ProcessingMode.ASYNC_DISTRIBUTED
 
         if memory_percent > self.load_thresholds['memory_threshold']:
-            if task.task_type == TaskType.MEMORY_INTENSIVE:
+            if task.task_type==TaskType.MEMORY_INTENSIVE:
                 return ProcessingMode.ASYNC_DISTRIBUTED
 
         # 基于优先级调整
-        if task.priority == Priority.URGENT:
+        if task.priority==Priority.URGENT:
             return ProcessingMode.SYNC_LOCAL
 
         # 返回默认路由
@@ -631,9 +631,9 @@ class PerformanceMonitor:
             'timestamp': datetime.now().isoformat(),
             'cpu_percent': cpu_percent,
             'memory_percent': memory.percent,
-            'memory_available_gb': memory.available / (1024 ***3),
+            'memory_available_gb': memory.available / (1024***3),
             'disk_percent': disk.percent,
-            'disk_free_gb': disk.free / (1024 ***3)
+            'disk_free_gb': disk.free / (1024***3)
         }
 
     def get_current_metrics(self) -> Dict[str, Any]:
@@ -719,7 +719,7 @@ class HybridArchitecture:
 
         with self.lock:
             self.active_tasks[task_id] = task
-            self.stats['total_tasks'] += 1
+            self.stats['total_tasks']+=1
 
         # 异步处理任务
         asyncio.create_task(self._process_task(task))
@@ -730,36 +730,36 @@ class HybridArchitecture:
     async def _process_task(self, task: HybridTask):
         """处理任务"""
         try:
-            if task.processing_mode == ProcessingMode.SYNC_LOCAL:
+            if task.processing_mode==ProcessingMode.SYNC_LOCAL:
                 result = self.local_processor.process_task_sync(task)
                 with self.lock:
-                    self.stats['local_tasks'] += 1
+                    self.stats['local_tasks']+=1
 
-            elif task.processing_mode == ProcessingMode.ASYNC_LOCAL:
+            elif task.processing_mode==ProcessingMode.ASYNC_LOCAL:
                 result = await self.local_processor.process_task_async(task)
                 with self.lock:
-                    self.stats['local_tasks'] += 1
+                    self.stats['local_tasks']+=1
 
             elif task.processing_mode in [ProcessingMode.SYNC_DISTRIBUTED,
                                         ProcessingMode.ASYNC_DISTRIBUTED]:
                 result = await self.distributed_processor.process_task_distributed(task)
                 with self.lock:
-                    self.stats['distributed_tasks'] += 1
+                    self.stats['distributed_tasks']+=1
 
-            elif task.processing_mode == ProcessingMode.HYBRID:
+            elif task.processing_mode==ProcessingMode.HYBRID:
                 # 混合模式：根据系统负载动态选择
                 cpu_percent = psutil.cpu_percent()
                 if cpu_percent > 80:
                     result = await self.distributed_processor.process_task_distributed(task)
                     with self.lock:
-                        self.stats['distributed_tasks'] += 1
+                        self.stats['distributed_tasks']+=1
                 else:
                     result = await self.local_processor.process_task_async(task)
                     with self.lock:
-                        self.stats['local_tasks'] += 1
+                        self.stats['local_tasks']+=1
 
                 with self.lock:
-                    self.stats['hybrid_tasks'] += 1
+                    self.stats['hybrid_tasks']+=1
 
             # 更新平均任务时间
             if task.execution_time:
@@ -781,7 +781,7 @@ class HybridArchitecture:
 
     def _update_avg_task_time(self, execution_time: float):
         """更新平均任务时间"""
-        if self.stats['avg_task_time'] == 0:
+        if self.stats['avg_task_time']==0:
             self.stats['avg_task_time'] = execution_time
         else:
             self.stats['avg_task_time'] = (

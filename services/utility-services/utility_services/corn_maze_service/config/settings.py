@@ -151,11 +151,11 @@ class Settings(BaseSettings):
 
     def is_production(self) -> bool:
         """是否为生产环境"""
-        return self.environment == "production"
+        return self.environment=="production"
 
     def is_development(self) -> bool:
         """是否为开发环境"""
-        return self.environment == "development"
+        return self.environment=="development"
 
     def get_log_config(self) -> dict[str, Any]:
         """获取日志配置"""

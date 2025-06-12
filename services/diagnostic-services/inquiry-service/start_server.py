@@ -21,6 +21,6 @@ sys.path.insert(0, current_dir)
 
 # 导入并启动服务
 
-if __name__ == "__main__":
+if __name__=="__main__":
     print("正在启动问诊服务...")
     serve()

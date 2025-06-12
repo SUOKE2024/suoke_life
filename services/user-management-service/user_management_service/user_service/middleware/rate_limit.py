@@ -144,7 +144,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
             requests.popleft()
 
         # 检查是否超过限制
-        return len(requests) >= max_requests
+        return len(requests)>=max_requests
 
     def _record_request(self, client_id: str) -> None:
         """记录请求"""

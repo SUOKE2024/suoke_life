@@ -101,14 +101,14 @@ build: ## 构建 Python 包
 	uv build
 
 docker-build: ## 构建 Docker 镜像
-	docker build -t suokelife/blockchain-service:latest -f deploy/docker/Dockerfile .
+	docker build -t suoke/blockchain-service:latest -f deploy/docker/Dockerfile .
 
 docker-run: ## 运行 Docker 容器
 	docker run -d --name blockchain-service \
 		-p 50055:50055 -p 8080:8080 -p 9090:9090 \
 		-v $(PWD)/config:/app/config \
 		--env-file .env \
-		suokelife/blockchain-service:latest
+		suoke/blockchain-service:latest
 
 docker-stop: ## 停止 Docker 容器
 	docker stop blockchain-service || true

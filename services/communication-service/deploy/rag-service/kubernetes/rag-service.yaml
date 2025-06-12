@@ -281,10 +281,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - rag-api.suokelife.com
+        - rag-api.suoke.life
       secretName: rag-tls-secret
   rules:
-    - host: rag-api.suokelife.com
+    - host: rag-api.suoke.life
       http:
         paths:
           - path: /

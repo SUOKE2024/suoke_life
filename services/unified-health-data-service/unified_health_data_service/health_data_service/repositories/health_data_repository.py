@@ -395,7 +395,7 @@ filtered_results = []
 for result in results:
     recorded_at = result.get('recorded_at')
 if recorded_at and isinstance(recorded_at, datetime):
-    if start_date <= recorded_at <= end_date:
+    if start_date<=recorded_at<=end_date:
     filtered_results.append(result)
 
 return filtered_results

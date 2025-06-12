@@ -388,5 +388,5 @@ async def main():
     except Exception as e:
         logger.error(f"安全加固失败: {str(e)}")
 
-if __name__ == "__main__":
+if __name__=="__main__":
     asyncio.run(main())

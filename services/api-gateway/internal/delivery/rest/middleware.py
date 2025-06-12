@@ -49,10 +49,10 @@ raise ValueError("Authorization头为空")
 
     parts = auth_header.split()
 
-    if parts[0].lower() ! = "bearer":
+    if parts[0].lower() !="bearer":
 raise ValueError("认证类型必须为Bearer")
 
-    if len(parts) ! = 2:
+    if len(parts) !=2:
 raise ValueError("无效的Authorization头格式")
 
     return parts[1]
@@ -216,7 +216,7 @@ if now - self.last_reset > self.config.reset_interval:
 # 检查请求计数
 current_count = self.request_counts.get(client_ip, 0)
 
-if current_count > = self.config.max_requests:
+if current_count >=self.config.max_requests:
             logger.warning(f"请求被限流 - IP: {client_ip}")
             return JSONResponse(
                 status_code = 429,

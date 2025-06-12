@@ -114,10 +114,10 @@ class APISchema:
         description: str = "",
         required: bool = False,
         example: Any = None,
-        **kwargs,
+       **kwargs,
     ):
         """添加属性"""
-        prop = {"type": prop_type, "description": description, **kwargs}
+        prop = {"type": prop_type, "description": description,**kwargs}
 
         if example is not None:
             prop["example"] = example
@@ -247,10 +247,10 @@ class OpenAPIGenerator:
         logger.info(f"添加数据模型: {schema.name}")
 
     def add_security_scheme(
-        self, name: str, scheme_type: str, description: str = "", **kwargs
+        self, name: str, scheme_type: str, description: str = "",**kwargs
     ):
         """添加安全方案"""
-        scheme = {"type": scheme_type, "description": description, **kwargs}
+        scheme = {"type": scheme_type, "description": description,**kwargs}
 
         self.security_schemes[name] = scheme
         logger.info(f"添加安全方案: {name}")
@@ -347,9 +347,9 @@ class OpenAPIGenerator:
 
     def save_to_file(self, file_path: str, format: str = "json"):
         """保存到文件"""
-        if format.lower() == "json":
+        if format.lower()=="json":
             content = self.generate_json()
-        elif format.lower() == "yaml":
+        elif format.lower()=="yaml":
             content = self.generate_yaml()
         else:
             raise ValueError("格式必须是 'json' 或 'yaml'")
@@ -391,12 +391,12 @@ class OpenAPIGenerator:
 
             # 确定参数类型
             param_type = "string"
-            if param.annotation != inspect.Parameter.empty:
-                if param.annotation == int:
+            if param.annotation!=inspect.Parameter.empty:
+                if param.annotation==int:
                     param_type = "integer"
-                elif param.annotation == float:
+                elif param.annotation==float:
                     param_type = "number"
-                elif param.annotation == bool:
+                elif param.annotation==bool:
                     param_type = "boolean"
 
             # 确定参数位置
@@ -407,7 +407,7 @@ class OpenAPIGenerator:
             api_param = APIParameter(
                 name = param_name,
                 location = location,
-                required = param.default == inspect.Parameter.empty,
+                required = param.default==inspect.Parameter.empty,
                 schema = {"type": param_type},
             )
 

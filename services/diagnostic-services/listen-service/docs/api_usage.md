@@ -616,6 +616,6 @@ except grpc.RpcError as e:
 
 如果遇到问题或需要额外支持，请联系：
 
-- 技术支持邮箱：tech-support@suokelife.com
-- 服务负责人：listen-service-team@suokelife.com
+- 技术支持邮箱：tech-support@suoke.life
+- 服务负责人：listen-service-team@suoke.life
 - 问题报告：在JIRA中创建问题，项目键为"LISTEN" 

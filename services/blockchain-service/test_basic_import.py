@@ -21,5 +21,5 @@ def test_basic_imports():
         print(f"❌ 导入测试失败: {e}")
         return False
 
-if __name__ == "__main__":
+if __name__=="__main__":
     test_basic_imports()

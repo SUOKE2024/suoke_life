@@ -76,7 +76,7 @@ class AsyncBatcher:
         async with self._lock:
             self.pending_items.append((item, future))
 
-            if len(self.pending_items) >= self.batch_size:
+            if len(self.pending_items)>=self.batch_size:
                 # 立即处理满批次
                 await self._process_batch()
 
@@ -95,7 +95,7 @@ class AsyncBatcher:
 
             except Exception as e:
                 logger.error(f"批处理循环错误: {e}")
-                self.stats["processing_errors"] += 1
+                self.stats["processing_errors"]+=1
 
     async def _process_batch(self) -> None:
         """处理批次"""
@@ -120,8 +120,8 @@ class AsyncBatcher:
                     future.set_result(result)
 
             # 更新统计
-            self.stats["total_batches"] += 1
-            self.stats["total_items"] += len(batch_items)
+            self.stats["total_batches"]+=1
+            self.stats["total_items"]+=len(batch_items)
             self.stats["average_batch_size"] = (
                 self.stats["total_items"] / self.stats["total_batches"]
             )
@@ -132,13 +132,13 @@ class AsyncBatcher:
                 if not future.done():
                     future.set_exception(e)
 
-            self.stats["processing_errors"] += 1
+            self.stats["processing_errors"]+=1
             logger.error(f"批处理失败: {e}")
 
     def get_stats(self) -> dict[str, Any]:
         """获取统计信息"""
         return {
-            ***self.stats,
+           ***self.stats,
             "pending_items": len(self.pending_items),
             "is_running": self._process_task is not None,
         }
@@ -179,7 +179,7 @@ class ConnectionPoolManager:
             # Redis 连接池
             if "redis" in config:
                 redis_config = config["redis"]
-                pool_config = ConnectionPoolConfig( ***redis_config.get("pool", {}))
+                pool_config = ConnectionPoolConfig(***redis_config.get("pool", {}))
                 self._pools_config["redis"] = pool_config
 
                 self.redis_pool = await aioredis.create_redis_pool(
@@ -193,7 +193,7 @@ class ConnectionPoolManager:
             # PostgreSQL 连接池
             if "postgres" in config:
                 pg_config = config["postgres"]
-                pool_config = ConnectionPoolConfig( ***pg_config.get("pool", {}))
+                pool_config = ConnectionPoolConfig(***pg_config.get("pool", {}))
                 self._pools_config["postgres"] = pool_config
 
                 self.pg_pool = await asyncpg.create_pool(
@@ -209,7 +209,7 @@ class ConnectionPoolManager:
             # MySQL 连接池
             if "mysql" in config:
                 mysql_config = config["mysql"]
-                pool_config = ConnectionPoolConfig( ***mysql_config.get("pool", {}))
+                pool_config = ConnectionPoolConfig(***mysql_config.get("pool", {}))
                 self._pools_config["mysql"] = pool_config
 
                 self.mysql_pool = await create_mysql_pool(
@@ -249,14 +249,14 @@ class ConnectionPoolManager:
             raise RuntimeError("Redis连接池未初始化")
 
         try:
-            self.stats["redis"]["acquired"] += 1
+            self.stats["redis"]["acquired"]+=1
             async with self.redis_pool.get() as conn:
                 yield conn
         except Exception:
-            self.stats["redis"]["errors"] += 1
+            self.stats["redis"]["errors"]+=1
             raise
         finally:
-            self.stats["redis"]["released"] += 1
+            self.stats["redis"]["released"]+=1
 
     @asynccontextmanager
     async def get_postgres(self) -> None:
@@ -265,14 +265,14 @@ class ConnectionPoolManager:
             raise RuntimeError("PostgreSQL连接池未初始化")
 
         try:
-            self.stats["postgres"]["acquired"] += 1
+            self.stats["postgres"]["acquired"]+=1
             async with self.pg_pool.acquire() as conn:
                 yield conn
         except Exception:
-            self.stats["postgres"]["errors"] += 1
+            self.stats["postgres"]["errors"]+=1
             raise
         finally:
-            self.stats["postgres"]["released"] += 1
+            self.stats["postgres"]["released"]+=1
 
     @asynccontextmanager
     async def get_mysql(self) -> None:
@@ -281,22 +281,22 @@ class ConnectionPoolManager:
             raise RuntimeError("MySQL连接池未初始化")
 
         try:
-            self.stats["mysql"]["acquired"] += 1
+            self.stats["mysql"]["acquired"]+=1
             async with self.mysql_pool.acquire() as conn:
                 async with conn.cursor() as cursor:
                     yield cursor
         except Exception:
-            self.stats["mysql"]["errors"] += 1
+            self.stats["mysql"]["errors"]+=1
             raise
         finally:
-            self.stats["mysql"]["released"] += 1
+            self.stats["mysql"]["released"]+=1
 
     def get_mongodb(self) -> motor.motor_asyncio.AsyncIOMotorDatabase:
         """获取 MongoDB 数据库实例"""
         if not self.mongo_client:
             raise RuntimeError("MongoDB客户端未初始化")
 
-        self.stats["mongodb"]["acquired"] += 1
+        self.stats["mongodb"]["acquired"]+=1
         return self.mongo_client.get_database()
 
     async def close_all(self) -> None:

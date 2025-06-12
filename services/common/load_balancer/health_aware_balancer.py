@@ -24,7 +24,7 @@ class HealthAwareLoadBalancer(LoadBalancer):
         
         # 简单轮询选择
         endpoint = healthy_endpoints[self._current_index % len(healthy_endpoints)]
-        self._current_index += 1
+        self._current_index+=1
         return endpoint
     
     def check_health(self, endpoint) -> bool:
@@ -60,5 +60,5 @@ def main() -> None:
     """主函数"""
     pass
 
-if __name__ == "__main__":
+if __name__=="__main__":
     main()

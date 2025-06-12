@@ -26,7 +26,7 @@ class BaseService(Generic[ModelType]):
 
     async def create(self, obj_in: dict) -> ModelType:
         """创建对象"""
-        db_obj = self.model( * *obj_in)
+        db_obj = self.model(**obj_in)
         self.db.add(db_obj)
         self.db.commit()
         self.db.refresh(db_obj)
@@ -34,7 +34,7 @@ class BaseService(Generic[ModelType]):
 
     async def get(self, id: int) -> ModelType | None:
         """根据ID获取对象"""
-        return self.db.query(self.model).filter(self.model.id == id).first()
+        return self.db.query(self.model).filter(self.model.id==id).first()
 
     async def get_multi(self, skip: int = 0, limit: int = 100) -> list[ModelType]:
         """获取多个对象"""
@@ -51,7 +51,7 @@ class BaseService(Generic[ModelType]):
 
     async def delete(self, id: int) -> ModelType | None:
         """删除对象"""
-        obj = self.db.query(self.model).filter(self.model.id == id).first()
+        obj = self.db.query(self.model).filter(self.model.id==id).first()
         if obj:
             self.db.delete(obj)
             self.db.commit()

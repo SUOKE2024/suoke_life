@@ -161,7 +161,7 @@ class User(BaseModel):
     def is_active_user(self) -> bool:
         """检查用户是否为活跃状态"""
         return (
-            self.status == UserStatus.ACTIVE
+            self.status==UserStatus.ACTIVE
             and not self.is_locked()
         )
 

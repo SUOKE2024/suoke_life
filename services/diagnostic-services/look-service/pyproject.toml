@@ -9,7 +9,7 @@ description = "Look service for TCM visual diagnosis"
 readme = "README.md"
 license = { text = "MIT" }
 authors = [
-    { name = "Suoke Life Team", email = "dev@suokelife.com" }
+    { name = "Suoke Life Team", email = "dev@suoke.life" }
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -89,9 +89,9 @@ cloud = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/suokelife/look-service"
-Repository = "https://github.com/suokelife/look-service.git"
-Issues = "https://github.com/suokelife/look-service/issues"
+Homepage = "https://github.com/SUOKE2024/look-service"
+Repository = "https://github.com/SUOKE2024/look-service.git"
+Issues = "https://github.com/SUOKE2024/look-service/issues"
 
 [project.scripts]
 look-service = "look_service.cmd.server:main"

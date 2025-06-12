@@ -98,8 +98,8 @@ def main():
     total_errors = 0
     for service, errors in syntax_results.items():
         if isinstance(errors, int):
-            total_errors += errors
-            status = "✅" if errors == 0 else "🔄" if errors < 1000 else "⚠️"
+            total_errors+=errors
+            status = "✅" if errors==0 else "🔄" if errors < 1000 else "⚠️"
             print(f"  {service}: {status} {errors} 个错误")
         else:
             print(f"  {service}: ❌ {errors}")
@@ -112,12 +112,12 @@ def main():
     print(f"  导入成功率: {import_success_rate:.1f}%")
     print(f"  总语法错误: {total_errors}")
     
-    if import_success_rate >= 75 and total_errors < 15000:
+    if import_success_rate>=75 and total_errors < 15000:
         print(f"\n🎉 优化效果良好！系统基本可用。")
-    elif import_success_rate >= 50:
+    elif import_success_rate>=50:
         print(f"\n👍 优化有显著进展，继续努力！")
     else:
         print(f"\n⚠️ 需要进一步优化。")
 
-if __name__ == "__main__":
+if __name__=="__main__":
     main() 

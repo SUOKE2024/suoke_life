@@ -25,7 +25,7 @@
 
 1. **克隆项目**
 ```bash
-git clone https://github.com/suokelife/suoke_life.git
+git clone https://github.com/SUOKE2024/suoke_life.git
 cd suoke_life/services/agent-services/xiaoke-service
 ```
 

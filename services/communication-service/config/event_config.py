@@ -49,7 +49,7 @@ class EventBusConfig:
     max_event_size: int = field(default_factory=lambda: int(os.getenv('MAX_EVENT_SIZE', '1048576')))  # 1MB
     batch_size: int = field(default_factory=lambda: int(os.getenv('EVENT_BATCH_SIZE', '100')))
     flush_interval: int = field(default_factory=lambda: int(os.getenv('EVENT_FLUSH_INTERVAL', '5')))  # 秒
-    enable_metrics: bool = field(default_factory=lambda: os.getenv('ENABLE_METRICS', 'true').lower() == 'true')
+    enable_metrics: bool = field(default_factory=lambda: os.getenv('ENABLE_METRICS', 'true').lower()=='true')
     metrics_port: int = field(default_factory=lambda: int(os.getenv('METRICS_PORT', '8000')))
 
 
@@ -58,7 +58,7 @@ class EventStoreConfig:
     """事件存储配置"""
     retention_days: int = field(default_factory=lambda: int(os.getenv('EVENT_RETENTION_DAYS', '90')))
     cleanup_interval_hours: int = field(default_factory=lambda: int(os.getenv('CLEANUP_INTERVAL_HOURS', '24')))
-    enable_snapshots: bool = field(default_factory=lambda: os.getenv('ENABLE_SNAPSHOTS', 'true').lower() == 'true')
+    enable_snapshots: bool = field(default_factory=lambda: os.getenv('ENABLE_SNAPSHOTS', 'true').lower()=='true')
     snapshot_interval: int = field(default_factory=lambda: int(os.getenv('SNAPSHOT_INTERVAL', '100')))  # 每100个事件
 
 
@@ -102,7 +102,7 @@ class AgentConfig:
     
     # 并发设置
     max_concurrent_sessions: int = field(default_factory=lambda: int(os.getenv('MAX_CONCURRENT_SESSIONS', '10')))
-    enable_parallel_diagnosis: bool = field(default_factory=lambda: os.getenv('ENABLE_PARALLEL_DIAGNOSIS', 'false').lower() == 'true')
+    enable_parallel_diagnosis: bool = field(default_factory=lambda: os.getenv('ENABLE_PARALLEL_DIAGNOSIS', 'false').lower()=='true')
     
     # 重试设置
     max_retries: int = field(default_factory=lambda: int(os.getenv('AGENT_MAX_RETRIES', '3')))
@@ -134,15 +134,15 @@ class HealthDataConfig:
     # 数据同步设置
     sync_interval: int = field(default_factory=lambda: int(os.getenv('DATA_SYNC_INTERVAL', '60')))  # 秒
     batch_sync_size: int = field(default_factory=lambda: int(os.getenv('BATCH_SYNC_SIZE', '100')))
-    enable_real_time_sync: bool = field(default_factory=lambda: os.getenv('ENABLE_REAL_TIME_SYNC', 'true').lower() == 'true')
+    enable_real_time_sync: bool = field(default_factory=lambda: os.getenv('ENABLE_REAL_TIME_SYNC', 'true').lower()=='true')
 
 
 @dataclass
 class SecurityConfig:
     """安全配置"""
-    enable_encryption: bool = field(default_factory=lambda: os.getenv('ENABLE_ENCRYPTION', 'true').lower() == 'true')
+    enable_encryption: bool = field(default_factory=lambda: os.getenv('ENABLE_ENCRYPTION', 'true').lower()=='true')
     encryption_key: str = field(default_factory=lambda: os.getenv('ENCRYPTION_KEY', ''))
-    enable_audit_log: bool = field(default_factory=lambda: os.getenv('ENABLE_AUDIT_LOG', 'true').lower() == 'true')
+    enable_audit_log: bool = field(default_factory=lambda: os.getenv('ENABLE_AUDIT_LOG', 'true').lower()=='true')
     max_event_age_hours: int = field(default_factory=lambda: int(os.getenv('MAX_EVENT_AGE_HOURS', '24')))
     
     # 访问控制
@@ -153,10 +153,10 @@ class SecurityConfig:
 @dataclass
 class MonitoringConfig:
     """监控配置"""
-    enable_health_checks: bool = field(default_factory=lambda: os.getenv('ENABLE_HEALTH_CHECKS', 'true').lower() == 'true')
+    enable_health_checks: bool = field(default_factory=lambda: os.getenv('ENABLE_HEALTH_CHECKS', 'true').lower()=='true')
     health_check_interval: int = field(default_factory=lambda: int(os.getenv('HEALTH_CHECK_INTERVAL', '30')))  # 秒
     
-    enable_performance_monitoring: bool = field(default_factory=lambda: os.getenv('ENABLE_PERFORMANCE_MONITORING', 'true').lower() == 'true')
+    enable_performance_monitoring: bool = field(default_factory=lambda: os.getenv('ENABLE_PERFORMANCE_MONITORING', 'true').lower()=='true')
     performance_sample_rate: float = field(default_factory=lambda: float(os.getenv('PERFORMANCE_SAMPLE_RATE', '0.1')))
     
     # 告警阈值
@@ -184,7 +184,7 @@ class SuokeEventConfig:
     
     # 环境设置
     environment: str = field(default_factory=lambda: os.getenv('ENVIRONMENT', 'development'))
-    debug: bool = field(default_factory=lambda: os.getenv('DEBUG', 'false').lower() == 'true')
+    debug: bool = field(default_factory=lambda: os.getenv('DEBUG', 'false').lower()=='true')
     log_level: str = field(default_factory=lambda: os.getenv('LOG_LEVEL', 'INFO'))
 
 
@@ -237,11 +237,11 @@ def validate_config(config: SuokeEventConfig) -> List[str]:
         errors.append("数据库URL不能为空")
     
     # 验证事件总线配置
-    if config.event_bus.max_event_size <= 0:
+    if config.event_bus.max_event_size<=0:
         errors.append("最大事件大小必须大于0")
     
     # 验证智能体配置
-    if config.agents.max_concurrent_sessions <= 0:
+    if config.agents.max_concurrent_sessions<=0:
         errors.append("最大并发会话数必须大于0")
     
     # 验证安全配置
@@ -291,7 +291,7 @@ class ConfigPresets:
 
 
 # 使用示例
-if __name__ == "__main__":
+if __name__=="__main__":
     # 获取默认配置
     config = get_config()
     print(f"环境: {config.environment}")

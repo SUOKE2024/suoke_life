@@ -8,10 +8,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - suokelife.com
+    - suoke.life
     secretName: suokelife-tls
   rules:
-  - host: suokelife.com
+  - host: suoke.life
     http:
       paths:
       - path: /

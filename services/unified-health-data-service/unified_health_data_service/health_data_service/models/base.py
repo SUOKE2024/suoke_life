@@ -66,7 +66,7 @@ page_size: int,
 message: str = "查询成功",
     ) -> "PaginatedResponse":
     """创建分页响应"""
-total_pages = (total + page_size - 1) // page_size
+total_pages = (total + page_size - 1)//page_size
 return cls(
 data = data,
 total = total,

@@ -94,10 +94,10 @@ class ModelMonitor:
             deployment_info.updated_at = time.time()
 
             # 更新状态
-            if status.ready_replicas == spec.replicas and spec.replicas > 0:
+            if status.ready_replicas==spec.replicas and spec.replicas > 0:
                 deployment_info.status = DeploymentStatus.RUNNING
-            elif status.ready_replicas == 0:
-                if status.replicas == 0:
+            elif status.ready_replicas==0:
+                if status.replicas==0:
                     deployment_info.status = DeploymentStatus.TERMINATING
                 else:
                     deployment_info.status = DeploymentStatus.PENDING
@@ -166,10 +166,10 @@ class ModelMonitor:
             endpoint_url = f"http://{metadata.name}.{self.k8s_client.namespace}.svc.cluster.local:8080"
 
             # 确定状态
-            if status.ready_replicas == spec.replicas and spec.replicas > 0:
+            if status.ready_replicas==spec.replicas and spec.replicas > 0:
                 deployment_status = DeploymentStatus.RUNNING
-            elif status.ready_replicas == 0:
-                if status.replicas == 0:
+            elif status.ready_replicas==0:
+                if status.replicas==0:
                     deployment_status = DeploymentStatus.TERMINATING
                 else:
                     deployment_status = DeploymentStatus.PENDING

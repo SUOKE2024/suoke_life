@@ -1,6 +1,6 @@
 # 索克生活触诊服务 (Palpation Service)
 
-[![CI/CD Pipeline](https://github.com/suokelife/suoke_life/actions/workflows/ci.yml/badge.svg)](https://github.com/suokelife/suoke_life/actions/workflows/ci.yml)
+[![CI/CD Pipeline](https://github.com/SUOKE2024/suoke_life/actions/workflows/ci.yml/badge.svg)](https://github.com/SUOKE2024/suoke_life/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/suokelife/suoke_life/branch/main/graph/badge.svg)](https://codecov.io/gh/suokelife/suoke_life)
 [![Python 3.13.3](https://img.shields.io/badge/python-3.13.3-blue.svg)](https://www.python.org/downloads/release/python-3133/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -49,7 +49,7 @@ graph TB
 
 1. **克隆项目**
    ```bash
-   git clone https://github.com/suokelife/suoke_life.git
+   git clone https://github.com/SUOKE2024/suoke_life.git
    cd suoke_life/services/diagnostic-services/palpation-service
    ```
 
@@ -316,9 +316,9 @@ uv run pre-commit install
 
 ## 📞 联系我们
 
-- 项目主页: [https://github.com/suokelife/suoke_life](https://github.com/suokelife/suoke_life)
-- 文档: [https://docs.suokelife.com](https://docs.suokelife.com)
-- 邮箱: dev@suokelife.com
+- 项目主页: [https://github.com/SUOKE2024/suoke_life](https://github.com/SUOKE2024/suoke_life)
+- 文档: [https://docs.suoke.life](https://docs.suoke.life)
+- 邮箱: dev@suoke.life
 
 ---
 

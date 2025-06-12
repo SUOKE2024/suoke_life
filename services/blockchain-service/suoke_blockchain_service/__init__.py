@@ -8,6 +8,6 @@ from typing import Any, Dict, List, Optional, Union
 
 __version__ = "0.1.0"
 __author__ = "SuoKe Life Team"
-__email__ = "dev@suokelife.com"
+__email__ = "dev@suoke.life"
 
 __all__ = ["__version__"]

@@ -287,8 +287,8 @@ if name not in self._aggregations:
             }
 
 agg = self._aggregations[name]
-agg['count'] += 1
-agg['sum'] += value
+agg['count']+=1
+agg['sum']+=value
 agg['min'] = min(agg['min'], value)
 agg['max'] = max(agg['max'], value)
 agg['avg'] = agg['sum'] / agg['count']

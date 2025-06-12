@@ -242,7 +242,7 @@ class CrossDeviceHealthManager(BaseAIService):
         if intent.analysis_level in ['detailed', 'comprehensive']:
             participating_agents.extend(['xiaoke', 'soer'])
         
-        if intent.analysis_level == 'comprehensive':
+        if intent.analysis_level=='comprehensive':
             participating_agents.append('laoke')
         
         # 并行启动智能体分析
@@ -486,7 +486,7 @@ class CrossDeviceHealthManager(BaseAIService):
         # 生成合并后的建议
         merged_recommendations = []
         for rec_type, recs in grouped_recs.items():
-            if len(recs) == 1:
+            if len(recs)==1:
                 merged_recommendations.append(recs[0])
             else:
                 # 多个智能体有相同类型建议，进行合并
@@ -521,7 +521,7 @@ class CrossDeviceHealthManager(BaseAIService):
         if 'consensus' in analysis:
             recommendations = analysis['consensus'].get('consensus_recommendations', [])
             if recommendations:
-                high_priority_recs = [r for r in recommendations if r.get('priority') == 'high']
+                high_priority_recs = [r for r in recommendations if r.get('priority')=='high']
                 if high_priority_recs:
                     response_parts.append(f"重要建议：{high_priority_recs[0]['content']}")
         
@@ -534,7 +534,7 @@ class CrossDeviceHealthManager(BaseAIService):
     async def _trigger_relevant_events(self, user_id: str, intent: HealthIntent, analysis: Dict[str, Any]):
         """触发相关事件"""
         # 根据分析结果触发相应事件
-        if intent.urgency == 'emergency':
+        if intent.urgency=='emergency':
             await self.event_bus.publish(
                 'health.emergency.cross_device_analysis_completed',
                 {
@@ -629,7 +629,7 @@ class CrossDeviceHealthManager(BaseAIService):
 class BaseDeviceConnector:
     """设备连接器基类"""
     
-    async def fetch_health_data(self, **kwargs) -> List[Dict[str, Any]]:
+    async def fetch_health_data(self,**kwargs) -> List[Dict[str, Any]]:
         """获取健康数据"""
         raise NotImplementedError
 
@@ -637,7 +637,7 @@ class BaseDeviceConnector:
 class AppleHealthConnector(BaseDeviceConnector):
     """Apple Health 连接器"""
     
-    async def fetch_health_data(self, **kwargs) -> List[Dict[str, Any]]:
+    async def fetch_health_data(self,**kwargs) -> List[Dict[str, Any]]:
         # 模拟Apple Health数据获取
         return [
             {
@@ -660,7 +660,7 @@ class AppleHealthConnector(BaseDeviceConnector):
 class GoogleFitConnector(BaseDeviceConnector):
     """Google Fit 连接器"""
     
-    async def fetch_health_data(self, **kwargs) -> List[Dict[str, Any]]:
+    async def fetch_health_data(self,**kwargs) -> List[Dict[str, Any]]:
         # 模拟Google Fit数据获取
         return [
             {
@@ -676,7 +676,7 @@ class GoogleFitConnector(BaseDeviceConnector):
 class FitbitConnector(BaseDeviceConnector):
     """Fitbit 连接器"""
     
-    async def fetch_health_data(self, **kwargs) -> List[Dict[str, Any]]:
+    async def fetch_health_data(self,**kwargs) -> List[Dict[str, Any]]:
         # 模拟Fitbit数据获取
         return [
             {
@@ -692,47 +692,47 @@ class FitbitConnector(BaseDeviceConnector):
 class GarminConnector(BaseDeviceConnector):
     """Garmin 连接器"""
     
-    async def fetch_health_data(self, **kwargs) -> List[Dict[str, Any]]:
+    async def fetch_health_data(self,**kwargs) -> List[Dict[str, Any]]:
         return []
 
 
 class XiaomiHealthConnector(BaseDeviceConnector):
     """小米健康连接器"""
     
-    async def fetch_health_data(self, **kwargs) -> List[Dict[str, Any]]:
+    async def fetch_health_data(self,**kwargs) -> List[Dict[str, Any]]:
         return []
 
 
 class HuaweiHealthConnector(BaseDeviceConnector):
     """华为健康连接器"""
     
-    async def fetch_health_data(self, **kwargs) -> List[Dict[str, Any]]:
+    async def fetch_health_data(self,**kwargs) -> List[Dict[str, Any]]:
         return []
 
 
 class SamsungHealthConnector(BaseDeviceConnector):
     """三星健康连接器"""
     
-    async def fetch_health_data(self, **kwargs) -> List[Dict[str, Any]]:
+    async def fetch_health_data(self,**kwargs) -> List[Dict[str, Any]]:
         return []
 
 
 class PolarConnector(BaseDeviceConnector):
     """Polar 连接器"""
     
-    async def fetch_health_data(self, **kwargs) -> List[Dict[str, Any]]:
+    async def fetch_health_data(self,**kwargs) -> List[Dict[str, Any]]:
         return []
 
 
 class WithingsConnector(BaseDeviceConnector):
     """Withings 连接器"""
     
-    async def fetch_health_data(self, **kwargs) -> List[Dict[str, Any]]:
+    async def fetch_health_data(self,**kwargs) -> List[Dict[str, Any]]:
         return []
 
 
 class OuraConnector(BaseDeviceConnector):
     """Oura 连接器"""
     
-    async def fetch_health_data(self, **kwargs) -> List[Dict[str, Any]]:
+    async def fetch_health_data(self,**kwargs) -> List[Dict[str, Any]]:
         return [] 

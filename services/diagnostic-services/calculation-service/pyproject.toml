@@ -9,7 +9,7 @@ description = "Calculation service for TCM computational diagnosis (算诊) - Th
 readme = "README.md"
 license = { text = "MIT" }
 authors = [
-    { name = "Suoke Life Team", email = "dev@suokelife.com" }
+    { name = "Suoke Life Team", email = "dev@suoke.life" }
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -111,9 +111,9 @@ cloud = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/suokelife/calculation-service"
-Repository = "https://github.com/suokelife/calculation-service.git"
-Issues = "https://github.com/suokelife/calculation-service/issues"
+Homepage = "https://github.com/SUOKE2024/calculation-service"
+Repository = "https://github.com/SUOKE2024/calculation-service.git"
+Issues = "https://github.com/SUOKE2024/calculation-service/issues"
 
 [project.scripts]
 calculation-service = "calculation_service.cmd.server:main"

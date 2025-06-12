@@ -24,13 +24,13 @@ def test_data_services():
                 sys.path.insert(0, service_path)
             
             # 尝试导入服务
-            if service == 'unified-health-data-service':
+            if service=='unified-health-data-service':
                 import unified_health_data_service
                 results[service] = "✅ 导入成功"
-            elif service == 'unified-knowledge-service':
+            elif service=='unified-knowledge-service':
                 import unified_knowledge_service
                 results[service] = "✅ 导入成功"
-            elif service == 'communication-service':
+            elif service=='communication-service':
                 import communication_service
                 results[service] = "✅ 导入成功"
                 
@@ -49,5 +49,5 @@ def test_data_services():
     
     return results
 
-if __name__ == "__main__":
+if __name__=="__main__":
     test_data_services() 

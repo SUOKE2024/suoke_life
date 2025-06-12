@@ -327,13 +327,13 @@ class SuokeMessageBusService:
             user_id, user_data
         )
 
-    async def get_user_health_data(self, user_id: str, data_type: str, **kwargs) -> dict:
+    async def get_user_health_data(self, user_id: str, data_type: str,**kwargs) -> dict:
         """获取用户健康数据"""
         if not self.data_router:
             raise RuntimeError("数据路由器未初始化")
         
         return await self.data_router.get_user_health_data(
-            user_id, data_type, **kwargs
+            user_id, data_type,**kwargs
         )
 
     async def update_user_health_data(self, user_id: str, data_type: str, data: dict) -> bool:
@@ -363,5 +363,5 @@ async def main() -> None:
         await service.stop()
 
 
-if __name__ == "__main__":
+if __name__=="__main__":
     asyncio.run(main())

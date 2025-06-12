@@ -5,5 +5,5 @@ from health_data_service.core.security import *
 """主函数 - 自动生成的最小可用版本"""
     pass
 
-if __name__ == "__main__":
+if __name__=="__main__":
     main()

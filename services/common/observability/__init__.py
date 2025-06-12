@@ -42,7 +42,7 @@ class Counter:
     
     def inc(self, amount: int = 1):
         """增加计数"""
-        self.value += amount
+        self.value+=amount
 
 
 class Histogram:
@@ -105,5 +105,5 @@ def main() -> None:
     """主函数"""
     pass
 
-if __name__ == "__main__":
+if __name__=="__main__":
     main()

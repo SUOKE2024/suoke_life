@@ -121,7 +121,7 @@ class SuokeEventBus:
             # 同时发布到通用频道（用于监控）
             await self.redis_client.publish('suoke.events.all', json.dumps(event.to_dict()))
             
-            self.published_events += 1
+            self.published_events+=1
             
             logger.info("事件发布成功", 
                        event_id=event.id,
@@ -131,7 +131,7 @@ class SuokeEventBus:
             return event.id
             
         except Exception as e:
-            self.failed_events += 1
+            self.failed_events+=1
             logger.error("事件发布失败", 
                         event_type=event_type,
                         error=str(e),
@@ -190,7 +190,7 @@ class SuokeEventBus:
                 if not self.running:
                     break
                 
-                if message['type'] == 'message':
+                if message['type']=='message':
                     await self._handle_message(event_type, message['data'])
                     
         except Exception as e:
@@ -206,7 +206,7 @@ class SuokeEventBus:
                 if not self.running:
                     break
                 
-                if message['type'] == 'pmessage':
+                if message['type']=='pmessage':
                     event_data = json.loads(message['data'])
                     event = Event.from_dict(event_data)
                     await self._safe_call_handler(handler, event)
@@ -225,10 +225,10 @@ class SuokeEventBus:
             for handler in handlers:
                 await self._safe_call_handler(handler, event)
             
-            self.processed_events += 1
+            self.processed_events+=1
             
         except Exception as e:
-            self.failed_events += 1
+            self.failed_events+=1
             logger.error("消息处理失败", 
                         event_type=event_type,
                         error=str(e),
@@ -243,7 +243,7 @@ class SuokeEventBus:
                 handler(event)
                 
         except Exception as e:
-            self.failed_events += 1
+            self.failed_events+=1
             logger.error("事件处理器执行失败", 
                         event_id=event.id,
                         event_type=event.type,

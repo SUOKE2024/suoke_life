@@ -209,12 +209,12 @@ extra ="ignore",
     @property
     def is_production(self) -> bool:
         """是否为生产环境"""
-        return self.environment == "production"
+        return self.environment=="production"
 
     @property
     def is_development(self) -> bool:
         """是否为开发环境"""
-        return self.environment == "development"
+        return self.environment=="development"
 
 # 全局配置实例
 settings = Settings()
@@ -223,5 +223,5 @@ def main() -> None:
     """主函数 - 自动生成的最小可用版本"""
     pass
 
-if __name__ == "__main__":
+if __name__=="__main__":
     main()

@@ -164,7 +164,7 @@ async def get_user_by_id(
 ):
     """根据ID获取用户信息"""
     # 权限检查：只能查看自己的信息或管理员可以查看所有
-    if current_user["id"] != user_id and not current_user.get("is_superuser", False):
+    if current_user["id"]!=user_id and not current_user.get("is_superuser", False):
         raise HTTPException(
             status_code = status.HTTP_403_FORBIDDEN,
             detail = "无权限访问此用户信息"
@@ -219,7 +219,7 @@ async def update_current_user(
             update_data["metadata"] = user_data.metadata
 
         # 更新用户
-        user = await user_service.update_user(current_user["id"], **update_data)
+        user = await user_service.update_user(current_user["id"],**update_data)
 
         return UserResponse(
             user_id = str(user.user_id),
@@ -270,7 +270,7 @@ async def update_user_by_id(
             update_data["metadata"] = user_data.metadata
 
         # 更新用户
-        user = await user_service.update_user(user_id, **update_data)
+        user = await user_service.update_user(user_id,**update_data)
 
         return UserResponse(
             user_id = str(user.user_id),
@@ -395,7 +395,7 @@ async def bind_device(
 
         # 获取绑定的设备信息
         devices = await user_service.get_user_devices(current_user["id"])
-        device = next((d for d in devices if d.binding_id == binding_id), None)
+        device = next((d for d in devices if d.binding_id==binding_id), None)
 
         if not device:
             raise HTTPException(

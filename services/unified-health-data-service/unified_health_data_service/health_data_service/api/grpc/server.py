@@ -8,5 +8,5 @@ from health_data_service.services.health_data_service import *
 """主函数 - 自动生成的最小可用版本"""
     pass
 
-if __name__ == "__main__":
+if __name__=="__main__":
     main()

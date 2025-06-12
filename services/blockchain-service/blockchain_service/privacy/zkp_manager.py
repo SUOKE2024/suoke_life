@@ -78,11 +78,11 @@ class ZKPCircuit:
                         public_inputs: Dict[str, Any]) -> List[int]:
         """计算见证值"""
         # 根据电路类型计算见证
-        if self.circuit_type == 'range_proof':
+        if self.circuit_type=='range_proof':
             return self._compute_range_witness(private_inputs, public_inputs)
-        elif self.circuit_type == 'membership_proof':
+        elif self.circuit_type=='membership_proof':
             return self._compute_membership_witness(private_inputs, public_inputs)
-        elif self.circuit_type == 'equality_proof':
+        elif self.circuit_type=='equality_proof':
             return self._compute_equality_witness(private_inputs, public_inputs)
         else:
             raise ValueError(f"不支持的电路类型: {self.circuit_type}")
@@ -95,14 +95,14 @@ class ZKPCircuit:
         max_val = public_inputs.get('max_value', 100)
 
         # 验证值在范围内
-        if not (min_val < = value < = max_val):
+        if not (min_val <=value <=max_val):
             raise ValueError("值不在指定范围内")
 
         # 生成见证值
         witness = [
             value,
-            value - min_val,  # 证明 value > = min_val
-            max_val - value,  # 证明 value < = max_val
+            value - min_val,  # 证明 value >=min_val
+            max_val - value,  # 证明 value <=max_val
             secrets.randbelow(2 * *128)  # 随机数
         ]
 
@@ -134,7 +134,7 @@ class ZKPCircuit:
         value1 = private_inputs.get('value1')
         value2 = private_inputs.get('value2')
 
-        if value1 ! = value2:
+        if value1 !=value2:
             raise ValueError("值不相等")
 
         # 生成相等证明见证
@@ -216,11 +216,11 @@ class ZKPManager:
 
     def _prepare_proof_inputs(self, claim: HealthDataClaim) -> Tuple[Dict[str, Any], Dict[str, Any]]:
         """准备证明输入"""
-        if claim.claim_type == 'range_proof':
+        if claim.claim_type=='range_proof':
             return self._prepare_range_proof_inputs(claim)
-        elif claim.claim_type == 'membership_proof':
+        elif claim.claim_type=='membership_proof':
             return self._prepare_membership_proof_inputs(claim)
-        elif claim.claim_type == 'equality_proof':
+        elif claim.claim_type=='equality_proof':
             return self._prepare_equality_proof_inputs(claim)
         else:
             raise ValueError(f"不支持的证明类型: {claim.claim_type}")
@@ -321,7 +321,7 @@ class ZKPManager:
                 return False
 
             # 验证公开输入
-            if len(proof_data['public_signals']) ! = len(proof.public_inputs):
+            if len(proof_data['public_signals']) !=len(proof.public_inputs):
                 return False
 
             # 模拟椭圆曲线配对验证

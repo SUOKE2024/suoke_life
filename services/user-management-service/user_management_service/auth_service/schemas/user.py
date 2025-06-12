@@ -101,7 +101,7 @@ class ChangePasswordRequest(BaseModel):
     @validator('confirm_password')
     def passwords_match(cls, v, values):
         """TODO: 添加文档字符串"""
-        if 'new_password' in values and v != values['new_password']:
+        if 'new_password' in values and v!=values['new_password']:
             raise ValueError('两次输入的密码不一致')
         return v
 

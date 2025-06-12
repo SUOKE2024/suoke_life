@@ -170,7 +170,7 @@ if "error" in health_data:
             style = "red"
 else:
             status = health_data.get("status", "unknown")
-            if status == "healthy":
+            if status=="healthy":
                 content = "✅ 服务健康"
                 style = "green"
             else:
@@ -180,10 +180,10 @@ else:
             # 添加检查详情
             checks = health_data.get("checks", {})
             if checks:
-                content += "\n\n检查项目:"
+                content+="\n\n检查项目:"
                 for name, check in checks.items():
-                    status_icon = "✅" if check["status"] == "healthy" else "❌"
-                    content += f"\n{status_icon} {name}: {check['message']}"
+                    status_icon = "✅" if check["status"]=="healthy" else "❌"
+                    content+=f"\n{status_icon} {name}: {check['message']}"
 
 return Panel(
             content,
@@ -276,7 +276,7 @@ else:
                 }.get(alert["level"], "❓")
 
                 timestamp = alert["timestamp"].strftime("%H:%M:%S")
-                content += f"{level_icon} [{timestamp}] {alert['message']}\n"
+                content+=f"{level_icon} [{timestamp}] {alert['message']}\n"
 
             style = "red" if any(a["level"] in ["error", "critical"] for a in recent_alerts) else "yellow"
 
@@ -365,9 +365,9 @@ try:
                 timestamp = datetime.now().strftime("%Y - %m - %d %H:%M:%S")
                 health_status = data["health"].get("status", "error")
 
-                if health_status == "healthy":
+                if health_status=="healthy":
                     status_icon = "✅"
-                elif health_status == "error":
+                elif health_status=="error":
                     status_icon = "❌"
                 else:
                     status_icon = "⚠️"
@@ -405,14 +405,14 @@ export_data = {
             "gateway_url": self.gateway_url,
             "metrics_history": [
                 {
-                    **item,
+                   **item,
                     "timestamp": item["timestamp"].isoformat(),
                 }
                 for item in self.metrics_history
             ],
             "alerts": [
                 {
-                    **alert,
+                   **alert,
                     "timestamp": alert["timestamp"].isoformat(),
                 }
                 for alert in self.alerts
@@ -485,5 +485,5 @@ await monitor.run_simple()
     else:
 await monitor.run_dashboard()
 
-if __name__ == "__main__":
+if __name__=="__main__":
     asyncio.run(main())

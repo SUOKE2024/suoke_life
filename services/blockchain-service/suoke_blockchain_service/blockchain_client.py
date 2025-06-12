@@ -71,7 +71,7 @@ if not self.w3.is_connected():
 
 # 验证链ID
 chain_id = self.w3.eth.chain_id
-if chain_id != settings.blockchain.chain_id:
+if chain_id!=settings.blockchain.chain_id:
     logger.warning(
 "链ID不匹配",
 expected = settings.blockchain.chain_id,
@@ -150,7 +150,7 @@ abi = abi
 
 # 验证合约是否存在
 code = self.w3.eth.get_code(checksum_address)
-if code == b'':
+if code==b'':
     raise ValueError(f"地址 {checksum_address} 没有部署合约")
 
 self.contracts[name] = ContractInfo(

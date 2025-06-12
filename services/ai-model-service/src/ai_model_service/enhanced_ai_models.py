@@ -191,7 +191,7 @@ class EnhancedTCMDiagnosisModel:
             
             # 训练传统机器学习模型
             for name, model in self.models.items():
-                if name != "neural_network":
+                if name!="neural_network":
                     model.fit(X_train_scaled, y_train)
                     
                     # 计算交叉验证准确率
@@ -280,7 +280,7 @@ class EnhancedTCMDiagnosisModel:
             confidences = {}
             
             for name, model in self.models.items():
-                if name == "neural_network":
+                if name=="neural_network":
                     pred_proba = model.predict(features_scaled, verbose=0)[0]
                     predictions[name] = np.argmax(pred_proba)
                     confidences[name] = np.max(pred_proba)
@@ -349,7 +349,7 @@ class EnhancedTCMDiagnosisModel:
         
         # 用户特征
         features.append(user_profile.get('age', 35) / 100.0)
-        features.append(1.0 if user_profile.get('gender') == 'male' else 0.0)
+        features.append(1.0 if user_profile.get('gender')=='male' else 0.0)
         features.append(user_profile.get('bmi', 22) / 40.0)
         
         # 症状特征
@@ -401,13 +401,13 @@ class EnhancedTCMDiagnosisModel:
         
     def _get_confidence_level(self, confidence_score: float) -> DiagnosisConfidenceLevel:
         """获取置信度等级"""
-        if confidence_score >= 0.95:
+        if confidence_score>=0.95:
             return DiagnosisConfidenceLevel.VERY_HIGH
-        elif confidence_score >= 0.85:
+        elif confidence_score>=0.85:
             return DiagnosisConfidenceLevel.HIGH
-        elif confidence_score >= 0.70:
+        elif confidence_score>=0.70:
             return DiagnosisConfidenceLevel.MEDIUM
-        elif confidence_score >= 0.50:
+        elif confidence_score>=0.50:
             return DiagnosisConfidenceLevel.LOW
         else:
             return DiagnosisConfidenceLevel.VERY_LOW
@@ -513,7 +513,7 @@ class EnhancedTCMDiagnosisModel:
         }
         
         # 基于证型的个性化建议
-        if syndrome == TCMSyndromeType.QI_DEFICIENCY:
+        if syndrome==TCMSyndromeType.QI_DEFICIENCY:
             advice["immediate_actions"] = ["增加休息时间", "避免过度劳累"]
             advice["long_term_plan"] = ["建立规律作息", "逐步增强体质"]
             advice["dietary_suggestions"] = ["温补食物为主", "避免生冷食物"]
@@ -611,11 +611,11 @@ class OptimizedConsensusAlgorithm:
             }.get(agent_type, 0.2)
             
             weight = base_weight * confidence
-            total_weight += weight
+            total_weight+=weight
             
             if recommendation not in weighted_scores:
                 weighted_scores[recommendation] = 0
-            weighted_scores[recommendation] += weight
+            weighted_scores[recommendation]+=weight
             
         # 选择得分最高的建议
         if weighted_scores:
@@ -644,7 +644,7 @@ class OptimizedConsensusAlgorithm:
         
         # 计算支持度
         support_count = sum(1 for d in agent_decisions 
-                          if d.get("recommendation") == best_decision.get("recommendation"))
+                          if d.get("recommendation")==best_decision.get("recommendation"))
         support_ratio = support_count / len(agent_decisions)
         
         # 调整置信度
@@ -686,7 +686,7 @@ class OptimizedConsensusAlgorithm:
         total_score = sum(fused_scores.values())
         if total_score > 0:
             for rec in fused_scores:
-                fused_scores[rec] /= total_score
+                fused_scores[rec]/=total_score
                 
         # 选择最佳建议
         if fused_scores:
@@ -888,7 +888,7 @@ class PersonalizedRecommendationEngine:
             # 基于用户偏好调整
             preferences = user_profile.get("preferences", {})
             if rec.category in preferences:
-                base_score *= 1.2
+                base_score*=1.2
                 
             # 基于实施难度调整
             difficulty_factor = {

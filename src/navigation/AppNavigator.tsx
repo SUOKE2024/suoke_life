@@ -1,162 +1,248 @@
-import AsyncStorage from "@react-native-async-storage/async-storage"
-import { NavigationContainer } from "@react-navigation/native"
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import React, { useEffect, useState } from "react"
-import {  Text, View  } from "react-native"
-import {  useSelector  } from "react-redux"
-import { RootState } from "../store"
-import { AuthNavigator } from "./AuthNavigator"
-import { linkingConfig } from "./DeepLinkConfig"
-import { MainNavigator } from "./MainNavigator"
-import { RootStackParamList } from "./types"/,'/g'/;
-const ChatDetailScreen: React.FC = () => (<View style={ flex: 1, justifyContent: 'center', alignItems: 'center' ;}}>')'
-    <Text>聊天详情页面</Text>)
-  </View>)
-);
-const AgentChatScreen: React.FC = () => (<View style={ flex: 1, justifyContent: 'center', alignItems: 'center' ;}}>')'
-    <Text>智能体聊天页面</Text>)
-  </View>)
-);
-const DiagnosisServiceScreen: React.FC = () => (<View style={ flex: 1, justifyContent: 'center', alignItems: 'center' ;}}>')'
-    <Text>诊断服务页面</Text>)
-  </View>)
-);
-const AgentDemoScreen: React.FC = () => (<View style={ flex: 1, justifyContent: 'center', alignItems: 'center' ;}}>')'
-    <Text>智能体演示页面</Text>)
-  </View>)
-);
-// 应用主导航器 - 负责管理应用的整体导航流程，包括认证状态检查和路由分发
-const Stack = createNativeStackNavigator<RootStackParamList>();
-// 导航状态持久化键'/,'/g'/;
-const NAVIGATION_STATE_KEY = '@navigation_state';
-// 内部导航器组件/,/g,/;
-  const: RootNavigator: React.FC<{isAuthenticated: boolean,
-}
-  const isDemoMode = boolean}
-}> = ({  isAuthenticated, isDemoMode  }) => {return (<Stack.Navigator;  />/,)screenOptions={}        headerShown: false,','/g,'/;
-  gestureEnabled: true,
-}
-        const animation = 'slide_from_right'}
-      }
-    >;
-      {isAuthenticated || isDemoMode ? (;)        // 已认证用户或演示模式显示主应用/;}        <>/g'/;
-          <Stack.Screen;'  />/;'/g'/;
-}
-            name="Main"}
-component={MainNavigator}","
-options={";}}
-              const animationTypeForReplace = 'push'}
-            }
-          />'/;'/g'/;
-          <Stack.Screen;'  />/,'/g'/;
-name="ChatDetail
-component={ChatDetailScreen}","
-options={"presentation: 'card,'
-}
-              const animation = 'slide_from_right'}
-            }
-          />'/;'/g'/;
-          <Stack.Screen;'  />/,'/g'/;
-name="AgentChat
-component={AgentChatScreen}","
-options={"presentation: 'card,'
-}
-              const animation = 'slide_from_right'}
-            }
-          />'/;'/g'/;
-          <Stack.Screen;'  />/,'/g'/;
-name="DiagnosisService
-component={DiagnosisServiceScreen}","
-options={"presentation: 'card,'
-}
-              const animation = 'slide_from_right'}
-            }
-          />'/;'/g'/;
-          <Stack.Screen;'  />/,'/g'/;
-name="AgentDemo
-component={AgentDemoScreen}","
-options={"presentation: 'card,'
-}
-              const animation = 'slide_from_right'}
-            ;}});
-          />)
-        < />)'
-      ) : (// 未认证用户显示认证流程/;)        <>/g'/;
-          <Stack.Screen;'  />/,'/g'/;
-name="Auth
-component={AuthNavigator}","
-options={";}}
-              const animationTypeForReplace = 'pop'}
-            }
-          />'/;'/g'/;
-          <Stack.Screen;'  />/,'/g'/;
-name="AgentDemo
-component={AgentDemoScreen}","
-options={"presentation: 'card,'
-}
-              const animation = 'slide_from_right'}
-            ;}});
-          />)
-        < />)
-      )}
-    </Stack.Navigator>
-  );
-};
-const  AppNavigator: React.FC = () => {// 从Redux获取认证状态/const authState = useSelector(state: RootState) => state.auth);','/g'/;
-const  isAuthenticated ='
-    'isAuthenticated' in authState ? authState.isAuthenticated : false;
-  // 本地状态管理
-const [isLoading, setIsLoading] = useState(true);
-const [isDemoMode, setIsDemoMode] = useState(false);
-const [initialState, setInitialState] = useState<any>();
-const [isReady, setIsReady] = useState(false);
-  // 检查认证状态和恢复导航状态
-useEffect() => {const  checkAuthStatus = async () => {}      try {// 恢复导航状态/const  savedStateString =,/g/;
-const await = AsyncStorage.getItem(NAVIGATION_STATE_KEY);
-const savedState = savedStateString;
-          ? JSON.parse(savedStateString);
-          : undefined;
-if (savedState) {}
-          setInitialState(savedState)}
-        }
-        // TODO: 实际的认证状态检查逻辑'/;'/g'/;
-        // 这里可以检查AsyncStorage中的token或其他认证信息'/;'/g'/;
-        // const token = await AsyncStorage.getItem("authToken");"/;"/g"/;
-        // setIsAuthenticated(!!token);
-        // 暂时设置为未认证状态，显示欢迎页面
-        // setIsAuthenticated(false);
-      } catch (error) {}
-}
-      } finally {setIsLoading(false)}
-        setIsReady(true)}
-      }
-    };
-checkAuthStatus();
-  }, []);
-  // 保存导航状态
-const  onStateChange = async (state: any) => {try {}
-      await: AsyncStorage.setItem(NAVIGATION_STATE_KEY, JSON.stringify(state)}
-    } catch (error) {";}}
-      console.error('Failed to save navigation state:', error);'}
-    }
+import React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
+
+// 导入屏幕组件
+import WelcomeScreen from '../screens/auth/WelcomeScreen';
+import LoginScreen from '../screens/auth/LoginScreen';
+import RegisterScreen from '../screens/auth/RegisterScreen';
+import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen';
+import MainTabNavigator from './MainTabNavigator';
+import AgentChatScreen from '../screens/chat/AgentChatScreen';
+
+// 导航参数类型定义
+export type RootStackParamList = {
+  Welcome: undefined;
+  Login: undefined;
+  Register: undefined;
+  ForgotPassword: undefined;
+  MainApp: undefined;
+  AgentChat: {
+    agentId: string;
+    agentName: string;
+    agentType: string;
   };
-  // 如果正在加载，可以显示启动画面
-if (isLoading || !isReady) {// TODO: 添加启动画面组件/;}}/g/;
-    return null}
-  }
-  return (<NavigationContainer;  />/,)linking={linkingConfig}),/g/;
-initialState={initialState});
-onStateChange={onStateChange})'
-onReady={() => {';}}
-        console.log('Navigation container is ready');'}
-      }
-    >;
-      <RootNavigator;  />
-isAuthenticated={isAuthenticated}
-        isDemoMode={isDemoMode}
-      />
+  Chat: {
+    contactId: string;
+    contactName: string;
+    contactType: string;
+  };
+  NewChat: undefined;
+  Search: undefined;
+};
+
+const Stack = createStackNavigator<RootStackParamList>();
+
+const AppNavigator: React.FC = () => {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName="Welcome"
+        screenOptions={{
+          headerShown: false,
+          gestureEnabled: true,
+          cardStyleInterpolator: ({ current, layouts }) => {
+            return {
+              cardStyle: {
+                transform: [
+                  {
+                    translateX: current.progress.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [layouts.screen.width, 0],
+                    }),
+                  },
+                ],
+              },
+            };
+          },
+        }}
+      >
+        {/* 欢迎页面 */}
+        <Stack.Screen
+          name="Welcome"
+          component={WelcomeScreen}
+          options={{
+            cardStyleInterpolator: ({ current }) => ({
+              cardStyle: {
+                opacity: current.progress,
+              },
+            }),
+          }}
+        />
+
+        {/* 认证流程 */}
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{
+            gestureDirection: 'horizontal',
+          }}
+        />
+        <Stack.Screen
+          name="Register"
+          component={RegisterScreen}
+          options={{
+            gestureDirection: 'horizontal',
+          }}
+        />
+        <Stack.Screen
+          name="ForgotPassword"
+          component={ForgotPasswordScreen}
+          options={{
+            gestureDirection: 'horizontal',
+          }}
+        />
+
+        {/* 主应用 */}
+        <Stack.Screen
+          name="MainApp"
+          component={MainTabNavigator}
+          options={{
+            gestureEnabled: false, // 禁用手势返回，防止意外退出主应用
+            cardStyleInterpolator: ({ current }) => ({
+              cardStyle: {
+                opacity: current.progress,
+              },
+            }),
+          }}
+        />
+
+        {/* 聊天相关屏幕 */}
+        <Stack.Screen
+          name="AgentChat"
+          component={AgentChatScreen}
+          options={{
+            headerShown: true,
+            headerTitle: '',
+            headerBackTitleVisible: false,
+            headerStyle: {
+              backgroundColor: '#ffffff',
+              elevation: 0,
+              shadowOpacity: 0,
+              borderBottomWidth: 1,
+              borderBottomColor: '#f0f0f0',
+            },
+            headerTintColor: '#333',
+            gestureDirection: 'horizontal',
+          }}
+        />
+
+        {/* 占位符屏幕 */}
+        <Stack.Screen
+          name="Chat"
+          component={PlaceholderChatScreen}
+          options={{
+            headerShown: true,
+            headerTitle: '聊天',
+            headerBackTitleVisible: false,
+            headerStyle: {
+              backgroundColor: '#ffffff',
+              elevation: 0,
+              shadowOpacity: 0,
+              borderBottomWidth: 1,
+              borderBottomColor: '#f0f0f0',
+            },
+            headerTintColor: '#333',
+            gestureDirection: 'horizontal',
+          }}
+        />
+
+        <Stack.Screen
+          name="NewChat"
+          component={PlaceholderNewChatScreen}
+          options={{
+            headerShown: true,
+            headerTitle: '新建聊天',
+            headerBackTitleVisible: false,
+            headerStyle: {
+              backgroundColor: '#ffffff',
+              elevation: 0,
+              shadowOpacity: 0,
+              borderBottomWidth: 1,
+              borderBottomColor: '#f0f0f0',
+            },
+            headerTintColor: '#333',
+            gestureDirection: 'horizontal',
+          }}
+        />
+
+        <Stack.Screen
+          name="Search"
+          component={PlaceholderSearchScreen}
+          options={{
+            headerShown: true,
+            headerTitle: '搜索',
+            headerBackTitleVisible: false,
+            headerStyle: {
+              backgroundColor: '#ffffff',
+              elevation: 0,
+              shadowOpacity: 0,
+              borderBottomWidth: 1,
+              borderBottomColor: '#f0f0f0',
+            },
+            headerTintColor: '#333',
+            gestureDirection: 'horizontal',
+          }}
+        />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 };
+
+// 占位符组件
+import { View, Text, StyleSheet } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
+const PlaceholderScreen: React.FC<{ title: string; description: string }> = ({ title, description }) => (
+  <View style={styles.placeholderContainer}>
+    <Icon name="construction" size={80} color="#ccc" />
+    <Text style={styles.placeholderTitle}>{title}</Text>
+    <Text style={styles.placeholderDescription}>{description}</Text>
+  </View>
+);
+
+const PlaceholderChatScreen = () => (
+  <PlaceholderScreen 
+    title="通用聊天" 
+    description="与用户、名医、服务商、供应商的聊天功能" 
+  />
+);
+
+const PlaceholderNewChatScreen = () => (
+  <PlaceholderScreen 
+    title="新建聊天" 
+    description="创建新的聊天会话或群组" 
+  />
+);
+
+const PlaceholderSearchScreen = () => (
+  <PlaceholderScreen 
+    title="搜索" 
+    description="搜索联系人、消息、服务和内容" 
+  />
+);
+
+const styles = StyleSheet.create({
+  placeholderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#ffffff',
+    paddingHorizontal: 40,
+  },
+  placeholderTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#333',
+    marginTop: 20,
+    marginBottom: 12,
+  },
+  placeholderDescription: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+    lineHeight: 24,
+  },
+});
+
 export default AppNavigator;
-''

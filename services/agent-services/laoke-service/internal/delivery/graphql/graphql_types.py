@@ -7,15 +7,12 @@ graphql_types - 索克生活项目模块
 from internal.delivery.graphql.pagination import Connection, Edge
 import strawberry
 
-#! / usr / bin / env python
+# !/usr/bin/env python
 
 """
 老克智能体服务 - GraphQL 类型定义
 提供所有 GraphQL 类型和连接类型
 """
-
-
-
 
 
 # 基本类型
@@ -30,6 +27,7 @@ class User:
     specialization: list[str]
     contribution_score: int
     joined_at: str
+
 
 @strawberry.type
 class KnowledgeArticle:
@@ -46,7 +44,8 @@ class KnowledgeArticle:
     rating: float | None = None
     rating_count: int = 0
     view_count: int = 0
-    related_topics: list["KnowledgeArticle"] = strawberry.field(default_factory = list)
+    related_topics: list["KnowledgeArticle"] = strawberry.field(default_factory=list)
+
 
 @strawberry.input
 class KnowledgeArticleInput:
@@ -57,6 +56,7 @@ class KnowledgeArticleInput:
     subcategory: str | None = None
     tags: list[str]
 
+
 @strawberry.type
 class Resource:
     """TODO: 添加文档字符串"""
@@ -65,6 +65,7 @@ class Resource:
     type: str
     url: str
     description: str | None = None
+
 
 @strawberry.type
 class QuizQuestion:
@@ -75,6 +76,7 @@ class QuizQuestion:
     correct_answer: int
     explanation: str | None = None
 
+
 @strawberry.type
 class Quiz:
     """TODO: 添加文档字符串"""
@@ -82,6 +84,7 @@ class Quiz:
     title: str
     questions: list[QuizQuestion]
     passing_score: float
+
 
 @strawberry.type
 class LearningModule:
@@ -93,6 +96,7 @@ class LearningModule:
     resources: list[Resource]
     quizzes: list[Quiz]
     order: int
+
 
 @strawberry.type
 class LearningPath:
@@ -108,6 +112,7 @@ class LearningPath:
     enrolled_users: int = 0
     completion_rate: float = 0.0
 
+
 @strawberry.type
 class Comment:
     """TODO: 添加文档字符串"""
@@ -116,7 +121,8 @@ class Comment:
     author: User
     created_at: str
     like_count: int = 0
-    replies: list["Comment"] = strawberry.field(default_factory = list)
+    replies: list["Comment"] = strawberry.field(default_factory=list)
+
 
 @strawberry.type
 class CommunityPost:
@@ -134,6 +140,7 @@ class CommunityPost:
     comments: list[Comment]
     is_featured: bool = False
 
+
 @strawberry.input
 class CommunityPostInput:
     """TODO: 添加文档字符串"""
@@ -141,6 +148,7 @@ class CommunityPostInput:
     content: str
     category: str
     tags: list[str]
+
 
 @strawberry.type
 class Lesson:
@@ -152,6 +160,7 @@ class Lesson:
     duration: str
     order: int
 
+
 @strawberry.type
 class CourseModule:
     """TODO: 添加文档字符串"""
@@ -162,6 +171,7 @@ class CourseModule:
     quiz: Quiz | None = None
     order: int
 
+
 @strawberry.enum
 class CourseLevel:
     """TODO: 添加文档字符串"""
@@ -169,6 +179,7 @@ class CourseLevel:
     INTERMEDIATE = "INTERMEDIATE"
     ADVANCED = "ADVANCED"
     EXPERT = "EXPERT"
+
 
 @strawberry.type
 class EducationCourse:
@@ -185,6 +196,7 @@ class EducationCourse:
     rating: float | None = None
     certification_enabled: bool = False
 
+
 @strawberry.type
 class NPCAction:
     """TODO: 添加文档字符串"""
@@ -194,6 +206,7 @@ class NPCAction:
     requirements_met: bool
     rewards: list[str]
 
+
 @strawberry.enum
 class ActionType:
     """TODO: 添加文档字符串"""
@@ -202,6 +215,7 @@ class ActionType:
     REWARD = "REWARD"
     DIALOGUE = "DIALOGUE"
     GAME = "GAME"
+
 
 @strawberry.type
 class GameNPC:
@@ -214,6 +228,7 @@ class GameNPC:
     avatar_url: str
     dialogue_style: str
 
+
 @strawberry.type
 class NPCInteractionResponse:
     """TODO: 添加文档字符串"""
@@ -223,40 +238,49 @@ class NPCInteractionResponse:
     knowledge: list[str] | None = None
 
 # 分页查询连接类型
+
+
 @strawberry.type
 class KnowledgeArticleEdge(Edge[KnowledgeArticle]):
     """知识文章边缘类型"""
     pass
+
 
 @strawberry.type
 class KnowledgeArticleConnection(Connection[KnowledgeArticle]):
     """知识文章连接类型"""
     pass
 
+
 @strawberry.type
 class LearningPathEdge(Edge[LearningPath]):
     """学习路径边缘类型"""
     pass
+
 
 @strawberry.type
 class LearningPathConnection(Connection[LearningPath]):
     """学习路径连接类型"""
     pass
 
+
 @strawberry.type
 class CommunityPostEdge(Edge[CommunityPost]):
     """社区帖子边缘类型"""
     pass
+
 
 @strawberry.type
 class CommunityPostConnection(Connection[CommunityPost]):
     """社区帖子连接类型"""
     pass
 
+
 @strawberry.type
 class EducationCourseEdge(Edge[EducationCourse]):
     """教育课程边缘类型"""
     pass
+
 
 @strawberry.type
 class EducationCourseConnection(Connection[EducationCourse]):

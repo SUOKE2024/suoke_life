@@ -200,5 +200,5 @@ def main() -> None:
     print(f"会话超时: {config.get('session.timeout_minutes')}分钟")
 
 
-if __name__ == "__main__":
+if __name__=="__main__":
     main() 

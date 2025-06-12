@@ -185,7 +185,7 @@ class RateLimiter:
             results = await pipe.execute()
             current_count = results[1]
 
-            if current_count >= limit:
+            if current_count>=limit:
                 return False, {
                     "allowed": False,
                     "limit": limit,
@@ -222,7 +222,7 @@ class RateLimiter:
             while requests and requests[0] < window_start:
                 requests.popleft()
 
-            if len(requests) >= limit:
+            if len(requests)>=limit:
                 return False, {
                     "allowed": False,
                     "limit": limit,
@@ -264,7 +264,7 @@ class RateLimiter:
                 results = await pipe.execute()
                 current_burst = results[1]
 
-                if current_burst >= burst_size:
+                if current_burst>=burst_size:
                     return False, {
                         "allowed": False,
                         "burst_limit": burst_size,
@@ -285,7 +285,7 @@ class RateLimiter:
             while requests and requests[0] < window_start:
                 requests.popleft()
 
-            if len(requests) >= burst_size:
+            if len(requests)>=burst_size:
                 return False, {
                     "allowed": False,
                     "burst_limit": burst_size,

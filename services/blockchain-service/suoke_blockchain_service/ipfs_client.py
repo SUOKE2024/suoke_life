@@ -36,5 +36,5 @@ class IPFSClient:
             logger.error(f"IPFS获取失败: {e}")
             raise
 
-if __name__ == "__main__":
+if __name__=="__main__":
     print("IPFS客户端模块已加载")

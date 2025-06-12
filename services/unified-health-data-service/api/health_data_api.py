@@ -55,7 +55,7 @@ async def create_health_data(
     try:
         result = await service.process_data(data.dict())
         
-        if result.get('status') == 'success':
+        if result.get('status')=='success':
             return APIResponse(
                 success=True,
                 message="健康数据创建成功",
@@ -100,7 +100,7 @@ async def get_health_data(
         
         # 计算总数（简化实现）
         total = len(results)
-        pages = (total + size - 1) // size
+        pages = (total + size - 1)//size
         
         return APIResponse(
             success=True,
@@ -165,7 +165,7 @@ async def create_vital_signs(
         
         result = await service.process_data(health_data)
         
-        if result.get('status') == 'success':
+        if result.get('status')=='success':
             return APIResponse(
                 success=True,
                 message="生命体征数据创建成功",
@@ -232,7 +232,7 @@ async def create_diagnostic_data(
         
         result = await service.process_data(health_data)
         
-        if result.get('status') == 'success':
+        if result.get('status')=='success':
             return APIResponse(
                 success=True,
                 message="诊断数据创建成功",
@@ -272,7 +272,7 @@ async def create_tcm_data(
         
         result = await service.process_data(health_data)
         
-        if result.get('status') == 'success':
+        if result.get('status')=='success':
             return APIResponse(
                 success=True,
                 message="中医数据创建成功",
@@ -377,7 +377,7 @@ async def get_health_statistics(
             data_type = record.get('data_type', 'unknown')
             if data_type not in statistics["data_types"]:
                 statistics["data_types"][data_type] = 0
-            statistics["data_types"][data_type] += 1
+            statistics["data_types"][data_type]+=1
             
             # 更新最新时间
             created_at = record.get('created_at')

@@ -153,11 +153,11 @@ def hash_data(data: str, algorithm: str = "sha256") -> str:
     Returns:
         str: 哈希值（十六进制）
     """
-    if algorithm == "sha256":
+    if algorithm=="sha256":
         return hashlib.sha256(data.encode()).hexdigest()
-    elif algorithm == "sha512":
+    elif algorithm=="sha512":
         return hashlib.sha512(data.encode()).hexdigest()
-    elif algorithm == "md5":
+    elif algorithm=="md5":
         return hashlib.md5(data.encode()).hexdigest()
     else:
         raise ValueError(f"不支持的哈希算法: {algorithm}")
@@ -187,11 +187,11 @@ def validate_password_strength(password: str) -> tuple[bool, list[str]]:
     if not any(c.isdigit() for c in password):
         errors.append("密码必须包含至少一个数字")
 
-    special_chars = "!@#$%^& * ()_ + -= []{}|;:,.<>?"
+    special_chars = "!@#$%^& * ()_ +-=[]{}|;:,.<>?"
     if not any(c in special_chars for c in password):
         errors.append("密码必须包含至少一个特殊字符")
 
-    return len(errors) == 0, errors
+    return len(errors)==0, errors
 
 
 # 全局加密服务实例

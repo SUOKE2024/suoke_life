@@ -279,7 +279,7 @@ class AccuracyOptimizer:
         
         scores = list(all_scores.values())
         primary_score = max(scores)
-        secondary_scores = [s for s in scores if s != primary_score]
+        secondary_scores = [s for s in scores if s!=primary_score]
         
         if not secondary_scores:
             return 1.0

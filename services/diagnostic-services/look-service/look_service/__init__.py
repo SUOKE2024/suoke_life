@@ -15,7 +15,7 @@ Look Service - 索克生活望诊微服务
 
 __version__ = "1.0.0"
 __author__ = "Suoke Life Team"
-__email__ = "dev@suokelife.com"
+__email__ = "dev@suoke.life"
 
 
 __all__ = [

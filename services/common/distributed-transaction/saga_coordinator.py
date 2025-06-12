@@ -92,7 +92,7 @@ class SagaCoordinator:
 
     def __init__(self,
                 redis_url: str = "redis: / /localhost:6379",
-                db_url: str = "sqlite: // / saga_transactions.db"):
+                db_url: str = "sqlite:/// saga_transactions.db"):
         self.redis_url = redis_url
         self.db_url = db_url
         self.redis_client = None
@@ -225,7 +225,7 @@ class SagaCoordinator:
             await self._execute_steps(transaction_id, steps, dependency_graph)
 
             # 检查最终状态
-            if all(step_exec.status == StepStatus.COMPLETED
+            if all(step_exec.status==StepStatus.COMPLETED
                 for step_exec in execution_state["steps"].values()):
                 execution_state["status"] = TransactionStatus.COMPLETED
                 await self._update_transaction_status(transaction_id, TransactionStatus.COMPLETED)
@@ -262,8 +262,8 @@ class SagaCoordinator:
             ready_steps = []
             for step_id, dependencies in dependency_graph.items():
                 step_exec = execution_state["steps"][step_id]
-                if (step_exec.status == StepStatus.PENDING and
-                    all(execution_state["steps"][dep].status == StepStatus.COMPLETED
+                if (step_exec.status==StepStatus.PENDING and
+                    all(execution_state["steps"][dep].status==StepStatus.COMPLETED
                         for dep in dependencies)):
                     ready_steps.append(step_id)
 
@@ -291,7 +291,7 @@ class SagaCoordinator:
             await asyncio.gather( * tasks, return_exceptions = True)
 
             # 检查是否有步骤失败
-            if any(execution_state["steps"][step_id].status == StepStatus.FAILED
+            if any(execution_state["steps"][step_id].status==StepStatus.FAILED
                 for step_id in ready_steps):
                 break  # 有步骤失败，停止执行
 
@@ -331,7 +331,7 @@ class SagaCoordinator:
 
                 if attempt < step.retry_count:
                     logger.warning(f"Step {step.step_id} failed (attempt {attempt + 1}), retrying: {e}")
-                    await asyncio.sleep(2 *** attempt)  # 指数退避
+                    await asyncio.sleep(2***attempt)  # 指数退避
                 else:
                     step_exec.status = StepStatus.FAILED
                     step_exec.end_time = datetime.utcnow()
@@ -350,7 +350,7 @@ class SagaCoordinator:
             return await client.call(action, payload)
         elif hasattr(client, action):
             method = getattr(client, action)
-            return await method( ***payload)
+            return await method(***payload)
         else:
             raise ValueError(f"Service client does not support action: {action}")
 
@@ -381,7 +381,7 @@ class SagaCoordinator:
         execution_state = self.running_transactions[transaction_id]
         step_exec = execution_state["steps"][step.step_id]
 
-        if step_exec.status != StepStatus.COMPLETED:
+        if step_exec.status!=StepStatus.COMPLETED:
             return  # 只补偿已完成的步骤
 
         step_exec.status = StepStatus.COMPENSATING
@@ -393,7 +393,7 @@ class SagaCoordinator:
 
             # 构建补偿载荷（包含原始结果）
             compensation_payload = {
-                ***step.payload,
+               ***step.payload,
                 "original_result": step_exec.result
             }
 
@@ -525,9 +525,9 @@ class SagaCoordinator:
                 self.running_transactions[transaction.transaction_id] = execution_state
 
                 # 根据状态继续执行
-                if execution_state["status"] == TransactionStatus.RUNNING:
+                if execution_state["status"]==TransactionStatus.RUNNING:
                     asyncio.create_task(self._execute_saga(transaction.transaction_id, steps))
-                elif execution_state["status"] == TransactionStatus.COMPENSATING:
+                elif execution_state["status"]==TransactionStatus.COMPENSATING:
                     asyncio.create_task(self._start_compensation(transaction.transaction_id, steps))
 
         except Exception as e:
@@ -612,7 +612,7 @@ class SagaCoordinator:
             execution_state = self.running_transactions[transaction_id]
 
             # 如果事务正在运行，开始补偿
-            if execution_state["status"] == TransactionStatus.RUNNING:
+            if execution_state["status"]==TransactionStatus.RUNNING:
                 transaction = self.db_session.query(SagaTransaction).filter_by(
                     transaction_id = transaction_id
                 ).first()
@@ -644,7 +644,7 @@ _saga_coordinator = None
 
 
 def get_saga_coordinator(redis_url: str = "redis: / /localhost:6379",
-                        db_url: str = "sqlite: // / saga_transactions.db") -> SagaCoordinator:
+                        db_url: str = "sqlite:/// saga_transactions.db") -> SagaCoordinator:
     """获取Saga协调器单例"""
     global _saga_coordinator
     if _saga_coordinator is None:
@@ -725,5 +725,5 @@ async def main() -> None:
         await coordinator.stop()
 
 
-if __name__ == "__main__":
+if __name__=="__main__":
     asyncio.run(main())

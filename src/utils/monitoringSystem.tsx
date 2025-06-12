@@ -233,7 +233,7 @@ case "low": ";
   }
   private async sendErrorReport(error: ErrorInfo): Promise<void>  {";}}
     try {"};
-        / await fetch("https: * * * api.suokelife.com * *  *   *   *  ;}) * / } catch (reportError) {/    "}
+        / await fetch("https: * * * api.suoke.life * *  *   *   *  ;}) * / } catch (reportError) {/    "}
       }
   }
   private async persistErrors(): Promise<void> {"try {";}}
@@ -424,7 +424,7 @@ const checkPromises = useMemo(() => services.map(servic;e;); => this.checkServic
   }
   private async checkService(serviceName: string);: Promise<void>  {const startTime = Date.now;";}}
     try {"}
-isHealthy: Math.random > 0.1  / 90%健康率*  api.suokelife.com * ${serviceName  } / health`, * version: "1.0.0/`;`/g`/`;
+isHealthy: Math.random > 0.1  / 90%健康率*  api.suoke.life * ${serviceName  } / health`, * version: "1.0.0/`;`/g`/`;
       };
 this.services.set(serviceName, result);
     } catch (error) {const result: HealthCheckResult = {service: serviceName,"status: "unhealthy,

@@ -51,14 +51,14 @@ class Message:
 
     def serialize(self) -> bytes:
         """序列化消息"""
-        if self.format == MessageFormat.JSON:
+        if self.format==MessageFormat.JSON:
             if isinstance(self.value, dict | list):
                 return json.dumps(self.value, ensure_ascii = False).encode("utf - 8")
             else:
                 return json.dumps({"value": self.value}, ensure_ascii = False).encode(
                     "utf - 8"
                 )
-        elif self.format == MessageFormat.BINARY:
+        elif self.format==MessageFormat.BINARY:
             if isinstance(self.value, bytes):
                 return self.value
             else:
@@ -71,9 +71,9 @@ class Message:
         cls, data: bytes, format: MessageFormat = MessageFormat.JSON
     ) -> Any:
         """反序列化消息"""
-        if format == MessageFormat.JSON:
+        if format==MessageFormat.JSON:
             return json.loads(data.decode("utf - 8"))
-        elif format == MessageFormat.BINARY:
+        elif format==MessageFormat.BINARY:
             return data
         else:  # TEXT
             return data.decode("utf - 8")

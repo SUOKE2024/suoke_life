@@ -71,9 +71,9 @@ ENV ENVIRONMENT=production \
     HTTP__RELOAD=false
 
 # 设置标签
-LABEL maintainer="Suoke Life Team <dev@suokelife.com>" \
+LABEL maintainer="Suoke Life Team <dev@suoke.life>" \
       version="0.2.0" \
       description="Corn Maze Service - 索克生活迷宫探索微服务" \
-      org.opencontainers.image.source="https://github.com/suokelife/suoke_life" \
-      org.opencontainers.image.documentation="https://docs.suokelife.com/services/corn-maze" \
+      org.opencontainers.image.source="https://github.com/SUOKE2024/suoke_life" \
+      org.opencontainers.image.documentation="https://docs.suoke.life/services/corn-maze" \
       org.opencontainers.image.vendor="Suoke Life Team"

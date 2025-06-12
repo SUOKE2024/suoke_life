@@ -110,7 +110,7 @@ if not healthy_endpoints:
             return None
 
 endpoint = healthy_endpoints[self._current_index % len(healthy_endpoints)]
-self._current_index += 1
+self._current_index+=1
 return endpoint
 
 class WeightedRoundRobinStrategy(LoadBalancerStrategy):
@@ -145,8 +145,8 @@ for endpoint in healthy_endpoints:
             if key not in self._current_weights:
                 self._current_weights[key] = 0
 
-            self._current_weights[key] += effective_weight
-            total_weight += effective_weight
+            self._current_weights[key]+=effective_weight
+            total_weight+=effective_weight
 
 # 选择权重最高的端点
 selected_endpoint = None
@@ -279,9 +279,9 @@ for endpoint in healthy_endpoints:
             stats = endpoint_stats.get(key, EndpointStats())
             effective_weight = endpoint.weight * stats.weight_factor
             weights.append(effective_weight)
-            total_weight += effective_weight
+            total_weight+=effective_weight
 
-if total_weight == 0:
+if total_weight==0:
             return random.choice(healthy_endpoints)
 
 # 随机选择
@@ -289,8 +289,8 @@ rand_value = random.uniform(0, total_weight)
 current_weight = 0
 
 for i, weight in enumerate(weights):
-            current_weight += weight
-            if rand_value < = current_weight:
+            current_weight+=weight
+            if rand_value <=current_weight:
                 return healthy_endpoints[i]
 
 return healthy_endpoints[ - 1]
@@ -436,7 +436,7 @@ logger.info(f"添加端点: {key}")
     def remove_endpoint(self, host: str, port: int):
 """移除端点"""
 key = f"{host}:{port}"
-self.endpoints = [ep for ep in self.endpoints if f"{ep.host}:{ep.port}" ! = key]
+self.endpoints = [ep for ep in self.endpoints if f"{ep.host}:{ep.port}" !=key]
 self.endpoint_stats.pop(key, None)
 logger.info(f"移除端点: {key}")
 
@@ -453,8 +453,8 @@ return self._current_strategy.select_endpoint(
 key = f"{endpoint.host}:{endpoint.port}"
 stats = self.endpoint_stats.get(key)
 if stats:
-            stats.active_connections += 1
-            stats.total_requests += 1
+            stats.active_connections+=1
+            stats.total_requests+=1
 
     def record_request_end(self, endpoint: EndpointConfig, success: bool, response_time: float):
 """记录请求结束"""
@@ -465,12 +465,12 @@ if stats:
             stats.last_response_time = response_time
 
             if success:
-                stats.successful_requests += 1
+                stats.successful_requests+=1
             else:
-                stats.failed_requests += 1
+                stats.failed_requests+=1
 
             # 更新平均响应时间（指数移动平均）
-            if stats.average_response_time == 0:
+            if stats.average_response_time==0:
                 stats.average_response_time = response_time
             else:
                 alpha = 0.1  # 平滑因子
@@ -515,18 +515,18 @@ url = f"{protocol}: / /{endpoint.host}:{endpoint.port}{endpoint.health_check_pat
 
 try:
             async with self._session.get(url, timeout = aiohttp.ClientTimeout(total = endpoint.health_check_timeout)) as response:
-                if response.status == 200:
+                if response.status==200:
                     stats.is_healthy = True
                     stats.health_check_failures = 0
                     logger.debug(f"端点健康检查成功: {key}")
                 else:
-                    stats.health_check_failures += 1
-                    if stats.health_check_failures > = endpoint.health_check_retries:
+                    stats.health_check_failures+=1
+                    if stats.health_check_failures >=endpoint.health_check_retries:
                         stats.is_healthy = False
                         logger.warning(f"端点健康检查失败: {key}, 状态码: {response.status}")
 except Exception as e:
-            stats.health_check_failures += 1
-            if stats.health_check_failures > = endpoint.health_check_retries:
+            stats.health_check_failures+=1
+            if stats.health_check_failures >=endpoint.health_check_retries:
                 stats.is_healthy = False
                 logger.warning(f"端点健康检查异常: {key}, 错误: {e}")
 
@@ -555,12 +555,12 @@ healthy_count = 0
 
 for stats in self.endpoint_stats.values():
             if stats.is_healthy and stats.total_requests > 0:
-                total_response_time += stats.average_response_time
+                total_response_time+=stats.average_response_time
                 success_rate = stats.successful_requests / stats.total_requests
-                total_success_rate += success_rate
-                healthy_count += 1
+                total_success_rate+=success_rate
+                healthy_count+=1
 
-if healthy_count == 0:
+if healthy_count==0:
             return
 
 avg_response_time = total_response_time / healthy_count
@@ -568,7 +568,7 @@ avg_success_rate = total_success_rate / healthy_count
 
 # 调整每个端点的权重因子
 for key, stats in self.endpoint_stats.items():
-            if not stats.is_healthy or stats.total_requests == 0:
+            if not stats.is_healthy or stats.total_requests==0:
                 continue
 
             success_rate = stats.successful_requests / stats.total_requests
@@ -627,5 +627,5 @@ algorithm: LoadBalancerAlgorithm = LoadBalancerAlgorithm.ROUND_ROBIN,
 **kwargs
     ) -> SmartLoadBalancer:
 """创建负载均衡器"""
-config = LoadBalancerConfig(algorithm = algorithm, **kwargs)
+config = LoadBalancerConfig(algorithm = algorithm,**kwargs)
 return SmartLoadBalancer(config)

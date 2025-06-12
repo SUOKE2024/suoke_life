@@ -148,7 +148,7 @@ class ConfigManager:
                 self._load_env_configs()
 
             # 增加版本号
-            self.version += 1
+            self.version+=1
 
             logger.info(f"配置加载完成，版本: {self.version}")
 
@@ -192,11 +192,11 @@ class ConfigManager:
     def _load_file(self, file_path: Path, format_type: ConfigFormat) -> dict[str, Any]:
         """加载单个配置文件"""
         with open(file_path, encoding = "utf - 8") as f:
-            if format_type == ConfigFormat.JSON:
+            if format_type==ConfigFormat.JSON:
                 return json.load(f)
-            elif format_type == ConfigFormat.YAML:
+            elif format_type==ConfigFormat.YAML:
                 return yaml.safe_load(f)
-            elif format_type == ConfigFormat.PROPERTIES:
+            elif format_type==ConfigFormat.PROPERTIES:
                 return self._parse_properties(f.read())
             else:
                 raise ValueError(f"不支持的配置格式: {format_type}")
@@ -242,7 +242,7 @@ class ConfigManager:
 
         # 尝试解析为布尔值
         if value.lower() in ("true", "false"):
-            return value.lower() == "true"
+            return value.lower()=="true"
 
         # 尝试解析为数字
         try:
@@ -379,7 +379,7 @@ class ConfigManager:
             return {
                 key: item.value
                 for key, item in self._config.items()
-                if item.source == source
+                if item.source==source
             }
 
     def start_watching(self) -> None:
@@ -411,10 +411,10 @@ class ConfigManager:
 _managers: dict[str, ConfigManager] = {}
 
 
-def get_config_manager(service_name: str, **kwargs) -> ConfigManager:
+def get_config_manager(service_name: str,**kwargs) -> ConfigManager:
     """获取或创建配置管理器"""
     if service_name not in _managers:
-        _managers[service_name] = ConfigManager(service_name, **kwargs)
+        _managers[service_name] = ConfigManager(service_name,**kwargs)
 
     return _managers[service_name]
 
@@ -429,7 +429,7 @@ def config(key: str, default: Any = None):
 
     def decorator(func: Callable):
         """TODO: 添加文档字符串"""
-        def wrapper( *args, **kwargs):
+        def wrapper( *args,**kwargs):
             """TODO: 添加文档字符串"""
             # 获取服务名（从模块名推断）
             service_name = func.__module__.split(".")[0]
@@ -439,7 +439,7 @@ def config(key: str, default: Any = None):
             config_value = manager.get(key, default)
             kwargs[key.replace(".", "_")] = config_value
 
-            return func( *args, **kwargs)
+            return func( *args,**kwargs)
 
         return wrapper
 

@@ -81,7 +81,7 @@ class Task:
 
     def __lt__(self, other):
         """优先级比较（用于优先队列）"""
-        if self.priority.value != other.priority.value:
+        if self.priority.value!=other.priority.value:
             return self.priority.value < other.priority.value
         return self.created_at < other.created_at
 
@@ -136,7 +136,7 @@ class LoadBalancer:
                 agent = self.agents[agent_id]
 
                 # 更新平均响应时间
-                if agent.avg_response_time == 0:
+                if agent.avg_response_time==0:
                     agent.avg_response_time = response_time
                 else:
                     agent.avg_response_time = (agent.avg_response_time * 0.8 +
@@ -147,7 +147,7 @@ class LoadBalancer:
                 total_requests = metrics.get('total_requests', 0) + 1
                 successful_requests = metrics.get('successful_requests', 0)
                 if success:
-                    successful_requests += 1
+                    successful_requests+=1
 
                 metrics['total_requests'] = total_requests
                 metrics['successful_requests'] = successful_requests
@@ -173,7 +173,7 @@ class LoadBalancer:
         success_score = agent.success_rate * 25
 
         # 优先级匹配因子
-        priority_score = 25 if task_priority <= 2 else 15
+        priority_score = 25 if task_priority<=2 else 15
 
         total_score = base_score + load_score + response_score + success_score + priority_score
         return total_score
@@ -184,8 +184,8 @@ class LoadBalancer:
         with self.lock:
             available_agents = [
                 agent for agent in self.agents.values()
-                if (agent.agent_type == agent_type and
-                    agent.status == "active" and
+                if (agent.agent_type==agent_type and
+                    agent.status=="active" and
                     agent.current_load < agent.max_capacity)
             ]
 
@@ -249,7 +249,7 @@ class TaskQueue:
 
                 # 查找匹配的任务
                 for i, task in enumerate(queue):
-                    if task.agent_type == agent_type:
+                    if task.agent_type==agent_type:
                         # 移除并返回任务
                         removed_task = queue.pop(i)
                         heapq.heapify(queue)  # 重新堆化
@@ -288,7 +288,7 @@ class TaskQueue:
 
                 # 检查是否需要重试
                 if task.retry_count < task.max_retries:
-                    task.retry_count += 1
+                    task.retry_count+=1
                     task.status = TaskStatus.PENDING
                     task.started_at = None
                     self.add_task(task)
@@ -396,7 +396,7 @@ class IntelligentTaskScheduler:
         with self.task_queue.lock:
             for priority_queue in self.task_queue.priority_queues.values():
                 for task in priority_queue:
-                    if task.task_id == task_id:
+                    if task.task_id==task_id:
                         return asdict(task)
 
         # 从Redis获取
@@ -472,7 +472,7 @@ class IntelligentTaskScheduler:
             return
 
         # 增加智能体负载
-        best_agent.current_load += 1
+        best_agent.current_load+=1
 
         # 异步执行任务
         asyncio.create_task(self._execute_task(task, best_agent))
@@ -507,7 +507,7 @@ class IntelligentTaskScheduler:
             )
 
             # 更新统计
-            self.stats["total_tasks_processed"] += 1
+            self.stats["total_tasks_processed"]+=1
 
         except Exception as e:
             execution_time = time.time() - start_time
@@ -523,7 +523,7 @@ class IntelligentTaskScheduler:
             )
 
             # 更新统计
-            self.stats["total_tasks_failed"] += 1
+            self.stats["total_tasks_failed"]+=1
 
         finally:
             # 减少智能体负载
@@ -556,8 +556,8 @@ class IntelligentTaskScheduler:
             with self.task_queue.lock:
                 for task in self.task_queue.completed_tasks.values():
                     if task.execution_time:
-                        total_time += task.execution_time
-                        count += 1
+                        total_time+=task.execution_time
+                        count+=1
 
             if count > 0:
                 self.stats["avg_processing_time"] = total_time / count

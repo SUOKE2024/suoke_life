@@ -71,5 +71,5 @@ def main() -> None:
     asyncio.run(test_messaging())
 
 
-if __name__ == "__main__":
+if __name__=="__main__":
     main() 

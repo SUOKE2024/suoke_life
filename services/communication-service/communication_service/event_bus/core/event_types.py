@@ -193,7 +193,7 @@ class EventCategory(Enum):
 # 事件类型到分类的映射
 EVENT_TYPE_CATEGORY_MAP: Dict[str, EventCategory] = {
     # 智能体协同事件
-    **{event: EventCategory.AGENT_COLLABORATION for event in [
+   **{event: EventCategory.AGENT_COLLABORATION for event in [
         AgentCollaborationEvents.DIAGNOSIS_STARTED,
         AgentCollaborationEvents.DIAGNOSIS_COMPLETED,
         AgentCollaborationEvents.XIAOAI_LOOK_STARTED,
@@ -203,7 +203,7 @@ EVENT_TYPE_CATEGORY_MAP: Dict[str, EventCategory] = {
     ]},
     
     # 健康数据事件
-    **{event: EventCategory.HEALTH_DATA for event in [
+   **{event: EventCategory.HEALTH_DATA for event in [
         HealthDataEvents.HEALTH_DATA_RECEIVED,
         HealthDataEvents.VITAL_SIGNS_UPDATED,
         HealthDataEvents.DIAGNOSTIC_DATA_RECEIVED,
@@ -211,14 +211,14 @@ EVENT_TYPE_CATEGORY_MAP: Dict[str, EventCategory] = {
     ]},
     
     # 用户交互事件
-    **{event: EventCategory.USER_INTERACTION for event in [
+   **{event: EventCategory.USER_INTERACTION for event in [
         UserInteractionEvents.USER_QUESTION_RECEIVED,
         UserInteractionEvents.AGENT_RESPONSE_GENERATED,
         UserInteractionEvents.USER_FEEDBACK_RECEIVED,
     ]},
     
     # 系统事件
-    **{event: EventCategory.SYSTEM for event in [
+   **{event: EventCategory.SYSTEM for event in [
         SystemEvents.SERVICE_STARTED,
         SystemEvents.SERVICE_ERROR,
         SystemEvents.DATABASE_CONNECTION_LOST,

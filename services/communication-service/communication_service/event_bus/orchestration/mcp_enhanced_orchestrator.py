@@ -157,7 +157,7 @@ class RealTimeDecisionEngine:
         
     async def _check_consensus_readiness(self, session_id: str, decision_type: DecisionType) -> None:
         """检查共识准备状态"""
-        decisions = [d for d in self.active_decisions[session_id] if d.decision_type == decision_type]
+        decisions = [d for d in self.active_decisions[session_id] if d.decision_type==decision_type]
         
         # 获取具备相关能力的智能体
         required_capabilities = self._get_required_capabilities(decision_type)
@@ -170,7 +170,7 @@ class RealTimeDecisionEngine:
         # 检查是否有足够的决策
         decision_agents = {d.agent_id for d in decisions}
         
-        if len(decision_agents.intersection(capable_agents)) >= len(capable_agents) * 0.6:  # 60%的智能体参与
+        if len(decision_agents.intersection(capable_agents))>=len(capable_agents) * 0.6:  # 60%的智能体参与
             await self._trigger_consensus(session_id, decision_type, decisions)
             
     def _get_required_capabilities(self, decision_type: DecisionType) -> Set[AgentCapability]:
@@ -219,7 +219,7 @@ class RealTimeDecisionEngine:
         # 清理已处理的决策
         self.active_decisions[session_id] = [
             d for d in self.active_decisions[session_id] 
-            if d.decision_type != decision_type
+            if d.decision_type!=decision_type
         ]
         
         logger.info(f"共识完成: {consensus_result.consensus_id}, 算法: {algorithm.value}, 分数: {consensus_result.consensus_score}")
@@ -229,9 +229,9 @@ class RealTimeDecisionEngine:
     def _select_consensus_algorithm(self, decision_type: DecisionType, decisions: List[AgentDecision]) -> ConsensusAlgorithm:
         """选择共识算法"""
         # 根据决策类型和参与情况选择算法
-        if decision_type == DecisionType.EMERGENCY:
+        if decision_type==DecisionType.EMERGENCY:
             return ConsensusAlgorithm.CONFIDENCE_BASED  # 紧急情况优先高置信度
-        elif len(decisions) >= 3:
+        elif len(decisions)>=3:
             return ConsensusAlgorithm.WEIGHTED_CONSENSUS  # 多智能体加权共识
         else:
             return ConsensusAlgorithm.MAJORITY_VOTE  # 简单多数投票
@@ -241,11 +241,11 @@ class RealTimeDecisionEngine:
         """执行共识算法"""
         consensus_id = f"consensus_{session_id}_{decision_type.value}_{int(datetime.utcnow().timestamp())}"
         
-        if algorithm == ConsensusAlgorithm.MAJORITY_VOTE:
+        if algorithm==ConsensusAlgorithm.MAJORITY_VOTE:
             return await self._majority_vote_consensus(consensus_id, decision_type, decisions)
-        elif algorithm == ConsensusAlgorithm.WEIGHTED_CONSENSUS:
+        elif algorithm==ConsensusAlgorithm.WEIGHTED_CONSENSUS:
             return await self._weighted_consensus(consensus_id, decision_type, decisions)
-        elif algorithm == ConsensusAlgorithm.CONFIDENCE_BASED:
+        elif algorithm==ConsensusAlgorithm.CONFIDENCE_BASED:
             return await self._confidence_based_consensus(consensus_id, decision_type, decisions)
         else:
             return await self._byzantine_fault_tolerant_consensus(consensus_id, decision_type, decisions)
@@ -259,7 +259,7 @@ class RealTimeDecisionEngine:
         
         for decision in decisions:
             key = json.dumps(decision.decision_data, sort_keys=True)
-            decision_counts[key] += 1
+            decision_counts[key]+=1
             decision_details[key].append(decision)
             
         # 找到多数选择
@@ -302,13 +302,13 @@ class RealTimeDecisionEngine:
         }
         
         # 根据决策类型调整权重
-        if decision_type == DecisionType.DIAGNOSIS:
+        if decision_type==DecisionType.DIAGNOSIS:
             agent_weights["xiaoai"] = 0.5
             agent_weights["xiaoke"] = 0.2
-        elif decision_type == DecisionType.RECOMMENDATION:
+        elif decision_type==DecisionType.RECOMMENDATION:
             agent_weights["xiaoke"] = 0.4
             agent_weights["xiaoai"] = 0.3
-        elif decision_type == DecisionType.LIFESTYLE:
+        elif decision_type==DecisionType.LIFESTYLE:
             agent_weights["soer"] = 0.4
             agent_weights["xiaoai"] = 0.3
             
@@ -321,7 +321,7 @@ class RealTimeDecisionEngine:
             weight = agent_weights.get(decision.agent_id, 0.1)
             confidence_weight = decision.confidence_score * weight
             
-            weighted_decisions[key] += confidence_weight
+            weighted_decisions[key]+=confidence_weight
             decision_details[key].append(decision)
             
         # 找到加权最高的决策
@@ -361,7 +361,7 @@ class RealTimeDecisionEngine:
         best_key = json.dumps(best_decision.decision_data, sort_keys=True)
         supporting_decisions = [
             d for d in decisions 
-            if json.dumps(d.decision_data, sort_keys=True) == best_key
+            if json.dumps(d.decision_data, sort_keys=True)==best_key
         ]
         
         consensus_score = len(supporting_decisions) / len(decisions)
@@ -395,8 +395,8 @@ class RealTimeDecisionEngine:
             decision_groups[key].append(decision)
             
         # 找到满足2/3条件的决策组
-        required_count = len(decisions) * 2 // 3 + 1
-        valid_groups = {k: v for k, v in decision_groups.items() if len(v) >= required_count}
+        required_count = len(decisions) * 2//3 + 1
+        valid_groups = {k: v for k, v in decision_groups.items() if len(v)>=required_count}
         
         if valid_groups:
             # 选择置信度最高的组
@@ -448,7 +448,7 @@ class ContextAwarenessEngine:
             "session_id": session_id,
             "current_time": current_time.isoformat(),
             "timezone": "UTC+8",  # 默认中国时区
-            **(additional_context or {})
+           **(additional_context or {})
         }
         
         # 设备上下文（模拟）
@@ -473,7 +473,7 @@ class ContextAwarenessEngine:
         temporal_context = {
             "current_hour": current_time.hour,
             "day_of_week": current_time.weekday(),
-            "is_weekend": current_time.weekday() >= 5,
+            "is_weekend": current_time.weekday()>=5,
             "season": self._get_season(current_time),
             "meal_time": self._get_meal_time(current_time)
         }
@@ -502,11 +502,11 @@ class ContextAwarenessEngine:
     def _get_time_period(self, dt: datetime) -> str:
         """获取时间段"""
         hour = dt.hour
-        if 6 <= hour < 12:
+        if 6<=hour < 12:
             return "morning"
-        elif 12 <= hour < 18:
+        elif 12<=hour < 18:
             return "afternoon"
-        elif 18 <= hour < 22:
+        elif 18<=hour < 22:
             return "evening"
         else:
             return "night"
@@ -526,11 +526,11 @@ class ContextAwarenessEngine:
     def _get_meal_time(self, dt: datetime) -> str:
         """获取用餐时间"""
         hour = dt.hour
-        if 6 <= hour < 10:
+        if 6<=hour < 10:
             return "breakfast"
-        elif 11 <= hour < 14:
+        elif 11<=hour < 14:
             return "lunch"
-        elif 17 <= hour < 20:
+        elif 17<=hour < 20:
             return "dinner"
         else:
             return "snack"
@@ -643,7 +643,7 @@ class MCPEnhancedOrchestrator(AgentOrchestrator):
         required_capabilities = self.decision_engine._get_required_capabilities(decision.decision_type)
         
         for agent_id, capabilities in self.decision_engine.agent_capabilities.items():
-            if (agent_id != decision.agent_id and 
+            if (agent_id!=decision.agent_id and 
                 any(cap in capabilities for cap in required_capabilities)):
                 
                 # 请求交叉验证
@@ -661,7 +661,7 @@ class MCPEnhancedOrchestrator(AgentOrchestrator):
         """获取共识结果"""
         # 从决策引擎的历史记录中查找
         for consensus in self.decision_engine.consensus_history:
-            if (consensus.decision_type == decision_type and 
+            if (consensus.decision_type==decision_type and 
                 session_id in consensus.consensus_id):
                 return consensus
         return None
@@ -689,7 +689,7 @@ class MCPEnhancedOrchestrator(AgentOrchestrator):
         
         # 检查各决策类型的共识准备状态
         for decision_type in DecisionType:
-            type_decisions = [d for d in active_decisions if d.decision_type == decision_type]
+            type_decisions = [d for d in active_decisions if d.decision_type==decision_type]
             required_capabilities = self.decision_engine._get_required_capabilities(decision_type)
             capable_agents = set()
             
@@ -734,7 +734,7 @@ class MCPEnhancedOrchestrator(AgentOrchestrator):
         agent_participation = defaultdict(int)
         for consensus in consensus_results:
             for agent in consensus["participating_agents"]:
-                agent_participation[agent] += 1
+                agent_participation[agent]+=1
                 
         analytics = {
             "session_id": session_id,
@@ -751,7 +751,7 @@ class MCPEnhancedOrchestrator(AgentOrchestrator):
                 "context_stability": "high"  # 可以基于上下文变化频率计算
             },
             "algorithm_usage": {
-                alg.value: sum(1 for c in consensus_results if c["algorithm_used"] == alg.value)
+                alg.value: sum(1 for c in consensus_results if c["algorithm_used"]==alg.value)
                 for alg in ConsensusAlgorithm
             }
         }

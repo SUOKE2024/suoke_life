@@ -189,7 +189,7 @@ jobs:
       id: meta
       uses: docker/metadata-action@v5
       with:
-        images: suokelife/xiaoai-service
+        images: suoke/xiaoai-service
         tags: |
           type=ref,event=branch
           type=ref,event=pr
@@ -262,7 +262,7 @@ jobs:
     - name: 运行 Trivy 漏洞扫描
       uses: aquasecurity/trivy-action@master
       with:
-        image-ref: 'suokelife/xiaoai-service:latest'
+        image-ref: 'suoke/xiaoai-service:latest'
         format: 'sarif'
         output: 'trivy-results.sarif'
 

@@ -9,10 +9,10 @@ description = "AI-powered accessibility service for Suoke Life platform"
 readme = "README.md"
 license = {file = "LICENSE"}
 authors = [
-    {name = "Suoke Life Team", email = "dev@suokelife.com"}
+    {name = "Suoke Life Team", email = "dev@suoke.life"}
 ]
 maintainers = [
-    {name = "Suoke Life Team", email = "dev@suokelife.com"}
+    {name = "Suoke Life Team", email = "dev@suoke.life"}
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -71,10 +71,10 @@ docs = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/suokelife/accessibility-service"
-Documentation = "https://docs.suokelife.com/accessibility-service"
-Repository = "https://github.com/suokelife/accessibility-service.git"
-"Bug Tracker" = "https://github.com/suokelife/accessibility-service/issues"
+Homepage = "https://github.com/SUOKE2024/accessibility-service"
+Documentation = "https://docs.suoke.life/accessibility-service"
+Repository = "https://github.com/SUOKE2024/accessibility-service.git"
+"Bug Tracker" = "https://github.com/SUOKE2024/accessibility-service/issues"
 
 [project.scripts]
 accessibility-service = "cmd.server.main:main"

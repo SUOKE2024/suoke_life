@@ -33,7 +33,7 @@ class UserService:
         username: str,
         email: str,
         phone: Optional[str] = None,
-        **kwargs
+       **kwargs
     ) -> User:
         """创建新用户"""
         try:
@@ -50,7 +50,7 @@ class UserService:
                 phone=phone,
                 status=UserStatus.ACTIVE,
                 created_at=datetime.utcnow(),
-                **kwargs
+               **kwargs
             )
             
             self.db.add(user)
@@ -68,7 +68,7 @@ class UserService:
     async def get_user_by_id(self, user_id: uuid.UUID) -> Optional[User]:
         """根据ID获取用户"""
         try:
-            stmt = select(User).where(User.id == user_id)
+            stmt = select(User).where(User.id==user_id)
             result = await self.db.execute(stmt)
             return result.scalar_one_or_none()
         except Exception as e:
@@ -78,7 +78,7 @@ class UserService:
     async def get_user_by_email(self, email: str) -> Optional[User]:
         """根据邮箱获取用户"""
         try:
-            stmt = select(User).where(User.email == email)
+            stmt = select(User).where(User.email==email)
             result = await self.db.execute(stmt)
             return result.scalar_one_or_none()
         except Exception as e:
@@ -88,7 +88,7 @@ class UserService:
     async def get_user_by_username(self, username: str) -> Optional[User]:
         """根据用户名获取用户"""
         try:
-            stmt = select(User).where(User.username == username)
+            stmt = select(User).where(User.username==username)
             result = await self.db.execute(stmt)
             return result.scalar_one_or_none()
         except Exception as e:
@@ -98,7 +98,7 @@ class UserService:
     async def update_user(
         self,
         user_id: uuid.UUID,
-        **kwargs
+       **kwargs
     ) -> User:
         """更新用户信息"""
         try:
@@ -159,7 +159,7 @@ class UserService:
             
             # 状态过滤
             if status:
-                stmt = stmt.where(User.status == status)
+                stmt = stmt.where(User.status==status)
             
             # 搜索过滤
             if search:
@@ -202,8 +202,8 @@ class UserService:
             
             # 检查设备是否已绑定
             stmt = select(UserDevice).where(
-                UserDevice.user_id == user_id,
-                UserDevice.device_id == device_id
+                UserDevice.user_id==user_id,
+                UserDevice.device_id==device_id
             )
             result = await self.db.execute(stmt)
             existing_device = result.scalar_one_or_none()
@@ -240,7 +240,7 @@ class UserService:
     async def get_user_devices(self, user_id: uuid.UUID) -> List[UserDevice]:
         """获取用户设备列表"""
         try:
-            stmt = select(UserDevice).where(UserDevice.user_id == user_id)
+            stmt = select(UserDevice).where(UserDevice.user_id==user_id)
             result = await self.db.execute(stmt)
             return list(result.scalars().all())
         except Exception as e:
@@ -251,8 +251,8 @@ class UserService:
         """解绑用户设备"""
         try:
             stmt = select(UserDevice).where(
-                UserDevice.user_id == user_id,
-                UserDevice.device_id == device_id
+                UserDevice.user_id==user_id,
+                UserDevice.device_id==device_id
             )
             result = await self.db.execute(stmt)
             device = result.scalar_one_or_none()
@@ -274,7 +274,7 @@ class UserService:
     async def get_user_health_summary(self, user_id: uuid.UUID) -> Optional[HealthSummary]:
         """获取用户健康摘要"""
         try:
-            stmt = select(HealthSummary).where(HealthSummary.user_id == user_id)
+            stmt = select(HealthSummary).where(HealthSummary.user_id==user_id)
             result = await self.db.execute(stmt)
             return result.scalar_one_or_none()
         except Exception as e:
@@ -293,7 +293,7 @@ class UserService:
                 raise UserNotFoundError(f"用户 {user_id} 不存在")
             
             # 查找现有健康摘要
-            stmt = select(HealthSummary).where(HealthSummary.user_id == user_id)
+            stmt = select(HealthSummary).where(HealthSummary.user_id==user_id)
             result = await self.db.execute(stmt)
             health_summary = result.scalar_one_or_none()
             
@@ -309,7 +309,7 @@ class UserService:
                     id=uuid.uuid4(),
                     user_id=user_id,
                     created_at=datetime.utcnow(),
-                    **health_data
+                   **health_data
                 )
                 self.db.add(health_summary)
             
@@ -330,5 +330,5 @@ def main() -> None:
     print("用户服务业务逻辑模块")
 
 
-if __name__ == "__main__":
+if __name__=="__main__":
     main()

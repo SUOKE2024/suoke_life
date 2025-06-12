@@ -1,10 +1,10 @@
 site_name: 触诊服务文档
 site_description: 索克生活触诊服务 - 基于AI的中医触诊智能分析微服务
 site_author: Suoke Life Team
-site_url: https://docs.suokelife.com/services/palpation
+site_url: https://docs.suoke.life/services/palpation
 
 repo_name: suokelife/suoke_life
-repo_url: https://github.com/suokelife/suoke_life
+repo_url: https://github.com/SUOKE2024/suoke_life
 edit_uri: edit/main/services/diagnostic-services/palpation-service/docs/
 
 theme:

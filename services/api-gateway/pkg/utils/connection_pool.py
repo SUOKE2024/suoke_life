@@ -187,12 +187,12 @@ return self._session_stats.copy()
 """获取总体统计信息"""
 total_stats = PoolStats()
 for stats in self._session_stats.values():
-            total_stats.total_connections += stats.total_connections
-            total_stats.active_connections += stats.active_connections
-            total_stats.idle_connections += stats.idle_connections
-            total_stats.created_connections += stats.created_connections
-            total_stats.closed_connections += stats.closed_connections
-            total_stats.failed_connections += stats.failed_connections
+            total_stats.total_connections+=stats.total_connections
+            total_stats.active_connections+=stats.active_connections
+            total_stats.idle_connections+=stats.idle_connections
+            total_stats.created_connections+=stats.created_connections
+            total_stats.closed_connections+=stats.closed_connections
+            total_stats.failed_connections+=stats.failed_connections
 
 return total_stats
 

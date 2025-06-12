@@ -150,23 +150,23 @@ class TestAuthMiddleware:
         """测试公共端点无需认证"""
         # 健康检查端点
         response = client.get("/health")
-        assert response.status_code == 200
-        assert response.json() == {"status": "ok"}
+        assert response.status_code==200
+        assert response.json()=={"status": "ok"}
 
         # 登录端点
         response = client.get("/api/auth/login")
-        assert response.status_code == 200
+        assert response.status_code==200
         assert "token" in response.json()
 
         # 通配符匹配的公共端点
         response = client.get("/public/test")
-        assert response.status_code == 200
-        assert response.json() == {"message": "public endpoint"}
+        assert response.status_code==200
+        assert response.json()=={"message": "public endpoint"}
 
     def test_protected_endpoint_no_token(self, client):
         """测试无令牌访问受保护端点"""
         response = client.get("/api/protected")
-        assert response.status_code == 401
+        assert response.status_code==401
         assert "detail" in response.json()
         assert "未提供认证令牌" in response.json()["detail"]
 
@@ -174,7 +174,7 @@ class TestAuthMiddleware:
         """测试无效令牌格式"""
         headers = {"Authorization": "InvalidFormat token123"}
         response = client.get("/api/protected", headers=headers)
-        assert response.status_code == 401
+        assert response.status_code==401
         assert "无效的认证令牌格式" in response.json()["detail"]
 
     def test_protected_endpoint_expired_token(self, client):
@@ -183,7 +183,7 @@ class TestAuthMiddleware:
         headers = {"Authorization": f"Bearer {token}"}
 
         response = client.get("/api/protected", headers=headers)
-        assert response.status_code == 401
+        assert response.status_code==401
         assert "令牌已过期" in response.json()["detail"]
 
     def test_protected_endpoint_valid_token(self, client):
@@ -192,8 +192,8 @@ class TestAuthMiddleware:
         headers = {"Authorization": f"Bearer {token}"}
 
         response = client.get("/api/protected", headers=headers)
-        assert response.status_code == 200
-        assert response.json()["user_id"] == "user123"
+        assert response.status_code==200
+        assert response.json()["user_id"]=="user123"
         assert "user" in response.json()["roles"]
 
     def test_admin_endpoint_non_admin(self, client):
@@ -202,7 +202,7 @@ class TestAuthMiddleware:
         headers = {"Authorization": f"Bearer {token}"}
 
         response = client.get("/api/admin", headers=headers)
-        assert response.status_code == 403
+        assert response.status_code==403
         assert "仅管理员可访问" in response.json()["detail"]
 
     def test_admin_endpoint_admin(self, client):
@@ -211,9 +211,9 @@ class TestAuthMiddleware:
         headers = {"Authorization": f"Bearer {token}"}
 
         response = client.get("/api/admin", headers=headers)
-        assert response.status_code == 200
-        assert response.json()["message"] == "管理员专属内容"
-        assert response.json()["user_id"] == "admin123"
+        assert response.status_code==200
+        assert response.json()["message"]=="管理员专属内容"
+        assert response.json()["user_id"]=="admin123"
 
 @pytest.mark.asyncio
 async def test_complex_public_path_matching() -> None:
@@ -271,7 +271,7 @@ middleware = MiddlewareConfig(
     ]
 
     for path, expected in test_cases:
-assert auth_middleware._is_public_path(path) == expected, f"Path {path} should be {'public' if expected else 'private'}"
+assert auth_middleware._is_public_path(path)==expected, f"Path {path} should be {'public' if expected else 'private'}"
 
 @pytest.mark.asyncio
 async def test_invalid_token_formats() -> None:

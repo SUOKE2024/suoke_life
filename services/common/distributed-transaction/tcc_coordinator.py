@@ -138,7 +138,7 @@ class TCCCoordinator:
         async with self._lock:
             transaction = TCCTransaction()
             self.transactions[transaction.transaction_id] = transaction
-            self.stats["total_transactions"] += 1
+            self.stats["total_transactions"]+=1
 
             self._record_event(transaction, "transaction_started", {})
             logger.info(f"开始TCC事务: {transaction.transaction_id}")
@@ -194,7 +194,7 @@ class TCCCoordinator:
             # 事务成功
             transaction.status = TCCStatus.CONFIRMED
             transaction.completed_at = datetime.now()
-            self.stats["successful_transactions"] += 1
+            self.stats["successful_transactions"]+=1
 
             self._record_event(
                 transaction,
@@ -213,7 +213,7 @@ class TCCCoordinator:
             # 异常，执行Cancel
             logger.error(f"TCC事务 {transaction_id} 执行失败: {e}")
             transaction.status = TCCStatus.FAILED
-            self.stats["failed_transactions"] += 1
+            self.stats["failed_transactions"]+=1
 
             await self._cancel_phase(transaction)
             return False
@@ -380,7 +380,7 @@ class TCCCoordinator:
 
         transaction.status = TCCStatus.CANCELLED
         transaction.completed_at = datetime.now()
-        self.stats["cancelled_transactions"] += 1
+        self.stats["cancelled_transactions"]+=1
 
         return True
 
@@ -456,7 +456,7 @@ class TCCCoordinator:
     def get_stats(self) -> dict[str, Any]:
         """获取统计信息"""
         return {
-            ***self.stats,
+           ***self.stats,
             "active_transactions": len(
                 [
                     t

@@ -74,7 +74,7 @@ start_time = time.time()
 try:
             headers = self.config.headers or {}
 
-            if self.config.method.upper() == "GET":
+            if self.config.method.upper()=="GET":
                 async with session.get(
                     self.config.url,
                     headers = headers,
@@ -87,12 +87,12 @@ try:
                         "request_id": request_id,
                         "status_code": response.status,
                         "response_time": end_time - start_time,
-                        "success": 200 < = response.status < 400,
+                        "success": 200 <=response.status < 400,
                         "error": None,
                         "timestamp": start_time,
                     }
 
-            elif self.config.method.upper() == "POST":
+            elif self.config.method.upper()=="POST":
                 data = self.config.data
                 if isinstance(data, str):
                     try:
@@ -114,7 +114,7 @@ try:
                         "request_id": request_id,
                         "status_code": response.status,
                         "response_time": end_time - start_time,
-                        "success": 200 < = response.status < 400,
+                        "success": 200 <=response.status < 400,
                         "error": None,
                         "timestamp": start_time,
                     }
@@ -226,7 +226,7 @@ async with aiohttp.ClientSession(connector = connector) as session:
                 while time.time() < end_time:
                     async with semaphore:
                         request_id = request_counter
-                        request_counter += 1
+                        request_counter+=1
                         result = await self.make_request(session, request_id)
                         self.results.append(result)
 
@@ -577,5 +577,5 @@ result = await tester.run_concurrent_test()
     if args.export:
 tester.export_results(result, args.export)
 
-if __name__ == "__main__":
+if __name__=="__main__":
     asyncio.run(main())

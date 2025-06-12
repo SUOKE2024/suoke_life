@@ -56,7 +56,7 @@ class HealthDataProcessor:
         normalized_data = data.copy()
         
         # 标准化生命体征数据
-        if data.get('data_type') == 'vital_signs':
+        if data.get('data_type')=='vital_signs':
             for key, value in data.items():
                 if key in self.normal_ranges and value is not None:
                     # 转换为浮点数
@@ -80,7 +80,7 @@ class HealthDataProcessor:
         """异常检测"""
         anomalies = []
         
-        if data.get('data_type') == 'vital_signs':
+        if data.get('data_type')=='vital_signs':
             for key, value in data.items():
                 if key in self.normal_ranges and value is not None:
                     normal_min, normal_max = self.normal_ranges[key]
@@ -130,7 +130,7 @@ class HealthDataProcessor:
         
         # 完整性评分
         required_fields = ['user_id', 'data_type']
-        if data.get('data_type') == 'vital_signs':
+        if data.get('data_type')=='vital_signs':
             required_fields.extend(['heart_rate', 'blood_pressure_systolic', 'blood_pressure_diastolic'])
             
         present_fields = sum(1 for field in required_fields if data.get(field) is not None)
@@ -138,7 +138,7 @@ class HealthDataProcessor:
         
         # 准确性评分（基于异常检测）
         anomalies = data.get('anomalies', [])
-        severe_anomalies = sum(1 for a in anomalies if a.get('severity') == 'severe')
+        severe_anomalies = sum(1 for a in anomalies if a.get('severity')=='severe')
         quality_score['accuracy'] = max(0.0, 1.0 - (severe_anomalies * 0.3))
         
         # 时效性评分
@@ -223,14 +223,14 @@ class HealthDataProcessor:
         median_value = median(values)
         
         # 计算变化趋势
-        if len(values) >= 2:
+        if len(values)>=2:
             first_half = values[:len(values)//2]
             second_half = values[len(values)//2:]
             
             first_mean = mean(first_half)
             second_mean = mean(second_half)
             
-            change_percent = ((second_mean - first_mean) / first_mean) * 100 if first_mean != 0 else 0
+            change_percent = ((second_mean - first_mean) / first_mean) * 100 if first_mean!=0 else 0
             
             if change_percent > 5:
                 trend_direction = 'increasing'
@@ -256,9 +256,9 @@ class HealthDataProcessor:
     
     def _generate_trend_analysis(self, direction: str, change_percent: float, mean_value: float) -> str:
         """生成趋势分析文本"""
-        if direction == 'increasing':
+        if direction=='increasing':
             return f"数据呈上升趋势，平均增长 {abs(change_percent):.1f}%，当前均值为 {mean_value:.2f}"
-        elif direction == 'decreasing':
+        elif direction=='decreasing':
             return f"数据呈下降趋势，平均下降 {abs(change_percent):.1f}%，当前均值为 {mean_value:.2f}"
         else:
             return f"数据保持稳定，变化幅度在 ±5% 以内，当前均值为 {mean_value:.2f}"
@@ -304,7 +304,7 @@ class HealthDataProcessor:
             if key in self.normal_ranges and value is not None:
                 normal_min, normal_max = self.normal_ranges[key]
                 
-                if normal_min <= value <= normal_max:
+                if normal_min<=value<=normal_max:
                     continue  # 正常范围，不扣分
                 else:
                     # 根据偏离程度扣分
@@ -314,7 +314,7 @@ class HealthDataProcessor:
                         deviation = (value - normal_max) / normal_max
                     
                     penalty = min(30, deviation * 50)  # 最多扣30分
-                    score -= penalty
+                    score-=penalty
         
         return max(0.0, score)
     
@@ -390,11 +390,11 @@ class HealthDataProcessor:
         """基于异常的建议"""
         recommendations = []
         
-        severe_anomalies = [a for a in anomalies if a.get('severity') == 'severe']
+        severe_anomalies = [a for a in anomalies if a.get('severity')=='severe']
         if severe_anomalies:
             recommendations.append("检测到严重异常指标，建议尽快咨询医生")
         
-        moderate_anomalies = [a for a in anomalies if a.get('severity') == 'moderate']
+        moderate_anomalies = [a for a in anomalies if a.get('severity')=='moderate']
         if moderate_anomalies:
             recommendations.append("部分指标异常，建议关注并定期监测")
         
@@ -405,9 +405,9 @@ class HealthDataProcessor:
         recommendations = []
         
         direction = trends.get('trend_direction')
-        if direction == 'increasing':
+        if direction=='increasing':
             recommendations.append("指标呈上升趋势，请持续关注")
-        elif direction == 'decreasing':
+        elif direction=='decreasing':
             recommendations.append("指标呈下降趋势，建议分析原因")
         
         return recommendations

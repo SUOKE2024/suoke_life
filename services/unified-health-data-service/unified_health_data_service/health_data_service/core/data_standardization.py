@@ -755,11 +755,11 @@ for field_name, field_config in schema.fields.items():
 
 # 类型转换
 try:
-    if field_config["type"] == "integer":
+    if field_config["type"]=="integer":
     processed_data[field_name] = int(float(value))
-elif field_config["type"] == "float":
+elif field_config["type"]=="float":
     processed_data[field_name] = float(value)
-elif field_config["type"] == "string":
+elif field_config["type"]=="string":
     processed_data[field_name] = str(value)
 else:
     processed_data[field_name] = value
@@ -790,12 +790,12 @@ if field_name in data:
 # 范围验证
 if "range" in field_config:
     min_val, max_val = field_config["range"]
-if not (min_val < = value < = max_val):
+if not (min_val <=value <=max_val):
     errors.append(f"字段 {field_name} 值 {value} 超出范围 [{min_val}, {max_val}]")
 
 # 规则验证
 for rule in schema.validation_rules:
-    if rule.rule_type == "range":
+    if rule.rule_type=="range":
     field_name = rule.field_name
 if field_name in data:
     value = data[field_name]
@@ -807,10 +807,10 @@ if min_val is not None and value < min_val:
 if max_val is not None and value > max_val:
     errors.append(f"{rule.error_message}: 值 {value} 大于最大值 {max_val}")
 
-elif rule.rule_type == "custom":
-    if rule.field_name == "blood_pressure_logic":
+elif rule.rule_type=="custom":
+    if rule.field_name=="blood_pressure_logic":
     if "systolic_bp" in data and "diastolic_bp" in data:
-    if data["systolic_bp"] < = data["diastolic_bp"]:
+    if data["systolic_bp"] <=data["diastolic_bp"]:
     errors.append(rule.error_message)
 
 return errors, warnings
@@ -823,21 +823,21 @@ transformed_data = data.copy()
 for rule_name, function_name in schema.transformation_rules.items():
     if function_name in self.unit_conversions:
     # 单位转换
-if rule_name == "temperature_fahrenheit" and "temperature" in data:
+if rule_name=="temperature_fahrenheit" and "temperature" in data:
     transformed_data["temperature_fahrenheit"] = self.unit_conversions[function_name](
 data["temperature"]
 )
-elif rule_name == "glucose_mmol" and "glucose" in data:
+elif rule_name=="glucose_mmol" and "glucose" in data:
     transformed_data["glucose_mmol"] = self.unit_conversions[function_name](
 data["glucose"]
 )
-elif rule_name == "distance_miles" and "distance" in data:
+elif rule_name=="distance_miles" and "distance" in data:
     transformed_data["distance_miles"] = self.unit_conversions[function_name](
 data["distance"]
 )
 
 # 添加计算字段
-if schema.data_type == DataType.VITAL_SIGNS:
+if schema.data_type==DataType.VITAL_SIGNS:
     if "systolic_bp" in data and "diastolic_bp" in data:
     # 计算平均动脉压
 map_pressure = (data["systolic_bp"] + 2 * data["diastolic_bp"]) / 3
@@ -848,7 +848,7 @@ transformed_data["bp_category"] = self._classify_blood_pressure(
 data["systolic_bp"], data["diastolic_bp"]
 )
 
-elif schema.data_type == DataType.LAB_RESULTS:
+elif schema.data_type==DataType.LAB_RESULTS:
     if "glucose" in data:
     transformed_data["glucose_category"] = self._classify_glucose(data["glucose"])
 
@@ -882,11 +882,11 @@ final_score = max(0, base_score - error_penalty - warning_penalty + completeness
 final_score = min(100, final_score)  # 最高100分
 
 # 确定质量等级
-if final_score > = 90:
+if final_score >=90:
     quality_level = DataQuality.HIGH
-elif final_score > = 70:
+elif final_score >=70:
     quality_level = DataQuality.MEDIUM
-elif final_score > = 50:
+elif final_score >=50:
     quality_level = DataQuality.LOW
 else:
     quality_level = DataQuality.INVALID
@@ -918,8 +918,8 @@ for category, values in ranges.items():
     sys_range = values["systolic"]
 dia_range = values["diastolic"]
 
-if (sys_range[0] < = systolic < = sys_range[1] and
-dia_range[0] < = diastolic < = dia_range[1]):
+if (sys_range[0] <=systolic <=sys_range[1] and
+dia_range[0] <=diastolic <=dia_range[1]):
     return category
 
 return "unknown"
@@ -929,11 +929,11 @@ return "unknown"
 ranges = self.reference_ranges["glucose"]
 
 # 假设是空腹血糖
-if ranges["normal_fasting"][0] < = glucose < = ranges["normal_fasting"][1]:
+if ranges["normal_fasting"][0] <=glucose <=ranges["normal_fasting"][1]:
     return "normal_fasting"
-elif ranges["prediabetes_fasting"][0] < = glucose < = ranges["prediabetes_fasting"][1]:
+elif ranges["prediabetes_fasting"][0] <=glucose <=ranges["prediabetes_fasting"][1]:
     return "prediabetes_fasting"
-elif glucose > = ranges["diabetes_fasting"][0]:
+elif glucose >=ranges["diabetes_fasting"][0]:
     return "diabetes_fasting"
 else:
     return "unknown"

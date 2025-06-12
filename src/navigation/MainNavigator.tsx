@@ -1,102 +1,179 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import React from "react"
-import Icon from "react-native-vector-icons/MaterialCommunityIcons"
-import { BenchmarkScreen } from "../screens/benchmark/BenchmarkScreen"
-import { ApiIntegrationDemo } from "../screens/demo/ApiIntegrationDemo"
-import { HomeScreen } from "../screens/main"
-import { DeveloperPanelScreen } from "../screens/profile/DeveloperPanelScreen"
-import { ServiceManagementScreen } from "../screens/profile/ServiceManagementScreen"
-import { ServiceStatusScreen } from "../screens/profile/ServiceStatusScreen"
-import { SettingsScreen } from "../screens/profile/SettingsScreen"
-import { MazeNavigator } from "./MazeNavigator"
-const Tab = createBottomTabNavigator();
-const Stack = createNativeStackNavigator();
-const  ProfileStack = () => (<Stack.Navigator>";)    <Stack.Screen;'  />/,'/g'/;
-name="ProfileMain";
-component={SettingsScreen}
-      options={ headerShown: false }
-    />"/;"/g"/;
-    <Stack.Screen;"  />"
-name="ServiceManagement";
-component={ServiceManagementScreen}
-    />"/;"/g"/;
-    <Stack.Screen;"  />"
-name="ServiceStatus";
-component={ServiceStatusScreen}
-    />"/;"/g"/;
-    <Stack.Screen;"  />"
-name="DeveloperPanel";
-component={DeveloperPanelScreen}
-    />"/;"/g"/;
-    <Stack.Screen;"  />"
-name="ApiIntegrationDemo";
-component={ApiIntegrationDemo}
-    />"/;"/g"/;
-    <Stack.Screen;"  />"
-name="Benchmark";
-component={BenchmarkScreen}
+import React, { Suspense } from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
+
+// 导入主要屏幕
+import HomeScreen from '../screens/main/HomeScreen';
+import AgentChatScreen from '../screens/agents/AgentChatScreen';
+
+// 导入导航器
+import AgentNavigator from './AgentNavigator';
+
+// 导航参数类型定义
+export type MainStackParamList = {
+  Home: undefined;
+  AgentChat: {
+    agentId: string;
+    agentName: string;
+    agentType: string;
+  };
+  Chat: {
+    contactId: string;
+    contactName: string;
+    contactType: string;
+  };
+  Search: undefined;
+  NewChat: undefined;
+  Agents: undefined;
+};
+
+const Stack = createNativeStackNavigator<MainStackParamList>();
+
+// 加载指示器组件
+const LoadingSpinner = () => (
+  <View style={styles.loadingContainer}>
+    <ActivityIndicator size="large" color="#2196F3" />
+    <Text style={styles.loadingText}>正在加载...</Text>
+  </View>
 );
-    />)
-  </Stack.Navigator>)
+
+// 搜索屏幕占位符
+const SearchScreen = () => (
+  <View style={styles.placeholderContainer}>
+    <Text style={styles.placeholderTitle}>搜索功能</Text>
+    <Text style={styles.placeholderSubtitle}>该功能正在开发中，敬请期待</Text>
+  </View>
 );
-export const MainNavigator: React.FC = () => {};
-  return (<Tab.Navigator;)}  />
-screenOptions={({  route  }) => ({)}
-        tabBarIcon: ({  focused, color, size ; }) => {const let = iconName: string;}","
-switch (route.name) {"case 'Home': '
-iconName = focused ? 'home' : 'home-outline';
-break;
-case 'Explore': '
-iconName = focused ? 'compass' : 'compass-outline';
-break;
-case 'Health': '
-iconName = focused ? 'heart' : 'heart-outline';
-break;
-case 'Community': '
-iconName = focused ? 'account-group' : 'account-group-outline';
-break;
-case 'Profile': '
-iconName = focused ? 'account' : 'account-outline';
-break;
-case 'Maze': '
-iconName = focused ? 'puzzle' : 'puzzle-outline';
-break;
-const default =
-}
-              iconName = 'help-circle-outline}
-          }
-          return <Icon name={iconName} size={size} color={color}  />;'/;'/g'/;
-        },'
-tabBarActiveTintColor: '#3498DB,'
-tabBarInactiveTintColor: '#95A5A6,'';
-const headerShown = false;
-      ;})}
-    >'
-      <Tab.Screen;'  />/,'/g'/;
-name="Home";
-component={HomeScreen}
-      />"/;"/g"/;
-      <Tab.Screen;"  />"
-name="Explore";
-component={HomeScreen}
-      />"/;"/g"/;
-      <Tab.Screen;"  />"
-name="Health";
-component={HomeScreen}
-      />"/;"/g"/;
-      <Tab.Screen;"  />"
-name="Community";
-component={HomeScreen}
-      />"/;"/g"/;
-      <Tab.Screen;"  />"
-name="Maze";
-component={MazeNavigator}
-      />"/;"/g"/;
-      <Tab.Screen;"  />"
-name="Profile";
-component={ProfileStack}
+
+// 新建聊天屏幕占位符
+const NewChatScreen = () => (
+  <View style={styles.placeholderContainer}>
+    <Text style={styles.placeholderTitle}>新建聊天</Text>
+    <Text style={styles.placeholderSubtitle}>该功能正在开发中，敬请期待</Text>
+  </View>
+);
+
+// 通用聊天屏幕占位符
+const ChatScreen = () => (
+  <View style={styles.placeholderContainer}>
+    <Text style={styles.placeholderTitle}>聊天界面</Text>
+    <Text style={styles.placeholderSubtitle}>该功能正在开发中，敬请期待</Text>
+  </View>
+);
+
+// 主导航器
+export const MainNavigator: React.FC = () => {
+  return (
+    <Stack.Navigator
+      initialRouteName="Home"
+      screenOptions={{
+        headerShown: false,
+        animation: 'slide_from_right',
+        gestureEnabled: true,
+        gestureDirection: 'horizontal',
+      }}
+    >
+      {/* 首页 */}
+      <Stack.Screen
+        name="Home"
+        options={{
+          gestureEnabled: false,
+        }}
+      >
+        {() => (
+          <Suspense fallback={<LoadingSpinner />}>
+            <HomeScreen />
+          </Suspense>
+        )}
+      </Stack.Screen>
+
+      {/* 智能体聊天 */}
+      <Stack.Screen
+        name="AgentChat"
+        options={{
+          animation: 'slide_from_bottom',
+          presentation: 'modal',
+        }}
+      >
+        {() => (
+          <Suspense fallback={<LoadingSpinner />}>
+            <AgentChatScreen />
+          </Suspense>
+        )}
+      </Stack.Screen>
+
+      {/* 通用聊天 */}
+      <Stack.Screen
+        name="Chat"
+        component={ChatScreen}
+        options={{
+          animation: 'slide_from_right',
+        }}
       />
-    </Tab.Navigator>
+
+      {/* 搜索 */}
+      <Stack.Screen
+        name="Search"
+        component={SearchScreen}
+        options={{
+          animation: 'slide_from_top',
+          presentation: 'modal',
+        }}
+      />
+
+      {/* 新建聊天 */}
+      <Stack.Screen
+        name="NewChat"
+        component={NewChatScreen}
+        options={{
+          animation: 'slide_from_bottom',
+          presentation: 'modal',
+        }}
+      />
+
+      {/* 智能体导航器 */}
+      <Stack.Screen
+        name="Agents"
+        component={AgentNavigator}
+        options={{
+          animation: 'slide_from_right',
+        }}
+      />
+    </Stack.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f5f5f5',
+  },
+  loadingText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: '#666666',
+  },
+  placeholderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f5f5f5',
+    padding: 20,
+  },
+  placeholderTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#333333',
+    marginBottom: 16,
+  },
+  placeholderSubtitle: {
+    fontSize: 16,
+    color: '#666666',
+    textAlign: 'center',
+    lineHeight: 24,
+  },
+});
+
+export default MainNavigator;

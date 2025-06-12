@@ -44,7 +44,7 @@ if route.service not in self.rewrite_rules:
 # 检查重写路径中是否有正则表达式捕获组
 # 格式例如: "^ / api / users / ([0 - 9] + )( / . * )?$" = > " / users / $1$2"
 rewrite_parts = route.rewrite_path.split(' = >')
-if len(rewrite_parts) ! = 2:
+if len(rewrite_parts) !=2:
             logger.warning(f"无效的重写规则格式: {route.rewrite_path}, 将被忽略")
             return
 

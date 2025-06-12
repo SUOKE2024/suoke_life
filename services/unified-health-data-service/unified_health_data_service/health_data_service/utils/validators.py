@@ -32,11 +32,11 @@ class HealthDataValidator:
             # 根据数据类型进行特定验证
             data_type = data.get('data_type')
             
-            if data_type == 'vital_signs':
+            if data_type=='vital_signs':
                 self._validate_vital_signs(data)
-            elif data_type == 'diagnostic':
+            elif data_type=='diagnostic':
                 self._validate_diagnostic_data(data)
-            elif data_type == 'tcm':
+            elif data_type=='tcm':
                 self._validate_tcm_data(data)
             
             # 添加验证时间戳
@@ -75,7 +75,7 @@ class HealthDataValidator:
                 if value is not None:
                     try:
                         value = float(value)
-                        if not (min_val <= value <= max_val):
+                        if not (min_val<=value<=max_val):
                             raise ValueError(f"{field} 值 {value} 超出正常范围 [{min_val}, {max_val}]")
                         data[field] = value  # 确保是数值类型
                     except (ValueError, TypeError):
@@ -86,7 +86,7 @@ class HealthDataValidator:
             sys_bp = data['blood_pressure_systolic']
             dia_bp = data['blood_pressure_diastolic']
             if sys_bp is not None and dia_bp is not None:
-                if sys_bp <= dia_bp:
+                if sys_bp<=dia_bp:
                     raise ValueError("收缩压必须大于舒张压")
     
     def _validate_diagnostic_data(self, data: Dict[str, Any]) -> None:
@@ -103,7 +103,7 @@ class HealthDataValidator:
             if confidence is not None:
                 try:
                     confidence = float(confidence)
-                    if not (0.0 <= confidence <= 1.0):
+                    if not (0.0<=confidence<=1.0):
                         raise ValueError("置信度必须在0.0到1.0之间")
                     data['confidence_score'] = confidence
                 except (ValueError, TypeError):
@@ -124,7 +124,7 @@ class HealthDataValidator:
                 raise ValueError("症状必须是列表格式")
             
             for symptom in symptoms:
-                if not isinstance(symptom, str) or len(symptom.strip()) == 0:
+                if not isinstance(symptom, str) or len(symptom.strip())==0:
                     raise ValueError("症状描述必须是非空字符串")
     
     def validate_user_id(self, user_id: str) -> bool:
@@ -134,7 +134,7 @@ class HealthDataValidator:
         
         # 简单的用户ID格式验证（可根据实际需求调整）
         pattern = r'^[a-zA-Z0-9_-]+$'
-        return bool(re.match(pattern, user_id)) and len(user_id) >= 3
+        return bool(re.match(pattern, user_id)) and len(user_id)>=3
     
     def validate_timestamp(self, timestamp: Any) -> datetime:
         """验证时间戳"""

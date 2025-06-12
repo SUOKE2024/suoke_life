@@ -38,7 +38,7 @@
 
 ```bash
 # 克隆项目
-git clone https://github.com/suokelife/suoke_life.git
+git clone https://github.com/SUOKE2024/suoke_life.git
 cd suoke_life/services/diagnostic-services/palpation-service
 
 # 安装依赖
@@ -107,12 +107,12 @@ palpation-service/
 
 ## 📄 许可证
 
-本项目采用 MIT 许可证。详情请查看 [LICENSE](https://github.com/suokelife/suoke_life/blob/main/LICENSE) 文件。
+本项目采用 MIT 许可证。详情请查看 [LICENSE](https://github.com/SUOKE2024/suoke_life/blob/main/LICENSE) 文件。
 
 ## 📞 支持
 
 如果您遇到问题或有任何疑问，请：
 
 - 查看[故障排除](troubleshooting.md)文档
-- 提交[Issue](https://github.com/suokelife/suoke_life/issues)
-- 联系开发团队：dev@suokelife.com 
+- 提交[Issue](https://github.com/SUOKE2024/suoke_life/issues)
+- 联系开发团队：dev@suoke.life 

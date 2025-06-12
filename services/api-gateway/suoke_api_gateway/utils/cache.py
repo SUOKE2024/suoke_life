@@ -83,19 +83,19 @@ try:
             value = await self.redis_client.get(full_key)
 
             if value is not None:
-                self.hit_count += 1
+                self.hit_count+=1
                 # 尝试解析JSON
                 try:
                     return json.loads(value)
                 except json.JSONDecodeError:
                     return value
             else:
-                self.miss_count += 1
+                self.miss_count+=1
                 return None
 
 except Exception as e:
             logger.error("Cache get failed", key = key, error = str(e))
-            self.miss_count += 1
+            self.miss_count+=1
             return None
 
     async def set(
@@ -174,10 +174,10 @@ try:
             if callable(factory_func):
                 if hasattr(factory_func, '__call__') and hasattr(factory_func, '__await__'):
                     # 异步函数
-                    value = await factory_func( * args, **kwargs)
+                    value = await factory_func( * args,**kwargs)
                 else:
                     # 同步函数
-                    value = factory_func( * args, **kwargs)
+                    value = factory_func( * args,**kwargs)
             else:
                 value = factory_func
 

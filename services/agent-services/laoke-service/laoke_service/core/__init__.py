@@ -4,8 +4,8 @@ from typing import Dict, List, Any, Optional, Union
 __init__ - 索克生活项目模块
 """
 
-from .config import Settings, get_settings
-from .exceptions import ConfigurationError, LaoKeServiceError, ValidationError
+from .config import Config, get_config
+from .exceptions import ConfigurationException, LaokeServiceException, ValidationException
 from .logging import get_logger, setup_logging
 
 """
@@ -14,11 +14,11 @@ from .logging import get_logger, setup_logging
 
 
 __all__ = [
-    "Settings",
-    "get_settings",
-    "LaoKeServiceError",
-    "ConfigurationError",
-    "ValidationError",
+    "Config",
+    "get_config",
+    "LaokeServiceException",
+    "ConfigurationException",
+    "ValidationException",
     "setup_logging",
     "get_logger",
 ]

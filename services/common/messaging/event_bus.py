@@ -248,9 +248,9 @@ class UserEventHandler(EventHandler):
     async def handle(self, event: Event) -> bool:
         """处理用户事件"""
         try:
-            if event.event_type == EventType.USER_REGISTERED.value:
+            if event.event_type==EventType.USER_REGISTERED.value:
                 return await self._handle_user_registered(event)
-            elif event.event_type == EventType.USER_LOGIN.value:
+            elif event.event_type==EventType.USER_LOGIN.value:
                 return await self._handle_user_login(event)
 
             return True
@@ -367,7 +367,7 @@ class SystemAlertEventHandler(EventHandler):
             if severity in ["critical", "high"]:
                 # 立即通知运维团队
                 await self.alert_service.send_immediate_alert(alert_data)
-            elif severity == "medium":
+            elif severity=="medium":
                 # 发送邮件通知
                 await self.alert_service.send_email_alert(alert_data)
             else:

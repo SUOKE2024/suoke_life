@@ -716,7 +716,7 @@ class DeviceConnectorManager:
                 connector = connector_class(config)
                 if await connector.authenticate():
                     self.connectors[device_type] = connector
-                    self.sync_performance_metrics["total_devices"] += 1
+                    self.sync_performance_metrics["total_devices"]+=1
                     logger.info(f"设备注册成功: {device_type}")
                     return True
             else:
@@ -760,11 +760,11 @@ class DeviceConnectorManager:
         
         for i, result in enumerate(results):
             if isinstance(result, Exception):
-                failed_syncs += 1
+                failed_syncs+=1
                 logger.error(f"设备数据获取失败: {list(self.connectors.keys())[i]}")
             else:
                 all_data.extend(result)
-                successful_syncs += 1
+                successful_syncs+=1
                 
         # 数据去重和质量评估
         deduplicated_data = self._deduplicate_data(all_data)
