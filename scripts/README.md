@@ -1,4 +1,107 @@
-# 索克生活项目脚本
+# 索克生活项目工具脚本
+
+本目录包含用于索克生活项目开发和维护的各种实用工具脚本。
+
+## Python代码格式化工具
+
+项目使用Black和isort进行Python代码格式化，以保持代码风格一致。
+
+### 单文件格式化
+
+`format_python_code.py`脚本可以格式化单个文件或目录中的所有Python文件。
+
+#### 使用方法
+
+```bash
+# 格式化单个文件
+python scripts/format_python_code.py --dir path/to/file.py
+
+# 格式化目录中的所有Python文件
+python scripts/format_python_code.py --dir path/to/directory
+
+# 只检查不修改
+python scripts/format_python_code.py --dir path/to/directory --check
+```
+
+### 批量格式化
+
+对于大型项目，`batch_format_python.py`脚本可以分批格式化所有Python文件，避免一次处理过多文件导致的问题。
+
+#### 使用方法
+
+```bash
+# 使用默认参数格式化整个项目
+python scripts/batch_format_python.py
+
+# 指定目录和批次大小
+python scripts/batch_format_python.py --dir services --batch-size 30
+
+# 指定批次间延迟时间（秒）
+python scripts/batch_format_python.py --dir services --batch-size 30 --delay 2
+```
+
+## 代码风格配置
+
+项目使用以下配置文件来定义代码风格：
+
+- `pyproject.toml`：Black和isort的配置
+- `.flake8`：Flake8的配置
+
+### Black配置
+
+```toml
+[tool.black]
+line-length = 88
+target-version = ['py38', 'py39', 'py310']
+include = '\.pyi?$'
+```
+
+### isort配置
+
+```toml
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+known_first_party = ["suoke_life"]
+```
+
+### Flake8配置
+
+```
+[flake8]
+max-line-length = 88
+extend-ignore = E203, W503, E501
+exclude = 
+    .git,
+    __pycache__,
+    venv,
+    .venv,
+    migrations,
+    node_modules
+```
+
+## 提交前检查
+
+建议在提交代码前运行以下命令，确保代码符合项目的格式化标准：
+
+```bash
+python scripts/format_python_code.py --check
+```
+
+如果发现格式问题，可以运行以下命令进行修复：
+
+```bash
+python scripts/format_python_code.py
+```
+
+对于大型项目，可以使用批量格式化脚本：
+
+```bash
+python scripts/batch_format_python.py
+```
+
+## 索克生活项目脚本
 
 本目录包含了索克生活项目的各种自动化脚本和工具。
 
