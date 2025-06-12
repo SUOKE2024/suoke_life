@@ -2,11 +2,12 @@
 logging - 索克生活项目模块
 """
 
-from health_data_service.core.config import settings
-from loguru import logger
+import sys
 from pathlib import Path
 from typing import Any, Optional, Tuple
-import sys
+
+from health_data_service.core.config import settings
+from loguru import logger
 
 #! / usr / bin / env python3
 """

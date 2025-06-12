@@ -28,11 +28,11 @@ __email__ = "dev@suoke.life"
 
 # 配置日志
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 
 logger = logging.getLogger(__name__)
+
 
 class UnifiedHealthDataService:
     """
@@ -74,8 +74,7 @@ class UnifiedHealthDataService:
 
         # 启动子服务
         await asyncio.gather(
-            self.start_database_service(),
-            self.start_health_data_service()
+            self.start_database_service(), self.start_health_data_service()
         )
 
         logger.info("统一健康数据服务启动完成")
@@ -107,8 +106,8 @@ class UnifiedHealthDataService:
                 },
                 "database_service": {
                     "status": "running" if self.database_service else "stopped"
-                }
-            }
+                },
+            },
         }
 
     async def process_health_data(self, data: dict[str, Any]) -> dict[str, Any]:
@@ -135,10 +134,6 @@ class UnifiedHealthDataService:
         # 模拟数据查询
         return [{"result": "mock_data", "query": query}]
 
+
 # 导出主要类和函数
-__all__ = [
-    "UnifiedHealthDataService",
-    "__version__",
-    "__author__",
-    "__email__"
-] 
+__all__ = ["UnifiedHealthDataService", "__version__", "__author__", "__email__"]

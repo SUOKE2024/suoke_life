@@ -5,9 +5,10 @@ ORM设置和配置
 
 import asyncio
 import logging
+
 from sqlalchemy import create_engine, event
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import QueuePool
 
 from ..models.health_data import Base

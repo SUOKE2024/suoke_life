@@ -2,12 +2,10 @@
 base - 索克生活项目模块
 """
 
-from abc import ABC
-from abc import abstractmethod
+from abc import ABC, abstractmethod
+from typing import Any, Generic, TypeVar
+
 from health_data_service.core.logging import log_database_operation
-from typing import Any
-from typing import Generic
-from typing import TypeVar
 
 """基础服务类"""
 

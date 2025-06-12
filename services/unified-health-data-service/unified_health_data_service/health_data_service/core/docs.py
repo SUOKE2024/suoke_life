@@ -2,11 +2,12 @@
 docs - 索克生活项目模块
 """
 
-from .config import get_settings
 from fastapi import FastAPI
-from fastapi.openapi.docs import get_swagger_ui_html, get_redoc_html
+from fastapi.openapi.docs import get_redoc_html, get_swagger_ui_html
 from fastapi.openapi.utils import get_openapi
 from fastapi.responses import HTMLResponse
+
+from .config import get_settings
 
 """
 API文档生成器

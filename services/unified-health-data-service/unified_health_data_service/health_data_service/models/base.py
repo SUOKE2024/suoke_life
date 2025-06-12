@@ -3,9 +3,8 @@ base - 索克生活项目模块
 """
 
 from datetime import datetime
-from pydantic import BaseModel
-from pydantic import ConfigDict
-from pydantic import Field
+
+from pydantic import BaseModel, ConfigDict, Field
 
 """基础数据模型"""
 
