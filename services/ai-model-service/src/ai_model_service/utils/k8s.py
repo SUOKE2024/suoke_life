@@ -231,7 +231,7 @@ class KubernetesClient:
             )
             return result
         except ApiException as e:
-            if e.status==404:
+            if e.status == 404:
                 return None
             logger.error("获取Deployment失败", name=name, error=str(e))
             raise
@@ -283,7 +283,7 @@ class KubernetesClient:
             )
             logger.info("Deployment删除成功", name=name, namespace=self.namespace)
         except ApiException as e:
-            if e.status!=404:
+            if e.status != 404:
                 logger.error("删除Deployment失败", name=name, error=str(e))
                 raise
 
@@ -301,7 +301,7 @@ class KubernetesClient:
             )
             logger.info("Service删除成功", name=name, namespace=self.namespace)
         except ApiException as e:
-            if e.status!=404:
+            if e.status != 404:
                 logger.error("删除Service失败", name=name, error=str(e))
                 raise
 
@@ -319,7 +319,7 @@ class KubernetesClient:
             )
             logger.info("HPA删除成功", name=name, namespace=self.namespace)
         except ApiException as e:
-            if e.status!=404:
+            if e.status != 404:
                 logger.error("删除HPA失败", name=name, error=str(e))
                 raise
 

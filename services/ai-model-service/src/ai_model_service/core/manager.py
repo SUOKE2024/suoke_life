@@ -285,7 +285,7 @@ class CloudModelManager:
             deployments_to_delete = [
                 deployment
                 for deployment in self.deployments.values()
-                if deployment.model_id==model_id
+                if deployment.model_id == model_id
             ]
 
             # 删除部署
@@ -438,7 +438,7 @@ class CloudModelManager:
     ) -> Optional[DeploymentInfo]:
         """根据模型ID查找部署"""
         for deployment in self.deployments.values():
-            if deployment.model_id==model_id:
+            if deployment.model_id == model_id:
                 return deployment
         return None
 
@@ -457,7 +457,7 @@ class CloudModelManager:
                 return
 
             await asyncio.sleep(check_interval)
-            waited_time+=check_interval
+            waited_time += check_interval
 
             if deployment and self.monitor:
                 await self.monitor.update_deployment_status(deployment)
@@ -480,8 +480,8 @@ class CloudModelManager:
         old_deployments = [
             deployment_id
             for deployment_id, deployment in self.deployments.items()
-            if deployment.model_id==model_id
-            and deployment_id!=current_deployment_id
+            if deployment.model_id == model_id
+            and deployment_id != current_deployment_id
         ]
 
         for deployment_id in old_deployments:
