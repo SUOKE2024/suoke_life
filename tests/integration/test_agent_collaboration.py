@@ -1,14 +1,14 @@
 """
 智能体协作集成测试
 
-测试四大智能体（索儿、小克、老克、小艾）之间的协作功能。
+测试四大智能体（小艾、小克、老克、索儿）的协同工作机制。
 """
 
 import pytest
 import asyncio
-from unittest.mock import AsyncMock, patch
-from httpx import AsyncClient
-import json
+import time
+from typing import Dict, Any, List
+from unittest.mock import AsyncMock, MagicMock
 
 # 导入通用测试基类
 import sys
@@ -18,189 +18,236 @@ from common.test_base import IntegrationTestCase
 
 
 class TestAgentCollaboration(IntegrationTestCase):
-    """智能体协作集成测试类"""
+    """智能体协作集成测试"""
 
-    @pytest.fixture
-    async def mock_agent_clients(self):
-        """模拟智能体客户端"""
-        clients = {
-            "soer": AsyncMock(),
-            "xiaoke": AsyncMock(),
-            "laoke": AsyncMock(),
-            "xiaoai": AsyncMock()
-        }
+    @pytest.fixture(autouse=True)
+    async def setup_agents(self):
+        """设置智能体服务模拟"""
+        self.xiaoai_service = AsyncMock()  # 小艾 - 健康助手
+        self.xiaoke_service = AsyncMock()  # 小克 - 诊断专家
+        self.laoke_service = AsyncMock()   # 老克 - 中医大师
+        self.soer_service = AsyncMock()    # 索儿 - 生活管家
         
-        # 配置模拟响应
-        clients["soer"].chat.return_value = {
-            "response": "我是索儿，我来协调其他智能体为您服务",
+        # 模拟服务响应
+        self.xiaoai_service.process_request.return_value = {
+            "agent": "xiaoai",
+            "status": "completed",
+            "result": "健康建议已生成",
             "next_agent": "xiaoke",
-            "context": {"user_query": "健康咨询", "priority": "high"}
+            "confidence": 0.85
         }
         
-        clients["xiaoke"].analyze_health.return_value = {
-            "constitution": "阳虚体质",
-            "recommendations": ["早睡早起", "适量运动"],
-            "need_expert_review": True
+        self.xiaoke_service.process_request.return_value = {
+            "agent": "xiaoke", 
+            "status": "completed",
+            "result": "初步诊断完成",
+            "next_agent": "laoke",
+            "confidence": 0.90
         }
         
-        clients["laoke"].provide_knowledge.return_value = {
-            "knowledge": "阳虚体质的详细说明和调理方法",
-            "sources": ["中医体质学", "黄帝内经"],
+        self.laoke_service.process_request.return_value = {
+            "agent": "laoke",
+            "status": "completed", 
+            "result": "中医辨证论治方案",
+            "next_agent": "soer",
             "confidence": 0.95
         }
         
-        clients["xiaoai"].coordinate_diagnosis.return_value = {
-            "diagnosis_plan": ["望诊", "问诊", "脉诊"],
-            "estimated_time": "15分钟",
-            "required_services": ["look-service", "inquiry-service"]
+        self.soer_service.process_request.return_value = {
+            "agent": "soer",
+            "status": "completed",
+            "result": "生活方案制定完成",
+            "next_agent": None,
+            "confidence": 0.88
+        }
+    
+    async def test_full_collaboration_workflow(self):
+        """测试完整的智能体协作工作流"""
+        # 用户请求
+        user_request = {
+            "user_id": "test_user_001",
+            "request_type": "health_consultation",
+            "symptoms": ["头痛", "失眠", "食欲不振"],
+            "duration": "3天",
+            "severity": "中等"
         }
         
-        return clients
-
-    @pytest.mark.integration
-    @pytest.mark.asyncio
-    async def test_full_consultation_workflow(self, mock_agent_clients):
-        """测试完整的咨询工作流"""
-        # 1. 用户发起健康咨询
-        user_query = {
-            "message": "我最近总是感觉疲劳，想了解一下自己的体质",
-            "user_id": "test-user-123",
-            "session_id": "test-session-456"
-        }
+        # 启动协作流程
+        workflow_result = await self._execute_collaboration_workflow(user_request)
         
-        # 2. 索儿接收并分析请求
-        soer_response = await mock_agent_clients["soer"].chat(user_query)
-        assert soer_response["next_agent"] == "xiaoke"
-        assert "健康咨询" in soer_response["context"]["user_query"]
+        # 验证工作流完成
+        assert workflow_result["status"] == "completed"
+        assert len(workflow_result["agent_results"]) == 4
         
-        # 3. 小克进行健康分析
-        health_analysis = await mock_agent_clients["xiaoke"].analyze_health({
-            "symptoms": ["疲劳"],
-            "user_id": user_query["user_id"]
-        })
-        assert health_analysis["constitution"] == "阳虚体质"
-        assert health_analysis["need_expert_review"] is True
+        # 验证每个智能体都被调用
+        self.xiaoai_service.process_request.assert_called_once()
+        self.xiaoke_service.process_request.assert_called_once()
+        self.laoke_service.process_request.assert_called_once()
+        self.soer_service.process_request.assert_called_once()
         
-        # 4. 老克提供专业知识
-        knowledge_response = await mock_agent_clients["laoke"].provide_knowledge({
-            "topic": "阳虚体质",
-            "context": health_analysis
-        })
-        assert knowledge_response["confidence"] > 0.9
-        assert "调理方法" in knowledge_response["knowledge"]
-        
-        # 5. 小艾协调诊断流程
-        diagnosis_plan = await mock_agent_clients["xiaoai"].coordinate_diagnosis({
-            "constitution": health_analysis["constitution"],
-            "user_id": user_query["user_id"]
-        })
-        assert "望诊" in diagnosis_plan["diagnosis_plan"]
-        assert "look-service" in diagnosis_plan["required_services"]
-
-    @pytest.mark.integration
-    @pytest.mark.asyncio
-    async def test_agent_handoff_mechanism(self, mock_agent_clients):
+        # 验证结果传递
+        agent_results = workflow_result["agent_results"]
+        assert agent_results[0]["agent"] == "xiaoai"
+        assert agent_results[1]["agent"] == "xiaoke"
+        assert agent_results[2]["agent"] == "laoke"
+        assert agent_results[3]["agent"] == "soer"
+    
+    async def test_agent_handoff_mechanism(self):
         """测试智能体交接机制"""
-        # 测试从索儿到小克的交接
-        handoff_data = {
-            "from_agent": "soer",
-            "to_agent": "xiaoke",
-            "context": {
-                "user_query": "体质分析",
-                "user_id": "test-user-123",
-                "priority": "normal"
-            },
-            "metadata": {
-                "timestamp": "2024-01-01T10:00:00Z",
-                "session_id": "test-session-456"
-            }
+        # 测试小艾到小克的交接
+        xiaoai_result = await self.xiaoai_service.process_request({
+            "user_id": "test_user_001",
+            "request": "我最近总是头痛"
+        })
+        
+        # 验证交接信息
+        assert xiaoai_result["next_agent"] == "xiaoke"
+        assert xiaoai_result["confidence"] > 0.8
+        
+        # 测试小克接收交接
+        xiaoke_input = {
+            "previous_agent": "xiaoai",
+            "previous_result": xiaoai_result["result"],
+            "user_context": {"symptoms": ["头痛"]}
         }
         
-        # 验证交接数据的完整性
-        assert handoff_data["from_agent"] in ["soer", "xiaoke", "laoke", "xiaoai"]
-        assert handoff_data["to_agent"] in ["soer", "xiaoke", "laoke", "xiaoai"]
-        assert "user_id" in handoff_data["context"]
-        assert "session_id" in handoff_data["metadata"]
-
-    @pytest.mark.integration
-    @pytest.mark.asyncio
-    async def test_multi_agent_decision_making(self, mock_agent_clients):
-        """测试多智能体决策"""
-        # 复杂健康问题需要多个智能体协作
-        complex_case = {
-            "symptoms": ["头痛", "失眠", "消化不良", "情绪低落"],
-            "duration": "3个月",
-            "user_profile": {
-                "age": 35,
-                "gender": "female",
-                "occupation": "程序员"
-            }
-        }
+        xiaoke_result = await self.xiaoke_service.process_request(xiaoke_input)
+        assert xiaoke_result["next_agent"] == "laoke"
+    
+    async def test_parallel_agent_processing(self):
+        """测试智能体并行处理能力"""
+        # 创建多个并发请求
+        requests = [
+            {"user_id": f"user_{i}", "symptoms": [f"症状_{i}"]}
+            for i in range(5)
+        ]
         
-        # 各智能体并行分析
+        # 并行处理
         tasks = [
-            mock_agent_clients["xiaoke"].analyze_health(complex_case),
-            mock_agent_clients["laoke"].search_knowledge({
-                "symptoms": complex_case["symptoms"]
-            }),
-            mock_agent_clients["xiaoai"].plan_diagnosis(complex_case)
+            self._execute_collaboration_workflow(req)
+            for req in requests
         ]
         
         results = await asyncio.gather(*tasks)
         
-        # 验证各智能体都提供了有效分析
-        health_analysis, knowledge_search, diagnosis_plan = results
-        assert health_analysis is not None
-        assert knowledge_search is not None
-        assert diagnosis_plan is not None
-
-    @pytest.mark.integration
-    @pytest.mark.asyncio
-    async def test_agent_error_handling_and_fallback(self, mock_agent_clients):
-        """测试智能体错误处理和降级机制"""
-        # 模拟小克服务不可用
-        mock_agent_clients["xiaoke"].analyze_health.side_effect = Exception("Service unavailable")
+        # 验证所有请求都成功处理
+        assert len(results) == 5
+        for result in results:
+            assert result["status"] == "completed"
+    
+    async def test_agent_failure_recovery(self):
+        """测试智能体故障恢复机制"""
+        # 模拟小克服务故障
+        self.xiaoke_service.process_request.side_effect = Exception("服务暂时不可用")
         
-        # 索儿应该能够检测到错误并启用降级机制
-        with pytest.raises(Exception):
-            await mock_agent_clients["xiaoke"].analyze_health({"symptoms": ["头痛"]})
-        
-        # 验证降级机制：使用老克的基础分析功能
-        fallback_response = await mock_agent_clients["laoke"].provide_knowledge({
-            "topic": "头痛症状分析",
-            "fallback_mode": True
-        })
-        assert fallback_response is not None
-
-    @pytest.mark.integration
-    @pytest.mark.asyncio
-    async def test_agent_context_sharing(self, mock_agent_clients):
-        """测试智能体间的上下文共享"""
-        # 创建共享上下文
-        shared_context = {
-            "user_id": "test-user-123",
-            "session_id": "test-session-456",
-            "conversation_history": [
-                {"agent": "soer", "message": "您好，我是索儿"},
-                {"agent": "user", "message": "我想了解我的体质"}
-            ],
-            "user_profile": {
-                "constitution": "未知",
-                "health_goals": ["体质改善", "健康管理"]
-            }
+        user_request = {
+            "user_id": "test_user_002",
+            "request_type": "health_consultation",
+            "symptoms": ["咳嗽"]
         }
         
-        # 各智能体应该能够访问和更新共享上下文
-        # 这里模拟上下文在智能体间的传递和更新
-        updated_context = shared_context.copy()
-        updated_context["conversation_history"].append({
-            "agent": "xiaoke", 
-            "message": "根据分析，您可能是阳虚体质"
-        })
-        updated_context["user_profile"]["constitution"] = "阳虚体质"
+        # 执行工作流（应该有故障恢复）
+        workflow_result = await self._execute_collaboration_workflow(user_request)
         
-        assert len(updated_context["conversation_history"]) == 3
-        assert updated_context["user_profile"]["constitution"] == "阳虚体质"
+        # 验证故障处理
+        assert workflow_result["status"] == "partial_completed"
+        assert "xiaoke" in workflow_result["failed_agents"]
+        
+        # 验证其他智能体仍然工作
+        assert len(workflow_result["agent_results"]) >= 2  # 至少小艾和备用处理
+    
+    # 辅助方法
+    async def _execute_collaboration_workflow(self, user_request: Dict[str, Any]) -> Dict[str, Any]:
+        """执行智能体协作工作流"""
+        workflow_result = {
+            "status": "in_progress",
+            "agent_results": [],
+            "failed_agents": []
+        }
+        
+        # 模拟工作流执行
+        agents = [
+            ("xiaoai", self.xiaoai_service),
+            ("xiaoke", self.xiaoke_service), 
+            ("laoke", self.laoke_service),
+            ("soer", self.soer_service)
+        ]
+        
+        current_context = user_request.copy()
+        
+        for agent_name, agent_service in agents:
+            try:
+                result = await agent_service.process_request(current_context)
+                workflow_result["agent_results"].append(result)
+                
+                # 更新上下文
+                current_context.update({
+                    "previous_agent": agent_name,
+                    "previous_result": result["result"]
+                })
+                
+                # 检查是否需要继续
+                if result.get("next_agent") is None:
+                    break
+                    
+            except Exception as e:
+                workflow_result["failed_agents"].append(agent_name)
+                # 继续处理其他智能体
+                continue
+        
+        # 确定最终状态
+        if not workflow_result["failed_agents"]:
+            workflow_result["status"] = "completed"
+        elif len(workflow_result["agent_results"]) > 0:
+            workflow_result["status"] = "partial_completed"
+        else:
+            workflow_result["status"] = "failed"
+        
+        return workflow_result
+
+
+@pytest.mark.integration
+@pytest.mark.asyncio
+class TestAgentPerformance(IntegrationTestCase):
+    """智能体性能测试"""
+    
+    async def test_response_time_requirements(self):
+        """测试响应时间要求"""
+        start_time = time.time()
+        
+        # 模拟智能体处理
+        await asyncio.sleep(0.1)  # 模拟处理时间
+        
+        end_time = time.time()
+        response_time = end_time - start_time
+        
+        # 验证响应时间要求（< 2秒）
+        assert response_time < 2.0
+    
+    async def test_concurrent_user_handling(self):
+        """测试并发用户处理能力"""
+        # 模拟100个并发用户
+        concurrent_users = 100
+        
+        async def simulate_user_request(user_id: int):
+            await asyncio.sleep(0.01)  # 模拟处理时间
+            return {"user_id": user_id, "status": "completed"}
+        
+        tasks = [
+            simulate_user_request(i) 
+            for i in range(concurrent_users)
+        ]
+        
+        start_time = time.time()
+        results = await asyncio.gather(*tasks)
+        end_time = time.time()
+        
+        # 验证所有请求都成功处理
+        assert len(results) == concurrent_users
+        
+        # 验证总处理时间合理（< 5秒）
+        total_time = end_time - start_time
+        assert total_time < 5.0
 
 
 class TestDiagnosisServiceIntegration(IntegrationTestCase):

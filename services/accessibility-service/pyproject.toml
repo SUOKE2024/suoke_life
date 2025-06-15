@@ -54,7 +54,7 @@ dependencies = [
     "transformers>=4.36.0",
     "opencv-python>=4.8.1",
     # "mediapipe>=0.10.8",  # 暂时注释，等待Python 3.13支持
-    "openai-whisper>=20231117",
+    # "openai-whisper>=20231117",  # 暂时注释，构建问题待解决
     "ultralytics>=8.0.0",
     
     # 图像和视频处理
