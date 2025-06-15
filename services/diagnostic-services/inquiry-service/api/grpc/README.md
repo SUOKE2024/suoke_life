@@ -259,7 +259,7 @@ call_credentials = grpc.access_token_call_credentials("my-token")
 combined_credentials = grpc.composite_channel_credentials(credentials, call_credentials)
 
 # 创建安全通道
-channel = grpc.secure_channel('api.suoke-life.com:443', combined_credentials)
+channel = grpc.secure_channel('api.suoke.life:443', combined_credentials)
 ```
 
 ## 断点续传

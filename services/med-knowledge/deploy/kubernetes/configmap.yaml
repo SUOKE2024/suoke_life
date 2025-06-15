@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: med-knowledge-config
+  namespace: suoke-db
+  labels:
+    app: med-knowledge
+    app.kubernetes.io/part-of: suoke-life
+data:
+  config.yaml: |
+    server:
+      port: 8080
+      host: "0.0.0.0"
+      timeout: 30
+      debug: false
+      max_request_size: 10485760
+      allowed_origins:
+        - "*"
+
+    logging:
+      level: "info"
+      format: "json"
+      output: "stdout"
+      file_path: "/var/log/med-knowledge/app.log"
+
+    cache:
+      redis:
+        enabled: true
+        host: "redis-master"
+        port: 6379
+        password: ""
+        db: 0
+        ttl: 3600
+
+    tracing:
+      enabled: true
+      jaeger:
+        host: "jaeger-agent"
+        port: 6831
+        service_name: "med-knowledge"
+
+    metrics:
+      enabled: true
+      prometheus:
+        port: 9090
+        path: "/metrics"
+
+    services:
+      rag:
+        host: "rag-service"
+        port: 8080
+        timeout: 10
+      xiaoai:
+        host: "xiaoai-service"
+        port: 8080
+        timeout: 10

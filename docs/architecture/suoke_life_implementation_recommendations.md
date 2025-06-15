@@ -195,7 +195,7 @@
 微服务框架: go-zero
 服务网格: Istio + Aeraki
 数据库: PostgreSQL + Redis
-消息队列: Apache Kafka
+消息队列: 内存事件总线
 监控: Prometheus + Grafana
 ```
 

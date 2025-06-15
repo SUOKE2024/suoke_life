@@ -2,9 +2,8 @@
 calculation - 索克生活项目模块
 """
 
-from datetime import date, time
+from datetime import date
 from enum import Enum
-from typing import Dict, List, Optional
 
 from pydantic import Field
 
@@ -84,19 +83,19 @@ class WuyunLiuqiModel(CalculationBaseModel):
     ganzhi: str = Field(description="年份干支")
 
     # 五运分析
-    wuyun: Dict = Field(description="五运分析结果")
+    wuyun: dict = Field(description="五运分析结果")
 
     # 六气分析
-    liuqi: Dict = Field(description="六气分析结果")
+    liuqi: dict = Field(description="六气分析结果")
 
     # 气候影响
     climate_influence: str = Field(description="气候影响")
 
     # 易发疾病
-    diseases_prone: List[str] = Field(description="易发疾病")
+    diseases_prone: list[str] = Field(description="易发疾病")
 
     # 预防建议
-    prevention_advice: List[str] = Field(description="预防建议")
+    prevention_advice: list[str] = Field(description="预防建议")
 
 
 class BaguaAnalysisModel(CalculationBaseModel):
@@ -108,7 +107,7 @@ class BaguaAnalysisModel(CalculationBaseModel):
     primary_gua: BaguaType = Field(description="主卦")
 
     # 变卦
-    changing_gua: Optional[BaguaType] = Field(default=None, description="变卦")
+    changing_gua: BaguaType | None = Field(default=None, description="变卦")
 
     # 脏腑对应
     organ_correspondence: str = Field(description="脏腑对应")
@@ -117,13 +116,13 @@ class BaguaAnalysisModel(CalculationBaseModel):
     constitution_type: str = Field(description="体质类型")
 
     # 性格特征
-    characteristics: List[str] = Field(description="性格特征")
+    characteristics: list[str] = Field(description="性格特征")
 
     # 健康建议
-    health_advice: List[str] = Field(description="健康建议")
+    health_advice: list[str] = Field(description="健康建议")
 
     # 病位分析
-    disease_location: Optional[str] = Field(default=None, description="病位分析")
+    disease_location: str | None = Field(default=None, description="病位分析")
 
 
 class ZiwuLiuzhuModel(CalculationBaseModel):
@@ -141,13 +140,13 @@ class ZiwuLiuzhuModel(CalculationBaseModel):
     treatment_type: str = Field(description="治疗类型")
 
     # 最佳治疗时间
-    optimal_treatment_times: List[Dict] = Field(description="最佳治疗时间")
+    optimal_treatment_times: list[dict] = Field(description="最佳治疗时间")
 
     # 当日经络流注
-    daily_meridian_flow: List[Dict] = Field(description="当日经络流注")
+    daily_meridian_flow: list[dict] = Field(description="当日经络流注")
 
     # 治疗建议
-    treatment_advice: List[str] = Field(description="治疗建议")
+    treatment_advice: list[str] = Field(description="治疗建议")
 
 
 class ConstitutionAnalysisModel(CalculationBaseModel):
@@ -165,22 +164,22 @@ class ConstitutionAnalysisModel(CalculationBaseModel):
     constitution_type: str = Field(description="体质类型")
 
     # 体质特征
-    characteristics: List[str] = Field(description="体质特征")
+    characteristics: list[str] = Field(description="体质特征")
 
     # 健康风险
-    health_risks: List[str] = Field(description="健康风险")
+    health_risks: list[str] = Field(description="健康风险")
 
     # 饮食建议
-    dietary_advice: List[str] = Field(description="饮食建议")
+    dietary_advice: list[str] = Field(description="饮食建议")
 
     # 生活方式建议
-    lifestyle_advice: List[str] = Field(description="生活方式建议")
+    lifestyle_advice: list[str] = Field(description="生活方式建议")
 
     # 运动建议
-    exercise_advice: List[str] = Field(description="运动建议")
+    exercise_advice: list[str] = Field(description="运动建议")
 
     # 情志调养
-    emotional_advice: List[str] = Field(description="情志调养")
+    emotional_advice: list[str] = Field(description="情志调养")
 
 
 class ComprehensiveAnalysisModel(CalculationBaseModel):
@@ -189,22 +188,22 @@ class ComprehensiveAnalysisModel(CalculationBaseModel):
     analysis_type: str = Field(default="comprehensive_analysis", description="分析类型")
 
     # 五运六气分析
-    wuyun_liuqi: Optional[WuyunLiuqiModel] = Field(
+    wuyun_liuqi: WuyunLiuqiModel | None = Field(
         default=None, description="五运六气分析"
     )
 
     # 八卦分析
-    bagua_analysis: Optional[BaguaAnalysisModel] = Field(
+    bagua_analysis: BaguaAnalysisModel | None = Field(
         default=None, description="八卦分析"
     )
 
     # 子午流注分析
-    ziwu_liuzhu: Optional[ZiwuLiuzhuModel] = Field(
+    ziwu_liuzhu: ZiwuLiuzhuModel | None = Field(
         default=None, description="子午流注分析"
     )
 
     # 体质分析
-    constitution_analysis: Optional[ConstitutionAnalysisModel] = Field(
+    constitution_analysis: ConstitutionAnalysisModel | None = Field(
         default=None, description="体质分析"
     )
 
@@ -212,16 +211,16 @@ class ComprehensiveAnalysisModel(CalculationBaseModel):
     comprehensive_assessment: str = Field(description="综合评估")
 
     # 主要健康风险
-    primary_health_risks: List[str] = Field(description="主要健康风险")
+    primary_health_risks: list[str] = Field(description="主要健康风险")
 
     # 综合建议
-    comprehensive_recommendations: List[str] = Field(description="综合建议")
+    comprehensive_recommendations: list[str] = Field(description="综合建议")
 
     # 优先级建议
-    priority_recommendations: List[Dict] = Field(description="优先级建议")
+    priority_recommendations: list[dict] = Field(description="优先级建议")
 
     # 随访建议
-    follow_up_advice: Optional[str] = Field(default=None, description="随访建议")
+    follow_up_advice: str | None = Field(default=None, description="随访建议")
 
 
 class CalculationRequestModel(CalculationBaseModel):
@@ -231,13 +230,13 @@ class CalculationRequestModel(CalculationBaseModel):
     request_type: str = Field(description="请求类型")
 
     # 患者信息
-    patient_info: Dict = Field(description="患者信息")
+    patient_info: dict = Field(description="患者信息")
 
     # 分析参数
-    analysis_parameters: Optional[Dict] = Field(default=None, description="分析参数")
+    analysis_parameters: dict | None = Field(default=None, description="分析参数")
 
     # 请求选项
-    options: Optional[Dict] = Field(default=None, description="请求选项")
+    options: dict | None = Field(default=None, description="请求选项")
 
 
 class CalculationResponseModel(CalculationBaseModel):
@@ -247,15 +246,13 @@ class CalculationResponseModel(CalculationBaseModel):
     request_id: str = Field(description="请求ID")
 
     # 分析结果
-    analysis_result: Dict = Field(description="分析结果")
+    analysis_result: dict = Field(description="分析结果")
 
     # 处理状态
     status: str = Field(description="处理状态")
 
     # 错误信息
-    error_message: Optional[str] = Field(default=None, description="错误信息")
+    error_message: str | None = Field(default=None, description="错误信息")
 
     # 处理时间
-    processing_time_ms: Optional[int] = Field(
-        default=None, description="处理时间(毫秒)"
-    )
+    processing_time_ms: int | None = Field(default=None, description="处理时间(毫秒)")

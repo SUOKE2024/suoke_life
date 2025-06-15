@@ -5,7 +5,7 @@ __init__ - 索克生活项目模块
 """
 
 from .grpc_server import ListenServiceGRPCServer
-from .rest_api import create_rest_app
+from .rest_api import create_app as create_rest_app
 
 """
 接口层

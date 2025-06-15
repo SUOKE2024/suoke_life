@@ -1,0 +1,1 @@
+[{"rule_id": "R001", "pattern_name": "\u9634\u865a\u8bc1", "required_symptoms": ["\u53e3\u5e72", "\u4e94\u5fc3\u70e6\u70ed"], "supporting_symptoms": {"\u5931\u7720": 0.7, "\u820c\u7ea2\u5c11\u82d4": 0.6}, "minimum_required_count": 1, "minimum_supporting_score": 0.5, "tongue_rules": "\u820c\u7ea2\u5c11\u82d4", "pulse_rules": "\u8109\u7ec6\u6570"}]

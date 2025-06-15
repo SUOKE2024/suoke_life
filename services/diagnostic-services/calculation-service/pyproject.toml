@@ -28,45 +28,37 @@ dependencies = [
     "uvicorn[standard]>=0.32.0",
     "pydantic>=2.10.0",
     "pydantic-settings>=2.6.0",
-    
     # HTTP client
     "httpx>=0.28.0",
-    
     # Database
     "asyncpg>=0.30.0",
     "redis>=5.2.0",
     "motor>=3.6.0",
-    
     # Traditional Chinese Medicine calculations
-    "lunardate>=0.2.2",  # 农历计算
-    "chinese-calendar>=1.9.0",  # 中国传统历法
-    "pytz>=2024.2",  # 时区处理
-    "ephem>=4.1.5",  # 天文计算
-    "astral>=3.2",  # 日出日落计算
-    
+    "lunardate>=0.2.2", # 农历计算
+    "chinese-calendar>=1.9.0", # 中国传统历法
+    "pytz>=2024.2", # 时区处理
+    "ephem>=4.1.5", # 天文计算
+    "astral>=3.2", # 日出日落计算
     # Mathematical and scientific computing
     "numpy>=2.2.0",
     "scipy>=1.14.0",
     "pandas>=2.2.0",
-    "sympy>=1.13.0",  # 符号数学计算
-    
+    "sympy>=1.13.0", # 符号数学计算
     # Machine learning for pattern recognition
     "scikit-learn>=1.6.0",
     "xgboost>=2.1.0",
-    
     # Time series analysis
     "statsmodels>=0.14.0",
-    
     # Logging and monitoring
     "structlog>=24.4.0",
     "loguru>=0.7.2",
     "prometheus-client>=0.21.0",
-    
     # Utilities
     "python-multipart>=0.0.12",
     "python-jose[cryptography]>=3.3.0",
     "passlib[bcrypt]>=1.7.4",
-    "croniter>=3.0.0",  # 时间周期计算
+    "croniter>=3.0.0", # 时间周期计算
 ]
 
 [project.optional-dependencies]

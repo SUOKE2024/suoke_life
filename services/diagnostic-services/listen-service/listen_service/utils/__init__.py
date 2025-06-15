@@ -6,7 +6,7 @@ __init__ - 索克生活项目模块
 
 from .cache import AudioCache
 from .logging import setup_logging
-from .performance import async_timer, performance_monitor
+from .performance import async_timer, get_performance_monitor
 
 """
 工具模块

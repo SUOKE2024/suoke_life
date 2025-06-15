@@ -1,3 +1,4 @@
+# 索克生活calculation-service服务 Docker Compose 配置
 version: '3.8'
 
 services:
@@ -5,57 +6,47 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      target: runtime
     container_name: suoke-calculation-service
+    restart: unless-stopped
     ports:
-      - "8003:8000"
+      - "8080:8080"  # REST API
+      - "50051:50051"  # gRPC
     environment:
-      - HOST=0.0.0.0
-      - PORT=8000
-      - DEBUG=false
-      - ENABLE_CACHE=true
-      - CACHE_TTL=3600
-      - RATE_LIMIT_ENABLED=true
-      - RATE_LIMIT_MAX_REQUESTS=100
-      - RATE_LIMIT_WINDOW_SECONDS=60
-      - ALLOWED_ORIGINS=["http://localhost:3000", "http://localhost:8080"]
+      # 服务配置
+      - SERVICE_NAME=calculation-service
+      - SERVICE_VERSION=2.0.0
+      - SERVICE_ENV=production
+      - REST_PORT=8080
+      - GRPC_PORT=50051
+      
+      # 数据库配置
+      - DATABASE_URL=postgresql://user:password@postgres:5432/calculation_servicedb
+      - REDIS_URL=redis://redis:6379/0
+      
+      # 监控配置
+      - ENABLE_METRICS=true
+      - ENABLE_TRACING=true
+      - JAEGER_ENDPOINT=http://jaeger:14268/api/traces
+      
+      # 日志配置
+      - LOG_LEVEL=INFO
+      - LOG_FORMAT=json
     volumes:
+      - calculation-service_data:/app/data
       - ./logs:/app/logs
     networks:
       - suoke-network
-    restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/ping"]
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.calculation-service.rule=Host(`calculation.suoke.local`)"
-      - "traefik.http.routers.calculation-service.entrypoints=web"
-      - "traefik.http.services.calculation-service.loadbalancer.server.port=8000"
-
-  db:
-    image: postgres:15
-    environment:
-      POSTGRES_DB: diagnostic_services/calculation_service_db
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-
-  redis:
-    image: redis:7-alpine
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
 
 volumes:
-  postgres_data:
-  redis_data:
+  calculation-service_data:
+    driver: local
 
 networks:
   suoke-network:

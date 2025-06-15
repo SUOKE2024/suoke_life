@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.log
+.DS_Store
+*.tmp
+*_report.json
+
+# 自动添加的清理规则
+# Python缓存
+*$py.class
+# 临时文件
+*.temp
+*.bak
+*.orig
+# 报告文件
+*_report_*.json
+*_validation_*.json
+# 日志文件
+logs/
+# 系统文件
+Thumbs.db
+# IDE文件
+.vscode/
+.idea/
+*.swp
+*.swo

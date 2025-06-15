@@ -180,7 +180,11 @@ class HealthPlan(BaseModel):
     notes: str | None = Field(None, description="备注")
 
     class Config:
-        """TODO: 添加文档字符串"""
+        """Pydantic 模型配置类
+        
+        定义健康计划模型的配置选项，包括示例数据和验证规则。
+        用于 API 文档生成和数据验证。
+        """
 
         schema_extra = {
             "example": {

@@ -1,0 +1,35 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - accessibility-deployment.yaml
+  - accessibility-service.yaml
+  - accessibility-configmap.yaml
+  - accessibility-secret.yaml
+  - accessibility-hpa.yaml
+
+namePrefix: accessibility-
+namespace: suoke-ai-np
+
+commonLabels:
+  app: accessibility-service
+  app.kubernetes.io/name: accessibility-service
+  app.kubernetes.io/part-of: suoke-life
+  app.kubernetes.io/component: backend
+  app.kubernetes.io/version: "v1"
+
+images:
+  - name: suoke/accessibility-service
+    newName: ${REGISTRY_URL}/suoke/accessibility-service
+    newTag: ${IMAGE_TAG}
+
+configMapGenerator:
+  - name: config
+    behavior: merge
+    files:
+      - config.yaml=../../config/config.yaml
+
+secretGenerator:
+  - name: secrets
+    envs:
+      - ../../.env.secret 

@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "suoke-auth-service.fullname" . }}-config
+  labels:
+    {{- include "suoke-auth-service.labels" . | nindent 4 }}
+data:
+  config.yaml: |
+    environment: {{ .Values.config.environment }}
+    log_level: {{ .Values.config.logLevel }}
+    debug: {{ .Values.config.debug }}
+    
+    database:
+      host: {{ .Values.config.database.host }}
+      port: {{ .Values.config.database.port }}
+      name: {{ .Values.config.database.name }}
+      user: {{ .Values.config.database.user }}
+      ssl_mode: {{ .Values.config.database.sslMode }}
+      max_connections: {{ .Values.config.database.maxConnections }}
+    
+    redis:
+      host: {{ .Values.config.redis.host }}
+      port: {{ .Values.config.redis.port }}
+      db: {{ .Values.config.redis.db }}
+      max_connections: {{ .Values.config.redis.maxConnections }}
+    
+    jwt:
+      access_token_expire: {{ .Values.config.jwt.accessTokenExpire }}
+      refresh_token_expire: {{ .Values.config.jwt.refreshTokenExpire }}
+    
+    oauth:
+      google:
+        enabled: {{ .Values.config.oauth.google.enabled }}
+      github:
+        enabled: {{ .Values.config.oauth.github.enabled }}
+      wechat:
+        enabled: {{ .Values.config.oauth.wechat.enabled }}
+    
+    blockchain:
+      ethereum:
+        enabled: {{ .Values.config.blockchain.ethereum.enabled }}
+      polygon:
+        enabled: {{ .Values.config.blockchain.polygon.enabled }}
+      bsc:
+        enabled: {{ .Values.config.blockchain.bsc.enabled }}
+    
+    biometric:
+      fingerprint:
+        enabled: {{ .Values.config.biometric.fingerprint.enabled }}
+        max_templates: {{ .Values.config.biometric.fingerprint.maxTemplates }}
+      face:
+        enabled: {{ .Values.config.biometric.face.enabled }}
+        max_templates: {{ .Values.config.biometric.face.maxTemplates }} 

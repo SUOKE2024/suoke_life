@@ -1,113 +1,149 @@
-import { AgentCoordinator } from "./AgentCoordinator"
+import { AgentCoordinator } from "./AgentCoordinator";
 import { AgentType } from "./types/agents";
-/* 置 */
- */"
-export interface AgentManagerConfig {maxConcurrentTasks: number}healthCheckInterval: number,;
-autoRestart: boolean,"
-logLevel: 'debug' | 'info' | 'warn' | 'error,'';
-performanceMonitoring: boolean,
-resourceLimits: {memory: number,
-}
-}
-    const cpu = number}
+
+/**
+ * 智能体管理器配置接口
+ */
+export interface AgentManagerConfig {
+  maxConcurrentTasks: number;
+  healthCheckInterval: number;
+  autoRestart: boolean;
+  logLevel: 'debug' | 'info' | 'warn' | 'error';
+  performanceMonitoring: boolean;
+  resourceLimits: {
+    memory: number;
+    cpu: number;
   };
 }
-/* 态 */
- *//,'/g'/;
-export type AgentStatus = ';
+
+/**
+ * 智能体状态枚举
+ */
+export type AgentStatus = 
   | 'initializing'
   | 'active'
   | 'inactive'
   | 'error'
   | 'maintenance';
-export interface AgentMetrics {tasksProcessed: number}successRate: number,;
-averageResponseTime: number,
-errorCount: number,
-lastActive: Date,
-memoryUsage: number,
-cpuUsage: number,
-}
-}
-  const uptime = number}
-}
-/* 等 */
+
+/**
+ * 智能体性能指标接口
  */
-export class AgentManager {private config: AgentManagerConfig;
-private coordinator: AgentCoordinator;
-private metrics: Map<AgentType, AgentMetrics> = new Map();
-private healthCheckTimer: NodeJS.Timeout | null = null;
-private isRunning: boolean = false;
-private startTime: Date = new Date();
-constructor(config?: Partial<AgentManagerConfig>) {this.config = {}      maxConcurrentTasks: 10,'
-healthCheckInterval: 30000, // 30秒'/,'/g,'/;
-  autoRestart: true,'
-logLevel: 'info,'';
-performanceMonitoring: true,
-resourceLimits: {memory: 512, // MB,
+export interface AgentMetrics {
+  tasksProcessed: number;
+  successRate: number;
+  averageResponseTime: number;
+  errorCount: number;
+  lastActive: Date;
+  memoryUsage: number;
+  cpuUsage: number;
+  uptime: number;
 }
-}
-        cpu: 80, // 百分比}
-      }
-      ...config,
+
+/**
+ * 智能体管理器 - 负责管理所有智能体的生命周期和性能监控
+ */
+export class AgentManager {
+  private config: AgentManagerConfig;
+  private coordinator: AgentCoordinator;
+  private metrics: Map<AgentType, AgentMetrics> = new Map();
+  private healthCheckTimer: NodeJS.Timeout | null = null;
+  private isRunning: boolean = false;
+  private startTime: Date = new Date();
+
+  constructor(config?: Partial<AgentManagerConfig>) {
+    this.config = {
+      maxConcurrentTasks: 10,
+      healthCheckInterval: 30000, // 30秒
+      autoRestart: true,
+      logLevel: 'info',
+      performanceMonitoring: true,
+      resourceLimits: {
+        memory: 512, // MB
+        cpu: 80 // 百分比
+      },
+      ...config
     };
-this.coordinator = new AgentCoordinator();
-this.initializeMetrics();
+    
+    this.coordinator = new AgentCoordinator();
+    this.initializeMetrics();
   }
-  /* 器 */
+  /**
+   * 初始化智能体管理器
    */
-const async = initialize(): Promise<void> {try {}      // 初始化协调器
-const await = this.coordinator.initialize();
+  async initialize(): Promise<void> {
+    try {
+      // 初始化协调器
+      await this.coordinator.initialize();
+      
       // 启动健康检查
-this.startHealthCheck();
+      this.startHealthCheck();
+      
       // 启动性能监控
-if (this.config.performanceMonitoring) {}
-        this.startPerformanceMonitoring()}
+      if (this.config.performanceMonitoring) {
+        this.startPerformanceMonitoring();
       }
+      
       this.isRunning = true;
-    } catch (error) {}
-      const throw = error}
+    } catch (error) {
+      throw error;
     }
   }
-  /* 务 */
-   *//,/g,/;
-  async: processTask(message: string, context: any): Promise<any> {if (!this.isRunning) {}
-}
-    }
-    const startTime = Date.now();
-try {// 检查并发任务限制/if (this.getCurrentTaskCount() >= this.config.maxConcurrentTasks) {}}/g/;
-}
-      }
-      // 通过协调器处理任务/,/g,/;
-  const: result = await this.coordinator.processCollaborativeTask(message,);
-context);
-      );
-      // 更新性能指标
-this.updateMetrics(result, Date.now() - startTime);
-return result;
-    } catch (error) {this.updateErrorMetrics()}
-      const throw = error}
-    }
-  }
-  /* 态 */
+
+  /**
+   * 处理任务
    */
-const async = getAgentStatus(agentType?: AgentType);
-  ): Promise<Map<AgentType; any> | any> {const allStatus = await this.coordinator.getAllAgentStatus()if (agentType) {return ()allStatus.get(agentType) || {'agentType,'
-status: 'error,'';
-load: 0,
-responseTime: 0,
-errorRate: 1,
-lastCheck: new Date(),
-capabilities: [],
-}
-          const version = '0.0.0}
-        }
-      );
+  async processTask(message: string, context: any): Promise<any> {
+    if (!this.isRunning) {
+      throw new Error('Agent manager is not running');
     }
+    
+    const startTime = Date.now();
+    try {
+      // 检查并发任务限制
+      if (this.getCurrentTaskCount() >= this.config.maxConcurrentTasks) {
+        throw new Error('Maximum concurrent tasks reached');
+      }
+      
+      // 通过协调器处理任务
+      const result = await this.coordinator.processCollaborativeTask(message, context);
+      
+      // 更新性能指标
+      this.updateMetrics(result, Date.now() - startTime);
+      return result;
+    } catch (error) {
+      this.updateErrorMetrics();
+      throw error;
+    }
+  }
+  /**
+   * 获取智能体状态
+   */
+  async getAgentStatus(agentType?: AgentType): Promise<Map<AgentType, any> | any> {
+    const allStatus = await this.coordinator.getAllAgentStatus();
+    
+    if (agentType) {
+      return allStatus.get(agentType) || {
+        agentType,
+        status: 'error',
+        load: 0,
+        responseTime: 0,
+        errorRate: 1,
+        lastCheck: new Date(),
+        capabilities: [],
+        version: '0.0.0'
+      };
+    }
+    
     return allStatus;
   }
-getMetrics(agentType?: AgentType);
-  ): Map<AgentType; AgentMetrics> | AgentMetrics | undefined {if (agentType) {}
-      return this.metrics.get(agentType)}
+
+  /**
+   * 获取性能指标
+   */
+  getMetrics(agentType?: AgentType): Map<AgentType, AgentMetrics> | AgentMetrics | undefined {
+    if (agentType) {
+      return this.metrics.get(agentType);
     }
     return this.metrics;
   }

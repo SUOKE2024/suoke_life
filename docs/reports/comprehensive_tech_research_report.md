@@ -32,7 +32,7 @@
 
 **技术亮点**：
 - 基于go-zero的完整微服务技术栈
-- 集成Kafka、Elasticsearch、Prometheus等
+- 集成事件总线、Elasticsearch、Prometheus等
 - 支持分布式事务（DTM）
 - 完整的CI/CD流程
 

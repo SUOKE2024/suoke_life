@@ -1,0 +1,101 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+test_reports/
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.bak
+*.backup
+cleanup_backup/
+
+# Database
+*.db
+*.sqlite3
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Development temporary files
+apply_optimizations.py
+implement_100_percent.py
+prepare_production.py
+simple_production_check.py
+simple_server.py
+test_basic.py
+test_complete_service.py
+test_final_verification.py
+test_optimization.py
+test_simple.py
+test_todo_features_simple.py
+test_todo_features.py
+verify_optimizations.py
+
+# Backup and temporary directories
+backup/
+tmp/
+temp/
+
+# Documentation build
+docs/_build/
+docs/build/
+
+# Package files
+*.tar.gz
+*.zip
+
+# Security
+*.pem
+*.key
+!*.key.example
+
+# Local configuration
+config/local.yaml
+config/development.yaml 

@@ -15,7 +15,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 DEPLOY_ENV="${DEPLOY_ENV:-production}"
 NAMESPACE="suoke-life"
-DOCKER_REGISTRY="${DOCKER_REGISTRY:-registry.suoke-life.com}"
+DOCKER_REGISTRY="${DOCKER_REGISTRY:-registry.suoke.life}"
 KUBECTL_CONTEXT="${KUBECTL_CONTEXT:-production}"
 
 # 颜色输出
@@ -481,10 +481,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - api.suoke-life.com
+    - api.suoke.life
     secretName: suoke-life-tls
   rules:
-  - host: api.suoke-life.com
+  - host: api.suoke.life
     http:
       paths:
       - path: /
@@ -665,9 +665,9 @@ $(kubectl top pods)
 - 消息队列: ✅ 正常
 
 ## 访问地址
-- API网关: https://api.suoke-life.com
-- 监控面板: https://grafana.suoke-life.com
-- 日志系统: https://kibana.suoke-life.com
+- API网关: https://api.suoke.life
+- 监控面板: https://grafana.suoke.life
+- 日志系统: https://kibana.suoke.life
 
 ---
 *报告由部署自动化脚本生成*
@@ -703,8 +703,8 @@ main() {
     generate_report
     
     log_success "🎉 索克生活生产环境部署完成！"
-    log_info "访问地址: https://api.suoke-life.com"
-    log_info "监控面板: https://grafana.suoke-life.com"
+    log_info "访问地址: https://api.suoke.life"
+    log_info "监控面板: https://grafana.suoke.life"
 }
 
 # 处理命令行参数

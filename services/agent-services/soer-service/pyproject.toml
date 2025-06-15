@@ -6,18 +6,20 @@ build-backend = "hatchling.build"
 index-url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
 
 [project]
-name = "soer-service"
-version = "0.1.0"
-description = "索儿智能体服务 - 索克生活平台的营养与生活方式管理智能体"
+name = "suoke-soer-service"
+version = "2.0.0"
+description = "索克生活索儿智能体服务 - 营养与生活方式管理AI智能体"
 readme = "README.md"
 license = { text = "MIT" }
 authors = [
-    { name = "Suoke Life Team", email = "dev@suoke.life" }
+    { name = "索克生活团队", email = "dev@suoke.life" }
 ]
 maintainers = [
-    { name = "Suoke Life Team", email = "dev@suoke.life" }
+    { name = "索克生活团队", email = "dev@suoke.life" }
 ]
 keywords = [
+    "soer",
+    "agent",
     "health",
     "nutrition",
     "ai-agent",
@@ -25,15 +27,17 @@ keywords = [
     "lifestyle-management"
 ]
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Healthcare Industry",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
     "Topic :: Scientific/Engineering :: Medical Science Apps.",
     "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
     "Typing :: Typed",
 ]
 requires-python = ">=3.13.3"
@@ -123,15 +127,13 @@ dependencies = [
     "jsonschema>=4.21.1,<5.0.0",
 ]
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
     "pytest>=8.0.0,<9.0.0",
     "pytest-asyncio>=0.23.4,<1.0.0",
     "pytest-cov>=4.0.0,<5.0.0",
     "pytest-mock>=3.12.0,<4.0.0",
     "pytest-xdist>=3.5.0,<4.0.0",
-    "black>=24.1.1,<25.0.0",
-    "isort>=5.13.2,<6.0.0",
     "mypy>=1.7.1,<2.0.0",
     "pylint>=3.0.3,<4.0.0",
     "ruff>=0.1.0,<1.0.0",
@@ -175,31 +177,6 @@ path = "soer_service/__init__.py"
 
 [tool.hatch.build.targets.wheel]
 packages = ["soer_service"]
-
-[tool.black]
-line-length = 88
-target-version = ["py313"]
-include = '\.pyi?$'
-extend-exclude = '''
-/(
-  # directories
-  \.eggs
-  | \.git
-  | \.hg
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | build
-  | dist
-)/
-'''
-
-[tool.isort]
-profile = "black"
-multi_line_output = 3
-line_length = 88
-known_first_party = ["soer_service"]
-known_third_party = ["fastapi", "pydantic", "sqlalchemy"]
 
 [tool.mypy]
 python_version = "3.13"
@@ -285,6 +262,12 @@ exclude_lines = [
 ]
 
 [tool.ruff]
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
 target-version = "py313"
 line-length = 88
 
@@ -299,7 +282,7 @@ select = [
     "UP", # pyupgrade
 ]
 ignore = [
-    "E501",  # line too long, handled by black
+    "E501",  # line too long, handled by ruff format
     "B008",  # do not perform function calls in argument defaults
     "C901",  # too complex
     "B904",  # raise ... from err (暂时忽略)

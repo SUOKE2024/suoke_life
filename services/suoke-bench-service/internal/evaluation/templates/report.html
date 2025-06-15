@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --light-gray: #ecf0f1;
+            --dark-gray: #95a5a6;
+        }
+        
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            border-radius: 5px 5px 0 0;
+            margin-bottom: 20px;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        
+        .header p {
+            margin: 5px 0 0;
+            opacity: 0.8;
+        }
+        
+        .section {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .section h2 {
+            margin-top: 0;
+            color: var(--primary-color);
+            border-bottom: 1px solid var(--light-gray);
+            padding-bottom: 10px;
+        }
+        
+        .summary {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .summary p {
+            margin: 0;
+            line-height: 1.6;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .metric-card {
+            background-color: white;
+            border-radius: 5px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .metric-card.pass {
+            border-left: 4px solid var(--success-color);
+        }
+        
+        .metric-card.fail {
+            border-left: 4px solid var(--danger-color);
+        }
+        
+        .metric-name {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+        
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .metric-threshold {
+            color: var(--dark-gray);
+            font-size: 14px;
+        }
+        
+        .metric-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .metric-badge.pass {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .metric-badge.fail {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        .chart-container {
+            margin-top: 20px;
+            height: 400px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        th {
+            background-color: var(--light-gray);
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .sample-status {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        
+        .sample-status.correct {
+            background-color: var(--success-color);
+        }
+        
+        .sample-status.incorrect {
+            background-color: var(--danger-color);
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: var(--dark-gray);
+            font-size: 14px;
+        }
+        
+        .text-truncate {
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: inline-block;
+        }
+        
+        .expand-btn {
+            cursor: pointer;
+            color: var(--secondary-color);
+            margin-left: 5px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 800px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: black;
+        }
+        
+        .modal-title {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+        
+        pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>{{ title }}</h1>
+            <p>生成时间: {{ timestamp }}</p>
+        </div>
+        
+        <div class="section">
+            <h2>测试概述</h2>
+            <table>
+                <tr>
+                    <td><strong>运行ID</strong></td>
+                    <td>{{ run_id }}</td>
+                    <td><strong>基准测试</strong></td>
+                    <td>{{ benchmark_id }}</td>
+                </tr>
+                <tr>
+                    <td><strong>模型</strong></td>
+                    <td>{{ model_id }}</td>
+                    <td><strong>版本</strong></td>
+                    <td>{{ model_version }}</td>
+                </tr>
+                <tr>
+                    <td><strong>状态</strong></td>
+                    <td>{{ status }}</td>
+                    <td><strong>通过率</strong></td>
+                    <td>{{ "%.2f%%" | format(passing_rate * 100) }}</td>
+                </tr>
+                <tr>
+                    <td><strong>开始时间</strong></td>
+                    <td>{{ created_at }}</td>
+                    <td><strong>完成时间</strong></td>
+                    <td>{{ completed_at }}</td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="summary">
+            <p>{{ summary }}</p>
+        </div>
+        
+        <div class="section">
+            <h2>性能指标</h2>
+            <div class="metrics-grid">
+                {% for metric in metrics %}
+                <div class="metric-card {{ 'pass' if metric.pass else 'fail' }}">
+                    <div class="metric-badge {{ 'pass' if metric.pass else 'fail' }}">
+                        {{ "通过" if metric.pass else "未通过" }}
+                    </div>
+                    <div class="metric-name">{{ metric.display_name }}</div>
+                    <div class="metric-value">{{ "%.2f" | format(metric.value) }}{{ metric.unit }}</div>
+                    <div class="metric-threshold">
+                        阈值: {{ "%.2f" | format(metric.threshold) }}{{ metric.unit }}
+                        {% if metric.comparison %}
+                        | {{ metric.comparison }}
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            {% if charts.metrics_bar %}
+            <div class="chart-container">
+                <div id="metrics-chart"></div>
+            </div>
+            {% endif %}
+        </div>
+        
+        {% if samples %}
+        <div class="section">
+            <h2>样本结果</h2>
+            
+            {% if charts.samples_pie %}
+            <div class="chart-container" style="height: 300px;">
+                <div id="samples-pie-chart"></div>
+            </div>
+            {% endif %}
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>样本ID</th>
+                        <th>输入</th>
+                        <th>期望输出</th>
+                        <th>实际输出</th>
+                        <th>状态</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sample in samples %}
+                    <tr>
+                        <td>{{ sample.id }}</td>
+                        <td>
+                            <span class="text-truncate">{{ sample.input }}</span>
+                            <span class="expand-btn" onclick="showModal('input-{{ loop.index }}')">查看</span>
+                        </td>
+                        <td>
+                            <span class="text-truncate">{{ sample.expected }}</span>
+                            <span class="expand-btn" onclick="showModal('expected-{{ loop.index }}')">查看</span>
+                        </td>
+                        <td>
+                            <span class="text-truncate">{{ sample.actual }}</span>
+                            <span class="expand-btn" onclick="showModal('actual-{{ loop.index }}')">查看</span>
+                        </td>
+                        <td>
+                            <span class="sample-status {{ 'correct' if sample.correct else 'incorrect' }}"></span>
+                            {{ "正确" if sample.correct else "错误" }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+        
+        <div class="footer">
+            <p>由 SuokeBench 评测系统生成</p>
+        </div>
+    </div>
+    
+    {% if samples %}
+    <!-- 样本查看弹窗 -->
+    {% for sample in samples %}
+    <div id="input-{{ loop.index }}" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="hideModal('input-{{ loop.index }}')">&times;</span>
+            <h3 class="modal-title">样本输入 - {{ sample.id }}</h3>
+            <pre>{{ sample.input }}</pre>
+        </div>
+    </div>
+    
+    <div id="expected-{{ loop.index }}" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="hideModal('expected-{{ loop.index }}')">&times;</span>
+            <h3 class="modal-title">期望输出 - {{ sample.id }}</h3>
+            <pre>{{ sample.expected }}</pre>
+        </div>
+    </div>
+    
+    <div id="actual-{{ loop.index }}" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="hideModal('actual-{{ loop.index }}')">&times;</span>
+            <h3 class="modal-title">实际输出 - {{ sample.id }}</h3>
+            <pre>{{ sample.actual }}</pre>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+    
+    <script>
+        // 显示弹窗
+        function showModal(id) {
+            document.getElementById(id).style.display = "block";
+        }
+        
+        // 隐藏弹窗
+        function hideModal(id) {
+            document.getElementById(id).style.display = "none";
+        }
+        
+        // 点击弹窗外部关闭
+        window.onclick = function(event) {
+            if (event.target.className === "modal") {
+                event.target.style.display = "none";
+            }
+        }
+        
+        {% if charts.metrics_bar %}
+        // 渲染指标图表
+        const metricsChart = JSON.parse('{{ charts.metrics_bar | safe }}');
+        Plotly.newPlot('metrics-chart', metricsChart.data, metricsChart.layout);
+        {% endif %}
+        
+        {% if charts.samples_pie %}
+        // 渲染样本饼图
+        const samplesPieChart = JSON.parse('{{ charts.samples_pie | safe }}');
+        Plotly.newPlot('samples-pie-chart', samplesPieChart.data, samplesPieChart.layout);
+        {% endif %}
+    </script>
+</body>
+</html> 

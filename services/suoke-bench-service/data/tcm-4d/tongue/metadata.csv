@@ -1,0 +1,6 @@
+image_id,path,label,tongue_color,tongue_coating,coating_color,tcm_constitution,device_info,timestamp
+TNG0001,images/TNG0001.jpg,pale,pale,thin,white,qi_deficiency,iPhone 13 Pro,2024-01-15T10:30:00
+TNG0002,images/TNG0002.jpg,red,red,thick,yellow,damp_heat,iPhone 13 Pro,2024-01-15T11:45:00
+TNG0003,images/TNG0003.jpg,dark_red,dark_red,thin,yellow,yin_deficiency,Pixel 6,2024-01-16T09:15:00
+TNG0004,images/TNG0004.jpg,purple,purple,thick,white,blood_stasis,iPhone 14,2024-01-17T14:20:00
+TNG0005,images/TNG0005.jpg,light_red,light_red,moderate,white,balanced,Canon EOS R5,2024-01-18T16:30:00 

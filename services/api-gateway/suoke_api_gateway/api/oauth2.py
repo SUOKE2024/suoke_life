@@ -1,19 +1,16 @@
+            from urllib.parse import urlencode
         from urllib.parse import urlencode
-
-from typing import Any, Dict, Optional
-from urllib.parse import urlencode
-
-from fastapi import APIRouter, Depends, Form, HTTPException, Query, Request
-from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-
+    from urllib.parse import urlencode
 from ..core.logging import get_logger
-from ..services.oauth2_provider import OAuth2Provider, get_oauth2_provider
+from ..services.oauth2_provider import get_oauth2_provider, OAuth2Provider
+from fastapi import APIRouter, HTTPException, Depends, Form, Query, Request
+from fastapi.responses import RedirectResponse, JSONResponse, HTMLResponse
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from typing import Dict, Any, Optional
 
-
-def main() -> None:
+def main()-> None:
     """主函数 - 自动生成的最小可用版本"""
     pass
 
-if __name__=="__main__":
+if __name__ == "__main__":
     main()

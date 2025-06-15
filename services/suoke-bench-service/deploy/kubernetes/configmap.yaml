@@ -1,0 +1,76 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: suoke-bench-config
+  namespace: suoke-core
+  labels:
+    app: suoke-bench-service
+    app.kubernetes.io/part-of: suoke-life
+data:
+  config.yaml: |
+    # SuokeBench 配置
+    service:
+      name: "suoke-bench-service"
+      version: "0.1.0"
+      description: "索克生活APP评测基准系统"
+      
+    logging:
+      level: "INFO"
+      format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+      
+    server:
+      rest:
+        host: "0.0.0.0"
+        port: 8000
+        cors:
+          allow_origins: ["*"]
+          allow_methods: ["*"]
+          allow_headers: ["*"]
+      grpc:
+        host: "0.0.0.0"
+        port: 50051
+        max_workers: 10
+        
+    storage:
+      results_dir: "/app/data/results"
+      reports_dir: "/app/data/reports"
+      
+    datasets:
+      tcm_4d:
+        path: "/app/data/tcm-4d"
+        enabled: true
+      health_plan:
+        path: "/app/data/health-plan"
+        enabled: true
+      agent_dialogue:
+        path: "/app/data/agent-dialogue"
+        enabled: true
+      privacy_zkp:
+        path: "/app/data/privacy-zkp"
+        enabled: true
+        
+    benchmarks:
+      tcm_diagnostic:
+        enabled: true
+        timeout: 600
+        metrics: ["accuracy", "f1_score", "precision", "recall"]
+      health_management:
+        enabled: true
+        timeout: 300
+        metrics: ["rouge", "bleu", "acceptance_rate"]
+      agent_collaboration:
+        enabled: true
+        timeout: 900
+        metrics: ["success_rate", "avg_turns", "efficiency_score"]
+      privacy_security:
+        enabled: true
+        timeout: 300
+        metrics: ["proof_success_rate", "leakage_score"]
+      edge_performance:
+        enabled: true
+        timeout: 300
+        metrics: ["p50_latency", "p95_latency", "memory_usage", "energy_consumption"]
+      dialect_coverage:
+        enabled: true
+        timeout: 300
+        metrics: ["wer", "cer", "dialect_score"]

@@ -1,0 +1,90 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-gateway-config
+  namespace: suoke-life
+  labels:
+    app: api-gateway
+data:
+  config.yaml: |
+    # API网关配置文件
+    server:
+      host: "0.0.0.0"
+      port: 8000
+      workers: 4
+      
+    # Redis配置
+    redis:
+      url: "${REDIS_URL}"
+      max_connections: 100
+      retry_on_timeout: true
+      
+    # 数据库配置
+    database:
+      url: "${DATABASE_URL}"
+      pool_size: 20
+      max_overflow: 30
+      
+    # JWT配置
+    jwt:
+      secret_key: "${JWT_SECRET_KEY}"
+      algorithm: "HS256"
+      access_token_expire_minutes: 30
+      refresh_token_expire_days: 7
+      
+    # 限流配置
+    rate_limit:
+      default_rate: "100/minute"
+      burst_size: 200
+      
+    # CORS配置
+    cors:
+      allow_origins: ["*"]
+      allow_methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+      allow_headers: ["*"]
+      
+    # 安全配置
+    security:
+      enable_https_redirect: true
+      enable_hsts: true
+      enable_csrf_protection: false
+      
+    # 追踪配置
+    tracing:
+      enabled: true
+      service_name: "api-gateway"
+      jaeger_endpoint: "http://jaeger:14268/api/traces"
+      
+    # 指标配置
+    metrics:
+      enabled: true
+      path: "/metrics"
+      
+    # 缓存配置
+    cache:
+      default_ttl: 300
+      max_size: 1000
+      
+    # 负载均衡配置
+    load_balancer:
+      strategy: "round_robin"
+      health_check_interval: 30
+      
+    # 服务发现配置
+    service_discovery:
+      enabled: true
+      refresh_interval: 60
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: api-gateway-secrets
+  namespace: suoke-life
+  labels:
+    app: api-gateway
+type: Opaque
+stringData:
+  redis-url: "redis://redis-service:6379"
+  database-url: "postgresql://postgres:password@postgres-service:5432/suoke_life"
+  jwt-secret: "your-super-secret-jwt-key-change-in-production" 

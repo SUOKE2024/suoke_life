@@ -191,5 +191,5 @@ def to_fhir_observation_heart_rate(user_id: str, value: float, unit: str = "bpm"
 - diagnostic-services 专注于诊断算法和健康指标分析，不与前端直接通信，仅暴露标准化API（如FHIR、OpenAPI Schema）。
 - integration-service 只负责第三方系统对接、数据格式转换与合规校验，不实现业务决策。
 - 所有健康数据、诊断结果等接口均推荐采用FHIR、OpenAPI Schema等标准格式。
-- 跨服务通信推荐采用事件流/消息队列（如Kafka、RabbitMQ等）进一步解耦。
+- 跨服务通信推荐采用内存事件总线进一步解耦。
 - 详细边界说明见 [docs/architecture/microservices_boundary.md](docs/architecture/microservices_boundary.md) 

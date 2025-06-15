@@ -7,12 +7,12 @@ info:
   version: 1.0.0
   contact:
     name: 索克生活技术团队
-    email: tech@suoke-life.com
+    email: tech@suoke.life
   
 servers:
-  - url: https://api.suoke-life.com/inquiry
+  - url: https://api.suoke.life/inquiry
     description: 生产环境
-  - url: https://api-staging.suoke-life.com/inquiry
+  - url: https://api-staging.suoke.life/inquiry
     description: 测试环境
   - url: http://localhost:8080/inquiry
     description: 本地开发环境

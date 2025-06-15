@@ -1,3 +1,4 @@
+# 索克生活soer-service服务 Docker Compose 配置
 version: '3.8'
 
 services:
@@ -5,179 +6,48 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: suoke/soer-service:latest
-    container_name: soer-service
+      target: runtime
+    container_name: suoke-soer-service
     restart: unless-stopped
     ports:
-      - "50054:50054"  # gRPC 服务端口
-      - "51054:51054"  # Prometheus 指标端口
-    volumes:
-      - ./config:/app/config
-      - ./logs:/app/logs
-      - ./data:/app/data
-    env_file:
-      - .env
+      - "8080:8080"  # REST API
+      - "50051:50051"  # gRPC
     environment:
+      # 服务配置
+      - SERVICE_NAME=soer-service
+      - SERVICE_VERSION=2.0.0
       - SERVICE_ENV=production
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-soerpassword}
-      - MONGO_PASSWORD=${MONGO_PASSWORD:-soerpassword}
-      - REDIS_PASSWORD=${REDIS_PASSWORD:-soerpassword}
-      - LLM_API_KEY=${LLM_API_KEY:-}
-      - SENSOR_DATA_API_KEY=${SENSOR_DATA_API_KEY:-}
-    depends_on:
-      - mongodb
-      - postgres
-      - redis
-      - timescaledb
-    networks:
-      - suoke-network
-    deploy:
-      resources:
-        limits:
-          cpus: '2'
-          memory: 4G
-        reservations:
-          cpus: '1'
-          memory: 2G
-
-  # TimescaleDB 时序数据库(针对传感器数据)
-  timescaledb:
-    image: timescale/timescaledb:latest-pg15
-    container_name: soer-timescaledb
-    restart: unless-stopped
-    ports:
-      - "5443:5432"  # 映射到非标准端口避免冲突
+      - REST_PORT=8080
+      - GRPC_PORT=50051
+      
+      # 数据库配置
+      - DATABASE_URL=postgresql://user:password@postgres:5432/soer_servicedb
+      - REDIS_URL=redis://redis:6379/0
+      
+      # 监控配置
+      - ENABLE_METRICS=true
+      - ENABLE_TRACING=true
+      - JAEGER_ENDPOINT=http://jaeger:14268/api/traces
+      
+      # 日志配置
+      - LOG_LEVEL=INFO
+      - LOG_FORMAT=json
     volumes:
-      - timescaledb_data:/var/lib/postgresql/data
-      - ./config/timescaledb-init.sql:/docker-entrypoint-initdb.d/timescaledb-init.sql:ro
-    environment:
-      - POSTGRES_USER=soer
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-soerpassword}
-      - POSTGRES_DB=soer_timeseries_db
+      - soer-service_data:/app/data
+      - ./logs:/app/logs
     networks:
       - suoke-network
-    deploy:
-      resources:
-        limits:
-          memory: 2G
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
-  # MongoDB 数据库
-  mongodb:
-    image: mongo:6.0
-    container_name: soer-mongodb
-    restart: unless-stopped
-    ports:
-      - "27028:27017"  # 映射到非标准端口避免冲突
-    volumes:
-      - mongodb_data:/data/db
-      - ./config/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ADMIN_PASSWORD:-adminpassword}
-      - MONGO_INITDB_DATABASE=soer_db
-    command: ["--auth", "--bind_ip_all"]
-    networks:
-      - suoke-network
-    deploy:
-      resources:
-        limits:
-          memory: 1G
-
-  # PostgreSQL 数据库
-  postgres:
-    image: postgres:15
-    container_name: soer-postgres
-    restart: unless-stopped
-    ports:
-      - "5443:5432"  # 映射到非标准端口避免冲突
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./config/postgres-init.sql:/docker-entrypoint-initdb.d/postgres-init.sql:ro
-    environment:
-      - POSTGRES_USER=soer
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-soerpassword}
-      - POSTGRES_DB=soer_db
-    networks:
-      - suoke-network
-    deploy:
-      resources:
-        limits:
-          memory: 1G
-
-  # Redis 缓存
-  redis:
-    image: redis:7.0-alpine
-    container_name: soer-redis
-    restart: unless-stopped
-    ports:
-      - "6390:6379"  # 映射到非标准端口避免冲突
-    volumes:
-      - redis_data:/data
-      - ./config/redis.conf:/usr/local/etc/redis/redis.conf:ro
-    command: ["redis-server", "/usr/local/etc/redis/redis.conf", "--requirepass", "${REDIS_PASSWORD:-soerpassword}"]
-    networks:
-      - suoke-network
-    deploy:
-      resources:
-        limits:
-          memory: 512M
-
-  # Prometheus 监控
-  prometheus:
-    image: prom/prometheus:v2.45.0
-    container_name: soer-prometheus
-    restart: unless-stopped
-    ports:
-      - "9098:9090"  # 映射到非标准端口避免冲突
-    volumes:
-      - ./deploy/prometheus:/etc/prometheus
-      - prometheus_data:/prometheus
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/etc/prometheus/console_libraries'
-      - '--web.console.templates=/etc/prometheus/consoles'
-      - '--web.enable-lifecycle'
-    networks:
-      - suoke-network
-    deploy:
-      resources:
-        limits:
-          memory: 512M
-
-  # Grafana 仪表盘
-  grafana:
-    image: grafana/grafana:10.0.3
-    container_name: soer-grafana
-    restart: unless-stopped
-    ports:
-      - "3008:3000"  # 映射到非标准端口避免冲突
-    volumes:
-      - ./deploy/grafana/provisioning:/etc/grafana/provisioning
-      - ./deploy/grafana/dashboards:/var/lib/grafana/dashboards
-      - grafana_data:/var/lib/grafana
-    environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
-      - GF_INSTALL_PLUGINS=grafana-piechart-panel,grafana-clock-panel,grafana-worldmap-panel
-    networks:
-      - suoke-network
-    depends_on:
-      - prometheus
-    deploy:
-      resources:
-        limits:
-          memory: 256M
+volumes:
+  soer-service_data:
+    driver: local
 
 networks:
   suoke-network:
-    name: suoke-network
     external: true
-
-volumes:
-  mongodb_data:
-  postgres_data:
-  redis_data:
-  timescaledb_data:
-  prometheus_data:
-  grafana_data:

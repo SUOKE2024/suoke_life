@@ -1,5 +1,3 @@
-from typing import Any, Dict, List, Optional, Union
-
 """
 五运六气基础数据
 

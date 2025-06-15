@@ -186,8 +186,8 @@ configure_alertmanager() {
     cat > monitoring/alertmanager/alertmanager.yml << 'EOF'
 global:
   smtp_smarthost: 'localhost:587'
-  smtp_from: 'alerts@suoke-life.com'
-  smtp_auth_username: 'alerts@suoke-life.com'
+  smtp_from: 'alerts@suoke.life'
+  smtp_auth_username: 'alerts@suoke.life'
   smtp_auth_password: 'your-email-password'
 
 route:
@@ -216,7 +216,7 @@ receivers:
 
 - name: 'critical-alerts'
   email_configs:
-  - to: 'admin@suoke-life.com'
+  - to: 'admin@suoke.life'
     subject: '🚨 索克生活严重告警: {{ .GroupLabels.alertname }}'
     body: |
       告警详情:
@@ -232,7 +232,7 @@ receivers:
 
 - name: 'warning-alerts'
   email_configs:
-  - to: 'ops@suoke-life.com'
+  - to: 'ops@suoke.life'
     subject: '⚠️ 索克生活警告告警: {{ .GroupLabels.alertname }}'
     body: |
       告警详情:

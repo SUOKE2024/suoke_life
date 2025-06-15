@@ -109,9 +109,14 @@ MANIFEST
 *.manifest
 *.spec
 
-# 单元测试 / 覆盖率报告
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
 htmlcov/
 .tox/
+.nox/
 .coverage
 .coverage.*
 .cache
@@ -145,6 +150,10 @@ target/
 
 # Jupyter Notebook
 .ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
 
 # pyenv
 .python-version
@@ -180,8 +189,47 @@ venv_py313/
 .dmypy.json
 dmypy.json
 
-# Docker
-.dockerignore
+# Pyre type checker
+.pyre/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
 
 # IDE
 .vscode/
@@ -190,277 +238,26 @@ dmypy.json
 *.swo
 *~
 
-# macOS
-.DS_Store
-.AppleDouble
-.LSOverride
-
-# Windows
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-
-# Linux
-*~
-
-# Jest和测试缓存
-.jest-cache/
-test-results/
-
-# Ruff缓存
-.ruff_cache/
-
-# Backup directories
-.backup/
-
-# Global virtual environment directories
-**/.venv/
-
-# ===== 项目特定的忽略规则 =====
-
-# 备份文件和目录
-.backup/
-*.backup
-*.backup.*
-*.bak
-*.old
-*.orig
-*.tmp
-
-# 测试和缓存文件
-.jest-cache/
-coverage/
-.nyc_output/
-test-results/
-*.test.log
-
-# 临时报告文件
-*-report.json
-*-test-report.json
-optimization-*.json
-memory-analysis-*.json
-deployment-checklist.json
-performance-config.json
-comprehensive-test-report.json
-api-integration-test-report.json
-e2e-user-flow-test-report.json
-agent-collaboration-test-report.json
-
-# 临时测试文件
-test-*.js
-simple-test.js
-test-uiux-optimization.js
-test-agents-simple.js
-test-single-agent.js
-
-# 构建和编译输出
-build/
-dist/
-out/
-.expo/
-.expo-shared/
-
-# 依赖和包管理
-node_modules/
-.pnp
-.pnp.js
-.yarn/cache
-.yarn/unplugged
-.yarn/build-state.yml
-.yarn/install-state.gz
-
-# Python虚拟环境
-.venv/
-venv/
-env/
-ENV/
-.env/
-
-# iOS特定
-ios/Pods/
-ios/build/
-ios/*.xcworkspace/xcuserdata/
-ios/*.xcodeproj/xcuserdata/
-ios/*.xcodeproj/project.xcworkspace/xcuserdata/
-*.pbxproj.backup
-
-# Android特定
-android/app/build/
-android/build/
-android/.gradle/
-android/local.properties
-
-# React Native特定
-.metro-health-check*
-.haste_cache/
-
-# 编辑器和系统文件
-.vscode/settings.json
-.idea/
-*.sublime-project
-*.sublime-workspace
-.DS_Store
-Thumbs.db
-Desktop.ini
-
-# 日志和调试文件
-*.log
+# Logs
 logs/
-debug.log
-error.log
-access.log
+*.log
 
-# 临时文件
+# Temporary files
 *.tmp
 *.temp
-*.swp
-*.swo
-*~
-.#*
+*.bak
+*.backup
+*.old
 
-# 安全和密钥文件
-*.key
-*.pem
-*.p12
-*.keystore
-secrets.json
-.secrets/
+# Test reports
+*_report.json
+*_test_report.json
+*_summary_report.json
 
-# 数据库文件
-*.db
-*.sqlite
-*.sqlite3
-data/
+# Temporary test files
+test_*.py.tmp
+*_test_temp.py
 
-# 监控和分析文件
-.monitoring/
-.analytics/
-performance-*.json
-
-# ===== 防止冗余文件产生的新增规则 =====
-
-# 开发报告文件（防止未来产生）
-*_REPORT.md
-*_REPORT.json
-*_COMPREHENSIVE_REPORT.md
-*_OPTIMIZATION_REPORT.md
-*_IMPLEMENTATION_REPORT.md
-*_COMPLETION_REPORT.md
-*_PROGRESS_REPORT.md
-*_ANALYSIS_REPORT.md
-*_FIX_REPORT.*
-*_STATUS.md
-*_GUIDE.md
-*_HISTORY.md
-PROJECT_CLEANUP_*.md
-CLEANUP_PLAN.md
-DEPLOYMENT.md
-PROJECT_STATUS.md
-OPTIMIZATION_GUIDE.md
-UI_COMPONENT_LIBRARY.md
-BRAND_COLOR_UPDATE.md
-
-# 性能和分析报告
-performance_report_*.json
-gil_*.json
-gil_optimization_report.json
-gil_performance_report.json
-PERFORMANCE_BENCHMARKS_REPORT.json
-ULTIMATE_OPTIMIZATION_REPORT.json
-CODE_QUALITY_REPORT.json
-CODE_QUALITY_ENHANCEMENT_REPORT.json
-TEST_IMPLEMENTATION_ENHANCEMENT_REPORT.json
-ADVANCED_SYNTAX_FIX_REPORT.json
-CRITICAL_SYNTAX_FIX_REPORT.json
-SYNTAX_FIX_REPORT.json
-FILE_EXTENSION_FIX_REPORT.json
-
-# 重复的配置文件
-jest.config.enhanced.js
-optimize.config.js
-requirements-optimized.txt
-requirements-minimal.txt
-requirements-core.txt
-*.config.backup.js
-*.config.old.js
-
-# 重复的Docker文件
-docker-compose.optimized.yml
-docker-compose.optimized-*.yml
-Dockerfile.optimized
-Dockerfile.backup
-Dockerfile.old
-
-# 清理备份目录
-cleanup_backup*/
-.cleanup_backup/
-backup*/
-
-# 临时开发文件
-*.draft
-*.draft.*
-*.wip
-*.wip.*
-*.todo
-*.notes
-*.scratch
-
-# 测试输出文件
-test_output/
-test_results/
-*.test.output
-*.spec.output
-
-# 调试和分析文件
-*.debug
-*.trace
-*.profile
-*.heap
-*.memory
-*.cpu
-
-# 自动生成的文档
-auto_generated_docs/
-generated_api_docs/
-*.auto.md
-
-# 临时脚本和工具
-temp_*.sh
-temp_*.py
-temp_*.js
-cleanup_*.sh
-fix_*.sh
-migrate_*.sh
-test_*.sh
-
-# 编辑器临时文件
-*.sublime-workspace
-*.sublime-project
-.vscode/launch.json
-.vscode/tasks.json
-.vscode/c_cpp_properties.json
-.vscode/settings.json
-
-# 系统和缓存文件
-.DS_Store
-.AppleDouble
-.LSOverride
-Icon?
-._*
-.Spotlight-V100
-.Trashes
-.fseventsd
-.VolumeIcon.icns
-.com.apple.timemachine.donotpresent
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-$RECYCLE.BIN/
-*.cab
-*.msi
-*.msm
-*.msp
-*.lnk
-# 环境变量和敏感信息
+# 环境和敏感信息
 credentials/
 backups/

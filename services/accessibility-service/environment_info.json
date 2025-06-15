@@ -1,0 +1,9 @@
+{
+  "project_name": "accessibility-service",
+  "python_version": "3.13.3",
+  "uv_version": "latest",
+  "platform": "macOS-15.5-arm64-arm-64bit-Mach-O",
+  "created_at": "2025-06-14T23:36:37.522768",
+  "virtual_env_path": "/Users/songxu/Developer/suoke_life/services/accessibility-service/.venv",
+  "activation_command": "source activate_env.sh"
+}

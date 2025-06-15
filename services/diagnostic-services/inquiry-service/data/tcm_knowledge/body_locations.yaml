@@ -1,0 +1,51 @@
+头部:
+  common_symptoms:
+  - 头痛
+  - 眩晕
+  - 耳鸣
+  - 鼻塞
+  id: head
+  name: 头部
+  related_organs:
+  - 脑
+  - 眼
+  - 耳
+  - 鼻
+  sub_locations:
+  - 前额
+  - 头顶
+  - 后脑
+  - 太阳穴
+胸部:
+  common_symptoms:
+  - 胸痛
+  - 胸闷
+  - 心悸
+  - 咳嗽
+  id: chest
+  name: 胸部
+  related_organs:
+  - 心
+  - 肺
+  sub_locations:
+  - 心前区
+  - 胸骨后
+  - 两胁
+腹部:
+  common_symptoms:
+  - 腹痛
+  - 腹胀
+  - 恶心
+  - 便秘
+  id: abdomen
+  name: 腹部
+  related_organs:
+  - 胃
+  - 肠
+  - 肝
+  - 脾
+  sub_locations:
+  - 上腹
+  - 中腹
+  - 下腹
+  - 两胁

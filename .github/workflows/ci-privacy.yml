@@ -45,7 +45,7 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: 索克生活隐私合规检测失败
           to: security@suoke.life
-          from: ci-bot@suoke.com
+          from: ci-bot@suoke.life
           body: |
             CI合规检测失败，请及时处理。
             详情见GitHub Actions日志 

@@ -1,0 +1,118 @@
+# 索克生活-医学知识服务配置文件
+
+# 环境配置
+environment: production
+
+# 服务器配置
+server:
+  host: "0.0.0.0"
+  port: 8080
+  timeout: 30
+  debug: false
+  max_request_size: 10485760  # 10MB
+  allowed_origins:
+    - "*"
+
+# 数据库配置
+database:
+  uri: "bolt://neo4j:7687"
+  username: "neo4j"
+  password: "password"
+  max_connections: 50
+  connection_timeout: 5
+  retry_max_attempts: 3
+  retry_backoff: "exponential"
+
+# 日志配置
+logging:
+  level: "info"
+  format: "json"
+  output: "stdout"
+  file_path: "/var/log/med-knowledge/app.log"
+
+# 安全配置
+security:
+  enabled: false
+  jwt:
+    secret: "your-jwt-secret-key"
+    expiry: 86400  # 24小时
+    algorithm: "HS256"
+  api_keys:
+    - name: "admin"
+      key: "admin-api-key"
+      roles: ["admin", "read", "write"]
+    - name: "readonly"
+      key: "readonly-api-key"
+      roles: ["read"]
+
+# 缓存配置
+cache:
+  redis:
+    enabled: true
+    host: "redis"
+    port: 6379
+    password: ""
+    db: 0
+    ttl: 3600  # 1小时
+    max_connections: 20
+
+# 监控配置
+metrics:
+  enabled: true
+  prometheus:
+    port: 9090
+    path: "/metrics"
+
+# 追踪配置
+tracing:
+  enabled: true
+  jaeger:
+    host: "jaeger"
+    port: 6831
+    service_name: "med-knowledge"
+
+# 限流配置
+rate_limit:
+  enabled: true
+  default_limit: "100/minute"
+  per_user_limit: "1000/hour"
+
+# 数据导入配置
+data_import:
+  sources:
+    - name: "constitutions"
+      path: "data/constitutions.json"
+      enabled: true
+    - name: "symptoms"
+      path: "data/symptoms.json"
+      enabled: true
+    - name: "acupoints"
+      path: "data/acupoints.json"
+      enabled: true
+    - name: "herbs"
+      path: "data/herbs.json"
+      enabled: true
+    - name: "syndromes"
+      path: "data/syndromes.json"
+      enabled: true
+  schedule:
+    enabled: false
+    cron: "0 0 * * 0"  # 每周日0点运行
+
+# 外部服务依赖
+services:
+  rag:
+    host: "rag-service"
+    port: 8080
+    timeout: 30
+    enabled: true
+  xiaoai:
+    host: "xiaoai-service"
+    port: 8080
+    timeout: 30
+    enabled: true
+  auth:
+    host: "auth-service"
+    port: 8080
+    timeout: 30
+    enabled: false 

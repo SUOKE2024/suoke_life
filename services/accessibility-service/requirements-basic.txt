@@ -1,0 +1,49 @@
+# 索克生活无障碍服务基础依赖
+# Python 3.13 兼容版本
+
+# 核心框架
+grpcio>=1.60.0
+grpcio-tools>=1.60.0
+protobuf>=4.25.0
+pyyaml>=6.0.1
+
+# 基础数据处理
+numpy>=1.26.0
+pillow>=10.1.0
+requests>=2.31.0
+
+# 异步支持
+aiohttp>=3.9.0
+asyncio-mqtt>=0.16.0
+
+# 数据验证
+pydantic>=2.5.0
+
+# Web框架
+fastapi>=0.104.0
+uvicorn>=0.24.0
+
+# 数据库
+sqlalchemy>=2.0.0
+alembic>=1.13.0
+
+# 缓存
+redis>=5.0.0
+
+# 监控
+prometheus-client>=0.19.0
+structlog>=23.2.0
+
+# 工具
+typer>=0.9.0
+rich>=13.7.0
+python-dotenv>=1.0.0
+
+# 开发工具
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+pytest-cov>=4.1.0
+black>=23.12.0
+isort>=5.13.0
+ruff>=0.1.9
+mypy>=1.8.0 

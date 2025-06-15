@@ -1,0 +1,53 @@
+# 索克生活med-knowledge服务 Docker Compose 配置
+version: '3.8'
+
+services:
+  med-knowledge:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    container_name: suoke-med-knowledge
+    restart: unless-stopped
+    ports:
+      - "8080:8080"  # REST API
+      - "50051:50051"  # gRPC
+    environment:
+      # 服务配置
+      - SERVICE_NAME=med-knowledge
+      - SERVICE_VERSION=2.0.0
+      - SERVICE_ENV=production
+      - REST_PORT=8080
+      - GRPC_PORT=50051
+      
+      # 数据库配置
+      - DATABASE_URL=postgresql://user:password@postgres:5432/med_knowledgedb
+      - REDIS_URL=redis://redis:6379/0
+      
+      # 监控配置
+      - ENABLE_METRICS=true
+      - ENABLE_TRACING=true
+      - JAEGER_ENDPOINT=http://jaeger:14268/api/traces
+      
+      # 日志配置
+      - LOG_LEVEL=INFO
+      - LOG_FORMAT=json
+    volumes:
+      - med-knowledge_data:/app/data
+      - ./logs:/app/logs
+    networks:
+      - suoke-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  med-knowledge_data:
+    driver: local
+
+networks:
+  suoke-network:
+    external: true

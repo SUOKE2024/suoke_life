@@ -1,236 +1,53 @@
+# 索克生活palpation-service服务 Docker Compose 配置
 version: '3.8'
 
 services:
-  # 触诊服务主服务
   palpation-service:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: palpation-service
+      target: runtime
+    container_name: suoke-palpation-service
     restart: unless-stopped
     ports:
-      - "8000:8000"  # API服务端口
-      - "8080:8080"  # 监控仪表板端口
+      - "8080:8080"  # REST API
+      - "50051:50051"  # gRPC
     environment:
-      - PALPATION_SERVICE_HOST=0.0.0.0
-      - PALPATION_SERVICE_PORT=8000
-      - PALPATION_SERVICE_DEBUG=false
-      - PALPATION_DATABASE_PATH=/app/data/palpation.db
-      - PALPATION_CACHE_REDIS_HOST=redis
-      - PALPATION_CACHE_REDIS_PORT=6379
-      - PALPATION_LOGGING_LEVEL=INFO
+      # 服务配置
+      - SERVICE_NAME=palpation-service
+      - SERVICE_VERSION=2.0.0
+      - SERVICE_ENV=production
+      - REST_PORT=8080
+      - GRPC_PORT=50051
+      
+      # 数据库配置
+      - DATABASE_URL=postgresql://user:password@postgres:5432/palpation_servicedb
+      - REDIS_URL=redis://redis:6379/0
+      
+      # 监控配置
+      - ENABLE_METRICS=true
+      - ENABLE_TRACING=true
+      - JAEGER_ENDPOINT=http://jaeger:14268/api/traces
+      
+      # 日志配置
+      - LOG_LEVEL=INFO
+      - LOG_FORMAT=json
     volumes:
-      - ./data:/app/data
+      - palpation-service_data:/app/data
       - ./logs:/app/logs
-      - ./config:/app/config
-      - ./models:/app/models
-      - ./cache:/app/cache
-      - ./reports:/app/reports
-      - /dev:/dev  # 设备访问
-    devices:
-      - /dev/ttyUSB0:/dev/ttyUSB0  # 串口设备
-      - /dev/ttyUSB1:/dev/ttyUSB1
-      - /dev/ttyUSB2:/dev/ttyUSB2
-      - /dev/i2c-1:/dev/i2c-1      # I2C设备
-      - /dev/spidev0.0:/dev/spidev0.0  # SPI设备
-    privileged: true  # 需要访问硬件设备
-    depends_on:
-      - redis
-      - prometheus
-      - grafana
     networks:
-      - palpation-network
+      - suoke-network
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
 
-  # Redis缓存服务
-  redis:
-    image: redis:7-alpine
-    container_name: palpation-redis
-    restart: unless-stopped
-    ports:
-      - "6379:6379"
-    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
-    volumes:
-      - redis-data:/data
-    networks:
-      - palpation-network
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  # Prometheus监控服务
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: palpation-prometheus
-    restart: unless-stopped
-    ports:
-      - "9090:9090"
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/etc/prometheus/console_libraries'
-      - '--web.console.templates=/etc/prometheus/consoles'
-      - '--storage.tsdb.retention.time=200h'
-      - '--web.enable-lifecycle'
-    volumes:
-      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
-      - prometheus-data:/prometheus
-    networks:
-      - palpation-network
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  # Grafana可视化服务
-  grafana:
-    image: grafana/grafana:latest
-    container_name: palpation-grafana
-    restart: unless-stopped
-    ports:
-      - "3000:3000"
-    environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin123
-      - GF_USERS_ALLOW_SIGN_UP=false
-    volumes:
-      - grafana-data:/var/lib/grafana
-      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
-      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
-    networks:
-      - palpation-network
-    depends_on:
-      - prometheus
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:3000/api/health || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  # Nginx反向代理
-  nginx:
-    image: nginx:alpine
-    container_name: palpation-nginx
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx/ssl:/etc/nginx/ssl
-      - ./nginx/logs:/var/log/nginx
-    depends_on:
-      - palpation-service
-    networks:
-      - palpation-network
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  # 日志收集服务
-  filebeat:
-    image: docker.elastic.co/beats/filebeat:8.11.0
-    container_name: palpation-filebeat
-    restart: unless-stopped
-    user: root
-    volumes:
-      - ./monitoring/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
-      - ./logs:/app/logs:ro
-      - /var/lib/docker/containers:/var/lib/docker/containers:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-    environment:
-      - ELASTICSEARCH_HOST=elasticsearch:9200
-    networks:
-      - palpation-network
-    depends_on:
-      - elasticsearch
-
-  # Elasticsearch日志存储
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
-    container_name: palpation-elasticsearch
-    restart: unless-stopped
-    environment:
-      - discovery.type=single-node
-      - xpack.security.enabled=false
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ports:
-      - "9200:9200"
-    volumes:
-      - elasticsearch-data:/usr/share/elasticsearch/data
-    networks:
-      - palpation-network
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  # Kibana日志可视化
-  kibana:
-    image: docker.elastic.co/kibana/kibana:8.11.0
-    container_name: palpation-kibana
-    restart: unless-stopped
-    ports:
-      - "5601:5601"
-    environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-    networks:
-      - palpation-network
-    depends_on:
-      - elasticsearch
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:5601/api/status || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  # 数据库备份服务
-  db-backup:
-    image: alpine:latest
-    container_name: palpation-db-backup
-    restart: unless-stopped
-    volumes:
-      - ./data:/app/data
-      - ./backups:/app/backups
-      - ./scripts/backup.sh:/app/backup.sh
-    command: >
-      sh -c "
-        apk add --no-cache sqlite &&
-        chmod +x /app/backup.sh &&
-        while true; do
-          /app/backup.sh
-          sleep 3600
-        done
-      "
-    networks:
-      - palpation-network
-
-# 网络配置
-networks:
-  palpation-network:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.20.0.0/16
-
-# 数据卷配置
 volumes:
-  redis-data:
+  palpation-service_data:
     driver: local
-  prometheus-data:
-    driver: local
-  grafana-data:
-    driver: local
-  elasticsearch-data:
-    driver: local 
+
+networks:
+  suoke-network:
+    external: true

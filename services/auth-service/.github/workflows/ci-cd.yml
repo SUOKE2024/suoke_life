@@ -1,0 +1,365 @@
+name: 索克生活认证服务 CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  release:
+    types: [ published ]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: suokelife/auth-service
+
+jobs:
+  # 代码质量检查
+  code-quality:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+      
+    - name: 设置Python环境
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: 安装依赖
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -r requirements-dev.txt
+        
+    - name: 代码格式检查
+      run: |
+        black --check .
+        isort --check-only .
+        
+    - name: 代码质量检查
+      run: |
+        flake8 .
+        pylint internal/ app/
+        
+    - name: 类型检查
+      run: |
+        mypy internal/ app/
+        
+    - name: 安全扫描
+      run: |
+        bandit -r internal/ app/
+        safety check
+
+  # 单元测试
+  unit-tests:
+    runs-on: ubuntu-latest
+    needs: code-quality
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_auth_service
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+          
+      redis:
+        image: redis:7
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+      
+    - name: 设置Python环境
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: 安装依赖
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -r requirements-dev.txt
+        
+    - name: 运行单元测试
+      env:
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_auth_service
+        REDIS_URL: redis://localhost:6379/0
+        JWT_SECRET: test_jwt_secret_key_for_testing_only
+      run: |
+        pytest tests/ -v --cov=internal --cov=app --cov-report=xml --cov-report=html
+        
+    - name: 上传测试覆盖率
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+
+  # 集成测试
+  integration-tests:
+    runs-on: ubuntu-latest
+    needs: unit-tests
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_auth_service
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+          
+      redis:
+        image: redis:7
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+      
+    - name: 设置Python环境
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: 安装依赖
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -r requirements-dev.txt
+        
+    - name: 运行数据库迁移
+      env:
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_auth_service
+      run: |
+        alembic upgrade head
+        
+    - name: 运行集成测试
+      env:
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_auth_service
+        REDIS_URL: redis://localhost:6379/0
+        JWT_SECRET: test_jwt_secret_key_for_testing_only
+      run: |
+        pytest tests/integration/ -v
+
+  # 构建Docker镜像
+  build-image:
+    runs-on: ubuntu-latest
+    needs: [unit-tests, integration-tests]
+    outputs:
+      image-digest: ${{ steps.build.outputs.digest }}
+      image-tag: ${{ steps.meta.outputs.tags }}
+      
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+      
+    - name: 设置Docker Buildx
+      uses: docker/setup-buildx-action@v3
+      
+    - name: 登录容器注册表
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: 提取元数据
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=sha,prefix={{branch}}-
+          
+    - name: 构建并推送镜像
+      id: build
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        platforms: linux/amd64,linux/arm64
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+  # 安全扫描
+  security-scan:
+    runs-on: ubuntu-latest
+    needs: build-image
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+      
+    - name: 运行Trivy漏洞扫描
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: ${{ needs.build-image.outputs.image-tag }}
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+        
+    - name: 上传Trivy扫描结果
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: 'trivy-results.sarif'
+
+  # 部署到开发环境
+  deploy-dev:
+    runs-on: ubuntu-latest
+    needs: [build-image, security-scan]
+    if: github.ref == 'refs/heads/develop'
+    environment: development
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+      
+    - name: 设置Kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: 'v1.28.0'
+        
+    - name: 配置Kubeconfig
+      run: |
+        mkdir -p $HOME/.kube
+        echo "${{ secrets.KUBE_CONFIG_DEV }}" | base64 -d > $HOME/.kube/config
+        
+    - name: 部署到开发环境
+      run: |
+        helm upgrade --install auth-service-dev ./helm \
+          --namespace suoke-dev \
+          --create-namespace \
+          --set image.tag=${{ github.sha }} \
+          --set config.environment=development \
+          --set ingress.hosts[0].host=auth-dev.suokelife.com \
+          --wait --timeout=10m
+          
+    - name: 验证部署
+      run: |
+        kubectl rollout status deployment/auth-service-dev -n suoke-dev
+        kubectl get pods -n suoke-dev -l app.kubernetes.io/name=suoke-auth-service
+
+  # 部署到生产环境
+  deploy-prod:
+    runs-on: ubuntu-latest
+    needs: [build-image, security-scan]
+    if: github.event_name == 'release'
+    environment: production
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+      
+    - name: 设置Kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: 'v1.28.0'
+        
+    - name: 配置Kubeconfig
+      run: |
+        mkdir -p $HOME/.kube
+        echo "${{ secrets.KUBE_CONFIG_PROD }}" | base64 -d > $HOME/.kube/config
+        
+    - name: 部署到生产环境
+      run: |
+        helm upgrade --install auth-service ./helm \
+          --namespace suoke-prod \
+          --create-namespace \
+          --set image.tag=${{ github.event.release.tag_name }} \
+          --set config.environment=production \
+          --set ingress.hosts[0].host=auth.suokelife.com \
+          --set autoscaling.enabled=true \
+          --set autoscaling.minReplicas=3 \
+          --set autoscaling.maxReplicas=10 \
+          --wait --timeout=15m
+          
+    - name: 验证部署
+      run: |
+        kubectl rollout status deployment/auth-service -n suoke-prod
+        kubectl get pods -n suoke-prod -l app.kubernetes.io/name=suoke-auth-service
+        
+    - name: 运行生产环境健康检查
+      run: |
+        sleep 30
+        curl -f https://auth.suokelife.com/health || exit 1
+
+  # 性能测试
+  performance-test:
+    runs-on: ubuntu-latest
+    needs: deploy-dev
+    if: github.ref == 'refs/heads/develop'
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+      
+    - name: 设置Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: 安装K6
+      run: |
+        sudo gpg -k
+        sudo gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+        echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+        sudo apt-get update
+        sudo apt-get install k6
+        
+    - name: 运行性能测试
+      run: |
+        k6 run tests/performance/load-test.js
+        
+    - name: 上传性能测试结果
+      uses: actions/upload-artifact@v3
+      with:
+        name: performance-results
+        path: performance-results.json
+
+  # 通知
+  notify:
+    runs-on: ubuntu-latest
+    needs: [deploy-dev, deploy-prod, performance-test]
+    if: always()
+    
+    steps:
+    - name: 发送部署通知
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        channel: '#deployments'
+        webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+        fields: repo,message,commit,author,action,eventName,ref,workflow
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }} 

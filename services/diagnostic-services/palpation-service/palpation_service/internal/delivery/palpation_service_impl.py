@@ -1,627 +1,1088 @@
 """
-切诊服务实现 - 索克生活项目
-实现中医切诊的数字化，包括脉象分析、触诊数据处理等功能
+palpation_service_impl - 索克生活项目模块
 """
 
-import asyncio
-import json
+from collections.abc import Iterator
+from internal.model.pulse_analyzer import PulseAnalyzer
+from internal.model.tcm_pattern_mapper import TCMPatternMapper
+from internal.repository.session_repository import SessionRepository
+from internal.repository.user_repository import UserRepository
+from internal.signal.abdominal_analyzer import AbdominalAnalyzer
+from internal.signal.pulse_processor import PulseProcessor
+from internal.signal.skin_analyzer import SkinAnalyzer
+from pathlib import Path
+from pkg.utils.metrics import MetricsCollector
+from typing import Any
+import grpc
 import logging
 import time
-from dataclasses import asdict, dataclass
-from datetime import datetime
-from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+import uuid
 
-import numpy as np
-from fastapi import HTTPException
-from pydantic import BaseModel, Field
+#! / usr / bin / env python
 
-# 配置日志
-logging.basicConfig(level=logging.INFO)
+"""
+切诊服务实现
+负责实现gRPC服务接口
+"""
+
+
+
+# 导入内部模块
+
+# 导入生成的gRPC代码
+
 logger = logging.getLogger(__name__)
 
-
-class PulseType(str, Enum):
-    """脉象类型枚举"""
-
-    FLOATING = "浮脉"  # 浮脉
-    DEEP = "沉脉"  # 沉脉
-    SLOW = "迟脉"  # 迟脉
-    RAPID = "数脉"  # 数脉
-    SLIPPERY = "滑脉"  # 滑脉
-    ROUGH = "涩脉"  # 涩脉
-    WIRY = "弦脉"  # 弦脉
-    TIGHT = "紧脉"  # 紧脉
-    WEAK = "弱脉"  # 弱脉
-    STRONG = "强脉"  # 强脉
-
-
-class TouchType(str, Enum):
-    """触诊类型枚举"""
-
-    ABDOMEN = "腹诊"  # 腹部触诊
-    LIMBS = "四肢"  # 四肢触诊
-    ACUPOINTS = "穴位"  # 穴位触诊
-    SKIN = "皮肤"  # 皮肤触诊
-    MUSCLE = "肌肉"  # 肌肉触诊
-
-
-@dataclass
-class PulseData:
-    """脉象数据"""
-
-    position: str  # 脉位：寸、关、尺
-    rate: int  # 脉率（次/分钟）
-    rhythm: str  # 脉律：规整、不规整
-    strength: float  # 脉力：0-1
-    tension: float  # 脉张力：0-1
-    width: float  # 脉宽：0-1
-    depth: float  # 脉深度：0-1
-    smoothness: float  # 脉流利度：0-1
-
-
-@dataclass
-class TouchData:
-    """触诊数据"""
-
-    area: str  # 触诊部位
-    temperature: float  # 温度
-    moisture: float  # 湿润度
-    elasticity: float  # 弹性
-    tenderness: float  # 压痛
-    hardness: float  # 硬度
-    thickness: float  # 厚度
-
-
-class PalpationRequest(BaseModel):
-    """切诊请求"""
-
-    patient_id: str = Field(..., description="患者ID")
-    session_id: str = Field(..., description="会话ID")
-    pulse_data: List[Dict[str, Any]] = Field(..., description="脉象数据")
-    touch_data: List[Dict[str, Any]] = Field(..., description="触诊数据")
-    symptoms: List[str] = Field(default=[], description="症状列表")
-    constitution: Optional[str] = Field(None, description="体质类型")
-    metadata: Dict[str, Any] = Field(default_factory=dict, description="元数据")
-
-
-class PalpationResult(BaseModel):
-    """切诊结果"""
-
-    analysis_id: str = Field(..., description="分析ID")
-    pulse_analysis: Dict[str, Any] = Field(..., description="脉象分析")
-    touch_analysis: Dict[str, Any] = Field(..., description="触诊分析")
-    syndrome_differentiation: Dict[str, Any] = Field(..., description="辨证分析")
-    recommendations: List[str] = Field(..., description="建议")
-    confidence: float = Field(..., description="置信度")
-    processing_time: float = Field(..., description="处理时间")
-    timestamp: str = Field(..., description="时间戳")
-
-
-class PalpationServiceImpl:
+class PalpationServiceImpl(pb2_grpc.PalpationServiceServicer):
     """切诊服务实现类"""
 
-    def __init__(self):
-        """初始化切诊服务"""
-        self.pulse_patterns = self._load_pulse_patterns()
-        self.touch_patterns = self._load_touch_patterns()
-        self.syndrome_rules = self._load_syndrome_rules()
-        logger.info("切诊服务初始化完成")
-
-    def _load_pulse_patterns(self) -> Dict[str, Any]:
-        """加载脉象模式库"""
-        return {
-            "浮脉": {
-                "characteristics": {"depth": 0.2, "strength": 0.7},
-                "indications": ["表证", "虚阳外越"],
-                "constitution": ["气虚", "阳虚"],
-            },
-            "沉脉": {
-                "characteristics": {"depth": 0.8, "strength": 0.6},
-                "indications": ["里证", "阳气不足"],
-                "constitution": ["阳虚", "痰湿"],
-            },
-            "数脉": {
-                "characteristics": {"rate": ">90", "rhythm": "规整"},
-                "indications": ["热证", "阴虚"],
-                "constitution": ["阴虚", "湿热"],
-            },
-            "迟脉": {
-                "characteristics": {"rate": "<60", "rhythm": "规整"},
-                "indications": ["寒证", "阳虚"],
-                "constitution": ["阳虚", "痰湿"],
-            },
-            "滑脉": {
-                "characteristics": {"smoothness": 0.9, "width": 0.7},
-                "indications": ["痰湿", "食积", "妊娠"],
-                "constitution": ["痰湿", "湿热"],
-            },
-            "涩脉": {
-                "characteristics": {"smoothness": 0.3, "tension": 0.8},
-                "indications": ["血瘀", "精亏", "血虚"],
-                "constitution": ["血瘀", "阴虚"],
-            },
-            "弦脉": {
-                "characteristics": {"tension": 0.9, "width": 0.4},
-                "indications": ["肝胆病", "痛证", "痰饮"],
-                "constitution": ["气郁", "痰湿"],
-            },
-            "紧脉": {
-                "characteristics": {"tension": 0.8, "strength": 0.8},
-                "indications": ["寒证", "痛证", "宿食"],
-                "constitution": ["阳虚", "气滞"],
-            },
-        }
-
-    def _load_touch_patterns(self) -> Dict[str, Any]:
-        """加载触诊模式库"""
-        return {
-            "腹诊": {
-                "正常": {"temperature": 0.5, "elasticity": 0.7, "tenderness": 0.1},
-                "脾胃虚寒": {"temperature": 0.3, "elasticity": 0.5, "tenderness": 0.3},
-                "肝气郁结": {"temperature": 0.6, "elasticity": 0.4, "tenderness": 0.7},
-                "湿热内蕴": {"temperature": 0.8, "elasticity": 0.6, "tenderness": 0.5},
-            },
-            "穴位": {
-                "正常": {"tenderness": 0.1, "elasticity": 0.7},
-                "经络阻滞": {"tenderness": 0.8, "elasticity": 0.3},
-                "气血不足": {"tenderness": 0.3, "elasticity": 0.4},
-            },
-            "皮肤": {
-                "正常": {"temperature": 0.5, "moisture": 0.5, "elasticity": 0.7},
-                "阳虚": {"temperature": 0.3, "moisture": 0.3, "elasticity": 0.5},
-                "阴虚": {"temperature": 0.7, "moisture": 0.2, "elasticity": 0.4},
-                "湿盛": {"temperature": 0.4, "moisture": 0.8, "elasticity": 0.6},
-            },
-        }
-
-    def _load_syndrome_rules(self) -> Dict[str, Any]:
-        """加载辨证规则"""
-        return {
-            "气虚证": {
-                "pulse_indicators": ["弱脉", "虚脉"],
-                "touch_indicators": ["肌肉松软", "按之无力"],
-                "symptoms": ["乏力", "气短", "懒言"],
-                "confidence_weight": 0.8,
-            },
-            "血瘀证": {
-                "pulse_indicators": ["涩脉", "结脉"],
-                "touch_indicators": ["局部硬结", "压痛明显"],
-                "symptoms": ["疼痛", "肿块", "紫斑"],
-                "confidence_weight": 0.9,
-            },
-            "痰湿证": {
-                "pulse_indicators": ["滑脉", "濡脉"],
-                "touch_indicators": ["肌肉松软", "水肿"],
-                "symptoms": ["痰多", "胸闷", "肢体困重"],
-                "confidence_weight": 0.85,
-            },
-            "阴虚证": {
-                "pulse_indicators": ["细脉", "数脉"],
-                "touch_indicators": ["皮肤干燥", "肌肉瘦削"],
-                "symptoms": ["潮热", "盗汗", "口干"],
-                "confidence_weight": 0.8,
-            },
-            "阳虚证": {
-                "pulse_indicators": ["迟脉", "沉脉"],
-                "touch_indicators": ["肢冷", "肌肉松软"],
-                "symptoms": ["畏寒", "乏力", "腰膝酸软"],
-                "confidence_weight": 0.8,
-            },
-        }
-
-    async def analyze_pulse(
-        self, pulse_data_list: List[Dict[str, Any]]
-    ) -> Dict[str, Any]:
-        """分析脉象"""
-        try:
-            pulse_results = []
-            overall_patterns = []
-
-            for pulse_data in pulse_data_list:
-                pulse = PulseData(**pulse_data)
-
-                # 分析脉象特征
-                pattern_scores = {}
-                for pattern_name, pattern_info in self.pulse_patterns.items():
-                    score = self._calculate_pulse_pattern_score(pulse, pattern_info)
-                    pattern_scores[pattern_name] = score
-
-                # 找出最匹配的脉象
-                best_pattern = max(pattern_scores.items(), key=lambda x: x[1])
-
-                pulse_result = {
-                    "position": pulse.position,
-                    "detected_pattern": best_pattern[0],
-                    "confidence": best_pattern[1],
-                    "characteristics": {
-                        "rate": pulse.rate,
-                        "rhythm": pulse.rhythm,
-                        "strength": pulse.strength,
-                        "tension": pulse.tension,
-                        "depth": pulse.depth,
-                        "smoothness": pulse.smoothness,
-                    },
-                    "pattern_scores": pattern_scores,
-                }
-
-                pulse_results.append(pulse_result)
-                overall_patterns.append(best_pattern[0])
-
-            # 综合分析
-            pattern_frequency = {}
-            for pattern in overall_patterns:
-                pattern_frequency[pattern] = pattern_frequency.get(pattern, 0) + 1
-
-            dominant_pattern = max(pattern_frequency.items(), key=lambda x: x[1])[0]
-
-            return {
-                "individual_results": pulse_results,
-                "dominant_pattern": dominant_pattern,
-                "pattern_distribution": pattern_frequency,
-                "clinical_significance": self.pulse_patterns[dominant_pattern][
-                    "indications"
-                ],
-                "constitution_indication": self.pulse_patterns[dominant_pattern][
-                    "constitution"
-                ],
-            }
-
-        except Exception as e:
-            logger.error(f"脉象分析失败: {str(e)}")
-            raise HTTPException(status_code=500, detail=f"脉象分析失败: {str(e)}")
-
-    def _calculate_pulse_pattern_score(
-        self, pulse: PulseData, pattern_info: Dict[str, Any]
-    ) -> float:
-        """计算脉象模式匹配分数"""
-        score = 0.0
-        total_weight = 0.0
-
-        characteristics = pattern_info["characteristics"]
-
-        # 检查脉率
-        if "rate" in characteristics:
-            rate_condition = characteristics["rate"]
-            if isinstance(rate_condition, str):
-                if rate_condition.startswith(">"):
-                    target_rate = int(rate_condition[1:])
-                    if pulse.rate > target_rate:
-                        score += 1.0
-                elif rate_condition.startswith("<"):
-                    target_rate = int(rate_condition[1:])
-                    if pulse.rate < target_rate:
-                        score += 1.0
-            total_weight += 1.0
-
-        # 检查其他特征
-        for char_name, target_value in characteristics.items():
-            if char_name == "rate":
-                continue
-
-            if hasattr(pulse, char_name):
-                actual_value = getattr(pulse, char_name)
-                if isinstance(target_value, (int, float)):
-                    # 计算相似度
-                    similarity = 1.0 - abs(actual_value - target_value)
-                    score += max(0, similarity)
-                    total_weight += 1.0
-
-        return score / total_weight if total_weight > 0 else 0.0
-
-    async def analyze_touch(
-        self, touch_data_list: List[Dict[str, Any]]
-    ) -> Dict[str, Any]:
-        """分析触诊"""
-        try:
-            touch_results = []
-
-            for touch_data in touch_data_list:
-                touch = TouchData(**touch_data)
-
-                # 根据触诊部位选择相应的模式库
-                area_patterns = self.touch_patterns.get(touch.area, {})
-
-                pattern_scores = {}
-                for pattern_name, pattern_info in area_patterns.items():
-                    score = self._calculate_touch_pattern_score(touch, pattern_info)
-                    pattern_scores[pattern_name] = score
-
-                if pattern_scores:
-                    best_pattern = max(pattern_scores.items(), key=lambda x: x[1])
-
-                    touch_result = {
-                        "area": touch.area,
-                        "detected_pattern": best_pattern[0],
-                        "confidence": best_pattern[1],
-                        "measurements": {
-                            "temperature": touch.temperature,
-                            "moisture": touch.moisture,
-                            "elasticity": touch.elasticity,
-                            "tenderness": touch.tenderness,
-                            "hardness": touch.hardness,
-                            "thickness": touch.thickness,
-                        },
-                        "pattern_scores": pattern_scores,
-                    }
-
-                    touch_results.append(touch_result)
-
-            return {
-                "individual_results": touch_results,
-                "summary": self._summarize_touch_findings(touch_results),
-            }
-
-        except Exception as e:
-            logger.error(f"触诊分析失败: {str(e)}")
-            raise HTTPException(status_code=500, detail=f"触诊分析失败: {str(e)}")
-
-    def _calculate_touch_pattern_score(
-        self, touch: TouchData, pattern_info: Dict[str, Any]
-    ) -> float:
-        """计算触诊模式匹配分数"""
-        score = 0.0
-        total_weight = 0.0
-
-        for char_name, target_value in pattern_info.items():
-            if hasattr(touch, char_name):
-                actual_value = getattr(touch, char_name)
-                similarity = 1.0 - abs(actual_value - target_value)
-                score += max(0, similarity)
-                total_weight += 1.0
-
-        return score / total_weight if total_weight > 0 else 0.0
-
-    def _summarize_touch_findings(
-        self, touch_results: List[Dict[str, Any]]
-    ) -> Dict[str, Any]:
-        """总结触诊发现"""
-        abnormal_findings = []
-        areas_examined = []
-
-        for result in touch_results:
-            areas_examined.append(result["area"])
-            if result["detected_pattern"] != "正常":
-                abnormal_findings.append(
-                    {
-                        "area": result["area"],
-                        "finding": result["detected_pattern"],
-                        "confidence": result["confidence"],
-                    }
-                )
-
-        return {
-            "areas_examined": areas_examined,
-            "abnormal_findings": abnormal_findings,
-            "overall_assessment": "正常" if not abnormal_findings else "异常",
-        }
-
-    async def perform_syndrome_differentiation(
+    def __init__(
         self,
-        pulse_analysis: Dict[str, Any],
-        touch_analysis: Dict[str, Any],
-        symptoms: List[str],
-    ) -> Dict[str, Any]:
-        """执行辨证分析"""
+        config: dict[str, Any],
+        session_repository: SessionRepository,
+        user_repository: UserRepository,
+    ):
+        """
+        初始化切诊服务实现
+
+        Args:
+            config: 服务配置
+            session_repository: 会话存储库
+            user_repository: 用户存储库
+        """
+        self.config = config
+        self.session_repository = session_repository
+        self.user_repository = user_repository
+
+        # 初始化信号处理组件
+        pulse_config = config.get("pulse_analysis", {})
+        self.pulse_processor = PulseProcessor(pulse_config)
+
+        # 初始化脉象分析器
+        self.pulse_analyzer = PulseAnalyzer(pulse_config)
+
+        # 初始化腹诊分析器
+        abdominal_config = config.get("abdominal_analysis", {})
+        self.abdominal_analyzer = AbdominalAnalyzer(abdominal_config)
+
+        # 初始化皮肤触诊分析器
+        skin_config = config.get("skin_analysis", {})
+        self.skin_analyzer = SkinAnalyzer(skin_config)
+
+        # 初始化中医证型映射器
+        tcm_config = config.get("tcm_pattern_mapping", {})
+        self.tcm_pattern_mapper = TCMPatternMapper(tcm_config)
+
+        # 指标收集器
+        metrics_config = config.get("metrics", {})
+        self.metrics = MetricsCollector(metrics_config)
+
+        # 集成服务客户端
+        self.xiaoai_client = None
+        self.rag_client = None
+
+        # 加载服务版本信息
+        self.version = self._load_version()
+
+        logger.info("切诊服务实现初始化完成")
+
+    def _load_version(None):
+        """加载服务版本信息"""
         try:
-            syndrome_scores = {}
+            version_file = Path(__file__).resolve().parents[3] / "VERSION"
+            if version_file.exists():
+                return version_file.read_text().strip()
+            return "0.1.0"  # 默认版本
+        except Exception as e:
+            logger.warning(f"无法加载版本信息: {e}")
+            return "unknown"
 
-            for syndrome_name, syndrome_info in self.syndrome_rules.items():
-                score = 0.0
-                evidence = []
+    def StartPulseSession(
+        self, request: pb2.StartPulseSessionRequest, context: grpc.ServicerContext
+    ) - > pb2.StartPulseSessionResponse:
+        """
+        开始脉诊会话
 
-                # 检查脉象指标
-                pulse_indicators = syndrome_info["pulse_indicators"]
-                dominant_pulse = pulse_analysis.get("dominant_pattern", "")
-                if dominant_pulse in pulse_indicators:
-                    score += 0.4
-                    evidence.append(f"脉象: {dominant_pulse}")
+        Args:
+            request: 开始会话请求
+            context: gRPC上下文
 
-                # 检查触诊指标
-                touch_indicators = syndrome_info["touch_indicators"]
-                touch_findings = touch_analysis.get("summary", {}).get(
-                    "abnormal_findings", []
+        Returns:
+            开始会话响应
+        """
+        start_time = time.time()
+
+        # 创建会话ID
+        session_id = str(uuid.uuid4())
+
+        try:
+            # 获取用户信息
+            user_id = request.user_id
+            user = self.user_repository.get_user(user_id)
+
+            if not user:
+                logger.warning(f"用户不存在: {user_id}")
+                return pb2.StartPulseSessionResponse(
+                    session_id = "", success = False, error_message = f"User not found: {user_id}"
                 )
-                for finding in touch_findings:
-                    if any(
-                        indicator in finding["finding"]
-                        for indicator in touch_indicators
-                    ):
-                        score += 0.3
-                        evidence.append(f"触诊: {finding['finding']}")
 
-                # 检查症状
-                syndrome_symptoms = syndrome_info["symptoms"]
-                matching_symptoms = [s for s in symptoms if s in syndrome_symptoms]
-                if matching_symptoms:
-                    score += 0.3 * (len(matching_symptoms) / len(syndrome_symptoms))
-                    evidence.extend([f"症状: {s}" for s in matching_symptoms])
+            # 创建会话记录
+            session_data = {
+                "session_id": session_id,
+                "user_id": user_id,
+                "start_time": time.time(),
+                "device_info": {
+                    "device_id": request.device_info.device_id,
+                    "model": request.device_info.model,
+                    "firmware_version": request.device_info.firmware_version,
+                    "sensor_types": list(request.device_info.sensor_types),
+                },
+                "calibration_data": {
+                    "values": list(request.calibration_data.calibration_values),
+                    "timestamp": request.calibration_data.calibration_timestamp,
+                    "operator": request.calibration_data.calibration_operator,
+                },
+                "status": "started",
+                "data_packets": [],
+                "analysis_results": {},
+            }
 
-                # 应用置信度权重
-                final_score = score * syndrome_info["confidence_weight"]
+            # 保存会话
+            self.session_repository.create_session(session_id, session_data)
 
-                syndrome_scores[syndrome_name] = {
-                    "score": final_score,
-                    "evidence": evidence,
-                    "confidence": syndrome_info["confidence_weight"],
-                }
+            # 确定采样配置
+            sampling_config = request.device_info.sensor_types
+            device_config = self._get_device_config(request.device_info.model)
 
-            # 排序并选择最可能的证候
-            sorted_syndromes = sorted(
-                syndrome_scores.items(), key=lambda x: x[1]["score"], reverse=True
+            sampling_config_response = pb2.SamplingConfig(
+                sampling_rate = device_config.get("sampling_rate", 1000),
+                sampling_duration = device_config.get("sampling_duration", 30),
+                required_positions = [
+                    "CUN_LEFT",
+                    "GUAN_LEFT",
+                    "CHI_LEFT",
+                    "CUN_RIGHT",
+                    "GUAN_RIGHT",
+                    "CHI_RIGHT",
+                ],
+                minimum_pressure = device_config.get("minimum_pressure", 0),
+                maximum_pressure = device_config.get("maximum_pressure", 100),
             )
 
-            primary_syndrome = sorted_syndromes[0] if sorted_syndromes else None
+            # 记录指标
+            self.metrics.record_counter(
+                "pulse_sessions_started", 1, {"device_model": request.device_info.model}
+            )
 
-            return {
-                "primary_syndrome": (
-                    {
-                        "name": primary_syndrome[0],
-                        "score": primary_syndrome[1]["score"],
-                        "evidence": primary_syndrome[1]["evidence"],
-                        "confidence": primary_syndrome[1]["confidence"],
-                    }
-                    if primary_syndrome
-                    else None
-                ),
-                "all_syndromes": dict(syndrome_scores),
-                "differential_diagnosis": [
-                    {"name": name, "score": info["score"]}
-                    for name, info in sorted_syndromes[:3]
-                ],
-            }
+            return pb2.StartPulseSessionResponse(
+                session_id = session_id,
+                success = True,
+                error_message = "",
+                sampling_config = sampling_config_response,
+            )
 
         except Exception as e:
-            logger.error(f"辨证分析失败: {str(e)}")
-            raise HTTPException(status_code=500, detail=f"辨证分析失败: {str(e)}")
+            logger.exception(f"开始脉诊会话失败: {e!s}")
+            self.metrics.record_counter("pulse_sessions_errors", 1, {"error_type": "start_session"})
 
-    def _generate_recommendations(self, syndrome_analysis: Dict[str, Any]) -> List[str]:
-        """生成治疗建议"""
-        recommendations = []
+            return pb2.StartPulseSessionResponse(
+                session_id = "", success = False, error_message = f"Failed to start pulse session: {e!s}"
+            )
+        finally:
+            # 记录延迟
+            end_time = time.time()
+            self.metrics.record_histogram("pulse_session_start_latency", end_time - start_time)
 
-        primary_syndrome = syndrome_analysis.get("primary_syndrome")
-        if not primary_syndrome:
-            return ["建议进一步检查以明确诊断"]
+    def _get_device_config(dict[str, Any]):
+        """获取设备配置"""
+        devices_config = self.config.get("devices", {})
+        supported_models = devices_config.get("supported_models", [])
 
-        syndrome_name = primary_syndrome["name"]
+        for model_config in supported_models:
+            if model_config.get("model") == device_model:
+                return model_config
 
-        # 基于证候的治疗建议
-        treatment_recommendations = {
-            "气虚证": [
-                "建议补气健脾，可选用四君子汤加减",
-                "适当运动，如太极拳、八段锦等",
-                "饮食宜清淡易消化，多食山药、大枣等",
-                "保证充足睡眠，避免过度劳累",
-            ],
-            "血瘀证": [
-                "建议活血化瘀，可选用血府逐瘀汤加减",
-                "适当按摩，促进血液循环",
-                "饮食宜温热，可食用红花、当归等",
-                "避免久坐久立，适当运动",
-            ],
-            "痰湿证": [
-                "建议健脾化湿，可选用二陈汤加减",
-                "控制饮食，少食肥甘厚腻",
-                "适当运动，如快走、游泳等",
-                "保持环境干燥，避免潮湿",
-            ],
-            "阴虚证": [
-                "建议滋阴润燥，可选用六味地黄丸加减",
-                "避免熬夜，保证充足睡眠",
-                "饮食宜清淡，多食银耳、百合等",
-                "避免辛辣刺激食物",
-            ],
-            "阳虚证": [
-                "建议温阳补肾，可选用金匮肾气丸加减",
-                "注意保暖，避免受寒",
-                "饮食宜温热，可食用羊肉、生姜等",
-                "适当运动，增强体质",
-            ],
+        # 如果找不到匹配的设备配置，使用默认值
+        return {
+            "sampling_rate": devices_config.get("sampling_rate", 1000),
+            "sampling_duration": 30,
+            "minimum_pressure": 0,
+            "maximum_pressure": 100,
         }
 
-        recommendations = treatment_recommendations.get(
-            syndrome_name,
-            [
-                "建议咨询专业中医师进行个性化治疗",
-                "定期复查，观察病情变化",
-                "保持良好的生活习惯",
-            ],
-        )
+    def RecordPulseData(
+        self, request_iterator: Iterator[pb2.PulseDataPacket], context: grpc.ServicerContext
+    ) - > pb2.RecordPulseDataResponse:
+        """
+        记录脉诊数据
 
-        return recommendations
+        Args:
+            request_iterator: 脉搏数据包流
+            context: gRPC上下文
 
-    async def perform_comprehensive_palpation(
-        self, request: PalpationRequest
-    ) -> PalpationResult:
-        """执行综合切诊分析"""
+        Returns:
+            记录数据响应
+        """
+        start_time = time.time()
+        session_id = None
+        packets_received = 0
+
+        try:
+            # 收集数据包
+            data_packets = []
+
+            for packet in request_iterator:
+                if session_id is None:
+                    session_id = packet.session_id
+
+                if packet.session_id ! = session_id:
+                    logger.warning(
+                        f"数据包会话ID不匹配: 预期 {session_id}, 实际 {packet.session_id}"
+                    )
+                    continue
+
+                # 转换为字典存储
+                packet_data = {
+                    "timestamp": packet.timestamp,
+                    "pressure_data": list(packet.pressure_data),
+                    "velocity_data": list(packet.velocity_data),
+                    "position": self._get_position_name(packet.position),
+                    "skin_temperature": packet.skin_temperature,
+                    "skin_moisture": packet.skin_moisture,
+                }
+
+                data_packets.append(packet_data)
+                packets_received + = 1
+
+            if not session_id:
+                logger.error("未收到数据包")
+                return pb2.RecordPulseDataResponse(
+                    session_id = "",
+                    packets_received = 0,
+                    success = False,
+                    error_message = "No data packets received",
+                )
+
+            # 获取会话数据
+            session = self.session_repository.get_session(session_id)
+            if not session:
+                logger.error(f"会话不存在: {session_id}")
+                return pb2.RecordPulseDataResponse(
+                    session_id = session_id,
+                    packets_received = packets_received,
+                    success = False,
+                    error_message = f"Session not found: {session_id}",
+                )
+
+            # 更新会话数据
+            session["data_packets"].extend(data_packets)
+            session["last_update_time"] = time.time()
+
+            # 保存更新后的会话
+            self.session_repository.update_session(session_id, session)
+
+            # 记录指标
+            self.metrics.record_counter("pulse_data_packets_received", packets_received)
+            self.metrics.record_histogram("pulse_data_packet_count", packets_received)
+
+            return pb2.RecordPulseDataResponse(
+                session_id = session_id,
+                packets_received = packets_received,
+                success = True,
+                error_message = "",
+            )
+
+        except Exception as e:
+            logger.exception(f"记录脉诊数据失败: {e!s}")
+            self.metrics.record_counter("pulse_sessions_errors", 1, {"error_type": "record_data"})
+
+            return pb2.RecordPulseDataResponse(
+                session_id = session_id if session_id else "",
+                packets_received = packets_received,
+                success = False,
+                error_message = f"Failed to record pulse data: {e!s}",
+            )
+        finally:
+            # 记录延迟
+            end_time = time.time()
+            self.metrics.record_histogram("pulse_data_recording_latency", end_time - start_time)
+
+    def _get_position_name(str):
+        """将枚举值转换为位置名称"""
+        position_map = {
+            0: "UNKNOWN_POSITION",
+            1: "CUN_LEFT",
+            2: "GUAN_LEFT",
+            3: "CHI_LEFT",
+            4: "CUN_RIGHT",
+            5: "GUAN_RIGHT",
+            6: "CHI_RIGHT",
+        }
+        return position_map.get(position_enum, "UNKNOWN_POSITION")
+
+    def ExtractPulseFeatures(
+        self, request: pb2.ExtractPulseFeaturesRequest, context: grpc.ServicerContext
+    ) - > pb2.ExtractPulseFeaturesResponse:
+        """
+        提取脉象特征
+
+        Args:
+            request: 特征提取请求
+            context: gRPC上下文
+
+        Returns:
+            脉象特征响应
+        """
         start_time = time.time()
 
         try:
-            # 生成分析ID
-            analysis_id = f"palpation_{int(time.time())}_{request.patient_id}"
+            session_id = request.session_id
 
-            # 脉象分析
-            pulse_analysis = await self.analyze_pulse(request.pulse_data)
-
-            # 触诊分析
-            touch_analysis = await self.analyze_touch(request.touch_data)
-
-            # 辨证分析
-            syndrome_analysis = await self.perform_syndrome_differentiation(
-                pulse_analysis, touch_analysis, request.symptoms
-            )
-
-            # 生成建议
-            recommendations = self._generate_recommendations(syndrome_analysis)
-
-            # 计算总体置信度
-            pulse_confidence = (
-                np.mean(
-                    [
-                        result["confidence"]
-                        for result in pulse_analysis["individual_results"]
-                    ]
+            # 获取会话数据
+            session = self.session_repository.get_session(session_id)
+            if not session:
+                logger.error(f"会话不存在: {session_id}")
+                return pb2.ExtractPulseFeaturesResponse(
+                    session_id = session_id,
+                    success = False,
+                    error_message = f"Session not found: {session_id}",
                 )
-                if pulse_analysis["individual_results"]
-                else 0.0
-            )
 
-            touch_confidence = (
-                np.mean(
-                    [
-                        result["confidence"]
-                        for result in touch_analysis["individual_results"]
-                    ]
+            data_packets = session.get("data_packets", [])
+            if not data_packets:
+                logger.error(f"会话没有数据包: {session_id}")
+                return pb2.ExtractPulseFeaturesResponse(
+                    session_id = session_id,
+                    success = False,
+                    error_message = f"No data packets in session: {session_id}",
                 )
-                if touch_analysis["individual_results"]
-                else 0.0
+
+            # 按位置分组数据包
+            position_data = {}
+            for packet in data_packets:
+                position = packet.get("position", "UNKNOWN_POSITION")
+                if position not in position_data:
+                    position_data[position] = {
+                        "pressure_data": [],
+                        "velocity_data": [],
+                        "timestamps": [],
+                    }
+
+                position_data[position]["pressure_data"].extend(packet.get("pressure_data", []))
+                position_data[position]["velocity_data"].extend(packet.get("velocity_data", []))
+                position_data[position]["timestamps"].append(packet.get("timestamp", 0))
+
+            # 提取特征
+            all_features = []
+            quality_metrics = None
+
+            # 处理每个位置的数据
+            for position, data in position_data.items():
+                # 跳过未知位置的数据
+                if position == "UNKNOWN_POSITION":
+                    continue
+
+                # 确保有足够的数据
+                pressure_data = data.get("pressure_data", [])
+                if len(pressure_data) < 100:  # 至少需要100个数据点
+                    logger.warning(f"位置 {position} 的数据不足: {len(pressure_data)} 点")
+                    continue
+
+                # 提取特征
+
+                features_result = self.pulse_processor.extract_features(
+                    np.array(pressure_data), position
+                )
+
+                # 获取质量指标
+                if quality_metrics is None and "quality" in features_result:
+                    quality = features_result.get("quality", {})
+                    quality_metrics = pb2.PulseQualityMetrics(
+                        signal_quality = quality.get("signal_quality", 0),
+                        noise_level = quality.get("noise_level", 0),
+                        is_valid = quality.get("is_valid", False),
+                        quality_issues = quality.get("quality_issues", ""),
+                    )
+
+                # 转换特征为响应格式
+                feature_dict = features_result.get("features", {})
+                for feature_name, feature_value in feature_dict.items():
+                    # 跳过标准差特征
+                    if feature_name.endswith("_std"):
+                        continue
+
+                    pulse_feature = pb2.PulseFeature(
+                        feature_name = feature_name,
+                        feature_value = float(feature_value),
+                        feature_description = self._get_feature_description(feature_name),
+                        position = self._get_position_enum(position),
+                    )
+                    all_features.append(pulse_feature)
+
+            # 如果没有提取到特征
+            if not all_features:
+                logger.error(f"未能提取到脉象特征: {session_id}")
+                return pb2.ExtractPulseFeaturesResponse(
+                    session_id = session_id,
+                    success = False,
+                    error_message = "Failed to extract pulse features from the data",
+                )
+
+            # 如果没有质量指标
+            if quality_metrics is None:
+                quality_metrics = pb2.PulseQualityMetrics(
+                    signal_quality = 0,
+                    noise_level = 1.0,
+                    is_valid = False,
+                    quality_issues = "Failed to assess signal quality",
+                )
+
+            # 保存特征到会话
+            session["features"] = {
+                "extraction_time": time.time(),
+                "features": [
+                    {"name": f.feature_name, "value": f.feature_value, "position": f.position}
+                    for f in all_features
+                ],
+                "quality": {
+                    "signal_quality": quality_metrics.signal_quality,
+                    "noise_level": quality_metrics.noise_level,
+                    "is_valid": quality_metrics.is_valid,
+                    "quality_issues": quality_metrics.quality_issues,
+                },
+            }
+
+            # 更新会话状态
+            session["status"] = "features_extracted"
+
+            # 保存会话
+            self.session_repository.update_session(session_id, session)
+
+            # 记录指标
+            self.metrics.record_counter("pulse_features_extracted", 1)
+            self.metrics.record_gauge("pulse_features_count", len(all_features))
+
+            return pb2.ExtractPulseFeaturesResponse(
+                session_id = session_id,
+                features = all_features,
+                quality_metrics = quality_metrics,
+                success = True,
+                error_message = "",
             )
-
-            syndrome_confidence = (
-                syndrome_analysis["primary_syndrome"]["confidence"]
-                if syndrome_analysis["primary_syndrome"]
-                else 0.0
-            )
-
-            overall_confidence = (
-                pulse_confidence + touch_confidence + syndrome_confidence
-            ) / 3
-
-            processing_time = time.time() - start_time
-
-            result = PalpationResult(
-                analysis_id=analysis_id,
-                pulse_analysis=pulse_analysis,
-                touch_analysis=touch_analysis,
-                syndrome_differentiation=syndrome_analysis,
-                recommendations=recommendations,
-                confidence=overall_confidence,
-                processing_time=processing_time,
-                timestamp=datetime.now().isoformat(),
-            )
-
-            logger.info(f"切诊分析完成: {analysis_id}, 耗时: {processing_time:.2f}秒")
-            return result
 
         except Exception as e:
-            logger.error(f"综合切诊分析失败: {str(e)}")
-            raise HTTPException(status_code=500, detail=f"综合切诊分析失败: {str(e)}")
+            logger.exception(f"提取脉象特征失败: {e!s}")
+            self.metrics.record_counter(
+                "pulse_sessions_errors", 1, {"error_type": "extract_features"}
+            )
 
+            return pb2.ExtractPulseFeaturesResponse(
+                session_id = request.session_id,
+                success = False,
+                error_message = f"Failed to extract pulse features: {e!s}",
+            )
+        finally:
+            # 记录延迟
+            end_time = time.time()
+            self.metrics.record_histogram("pulse_feature_extraction_latency", end_time - start_time)
 
-# 全局服务实例
-palpation_service = PalpationServiceImpl()
+    def _get_position_enum(int):
+        """将位置名称转换为枚举值"""
+        position_map = {
+            "UNKNOWN_POSITION": 0,
+            "CUN_LEFT": 1,
+            "GUAN_LEFT": 2,
+            "CHI_LEFT": 3,
+            "CUN_RIGHT": 4,
+            "GUAN_RIGHT": 5,
+            "CHI_RIGHT": 6,
+        }
+        return position_map.get(position_name, 0)
 
+    def _get_feature_description(str):
+        """获取特征描述"""
+        # 特征描述映射
+        descriptions = {
+            "main_peak_amplitude": "主波幅度",
+            "main_peak_position": "主波位置",
+            "rising_time": "上升时间",
+            "rising_slope": "上升斜率",
+            "falling_slope": "下降斜率",
+            "dicrotic_peak_amplitude": "重搏波幅度",
+            "dicrotic_peak_position": "重搏波位置",
+            "dicrotic_ratio": "重搏波与主波比值",
+            "pulse_width": "脉搏宽度",
+            "area_under_curve": "曲线下面积",
+            "energy": "脉象能量",
+            "mean": "平均值",
+            "std": "标准差",
+            "skewness": "偏度",
+            "kurtosis": "峰度",
+            "dominant_frequency": "主频率",
+            "dominant_frequency_power": "主频率能量",
+            "total_power": "总能量",
+            "low_frequency_ratio": "低频能量比",
+            "mid_frequency_ratio": "中频能量比",
+            "high_frequency_ratio": "高频能量比",
+            "spectral_entropy": "频谱熵",
+            "wavelet_approximation_energy": "小波近似能量",
+            "wavelet_entropy": "小波熵",
+        }
 
-async def process_palpation_request(request: PalpationRequest) -> PalpationResult:
-    """处理切诊请求的主入口函数"""
-    return await palpation_service.perform_comprehensive_palpation(request)
+        # 对于小波细节能量特征
+        if feature_name.startswith("wavelet_detail_") and feature_name.endswith("_energy"):
+            level = feature_name.split("_")[2]
+            return f"小波细节能量(级别{level})"
 
+        return descriptions.get(feature_name, feature_name)
 
-def main():
-    """主函数"""
-    logger.info("切诊服务启动")
-    # 这里可以添加服务启动逻辑
+    def AnalyzePulse(
+        self, request: pb2.AnalyzePulseRequest, context: grpc.ServicerContext
+    ) - > pb2.AnalyzePulseResponse:
+        """
+        分析脉象
 
+        Args:
+            request: 脉象分析请求
+            context: gRPC上下文
 
-if __name__ == "__main__":
-    main()
+        Returns:
+            脉象分析响应
+        """
+        start_time = time.time()
+
+        try:
+            session_id = request.session_id
+            user_id = request.user_id
+
+            # 获取会话数据
+            session = self.session_repository.get_session(session_id)
+            if not session:
+                logger.error(f"会话不存在: {session_id}")
+                return pb2.AnalyzePulseResponse(
+                    session_id = session_id,
+                    success = False,
+                    error_message = f"Session not found: {session_id}",
+                )
+
+            # 确保有特征数据
+            if "features" not in session:
+                logger.error(f"会话没有特征数据: {session_id}")
+                return pb2.AnalyzePulseResponse(
+                    session_id = session_id,
+                    success = False,
+                    error_message = f"No features extracted for session: {session_id}",
+                )
+
+            # 使用脉象分析器分析
+            user = self.user_repository.get_user(user_id)
+            user_info = {
+                "user_id": user_id,
+                "age": user.get("age", 0) if user else 0,
+                "gender": user.get("gender", "") if user else "",
+                "health_status": user.get("health_status", {}) if user else {},
+            }
+
+            analysis_options = {
+                "use_tcm_model": (
+                    request.options.use_tcm_model
+                    if hasattr(request, "options") and request.options
+                    else True
+                ),
+                "use_western_model": (
+                    request.options.use_western_model
+                    if hasattr(request, "options") and request.options
+                    else False
+                ),
+                "analysis_depth": (
+                    request.options.analysis_depth
+                    if hasattr(request, "options") and request.options
+                    else "standard"
+                ),
+                "specific_conditions": (
+                    list(request.options.specific_conditions)
+                    if hasattr(request, "options") and request.options
+                    else []
+                ),
+            }
+
+            # 获取脉象特征
+            features = session["features"]
+
+            # 分析脉象
+            analysis_result = self.pulse_analyzer.analyze_pulse(
+                features = features, user_info = user_info, options = analysis_options
+            )
+
+            # 转换脉象类型
+            pulse_types = []
+            for pulse_type in analysis_result.get("pulse_types", []):
+                enum_value = self._get_pulse_wave_type_enum(pulse_type.get("type", "UNKNOWN_WAVE"))
+                pulse_types.append(enum_value)
+
+            # 转换中医脉象模式
+            tcm_patterns = []
+            for pattern in analysis_result.get("tcm_patterns", []):
+                tcm_pattern = pb2.TCMPulsePattern(
+                    pattern_name = pattern.get("pattern_name", ""),
+                    confidence = pattern.get("confidence", 0.0),
+                    description = pattern.get("description", ""),
+                    related_conditions = pattern.get("related_conditions", []),
+                )
+                tcm_patterns.append(tcm_pattern)
+
+            # 转换脏腑状况
+            organ_conditions = []
+            for condition in analysis_result.get("organ_conditions", []):
+                organ_condition = pb2.OrganCondition(
+                    organ_name = condition.get("organ_name", ""),
+                    condition = condition.get("condition", ""),
+                    severity = condition.get("severity", 0.0),
+                    description = condition.get("description", ""),
+                )
+                organ_conditions.append(organ_condition)
+
+            # 获取分析总结和置信度
+            analysis_summary = analysis_result.get("analysis_summary", "")
+            confidence_score = analysis_result.get("confidence_score", 0.0)
+
+            # 保存分析结果到会话
+            session["pulse_analysis"] = {
+                "analysis_time": time.time(),
+                "pulse_types": [self._get_pulse_wave_type_name(pt) for pt in pulse_types],
+                "tcm_patterns": [p.pattern_name for p in tcm_patterns],
+                "organ_conditions": [
+                    {
+                        "organ_name": oc.organ_name,
+                        "condition": oc.condition,
+                        "severity": oc.severity,
+                    }
+                    for oc in organ_conditions
+                ],
+                "analysis_summary": analysis_summary,
+                "confidence_score": confidence_score,
+            }
+
+            # 更新会话状态
+            session["status"] = "pulse_analyzed"
+
+            # 保存会话
+            self.session_repository.update_session(session_id, session)
+
+            # 记录指标
+            self.metrics.record_counter("pulse_analysis_completed", 1)
+            self.metrics.record_histogram("pulse_analysis_confidence", confidence_score)
+
+            return pb2.AnalyzePulseResponse(
+                session_id = session_id,
+                pulse_types = pulse_types,
+                tcm_patterns = tcm_patterns,
+                organ_conditions = organ_conditions,
+                analysis_summary = analysis_summary,
+                confidence_score = confidence_score,
+                success = True,
+                error_message = "",
+            )
+
+        except Exception as e:
+            logger.exception(f"分析脉象失败: {e!s}")
+            self.metrics.record_counter("pulse_sessions_errors", 1, {"error_type": "analyze_pulse"})
+
+            return pb2.AnalyzePulseResponse(
+                session_id = request.session_id,
+                success = False,
+                error_message = f"Failed to analyze pulse: {e!s}",
+            )
+        finally:
+            # 记录延迟
+            end_time = time.time()
+            self.metrics.record_histogram("pulse_analysis_latency", end_time - start_time)
+
+    def _get_pulse_wave_type_enum(int):
+        """将脉象类型名称转换为枚举值"""
+        pulse_type_map = {
+            "UNKNOWN_WAVE": 0,
+            "FLOATING": 1,  # 浮脉
+            "SUNKEN": 2,  # 沉脉
+            "SLOW": 3,  # 迟脉
+            "RAPID": 4,  # 数脉
+            "SLIPPERY": 5,  # 滑脉
+            "ROUGH": 6,  # 涩脉
+            "WIRY": 7,  # 弦脉
+            "MODERATE": 8,  # 和脉
+            "FAINT": 9,  # 微脉
+            "SURGING": 10,  # 洪脉
+            "TIGHT": 11,  # 紧脉
+            "EMPTY": 12,  # 虚脉
+            "LEATHER": 13,  # 革脉
+            "WEAK": 14,  # 弱脉
+            "SCATTERED": 15,  # 散脉
+            "INTERMITTENT": 16,  # 代脉
+            "BOUND": 17,  # 结脉
+            "HASTY": 18,  # 促脉
+            "HIDDEN": 19,  # 伏脉
+            "LONG": 20,  # 长脉
+            "SHORT": 21,  # 短脉
+            "THREADY": 22,  # 细脉
+            "SOFT": 23,  # 软脉
+            "REGULARLY_INTERMITTENT": 24,  # 结脉
+            "IRREGULARLY_INTERMITTENT": 25,  # 代脉
+        }
+        return pulse_type_map.get(type_name, 0)
+
+    def _get_pulse_wave_type_name(str):
+        """将脉象类型枚举值转换为名称"""
+        pulse_type_map = {
+            0: "UNKNOWN_WAVE",
+            1: "FLOATING",  # 浮脉
+            2: "SUNKEN",  # 沉脉
+            3: "SLOW",  # 迟脉
+            4: "RAPID",  # 数脉
+            5: "SLIPPERY",  # 滑脉
+            6: "ROUGH",  # 涩脉
+            7: "WIRY",  # 弦脉
+            8: "MODERATE",  # 和脉
+            9: "FAINT",  # 微脉
+            10: "SURGING",  # 洪脉
+            11: "TIGHT",  # 紧脉
+            12: "EMPTY",  # 虚脉
+            13: "LEATHER",  # 革脉
+            14: "WEAK",  # 弱脉
+            15: "SCATTERED",  # 散脉
+            16: "INTERMITTENT",  # 代脉
+            17: "BOUND",  # 结脉
+            18: "HASTY",  # 促脉
+            19: "HIDDEN",  # 伏脉
+            20: "LONG",  # 长脉
+            21: "SHORT",  # 短脉
+            22: "THREADY",  # 细脉
+            23: "SOFT",  # 软脉
+            24: "REGULARLY_INTERMITTENT",  # 结脉
+            25: "IRREGULARLY_INTERMITTENT",  # 代脉
+        }
+        return pulse_type_map.get(type_enum, "UNKNOWN_WAVE")
+
+    def AnalyzeAbdominalPalpation(
+        self, request: pb2.AbdominalPalpationRequest, context: grpc.ServicerContext
+    ) - > pb2.AbdominalPalpationResponse:
+        """
+        分析腹诊数据
+
+        Args:
+            request: 腹诊分析请求
+            context: gRPC上下文
+
+        Returns:
+            腹诊分析响应
+        """
+        start_time = time.time()
+
+        try:
+            user_id = request.user_id
+
+            # 获取用户信息
+            user = self.user_repository.get_user(user_id)
+            if not user:
+                logger.warning(f"用户不存在: {user_id}")
+
+            # 转换区域数据
+            regions_data = []
+            for region in request.regions:
+                region_data = {
+                    "region_id": region.region_id,
+                    "region_name": region.region_name,
+                    "tenderness_level": region.tenderness_level,
+                    "tension_level": region.tension_level,
+                    "has_mass": region.has_mass,
+                    "texture_description": region.texture_description,
+                    "comments": region.comments,
+                }
+                regions_data.append(region_data)
+
+            # 分析腹诊数据
+            analysis_result = self.abdominal_analyzer.analyze_regions(regions_data)
+
+            # 转换分析结果为响应格式
+            findings = []
+            for finding in analysis_result.get("findings", []):
+                abdominal_finding = pb2.AbdominalFinding(
+                    region_id = finding.get("region_id", ""),
+                    finding_type = finding.get("finding_type", ""),
+                    description = finding.get("description", ""),
+                    confidence = finding.get("confidence", 0.0),
+                    potential_causes = finding.get("potential_causes", []),
+                )
+                findings.append(abdominal_finding)
+
+            # 获取分析总结
+            analysis_summary = analysis_result.get("analysis_summary", "")
+
+            # 存储分析结果
+            analysis_id = str(uuid.uuid4())
+            analysis_data = {
+                "analysis_id": analysis_id,
+                "user_id": user_id,
+                "analysis_time": time.time(),
+                "regions_data": regions_data,
+                "findings": analysis_result.get("findings", []),
+                "analysis_summary": analysis_summary,
+            }
+
+            # 保存到数据库
+            self.session_repository.create_abdominal_analysis(analysis_id, analysis_data)
+
+            # 记录指标
+            self.metrics.record_counter("abdominal_analyses_completed", 1)
+            self.metrics.record_gauge("abdominal_findings_count", len(findings))
+
+            return pb2.AbdominalPalpationResponse(
+                findings = findings, analysis_summary = analysis_summary, success = True, error_message = ""
+            )
+
+        except Exception as e:
+            logger.exception(f"分析腹诊数据失败: {e!s}")
+            self.metrics.record_counter("abdominal_analysis_errors", 1)
+
+            return pb2.AbdominalPalpationResponse(
+                success = False, error_message = f"Failed to analyze abdominal palpation data: {e!s}"
+            )
+        finally:
+            # 记录延迟
+            end_time = time.time()
+            self.metrics.record_histogram("abdominal_analysis_latency", end_time - start_time)
+
+    def AnalyzeSkinPalpation(
+        self, request: pb2.SkinPalpationRequest, context: grpc.ServicerContext
+    ) - > pb2.SkinPalpationResponse:
+        """
+        分析皮肤触诊数据
+
+        Args:
+            request: 皮肤触诊分析请求
+            context: gRPC上下文
+
+        Returns:
+            皮肤触诊分析响应
+        """
+        start_time = time.time()
+
+        try:
+            user_id = request.user_id
+
+            # 获取用户信息
+            user = self.user_repository.get_user(user_id)
+            if not user:
+                logger.warning(f"用户不存在: {user_id}")
+
+            # 转换区域数据
+            regions_data = []
+            for region in request.regions:
+                region_data = {
+                    "region_id": region.region_id,
+                    "region_name": region.region_name,
+                    "moisture_level": region.moisture_level,
+                    "elasticity": region.elasticity,
+                    "texture": region.texture,
+                    "temperature": region.temperature,
+                    "color": region.color,
+                }
+                regions_data.append(region_data)
+
+            # 分析皮肤触诊数据
+            analysis_result = self.skin_analyzer.analyze_regions(regions_data)
+
+            # 转换分析结果为响应格式
+            findings = []
+            for finding in analysis_result.get("findings", []):
+                skin_finding = pb2.SkinFinding(
+                    region_id = finding.get("region_id", ""),
+                    finding_type = finding.get("finding_type", ""),
+                    description = finding.get("description", ""),
+                    related_conditions = finding.get("related_conditions", []),
+                )
+                findings.append(skin_finding)
+
+            # 获取分析总结
+            analysis_summary = analysis_result.get("analysis_summary", "")
+
+            # 存储分析结果
+            analysis_id = str(uuid.uuid4())
+            analysis_data = {
+                "analysis_id": analysis_id,
+                "user_id": user_id,
+                "analysis_time": time.time(),
+                "regions_data": regions_data,
+                "findings": analysis_result.get("findings", []),
+                "analysis_summary": analysis_summary,
+            }
+
+            # 保存到数据库
+            self.session_repository.create_skin_analysis(analysis_id, analysis_data)
+
+            # 记录指标
+            self.metrics.record_counter("skin_analyses_completed", 1)
+            self.metrics.record_gauge("skin_findings_count", len(findings))
+
+            return pb2.SkinPalpationResponse(
+                findings = findings, analysis_summary = analysis_summary, success = True, error_message = ""
+            )
+
+        except Exception as e:
+            logger.exception(f"分析皮肤触诊数据失败: {e!s}")
+            self.metrics.record_counter("skin_analysis_errors", 1)
+
+            return pb2.SkinPalpationResponse(
+                success = False, error_message = f"Failed to analyze skin palpation data: {e!s}"
+            )
+        finally:
+            # 记录延迟
+            end_time = time.time()
+            self.metrics.record_histogram("skin_analysis_latency", end_time - start_time)
+
+    def HealthCheck(self, request, context):
+        """
+        实现健康检查接口
+
+        Args:
+            request: HealthCheckRequest 包含检查级别
+            context: gRPC上下文
+
+        Returns:
+            HealthCheckResponse 健康状态响应
+        """
+        logger.info(f"收到健康检查请求, 级别: {request.level}")
+        start_time = time.time()
+
+        response = pb2.HealthCheckResponse()
+        response.version = self.version
+        response.timestamp = int(time.time())
+
+        # 检查服务自身状态
+        service_component = response.components.add()
+        service_component.component_name = "palpation_service"
+        service_component.status = pb2.HealthCheckResponse.ServiceStatus.SERVING
+        service_component.details = "服务正常运行"
+        service_component.response_time_ms = 0
+
+        # 执行数据库健康检查 (BASIC级别)
+        if request.level > = pb2.HealthCheckRequest.HealthCheckLevel.BASIC:
+            db_check_start = time.time()
+            try:
+                db_status = self._check_database_health()
+                db_component = response.components.add()
+                db_component.component_name = "database"
+                db_component.status = pb2.HealthCheckResponse.ServiceStatus.SERVING
+                db_component.details = "数据库连接正常"
+                db_component.response_time_ms = int((time.time() - db_check_start) * 1000)
+            except Exception as e:
+                logger.error(f"数据库健康检查失败: {e}")
+                db_component = response.components.add()
+                db_component.component_name = "database"
+                db_component.status = pb2.HealthCheckResponse.ServiceStatus.NOT_SERVING
+                db_component.details = f"数据库连接失败: {e!s}"
+                db_component.response_time_ms = int((time.time() - db_check_start) * 1000)
+
+                # 如果数据库不可用，整个服务标记为不可用
+                response.status = pb2.HealthCheckResponse.ServiceStatus.NOT_SERVING
+                return response
+
+        # 执行全面检查 (FULL级别)
+        if request.level == pb2.HealthCheckRequest.HealthCheckLevel.FULL:
+            # 检查集成服务连接
+            integration_names = ["xiaoai_service", "rag_service"]
+            for integration_name in integration_names:
+                integration_check_start = time.time()
+                try:
+                    integration_status = self._check_integration_health(integration_name)
+                    integration_component = response.components.add()
+                    integration_component.component_name = integration_name
+
+                    if integration_status:
+                        integration_component.status = pb2.HealthCheckResponse.ServiceStatus.SERVING
+                        integration_component.details = f"{integration_name} 连接正常"
+                    else:
+                        integration_component.status = (
+                            pb2.HealthCheckResponse.ServiceStatus.SERVICE_UNKNOWN
+                        )
+                        integration_component.details = f"{integration_name} 服务状态未知"
+
+                    integration_component.response_time_ms = int(
+                        (time.time() - integration_check_start) * 1000
+                    )
+                except Exception as e:
+                    logger.warning(f"{integration_name} 健康检查失败: {e}")
+                    integration_component = response.components.add()
+                    integration_component.component_name = integration_name
+                    integration_component.status = pb2.HealthCheckResponse.ServiceStatus.NOT_SERVING
+                    integration_component.details = f"{integration_name} 连接失败: {e!s}"
+                    integration_component.response_time_ms = int(
+                        (time.time() - integration_check_start) * 1000
+                    )
+
+            # 检查模型可用性
+            model_check_start = time.time()
+            try:
+                model_status = self._check_models_health()
+                model_component = response.components.add()
+                model_component.component_name = "ml_models"
+                model_component.status = pb2.HealthCheckResponse.ServiceStatus.SERVING
+                model_component.details = "模型加载正常"
+                model_component.response_time_ms = int((time.time() - model_check_start) * 1000)
+            except Exception as e:
+                logger.error(f"模型健康检查失败: {e}")
+                model_component = response.components.add()
+                model_component.component_name = "ml_models"
+                model_component.status = pb2.HealthCheckResponse.ServiceStatus.NOT_SERVING
+                model_component.details = f"模型加载失败: {e!s}"
+                model_component.response_time_ms = int((time.time() - model_check_start) * 1000)
+
+                # 如果核心模型不可用，服务可能无法正常工作
+                response.status = pb2.HealthCheckResponse.ServiceStatus.NOT_SERVING
+                return response
+
+        # 设置总体服务状态
+        response.status = pb2.HealthCheckResponse.ServiceStatus.SERVING
+
+        # 记录总响应时间
+        total_time_ms = int((time.time() - start_time) * 1000)
+        logger.info(f"健康检查完成，耗时: {total_time_ms}ms, 状态: {response.status}")
+
+        return response
+
+    def _check_database_health(None):
+        """检查数据库健康状态"""
+        try:
+            # 执行简单查询，验证数据库连接
+            self.session_repository.ping()
+            self.user_repository.ping()
+            return True
+        except Exception as e:
+            logger.error(f"数据库健康检查失败: {e}")
+            raise
+
+    def _check_integration_health(self, integration_name):
+        """检查集成服务健康状态"""
+        try:
+            # TODO: 实现实际的集成服务健康检查
+            # 这里是简化实现，实际应该调用各服务的健康检查接口
+            return True
+        except Exception as e:
+            logger.warning(f"集成服务 {integration_name} 健康检查失败: {e}")
+            return False
+
+    def _check_models_health(None):
+        """检查模型健康状态"""
+        try:
+            # 验证脉诊处理器模型加载状态
+            self.pulse_processor.check_model_loaded()
+
+            # 验证腹诊分析器模型加载状态
+            self.abdominal_analyzer.check_model_loaded()
+
+            # 验证皮肤分析器模型加载状态
+            self.skin_analyzer.check_model_loaded()
+
+            return True
+        except Exception as e:
+            logger.error(f"模型健康检查失败: {e}")
+            raise

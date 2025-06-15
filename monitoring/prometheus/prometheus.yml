@@ -3,127 +3,216 @@ global:
   evaluation_interval: 15s
 
 rule_files:
-  # - "first_rules.yml"
-  # - "second_rules.yml"
+  - "rules/*.yml"
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - alertmanager:9093
 
 scrape_configs:
-  # Prometheus自身监控
-  - job_name: 'prometheus'
+  # Prometheus 自身监控
+  - job_name: "prometheus"
     static_configs:
-      - targets: ['localhost:9090']
+      - targets: ["localhost:9090"]
 
-  # Node Exporter - 系统指标
-  - job_name: 'node-exporter'
+  # 索克生活核心服务监控
+  - job_name: "suoke-auth-service"
     static_configs:
-      - targets: ['node-exporter:9100']
+      - targets: ["auth-service:8080"]
+    metrics_path: "/metrics"
+    scrape_interval: 10s
 
-  # cAdvisor - 容器指标
-  - job_name: 'cadvisor'
+  - job_name: "suoke-user-service"
     static_configs:
-      - targets: ['cadvisor:8080']
+      - targets: ["user-service:8080"]
+    metrics_path: "/metrics"
+    scrape_interval: 10s
 
-  # 索克生活微服务监控
-  - job_name: 'suoke-api-gateway'
+  - job_name: "suoke-api-gateway"
     static_configs:
-      - targets: ['host.docker.internal:8000']
-    metrics_path: '/metrics'
-    scrape_interval: 30s
-
-  - job_name: 'suoke-user-management'
-    static_configs:
-      - targets: ['host.docker.internal:8001']
-    metrics_path: '/metrics'
-    scrape_interval: 30s
-
-  - job_name: 'suoke-health-data'
-    static_configs:
-      - targets: ['host.docker.internal:8002']
-    metrics_path: '/metrics'
-    scrape_interval: 30s
-
-  - job_name: 'suoke-blockchain'
-    static_configs:
-      - targets: ['host.docker.internal:8003']
-    metrics_path: '/metrics'
-    scrape_interval: 30s
-
-  - job_name: 'suoke-communication'
-    static_configs:
-      - targets: ['host.docker.internal:8030']
-    metrics_path: '/metrics'
-    scrape_interval: 30s
-
-  - job_name: 'suoke-utility-services'
-    static_configs:
-      - targets: ['host.docker.internal:8040']
-    metrics_path: '/metrics'
-    scrape_interval: 30s
+      - targets: ["api-gateway:8080"]
+    metrics_path: "/metrics"
+    scrape_interval: 5s
 
   # 智能体服务监控
-  - job_name: 'suoke-xiaoai-agent'
+  - job_name: "suoke-soer-service"
     static_configs:
-      - targets: ['host.docker.internal:8015']
-    metrics_path: '/metrics'
-    scrape_interval: 30s
+      - targets: ["soer-service:8080"]
+    metrics_path: "/metrics"
+    scrape_interval: 10s
 
-  - job_name: 'suoke-xiaoke-agent'
+  - job_name: "suoke-xiaoke-service"
     static_configs:
-      - targets: ['host.docker.internal:8016']
-    metrics_path: '/metrics'
-    scrape_interval: 30s
+      - targets: ["xiaoke-service:8080"]
+    metrics_path: "/metrics"
+    scrape_interval: 10s
 
-  - job_name: 'suoke-laoke-agent'
+  - job_name: "suoke-laoke-service"
     static_configs:
-      - targets: ['host.docker.internal:8017']
-    metrics_path: '/metrics'
-    scrape_interval: 30s
+      - targets: ["laoke-service:8080"]
+    metrics_path: "/metrics"
+    scrape_interval: 10s
 
-  - job_name: 'suoke-soer-agent'
+  - job_name: "suoke-xiaoai-service"
     static_configs:
-      - targets: ['host.docker.internal:8018']
-    metrics_path: '/metrics'
-    scrape_interval: 30s
+      - targets: ["xiaoai-service:8080"]
+    metrics_path: "/metrics"
+    scrape_interval: 10s
 
   # 诊断服务监控
-  - job_name: 'suoke-diagnostic-look'
+  - job_name: "suoke-look-service"
     static_configs:
-      - targets: ['host.docker.internal:8019']
-    metrics_path: '/metrics'
+      - targets: ["look-service:8080"]
+    metrics_path: "/metrics"
+    scrape_interval: 15s
+
+  - job_name: "suoke-listen-service"
+    static_configs:
+      - targets: ["listen-service:8080"]
+    metrics_path: "/metrics"
+    scrape_interval: 15s
+
+  - job_name: "suoke-palpation-service"
+    static_configs:
+      - targets: ["palpation-service:8080"]
+    metrics_path: "/metrics"
+    scrape_interval: 15s
+
+  - job_name: "suoke-inquiry-service"
+    static_configs:
+      - targets: ["inquiry-service:8080"]
+    metrics_path: "/metrics"
+    scrape_interval: 15s
+
+  - job_name: "suoke-calculation-service"
+    static_configs:
+      - targets: ["calculation-service:8080"]
+    metrics_path: "/metrics"
+    scrape_interval: 15s
+
+  # 支持服务监控
+  - job_name: "suoke-rag-service"
+    static_configs:
+      - targets: ["rag-service:8080"]
+    metrics_path: "/metrics"
+    scrape_interval: 20s
+
+  - job_name: "suoke-blockchain-service"
+    static_configs:
+      - targets: ["blockchain-service:8080"]
+    metrics_path: "/metrics"
     scrape_interval: 30s
 
-  - job_name: 'suoke-diagnostic-listen'
+  - job_name: "suoke-human-review-service"
     static_configs:
-      - targets: ['host.docker.internal:8020']
-    metrics_path: '/metrics'
+      - targets: ["human-review-service:8080"]
+    metrics_path: "/metrics"
+    scrape_interval: 20s
+
+  - job_name: "suoke-accessibility-service"
+    static_configs:
+      - targets: ["accessibility-service:8080"]
+    metrics_path: "/metrics"
+    scrape_interval: 15s
+
+  - job_name: "suoke-payment-service"
+    static_configs:
+      - targets: ["payment-service:8080"]
+    metrics_path: "/metrics"
+    scrape_interval: 10s
+
+  - job_name: "suoke-notification-service"
+    static_configs:
+      - targets: ["notification-service:8080"]
+    metrics_path: "/metrics"
+    scrape_interval: 10s
+
+  - job_name: "suoke-analytics-service"
+    static_configs:
+      - targets: ["analytics-service:8080"]
+    metrics_path: "/metrics"
     scrape_interval: 30s
 
-  - job_name: 'suoke-diagnostic-inquiry'
+  # 基础设施监控
+  - job_name: "node-exporter"
     static_configs:
-      - targets: ['host.docker.internal:8021']
-    metrics_path: '/metrics'
-    scrape_interval: 30s
+      - targets: ["node-exporter:9100"]
 
-  - job_name: 'suoke-diagnostic-palpation'
+  - job_name: "postgres-exporter"
     static_configs:
-      - targets: ['host.docker.internal:8022']
-    metrics_path: '/metrics'
-    scrape_interval: 30s
+      - targets: ["postgres-exporter:9187"]
 
-  - job_name: 'suoke-diagnostic-calculation'
+  - job_name: "redis-exporter"
     static_configs:
-      - targets: ['host.docker.internal:8023']
-    metrics_path: '/metrics'
-    scrape_interval: 30s
+      - targets: ["redis-exporter:9121"]
 
-  # 数据库监控
-  - job_name: 'postgres'
+  - job_name: "mongodb-exporter"
     static_configs:
-      - targets: ['host.docker.internal:5432']
-    metrics_path: '/metrics'
-    scrape_interval: 30s
+      - targets: ["mongodb-exporter:9216"]
 
-  - job_name: 'redis'
+  # Nginx/负载均衡器监控
+  - job_name: "nginx-exporter"
     static_configs:
-      - targets: ['host.docker.internal:6379']
-    metrics_path: '/metrics'
-    scrape_interval: 30s 
+      - targets: ["nginx-exporter:9113"]
+
+  # 消息队列监控
+  - job_name: "rabbitmq-exporter"
+    static_configs:
+      - targets: ["rabbitmq-exporter:9419"]
+
+  # Kubernetes 监控 (如果使用 K8s)
+  - job_name: "kubernetes-apiservers"
+    kubernetes_sd_configs:
+      - role: endpoints
+    scheme: https
+    tls_config:
+      ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+    relabel_configs:
+      - source_labels:
+          [
+            __meta_kubernetes_namespace,
+            __meta_kubernetes_service_name,
+            __meta_kubernetes_endpoint_port_name,
+          ]
+        action: keep
+        regex: default;kubernetes;https
+
+  - job_name: "kubernetes-nodes"
+    kubernetes_sd_configs:
+      - role: node
+    scheme: https
+    tls_config:
+      ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+    relabel_configs:
+      - action: labelmap
+        regex: __meta_kubernetes_node_label_(.+)
+
+  - job_name: "kubernetes-pods"
+    kubernetes_sd_configs:
+      - role: pod
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+        action: keep
+        regex: true
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+        action: replace
+        target_label: __metrics_path__
+        regex: (.+)
+      - source_labels:
+          [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+        action: replace
+        regex: ([^:]+)(?::\d+)?;(\d+)
+        replacement: $1:$2
+        target_label: __address__
+      - action: labelmap
+        regex: __meta_kubernetes_pod_label_(.+)
+      - source_labels: [__meta_kubernetes_namespace]
+        action: replace
+        target_label: kubernetes_namespace
+      - source_labels: [__meta_kubernetes_pod_name]
+        action: replace
+        target_label: kubernetes_pod_name

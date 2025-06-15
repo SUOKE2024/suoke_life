@@ -1,0 +1,22 @@
+database:
+  audit_log_path: user_audit_logs.db
+  path: user_service.db
+grpc:
+  enabled: false
+  port: 50051
+logging:
+  level: INFO
+security:
+  jwt_secret: dev_secret_key_change_in_production
+  rate_limit:
+    enabled: true
+  rbac:
+    enabled: false
+server:
+  cors:
+    enabled: true
+    origins:
+    - '*'
+  expose_docs: true
+  host: 0.0.0.0
+  port: 8000

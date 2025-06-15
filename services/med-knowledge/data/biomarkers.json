@@ -1,0 +1,154 @@
+[
+  {
+    "id": "biomarker-001",
+    "name": "白介素-6 (IL-6)",
+    "category": "炎症因子",
+    "description": "细胞因子的一种，由T细胞和巨噬细胞等多种免疫细胞产生，在炎症反应中起重要作用。与免疫调节、造血、急性期反应和炎症发生密切相关。",
+    "normal_range": "0-7 pg/mL",
+    "significance": "IL-6水平升高提示机体存在炎症状态，可见于感染、自身免疫性疾病、某些恶性肿瘤等。在中医血瘀证、痰湿证患者中常有不同程度升高，与病情严重程度相关。",
+    "related_diseases": ["类风湿性关节炎", "系统性红斑狼疮", "感染性疾病", "某些恶性肿瘤"],
+    "related_syndromes": ["血瘀证", "痰湿证", "湿热证"],
+    "related_constitutions": ["痰湿质", "湿热质", "血瘀质"],
+    "monitoring_frequency": "根据病情需要，急性期可1-2周监测一次，稳定期可延长至1-3个月",
+    "intervention_thresholds": {
+      "mild": ">7 pg/mL",
+      "moderate": ">20 pg/mL",
+      "severe": ">50 pg/mL"
+    }
+  },
+  {
+    "id": "biomarker-002",
+    "name": "肾上腺皮质激素 (Cortisol)",
+    "category": "应激激素",
+    "description": "由肾上腺皮质分泌的糖皮质激素，在糖、蛋白质和脂肪代谢中发挥重要作用，参与调节血压和心血管功能，具有抗炎和免疫抑制作用。呈昼夜节律变化，清晨高，午夜低。",
+    "normal_range": "晨间: 5-25 μg/dL，午夜: <10 μg/dL",
+    "significance": "皮质醇水平异常与压力状态、情绪障碍、免疫功能紊乱和代谢异常相关。在中医气郁体质、阴虚体质患者中常见节律紊乱，可表现为晨低午高模式。",
+    "related_diseases": ["库欣综合征", "抑郁症", "焦虑障碍", "代谢综合征", "肾上腺功能减退"],
+    "related_syndromes": ["肝郁脾虚证", "心脾两虚证", "阴虚内热证"],
+    "related_constitutions": ["气郁质", "阴虚质", "特禀质"],
+    "monitoring_frequency": "基础评估建议测量晨间和午夜水平，后续可根据病情每3-6个月复查",
+    "intervention_thresholds": {
+      "rhythm_disruption": "晨午比值<2",
+      "elevated": ">25 μg/dL 持续",
+      "suppressed": "<5 μg/dL 持续"
+    }
+  },
+  {
+    "id": "biomarker-003",
+    "name": "脑源性神经营养因子 (BDNF)",
+    "category": "神经因子",
+    "description": "一种神经营养因子，主要在中枢神经系统表达，对神经元的生存、生长和突触可塑性起重要作用。与学习、记忆、情绪调节和神经保护密切相关。",
+    "normal_range": "18-30 ng/mL",
+    "significance": "BDNF水平降低与抑郁症、焦虑障碍、神经退行性疾病相关。在中医气郁质、气虚质患者中常见水平降低，与情志异常、脑力疲劳和认知功能下降相关。",
+    "related_diseases": ["抑郁症", "阿尔茨海默病", "认知功能障碍", "焦虑障碍"],
+    "related_syndromes": ["肝郁气滞证", "心脾两虚证", "脾肾阳虚证"],
+    "related_constitutions": ["气郁质", "气虚质", "阳虚质"],
+    "monitoring_frequency": "基础评估后根据临床需要，通常建议3-6个月随访一次",
+    "intervention_thresholds": {
+      "mild_deficiency": "<18 ng/mL",
+      "moderate_deficiency": "<15 ng/mL",
+      "severe_deficiency": "<10 ng/mL"
+    }
+  },
+  {
+    "id": "biomarker-004",
+    "name": "高敏C反应蛋白 (hs-CRP)",
+    "category": "炎症标志物",
+    "description": "肝脏合成的急性相蛋白，是系统性炎症的敏感标志物。常用于评估心血管疾病风险和慢性低度炎症状态。",
+    "normal_range": "<3 mg/L",
+    "significance": "hs-CRP轻度升高提示存在慢性低度炎症，与心血管疾病风险增加相关。在中医血瘀质、痰湿质、湿热质患者中常见升高，是辨别这些体质的客观指标之一。",
+    "related_diseases": ["动脉粥样硬化", "冠心病", "糖尿病", "肥胖", "自身免疫性疾病"],
+    "related_syndromes": ["血瘀证", "痰湿证", "湿热证"],
+    "related_constitutions": ["血瘀质", "痰湿质", "湿热质"],
+    "monitoring_frequency": "心血管风险评估每6个月一次，其他情况根据临床需要",
+    "intervention_thresholds": {
+      "low_risk": "<1 mg/L",
+      "moderate_risk": "1-3 mg/L",
+      "high_risk": ">3 mg/L",
+      "very_high_risk": ">10 mg/L"
+    }
+  },
+  {
+    "id": "biomarker-005",
+    "name": "肿瘤坏死因子-α (TNF-α)",
+    "category": "炎症因子",
+    "description": "主要由巨噬细胞和T细胞产生的促炎细胞因子，参与局部和系统性炎症反应，细胞凋亡和坏死，以及免疫调节。",
+    "normal_range": "<15 pg/mL",
+    "significance": "TNF-α水平升高提示存在炎症活动，是多种慢性炎症性疾病的重要病理机制。在中医湿热质、痰湿质患者中常见升高，与脾胃湿热、痰湿内蕴相关。",
+    "related_diseases": ["类风湿性关节炎", "克罗恩病", "银屑病", "系统性红斑狼疮", "肥胖症"],
+    "related_syndromes": ["湿热蕴结证", "痰湿阻肺证", "血瘀热结证"],
+    "related_constitutions": ["湿热质", "痰湿质", "血瘀质"],
+    "monitoring_frequency": "自身免疫性疾病活动期可每1-2月监测一次，缓解期可每3-6个月一次",
+    "intervention_thresholds": {
+      "mild_elevation": "15-30 pg/mL",
+      "moderate_elevation": "30-50 pg/mL",
+      "high_elevation": ">50 pg/mL"
+    }
+  },
+  {
+    "id": "biomarker-006",
+    "name": "睡眠褪黑素 (Melatonin)",
+    "category": "神经内分泌激素",
+    "description": "由松果体分泌的激素，调节生物昼夜节律和睡眠-觉醒周期。夜间分泌增加，白天分泌减少。具有抗氧化和免疫调节作用。",
+    "normal_range": "白天: <10 pg/mL，夜间高峰: 80-120 pg/mL",
+    "significance": "褪黑素节律紊乱与睡眠障碍、情绪问题和免疫功能下降相关。在中医阴虚质、气虚质患者中常见夜间分泌不足，与失眠、早醒、多梦等症状相关。",
+    "related_diseases": ["失眠症", "昼夜节律睡眠障碍", "抑郁症", "老年相关疾病"],
+    "related_syndromes": ["阴虚内热证", "心脾两虚证", "肝郁脾虚证"],
+    "related_constitutions": ["阴虚质", "气虚质", "气郁质"],
+    "monitoring_frequency": "睡眠障碍评估可测量夜间高峰和早晨水平，通常每3-6个月评估一次",
+    "intervention_thresholds": {
+      "insufficient_night_peak": "<50 pg/mL",
+      "rhythm_disruption": "夜间/白天比值<5"
+    }
+  },
+  {
+    "id": "biomarker-007",
+    "name": "脑肠肽YY (PYY)",
+    "category": "消化代谢激素",
+    "description": "由肠道L细胞分泌的多肽激素，主要在进食后释放，参与食欲调节和能量平衡，抑制胃肠道蠕动和分泌，延缓胃排空，促进饱腹感。",
+    "normal_range": "空腹: 10-100 pg/mL，餐后: 100-300 pg/mL",
+    "significance": "PYY分泌不足与食欲过盛、肥胖和代谢紊乱相关。在中医脾虚质、痰湿质患者中常见餐后反应迟钝，与消化功能减弱、痰湿内生相关。",
+    "related_diseases": ["肥胖症", "2型糖尿病", "功能性消化不良"],
+    "related_syndromes": ["脾虚湿盛证", "食积证", "肝郁脾虚证"],
+    "related_constitutions": ["痰湿质", "气虚质", "湿热质"],
+    "monitoring_frequency": "代谢评估可测量空腹和餐后水平，通常每3-6个月随访一次",
+    "intervention_thresholds": {
+      "insufficient_response": "餐后增加<50%",
+      "deficiency": "餐后高峰<100 pg/mL"
+    }
+  },
+  {
+    "id": "biomarker-008",
+    "name": "嗜酸性粒细胞阳离子蛋白 (ECP)",
+    "category": "过敏与免疫",
+    "description": "嗜酸性粒细胞释放的细胞毒性蛋白，在过敏反应和防御寄生虫感染中起重要作用。是嗜酸性粒细胞活化的敏感标志物。",
+    "normal_range": "<20 μg/L",
+    "significance": "ECP升高提示存在过敏性炎症，常见于过敏性疾病和寄生虫感染。在中医特禀质患者中常见升高，与过敏性体质、卫表不固相关。",
+    "related_diseases": ["过敏性鼻炎", "哮喘", "特应性皮炎", "寄生虫感染"],
+    "related_syndromes": ["肺卫不固证", "风热犯表证", "风寒犯表证"],
+    "related_constitutions": ["特禀质", "阳虚质"],
+    "monitoring_frequency": "过敏性疾病活动期每1-2月监测一次，稳定期可每6个月一次",
+    "intervention_thresholds": {
+      "mild_elevation": "20-40 μg/L",
+      "moderate_elevation": "40-100 μg/L",
+      "high_elevation": ">100 μg/L"
+    }
+  },
+  {
+    "id": "biomarker-009",
+    "name": "脑钠肽 (BNP/NT-proBNP)",
+    "category": "心血管标志物",
+    "description": "由心室肌细胞合成并分泌的多肽激素，在心室容量或压力负荷增加时释放增多。具有利尿、排钠和扩血管作用，参与调节血压和水电解质平衡。",
+    "normal_range": "BNP: <100 pg/mL，NT-proBNP: <300 pg/mL",
+    "significance": "BNP/NT-proBNP升高提示存在心脏负荷增加或心功能不全。在中医阳虚质、气虚质患者中常见轻度升高，与心阳不足、气虚水停相关。",
+    "related_diseases": ["心力衰竭", "冠心病", "高血压", "心律失常"],
+    "related_syndromes": ["心阳虚证", "气虚水肿证", "阳虚水泛证"],
+    "related_constitutions": ["阳虚质", "气虚质", "痰湿质"],
+    "monitoring_frequency": "心功能不全患者根据病情每1-3个月监测一次，稳定期可延长至6个月",
+    "intervention_thresholds": {
+      "mild": "BNP: 100-400 pg/mL，NT-proBNP: 300-900 pg/mL",
+      "moderate": "BNP: 400-900 pg/mL，NT-proBNP: 900-1800 pg/mL",
+      "severe": "BNP: >900 pg/mL，NT-proBNP: >1800 pg/mL"
+    }
+  }
+] 

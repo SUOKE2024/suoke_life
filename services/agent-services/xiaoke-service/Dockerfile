@@ -1,105 +1,80 @@
-# 多阶段构建 Dockerfile
-
-# 第1阶段：Python依赖构建
+# 标准化的多阶段构建Dockerfile - 使用UV包管理器
+# 构建阶段
 FROM python:3.13.3-slim AS builder
 
-WORKDIR /app
+# 设置环境变量
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
 
-# 安装系统依赖和 uv
+# 安装系统依赖
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     gcc \
     g++ \
+    libpq-dev \
     libffi-dev \
     libssl-dev \
-    python3-dev \
-    git \
     curl \
-    && curl -LsSf https://astral.sh/uv/install.sh | sh \
-    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# 将 uv 添加到 PATH
-ENV PATH="/root/.cargo/bin:$PATH"
+# 安装UV包管理器
+RUN pip install uv
 
-# 配置国内镜像源
-ENV UV_INDEX_URL="https://pypi.tuna.tsinghua.edu.cn/simple"
+# 设置工作目录
+WORKDIR /app
 
 # 复制项目配置文件
 COPY pyproject.toml uv.lock* ./
 
-# 使用 uv 安装依赖
-RUN uv sync --frozen --no-dev --no-install-project
+# 创建虚拟环境并安装依赖
+RUN uv venv && \
+    uv pip install -e .
 
-# 第2阶段：构建gRPC代码
-FROM builder AS grpc-builder
+# 运行阶段
+FROM python:3.13.3-slim AS runtime
 
-WORKDIR /app
+# 设置环境变量
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PATH="/app/.venv/bin:$PATH" \
+    PYTHONPATH="/app"
 
-# 复制proto文件并生成Python代码
-COPY api/grpc/ /app/api/grpc/
-RUN mkdir -p /app/generated && \
-    .venv/bin/python -m grpc_tools.protoc \
-    --proto_path=/app/api/grpc \
-    --python_out=/app/generated \
-    --grpc_python_out=/app/generated \
-    /app/api/grpc/*.proto
-
-# 第3阶段：最终镜像
-FROM python:3.13.3-slim
-
-WORKDIR /app
+# 创建非root用户
+RUN groupadd -r suoke && useradd -r -g suoke -d /app -s /bin/bash suoke
 
 # 安装运行时依赖
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    libpq5 \
     libgomp1 \
     curl \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
 
-# 创建非root用户
-RUN addgroup --system xiaoke && \
-    adduser --system --ingroup xiaoke xiaoke
+# 设置工作目录
+WORKDIR /app
 
 # 从构建阶段复制虚拟环境
 COPY --from=builder /app/.venv /app/.venv
 
-# 从构建阶段复制生成的gRPC代码
-COPY --from=grpc-builder /app/generated /app/api/
-
 # 复制应用代码
-COPY xiaoke_service/ /app/xiaoke_service/
-COPY config/ /app/config/
-COPY internal/ /app/internal/
-COPY pkg/ /app/pkg/
-COPY cmd/ /app/cmd/
-COPY api/grpc/ /app/api/grpc/
-COPY integration/ /app/integration/
+COPY --chown=suoke:suoke . .
 
-# 创建必要的目录结构
-RUN mkdir -p /app/logs /app/data && \
-    chown -R xiaoke:xiaoke /app
-
-# 设置环境变量
-ENV PYTHONPATH="/app:${PYTHONPATH}" \
-    PYTHONUNBUFFERED=1 \
-    SERVICE_ENV=production \
-    SERVICE_VERSION="1.0.0" \
-    GRPC_PORT="50054" \
-    MONITORING_PORT="51054" \
-    LOG_DIR="/app/logs" \
-    PATH="/app/.venv/bin:$PATH"
+# 创建必要的目录
+RUN mkdir -p /app/logs /app/data /app/cache && \
+    chown -R suoke:suoke /app
 
 # 切换到非root用户
-USER xiaoke
+USER suoke
 
-# 健康检查 - 使用HTTP健康检查而不是直接的socket检查
-HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
-    CMD curl -f http://localhost:${MONITORING_PORT}/health || exit 1
+# 暴露端口 (统一端口规范)
+EXPOSE 8080 50051
 
-# 暴露服务端口
-EXPOSE 50054
-EXPOSE 51054
+# 健康检查
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8080/health || exit 1
 
-# 启动服务
-CMD ["python", "-m", "cmd.server"]
+# 启动命令
+CMD ["uv", "run", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]

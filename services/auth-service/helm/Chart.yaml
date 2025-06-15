@@ -1,0 +1,28 @@
+apiVersion: v2
+name: suoke-auth-service
+description: 索克生活认证服务 Helm Chart
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - authentication
+  - microservice
+  - suoke-life
+  - health-management
+home: https://github.com/suoke-life/auth-service
+sources:
+  - https://github.com/suoke-life/auth-service
+maintainers:
+  - name: Suoke Life Team
+    email: dev@suokelife.com
+dependencies:
+  - name: postgresql
+    version: "12.1.9"
+    repository: "https://charts.bitnami.com/bitnami"
+    condition: postgresql.enabled
+  - name: redis
+    version: "17.3.7"
+    repository: "https://charts.bitnami.com/bitnami"
+    condition: redis.enabled
+annotations:
+  category: Authentication 

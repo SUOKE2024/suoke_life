@@ -18,7 +18,11 @@ from internal.delivery.graphql.pagination import Connection, Edge
 # 基本类型
 @strawberry.type
 class User:
-    """TODO: 添加文档字符串"""
+    """用户信息类型
+    
+    表示系统中的用户，包含基本信息、角色和专业领域。
+    用于社区互动和知识分享。
+    """
 
     id: str
     username: str
@@ -32,7 +36,11 @@ class User:
 
 @strawberry.type
 class KnowledgeArticle:
-    """TODO: 添加文档字符串"""
+    """知识文章类型
+    
+    表示知识库中的文章，包含内容、分类、标签和评分信息。
+    支持相关主题关联和用户互动。
+    """
 
     id: str
     title: str
@@ -51,7 +59,11 @@ class KnowledgeArticle:
 
 @strawberry.input
 class KnowledgeArticleInput:
-    """TODO: 添加文档字符串"""
+    """知识文章输入类型
+    
+    用于创建或更新知识文章的输入数据结构。
+    包含文章的基本信息和分类标签。
+    """
 
     title: str
     content: str
@@ -62,7 +74,11 @@ class KnowledgeArticleInput:
 
 @strawberry.type
 class Resource:
-    """TODO: 添加文档字符串"""
+    """学习资源类型
+    
+    表示学习模块中的资源，如文档、视频、链接等。
+    提供多媒体学习支持。
+    """
 
     id: str
     title: str
@@ -73,7 +89,11 @@ class Resource:
 
 @strawberry.type
 class QuizQuestion:
-    """TODO: 添加文档字符串"""
+    """测验问题类型
+    
+    表示测验中的单个问题，包含选项、正确答案和解释。
+    用于知识掌握程度评估。
+    """
 
     id: str
     question: str
@@ -84,7 +104,11 @@ class QuizQuestion:
 
 @strawberry.type
 class Quiz:
-    """TODO: 添加文档字符串"""
+    """测验类型
+    
+    表示完整的测验，包含多个问题和及格分数。
+    用于学习效果验证。
+    """
 
     id: str
     title: str
@@ -94,7 +118,11 @@ class Quiz:
 
 @strawberry.type
 class LearningModule:
-    """TODO: 添加文档字符串"""
+    """学习模块类型
+    
+    表示学习路径中的单个模块，包含内容、资源和测验。
+    提供结构化的学习体验。
+    """
 
     id: str
     title: str
@@ -107,7 +135,11 @@ class LearningModule:
 
 @strawberry.type
 class LearningPath:
-    """TODO: 添加文档字符串"""
+    """学习路径类型
+    
+    表示完整的学习路径，包含多个模块和前置条件。
+    提供系统化的知识学习体系。
+    """
 
     id: str
     title: str
@@ -123,7 +155,11 @@ class LearningPath:
 
 @strawberry.type
 class Comment:
-    """TODO: 添加文档字符串"""
+    """评论类型
+    
+    表示用户在社区帖子或文章下的评论。
+    支持嵌套回复和点赞功能。
+    """
 
     id: str
     content: str
@@ -135,7 +171,11 @@ class Comment:
 
 @strawberry.type
 class CommunityPost:
-    """TODO: 添加文档字符串"""
+    """社区帖子类型
+    
+    表示社区中的用户发帖，包含内容、分类和互动数据。
+    支持用户交流和知识分享。
+    """
 
     id: str
     title: str
@@ -153,7 +193,11 @@ class CommunityPost:
 
 @strawberry.input
 class CommunityPostInput:
-    """TODO: 添加文档字符串"""
+    """社区帖子输入类型
+    
+    用于创建社区帖子的输入数据结构。
+    包含帖子的基本信息和分类标签。
+    """
 
     title: str
     content: str
@@ -163,7 +207,11 @@ class CommunityPostInput:
 
 @strawberry.type
 class Lesson:
-    """TODO: 添加文档字符串"""
+    """课程课时类型
+    
+    表示教育课程中的单个课时，包含内容和视频资源。
+    提供结构化的教学内容。
+    """
 
     id: str
     title: str
@@ -175,7 +223,11 @@ class Lesson:
 
 @strawberry.type
 class CourseModule:
-    """TODO: 添加文档字符串"""
+    """课程模块类型
+    
+    表示教育课程中的模块，包含多个课时和测验。
+    提供模块化的教学结构。
+    """
 
     id: str
     title: str
@@ -187,7 +239,11 @@ class CourseModule:
 
 @strawberry.enum
 class CourseLevel:
-    """TODO: 添加文档字符串"""
+    """课程难度级别枚举
+    
+    定义课程的难度等级，从初级到专家级。
+    用于课程分类和学习路径规划。
+    """
 
     BEGINNER = "BEGINNER"
     INTERMEDIATE = "INTERMEDIATE"
@@ -197,7 +253,11 @@ class CourseLevel:
 
 @strawberry.type
 class EducationCourse:
-    """TODO: 添加文档字符串"""
+    """教育课程类型
+    
+    表示完整的教育课程，包含模块、讲师和认证信息。
+    提供系统化的专业教育。
+    """
 
     id: str
     title: str
@@ -214,7 +274,11 @@ class EducationCourse:
 
 @strawberry.type
 class NPCAction:
-    """TODO: 添加文档字符串"""
+    """NPC 行动类型
+    
+    表示游戏化 NPC 可执行的行动，包含要求和奖励。
+    用于互动式学习体验。
+    """
 
     id: str
     type: str
@@ -225,7 +289,11 @@ class NPCAction:
 
 @strawberry.enum
 class ActionType:
-    """TODO: 添加文档字符串"""
+    """行动类型枚举
+    
+    定义 NPC 可执行的行动类型，如任务、挑战、对话等。
+    用于游戏化学习机制。
+    """
 
     QUEST = "QUEST"
     CHALLENGE = "CHALLENGE"
@@ -236,7 +304,11 @@ class ActionType:
 
 @strawberry.type
 class GameNPC:
-    """TODO: 添加文档字符串"""
+    """游戏 NPC 类型
+    
+    表示游戏化学习中的 NPC 角色，包含个性和背景故事。
+    提供沉浸式的学习体验。
+    """
 
     id: str
     name: str
@@ -249,7 +321,11 @@ class GameNPC:
 
 @strawberry.type
 class NPCInteractionResponse:
-    """TODO: 添加文档字符串"""
+    """NPC 交互响应类型
+    
+    表示与 NPC 交互后的响应，包含消息、情绪和可用行动。
+    用于动态的学习互动。
+    """
 
     message: str
     emotion: str

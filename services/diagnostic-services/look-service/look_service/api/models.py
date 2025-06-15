@@ -26,20 +26,38 @@ class LookDiagnosisRequest(BaseModel):
     metadata: Optional[Dict[str, Any]] = Field(default=None, description="额外的元数据")
 
     class Config:
-        """TODO: 添加文档字符串"""
+        """配置类"""
 
         json_schema_extra = {
             "example": {
                 "user_id": "user123",
-                "image_data": "data:image / jpeg;base64, / 9j / 4AAQSkZJRgABAQAAAQ...",
+                "image_data": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQ...",
                 "image_type": "face",
                 "analysis_type": ["complexion", "tongue"],
                 "metadata": {
-                    "timestamp": "2024 - 01 - 01T12:00:00Z",
+                    "timestamp": "2024-01-01T12:00:00Z",
                     "device": "mobile",
                 },
             }
         }
+
+
+class FaceAnalysisRequest(BaseModel):
+    """面部分析请求模型"""
+    
+    user_id: Optional[str] = Field(default=None, description="用户ID")
+    analysis_options: Optional[Dict[str, Any]] = Field(default=None, description="分析选项")
+    metadata: Optional[Dict[str, Any]] = Field(default=None, description="元数据")
+
+
+class FaceAnalysisResponse(BaseModel):
+    """面部分析响应模型"""
+    
+    success: bool = Field(..., description="分析是否成功")
+    message: str = Field(..., description="响应消息")
+    data: Dict[str, Any] = Field(..., description="分析结果数据")
+    analysis_id: Optional[str] = Field(default=None, description="分析ID")
+    timestamp: Optional[str] = Field(default=None, description="分析时间")
 
 
 class FHIRObservationResponse(BaseModel):
@@ -64,18 +82,18 @@ class FHIRObservationResponse(BaseModel):
     note: Optional[List[Dict[str, str]]] = Field(default=None, description="备注")
 
     class Config:
-        """TODO: 添加文档字符串"""
+        """配置类"""
 
         json_schema_extra = {
             "example": {
                 "resourceType": "Observation",
-                "id": "look - obs - 123",
+                "id": "look-obs-123",
                 "status": "final",
                 "category": [
                     {
                         "coding": [
                             {
-                                "system": "http: / /terminology.hl7.org / CodeSystem / observation - category",
+                                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
                                 "code": "survey",
                                 "display": "Survey",
                             }
@@ -85,20 +103,20 @@ class FHIRObservationResponse(BaseModel):
                 "code": {
                     "coding": [
                         {
-                            "system": "http: / /suoke.life / fhir / CodeSystem / tcm - observation",
-                            "code": "look - diagnosis",
+                            "system": "http://suoke.life/fhir/CodeSystem/tcm-observation",
+                            "code": "look-diagnosis",
                             "display": "中医望诊",
                         }
                     ]
                 },
-                "subject": {"reference": "Patient / user123"},
-                "effectiveDateTime": "2024 - 01 - 01T12:00:00Z",
+                "subject": {"reference": "Patient/user123"},
+                "effectiveDateTime": "2024-01-01T12:00:00Z",
                 "component": [
                     {
                         "code": {
                             "coding": [
                                 {
-                                    "system": "http: / /suoke.life / fhir / CodeSystem / tcm - look",
+                                    "system": "http://suoke.life/fhir/CodeSystem/tcm-look",
                                     "code": "complexion",
                                     "display": "面色",
                                 }
@@ -107,7 +125,7 @@ class FHIRObservationResponse(BaseModel):
                         "valueCodeableConcept": {
                             "coding": [
                                 {
-                                    "system": "http: / /suoke.life / fhir / CodeSystem / tcm - complexion",
+                                    "system": "http://suoke.life/fhir/CodeSystem/tcm-complexion",
                                     "code": "pale",
                                     "display": "面色苍白",
                                 }
@@ -149,10 +167,13 @@ class EyeAnalysis(BaseModel):
 class LookDiagnosisResult(BaseModel):
     """望诊分析结果"""
 
-    analysis_id: str = Field(..., description="分析ID")
-    user_id: str = Field(..., description="用户ID")
-    timestamp: datetime = Field(..., description="分析时间")
-    image_type: str = Field(..., description="图像类型")
+    success: bool = Field(..., description="分析是否成功")
+    message: str = Field(..., description="响应消息")
+    data: Dict[str, Any] = Field(..., description="分析结果数据")
+    analysis_id: Optional[str] = Field(default=None, description="分析ID")
+    user_id: Optional[str] = Field(default=None, description="用户ID")
+    timestamp: Optional[datetime.datetime] = Field(default=None, description="分析时间")
+    image_type: Optional[str] = Field(default=None, description="图像类型")
 
     complexion: Optional[ComplexionAnalysis] = Field(
         default=None, description="面色分析"
@@ -160,18 +181,24 @@ class LookDiagnosisResult(BaseModel):
     tongue: Optional[TongueAnalysis] = Field(default=None, description="舌诊分析")
     eye: Optional[EyeAnalysis] = Field(default=None, description="眼诊分析")
 
-    overall_score: float = Field(..., description="整体评分", ge=0.0, le=100.0)
-    health_status: str = Field(..., description="健康状态评估")
-    recommendations: List[str] = Field(default=[], description="建议")
+    overall_score: Optional[float] = Field(default=None, description="整体评分", ge=0.0, le=100.0)
+    health_status: Optional[str] = Field(default=None, description="健康状态评估")
+    recommendations: Optional[List[str]] = Field(default=[], description="建议")
 
     class Config:
-        """TODO: 添加文档字符串"""
+        """配置类"""
 
         json_schema_extra = {
             "example": {
-                "analysis_id": "look - 123",
+                "success": True,
+                "message": "分析完成",
+                "data": {
+                    "overall_health": "良好",
+                    "constitution_type": "平和质"
+                },
+                "analysis_id": "look-123",
                 "user_id": "user123",
-                "timestamp": "2024 - 01 - 01T12:00:00Z",
+                "timestamp": "2024-01-01T12:00:00Z",
                 "image_type": "face",
                 "complexion": {
                     "color_type": "pale",

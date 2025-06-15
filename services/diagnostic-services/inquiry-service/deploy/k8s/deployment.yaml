@@ -1,0 +1,447 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: suoke-life
+  labels:
+    name: suoke-life
+    app.kubernetes.io/name: suoke-life
+    app.kubernetes.io/part-of: suoke-life-platform
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: inquiry-service-config
+  namespace: suoke-life
+  labels:
+    app: inquiry-service
+    component: config
+data:
+  config.yaml: |
+    server:
+      host: "0.0.0.0"
+      port: 8080
+      debug: false
+    
+    grpc:
+      host: "0.0.0.0"
+      port: 50051
+      max_workers: 10
+      max_message_length: 4194304
+      keepalive_time_ms: 30000
+      keepalive_timeout_ms: 5000
+      keepalive_permit_without_calls: true
+      max_connection_idle_ms: 300000
+    
+    dialogue:
+      max_session_duration_minutes: 30
+      max_messages_per_session: 100
+      session_timeout_minutes: 5
+      welcome_message: "您好！我是您的健康顾问，请问有什么可以帮助您的？"
+      default_suggestions:
+        - "描述您的症状"
+        - "了解体质调理"
+        - "咨询健康建议"
+        - "预防保健知识"
+    
+    llm:
+      model_type: "llama3"
+      use_mock_mode: false
+      temperature: 0.7
+      top_p: 0.95
+      response_max_tokens: 1024
+      timeout_seconds: 30
+      retry_attempts: 3
+      retry_delay_seconds: 1
+    
+    symptom_extraction:
+      confidence_threshold: 0.7
+      max_symptoms_per_text: 20
+      enable_negation_detection: true
+      enable_severity_analysis: true
+      enable_duration_extraction: true
+      enable_body_part_mapping: true
+      parallel_processing: true
+      batch_size: 10
+    
+    tcm_mapping:
+      confidence_threshold: 0.6
+      max_patterns_per_analysis: 5
+      enable_constitution_analysis: true
+      enable_pattern_combination: true
+    
+    monitoring:
+      enabled: true
+      metrics_port: 9090
+      health_check_interval: 30
+      log_level: "INFO"
+    
+    logging:
+      level: "INFO"
+      format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+      file_path: "./logs/inquiry-service.log"
+      max_file_size: "10MB"
+      backup_count: 5
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: inquiry-service-secrets
+  namespace: suoke-life
+  labels:
+    app: inquiry-service
+    component: secrets
+type: Opaque
+data:
+  # Base64编码的密钥
+  database-url: cG9zdGdyZXNxbCthc3luY3BnOi8vaW5xdWlyeV91c2VyOmlucXVpcnlfcGFzc0Bwb3N0Z3Jlcy1zZXJ2aWNlOjU0MzIvaW5xdWlyeV9kYg==
+  redis-url: cmVkaXM6Ly9yZWRpcy1zZXJ2aWNlOjYzNzkvMA==
+  llm-api-key: eW91ci1sbG0tYXBpLWtleS1oZXJl
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inquiry-service
+  namespace: suoke-life
+  labels:
+    app: inquiry-service
+    component: backend
+    version: v1.0.0
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: inquiry-service
+      component: backend
+  template:
+    metadata:
+      labels:
+        app: inquiry-service
+        component: backend
+        version: v1.0.0
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: inquiry-service
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+      - name: inquiry-service
+        image: suoke-life/inquiry-service:latest
+        imagePullPolicy: Always
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        - name: grpc
+          containerPort: 50051
+          protocol: TCP
+        - name: metrics
+          containerPort: 9090
+          protocol: TCP
+        env:
+        - name: ENV
+          value: "production"
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: inquiry-service-secrets
+              key: database-url
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: inquiry-service-secrets
+              key: redis-url
+        - name: LLM_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: inquiry-service-secrets
+              key: llm-api-key
+        - name: LOG_LEVEL
+          value: "INFO"
+        - name: PYTHONPATH
+          value: "/app"
+        - name: PYTHONUNBUFFERED
+          value: "1"
+        volumeMounts:
+        - name: config
+          mountPath: /app/config
+          readOnly: true
+        - name: logs
+          mountPath: /app/logs
+        - name: data
+          mountPath: /app/data
+          readOnly: true
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 30
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+      volumes:
+      - name: config
+        configMap:
+          name: inquiry-service-config
+      - name: logs
+        emptyDir: {}
+      - name: data
+        configMap:
+          name: inquiry-service-data
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - inquiry-service
+              topologyKey: kubernetes.io/hostname
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: inquiry-service
+  namespace: suoke-life
+  labels:
+    app: inquiry-service
+    component: backend
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: nlb
+spec:
+  type: LoadBalancer
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+    protocol: TCP
+  - name: grpc
+    port: 50051
+    targetPort: grpc
+    protocol: TCP
+  selector:
+    app: inquiry-service
+    component: backend
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: inquiry-service-metrics
+  namespace: suoke-life
+  labels:
+    app: inquiry-service
+    component: metrics
+spec:
+  type: ClusterIP
+  ports:
+  - name: metrics
+    port: 9090
+    targetPort: metrics
+    protocol: TCP
+  selector:
+    app: inquiry-service
+    component: backend
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: inquiry-service
+  namespace: suoke-life
+  labels:
+    app: inquiry-service
+    component: serviceaccount
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: inquiry-service
+  namespace: suoke-life
+  labels:
+    app: inquiry-service
+    component: rbac
+rules:
+- apiGroups: [""]
+  resources: ["configmaps", "secrets"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list", "watch"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: inquiry-service
+  namespace: suoke-life
+  labels:
+    app: inquiry-service
+    component: rbac
+subjects:
+- kind: ServiceAccount
+  name: inquiry-service
+  namespace: suoke-life
+roleRef:
+  kind: Role
+  name: inquiry-service
+  apiGroup: rbac.authorization.k8s.io
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: inquiry-service-hpa
+  namespace: suoke-life
+  labels:
+    app: inquiry-service
+    component: autoscaling
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: inquiry-service
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 10
+        periodSeconds: 60
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+      - type: Percent
+        value: 50
+        periodSeconds: 60
+
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: inquiry-service-pdb
+  namespace: suoke-life
+  labels:
+    app: inquiry-service
+    component: availability
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: inquiry-service
+      component: backend
+
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: inquiry-service-netpol
+  namespace: suoke-life
+  labels:
+    app: inquiry-service
+    component: security
+spec:
+  podSelector:
+    matchLabels:
+      app: inquiry-service
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: suoke-life
+    - namespaceSelector:
+        matchLabels:
+          name: istio-system
+    ports:
+    - protocol: TCP
+      port: 8080
+    - protocol: TCP
+      port: 50051
+    - protocol: TCP
+      port: 9090
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: suoke-life
+    ports:
+    - protocol: TCP
+      port: 5432  # PostgreSQL
+    - protocol: TCP
+      port: 6379  # Redis
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 53   # DNS
+    - protocol: UDP
+      port: 53   # DNS
+    - protocol: TCP
+      port: 443  # HTTPS 

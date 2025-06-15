@@ -1,5 +1,5 @@
 # 索克生活 - 优化后的API网关Dockerfile
-FROM python:3.11-slim as base
+FROM python:3.13.3-slim as base
 
 # 设置工作目录
 WORKDIR /app

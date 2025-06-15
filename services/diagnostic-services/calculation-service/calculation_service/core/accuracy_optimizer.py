@@ -9,7 +9,7 @@ import logging
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 import numpy as np
 
@@ -43,16 +43,16 @@ class OptimizedDiagnosisResult:
 
     primary_constitution: str
     constitution_confidence: float
-    secondary_constitutions: List[Tuple[str, float]]
+    secondary_constitutions: list[tuple[str, float]]
 
     # 优化指标
     accuracy_score: float
     consistency_score: float
-    feature_importance: Dict[str, float]
+    feature_importance: dict[str, float]
 
     # 诊断建议
-    recommendations: List[str]
-    risk_factors: List[str]
+    recommendations: list[str]
+    risk_factors: list[str]
 
     # 元数据
     optimization_version: str = "2.0.0"
@@ -69,7 +69,7 @@ class AccuracyOptimizer:
         self.confidence_boost_factor = 0.15
         self.multi_source_bonus = 0.1
 
-    def _initialize_feature_weights(self) -> Dict[str, float]:
+    def _initialize_feature_weights(self) -> dict[str, float]:
         """初始化特征权重"""
         return {
             # 八字体质特征权重
@@ -97,7 +97,7 @@ class AccuracyOptimizer:
         }
 
     def optimize_diagnosis(
-        self, raw_features: Dict[str, Any], algorithm_results: Dict[str, Any]
+        self, raw_features: dict[str, Any], algorithm_results: dict[str, Any]
     ) -> OptimizedDiagnosisResult:
         """
         优化诊断结果
@@ -153,8 +153,8 @@ class AccuracyOptimizer:
         )
 
     def _extract_and_normalize_features(
-        self, raw_features: Dict[str, Any]
-    ) -> List[DiagnosisFeature]:
+        self, raw_features: dict[str, Any]
+    ) -> list[DiagnosisFeature]:
         """提取和标准化特征"""
         features = []
 
@@ -184,7 +184,7 @@ class AccuracyOptimizer:
 
     def _normalize_feature_value(self, value: Any, feature_name: str) -> float:
         """标准化特征值到0-1范围"""
-        if isinstance(value, (int, float)):
+        if isinstance(value, int | float):
             # 数值型特征：使用min-max标准化
             return max(0.0, min(1.0, float(value)))
         elif isinstance(value, str):
@@ -279,13 +279,13 @@ class AccuracyOptimizer:
             return "综合"
 
     def _fuse_algorithm_results(
-        self, algorithm_results: Dict[str, Any]
-    ) -> Dict[str, Any]:
+        self, algorithm_results: dict[str, Any]
+    ) -> dict[str, Any]:
         """融合多算法结果"""
         constitution_scores = {}
 
         # 收集各算法的体质判断结果
-        for algorithm_name, result in algorithm_results.items():
+        for _algorithm_name, result in algorithm_results.items():
             if "constitution" in result:
                 constitution = result["constitution"]
                 confidence = result.get("confidence", 0.5)
@@ -298,7 +298,7 @@ class AccuracyOptimizer:
         final_scores = {}
         for constitution, scores in constitution_scores.items():
             # 使用加权平均，给予一致性更高的结果更大权重
-            weights = [score for score in scores]  # 置信度作为权重
+            weights = list(scores)  # 置信度作为权重
             weighted_score = np.average(scores, weights=weights)
             final_scores[constitution] = weighted_score
 
@@ -318,7 +318,7 @@ class AccuracyOptimizer:
             "all_scores": final_scores,
         }
 
-    def _calculate_consistency(self, fused_results: Dict[str, Any]) -> float:
+    def _calculate_consistency(self, fused_results: dict[str, Any]) -> float:
         """计算结果一致性"""
         all_scores = fused_results["all_scores"]
         if len(all_scores) < 2:
@@ -338,7 +338,7 @@ class AccuracyOptimizer:
         return max(0.0, min(1.0, consistency))
 
     def _adjust_confidence(
-        self, fused_results: Dict[str, Any], consistency_score: float
+        self, fused_results: dict[str, Any], consistency_score: float
     ) -> float:
         """调整置信度"""
         all_scores = fused_results["all_scores"]
@@ -358,8 +358,8 @@ class AccuracyOptimizer:
         return max(0.1, min(0.98, adjusted_confidence))
 
     def _analyze_feature_importance(
-        self, features: List[DiagnosisFeature], fused_results: Dict[str, Any]
-    ) -> Dict[str, float]:
+        self, features: list[DiagnosisFeature], fused_results: dict[str, Any]
+    ) -> dict[str, float]:
         """分析特征重要性"""
         importance_scores = {}
 
@@ -384,8 +384,8 @@ class AccuracyOptimizer:
         return importance_scores
 
     def _generate_recommendations(
-        self, fused_results: Dict[str, Any], feature_importance: Dict[str, float]
-    ) -> List[str]:
+        self, fused_results: dict[str, Any], feature_importance: dict[str, float]
+    ) -> list[str]:
         """生成优化建议"""
         recommendations = []
         primary_constitution = fused_results["primary_constitution"]
@@ -423,8 +423,8 @@ class AccuracyOptimizer:
         return list(set(recommendations))  # 去重
 
     def _identify_risk_factors(
-        self, fused_results: Dict[str, Any], features: List[DiagnosisFeature]
-    ) -> List[str]:
+        self, fused_results: dict[str, Any], features: list[DiagnosisFeature]
+    ) -> list[str]:
         """识别风险因素"""
         risk_factors = []
         primary_constitution = fused_results["primary_constitution"]
@@ -457,7 +457,7 @@ class AccuracyOptimizer:
         self,
         confidence: float,
         consistency: float,
-        feature_importance: Dict[str, float],
+        feature_importance: dict[str, float],
     ) -> float:
         """计算准确率分数"""
         # 基础准确率 = 置信度 × 一致性
@@ -477,7 +477,7 @@ class AccuracyOptimizer:
 
 # 使用示例
 def optimize_calculation_diagnosis(
-    raw_data: Dict[str, Any],
+    raw_data: dict[str, Any],
 ) -> OptimizedDiagnosisResult:
     """
     优化算诊结果的主要接口

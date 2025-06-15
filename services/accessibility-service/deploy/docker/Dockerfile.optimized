@@ -1,0 +1,154 @@
+# 多阶段构建优化的Dockerfile
+# 阶段1: 构建阶段
+FROM python:3.13.3-slim as builder
+
+# 设置构建参数
+ARG BUILD_DATE
+ARG VERSION
+ARG VCS_REF
+
+# 安装构建依赖
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    gcc \
+    g++ \
+    pkg-config \
+    && rm -rf /var/lib/apt/lists/*
+
+# 创建虚拟环境
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# 升级pip和安装wheel
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel
+
+# 复制并安装Python依赖
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 阶段2: 运行时阶段
+FROM python:3.13.3-slim as runtime
+
+# 设置标签
+LABEL maintainer="suoke-life-team" \
+      version="${VERSION}" \
+      description="Accessibility Service for Suoke Life Platform" \
+      build-date="${BUILD_DATE}" \
+      vcs-ref="${VCS_REF}"
+
+# 创建非root用户
+RUN groupadd -r accessibility && \
+    useradd -r -g accessibility -d /app -s /bin/bash accessibility
+
+# 安装运行时依赖
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    libgomp1 \
+    libopencv-dev \
+    curl \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+# 从构建阶段复制虚拟环境
+COPY --from=builder /opt/venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# 设置工作目录
+WORKDIR /app
+
+# 创建必要的目录并设置权限
+RUN mkdir -p /app/logs \
+             /app/data \
+             /app/cache \
+             /tmp/accessibility_cache \
+    && chown -R accessibility:accessibility /app \
+    && chown -R accessibility:accessibility /tmp/accessibility_cache
+
+# 复制应用代码
+COPY --chown=accessibility:accessibility . .
+
+# 设置Python路径
+ENV PYTHONPATH=/app
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+
+# 设置应用配置
+ENV ACCESSIBILITY_CONFIG_PATH=/app/config/config.yaml
+ENV ACCESSIBILITY_LOG_LEVEL=INFO
+ENV ACCESSIBILITY_DATA_ROOT=/app/data
+
+# 安全配置
+ENV PYTHONHASHSEED=random
+ENV PYTHONIOENCODING=utf-8
+
+# 切换到非root用户
+USER accessibility
+
+# 健康检查脚本
+COPY --chown=accessibility:accessibility deploy/docker/healthcheck.py /app/healthcheck.py
+RUN chmod +x /app/healthcheck.py
+
+# 设置健康检查
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+    CMD python /app/healthcheck.py
+
+# 开放端口
+EXPOSE 50051
+
+# 设置入口点和默认命令
+ENTRYPOINT ["python", "-m", "cmd.server.main"]
+CMD []
+
+# 阶段3: 开发阶段（可选）
+FROM runtime as development
+
+# 切换回root用户安装开发工具
+USER root
+
+# 安装开发依赖
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
+    vim \
+    htop \
+    strace \
+    && rm -rf /var/lib/apt/lists/*
+
+# 安装开发Python包
+RUN pip install --no-cache-dir \
+    pytest \
+    pytest-asyncio \
+    pytest-cov \
+    black \
+    flake8 \
+    mypy
+
+# 切换回应用用户
+USER accessibility
+
+# 开发环境配置
+ENV ACCESSIBILITY_LOG_LEVEL=DEBUG
+ENV PYTHONDEBUG=1
+
+# 阶段4: 测试阶段
+FROM development as testing
+
+# 复制测试文件
+COPY --chown=accessibility:accessibility test/ /app/test/
+
+# 运行测试
+RUN python -m pytest test/ -v --cov=internal --cov-report=html
+
+# 阶段5: 生产阶段（默认）
+FROM runtime as production
+
+# 生产环境优化
+ENV ACCESSIBILITY_LOG_LEVEL=WARNING
+ENV PYTHONOPTIMIZE=2
+
+# 移除不必要的文件
+RUN find /app -name "*.pyc" -delete && \
+    find /app -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
+
+# 最终镜像信息
+RUN echo "Accessibility Service v${VERSION:-unknown} built on ${BUILD_DATE:-unknown}" > /app/VERSION 

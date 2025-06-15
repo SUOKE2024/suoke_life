@@ -1,0 +1,419 @@
+name: 索克生活无障碍服务 CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'services/accessibility-service/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'services/accessibility-service/**'
+  release:
+    types: [ published ]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: suoke-life/accessibility-service
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  # 代码质量检查
+  code-quality:
+    name: 代码质量检查
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/accessibility-service
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+    
+    - name: 设置Python环境
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        cache: 'pip'
+    
+    - name: 安装依赖
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements-dev.txt
+    
+    - name: 代码格式检查 (Black)
+      run: black --check --diff .
+    
+    - name: 代码风格检查 (Flake8)
+      run: flake8 .
+    
+    - name: 类型检查 (MyPy)
+      run: mypy .
+    
+    - name: 安全检查 (Bandit)
+      run: bandit -r . -f json -o bandit-report.json
+    
+    - name: 依赖安全检查 (Safety)
+      run: safety check --json --output safety-report.json
+    
+    - name: 上传安全报告
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: security-reports
+        path: |
+          services/accessibility-service/bandit-report.json
+          services/accessibility-service/safety-report.json
+
+  # 单元测试
+  unit-tests:
+    name: 单元测试
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/accessibility-service
+    
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.11', '3.12']
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+    
+    - name: 设置Python环境
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: 'pip'
+    
+    - name: 安装依赖
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -r requirements-dev.txt
+    
+    - name: 运行单元测试
+      run: |
+        pytest test/unit/ \
+          --cov=internal \
+          --cov-report=xml \
+          --cov-report=html \
+          --junitxml=junit.xml \
+          -v
+    
+    - name: 上传测试结果
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: test-results-${{ matrix.python-version }}
+        path: |
+          services/accessibility-service/junit.xml
+          services/accessibility-service/htmlcov/
+    
+    - name: 上传覆盖率报告
+      uses: codecov/codecov-action@v3
+      with:
+        file: services/accessibility-service/coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+
+  # 集成测试
+  integration-tests:
+    name: 集成测试
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/accessibility-service
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_USER: test_user
+          POSTGRES_DB: test_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      
+      redis:
+        image: redis:7
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+    
+    - name: 设置Python环境
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        cache: 'pip'
+    
+    - name: 安装依赖
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -r requirements-dev.txt
+    
+    - name: 等待服务就绪
+      run: |
+        timeout 30 bash -c 'until nc -z localhost 5432; do sleep 1; done'
+        timeout 30 bash -c 'until nc -z localhost 6379; do sleep 1; done'
+    
+    - name: 运行集成测试
+      env:
+        DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_db
+        REDIS_URL: redis://localhost:6379/0
+      run: |
+        pytest test/integration/ \
+          --junitxml=integration-junit.xml \
+          -v
+    
+    - name: 上传集成测试结果
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: integration-test-results
+        path: services/accessibility-service/integration-junit.xml
+
+  # 性能测试
+  performance-tests:
+    name: 性能测试
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/accessibility-service
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+    
+    - name: 设置Python环境
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        cache: 'pip'
+    
+    - name: 安装依赖
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -r requirements-dev.txt
+    
+    - name: 运行性能测试
+      run: |
+        python test/performance/benchmark.py --output performance-report.json
+    
+    - name: 上传性能报告
+      uses: actions/upload-artifact@v3
+      with:
+        name: performance-report
+        path: services/accessibility-service/performance-report.json
+
+  # 构建Docker镜像
+  build-image:
+    name: 构建Docker镜像
+    runs-on: ubuntu-latest
+    needs: [code-quality, unit-tests, integration-tests]
+    defaults:
+      run:
+        working-directory: services/accessibility-service
+    
+    outputs:
+      image-digest: ${{ steps.build.outputs.digest }}
+      image-tag: ${{ steps.meta.outputs.tags }}
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+    
+    - name: 设置Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    
+    - name: 登录容器注册表
+      if: github.event_name != 'pull_request'
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: 提取元数据
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=sha,prefix={{branch}}-
+    
+    - name: 构建并推送镜像
+      id: build
+      uses: docker/build-push-action@v5
+      with:
+        context: services/accessibility-service
+        file: services/accessibility-service/Dockerfile
+        push: ${{ github.event_name != 'pull_request' }}
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        platforms: linux/amd64,linux/arm64
+
+  # 安全扫描
+  security-scan:
+    name: 安全扫描
+    runs-on: ubuntu-latest
+    needs: [build-image]
+    if: github.event_name != 'pull_request'
+    
+    steps:
+    - name: 运行Trivy漏洞扫描
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: ${{ needs.build-image.outputs.image-tag }}
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+    
+    - name: 上传Trivy扫描结果
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: 'trivy-results.sarif'
+
+  # 部署到开发环境
+  deploy-dev:
+    name: 部署到开发环境
+    runs-on: ubuntu-latest
+    needs: [build-image, security-scan]
+    if: github.ref == 'refs/heads/develop'
+    environment: development
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+    
+    - name: 设置kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: 'v1.28.0'
+    
+    - name: 配置kubeconfig
+      run: |
+        mkdir -p $HOME/.kube
+        echo "${{ secrets.KUBE_CONFIG_DEV }}" | base64 -d > $HOME/.kube/config
+    
+    - name: 部署到Kubernetes
+      run: |
+        cd services/accessibility-service/deploy/k8s
+        kubectl apply -f namespace.yaml
+        kubectl apply -f configmap.yaml
+        kubectl apply -f secret.yaml
+        kubectl apply -f deployment.yaml
+        kubectl apply -f service.yaml
+        kubectl apply -f ingress.yaml
+        
+        # 等待部署完成
+        kubectl rollout status deployment/accessibility-service -n suoke-dev --timeout=300s
+    
+    - name: 运行健康检查
+      run: |
+        kubectl wait --for=condition=ready pod -l app=accessibility-service -n suoke-dev --timeout=300s
+        kubectl get pods -n suoke-dev
+
+  # 部署到生产环境
+  deploy-prod:
+    name: 部署到生产环境
+    runs-on: ubuntu-latest
+    needs: [build-image, security-scan]
+    if: github.event_name == 'release'
+    environment: production
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+    
+    - name: 设置kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: 'v1.28.0'
+    
+    - name: 配置kubeconfig
+      run: |
+        mkdir -p $HOME/.kube
+        echo "${{ secrets.KUBE_CONFIG_PROD }}" | base64 -d > $HOME/.kube/config
+    
+    - name: 蓝绿部署
+      run: |
+        cd services/accessibility-service/deploy/k8s
+        
+        # 创建新版本部署
+        kubectl apply -f namespace.yaml
+        kubectl apply -f configmap.yaml
+        kubectl apply -f secret.yaml
+        
+        # 更新镜像标签
+        kubectl set image deployment/accessibility-service \
+          accessibility-service=${{ needs.build-image.outputs.image-tag }} \
+          -n suoke-prod
+        
+        # 等待新版本就绪
+        kubectl rollout status deployment/accessibility-service -n suoke-prod --timeout=600s
+        
+        # 运行健康检查
+        kubectl wait --for=condition=ready pod -l app=accessibility-service -n suoke-prod --timeout=300s
+    
+    - name: 运行生产环境测试
+      run: |
+        # 运行生产环境冒烟测试
+        python services/accessibility-service/test/smoke/smoke_test.py --env production
+
+  # 通知
+  notify:
+    name: 通知
+    runs-on: ubuntu-latest
+    needs: [deploy-dev, deploy-prod]
+    if: always()
+    
+    steps:
+    - name: 发送钉钉通知
+      if: always()
+      uses: zcong1993/actions-ding@master
+      with:
+        dingToken: ${{ secrets.DING_TOKEN }}
+        body: |
+          {
+            "msgtype": "markdown",
+            "markdown": {
+              "title": "索克生活无障碍服务部署通知",
+              "text": "## 部署结果\n\n- **项目**: 索克生活无障碍服务\n- **分支**: ${{ github.ref_name }}\n- **提交**: ${{ github.sha }}\n- **状态**: ${{ job.status }}\n- **时间**: $(date)\n\n[查看详情](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+            }
+          }
+
+  # 清理
+  cleanup:
+    name: 清理
+    runs-on: ubuntu-latest
+    needs: [deploy-dev, deploy-prod]
+    if: always()
+    
+    steps:
+    - name: 清理旧镜像
+      run: |
+        # 保留最近10个版本的镜像
+        echo "清理旧的Docker镜像..."
+        # 这里可以添加清理逻辑 

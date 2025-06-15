@@ -82,7 +82,7 @@ metadata:
     konghq.com/plugins: rate-limiting
 spec:
   rules:
-  - host: api.suoke-life.com
+  - host: api.suoke.life
     http:
       paths:
       - path: /api/v1/auth
@@ -525,7 +525,7 @@ stages:
   - deploy-prod
 
 variables:
-  DOCKER_REGISTRY: registry.suoke-life.com
+  DOCKER_REGISTRY: registry.suoke.life
   KUBERNETES_NAMESPACE_DEV: suoke-life-dev
   KUBERNETES_NAMESPACE_STAGING: suoke-life-staging
   KUBERNETES_NAMESPACE_PROD: suoke-life-prod
@@ -575,7 +575,7 @@ deploy-dev:
     - kubectl rollout status deployment/$CI_PROJECT_NAME -n $KUBERNETES_NAMESPACE_DEV
   environment:
     name: development
-    url: https://dev-api.suoke-life.com
+    url: https://dev-api.suoke.life
   only:
     - develop
 
@@ -589,7 +589,7 @@ deploy-prod:
     - kubectl rollout status deployment/$CI_PROJECT_NAME -n $KUBERNETES_NAMESPACE_PROD
   environment:
     name: production
-    url: https://api.suoke-life.com
+    url: https://api.suoke.life
   when: manual
   only:
     - main

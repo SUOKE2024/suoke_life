@@ -1,0 +1,552 @@
+name: 代码质量、安全扫描与性能测试
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # 每天凌晨2点运行完整测试
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      test_type:
+        description: '测试类型'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+        - all
+        - quality
+        - security
+        - performance
+      environment:
+        description: '测试环境'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+        - staging
+        - production
+
+env:
+  PYTHON_VERSION: '3.13'
+  NODE_VERSION: '20'
+  UV_VERSION: '0.1.18'
+  SONAR_HOST_URL: 'https://sonarqube.suoke.life'
+  K6_VERSION: '0.47.0'
+
+jobs:
+  # 代码质量检查作业
+  code-quality:
+    name: 代码质量检查
+    runs-on: ubuntu-latest
+    if: github.event.inputs.test_type == 'all' || github.event.inputs.test_type == 'quality' || github.event.inputs.test_type == ''
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # SonarQube需要完整历史
+
+    - name: 设置Python环境
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: 设置Node.js环境
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: 安装UV包管理器
+      run: |
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+        echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
+    - name: 安装Python依赖
+      run: |
+        uv venv
+        source .venv/bin/activate
+        uv pip install -r requirements.txt
+        uv pip install pytest pytest-cov pytest-xdist pylint flake8 mypy black isort bandit safety
+
+    - name: 安装Node.js依赖
+      run: npm ci
+
+    - name: Python代码格式化检查
+      run: |
+        source .venv/bin/activate
+        black --check --diff services/ tests/
+        isort --check-only --diff services/ tests/
+
+    - name: Python静态分析
+      run: |
+        source .venv/bin/activate
+        # Flake8检查
+        flake8 services/ tests/ --output-file=flake8-report.txt --tee
+        # Pylint检查
+        pylint services/ --output-format=text --reports=yes > pylint-report.txt || true
+        # MyPy类型检查
+        mypy services/ --txt-report mypy-report --html-report mypy-html || true
+
+    - name: JavaScript/TypeScript静态分析
+      run: |
+        npm run lint -- --format json --output-file eslint-report.json || true
+        npm run type-check || true
+
+    - name: 运行Python测试并生成覆盖率报告
+      run: |
+        source .venv/bin/activate
+        pytest tests/ \
+          --cov=services \
+          --cov-report=xml:coverage.xml \
+          --cov-report=html:htmlcov \
+          --cov-report=term \
+          --junit-xml=pytest-report.xml \
+          --maxfail=10 \
+          -n auto
+
+    - name: 运行JavaScript测试
+      run: |
+        npm test -- --coverage --watchAll=false --coverageReporters=lcov,text
+
+    - name: SonarQube扫描
+      uses: sonarqube-quality-gate-action@master
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_HOST_URL: ${{ env.SONAR_HOST_URL }}
+      with:
+        scanMetadataReportFile: .scannerwork/report-task.txt
+
+    - name: 运行SonarQube Scanner
+      run: |
+        docker run --rm \
+          -e SONAR_HOST_URL="${{ env.SONAR_HOST_URL }}" \
+          -e SONAR_LOGIN="${{ secrets.SONAR_TOKEN }}" \
+          -v "${{ github.workspace }}:/usr/src" \
+          sonarsource/sonar-scanner-cli:latest
+
+    - name: 上传测试报告
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: quality-reports
+        path: |
+          coverage.xml
+          htmlcov/
+          pytest-report.xml
+          flake8-report.txt
+          pylint-report.txt
+          mypy-report/
+          eslint-report.json
+          coverage/
+
+    - name: 发布测试结果
+      uses: dorny/test-reporter@v1
+      if: success() || failure()
+      with:
+        name: Python测试结果
+        path: pytest-report.xml
+        reporter: java-junit
+
+  # 安全扫描作业
+  security-scan:
+    name: 安全漏洞扫描
+    runs-on: ubuntu-latest
+    if: github.event.inputs.test_type == 'all' || github.event.inputs.test_type == 'security' || github.event.inputs.test_type == ''
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+
+    - name: 设置Python环境
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: 设置Node.js环境
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+
+    - name: 安装Snyk CLI
+      run: |
+        npm install -g snyk
+        snyk auth ${{ secrets.SNYK_TOKEN }}
+
+    - name: Python依赖安全扫描
+      run: |
+        pip install safety bandit
+        # Safety扫描已知漏洞
+        safety check --json --output safety-report.json || true
+        # Bandit扫描代码安全问题
+        bandit -r services/ -f json -o bandit-report.json || true
+
+    - name: Snyk Python依赖扫描
+      run: |
+        snyk test --file=requirements.txt \
+          --json --json-file-output=snyk-python-report.json \
+          --severity-threshold=medium || true
+
+    - name: Snyk JavaScript依赖扫描
+      run: |
+        snyk test --file=package.json \
+          --json --json-file-output=snyk-js-report.json \
+          --severity-threshold=medium || true
+
+    - name: Snyk代码安全扫描
+      run: |
+        snyk code test \
+          --json --json-file-output=snyk-code-report.json \
+          --severity-threshold=high || true
+
+    - name: Docker镜像安全扫描
+      run: |
+        # 构建测试镜像
+        docker build -t suoke-life:test .
+        # Snyk容器扫描
+        snyk container test suoke-life:test \
+          --json --json-file-output=snyk-container-report.json \
+          --severity-threshold=high || true
+
+    - name: Kubernetes配置安全扫描
+      run: |
+        snyk iac test k8s/ \
+          --json --json-file-output=snyk-k8s-report.json \
+          --severity-threshold=medium || true
+
+    - name: 生成安全报告摘要
+      run: |
+        python3 << 'EOF'
+        import json
+        import os
+        
+        def load_json_report(filename):
+            try:
+                with open(filename, 'r') as f:
+                    return json.load(f)
+            except:
+                return {}
+        
+        # 加载各种安全报告
+        safety_report = load_json_report('safety-report.json')
+        bandit_report = load_json_report('bandit-report.json')
+        snyk_python = load_json_report('snyk-python-report.json')
+        snyk_js = load_json_report('snyk-js-report.json')
+        snyk_code = load_json_report('snyk-code-report.json')
+        snyk_container = load_json_report('snyk-container-report.json')
+        snyk_k8s = load_json_report('snyk-k8s-report.json')
+        
+        # 生成摘要
+        summary = {
+            'timestamp': '$(date -u +"%Y-%m-%dT%H:%M:%SZ")',
+            'python_vulnerabilities': len(safety_report.get('vulnerabilities', [])),
+            'code_security_issues': len(bandit_report.get('results', [])),
+            'snyk_python_issues': len(snyk_python.get('vulnerabilities', [])),
+            'snyk_js_issues': len(snyk_js.get('vulnerabilities', [])),
+            'snyk_code_issues': len(snyk_code.get('runs', [{}])[0].get('results', [])),
+            'container_vulnerabilities': len(snyk_container.get('vulnerabilities', [])),
+            'k8s_security_issues': len(snyk_k8s.get('infrastructureAsCodeIssues', []))
+        }
+        
+        with open('security-summary.json', 'w') as f:
+            json.dump(summary, f, indent=2)
+        
+        print("安全扫描摘要:")
+        for key, value in summary.items():
+            if key != 'timestamp':
+                print(f"- {key}: {value}")
+        EOF
+
+    - name: 上传安全报告
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: security-reports
+        path: |
+          safety-report.json
+          bandit-report.json
+          snyk-*-report.json
+          security-summary.json
+
+    - name: 安全门禁检查
+      run: |
+        python3 << 'EOF'
+        import json
+        import sys
+        
+        with open('security-summary.json', 'r') as f:
+            summary = json.load(f)
+        
+        # 定义安全阈值
+        thresholds = {
+            'python_vulnerabilities': 0,
+            'code_security_issues': 5,
+            'snyk_python_issues': 2,
+            'snyk_js_issues': 2,
+            'snyk_code_issues': 3,
+            'container_vulnerabilities': 1,
+            'k8s_security_issues': 2
+        }
+        
+        failed = False
+        for metric, threshold in thresholds.items():
+            if summary.get(metric, 0) > threshold:
+                print(f"❌ {metric}: {summary[metric]} > {threshold}")
+                failed = True
+            else:
+                print(f"✅ {metric}: {summary[metric]} <= {threshold}")
+        
+        if failed:
+            print("\n安全门禁检查失败！请修复安全问题后重新提交。")
+            sys.exit(1)
+        else:
+            print("\n✅ 所有安全检查通过！")
+        EOF
+
+  # 性能测试作业
+  performance-test:
+    name: 性能测试
+    runs-on: ubuntu-latest
+    if: github.event.inputs.test_type == 'all' || github.event.inputs.test_type == 'performance' || github.event.inputs.test_type == ''
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: testpassword
+          POSTGRES_DB: suoke_life_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+
+    - name: 设置Python环境
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: 安装K6
+      run: |
+        sudo gpg -k
+        sudo gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+        echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+        sudo apt-get update
+        sudo apt-get install k6
+
+    - name: 安装应用依赖
+      run: |
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+        echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+        uv venv
+        source .venv/bin/activate
+        uv pip install -r requirements.txt
+
+    - name: 启动测试服务
+      run: |
+        source .venv/bin/activate
+        # 设置测试环境变量
+        export DATABASE_URL="postgresql://postgres:testpassword@localhost:5432/suoke_life_test"
+        export REDIS_URL="redis://localhost:6379"
+        export ENVIRONMENT="test"
+        
+        # 启动微服务（后台运行）
+        cd services/core/auth && uvicorn main:app --host 0.0.0.0 --port 8001 &
+        cd services/core/user && uvicorn main:app --host 0.0.0.0 --port 8002 &
+        cd services/core/health-data && uvicorn main:app --host 0.0.0.0 --port 8003 &
+        cd services/agents/xiaoai && uvicorn main:app --host 0.0.0.0 --port 8011 &
+        
+        # 等待服务启动
+        sleep 30
+        
+        # 健康检查
+        curl -f http://localhost:8001/health || exit 1
+        curl -f http://localhost:8002/health || exit 1
+        curl -f http://localhost:8003/health || exit 1
+        curl -f http://localhost:8011/health || exit 1
+
+    - name: 运行认证服务负载测试
+      run: |
+        k6 run k6/performance-tests/scenarios/auth-load-test.js \
+          --env BASE_URL=http://localhost:8001 \
+          --out json=auth-load-results.json
+
+    - name: 运行健康数据服务压力测试
+      run: |
+        k6 run k6/performance-tests/load-test-config.js \
+          --env BASE_URL=http://localhost:8003 \
+          --env K6_SCENARIO_NAME=health_data_stress_test \
+          --out json=health-data-stress-results.json
+
+    - name: 运行智能体协同峰值测试
+      run: |
+        k6 run k6/performance-tests/load-test-config.js \
+          --env BASE_URL=http://localhost:8011 \
+          --env K6_SCENARIO_NAME=agent_collaboration_spike_test \
+          --out json=agent-spike-results.json
+
+    - name: 运行系统整体稳定性测试
+      if: github.event_name == 'schedule' || github.event.inputs.test_type == 'performance'
+      run: |
+        k6 run k6/performance-tests/load-test-config.js \
+          --env BASE_URL=http://localhost:8001 \
+          --env K6_SCENARIO_NAME=system_stability_test \
+          --out json=stability-results.json
+
+    - name: 生成性能报告
+      if: always()
+      run: |
+        python3 << 'EOF'
+        import json
+        import glob
+        from datetime import datetime
+        
+        # 收集所有性能测试结果
+        result_files = glob.glob('*-results.json')
+        performance_summary = {
+            'timestamp': datetime.utcnow().isoformat(),
+            'tests': {}
+        }
+        
+        for file in result_files:
+            test_name = file.replace('-results.json', '')
+            try:
+                with open(file, 'r') as f:
+                    data = json.load(f)
+                    
+                performance_summary['tests'][test_name] = {
+                    'total_requests': data['metrics']['http_reqs']['count'],
+                    'avg_response_time': round(data['metrics']['http_req_duration']['avg'], 2),
+                    'p95_response_time': round(data['metrics']['http_req_duration']['p(95)'], 2),
+                    'error_rate': round(data['metrics']['http_req_failed']['rate'] * 100, 2),
+                    'thresholds_passed': all(t['ok'] for t in data['thresholds'].values())
+                }
+            except Exception as e:
+                print(f"处理文件 {file} 时出错: {e}")
+        
+        # 保存摘要
+        with open('performance-summary.json', 'w') as f:
+            json.dump(performance_summary, f, indent=2)
+        
+        # 打印摘要
+        print("性能测试摘要:")
+        for test_name, metrics in performance_summary['tests'].items():
+            print(f"\n{test_name}:")
+            for key, value in metrics.items():
+                print(f"  - {key}: {value}")
+        EOF
+
+    - name: 性能门禁检查
+      run: |
+        python3 << 'EOF'
+        import json
+        import sys
+        
+        with open('performance-summary.json', 'r') as f:
+            summary = json.load(f)
+        
+        failed_tests = []
+        for test_name, metrics in summary['tests'].items():
+            if not metrics['thresholds_passed']:
+                failed_tests.append(test_name)
+            
+            # 额外检查
+            if metrics['error_rate'] > 1.0:
+                print(f"❌ {test_name}: 错误率过高 ({metrics['error_rate']}%)")
+                failed_tests.append(test_name)
+            elif metrics['p95_response_time'] > 1000:
+                print(f"❌ {test_name}: 95%响应时间过长 ({metrics['p95_response_time']}ms)")
+                failed_tests.append(test_name)
+            else:
+                print(f"✅ {test_name}: 性能测试通过")
+        
+        if failed_tests:
+            print(f"\n❌ 性能测试失败的项目: {', '.join(set(failed_tests))}")
+            sys.exit(1)
+        else:
+            print("\n✅ 所有性能测试通过！")
+        EOF
+
+    - name: 上传性能报告
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: performance-reports
+        path: |
+          *-results.json
+          performance-summary.json
+
+  # 通知作业
+  notify:
+    name: 测试结果通知
+    runs-on: ubuntu-latest
+    needs: [code-quality, security-scan, performance-test]
+    if: always()
+    
+    steps:
+    - name: 下载所有报告
+      uses: actions/download-artifact@v3
+
+    - name: 发送Slack通知
+      if: always()
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        channel: '#suoke-life-ci'
+        text: |
+          索克生活项目测试完成
+          
+          代码质量检查: ${{ needs.code-quality.result }}
+          安全扫描: ${{ needs.security-scan.result }}
+          性能测试: ${{ needs.performance-test.result }}
+          
+          分支: ${{ github.ref }}
+          提交: ${{ github.sha }}
+          触发者: ${{ github.actor }}
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+    - name: 发送邮件通知
+      if: failure()
+      uses: dawidd6/action-send-mail@v3
+      with:
+        server_address: smtp.gmail.com
+        server_port: 587
+        username: ${{ secrets.EMAIL_USERNAME }}
+        password: ${{ secrets.EMAIL_PASSWORD }}
+        subject: '索克生活项目测试失败 - ${{ github.ref }}'
+        to: ${{ secrets.NOTIFICATION_EMAIL }}
+        from: 'Suoke Life CI/CD <noreply@suoke.life>'
+        body: |
+          索克生活项目在以下测试中失败：
+          
+          代码质量检查: ${{ needs.code-quality.result }}
+          安全扫描: ${{ needs.security-scan.result }}
+          性能测试: ${{ needs.performance-test.result }}
+          
+          请查看详细报告并及时修复问题。
+          
+          分支: ${{ github.ref }}
+          提交: ${{ github.sha }}
+          触发者: ${{ github.actor }}
+          
+          查看详情: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} 

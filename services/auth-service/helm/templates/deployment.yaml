@@ -1,0 +1,175 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "suoke-auth-service.fullname" . }}
+  labels:
+    {{- include "suoke-auth-service.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "suoke-auth-service.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "suoke-auth-service.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "suoke-auth-service.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+            - name: grpc
+              containerPort: 9000
+              protocol: TCP
+          env:
+            - name: ENVIRONMENT
+              value: {{ .Values.config.environment }}
+            - name: LOG_LEVEL
+              value: {{ .Values.config.logLevel }}
+            - name: DEBUG
+              value: {{ .Values.config.debug | quote }}
+            - name: DATABASE_HOST
+              value: {{ .Values.config.database.host }}
+            - name: DATABASE_PORT
+              value: {{ .Values.config.database.port | quote }}
+            - name: DATABASE_NAME
+              value: {{ .Values.config.database.name }}
+            - name: DATABASE_USER
+              value: {{ .Values.config.database.user }}
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "suoke-auth-service.fullname" . }}-secret
+                  key: database-password
+            - name: DATABASE_SSL_MODE
+              value: {{ .Values.config.database.sslMode }}
+            - name: DATABASE_MAX_CONNECTIONS
+              value: {{ .Values.config.database.maxConnections | quote }}
+            - name: REDIS_HOST
+              value: {{ .Values.config.redis.host }}
+            - name: REDIS_PORT
+              value: {{ .Values.config.redis.port | quote }}
+            - name: REDIS_DB
+              value: {{ .Values.config.redis.db | quote }}
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "suoke-auth-service.fullname" . }}-secret
+                  key: redis-password
+            - name: REDIS_MAX_CONNECTIONS
+              value: {{ .Values.config.redis.maxConnections | quote }}
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "suoke-auth-service.fullname" . }}-secret
+                  key: jwt-secret
+            - name: JWT_ACCESS_TOKEN_EXPIRE
+              value: {{ .Values.config.jwt.accessTokenExpire | quote }}
+            - name: JWT_REFRESH_TOKEN_EXPIRE
+              value: {{ .Values.config.jwt.refreshTokenExpire | quote }}
+            {{- if .Values.config.oauth.google.enabled }}
+            - name: OAUTH_GOOGLE_ENABLED
+              value: "true"
+            - name: OAUTH_GOOGLE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "suoke-auth-service.fullname" . }}-secret
+                  key: oauth-google-client-secret
+            {{- end }}
+            {{- if .Values.config.oauth.github.enabled }}
+            - name: OAUTH_GITHUB_ENABLED
+              value: "true"
+            - name: OAUTH_GITHUB_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "suoke-auth-service.fullname" . }}-secret
+                  key: oauth-github-client-secret
+            {{- end }}
+            {{- if .Values.config.oauth.wechat.enabled }}
+            - name: OAUTH_WECHAT_ENABLED
+              value: "true"
+            - name: OAUTH_WECHAT_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "suoke-auth-service.fullname" . }}-secret
+                  key: oauth-wechat-client-secret
+            {{- end }}
+            {{- if .Values.config.blockchain.ethereum.enabled }}
+            - name: BLOCKCHAIN_ETHEREUM_ENABLED
+              value: "true"
+            {{- end }}
+            {{- if .Values.config.blockchain.polygon.enabled }}
+            - name: BLOCKCHAIN_POLYGON_ENABLED
+              value: "true"
+            {{- end }}
+            {{- if .Values.config.blockchain.bsc.enabled }}
+            - name: BLOCKCHAIN_BSC_ENABLED
+              value: "true"
+            {{- end }}
+            {{- if .Values.config.biometric.fingerprint.enabled }}
+            - name: BIOMETRIC_FINGERPRINT_ENABLED
+              value: "true"
+            - name: BIOMETRIC_FINGERPRINT_MAX_TEMPLATES
+              value: {{ .Values.config.biometric.fingerprint.maxTemplates | quote }}
+            {{- end }}
+            {{- if .Values.config.biometric.face.enabled }}
+            - name: BIOMETRIC_FACE_ENABLED
+              value: "true"
+            - name: BIOMETRIC_FACE_MAX_TEMPLATES
+              value: {{ .Values.config.biometric.face.maxTemplates | quote }}
+            {{- end }}
+          livenessProbe:
+            {{- toYaml .Values.healthCheck.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.healthCheck.readinessProbe | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: /app/config
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
+            - name: var-run
+              mountPath: /var/run
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "suoke-auth-service.fullname" . }}-config
+        - name: tmp
+          emptyDir: {}
+        - name: var-run
+          emptyDir: {}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }} 

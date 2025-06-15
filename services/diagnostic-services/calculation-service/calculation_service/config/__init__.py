@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional, Union
+"""模块初始化文件"""
 
 """
 __init__ - 索克生活项目模块

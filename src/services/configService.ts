@@ -62,7 +62,7 @@ isFeatureEnabled(featureName: string): boolean {}
     const feature = this.get(`features.${featureName;}`);````,```;
 return feature && feature.enabled;
   }
-  private getDefaultConfig(): AppConfig {return {'gateway: {,'baseUrl: 'https://api.suoke-life.com,''/,'/g,'/;
+  private getDefaultConfig(): AppConfig {return {'gateway: {,'baseUrl: 'https://api.suoke.life,''/,'/g,'/;
   timeout: 30000,
 retryAttempts: 3,
 }

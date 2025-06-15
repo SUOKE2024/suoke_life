@@ -1,33 +1,53 @@
+# 索克生活inquiry-service服务 Docker Compose 配置
 version: '3.8'
 
 services:
   inquiry-service:
     build:
       context: .
-      dockerfile: deploy/docker/Dockerfile
-      args:
-        # 使用阿里云镜像加速
-        PIP_INDEX_URL: https://mirrors.aliyun.com/pypi/simple/
-        PIP_TRUSTED_HOST: mirrors.aliyun.com
-    image: suoke/inquiry-service:latest
-    container_name: inquiry-service
+      dockerfile: Dockerfile
+      target: runtime
+    container_name: suoke-inquiry-service
     restart: unless-stopped
     ports:
-      - "50052:50052"  # gRPC端口
-      - "9090:9090"    # 监控端口
-    volumes:
-      - ./config:/app/config
-      - ./data:/app/data
-      - ./.env:/app/.env
+      - "8080:8080"  # REST API
+      - "50051:50051"  # gRPC
     environment:
-      - SERVICE_ENV=development
-      - LOG_LEVEL=DEBUG
-      - USE_MOCK_MODE=true
-      - MOCK_EXTERNAL_SERVICES=true
+      # 服务配置
+      - SERVICE_NAME=inquiry-service
+      - SERVICE_VERSION=2.0.0
+      - SERVICE_ENV=production
+      - REST_PORT=8080
+      - GRPC_PORT=50051
+      
+      # 数据库配置
+      - DATABASE_URL=postgresql://user:password@postgres:5432/inquiry_servicedb
+      - REDIS_URL=redis://redis:6379/0
+      
+      # 监控配置
+      - ENABLE_METRICS=true
+      - ENABLE_TRACING=true
+      - JAEGER_ENDPOINT=http://jaeger:14268/api/traces
+      
+      # 日志配置
+      - LOG_LEVEL=INFO
+      - LOG_FORMAT=json
+    volumes:
+      - inquiry-service_data:/app/data
+      - ./logs:/app/logs
     networks:
       - suoke-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  inquiry-service_data:
+    driver: local
 
 networks:
   suoke-network:
-    name: suoke-network
-    driver: bridge
+    external: true

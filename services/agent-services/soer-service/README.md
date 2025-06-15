@@ -1,345 +1,338 @@
-# 索儿服务 (Soer Service)
+# 索儿智能体服务 (Soer Agent Service)
 
-索儿智能体微服务，是"索克生活"健康管理平台的核心组件之一。专注于提供营养分析、健康咨询、生活方式建议和中医养生指导。
+索儿智能体是索克生活平台的核心AI服务，专注于提供个性化的健康管理、营养分析和生活方式建议。
 
-## 🌟 特性
+## 🌟 核心功能
 
-### 核心功能
-- **营养分析**: 食物营养成分分析、膳食计划制定
-- **健康管理**: 健康数据分析、健康趋势监测、个性化建议
-- **生活方式**: 运动计划、睡眠分析、压力管理
-- **智能对话**: 自然语言交互、个性化响应、情感支持
-- **中医养生**: 体质分析、经络指导、季节性养生建议
+### 🤖 智能对话
+- 自然语言交互
+- 上下文记忆管理
+- 意图识别和情感分析
+- 个性化响应生成
 
-### 技术特点
-- **现代化架构**: 基于 FastAPI 的异步微服务
-- **类型安全**: 完整的 Pydantic 模型和类型注解
-- **多数据库支持**: MongoDB、Redis、PostgreSQL
-- **监控集成**: Prometheus 指标、健康检查
-- **代码质量**: 完整的代码质量工具链
+### 🏥 健康管理
+- 健康数据收集和分析
+- 生物指标趋势监测
+- 健康风险评估
+- 个性化健康建议
+
+### 🍎 营养分析
+- 食物营养成分分析
+- 膳食计划制定
+- 营养目标跟踪
+- 食物数据库搜索
+
+### 🏃‍♀️ 生活方式
+- 个性化运动计划
+- 睡眠质量分析
+- 压力水平评估
+- 生活习惯建议
+
+### 🔐 用户认证
+- JWT令牌认证
+- 角色权限管理
+- 会话管理
+- 安全防护
 
 ## 🚀 快速开始
 
 ### 环境要求
-- Python 3.13.3+
-- UV 包管理器
-- MongoDB (可选)
-- Redis (可选)
-- PostgreSQL (可选)
+- Python 3.11+
+- MongoDB 7.0+
+- Redis 7.0+
+- Docker (可选)
 
-### 安装依赖
+### 本地开发
 
+1. **克隆项目**
 ```bash
-# 使用 UV 安装依赖
-uv sync
-
-# 或使用 pip
-pip install -e .
+git clone <repository-url>
+cd soer-service
 ```
 
-### 环境配置
-
-创建 `.env` 文件：
-
+2. **安装依赖**
 ```bash
-# 基础配置
-ENVIRONMENT=development
-DEBUG=true
-HOST=0.0.0.0
-PORT=8000
-
-# 数据库配置
-MONGODB_URL=mongodb://localhost:27017
-REDIS_URL=redis://localhost:6379
-POSTGRES_URL=postgresql://user:password@localhost:5432/soer_db
-
-# 安全配置
-SECRET_KEY=your-secret-key-here
-JWT_SECRET_KEY=your-jwt-secret-here
-
-# AI 服务配置
-OPENAI_API_KEY=your-openai-key
-OPENAI_BASE_URL=https://api.openai.com/v1
+pip install -r requirements.txt
 ```
 
-### 启动服务
-
+3. **配置环境变量**
 ```bash
-# 使用简化启动脚本
-python run_service.py
+cp .env.example .env
+# 编辑 .env 文件，配置必要的环境变量
+```
 
-# 使用启动脚本
-python scripts/start.py
+4. **启动数据库服务**
+```bash
+# 启动 MongoDB
+mongod --dbpath ./data/db
 
-# 或直接使用 uvicorn
-uvicorn soer_service.main:create_app --factory --reload --host 0.0.0.0 --port 8003
+# 启动 Redis
+redis-server
+```
+
+5. **运行服务**
+```bash
+uvicorn soer_service.main:app --reload --host 0.0.0.0 --port 8003
 ```
 
 ### Docker 部署
 
+1. **使用 Docker Compose**
 ```bash
-# 构建镜像
-docker build -t soer-service .
-
-# 运行容器
-docker run -p 8003:8003 soer-service
-
-# 使用 docker-compose
 docker-compose up -d
 ```
 
-### 运行测试
+2. **查看服务状态**
+```bash
+docker-compose ps
+```
 
+3. **查看日志**
+```bash
+docker-compose logs -f soer-service
+```
+
+## 📚 API 文档
+
+服务启动后，可以通过以下地址访问API文档：
+
+- **Swagger UI**: http://localhost:8003/docs
+- **ReDoc**: http://localhost:8003/redoc
+
+### 主要端点
+
+#### 认证端点
+- `POST /auth/register` - 用户注册
+- `POST /auth/login` - 用户登录
+- `POST /auth/refresh` - 刷新令牌
+- `POST /auth/logout` - 用户登出
+
+#### 智能体端点
+- `POST /agent/chat` - 智能对话
+- `GET /agent/capabilities` - 获取能力列表
+- `GET /agent/history` - 对话历史
+- `WebSocket /agent/ws` - 实时对话
+
+#### 健康管理端点
+- `POST /health/data` - 提交健康数据
+- `GET /health/dashboard` - 健康仪表板
+- `POST /health/analyze` - 健康数据分析
+- `GET /health/trends` - 健康趋势
+
+#### 营养分析端点
+- `POST /nutrition/analyze` - 食物营养分析
+- `GET /nutrition/search` - 食物数据库搜索
+- `POST /nutrition/diet-plan` - 创建膳食计划
+- `POST /nutrition/track-meal` - 记录用餐
+
+#### 生活方式端点
+- `POST /lifestyle/exercise-plan` - 创建运动计划
+- `POST /lifestyle/sleep/analyze` - 睡眠分析
+- `POST /lifestyle/stress/assess` - 压力评估
+- `POST /lifestyle/activity/track` - 活动记录
+
+## 🔧 配置说明
+
+### 环境变量
+
+| 变量名 | 描述 | 默认值 |
+|--------|------|--------|
+| `MONGODB_URL` | MongoDB连接URL | `mongodb://localhost:27017` |
+| `MONGODB_DATABASE` | 数据库名称 | `soer_service` |
+| `REDIS_URL` | Redis连接URL | `redis://localhost:6379/0` |
+| `SECRET_KEY` | JWT密钥 | `your-secret-key-change-in-production` |
+| `OPENAI_API_KEY` | OpenAI API密钥 | - |
+| `ANTHROPIC_API_KEY` | Anthropic API密钥 | - |
+| `NUTRITION_API_KEY` | 营养数据库API密钥 | - |
+| `LOG_LEVEL` | 日志级别 | `INFO` |
+| `ENVIRONMENT` | 运行环境 | `development` |
+
+### 数据库配置
+
+服务支持MongoDB作为主数据库，Redis作为缓存和会话存储。
+
+#### MongoDB集合结构
+- `users` - 用户基本信息
+- `user_profiles` - 用户档案
+- `user_sessions` - 用户会话
+- `health_data` - 健康数据
+- `nutrition_data` - 营养分析数据
+- `exercise_plans` - 运动计划
+- `conversation_history` - 对话历史
+
+## 🧪 测试
+
+### 运行测试
 ```bash
 # 运行所有测试
 pytest
 
-# 运行特定测试
-pytest tests/test_basic.py
+# 运行特定测试文件
+pytest tests/test_auth_service.py
+
+# 运行性能测试
+pytest tests/test_performance.py
 
 # 生成覆盖率报告
 pytest --cov=soer_service --cov-report=html
 ```
 
-## 📚 API 文档
-
-启动服务后，访问以下地址查看 API 文档：
-
-- **Swagger UI**: http://localhost:8003/docs
-- **ReDoc**: http://localhost:8003/redoc
-- **OpenAPI JSON**: http://localhost:8003/openapi.json
-- **健康检查**: http://localhost:8003/health
-- **监控指标**: http://localhost:8003/metrics
-
-### 主要端点
-
-#### 健康检查
-```http
-GET /health
-```
-
-#### 智能体交互
-```http
-POST /api/v1/agent/chat
-GET /api/v1/agent/capabilities
-GET /api/v1/agent/history/{user_id}
-```
-
-#### 营养分析
-```http
-POST /api/v1/nutrition/analyze
-POST /api/v1/nutrition/diet-plan
-GET /api/v1/nutrition/search
-GET /api/v1/nutrition/recommendations/{user_id}
-```
-
-#### 健康管理
-```http
-POST /api/v1/health/data
-GET /api/v1/health/analysis/{user_id}
-GET /api/v1/health/dashboard/{user_id}
-GET /api/v1/health/trends/{user_id}
-```
-
-#### 生活方式
-```http
-POST /api/v1/lifestyle/exercise-plan
-POST /api/v1/lifestyle/sleep-analysis
-POST /api/v1/lifestyle/stress-assessment
-GET /api/v1/lifestyle/recommendations/{user_id}
-```
-
-## 🏗️ 项目结构
-
-```
-soer-service/
-├── soer_service/           # 主要源代码
-│   ├── __init__.py
-│   ├── main.py            # FastAPI 应用入口
-│   │   ├── __init__.py
-│   │   ├── routes.py      # 主路由器
-│   │   └── endpoints/     # 具体端点
-│   ├── config/            # 配置管理
-│   │   ├── __init__.py
-│   │   └── settings.py    # 应用设置
-│   ├── core/              # 核心功能
-│   │   ├── __init__.py
-│   │   ├── database.py    # 数据库连接
-│   │   ├── logging.py     # 日志配置
-│   │   └── monitoring.py  # 监控指标
-│   ├── models/            # 数据模型
-│   │   ├── __init__.py
-│   │   ├── agent.py       # 智能体模型
-│   │   ├── health.py      # 健康模型
-│   │   ├── lifestyle.py   # 生活方式模型
-│   │   └── nutrition.py   # 营养模型
-│   └── services/          # 业务逻辑
-│       ├── __init__.py
-│       ├── base_service.py
-│       ├── agent_service.py
-│       ├── health_service.py
-│       ├── lifestyle_service.py
-│       └── nutrition_service.py
-├── scripts/               # 脚本文件
-│   └── start.py          # 启动脚本
-├── tests/                 # 测试文件
-│   └── test_basic.py     # 基础测试
-├── .python-version       # Python 版本
-├── pyproject.toml        # 项目配置
-├── README.md             # 项目说明
-└── requirements.txt      # 依赖列表
-```
-
-## 🔧 开发指南
-
-### 代码质量
-
-项目集成了完整的代码质量工具链：
-
-```bash
-# 代码格式化
-black soer_service/
-isort soer_service/
-
-# 代码检查
-ruff check soer_service/
-mypy soer_service/
-pylint soer_service/
-
-# 运行所有质量检查
-pre-commit run --all-files
-```
-
-### 添加新功能
-
-1. **创建数据模型**: 在 `models/` 目录下定义 Pydantic 模型
-2. **实现业务逻辑**: 在 `services/` 目录下创建服务类
-3. **添加 API 端点**: 在 `api/endpoints/` 目录下创建路由
-4. **编写测试**: 在 `tests/` 目录下添加测试用例
-5. **更新文档**: 更新 README 和 API 文档
-
-### 数据库迁移
-
-```bash
-# 创建迁移文件
-alembic revision --autogenerate -m "描述"
-
-# 执行迁移
-alembic upgrade head
-
-# 回滚迁移
-alembic downgrade -1
-```
-
-## 🐳 Docker 部署
-
-### 构建镜像
-
-```bash
-docker build -t soer-service:latest .
-```
-
-### 运行容器
-
-```bash
-docker run -d \
-  --name soer-service \
-  -p 8000:8000 \
-  -e ENVIRONMENT=production \
-  -e MONGODB_URL=mongodb://mongo:27017 \
-  soer-service:latest
-```
-
-### Docker Compose
-
-```yaml
-version: '3.8'
-services:
-  soer-service:
-    build: .
-    ports:
-      - "8000:8000"
-    environment:
-      - ENVIRONMENT=production
-      - MONGODB_URL=mongodb://mongo:27017
-      - REDIS_URL=redis://redis:6379
-    depends_on:
-      - mongo
-      - redis
-  
-  mongo:
-    image: mongo:7
-    ports:
-      - "27017:27017"
-  
-  redis:
-    image: redis:7-alpine
-    ports:
-      - "6379:6379"
-```
+### 测试覆盖率
+目标测试覆盖率：90%+
 
 ## 📊 监控和日志
 
-### Prometheus 指标
-
-服务暴露以下 Prometheus 指标：
-
-- `http_requests_total`: HTTP 请求总数
-- `http_request_duration_seconds`: HTTP 请求持续时间
-- `active_connections`: 活跃连接数
-- `database_operations_total`: 数据库操作总数
-
-访问 `/metrics` 端点获取指标数据。
+### 健康检查
+- `GET /health` - 服务健康状态
+- `GET /metrics` - Prometheus指标
 
 ### 日志配置
+- 结构化日志输出
+- 多级别日志记录
+- 日志轮转和归档
 
-支持多种日志格式和输出：
+### 性能监控
+- 响应时间监控
+- 吞吐量统计
+- 错误率追踪
+- 资源使用监控
 
-- **控制台输出**: 开发环境彩色日志
-- **JSON 格式**: 生产环境结构化日志
-- **文件轮转**: 自动日志文件管理
-- **远程日志**: 支持发送到日志聚合服务
+## 🔒 安全特性
 
-## 🤝 贡献指南
+### 认证和授权
+- JWT令牌认证
+- 角色权限控制
+- 会话管理
+- 令牌刷新机制
 
-1. Fork 项目
-2. 创建功能分支 (`git checkout -b feature/amazing-feature`)
-3. 提交更改 (`git commit -m 'Add amazing feature'`)
-4. 推送到分支 (`git push origin feature/amazing-feature`)
-5. 创建 Pull Request
+### 安全防护
+- 速率限制
+- CORS配置
+- 安全头部
+- 输入验证
+
+### 数据保护
+- 密码哈希存储
+- 敏感数据加密
+- 数据脱敏
+- 审计日志
+
+## 🚀 部署指南
+
+### 生产环境部署
+
+1. **环境准备**
+```bash
+# 创建生产环境配置
+cp .env.example .env.production
+# 编辑生产环境配置
+```
+
+2. **数据库初始化**
+```bash
+# 运行数据库迁移
+python -m alembic upgrade head
+```
+
+3. **服务部署**
+```bash
+# 使用Docker部署
+docker-compose -f docker-compose.prod.yml up -d
+```
+
+4. **负载均衡配置**
+```bash
+# 配置Nginx负载均衡
+cp nginx.conf.example /etc/nginx/sites-available/soer-service
+```
+
+### 扩展部署
+
+- **水平扩展**: 支持多实例部署
+- **负载均衡**: Nginx/HAProxy配置
+- **数据库集群**: MongoDB副本集
+- **缓存集群**: Redis Cluster
+
+## 🤝 开发指南
+
+### 代码规范
+- 使用Black进行代码格式化
+- 使用isort进行导入排序
+- 使用flake8进行代码检查
+- 使用mypy进行类型检查
 
 ### 提交规范
+- 遵循Conventional Commits规范
+- 编写清晰的提交信息
+- 包含必要的测试用例
 
-使用 [Conventional Commits](https://www.conventionalcommits.org/) 规范：
+### 开发流程
+1. 创建功能分支
+2. 编写代码和测试
+3. 运行代码检查
+4. 提交代码审查
+5. 合并到主分支
 
+## 📈 性能优化
+
+### 响应时间优化
+- 异步处理
+- 数据库索引优化
+- 缓存策略
+- 连接池配置
+
+### 内存优化
+- 对象池复用
+- 垃圾回收优化
+- 内存泄漏检测
+
+### 并发优化
+- 异步IO处理
+- 连接复用
+- 请求队列管理
+
+## 🐛 故障排除
+
+### 常见问题
+
+1. **数据库连接失败**
+   - 检查MongoDB服务状态
+   - 验证连接字符串
+   - 检查网络连通性
+
+2. **Redis连接失败**
+   - 检查Redis服务状态
+   - 验证连接配置
+   - 检查内存使用情况
+
+3. **AI服务调用失败**
+   - 检查API密钥配置
+   - 验证网络连接
+   - 检查API配额限制
+
+### 日志分析
+```bash
+# 查看错误日志
+grep "ERROR" logs/soer-service.log
+
+# 查看性能日志
+grep "PERFORMANCE" logs/soer-service.log
+
+# 实时监控日志
+tail -f logs/soer-service.log
 ```
-feat: 添加新功能
-fix: 修复 bug
-docs: 更新文档
-style: 代码格式调整
-refactor: 代码重构
-test: 添加测试
-chore: 构建过程或辅助工具的变动
-```
+
+## 📞 支持和联系
+
+- **项目仓库**: [GitHub Repository]
+- **问题反馈**: [Issues]
+- **文档站点**: [Documentation]
+- **技术支持**: support@suokelife.com
 
 ## 📄 许可证
 
 本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情。
 
-## 🙏 致谢
-
-- [FastAPI](https://fastapi.tiangolo.com/) - 现代化的 Python Web 框架
-- [Pydantic](https://pydantic-docs.helpmanual.io/) - 数据验证和设置管理
-- [UV](https://github.com/astral-sh/uv) - 快速的 Python 包管理器
-- [MongoDB](https://www.mongodb.com/) - 文档数据库
-- [Redis](https://redis.io/) - 内存数据结构存储
-
-## 📞 联系方式
-
-- 项目主页: [索克生活](https://github.com/your-org/suoke-life)
-- 问题反馈: [Issues](https://github.com/your-org/suoke-life/issues)
-- 邮箱: support@suoke-life.com
-
 ---
 
-**索儿智能体** - 您的个人健康管理助手 🌱
+**索儿智能体服务** - 让健康管理更智能，让生活更美好！ 🌟

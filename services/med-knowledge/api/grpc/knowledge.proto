@@ -1,0 +1,386 @@
+syntax = "proto3";
+
+package suoke.med_knowledge.v1;
+
+option go_package = "github.com/SUOKE2024/med-knowledge/api/grpc";
+
+// 医学知识服务
+service MedKnowledgeService {
+  // 获取中医体质信息
+  rpc GetConstitutionInfo(ConstitutionRequest) returns (ConstitutionResponse);
+  
+  // 获取症状信息
+  rpc GetSymptomInfo(SymptomRequest) returns (SymptomResponse);
+  
+  // 获取穴位信息
+  rpc GetAcupointInfo(AcupointRequest) returns (AcupointResponse);
+  
+  // 获取中药信息
+  rpc GetHerbalInfo(HerbalRequest) returns (HerbalResponse);
+  
+  // 通过体质查找推荐方案
+  rpc GetRecommendationsByConstitution(ConstitutionRecommendationRequest) returns (RecommendationResponse);
+  
+  // 按关键字搜索知识库
+  rpc SearchKnowledge(SearchRequest) returns (SearchResponse);
+  
+  // 获取中医辨证路径
+  rpc GetSyndromePathways(SyndromeRequest) returns (SyndromePathwaysResponse);
+
+  // 中医基础知识
+  rpc GetConstitutionById(GetConstitutionByIdRequest) returns (Constitution);
+  rpc GetConstitutions(GetConstitutionsRequest) returns (ConstitutionList);
+  rpc GetSymptomById(GetSymptomByIdRequest) returns (Symptom);
+  rpc GetSymptoms(GetSymptomsRequest) returns (SymptomList);
+  rpc GetAcupointById(GetAcupointByIdRequest) returns (Acupoint);
+  rpc GetAcupoints(GetAcupointsRequest) returns (AcupointList);
+  rpc GetHerbById(GetHerbByIdRequest) returns (Herb);
+  rpc GetHerbs(GetHerbsRequest) returns (HerbList);
+  rpc GetSyndromeById(GetSyndromeByIdRequest) returns (Syndrome);
+  rpc GetSyndromes(GetSyndromesRequest) returns (SyndromeList);
+  
+  // 中西医结合知识
+  rpc GetBiomarkerById(GetBiomarkerByIdRequest) returns (Biomarker);
+  rpc GetBiomarkers(GetBiomarkersRequest) returns (BiomarkerList);
+  rpc GetBiomarkersByConstitution(GetBiomarkersByConstitutionRequest) returns (BiomarkerList);
+  
+  rpc GetWesternDiseaseById(GetWesternDiseaseByIdRequest) returns (WesternDisease);
+  rpc GetWesternDiseases(GetWesternDiseasesRequest) returns (WesternDiseaseList);
+  rpc GetWesternDiseasesBySyndrome(GetWesternDiseasesBySyndromeRequest) returns (WesternDiseaseList);
+  
+  rpc GetPreventionEvidenceById(GetPreventionEvidenceByIdRequest) returns (PreventionEvidence);
+  rpc GetPreventionEvidence(GetPreventionEvidenceRequest) returns (PreventionEvidenceList);
+  
+  rpc GetIntegratedTreatmentById(GetIntegratedTreatmentByIdRequest) returns (IntegratedTreatment);
+  rpc GetIntegratedTreatments(GetIntegratedTreatmentsRequest) returns (IntegratedTreatmentList);
+  
+  rpc GetLifestyleInterventionById(GetLifestyleInterventionByIdRequest) returns (LifestyleIntervention);
+  rpc GetLifestyleInterventions(GetLifestyleInterventionsRequest) returns (LifestyleInterventionList);
+  rpc GetLifestyleInterventionsByConstitution(GetLifestyleInterventionsByConstitutionRequest) returns (LifestyleInterventionList);
+
+  // 知识图谱服务
+  rpc GetGraphStatistics(GetGraphStatisticsRequest) returns (GraphStatistics);
+  rpc GetGraphVisualizationData(GetGraphVisualizationDataRequest) returns (GraphVisualizationData);
+  rpc FindPathBetweenNodes(FindPathBetweenNodesRequest) returns (PathsResult);
+  rpc GetNodeRelationships(GetNodeRelationshipsRequest) returns (NodeRelationshipsResult);
+  rpc GetKnowledgeSubgraph(GetKnowledgeSubgraphRequest) returns (Subgraph);
+  rpc GetEntityNeighbors(GetEntityNeighborsRequest) returns (EntityNeighborsResult);
+  rpc GetRelatedEntities(GetRelatedEntitiesRequest) returns (RelatedEntitiesResult);
+}
+
+// 体质请求
+message ConstitutionRequest {
+  string constitution_id = 1;
+  string constitution_name = 2; // 可选，根据名称查询
+}
+
+// 体质响应
+message ConstitutionResponse {
+  ConstitutionInfo constitution = 1;
+}
+
+// 体质信息
+message ConstitutionInfo {
+  string id = 1;
+  string name = 2; // 体质名称，如"平和质"、"气虚质"
+  string description = 3; // 体质描述
+  repeated string characteristics = 4; // 体质特征
+  repeated string symptoms = 5; // 常见症状
+  repeated string preventions = 6; // 预防建议
+  repeated string food_recommendations = 7; // 食物推荐
+  repeated string food_avoidances = 8; // 忌口食物
+  float prevalence = 9; // 人群分布比例
+}
+
+// 症状请求
+message SymptomRequest {
+  string symptom_id = 1;
+  string symptom_name = 2; // 可选，根据名称查询
+}
+
+// 症状响应
+message SymptomResponse {
+  SymptomInfo symptom = 1;
+}
+
+// 症状信息
+message SymptomInfo {
+  string id = 1;
+  string name = 2; // 症状名称
+  string description = 3; // 症状描述
+  repeated string related_syndromes = 4; // 相关证型
+  repeated string related_diseases = 5; // 相关疾病
+  repeated string related_constitutions = 6; // 相关体质
+  string western_medicine_explanation = 7; // 西医解释
+}
+
+// 穴位请求
+message AcupointRequest {
+  string acupoint_id = 1;
+  string acupoint_name = 2; // 可选，根据名称查询
+}
+
+// 穴位响应
+message AcupointResponse {
+  AcupointInfo acupoint = 1;
+}
+
+// 穴位信息
+message AcupointInfo {
+  string id = 1;
+  string name = 2; // 穴位名称，如"足三里"
+  string pinyin = 3; // 拼音，如"zusanli"
+  string meridian = 4; // 所属经络
+  string location = 5; // 位置描述
+  repeated string functions = 6; // 功效
+  repeated string indications = 7; // 主治症状
+  string manipulation = 8; // 操作方法
+  repeated string cautions = 9; // 注意事项
+}
+
+// 中药信息请求
+message HerbalRequest {
+  string herbal_id = 1;
+  string herbal_name = 2; // 可选，根据名称查询
+}
+
+// 中药信息响应
+message HerbalResponse {
+  HerbalInfo herbal = 1;
+}
+
+// 中药信息
+message HerbalInfo {
+  string id = 1;
+  string name = 2; // 中药名称
+  string pinyin = 3; // 拼音
+  string category = 4; // 分类，如"解表药"
+  string nature = 5; // 药性，如"温"
+  string flavor = 6; // 味道，如"辛"
+  string meridian_tropism = 7; // 归经
+  string efficacy = 8; // 功效
+  repeated string indications = 9; // 主治
+  string dosage = 10; // 用量
+  repeated string cautions = 11; // 禁忌
+  repeated string common_pairs = 12; // 常用配伍
+  string modern_research = 13; // 现代研究
+}
+
+// 体质推荐请求
+message ConstitutionRecommendationRequest {
+  string constitution_id = 1;
+  repeated string recommendation_types = 2; // 推荐类型，如"diet", "exercise", "lifestyle"
+}
+
+// 推荐响应
+message RecommendationResponse {
+  repeated Recommendation recommendations = 1;
+}
+
+// 推荐信息
+message Recommendation {
+  string id = 1;
+  string type = 2; // 推荐类型
+  string title = 3; // 标题
+  string description = 4; // 描述
+  float relevance_score = 5; // 相关性评分
+  string evidence = 6; // 证据来源
+}
+
+// 搜索请求
+message SearchRequest {
+  string query = 1; // 搜索关键词
+  string entity_type = 2; // 实体类型，如"constitution", "symptom", "acupoint", "herbal"
+  int32 limit = 3; // 结果数量限制
+  int32 offset = 4; // 分页偏移
+}
+
+// 搜索响应
+message SearchResponse {
+  repeated KnowledgeEntity results = 1;
+  int32 total_count = 2;
+}
+
+// 知识实体
+message KnowledgeEntity {
+  string id = 1;
+  string name = 2;
+  string entity_type = 3; // 实体类型
+  string brief = 4; // 简要描述
+  float relevance_score = 5; // 相关性评分
+}
+
+// 证型请求
+message SyndromeRequest {
+  string syndrome_id = 1;
+  string syndrome_name = 2; // 可选，根据名称查询
+}
+
+// 证型路径响应
+message SyndromePathwaysResponse {
+  SyndromeInfo syndrome = 1;
+  repeated DiagnosisPathway pathways = 2;
+}
+
+// 证型信息
+message SyndromeInfo {
+  string id = 1;
+  string name = 2; // 证型名称，如"肝郁脾虚证"
+  string description = 3; // 证型描述
+  repeated string key_symptoms = 4; // 主要症状
+  repeated string tongue_features = 5; // 舌象特征
+  repeated string pulse_features = 6; // 脉象特征
+}
+
+// 辨证路径
+message DiagnosisPathway {
+  string id = 1;
+  string name = 2; // 路径名称
+  string description = 3; // 路径描述
+  repeated DiagnosisStep steps = 4; // 诊断步骤
+}
+
+// 诊断步骤
+message DiagnosisStep {
+  int32 step_number = 1;
+  string description = 2; // 步骤描述
+  repeated DiagnosisEvidence evidence = 3; // 诊断依据
+  repeated string differential_points = 4; // 鉴别要点
+}
+
+// 诊断依据
+message DiagnosisEvidence {
+  string type = 1; // 依据类型，如"tongue", "pulse", "symptom"
+  string description = 2; // 描述
+  float weight = 3; // 权重
+}
+
+// 基础请求和响应消息
+message PaginationParams {
+  int32 limit = 1;
+  int32 offset = 2;
+}
+
+// 知识图谱服务相关消息
+message GetGraphStatisticsRequest {}
+
+message TypeCount {
+  string type = 1;
+  int32 count = 2;
+}
+
+message GraphStatistics {
+  int32 node_count = 1;
+  int32 relationship_count = 2;
+  repeated TypeCount node_types = 3;
+  repeated TypeCount relationship_types = 4;
+}
+
+message GetGraphVisualizationDataRequest {
+  int32 limit = 1;
+  repeated string node_types = 2;
+  repeated string relationship_types = 3;
+}
+
+message NodeData {
+  string id = 1;
+  string label = 2;
+  string type = 3;
+  map<string, string> properties = 4;
+  bool is_central = 5; // 是否为中心节点
+}
+
+message LinkData {
+  string source = 1;
+  string target = 2;
+  string type = 3;
+  map<string, string> properties = 4;
+}
+
+message GraphVisualizationData {
+  repeated NodeData nodes = 1;
+  repeated LinkData links = 2;
+}
+
+message FindPathBetweenNodesRequest {
+  string start_node_id = 1;
+  string end_node_id = 2;
+  int32 max_depth = 3;
+}
+
+message Path {
+  repeated NodeData nodes = 1;
+  repeated LinkData relationships = 2;
+}
+
+message PathsResult {
+  repeated Path paths = 1;
+}
+
+message GetNodeRelationshipsRequest {
+  string node_id = 1;
+  string direction = 2; // outgoing, incoming, both
+  repeated string relationship_types = 3;
+  int32 limit = 4;
+}
+
+message RelationshipData {
+  string id = 1;
+  string type = 2;
+  string direction = 3; // outgoing, incoming
+  map<string, string> properties = 4;
+}
+
+message RelatedNode {
+  NodeData node = 1;
+  RelationshipData relationship = 2;
+}
+
+message NodeRelationshipsResult {
+  NodeData central_node = 1;
+  repeated RelatedNode related_nodes = 2;
+}
+
+message GetKnowledgeSubgraphRequest {
+  string entity_type = 1;
+  string entity_id = 2;
+  int32 depth = 3;
+  int32 max_nodes = 4;
+}
+
+message Subgraph {
+  repeated NodeData nodes = 1;
+  repeated LinkData links = 2;
+}
+
+message GetEntityNeighborsRequest {
+  string entity_type = 1;
+  string entity_id = 2;
+  repeated string neighbor_types = 3;
+}
+
+message EntityNeighborsResult {
+  NodeData entity = 1;
+  repeated RelatedNode neighbors = 2;
+}
+
+message GetRelatedEntitiesRequest {
+  string entity_type = 1;
+  string entity_id = 2;
+  string target_type = 3;
+  string relationship_type = 4;
+  int32 limit = 5;
+}
+
+message RelatedEntity {
+  string id = 1;
+  string name = 2;
+  string type = 3;
+  map<string, string> properties = 4;
+  string relationship = 5;
+  string direction = 6;
+}
+
+message RelatedEntitiesResult {
+  repeated RelatedEntity entities = 1;
+} 

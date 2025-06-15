@@ -47,7 +47,7 @@
 
 ## 3. 去耦与优化建议
 - **接口标准化**：所有健康数据、诊断结果、用户信息等均采用标准数据结构（如FHIR、OpenAPI Schema）。
-- **事件驱动解耦**：跨服务编排、异步任务、通知等通过消息总线（如Kafka、RabbitMQ）实现，避免同步耦合。
+- **事件驱动解耦**：跨服务编排、异步任务、通知等通过内存事件总线实现，避免同步耦合。
 - **通用能力下沉**：用户、权限、日志、健康数据标准化等通用能力下沉为独立服务或共享库，避免重复实现。
 - **API网关统一入口**：所有外部流量通过API Gateway路由，内部服务仅暴露必要接口。
 - **文档与契约驱动开发**：所有服务接口均有OpenAPI/Proto文档，前后端/服务间协作基于契约开发。
@@ -75,19 +75,19 @@
 如需详细接口定义、服务契约示例或具体优化方案，请查阅各服务API文档或联系架构团队。
 
 ### 跨服务通信
-- 推荐采用事件流/消息队列（如Kafka、RabbitMQ等）进行解耦，提升可维护性和可扩展性。
+- 推荐采用内存事件总线进行解耦，提升可维护性和可扩展性。
 - 服务间不直接共享数据库，所有数据交互通过API或事件流完成。
 
 ---
 
 ## 6. 事件流/消息队列落地实现示例
 
-- 所有核心服务均通过事件总线（EventBus）模块对接Kafka/RabbitMQ等消息队列，实现事件发布与订阅。
+- 所有核心服务均通过事件总线（EventBus）模块实现事件发布与订阅。
 - 事件流转示例：
   1. diagnostic-services 诊断完成后，调用 `event_bus.publish('diagnosis.result', event)` 发布诊断结果事件。
   2. agent-services 通过 `event_bus.subscribe('diagnosis.result', handler)` 订阅诊断结果事件，收到后聚合并推送给前端。
   3. integration-service 通过 `event_bus.subscribe('external.healthdata.sync', handler)` 订阅外部健康数据同步事件，收到后进行格式转换与合规校验。
-- 事件总线模块支持多种后端（Kafka/RabbitMQ），可根据实际部署环境切换。
+- 事件总线模块基于内存实现，支持高性能的事件处理。
 - 推荐所有跨服务异步通信、批量任务、通知等均通过事件流实现，提升解耦性和可观测性。
 
 ### 代码示例
@@ -96,7 +96,7 @@
 # 发布事件（诊断服务）
 from services.common.messaging.event_bus import EventBus
 
-event_bus = EventBus(backend='kafka', config={})
+event_bus = EventBus()
 event_bus.publish('diagnosis.result', {'type': 'diagnosis.result', 'payload': result})
 
 # 订阅事件（智能体服务）

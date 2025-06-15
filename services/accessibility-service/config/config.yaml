@@ -1,0 +1,436 @@
+service:
+  name: accessibility-service
+  version: 0.2.0
+  host: 0.0.0.0
+  port: 50051
+  data_root: ${HOME}/data/accessibility-service
+
+models:
+  scene_model: microsoft/beit-base-patch16-224-pt22k
+  sign_language_model: mediapipe/hands
+  speech_model:
+    asr: silero-models/silero-stt-model
+    tts: silero-models/silero-tts-model
+  conversion_model: google/flan-t5-base
+
+logging:
+  level: DEBUG
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: ${HOME}/logs/accessibility-service/service.log
+
+database:
+  host: localhost
+  port: 5432
+  name: accessibility_db
+  user: accessibility_user
+  password: password  # 开发环境使用，生产环境应使用环境变量
+
+features:
+  blind_assistance:
+    enabled: false
+    max_image_size: 1024
+    confidence_threshold: 0.7
+    obstacle_detection:
+      max_distance: 10  # 最大检测距离（米）
+      min_confidence: 0.6  # 最小置信度
+
+  sign_language:
+    enabled: true
+    supported_languages:
+      - zh-CN
+      - en-US
+    model_options:
+      min_detection_confidence: 0.7
+      min_tracking_confidence: 0.5
+
+  screen_reading:
+    enabled: true
+    element_detection_threshold: 0.6
+    ocr_conf_threshold: 0.7
+    highlight_elements: true
+    auto_scroll: true
+
+  voice_assistance:
+    enabled: true
+    supported_dialects:
+      - mandarin  # 普通话
+      - cantonese  # 粤语
+      - sichuanese  # 四川话
+    asr_options:
+      sample_rate: 16000
+      timeout_seconds: 30
+
+  content_conversion:
+    enabled: true
+    supported_formats:
+      - audio
+      - simplified
+    simplification_level: 2  # 1-3，3为最简化
+
+# 后台数据采集服务配置 - 开发环境简化版
+background_collection:
+  enabled: false
+
+# 边缘计算服务配置 - 开发环境简化版
+edge_computing:
+  enabled: false
+
+# 智能体协作服务配置 - 开发环境简化版
+agent_coordination:
+  enabled: false
+  agents:
+    xiaoai:
+      enabled: true
+      host: localhost
+      port: 50052
+    xiaoke:
+      enabled: true
+      host: localhost
+      port: 50053
+    laoke:
+      enabled: true
+      host: localhost
+      port: 50054
+    soer:
+      enabled: true
+      host: localhost
+      port: 50055
+  event_bus:
+    type: memory
+    connection:
+      broker_url: none
+      topic_prefix: accessibility
+      subscription: accessibility-service
+
+# 观测性服务配置 - 开发环境简化版
+observability:
+  metrics:
+    provider: memory
+    endpoint: /metrics
+    push_gateway: http://localhost:9091  # Prometheus Push Gateway
+    interval_seconds: 60
+    labels:
+      environment: development
+      version: 0.2.0
+  tracing:
+    provider: memory
+    service_name: accessibility-service
+    endpoint: http://localhost:14268/api/traces  # Jaeger endpoint
+    sample_rate: 0.1
+  logging:
+    provider: stdout
+    structured: true
+    forward_address: http://localhost:5044  # Logstash/Fluentd endpoint
+
+# 安全与隐私配置 - 开发环境简化版
+security:
+  encryption:
+    enabled: false
+  access_control:
+    enabled: false
+
+# 容灾备份配置 - 开发环境简化版
+resilience:
+  backup:
+    enabled: false
+
+# ==================== 新增的高级功能配置 ====================
+
+# 高级分析和报告模块配置
+advanced_analytics:
+  enabled: true
+  data_collection:
+    enabled: true
+    retention_days: 90
+    anonymization: true
+  analysis:
+    real_time_enabled: true
+    batch_processing_enabled: true
+    ml_models_enabled: true
+  reporting:
+    auto_generation: true
+    report_formats:
+      - json
+      - html
+      - pdf
+    schedule:
+      daily: true
+      weekly: true
+      monthly: true
+  visualization:
+    enabled: true
+    chart_types:
+      - line
+      - bar
+      - pie
+      - heatmap
+      - scatter
+
+# 自适应学习系统配置
+adaptive_learning:
+  enabled: true
+  learning_algorithms:
+    behavior_analysis: true
+    preference_learning: true
+    pattern_recognition: true
+    recommendation_engine: true
+  personalization:
+    enabled: true
+    adaptation_speed: medium  # slow, medium, fast
+    confidence_threshold: 0.7
+  data_sources:
+    user_interactions: true
+    system_metrics: true
+    feedback_data: true
+    contextual_data: true
+
+# 安全隐私保护模块配置
+security_privacy:
+  enabled: true
+  encryption:
+    data_at_rest: true
+    data_in_transit: true
+    algorithm: AES-256
+  privacy:
+    data_anonymization: true
+    consent_management: true
+    data_minimization: true
+    right_to_deletion: true
+  access_control:
+    rbac_enabled: true
+    mfa_enabled: true
+    session_timeout: 3600  # 秒
+  audit:
+    enabled: true
+    log_retention_days: 365
+    compliance_checks: true
+
+# 多语言国际化配置
+i18n:
+  enabled: true
+  default_language: zh-CN
+  supported_languages:
+    - zh-CN
+    - zh-TW
+    - en-US
+    - ja-JP
+    - ko-KR
+    - fr-FR
+    - de-DE
+    - es-ES
+    - ar-SA
+    - hi-IN
+  translation:
+    auto_detection: true
+    cache_enabled: true
+    quality_threshold: 0.7
+  localization:
+    date_format: auto
+    number_format: auto
+    currency_format: auto
+    cultural_adaptation: true
+
+# 用户体验优化配置
+ux_optimization:
+  enabled: true
+  usability_analysis:
+    enabled: true
+    metrics_collection: true
+    issue_detection: true
+  interface_adaptation:
+    device_adaptation: true
+    user_preferences: true
+    accessibility_adaptation: true
+    performance_optimization: true
+  personalization:
+    behavior_learning: true
+    preference_modeling: true
+    recommendation_generation: true
+  optimization_targets:
+    task_completion_rate: 0.95
+    error_rate: 0.05
+    user_satisfaction: 4.5
+    accessibility_score: 0.9
+
+# ==================== 新增的增强功能配置 ====================
+
+# 桌面自动化服务配置
+desktop_automation:
+  enabled: true
+  security_policy:
+    max_actions_per_minute: 60
+    allowed_apps: []  # 空表示允许所有应用
+    blocked_areas:  # 阻止操作的屏幕区域
+      - x: 0
+        y: 0
+        width: 100
+        height: 50  # 阻止操作屏幕左上角区域
+  platforms:
+    android:
+      enabled: true
+      automation_framework: uiautomator2
+    ios:
+      enabled: true
+      automation_framework: wda
+    desktop:
+      enabled: true
+      automation_framework: pyautogui
+
+# 位置服务配置
+location_service:
+  enabled: true
+  gps_enabled: true
+  indoor_positioning_enabled: true
+  providers:
+    gps:
+      accuracy_threshold: 10.0  # 米
+      timeout_seconds: 30
+    indoor:
+      wifi_scanning: true
+      bluetooth_beacons: true
+      uwb_enabled: false
+    network:
+      ip_geolocation: true
+      wifi_networks: true
+  geofencing:
+    enabled: true
+    max_geofences_per_user: 10
+  navigation:
+    enabled: true
+    supported_modes:
+      - walking
+      - driving
+      - cycling
+      - public_transport
+      - wheelchair
+
+# 传感器管理器配置
+sensor_manager:
+  enabled: true
+  sensors:
+    accelerometer:
+      enabled: true
+      sampling_rate: 50.0  # Hz
+      buffer_size: 200
+      filters:
+        - low_pass
+      calibration:
+        offset_0: 0.0
+        offset_1: 0.0
+        offset_2: 0.0
+        scale_0: 1.0
+        scale_1: 1.0
+        scale_2: 1.0
+    
+    gyroscope:
+      enabled: true
+      sampling_rate: 50.0
+      buffer_size: 200
+      filters:
+        - low_pass
+    
+    magnetometer:
+      enabled: true
+      sampling_rate: 20.0
+      buffer_size: 100
+    
+    light:
+      enabled: true
+      sampling_rate: 5.0
+      buffer_size: 50
+    
+    proximity:
+      enabled: true
+      sampling_rate: 10.0
+      buffer_size: 50
+    
+    microphone:
+      enabled: true
+      sampling_rate: 10.0  # 音频特征采样率
+      buffer_size: 100
+    
+    temperature:
+      enabled: true
+      sampling_rate: 1.0
+      buffer_size: 60
+    
+    humidity:
+      enabled: true
+      sampling_rate: 1.0
+      buffer_size: 60
+    
+    pressure:
+      enabled: true
+      sampling_rate: 1.0
+      buffer_size: 60
+    
+    gps:
+      enabled: true
+      sampling_rate: 1.0
+      buffer_size: 100
+    
+    heart_rate:
+      enabled: false  # 需要专门的硬件
+      sampling_rate: 1.0
+      buffer_size: 60
+    
+    step_counter:
+      enabled: true
+      sampling_rate: 1.0
+      buffer_size: 1000
+    
+    orientation:
+      enabled: true
+      sampling_rate: 20.0
+      buffer_size: 100
+
+integration:
+  xiaoai_service:
+    host: localhost
+    port: 50052
+    timeout_ms: 5000
+    retry: 3
+  xiaoke_service:
+    host: localhost
+    port: 50053
+    timeout_ms: 5000
+    retry: 3
+  laoke_service:
+    host: localhost
+    port: 50054
+    timeout_ms: 5000
+    retry: 3
+  soer_service:
+    host: localhost
+    port: 50055
+    timeout_ms: 5000
+    retry: 3
+
+# 无障碍特性支持级别（可供前端配置使用）
+accessibility_levels:
+  basic:  # 基础无障碍支持
+    - screen_reading
+    - voice_assistance
+    - high_contrast
+    - text_resize
+  
+  intermediate:  # 中级无障碍支持
+    - blind_assistance
+    - simplified_content
+    - dialect_support
+    - tcm_accessibility
+  
+  advanced:  # 高级无障碍支持
+    - sign_language
+    - braille_output
+    - full_voice_control
+    - edge_computing
+    - multi_dialect
+  
+  enhanced:  # 增强无障碍支持（新增）
+    - desktop_automation
+    - location_awareness
+    - sensor_fusion
+    - spatial_navigation
+    - environmental_sensing
+    - gesture_control 

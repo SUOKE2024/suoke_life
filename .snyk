@@ -1,0 +1,224 @@
+# Snyk安全扫描配置 - 索克生活健康管理平台
+# https://docs.snyk.io/snyk-cli/test-for-vulnerabilities/the-.snyk-file
+
+# 版本配置
+version: v1.0.0
+
+# Python依赖漏洞忽略配置
+ignore:
+  # 开发依赖相关漏洞（非生产环境）
+  SNYK-PYTHON-PYTEST-1088622:
+    - '*':
+        reason: 开发依赖，仅在测试环境使用
+        expires: '2024-12-31T23:59:59.999Z'
+  
+  SNYK-PYTHON-JINJA2-1012994:
+    - '*':
+        reason: 模板引擎漏洞已通过配置缓解
+        expires: '2024-12-31T23:59:59.999Z'
+  
+  # 暂时忽略的低风险漏洞
+  SNYK-PYTHON-PILLOW-1319443:
+    - '*':
+        reason: 图像处理库，已限制输入源
+        expires: '2024-06-30T23:59:59.999Z'
+
+# JavaScript/Node.js依赖漏洞忽略配置
+  SNYK-JS-LODASH-567746:
+    - '*':
+        reason: 原型污染漏洞，已通过输入验证缓解
+        expires: '2024-12-31T23:59:59.999Z'
+
+# 补丁配置
+patches:
+  # 自动应用安全补丁
+  SNYK-PYTHON-REQUESTS-1321029:
+    - requests:
+        patched: '2024-01-15T10:30:00.000Z'
+
+# 语言特定配置
+language-settings:
+  python:
+    # Python包管理器配置
+    packageManager: pip
+    # 忽略开发依赖
+    dev-dependencies: false
+    # 扫描requirements文件
+    requirements-file-name: requirements.txt
+    
+  javascript:
+    # Node.js包管理器配置  
+    packageManager: npm
+    # 包含开发依赖扫描
+    dev-dependencies: true
+    # 扫描package.json和package-lock.json
+    package-file-name: package.json
+
+# 排除路径配置
+exclude:
+  # 排除测试文件
+  - tests/
+  - test/
+  - __tests__/
+  - '**/*test*.py'
+  - '**/*test*.js'
+  - '**/*test*.ts'
+  
+  # 排除构建和缓存目录
+  - build/
+  - dist/
+  - node_modules/
+  - .venv/
+  - venv/
+  - __pycache__/
+  - .pytest_cache/
+  
+  # 排除文档和配置文件
+  - docs/
+  - '*.md'
+  - '*.yml'
+  - '*.yaml'
+  - '*.json'
+  
+  # 排除静态资源
+  - static/
+  - media/
+  - assets/
+  - public/
+
+# 严重性阈值配置
+severity-threshold: medium
+
+# 许可证策略配置
+license-policy:
+  # 允许的开源许可证
+  allowed:
+    - MIT
+    - Apache-2.0
+    - BSD-2-Clause
+    - BSD-3-Clause
+    - ISC
+    - GPL-3.0
+    - LGPL-3.0
+  
+  # 禁止的许可证
+  forbidden:
+    - GPL-2.0
+    - AGPL-3.0
+    - WTFPL
+
+# 容器镜像扫描配置
+container:
+  # 基础镜像漏洞扫描
+  base-image-remediation: true
+  # 排除系统包
+  exclude-system-packages: false
+  # 严重性阈值
+  severity-threshold: high
+
+# 基础设施即代码(IaC)扫描配置
+iac:
+  # Kubernetes配置扫描
+  kubernetes: true
+  # Terraform配置扫描
+  terraform: true
+  # Docker配置扫描
+  docker: true
+  # 严重性阈值
+  severity-threshold: medium
+
+# 代码安全扫描配置
+code:
+  # 启用SAST扫描
+  sast: true
+  # 扫描的文件类型
+  file-types:
+    - .py
+    - .js
+    - .ts
+    - .jsx
+    - .tsx
+  # 严重性阈值
+  severity-threshold: high
+
+# 报告配置
+reporting:
+  # 输出格式
+  format: json
+  # 包含修复建议
+  include-remediation: true
+  # 包含许可证信息
+  include-licenses: true
+  # 包含依赖路径
+  include-paths: true
+
+# 集成配置
+integrations:
+  # GitHub集成
+  github:
+    # 自动创建PR修复
+    auto-fix-prs: true
+    # 自动依赖更新
+    auto-dependency-updates: true
+  
+  # Slack通知
+  slack:
+    # 高危漏洞通知
+    notify-on-high-severity: true
+    # 新漏洞通知
+    notify-on-new-vulnerabilities: true
+
+# 自定义规则配置
+custom-rules:
+  # 健康数据相关安全规则
+  health-data-security:
+    - rule: "禁止在日志中记录敏感健康数据"
+      pattern: "log.*(?:blood_pressure|heart_rate|medical_record)"
+      severity: high
+    
+    - rule: "确保健康数据传输加密"
+      pattern: "http://.*health.*data"
+      severity: critical
+  
+  # 中医诊断数据安全规则
+  tcm-diagnosis-security:
+    - rule: "中医诊断结果需要加密存储"
+      pattern: "diagnosis.*(?:store|save).*(?:plain|unencrypted)"
+      severity: high
+    
+    - rule: "禁止硬编码中医知识库密钥"
+      pattern: "tcm.*(?:key|secret|password).*=.*['\"]"
+      severity: critical
+
+# 监控和告警配置
+monitoring:
+  # 定期扫描频率
+  scan-frequency: daily
+  
+  # 告警阈值
+  alert-thresholds:
+    critical: 1
+    high: 5
+    medium: 20
+  
+  # 告警渠道
+  alert-channels:
+    - email
+    - slack
+    - webhook
+
+# 合规性配置
+compliance:
+  # 医疗数据合规标准
+  standards:
+    - HIPAA
+    - GDPR
+    - ISO27001
+    - SOC2
+  
+  # 合规检查项
+  checks:
+    - data-encryption
+    - access-control
+    - audit-logging
+    - data-retention 

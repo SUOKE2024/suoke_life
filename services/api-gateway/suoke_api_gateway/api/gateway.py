@@ -1,197 +1,335 @@
-from typing import Any, Dict, List, Optional, Union
-
+#!/usr/bin/env python3
 """
-gateway - 索克生活项目模块
+索克生活 API 网关路由
+
+处理代理请求和负载均衡。
 """
 
-import time
-
-import httpx
-from fastapi import APIRouter, HTTPException, Request, Response, status
-
+from ..core.config import get_settings
 from ..core.logging import get_logger
 from ..services.service_registry import ServiceRegistry
-
-"""
-网关路由处理器
-
-处理请求转发、负载均衡等核心网关功能。
-"""
-
-
-
+from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
+from fastapi.responses import StreamingResponse
+from typing import Any, Dict, Optional
+import httpx
+import time
 
 logger = get_logger(__name__)
 
+# 创建网关路由器
 gateway_router = APIRouter()
 
+
+async def get_service_registry() -> ServiceRegistry:
+    """获取服务注册表依赖"""
+    # 这里应该从应用状态获取
+    # 暂时返回一个新实例，实际应该是单例
+    settings = get_settings()
+    registry = ServiceRegistry(settings)
+    await registry.initialize()
+    return registry
+
+
 @gateway_router.api_route(
-    " / {service_name} / {path:path}",
-    methods = ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"],
+    "/{service_name}/{path:path}",
+    methods=["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"],
+    summary="代理请求到后端服务",
+    description="将请求代理到指定的后端服务"
 )
 async def proxy_request(
     service_name: str,
     path: str,
     request: Request,
+    registry: ServiceRegistry = Depends(get_service_registry)
 ) -> Response:
     """代理请求到后端服务"""
     start_time = time.time()
-
+    
     try:
-# 获取服务注册表
-service_registry: ServiceRegistry = request.app.state.service_registry
-
-# 获取服务实例
-service_instance = service_registry.get_service_instance(service_name)
-if not service_instance:
+        # 获取服务实例
+        instance = registry.get_service_instance(service_name)
+        if not instance:
             raise HTTPException(
-                status_code = status.HTTP_503_SERVICE_UNAVAILABLE,
-                detail = f"Service '{service_name}' is not available"
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail=f"Service '{service_name}' is not available"
             )
 
-# 构建目标URL
-target_url = f"http: / /{service_instance.host}:{service_instance.port} / {path}"
-if request.url.query:
-            target_url+=f"?{request.url.query}"
+        # 构建目标URL
+        target_url = f"http://{instance.host}:{instance.port}/{path}"
+        if request.url.query:
+            target_url += f"?{request.url.query}"
 
-# 准备请求头
-headers = dict(request.headers)
-# 移除可能导致问题的头部
-headers.pop("host", None)
-headers.pop("content - length", None)
+        # 准备请求头
+        headers = dict(request.headers)
+        # 移除可能导致问题的头部
+        headers.pop("host", None)
+        headers.pop("content-length", None)
 
-# 添加代理头
-headers["X - Forwarded - For"] = request.client.host if request.client else "unknown"
-headers["X - Forwarded - Proto"] = request.url.scheme
-headers["X - Forwarded - Host"] = request.headers.get("host", "")
-headers["X - Gateway - Service"] = service_name
+        # 读取请求体
+        body = None
+        if request.method in ["POST", "PUT", "PATCH"]:
+            body = await request.body()
 
-# 添加用户信息（如果有）
-user_id = getattr(request.state, "user_id", None)
-if user_id:
-            headers["X - User - ID"] = user_id
-
-request_id = getattr(request.state, "request_id", None)
-if request_id:
-            headers["X - Request - ID"] = request_id
-
-# 读取请求体
-body = await request.body() if request.method in ["POST", "PUT", "PATCH"] else None
-
-# 发送请求到后端服务
-async with httpx.AsyncClient(timeout = 30.0) as client:
+        # 发送代理请求
+        async with httpx.AsyncClient(timeout=30.0) as client:
             response = await client.request(
-                method = request.method,
-                url = target_url,
-                headers = headers,
-                content = body,
+                method=request.method,
+                url=target_url,
+                headers=headers,
+                content=body,
+                follow_redirects=False
             )
 
-# 记录指标
-duration = time.time() - start_time
-metrics_service = getattr(request.app.state, "metrics_service", None)
-if metrics_service:
-            metrics_service.record_service_request(
-                service = service_name,
-                method = request.method,
-                status_code = response.status_code,
-                duration = duration,
+            # 记录响应时间
+            response_time = time.time() - start_time
+            registry.record_response_time(service_name, f"{instance.host}:{instance.port}", response_time)
+
+            # 准备响应头
+            response_headers = dict(response.headers)
+            # 移除可能导致问题的头部
+            response_headers.pop("content-length", None)
+            response_headers.pop("transfer-encoding", None)
+
+            # 添加代理信息头
+            response_headers["X-Proxy-Service"] = service_name
+            response_headers["X-Proxy-Instance"] = instance.id
+            response_headers["X-Response-Time"] = str(response_time)
+
+            # 返回响应
+            return Response(
+                content=response.content,
+                status_code=response.status_code,
+                headers=response_headers,
+                media_type=response.headers.get("content-type")
             )
-
-# 准备响应头
-response_headers = dict(response.headers)
-# 移除可能导致问题的头部
-response_headers.pop("content - length", None)
-response_headers.pop("transfer - encoding", None)
-
-# 添加网关信息
-response_headers["X - Gateway - Service"] = service_name
-response_headers["X - Gateway - Instance"] = service_instance.id
-response_headers["X - Gateway - Duration"] = f"{duration:.4f}"
-
-# 返回响应
-return Response(
-            content = response.content,
-            status_code = response.status_code,
-            headers = response_headers,
-            media_type = response.headers.get("content - type"),
-)
 
     except httpx.TimeoutException:
-logger.error(
-            "Request timeout",
-            service = service_name,
-            path = path,
-            method = request.method,
-)
-raise HTTPException(
-            status_code = status.HTTP_504_GATEWAY_TIMEOUT,
-            detail = "Request timeout"
-)
+        # 标记实例为不健康
+        if 'instance' in locals():
+            registry.mark_unhealthy(service_name, f"{instance.host}:{instance.port}")
+        
+        logger.error(
+            "Proxy request timeout",
+            service=service_name,
+            path=path,
+            method=request.method,
+            duration=time.time() - start_time
+        )
+        
+        raise HTTPException(
+            status_code=status.HTTP_504_GATEWAY_TIMEOUT,
+            detail="Service request timeout"
+        )
 
     except httpx.ConnectError:
-logger.error(
-            "Connection error",
-            service = service_name,
-            path = path,
-            method = request.method,
-)
-raise HTTPException(
-            status_code = status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail = "Service connection failed"
-)
+        # 标记实例为不健康
+        if 'instance' in locals():
+            registry.mark_unhealthy(service_name, f"{instance.host}:{instance.port}")
+        
+        logger.error(
+            "Proxy request connection error",
+            service=service_name,
+            path=path,
+            method=request.method,
+            duration=time.time() - start_time
+        )
+        
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Service connection failed"
+        )
 
     except Exception as e:
-logger.error(
+        logger.error(
             "Proxy request failed",
-            service = service_name,
-            path = path,
-            method = request.method,
-            error = str(e),
-            exc_info = True,
-)
-raise HTTPException(
-            status_code = status.HTTP_502_BAD_GATEWAY,
-            detail = "Gateway error"
-)
+            service=service_name,
+            path=path,
+            method=request.method,
+            error=str(e),
+            duration=time.time() - start_time,
+            exc_info=True
+        )
+        
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Internal proxy error"
+        )
 
-@gateway_router.get(" / services")
-async def list_services(request: Request):
-    """列出所有可用服务"""
-    service_registry: ServiceRegistry = request.app.state.service_registry
-    services = service_registry.get_all_services()
 
+@gateway_router.get(
+    "/services",
+    summary="获取所有服务",
+    description="获取所有注册的服务及其实例信息"
+)
+async def list_services(
+    registry: ServiceRegistry = Depends(get_service_registry)
+) -> Dict[str, Any]:
+    """获取所有服务"""
+    services = registry.get_all_services()
+    
     result = {}
     for service_name, instances in services.items():
-healthy_instances = [inst for inst in instances if inst.healthy]
-result[service_name] = {
+        result[service_name] = {
             "total_instances": len(instances),
-            "healthy_instances": len(healthy_instances),
-            "status": "healthy" if healthy_instances else "unhealthy",
+            "healthy_instances": sum(1 for instance in instances if instance.healthy),
             "instances": [
                 {
-                    "id": inst.id,
-                    "host": inst.host,
-                    "port": inst.port,
-                    "healthy": inst.healthy,
-                    "weight": inst.weight,
+                    "id": instance.id,
+                    "host": instance.host,
+                    "port": instance.port,
+                    "healthy": instance.healthy,
+                    "weight": instance.weight,
+                    "failure_count": instance.failure_count,
+                    "last_health_check": instance.last_health_check.isoformat() if instance.last_health_check else None
                 }
-                for inst in instances
+                for instance in instances
             ]
-}
+        }
+    
+    return {
+        "services": result,
+        "total_services": len(services),
+        "timestamp": time.time()
+    }
 
-    return result
 
-@gateway_router.get(" / services / {service_name} / health")
-async def get_service_health(service_name: str, request: Request):
-    """获取特定服务的健康状态"""
-    service_registry: ServiceRegistry = request.app.state.service_registry
-    health_info = service_registry.get_service_health(service_name)
-
-    if health_info["status"]=="not_found":
-raise HTTPException(
-            status_code = status.HTTP_404_NOT_FOUND,
-            detail = f"Service '{service_name}' not found"
+@gateway_router.get(
+    "/services/{service_name}",
+    summary="获取指定服务信息",
+    description="获取指定服务的详细信息"
 )
+async def get_service_info(
+    service_name: str,
+    registry: ServiceRegistry = Depends(get_service_registry)
+) -> Dict[str, Any]:
+    """获取指定服务信息"""
+    health_info = registry.get_service_health(service_name)
+    
+    if health_info.get("status") == "not_found":
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Service '{service_name}' not found"
+        )
+    
+    return {
+        "service_name": service_name,
+        "health": health_info,
+        "timestamp": time.time()
+    }
 
-    return health_info
+
+@gateway_router.post(
+    "/services/{service_name}/instances",
+    summary="注册服务实例",
+    description="动态注册新的服务实例"
+)
+async def register_service_instance(
+    service_name: str,
+    instance_data: Dict[str, Any],
+    registry: ServiceRegistry = Depends(get_service_registry)
+) -> Dict[str, Any]:
+    """注册服务实例"""
+    try:
+        # 验证必需字段
+        required_fields = ["host", "port"]
+        for field in required_fields:
+            if field not in instance_data:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=f"Missing required field: {field}"
+                )
+
+        # 创建服务配置
+        from ..core.config import ServiceConfig
+        service_config = ServiceConfig(
+            name=service_name,
+            url=f"http://{instance_data['host']}:{instance_data['port']}",
+            weight=instance_data.get("weight", 1),
+            timeout=instance_data.get("timeout", 30.0),
+            health_check_path=instance_data.get("health_check_path", "/health")
+        )
+
+        # 注册服务
+        instance_id = await registry.register_service(
+            service_name,
+            service_config,
+            instance_data.get("instance_id")
+        )
+
+        logger.info(
+            "Service instance registered via API",
+            service=service_name,
+            instance_id=instance_id,
+            host=instance_data["host"],
+            port=instance_data["port"]
+        )
+
+        return {
+            "message": "Service instance registered successfully",
+            "service_name": service_name,
+            "instance_id": instance_id,
+            "timestamp": time.time()
+        }
+
+    except Exception as e:
+        logger.error(
+            "Failed to register service instance",
+            service=service_name,
+            error=str(e),
+            exc_info=True
+        )
+        
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to register service instance: {str(e)}"
+        )
+
+
+@gateway_router.delete(
+    "/services/{service_name}/instances/{instance_id}",
+    summary="注销服务实例",
+    description="动态注销服务实例"
+)
+async def deregister_service_instance(
+    service_name: str,
+    instance_id: str,
+    registry: ServiceRegistry = Depends(get_service_registry)
+) -> Dict[str, Any]:
+    """注销服务实例"""
+    try:
+        success = await registry.deregister_service(service_name, instance_id)
+        
+        if not success:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Service instance '{instance_id}' not found in service '{service_name}'"
+            )
+
+        logger.info(
+            "Service instance deregistered via API",
+            service=service_name,
+            instance_id=instance_id
+        )
+
+        return {
+            "message": "Service instance deregistered successfully",
+            "service_name": service_name,
+            "instance_id": instance_id,
+            "timestamp": time.time()
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(
+            "Failed to deregister service instance",
+            service=service_name,
+            instance_id=instance_id,
+            error=str(e),
+            exc_info=True
+        )
+        
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to deregister service instance: {str(e)}"
+        )

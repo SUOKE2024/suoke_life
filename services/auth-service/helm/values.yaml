@@ -1,0 +1,231 @@
+# 默认配置值
+replicaCount: 3
+
+image:
+  repository: suokelife/auth-service
+  pullPolicy: IfNotPresent
+  tag: "1.0.0"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext:
+  fsGroup: 2000
+
+securityContext:
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 8000
+  targetPort: 8000
+
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  hosts:
+    - host: auth.suokelife.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: auth-tls
+      hosts:
+        - auth.suokelife.com
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+  requests:
+    cpu: 500m
+    memory: 512Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 100
+      podAffinityTerm:
+        labelSelector:
+          matchExpressions:
+          - key: app.kubernetes.io/name
+            operator: In
+            values:
+            - suoke-auth-service
+        topologyKey: kubernetes.io/hostname
+
+# 应用配置
+config:
+  environment: production
+  logLevel: INFO
+  debug: false
+  
+  # 数据库配置
+  database:
+    host: postgresql
+    port: 5432
+    name: auth_service
+    user: auth_user
+    sslMode: require
+    maxConnections: 20
+    
+  # Redis配置
+  redis:
+    host: redis-master
+    port: 6379
+    db: 0
+    maxConnections: 10
+    
+  # JWT配置
+  jwt:
+    accessTokenExpire: 3600  # 1小时
+    refreshTokenExpire: 604800  # 7天
+    
+  # OAuth配置
+  oauth:
+    google:
+      enabled: true
+    github:
+      enabled: true
+    wechat:
+      enabled: true
+      
+  # 区块链配置
+  blockchain:
+    ethereum:
+      enabled: true
+    polygon:
+      enabled: true
+    bsc:
+      enabled: true
+      
+  # 生物识别配置
+  biometric:
+    fingerprint:
+      enabled: true
+      maxTemplates: 5
+    face:
+      enabled: true
+      maxTemplates: 3
+
+# 密钥配置（通过Secret管理）
+secrets:
+  jwtSecret: ""
+  databasePassword: ""
+  redisPassword: ""
+  oauthGoogleClientSecret: ""
+  oauthGithubClientSecret: ""
+  oauthWechatClientSecret: ""
+
+# PostgreSQL依赖配置
+postgresql:
+  enabled: true
+  auth:
+    postgresPassword: "postgres123"
+    username: "auth_user"
+    password: "auth_pass123"
+    database: "auth_service"
+  primary:
+    persistence:
+      enabled: true
+      size: 20Gi
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 1Gi
+      requests:
+        cpu: 500m
+        memory: 512Mi
+
+# Redis依赖配置
+redis:
+  enabled: true
+  auth:
+    enabled: true
+    password: "redis123"
+  master:
+    persistence:
+      enabled: true
+      size: 10Gi
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 250m
+        memory: 256Mi
+
+# 监控配置
+monitoring:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+    interval: 30s
+    path: /metrics
+  prometheusRule:
+    enabled: true
+
+# 健康检查配置
+healthCheck:
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: 8000
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+  readinessProbe:
+    httpGet:
+      path: /ready
+      port: 8000
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 3
+    failureThreshold: 3
+
+# 备份配置
+backup:
+  enabled: true
+  schedule: "0 2 * * *"  # 每天凌晨2点
+  retention: 7  # 保留7天
+
+# 网络策略
+networkPolicy:
+  enabled: true
+  ingress:
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            name: suoke-system
+      ports:
+      - protocol: TCP
+        port: 8000 

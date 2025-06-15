@@ -2,26 +2,24 @@
 tracing - 索克生活项目模块
 """
 
-import time
-import uuid
+from ..core.config import get_settings
+from ..core.logging import get_logger
 from contextlib import contextmanager
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass, asdict
 from enum import Enum
-from typing import Any, Callable, Dict, List, Optional
-
 from opentelemetry import trace
 from opentelemetry.exporter.jaeger.thrift import JaegerExporter
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from opentelemetry.instrumentation.redis import RedisInstrumentor
 from opentelemetry.instrumentation.requests import RequestsInstrumentor
-from opentelemetry.propagate import extract, inject
+from opentelemetry.propagate import inject, extract
 from opentelemetry.sdk.resources import Resource
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.trace.status import Status, StatusCode
-
-from ..core.config import get_settings
-from ..core.logging import get_logger
+from typing import Dict, Any, Optional, List, Callable
+import time
+import uuid
 
 #! / usr / bin / env python
 # - * - coding: utf - 8 - * -
@@ -56,9 +54,9 @@ class SpanContext:
     parent_span_id: Optional[str] = None
     baggage: Dict[str, str] = None
 
-    def __post_init__(self) -> None:
-"""TODO: 添加文档字符串"""
-if self.baggage is None:
+    def __post_init__(self)-> None:
+        """TODO: 添加文档字符串"""
+        if self.baggage is None:
             self.baggage = {}
 
 
@@ -77,36 +75,36 @@ class SpanData:
     status: str
     kind: str
 
-    def __post_init__(self) -> None:
-"""TODO: 添加文档字符串"""
-if self.end_time and self.start_time:
+    def __post_init__(self)-> None:
+        """TODO: 添加文档字符串"""
+        if self.end_time and self.start_time:
             self.duration = self.end_time - self.start_time
 
 
 class TracingService:
     """分布式追踪服务"""
 
-    def __init__(self) -> None:
-"""TODO: 添加文档字符串"""
-self.tracer_provider: Optional[TracerProvider] = None
-self.tracer: Optional[trace.Tracer] = None
-self.jaeger_exporter: Optional[JaegerExporter] = None
+    def __init__(self)-> None:
+        """TODO: 添加文档字符串"""
+        self.tracer_provider: Optional[TracerProvider] = None
+        self.tracer: Optional[trace.Tracer] = None
+        self.jaeger_exporter: Optional[JaegerExporter] = None
 
-# 本地存储（用于测试和调试）
-self.spans: Dict[str, SpanData] = {}
-self.traces: Dict[str, List[str]] = {}  # trace_id -> span_ids
+        # 本地存储（用于测试和调试）
+        self.spans: Dict[str, SpanData] = {}
+        self.traces: Dict[str, List[str]] = {}  # trace_id-> span_ids
 
-# 配置
-self.service_name = settings.service_name or "suoke - api - gateway"
-self.jaeger_endpoint = settings.jaeger_endpoint or "http: / /localhost:14268 / api / traces"
-self.enabled = getattr(settings, 'tracing_enabled', True)
+        # 配置
+        self.service_name = settings.service_name or "suoke - api - gateway"
+        self.jaeger_endpoint = settings.jaeger_endpoint or "http: / /localhost:14268 / api / traces"
+        self.enabled = getattr(settings, 'tracing_enabled', True)
 
-if self.enabled:
+        if self.enabled:
             self._setup_tracing()
 
-    def _setup_tracing(self) -> None:
-"""设置分布式追踪"""
-try:
+    def _setup_tracing(self)-> None:
+        """设置分布式追踪"""
+        try:
             # 创建资源
             resource = Resource.create({
                 "service.name": self.service_name,
@@ -141,13 +139,13 @@ try:
                 jaeger_endpoint = self.jaeger_endpoint,
             )
 
-except Exception as e:
+        except Exception as e:
             logger.error("Failed to setup distributed tracing", error = str(e))
             self.enabled = False
 
-    def _setup_auto_instrumentation(self) -> None:
-"""设置自动仪表化"""
-try:
+    def _setup_auto_instrumentation(self)-> None:
+        """设置自动仪表化"""
+        try:
             # FastAPI 自动仪表化
             FastAPIInstrumentor.instrument()
 
@@ -159,18 +157,18 @@ try:
 
             logger.info("Auto - instrumentation setup completed")
 
-except Exception as e:
+        except Exception as e:
             logger.warning("Failed to setup auto - instrumentation", error = str(e))
 
     def start_span(
-self,
-operation_name: str,
-parent_context: Optional[SpanContext] = None,
-kind: SpanKind = SpanKind.INTERNAL,
-tags: Optional[Dict[str, Any]] = None,
-    ) -> SpanContext:
-"""开始一个新的 Span"""
-if not self.enabled or not self.tracer:
+        self,
+        operation_name: str,
+        parent_context: Optional[SpanContext] = None,
+        kind: SpanKind = SpanKind.INTERNAL,
+        tags: Optional[Dict[str, Any]] = None,
+    )-> SpanContext:
+        """开始一个新的 Span"""
+        if not self.enabled or not self.tracer:
             # 返回模拟的 SpanContext
             return SpanContext(
                 trace_id = str(uuid.uuid4()),
@@ -178,7 +176,7 @@ if not self.enabled or not self.tracer:
                 parent_span_id = parent_context.span_id if parent_context else None,
             )
 
-try:
+        try:
             # 创建 Span
             with self.tracer.start_as_current_span(
                 operation_name,
@@ -222,7 +220,7 @@ try:
 
                 return context
 
-except Exception as e:
+        except Exception as e:
             logger.error("Failed to start span", operation_name = operation_name, error = str(e))
             return SpanContext(
                 trace_id = str(uuid.uuid4()),
@@ -231,22 +229,22 @@ except Exception as e:
             )
 
     def finish_span(
-self,
-span_context: SpanContext,
-status: StatusCode = StatusCode.OK,
-error: Optional[Exception] = None,
-    ) -> None:
-"""结束 Span"""
-if not self.enabled:
+        self,
+        span_context: SpanContext,
+        status: StatusCode = StatusCode.OK,
+        error: Optional[Exception] = None,
+    )-> None:
+        """结束 Span"""
+        if not self.enabled:
             return
 
-try:
+        try:
             # 更新本地存储的 Span 数据
             span_data = self.spans.get(span_context.span_id)
             if span_data:
                 span_data.end_time = time.time()
                 span_data.duration = span_data.end_time - span_data.start_time
-                span_data.status = "finished" if status==StatusCode.OK else "error"
+                span_data.status = "finished" if status == StatusCode.OK else "error"
 
                 if error:
                     span_data.tags["error"] = True
@@ -262,15 +260,15 @@ try:
                     current_span.record_exception(error)
                     current_span.set_attribute("error", True)
 
-except Exception as e:
+        except Exception as e:
             logger.error("Failed to finish span", error = str(e))
 
-    def add_span_tag(self, span_context: SpanContext, key: str, value: Any) -> None:
-"""添加 Span 标签"""
-if not self.enabled:
+    def add_span_tag(self, span_context: SpanContext, key: str, value: Any)-> None:
+        """添加 Span 标签"""
+        if not self.enabled:
             return
 
-try:
+        try:
             # 更新本地存储
             span_data = self.spans.get(span_context.span_id)
             if span_data:
@@ -281,26 +279,26 @@ try:
             if current_span and current_span.is_recording():
                 current_span.set_attribute(key, str(value))
 
-except Exception as e:
+        except Exception as e:
             logger.error("Failed to add span tag", error = str(e))
 
     def add_span_log(
-self,
-span_context: SpanContext,
-message: str,
-level: str = "info",
-**kwargs
-    ) -> None:
-"""添加 Span 日志"""
-if not self.enabled:
+        self,
+        span_context: SpanContext,
+        message: str,
+        level: str = "info",
+        **kwargs
+    )-> None:
+        """添加 Span 日志"""
+        if not self.enabled:
             return
 
-try:
+        try:
             log_entry = {
                 "timestamp": time.time(),
                 "level": level,
                 "message": message,
-               **kwargs
+                **kwargs
             }
 
             # 更新本地存储
@@ -313,51 +311,51 @@ try:
             if current_span and current_span.is_recording():
                 current_span.add_event(message, log_entry)
 
-except Exception as e:
+        except Exception as e:
             logger.error("Failed to add span log", error = str(e))
 
     @contextmanager
     def trace_operation(
-self,
-operation_name: str,
-parent_context: Optional[SpanContext] = None,
-kind: SpanKind = SpanKind.INTERNAL,
-tags: Optional[Dict[str, Any]] = None,
+        self,
+        operation_name: str,
+        parent_context: Optional[SpanContext] = None,
+        kind: SpanKind = SpanKind.INTERNAL,
+        tags: Optional[Dict[str, Any]] = None,
     ):
-"""追踪操作的上下文管理器"""
-span_context = self.start_span(
+        """追踪操作的上下文管理器"""
+        span_context = self.start_span(
             operation_name = operation_name,
             parent_context = parent_context,
             kind = kind,
             tags = tags,
-)
+        )
 
-try:
+        try:
             yield span_context
             self.finish_span(span_context, StatusCode.OK)
-except Exception as e:
+        except Exception as e:
             self.finish_span(span_context, StatusCode.ERROR, e)
             raise
 
-    def inject_headers(self, span_context: SpanContext) -> Dict[str, str]:
-"""注入追踪头部"""
-if not self.enabled:
+    def inject_headers(self, span_context: SpanContext)-> Dict[str, str]:
+        """注入追踪头部"""
+        if not self.enabled:
             return {}
 
-try:
+        try:
             headers = {}
             inject(headers)
             return headers
-except Exception as e:
+        except Exception as e:
             logger.error("Failed to inject headers", error = str(e))
             return {}
 
-    def extract_context(self, headers: Dict[str, str]) -> Optional[SpanContext]:
-"""从头部提取追踪上下文"""
-if not self.enabled:
+    def extract_context(self, headers: Dict[str, str])-> Optional[SpanContext]:
+        """从头部提取追踪上下文"""
+        if not self.enabled:
             return None
 
-try:
+        try:
             context = extract(headers)
             if context:
                 span = trace.get_current_span(context)
@@ -367,49 +365,49 @@ try:
                         trace_id = format(span_context_obj.trace_id, '032x'),
                         span_id = format(span_context_obj.span_id, '016x'),
                     )
-except Exception as e:
+        except Exception as e:
             logger.error("Failed to extract context", error = str(e))
 
-return None
+        return None
 
-    def get_trace(self, trace_id: str) -> Optional[List[SpanData]]:
-"""获取完整的 Trace"""
-span_ids = self.traces.get(trace_id)
-if not span_ids:
+    def get_trace(self, trace_id: str)-> Optional[List[SpanData]]:
+        """获取完整的 Trace"""
+        span_ids = self.traces.get(trace_id)
+        if not span_ids:
             return None
 
-spans = []
-for span_id in span_ids:
+        spans = []
+        for span_id in span_ids:
             span_data = self.spans.get(span_id)
             if span_data:
                 spans.append(span_data)
 
-# 按开始时间排序
-spans.sort(key = lambda x: x.start_time)
-return spans
+        # 按开始时间排序
+        spans.sort(key = lambda x: x.start_time)
+        return spans
 
-    def get_span(self, span_id: str) -> Optional[SpanData]:
-"""获取单个 Span"""
-return self.spans.get(span_id)
+    def get_span(self, span_id: str)-> Optional[SpanData]:
+        """获取单个 Span"""
+        return self.spans.get(span_id)
 
     def search_traces(
-self,
-service_name: Optional[str] = None,
-operation_name: Optional[str] = None,
-tags: Optional[Dict[str, Any]] = None,
-start_time: Optional[float] = None,
-end_time: Optional[float] = None,
-limit: int = 100,
-    ) -> List[SpanData]:
-"""搜索 Traces"""
-results = []
+        self,
+        service_name: Optional[str] = None,
+        operation_name: Optional[str] = None,
+        tags: Optional[Dict[str, Any]] = None,
+        start_time: Optional[float] = None,
+        end_time: Optional[float] = None,
+        limit: int = 100,
+    )-> List[SpanData]:
+        """搜索 Traces"""
+        results = []
 
-for span_data in self.spans.values():
+        for span_data in self.spans.values():
             # 过滤条件
-            if service_name and service_name !=self.service_name:
+            if service_name and service_name ! = self.service_name:
                 continue
 
-            if operation_name and operation_name !=span_data.operation_name:
+            if operation_name and operation_name ! = span_data.operation_name:
                 continue
 
             if start_time and span_data.start_time < start_time:
@@ -421,7 +419,7 @@ for span_data in self.spans.values():
             if tags:
                 match = True
                 for key, value in tags.items():
-                    if key not in span_data.tags or span_data.tags[key] !=value:
+                    if key not in span_data.tags or span_data.tags[key] ! = value:
                         match = False
                         break
                 if not match:
@@ -429,32 +427,32 @@ for span_data in self.spans.values():
 
             results.append(span_data)
 
-            if len(results) >=limit:
+            if len(results) > = limit:
                 break
 
-# 按开始时间倒序排序
-results.sort(key = lambda x: x.start_time, reverse = True)
-return results
+        # 按开始时间倒序排序
+        results.sort(key = lambda x: x.start_time, reverse = True)
+        return results
 
-    def get_stats(self) -> Dict[str, Any]:
-"""获取追踪统计信息"""
-total_spans = len(self.spans)
-total_traces = len(self.traces)
+    def get_stats(self)-> Dict[str, Any]:
+        """获取追踪统计信息"""
+        total_spans = len(self.spans)
+        total_traces = len(self.traces)
 
-# 计算平均持续时间
-durations = [span.duration for span in self.spans.values() if span.duration]
-avg_duration = sum(durations) / len(durations) if durations else 0
+        # 计算平均持续时间
+        durations = [span.duration for span in self.spans.values() if span.duration]
+        avg_duration = sum(durations) / len(durations) if durations else 0
 
-# 统计错误数量
-error_spans = [span for span in self.spans.values() if span.status=="error"]
-error_rate = len(error_spans) / total_spans if total_spans > 0 else 0
+        # 统计错误数量
+        error_spans = [span for span in self.spans.values() if span.status == "error"]
+        error_rate = len(error_spans) / total_spans if total_spans > 0 else 0
 
-# 统计操作类型
-operations = {}
-for span in self.spans.values():
+        # 统计操作类型
+        operations = {}
+        for span in self.spans.values():
             operations[span.operation_name] = operations.get(span.operation_name, 0) + 1
 
-return {
+        return {
             "enabled": self.enabled,
             "service_name": self.service_name,
             "total_spans": total_spans,
@@ -463,21 +461,21 @@ return {
             "error_rate": error_rate,
             "error_count": len(error_spans),
             "operations": operations,
-}
+        }
 
-    def cleanup_old_spans(self, max_age_seconds: int = 3600) -> None:
-"""清理旧的 Span 数据"""
-current_time = time.time()
-cutoff_time = current_time - max_age_seconds
+    def cleanup_old_spans(self, max_age_seconds: int = 3600)-> None:
+        """清理旧的 Span 数据"""
+        current_time = time.time()
+        cutoff_time = current_time - max_age_seconds
 
-# 找到需要删除的 Span
-spans_to_delete = []
-for span_id, span_data in self.spans.items():
+        # 找到需要删除的 Span
+        spans_to_delete = []
+        for span_id, span_data in self.spans.items():
             if span_data.start_time < cutoff_time:
                 spans_to_delete.append(span_id)
 
-# 删除旧的 Span
-for span_id in spans_to_delete:
+        # 删除旧的 Span
+        for span_id in spans_to_delete:
             span_data = self.spans[span_id]
             del self.spans[span_id]
 
@@ -485,13 +483,13 @@ for span_id in spans_to_delete:
             trace_id = span_data.trace_id
             if trace_id in self.traces:
                 self.traces[trace_id] = [
-                    sid for sid in self.traces[trace_id] if sid !=span_id
+                    sid for sid in self.traces[trace_id] if sid ! = span_id
                 ]
                 # 如果 trace 为空，删除它
                 if not self.traces[trace_id]:
                     del self.traces[trace_id]
 
-if spans_to_delete:
+        if spans_to_delete:
             logger.info(
                 "Cleaned up old spans",
                 deleted_spans = len(spans_to_delete),
@@ -503,7 +501,7 @@ if spans_to_delete:
 tracing_service = TracingService()
 
 
-def get_tracing_service() -> TracingService:
+def get_tracing_service()-> TracingService:
     """获取全局追踪服务"""
     return tracing_service
 
@@ -514,9 +512,9 @@ def trace_function(
     tags: Optional[Dict[str, Any]] = None,
 ):
     """函数装饰器，用于自动追踪函数调用"""
-    def decorator(func: Callable) -> Callable:
-"""TODO: 添加文档字符串"""
-def wrapper( * args,**kwargs):
+    def decorator(func: Callable)-> Callable:
+        """TODO: 添加文档字符串"""
+        def wrapper( * args, **kwargs):
             """TODO: 添加文档字符串"""
             op_name = operation_name or f"{func.__module__}.{func.__name__}"
 
@@ -532,7 +530,7 @@ def wrapper( * args,**kwargs):
                     tracing_service.add_span_tag(span_context, "kwargs.count", len(kwargs))
 
                 try:
-                    result = func( * args,**kwargs)
+                    result = func( * args, **kwargs)
                     tracing_service.add_span_tag(span_context, "result.type", type(result).__name__)
                     return result
                 except Exception as e:
@@ -540,5 +538,5 @@ def wrapper( * args,**kwargs):
                     tracing_service.add_span_tag(span_context, "error.type", type(e).__name__)
                     raise
 
-return wrapper
+        return wrapper
     return decorator

@@ -1,5 +1,3 @@
-from typing import Any, Dict, List, Optional, Union
-
 """
 子午流注基础数据
 

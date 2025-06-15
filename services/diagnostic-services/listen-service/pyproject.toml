@@ -58,7 +58,7 @@ dependencies = [
     
     # 数据库和缓存
     "redis>=5.2.0",
-    "aioredis>=2.0.1",
+    "redis>=5.0.0",
     "pymongo>=4.10.0",
     
     # 日志和监控

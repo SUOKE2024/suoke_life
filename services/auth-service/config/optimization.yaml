@@ -1,0 +1,203 @@
+# 性能优化配置
+performance:
+  # 数据库连接池优化
+  database:
+    pool_size: 20
+    max_overflow: 30
+    pool_timeout: 30
+    pool_recycle: 3600
+    pool_pre_ping: true
+    echo: false
+    
+  # Redis连接池优化
+  redis:
+    max_connections: 50
+    socket_timeout: 5
+    socket_connect_timeout: 5
+    health_check_interval: 30
+    retry_on_timeout: true
+    
+  # 缓存配置
+  cache:
+    default_ttl: 300
+    max_memory_size: 1000
+    strategy: "lru"
+    level: "both"
+    compress: false
+    serialize_method: "json"
+    
+  # API性能配置
+  api:
+    request_timeout: 30
+    max_request_size: 10485760  # 10MB
+    enable_compression: true
+    compression_level: 6
+    
+# 监控配置
+monitoring:
+  # 性能监控
+  performance:
+    enable_api_monitoring: true
+    enable_db_monitoring: true
+    enable_system_monitoring: true
+    metrics_retention_days: 7
+    slow_query_threshold: 1.0
+    
+  # Prometheus配置
+  prometheus:
+    enabled: true
+    port: 9090
+    path: "/metrics"
+    
+  # 日志配置
+  logging:
+    level: "INFO"
+    format: "json"
+    enable_structured_logging: true
+    log_rotation: true
+    max_file_size: "100MB"
+    backup_count: 10
+
+# 安全配置
+security:
+  # 高级安全功能
+  advanced:
+    enable_threat_detection: true
+    enable_device_tracking: true
+    enable_geo_blocking: false
+    enable_rate_limiting: true
+    
+  # IP管理
+  ip_management:
+    whitelist_enabled: true
+    blacklist_enabled: true
+    auto_blacklist_threshold: 10
+    
+  # 威胁检测
+  threat_detection:
+    sql_injection: true
+    xss_detection: true
+    path_traversal: true
+    command_injection: true
+    
+  # 速率限制
+  rate_limiting:
+    window_seconds: 300
+    max_requests: 100
+    lockout_duration: 900
+    
+  # 设备指纹
+  device_fingerprinting:
+    enabled: true
+    trust_threshold: 0.7
+    require_mfa_for_new_device: true
+
+# 优化策略
+optimization:
+  # 查询优化
+  database_queries:
+    enable_query_cache: true
+    cache_ttl: 600
+    enable_prepared_statements: true
+    enable_connection_pooling: true
+    
+  # 索引优化
+  database_indexes:
+    auto_create_indexes: true
+    analyze_slow_queries: true
+    index_usage_monitoring: true
+    
+  # 缓存策略
+  caching:
+    user_cache_ttl: 600
+    session_cache_ttl: 1800
+    permission_cache_ttl: 3600
+    statistics_cache_ttl: 300
+    
+  # 预加载策略
+  preloading:
+    enable_cache_warmup: true
+    warmup_delay_seconds: 10
+    preload_user_statistics: true
+    preload_permissions: true
+
+# 扩展配置
+scaling:
+  # 水平扩展
+  horizontal:
+    enable_load_balancing: true
+    max_instances: 10
+    auto_scaling: true
+    cpu_threshold: 70
+    memory_threshold: 80
+    
+  # 垂直扩展
+  vertical:
+    max_memory: "2GB"
+    max_cpu_cores: 4
+    
+# 健康检查
+health_checks:
+  # 检查间隔
+  intervals:
+    database: 30
+    redis: 30
+    external_services: 60
+    
+  # 超时配置
+  timeouts:
+    database: 5
+    redis: 3
+    external_services: 10
+    
+  # 重试配置
+  retries:
+    max_attempts: 3
+    backoff_factor: 2
+    
+# 告警配置
+alerting:
+  # 性能告警
+  performance:
+    response_time_threshold: 1.0
+    error_rate_threshold: 5.0
+    cpu_usage_threshold: 80.0
+    memory_usage_threshold: 85.0
+    
+  # 安全告警
+  security:
+    threat_level_threshold: "high"
+    failed_login_threshold: 5
+    suspicious_ip_threshold: 10
+    
+  # 通知渠道
+  notifications:
+    email:
+      enabled: true
+      smtp_server: "smtp.example.com"
+      smtp_port: 587
+      username: "alerts@suokelife.com"
+      
+    slack:
+      enabled: false
+      webhook_url: ""
+      channel: "#alerts"
+      
+    webhook:
+      enabled: false
+      url: ""
+      
+# 备份和恢复
+backup:
+  # 数据备份
+  database:
+    enabled: true
+    schedule: "0 2 * * *"  # 每天凌晨2点
+    retention_days: 30
+    compression: true
+    
+  # 配置备份
+  configuration:
+    enabled: true
+    schedule: "0 3 * * 0"  # 每周日凌晨3点
+    retention_weeks: 12 

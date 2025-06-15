@@ -1,0 +1,371 @@
+---
+# Elasticsearch Master节点
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: elasticsearch-master
+  namespace: suoke-life
+spec:
+  serviceName: elasticsearch-master-headless
+  replicas: 3
+  selector:
+    matchLabels:
+      app: elasticsearch
+      role: master
+  template:
+    metadata:
+      labels:
+        app: elasticsearch
+        role: master
+    spec:
+      initContainers:
+      - name: increase-vm-max-map
+        image: busybox:1.35
+        command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
+        securityContext:
+          privileged: true
+      - name: increase-fd-ulimit
+        image: busybox:1.35
+        command: ['sh', '-c', 'ulimit -n 65536']
+        securityContext:
+          privileged: true
+      containers:
+      - name: elasticsearch
+        image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+        ports:
+        - containerPort: 9200
+          name: http
+        - containerPort: 9300
+          name: transport
+        env:
+        - name: node.name
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: cluster.name
+          value: "suoke-life-es-cluster"
+        - name: discovery.seed_hosts
+          value: "elasticsearch-master-headless.suoke-life.svc.cluster.local"
+        - name: cluster.initial_master_nodes
+          value: "elasticsearch-master-0,elasticsearch-master-1,elasticsearch-master-2"
+        - name: node.roles
+          value: "master"
+        - name: ES_JAVA_OPTS
+          value: "-Xms1g -Xmx1g"
+        - name: xpack.security.enabled
+          value: "false"
+        - name: xpack.monitoring.collection.enabled
+          value: "true"
+        - name: network.host
+          value: "0.0.0.0"
+        - name: http.port
+          value: "9200"
+        - name: transport.port
+          value: "9300"
+        volumeMounts:
+        - name: elasticsearch-data
+          mountPath: /usr/share/elasticsearch/data
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /_cluster/health
+            port: 9200
+          initialDelaySeconds: 60
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /_cluster/health?wait_for_status=yellow&timeout=5s
+            port: 9200
+          initialDelaySeconds: 30
+          periodSeconds: 10
+  volumeClaimTemplates:
+  - metadata:
+      name: elasticsearch-data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 20Gi
+
+---
+# Elasticsearch Data节点
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: elasticsearch-data
+  namespace: suoke-life
+spec:
+  serviceName: elasticsearch-data-headless
+  replicas: 3
+  selector:
+    matchLabels:
+      app: elasticsearch
+      role: data
+  template:
+    metadata:
+      labels:
+        app: elasticsearch
+        role: data
+    spec:
+      initContainers:
+      - name: increase-vm-max-map
+        image: busybox:1.35
+        command: ['sh', '-c', 'sysctl -w vm.max_map_count=262144']
+        securityContext:
+          privileged: true
+      containers:
+      - name: elasticsearch
+        image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+        ports:
+        - containerPort: 9200
+          name: http
+        - containerPort: 9300
+          name: transport
+        env:
+        - name: node.name
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: cluster.name
+          value: "suoke-life-es-cluster"
+        - name: discovery.seed_hosts
+          value: "elasticsearch-master-headless.suoke-life.svc.cluster.local"
+        - name: cluster.initial_master_nodes
+          value: "elasticsearch-master-0,elasticsearch-master-1,elasticsearch-master-2"
+        - name: node.roles
+          value: "data,ingest"
+        - name: ES_JAVA_OPTS
+          value: "-Xms2g -Xmx2g"
+        - name: xpack.security.enabled
+          value: "false"
+        - name: xpack.monitoring.collection.enabled
+          value: "true"
+        - name: network.host
+          value: "0.0.0.0"
+        volumeMounts:
+        - name: elasticsearch-data
+          mountPath: /usr/share/elasticsearch/data
+        resources:
+          requests:
+            memory: "4Gi"
+            cpu: "1000m"
+          limits:
+            memory: "4Gi"
+            cpu: "2000m"
+        livenessProbe:
+          httpGet:
+            path: /_cluster/health
+            port: 9200
+          initialDelaySeconds: 60
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /_cluster/health?wait_for_status=yellow&timeout=5s
+            port: 9200
+          initialDelaySeconds: 30
+          periodSeconds: 10
+  volumeClaimTemplates:
+  - metadata:
+      name: elasticsearch-data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 100Gi
+
+---
+# Elasticsearch Master Headless Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: elasticsearch-master-headless
+  namespace: suoke-life
+spec:
+  clusterIP: None
+  selector:
+    app: elasticsearch
+    role: master
+  ports:
+  - port: 9200
+    name: http
+  - port: 9300
+    name: transport
+
+---
+# Elasticsearch Data Headless Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: elasticsearch-data-headless
+  namespace: suoke-life
+spec:
+  clusterIP: None
+  selector:
+    app: elasticsearch
+    role: data
+  ports:
+  - port: 9200
+    name: http
+  - port: 9300
+    name: transport
+
+---
+# Elasticsearch Client Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: elasticsearch
+  namespace: suoke-life
+spec:
+  selector:
+    app: elasticsearch
+  ports:
+  - port: 9200
+    name: http
+    targetPort: 9200
+  type: ClusterIP
+
+---
+# Kibana部署
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kibana
+  namespace: suoke-life
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kibana
+  template:
+    metadata:
+      labels:
+        app: kibana
+    spec:
+      containers:
+      - name: kibana
+        image: docker.elastic.co/kibana/kibana:8.11.0
+        ports:
+        - containerPort: 5601
+          name: http
+        env:
+        - name: ELASTICSEARCH_HOSTS
+          value: "http://elasticsearch.suoke-life.svc.cluster.local:9200"
+        - name: SERVER_NAME
+          value: "kibana.suoke.life"
+        - name: SERVER_HOST
+          value: "0.0.0.0"
+        - name: XPACK_SECURITY_ENABLED
+          value: "false"
+        - name: XPACK_MONITORING_ENABLED
+          value: "true"
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /api/status
+            port: 5601
+          initialDelaySeconds: 60
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /api/status
+            port: 5601
+          initialDelaySeconds: 30
+          periodSeconds: 10
+
+---
+# Kibana Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: kibana
+  namespace: suoke-life
+spec:
+  selector:
+    app: kibana
+  ports:
+  - port: 5601
+    name: http
+    targetPort: 5601
+  type: LoadBalancer
+
+---
+# Logstash部署
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logstash
+  namespace: suoke-life
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: logstash
+  template:
+    metadata:
+      labels:
+        app: logstash
+    spec:
+      containers:
+      - name: logstash
+        image: docker.elastic.co/logstash/logstash:8.11.0
+        ports:
+        - containerPort: 5044
+          name: beats
+        - containerPort: 9600
+          name: http
+        env:
+        - name: LS_JAVA_OPTS
+          value: "-Xms1g -Xmx1g"
+        - name: ELASTICSEARCH_HOSTS
+          value: "http://elasticsearch.suoke-life.svc.cluster.local:9200"
+        volumeMounts:
+        - name: logstash-config
+          mountPath: /usr/share/logstash/pipeline
+        - name: logstash-settings
+          mountPath: /usr/share/logstash/config
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+      volumes:
+      - name: logstash-config
+        configMap:
+          name: logstash-config
+      - name: logstash-settings
+        configMap:
+          name: logstash-settings
+
+---
+# Logstash Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: logstash
+  namespace: suoke-life
+spec:
+  selector:
+    app: logstash
+  ports:
+  - port: 5044
+    name: beats
+    targetPort: 5044
+  - port: 9600
+    name: http
+    targetPort: 9600
+  type: ClusterIP 

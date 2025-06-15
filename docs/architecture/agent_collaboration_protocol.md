@@ -42,7 +42,7 @@ stateDiagram-v2
 ---
 
 ## 4. 事件驱动与分布式协作
-- 所有任务、状态、结果、冲突等均通过事件总线（Kafka/RabbitMQ）驱动：
+- 所有任务、状态、结果、冲突等均通过内存事件总线驱动：
   - `agent.task.assign`：任务分配
   - `agent.task.accept`：Agent接收任务
   - `agent.task.result`：任务结果

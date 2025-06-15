@@ -1,0 +1,1317 @@
+{
+  "timestamp": "2025-06-15T11:10:24.533769",
+  "fixed_files": [],
+  "security_fixes": [
+    {
+      "file": "internal/service/predictive_maintenance.py",
+      "issue": "pickle使用",
+      "fix": "替换为json"
+    },
+    {
+      "file": "internal/service/cache_manager.py",
+      "issue": "pickle使用",
+      "fix": "替换为json"
+    },
+    {
+      "file": "test_security_fixes.py",
+      "issue": "明文密码存储",
+      "fix": "使用环境变量"
+    }
+  ],
+  "error_handling_fixes": [
+    {
+      "file": "demo_optimizations.py",
+      "fix": "改进异常处理和日志记录"
+    },
+    {
+      "file": "test_accessibility_service_validation.py",
+      "fix": "改进异常处理和日志记录"
+    },
+    {
+      "file": "pkg/utils/platform_checker.py",
+      "fix": "改进异常处理和日志记录"
+    },
+    {
+      "file": "internal/service/config_hot_reload.py",
+      "fix": "改进异常处理和日志记录"
+    },
+    {
+      "file": "internal/service/predictive_maintenance.py",
+      "fix": "改进异常处理和日志记录"
+    },
+    {
+      "file": "internal/service/cache_manager.py",
+      "fix": "改进异常处理和日志记录"
+    },
+    {
+      "file": "internal/service/performance_monitor.py",
+      "fix": "改进异常处理和日志记录"
+    },
+    {
+      "file": "internal/service/model_manager.py",
+      "fix": "改进异常处理和日志记录"
+    },
+    {
+      "file": "internal/service/edge_computing.py",
+      "fix": "改进异常处理和日志记录"
+    },
+    {
+      "file": "internal/service/implementations/eye_tracking_impl.py",
+      "fix": "改进异常处理和日志记录"
+    },
+    {
+      "file": "internal/service/implementations/haptic_feedback_service.py",
+      "fix": "改进异常处理和日志记录"
+    }
+  ],
+  "type_annotation_fixes": [
+    {
+      "file": "quick_fixes.py",
+      "functions": [
+        "main"
+      ]
+    },
+    {
+      "file": "setup_environment.py",
+      "functions": [
+        "main",
+        "create_activation_script"
+      ]
+    },
+    {
+      "file": "quick_validation.py",
+      "functions": [
+        "main",
+        "log_result",
+        "check_python_version",
+        "check_required_files",
+        "check_basic_dependencies",
+        "check_syntax",
+        "check_imports",
+        "check_config_file",
+        "run_basic_tests",
+        "run_all_checks"
+      ]
+    },
+    {
+      "file": "quick_start.py",
+      "functions": [
+        "print_banner",
+        "print_status",
+        "show_service_info",
+        "show_technical_info"
+      ]
+    },
+    {
+      "file": "demo_optimizations.py",
+      "functions": [
+        "cleanup_temp_files",
+        "on_config_change"
+      ]
+    },
+    {
+      "file": "test_midterm_optimizations.py",
+      "functions": [
+        "log_result",
+        "print_summary"
+      ]
+    },
+    {
+      "file": "code_quality_improvements.py",
+      "functions": [
+        "main"
+      ]
+    },
+    {
+      "file": "cleanup_redundant_files.py",
+      "functions": [
+        "main"
+      ]
+    },
+    {
+      "file": "demo_midterm_comprehensive.py",
+      "functions": [
+        "print_header",
+        "print_section",
+        "print_final_summary"
+      ]
+    },
+    {
+      "file": "test_improvements.py",
+      "functions": [
+        "test_error_handling",
+        "test_performance_monitoring",
+        "test_integration",
+        "test_function",
+        "integrated_function"
+      ]
+    },
+    {
+      "file": "simple_validation_test.py",
+      "functions": [
+        "print_test_header",
+        "test_basic_imports",
+        "test_config_functionality",
+        "test_app_creation",
+        "test_performance_basic"
+      ]
+    },
+    {
+      "file": "test_agent_integration.py",
+      "functions": [
+        "print_test_results",
+        "cleanup"
+      ]
+    },
+    {
+      "file": "setup_uv_environment.py",
+      "functions": [
+        "main",
+        "log_step",
+        "check_system_requirements",
+        "install_uv",
+        "create_virtual_environment",
+        "install_dependencies",
+        "install_development_tools",
+        "generate_activation_script",
+        "generate_environment_info",
+        "setup_environment"
+      ]
+    },
+    {
+      "file": "fix_module_imports.py",
+      "functions": [
+        "fix_sign_language_module",
+        "fix_voice_assistance_module",
+        "fix_screen_reading_module",
+        "fix_content_conversion_module",
+        "fix_translation_module",
+        "fix_settings_manager_module",
+        "main"
+      ]
+    },
+    {
+      "file": "test_short_term_optimizations.py",
+      "functions": [
+        "cleanup_temp_files",
+        "print_test_summary",
+        "on_config_change"
+      ]
+    },
+    {
+      "file": "test_accessibility_service_validation.py",
+      "functions": [
+        "add_result",
+        "generate_recommendations",
+        "save_report"
+      ]
+    },
+    {
+      "file": "test/setup_mockserver.py",
+      "functions": [
+        "wait_for_mockserver",
+        "create_expectation",
+        "setup_health_data_service_mock",
+        "setup_agent_service_mock",
+        "setup_user_service_mock",
+        "setup_alert_service_mock",
+        "main"
+      ]
+    },
+    {
+      "file": "test/test_advanced_modules_simple.py",
+      "functions": [
+        "config",
+        "test_all_modules_initialization",
+        "test_all_modules_stats",
+        "test_module_compatibility"
+      ]
+    },
+    {
+      "file": "test/run_tests.py",
+      "functions": [
+        "run_command",
+        "run_unit_tests",
+        "run_integration_tests",
+        "run_performance_tests",
+        "run_e2e_tests",
+        "run_all_tests",
+        "run_coverage_tests",
+        "run_specific_test",
+        "check_dependencies",
+        "generate_test_report",
+        "main"
+      ]
+    },
+    {
+      "file": "test/test_enhanced_capabilities.py",
+      "functions": [
+        "config",
+        "desktop_service",
+        "test_service_initialization",
+        "test_security_check",
+        "test_action_history_recording",
+        "test_get_stats",
+        "config",
+        "location_service",
+        "test_service_initialization",
+        "test_calculate_distance",
+        "test_add_geofence",
+        "test_get_location_history",
+        "test_get_stats",
+        "config",
+        "sensor_manager",
+        "test_service_initialization",
+        "test_get_latest_reading",
+        "test_get_readings",
+        "test_apply_calibration",
+        "test_register_callback",
+        "test_get_all_sensor_status",
+        "test_get_stats",
+        "full_config",
+        "test_all_services_initialization",
+        "test_callback"
+      ]
+    },
+    {
+      "file": "test/test_scientific_computing_enhanced.py",
+      "functions": [
+        "test_manager_initialization",
+        "test_library_availability_check",
+        "setup_method",
+        "test_analyze_sensor_data",
+        "test_detect_anomalies",
+        "setup_method",
+        "test_filter_signal",
+        "test_analyze_frequency_spectrum",
+        "setup_method",
+        "test_train_classifier",
+        "test_cluster_data",
+        "setup_method",
+        "test_create_line_plot",
+        "test_create_histogram",
+        "test_create_scatter_plot",
+        "test_create_boxplot",
+        "setup_method",
+        "test_service_initialization",
+        "test_get_service_status",
+        "test_process_data_analyze",
+        "test_process_data_detect_anomalies",
+        "test_process_data_filter",
+        "test_process_data_spectrum",
+        "test_process_data_cluster",
+        "test_process_data_plot",
+        "test_invalid_operation",
+        "test_singleton_pattern",
+        "setup_method",
+        "test_empty_data_handling",
+        "test_invalid_data_handling",
+        "setup_method",
+        "test_complex_signal_processing",
+        "test_multi_dimensional_analysis",
+        "setup_method",
+        "test_large_data_processing",
+        "setup_method",
+        "test_sensor_data_integration",
+        "test_accessibility_feature_support",
+        "setup_method",
+        "test_all_library_categories"
+      ]
+    },
+    {
+      "file": "test/test_core_modules.py",
+      "functions": [
+        "setUp",
+        "test_config_loading",
+        "test_version_property",
+        "test_service_config",
+        "test_features_config",
+        "setUp",
+        "test_module_initialization",
+        "test_process_request",
+        "setUp",
+        "test_module_initialization",
+        "test_process_voice_command",
+        "setUp",
+        "test_module_initialization",
+        "setUp",
+        "test_module_initialization",
+        "test_simplify_content"
+      ]
+    },
+    {
+      "file": "test/mock_translation_test.py",
+      "functions": [
+        "translate_text",
+        "translate_speech",
+        "create_streaming_session",
+        "process_streaming_chunk",
+        "get_session_status",
+        "get_supported_language_pairs",
+        "cleanup_inactive_sessions",
+        "setUp",
+        "test_init",
+        "test_translate_text",
+        "test_translate_speech",
+        "test_streaming_session",
+        "test_supported_language_pairs"
+      ]
+    },
+    {
+      "file": "test/test_scientific_computing.py",
+      "functions": [
+        "test_numpy_support",
+        "test_scipy_support",
+        "test_pandas_support",
+        "test_opencv_support",
+        "test_scikit_learn_support",
+        "test_matplotlib_support",
+        "test_librosa_support",
+        "test_geopy_support",
+        "test_integrated_scientific_workflow",
+        "test_all_scientific_libraries"
+      ]
+    },
+    {
+      "file": "test/test_translation_service.py",
+      "functions": [
+        "setUp",
+        "test_init",
+        "test_supported_languages",
+        "test_get_supported_language_pairs",
+        "test_translate_text",
+        "test_translate_speech",
+        "test_create_streaming_session",
+        "test_process_streaming_chunk",
+        "test_get_session_status",
+        "test_cleanup_inactive_sessions"
+      ]
+    },
+    {
+      "file": "test/test_integration_suite.py",
+      "functions": [
+        "record_test_result",
+        "save_report",
+        "test_task",
+        "cpu_intensive_task"
+      ]
+    },
+    {
+      "file": "test/test_service_implementations.py",
+      "functions": [
+        "mock_model_manager",
+        "mock_cache_manager",
+        "test_service_imports",
+        "mock_model_manager",
+        "mock_cache_manager"
+      ]
+    },
+    {
+      "file": "test/integration_test.py",
+      "functions": [
+        "run_tests",
+        "get",
+        "blind_assistance",
+        "sign_language_recognition",
+        "screen_reading",
+        "register_accessibility_features",
+        "process_accessibility_request",
+        "setUpClass",
+        "test_agent_registration",
+        "test_xiaoai_integration",
+        "test_xiaoke_integration",
+        "test_laoke_integration",
+        "test_soer_integration"
+      ]
+    },
+    {
+      "file": "test/test_advanced_modules.py",
+      "functions": [
+        "config",
+        "analytics",
+        "test_initialization",
+        "config",
+        "learning",
+        "test_initialization",
+        "config",
+        "security",
+        "test_initialization",
+        "config",
+        "i18n",
+        "test_initialization",
+        "config",
+        "ux_optimizer",
+        "test_initialization",
+        "full_config",
+        "test_all_modules_stats"
+      ]
+    },
+    {
+      "file": "config/enhanced_config.py",
+      "functions": [
+        "reload_config",
+        "on_modified",
+        "load_config",
+        "add_reload_callback",
+        "remove_reload_callback",
+        "set",
+        "save_config",
+        "cleanup",
+        "extract_env_vars"
+      ]
+    },
+    {
+      "file": "scripts/security_hardening.py",
+      "functions": [
+        "main"
+      ]
+    },
+    {
+      "file": "scripts/code_quality_check.py",
+      "functions": [
+        "main"
+      ]
+    },
+    {
+      "file": "scripts/generate_api_docs.py",
+      "functions": [
+        "main",
+        "generate_all_docs",
+        "generate_openapi_spec",
+        "generate_markdown_docs",
+        "generate_postman_collection",
+        "generate_sdk_examples"
+      ]
+    },
+    {
+      "file": "scripts/test_coverage_enhancer.py",
+      "functions": [
+        "main"
+      ]
+    },
+    {
+      "file": "scripts/install_scientific_libraries.py",
+      "functions": [
+        "main"
+      ]
+    },
+    {
+      "file": "pkg/utils/dependency_manager.py",
+      "functions": [
+        "optional_import",
+        "require_dependency",
+        "print_status",
+        "wrapper",
+        "wrapper"
+      ]
+    },
+    {
+      "file": "pkg/utils/platform_checker.py",
+      "functions": [
+        "print_report"
+      ]
+    },
+    {
+      "file": "command/server/main.py",
+      "functions": [
+        "setup_logging",
+        "parse_args",
+        "create_server",
+        "handle_sigterm",
+        "main"
+      ]
+    },
+    {
+      "file": "internal/integration/agent_coordination.py",
+      "functions": [
+        "subscribe",
+        "publish",
+        "register_capabilities",
+        "publish_capability_updates"
+      ]
+    },
+    {
+      "file": "internal/platform/__init__.py",
+      "functions": [
+        "init_platform",
+        "get_platform",
+        "is_mobile",
+        "is_desktop"
+      ]
+    },
+    {
+      "file": "internal/utils/config_manager.py",
+      "functions": [
+        "add_watcher",
+        "remove_watcher"
+      ]
+    },
+    {
+      "file": "internal/observability/monitoring.py",
+      "functions": [
+        "end_span",
+        "add_event",
+        "set_span_status",
+        "log",
+        "debug",
+        "info",
+        "warning",
+        "error",
+        "critical",
+        "setup",
+        "record_request_metrics",
+        "record_model_inference_metrics",
+        "record_accessibility_usage",
+        "end_trace",
+        "log_structured"
+      ]
+    },
+    {
+      "file": "internal/resilience/disaster_recovery.py",
+      "functions": [
+        "start",
+        "stop"
+      ]
+    },
+    {
+      "file": "internal/service/dependency_injection.py",
+      "functions": [
+        "inject",
+        "decorator"
+      ]
+    },
+    {
+      "file": "internal/service/config_hot_reload.py",
+      "functions": [
+        "config_reload_on_change",
+        "update_metadata",
+        "remove_config_file",
+        "add_change_callback",
+        "remove_change_callback",
+        "start",
+        "stop",
+        "decorator",
+        "new_init",
+        "on_config_change",
+        "on_config_change"
+      ]
+    },
+    {
+      "file": "internal/service/api_gateway.py",
+      "functions": [
+        "clear_cache",
+        "put",
+        "clear",
+        "add_route",
+        "add_route",
+        "add_middleware"
+      ]
+    },
+    {
+      "file": "internal/service/enhanced_notification_channels.py",
+      "functions": [
+        "setup_notification_channels",
+        "mark_sent",
+        "add_channel",
+        "remove_channel"
+      ]
+    },
+    {
+      "file": "internal/service/predictive_maintenance.py",
+      "functions": [
+        "train_models",
+        "load_models",
+        "train_prediction_models"
+      ]
+    },
+    {
+      "file": "internal/service/database_pool_optimizer.py",
+      "functions": [
+        "cache_query_result",
+        "record_query_metrics"
+      ]
+    },
+    {
+      "file": "internal/service/config_manager.py",
+      "functions": [
+        "reload_config",
+        "dataclass_to_dict"
+      ]
+    },
+    {
+      "file": "internal/service/realtime_response.py",
+      "functions": [
+        "register_handler",
+        "add_middleware",
+        "add_processor",
+        "remove_processor",
+        "put",
+        "invalidate",
+        "clear",
+        "register_custom_handler",
+        "add_middleware"
+      ]
+    },
+    {
+      "file": "internal/service/personalization_engine.py",
+      "functions": [
+        "record_user_feedback"
+      ]
+    },
+    {
+      "file": "internal/service/sensor_manager.py",
+      "functions": [
+        "register_callback",
+        "unregister_callback"
+      ]
+    },
+    {
+      "file": "internal/service/monitoring.py",
+      "functions": [
+        "record_request_time",
+        "record_error",
+        "record_request_metrics"
+      ]
+    },
+    {
+      "file": "internal/service/performance_monitor.py",
+      "functions": [
+        "finish",
+        "set_tag",
+        "log",
+        "record_counter",
+        "record_gauge",
+        "record_histogram",
+        "record_timer",
+        "finish_span",
+        "add_span_processor",
+        "trace",
+        "timer",
+        "counter",
+        "decorator",
+        "decorator",
+        "decorator",
+        "sync_wrapper",
+        "sync_wrapper",
+        "sync_wrapper"
+      ]
+    },
+    {
+      "file": "internal/service/web_dashboard.py",
+      "functions": [
+        "setup_templates",
+        "setup_routes",
+        "disconnect",
+        "set_health_manager",
+        "set_performance_monitor",
+        "set_alert_manager"
+      ]
+    },
+    {
+      "file": "internal/service/crisis_alert.py",
+      "functions": [
+        "register_analyzer",
+        "register_alert_handler",
+        "start",
+        "stop",
+        "integrate_with_agents",
+        "request_agent_assistance",
+        "wrapped_cache_data"
+      ]
+    },
+    {
+      "file": "internal/service/health_monitor.py",
+      "functions": [
+        "increment_counter",
+        "set_gauge",
+        "record_histogram",
+        "record_timer",
+        "add_alert_rule",
+        "add_alert_handler",
+        "add_health_check",
+        "remove_health_check"
+      ]
+    },
+    {
+      "file": "internal/service/temporal_awareness.py",
+      "functions": [
+        "add_time_event"
+      ]
+    },
+    {
+      "file": "internal/service/ai_coordinator.py",
+      "functions": [
+        "set_module_references"
+      ]
+    },
+    {
+      "file": "internal/service/security_privacy.py",
+      "functions": [
+        "bcrypt_hashpw",
+        "bcrypt_gensalt",
+        "bcrypt_checkpw",
+        "generate_key",
+        "encrypt",
+        "decrypt",
+        "encode",
+        "decode",
+        "ip_address",
+        "is_private"
+      ]
+    },
+    {
+      "file": "internal/service/error_handling.py",
+      "functions": [
+        "error_handler",
+        "async_error_handler",
+        "log_error_info",
+        "handle_configuration_error",
+        "handle_model_loading_error",
+        "handle_network_error",
+        "handle_data_processing_error",
+        "decorator",
+        "decorator",
+        "wrapper"
+      ]
+    },
+    {
+      "file": "internal/service/background_collection.py",
+      "functions": [
+        "setup_encryption",
+        "set_crisis_alert_service",
+        "start",
+        "stop"
+      ]
+    },
+    {
+      "file": "internal/service/adaptive_learning.py",
+      "functions": [
+        "train_test_split",
+        "accuracy_score",
+        "mean_squared_error",
+        "array",
+        "mean",
+        "std",
+        "to_datetime",
+        "fit",
+        "predict",
+        "predict_proba",
+        "fit",
+        "predict",
+        "groupby",
+        "size",
+        "nlargest",
+        "groupby",
+        "max",
+        "dt",
+        "tolist"
+      ]
+    },
+    {
+      "file": "internal/service/advanced_health_check.py",
+      "functions": [
+        "setup_default_alert_rules",
+        "setup_advanced_health_checks",
+        "add_alert_rule",
+        "add_notification_handler",
+        "resolve_alert"
+      ]
+    },
+    {
+      "file": "internal/service/optimized_accessibility_service.py",
+      "functions": [
+        "reload_config",
+        "start",
+        "stop"
+      ]
+    },
+    {
+      "file": "internal/service/performance_alerting.py",
+      "functions": [
+        "setup_default_performance_thresholds",
+        "record_performance_metric",
+        "add_threshold_rule",
+        "remove_threshold_rule",
+        "add_alert_callback",
+        "record_metric"
+      ]
+    },
+    {
+      "file": "internal/service/i18n_localization.py",
+      "functions": [
+        "detect",
+        "translate",
+        "parse"
+      ]
+    },
+    {
+      "file": "internal/service/ux_optimizer.py",
+      "functions": [
+        "array",
+        "mean",
+        "std",
+        "median",
+        "fit",
+        "fit_transform"
+      ]
+    },
+    {
+      "file": "internal/service/health_check.py",
+      "functions": [
+        "setup_default_health_checks",
+        "add_health_checker",
+        "add_checker",
+        "remove_checker"
+      ]
+    },
+    {
+      "file": "internal/service/error_handler.py",
+      "functions": [
+        "add_rule",
+        "reset",
+        "retry",
+        "circuit_breaker",
+        "reset_circuit_breaker",
+        "add_recovery_strategy",
+        "decorator"
+      ]
+    },
+    {
+      "file": "internal/service/notification_channels.py",
+      "functions": [
+        "record_sent",
+        "add_channel",
+        "remove_channel"
+      ]
+    },
+    {
+      "file": "internal/service/optimized_performance_monitor.py",
+      "functions": [
+        "performance_timer",
+        "wrapper"
+      ]
+    },
+    {
+      "file": "internal/service/ultra_fast_health_check.py",
+      "functions": [
+        "setup_ultra_fast_health_checks",
+        "add_checker",
+        "cleanup"
+      ]
+    },
+    {
+      "file": "internal/service/intelligent_decision.py",
+      "functions": [
+        "learn_from_data",
+        "record_feedback",
+        "record_decision_feedback"
+      ]
+    },
+    {
+      "file": "internal/service/optimized_health_check.py",
+      "functions": [
+        "setup_optimized_health_checks",
+        "clear_cache",
+        "add_checker",
+        "cleanup"
+      ]
+    },
+    {
+      "file": "internal/service/ai_model_optimizer.py",
+      "functions": [
+        "put",
+        "clear"
+      ]
+    },
+    {
+      "file": "internal/service/advanced_ml_anomaly_detection.py",
+      "functions": [
+        "add_value",
+        "add_metric_value",
+        "update_false_positive_feedback"
+      ]
+    },
+    {
+      "file": "internal/service/smart_config.py",
+      "functions": [
+        "register_schema",
+        "register_custom_validator",
+        "on_modified",
+        "register_change_callback",
+        "register_global_callback"
+      ]
+    },
+    {
+      "file": "internal/service/implementations/settings_impl.py",
+      "functions": [
+        "deep_merge",
+        "compare_dicts"
+      ]
+    },
+    {
+      "file": "internal/service/modules/base_module.py",
+      "functions": [
+        "clear_cache",
+        "reload_model"
+      ]
+    },
+    {
+      "file": "test/integration/test_background_collection.py",
+      "functions": [
+        "setUp",
+        "tearDown",
+        "test_configure_background_collection",
+        "test_get_collection_status",
+        "test_submit_collected_data",
+        "test_e2e_background_collection_flow",
+        "test_battery_optimization",
+        "mock_battery_level"
+      ]
+    },
+    {
+      "file": "test/integration/test_crisis_alert.py",
+      "functions": [
+        "setUp",
+        "tearDown",
+        "setup_test_user",
+        "simulate_data_collection",
+        "test_service_integration",
+        "test_normal_data_no_alert",
+        "test_warning_level_alert",
+        "test_danger_level_alert",
+        "test_multiple_data_types",
+        "test_critical_alert_emergency_contacts",
+        "test_battery_optimization",
+        "test_long_term_data_trend_alert",
+        "mock_battery_level",
+        "mock_time_sleep"
+      ]
+    },
+    {
+      "file": "test/platform/test_battery_bridge.py",
+      "functions": [
+        "setUp",
+        "test_platform_detection",
+        "test_battery_info_caching",
+        "test_battery_level_method",
+        "test_is_charging_method",
+        "test_get_power_mode_method",
+        "test_error_handling",
+        "test_linux_battery_detection",
+        "test_macos_battery_detection",
+        "test_windows_battery_detection",
+        "test_android_battery_detection",
+        "test_global_functions"
+      ]
+    },
+    {
+      "file": "test/client/test_client.py",
+      "functions": [
+        "main"
+      ]
+    }
+  ],
+  "import_fixes": [
+    {
+      "file": "test_performance_alerting.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "test_midterm_optimizations.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "cleanup_redundant_files.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "test_improvements.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "simple_validation_test.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "demo_comprehensive.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "test_short_term_optimizations.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "test_advanced_health.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "test_desktop_capabilities.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "test_accessibility_service_validation.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "test/test_advanced_frontier_services.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "test/test_advanced_modules_simple.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "test/run_tests.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "test/test_enhanced_capabilities.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "test/test_scientific_computing_enhanced.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "test/test_core_modules.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "test/test_new_accessibility_services.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "test/test_advanced_accessibility_services.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "test/test_integration_fixed.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "test/mock_translation_test.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "test/test_performance.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "test/test_scientific_computing.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "test/test_e2e.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "test/test_translation_service.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "test/test_integration.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "test/test_integration_suite.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "test/integration_test.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "test/test_advanced_modules.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "scripts/validate_mid_term_optimization.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "scripts/code_quality_check.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "scripts/test_coverage_enhancer.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "scripts/performance_optimizer.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "pkg/utils/platform_checker.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/security/middleware.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/platform/__init__.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/delivery/grpc_server.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/service/scientific_computing.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/service/api_gateway.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/service/predictive_maintenance.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/service/database_pool_optimizer.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/service/personalization_engine.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/service/sensor_manager.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/service/enhanced_notification_system.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/service/temporal_awareness.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/service/ai_coordinator.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/service/model_manager.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/service/security_privacy.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/service/adaptive_learning.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/service/multimodal_fusion.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/service/environmental_intelligence.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/service/i18n_localization.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/service/ux_optimizer.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/service/ml_anomaly_detection.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/service/error_handler.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/service/intelligent_decision.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/service/desktop_automation.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/service/ai_model_optimizer.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/service/advanced_ml_anomaly_detection.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/service/capacity_planning.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/service/implementations/vr_accessibility_impl.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/service/implementations/eye_tracking_impl.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/service/implementations/haptic_feedback_impl.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/service/implementations/spatial_audio_impl.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/service/implementations/bci_impl.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/service/implementations/audio_visualization_impl.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/service/modules/blind_assistance.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/delivery/grpc/servicer.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "internal/delivery/grpc/translation_handler.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "test/integration/test_background_collection.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "test/integration/test_crisis_alert.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "test/client/translation_test_client.py",
+      "fix": "移除未使用的导入"
+    },
+    {
+      "file": "test/client/test_client.py",
+      "fix": "移除未使用的导入"
+    }
+  ],
+  "style_fixes": [
+    {
+      "tool": "isort",
+      "status": "success"
+    }
+  ],
+  "errors": [],
+  "statistics": {
+    "total_files_processed": 0,
+    "total_fixes_applied": 0,
+    "security_issues_fixed": 3,
+    "error_handling_improved": 11
+  }
+}

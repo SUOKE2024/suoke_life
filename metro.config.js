@@ -7,14 +7,18 @@ const config = {
   // 解析器配置
   resolver: {
     ...defaultConfig.resolver,
-    // 添加字体文件支持
+    // 添加字体文件和AI模型文件支持
     assetExts: [
       ...defaultConfig.resolver.assetExts,
       "ttf",
       "otf",
       "woff",
       "woff2",
-      "eot"
+      "eot",
+      "onnx",
+      "tflite",
+      "bin",
+      "pb"
     ],
     // 源文件扩展名
     sourceExts: [
@@ -35,7 +39,8 @@ const config = {
       "@store": path.resolve(__dirname, "src/store"),
       "@navigation": path.resolve(__dirname, "src/navigation"),
       "@contexts": path.resolve(__dirname, "src/contexts"),
-      "@assets": path.resolve(__dirname, "src/assets")
+      "@assets": path.resolve(__dirname, "src/assets"),
+      "@ai": path.resolve(__dirname, "src/ai")
     }
   },
 
@@ -44,6 +49,8 @@ const config = {
     ...defaultConfig.transformer,
     // 启用内联需要
     inlineRequires: true,
+    // 支持新架构
+    unstable_allowRequireContext: true,
     getTransformOptions: async () => ({
       transform: {
         experimentalImportSupport: false,
@@ -55,7 +62,22 @@ const config = {
   // 监视器配置
   watchFolders: [
     path.resolve(__dirname, "src")
-  ]
+  ],
+
+  // 新架构支持
+  server: {
+    enhanceMiddleware: (middleware) => {
+      return (req, res, next) => {
+        // 添加对AI模型文件的MIME类型支持
+        if (req.url.endsWith('.onnx')) {
+          res.setHeader('Content-Type', 'application/octet-stream');
+        } else if (req.url.endsWith('.tflite')) {
+          res.setHeader('Content-Type', 'application/octet-stream');
+        }
+        return middleware(req, res, next);
+      };
+    },
+  }
 };
 
 module.exports = mergeConfig(defaultConfig, config);

@@ -1,0 +1,186 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: health-data-service
+  namespace: suoke
+  labels:
+    app: health-data-service
+    component: backend
+    part-of: suoke-life
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: health-data-service
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: health-data-service
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8004"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+      - name: health-data-service
+        image: ${DOCKER_REGISTRY}/suoke/health-data-service:${IMAGE_TAG}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8004
+          name: http
+        - containerPort: 50054
+          name: grpc
+        env:
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: health-data-config
+              key: db_host
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: health-data-config
+              key: db_port
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: health-data-config
+              key: db_name
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: health-data-secrets
+              key: db_user
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: health-data-secrets
+              key: db_password
+        - name: REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: redis-config
+              key: redis_host
+        - name: REDIS_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: redis-config
+              key: redis_port
+        - name: KAFKA_SERVERS
+          valueFrom:
+            configMapKeyRef:
+              name: kafka-config
+              key: bootstrap_servers
+        - name: BLOCKCHAIN_SERVICE_URL
+          value: "http://blockchain-service:8008"
+        - name: TELEMETRY_ENABLED
+          value: "true"
+        - name: TELEMETRY_EXPORTER
+          value: "prometheus"
+        - name: LOG_LEVEL
+          value: "INFO"
+        resources:
+          limits:
+            cpu: "1"
+            memory: "1Gi"
+          requests:
+            cpu: "500m"
+            memory: "512Mi"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8004
+          initialDelaySeconds: 30
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8004
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config/default.yaml
+          subPath: default.yaml
+        - name: logs-volume
+          mountPath: /app/logs
+      volumes:
+      - name: config-volume
+        configMap:
+          name: health-data-service-config
+      - name: logs-volume
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: health-data-service
+  namespace: suoke
+  labels:
+    app: health-data-service
+spec:
+  ports:
+  - port: 8004
+    targetPort: 8004
+    name: http
+  - port: 50054
+    targetPort: 50054
+    name: grpc
+  selector:
+    app: health-data-service
+  type: ClusterIP
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: health-data-config
+  namespace: suoke
+data:
+  db_host: "postgres"
+  db_port: "5432"
+  db_name: "health_data"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: health-data-secrets
+  namespace: suoke
+type: Opaque
+data:
+  db_user: cG9zdGdyZXM=  # postgres
+  db_password: cG9zdGdyZXM=  # postgres
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: health-data-service-ingress
+  namespace: suoke
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  rules:
+  - host: api.suoke.life
+    http:
+      paths:
+      - path: /health-data(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: health-data-service
+            port:
+              number: 8004
+  tls:
+  - hosts:
+    - api.suoke.life
+    secretName: suoke-tls-secret 

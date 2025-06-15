@@ -1,0 +1,171 @@
+---
+# Gateway配置
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: suoke-life-gateway
+  namespace: suoke-life
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - api.suoke.life
+    - "*.suoke.life"
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      credentialName: suoke-life-tls
+    hosts:
+    - api.suoke.life
+    - "*.suoke.life"
+
+---
+# API网关VirtualService
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: api-gateway-vs
+  namespace: suoke-life
+spec:
+  hosts:
+  - api.suoke.life
+  gateways:
+  - suoke-life-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /api/v1/agents/
+    route:
+    - destination:
+        host: api-gateway.suoke-life.svc.cluster.local
+        port:
+          number: 8000
+    fault:
+      delay:
+        percentage:
+          value: 0.1
+        fixedDelay: 5s
+    retries:
+      attempts: 3
+      perTryTimeout: 2s
+    timeout: 10s
+
+---
+# 智能体服务VirtualService
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: agent-services-vs
+  namespace: suoke-life
+spec:
+  hosts:
+  - xiaoai-service.suoke-life.svc.cluster.local
+  - xiaoke-service.suoke-life.svc.cluster.local
+  - laoke-service.suoke-life.svc.cluster.local
+  - soer-service.suoke-life.svc.cluster.local
+  http:
+  - match:
+    - headers:
+        user-type:
+          exact: premium
+    route:
+    - destination:
+        host: xiaoai-service.suoke-life.svc.cluster.local
+        subset: v2
+      weight: 100
+  - route:
+    - destination:
+        host: xiaoai-service.suoke-life.svc.cluster.local
+        subset: v1
+      weight: 90
+    - destination:
+        host: xiaoai-service.suoke-life.svc.cluster.local
+        subset: v2
+      weight: 10
+
+---
+# DestinationRule配置
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: xiaoai-service-dr
+  namespace: suoke-life
+spec:
+  host: xiaoai-service.suoke-life.svc.cluster.local
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 100
+      http:
+        http1MaxPendingRequests: 50
+        http2MaxRequests: 100
+        maxRequestsPerConnection: 10
+        maxRetries: 3
+        consecutiveGatewayErrors: 5
+        interval: 30s
+        baseEjectionTime: 30s
+        maxEjectionPercent: 50
+    loadBalancer:
+      simple: LEAST_CONN
+    outlierDetection:
+      consecutiveGatewayErrors: 5
+      interval: 30s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 50
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+    trafficPolicy:
+      connectionPool:
+        tcp:
+          maxConnections: 50
+  - name: v2
+    labels:
+      version: v2
+    trafficPolicy:
+      connectionPool:
+        tcp:
+          maxConnections: 100
+
+---
+# 安全策略配置
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: suoke-life
+spec:
+  mtls:
+    mode: STRICT
+
+---
+# 授权策略
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: agent-services-authz
+  namespace: suoke-life
+spec:
+  selector:
+    matchLabels:
+      app: xiaoai-service
+  rules:
+  - from:
+    - source:
+        principals: ["cluster.local/ns/suoke-life/sa/api-gateway"]
+  - to:
+    - operation:
+        methods: ["GET", "POST"]
+        paths: ["/api/v1/*"]
+  - when:
+    - key: request.headers[authorization]
+      values: ["Bearer *"] 

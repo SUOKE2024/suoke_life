@@ -10,7 +10,7 @@
 - **容器化**: Docker + Kubernetes
 - **微服务架构**: 独立部署和扩缩容
 - **数据库**: PostgreSQL集群 + Redis集群
-- **消息队列**: RabbitMQ/Apache Kafka
+- **消息队列**: 内存事件总线
 - **监控**: Prometheus + Grafana + ELK Stack
 
 ## 部署环境规划
@@ -80,7 +80,7 @@
 - [ ] 测试缓存性能
 
 #### 2.3 消息队列部署
-- [ ] 部署RabbitMQ/Kafka集群
+- [ ] 部署事件总线服务
 - [ ] 配置消息队列监控
 - [ ] 测试消息传递性能
 - [ ] 配置死信队列
